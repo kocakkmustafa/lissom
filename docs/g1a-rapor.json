@@ -40,7 +40,7 @@
     },
     "A6": {
       "leaks": 0,
-      "checked": 110,
+      "checked": 120,
       "pass": true
     },
     "A9": {
@@ -49,6 +49,8 @@
         "heel_rise_right",
         "heel_rise_left",
         "reach_depth",
+        "knee_height_right",
+        "knee_height_left",
         "shoulder_line_foreshortening"
       ],
       "pass": true

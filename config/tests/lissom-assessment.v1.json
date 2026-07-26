@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.assessment.battery",
+  "version": "1.0.0",
+  "metricSet": "lissom.assessment.metrics@1.0.0",
+  "_notes": [
+    "Lissom V1 aday test bataryası. G1-b kapısı bu testlerden hangilerinin V1'e gireceğine karar verir.",
+    "Şablon: Amazon Halo Movement (npj Digital Medicine 2022) — kamera-tabanlı mobilite değerlendirmesinin tek hakemli emsali.",
+    "DÜRÜSTLÜK NOTU: Halo'nun genel skoru referans fonksiyonel testlerle yalnız r=0.29-0.63 korelasyon aldı. Bu bataryanın da doğruluğu kanıtlanmış DEĞİLDİR; bandlar literatür ortalamalarından TÜRETİLMİŞ başlangıç kalibrasyonudur, klinik kesim noktası değil.",
+    "Halo bulgusu (bizim için kritik): test-tekrar güvenilirliği hareket-KISITLI grupta %35 daha kötü (CV %2.16 vs %1.60) — yani tam hedef kitlemizde en gürültülü. Kısıtlı uçta bandlar daha geniş, dil daha temkinli.",
+    "Yaş bandı ZORUNLU: denge süresi 60-69 -> 80-99 arası 27 sn'den 8.5 sn'ye düşüyor; tek bant yaşlı kullanıcıya sistematik haksızlık olur.",
+    "cameraDistanceCm 180-200: JMIR e82412'nin en yüksek doğruluk bandı. yawToleranceDeg 10: G1-a A5 ölçümü (gövde metrikleri +-10 derecede 5.7 sapıyor)."
+  ],
+  "globalCameraSetup": {
+    "distanceCm": [180, 200],
+    "heightCm": [90, 110],
+    "yawToleranceDeg": 10,
+    "yawWarnDeg": 5,
+    "framingRule": "Head and feet must stay in frame through the full range of motion."
+  },
+  "ageBands": ["u40", "40-59", "60plus"],
+  "tests": [
+    {
+      "id": "overhead_reach",
+      "name": "Overhead Reach",
+      "instruction": "Stand side-on to the camera. Let your arms hang. Slowly raise the arm nearest the camera as high overhead as you can, keep the elbow straight, hold for two seconds, then lower.",
+      "plane": "sagittal",
+      "perSide": true,
+      "reps": 3,
+      "holdSeconds": 2,
+      "confidenceClass": "A",
+      "primaryMetric": "shoulder_flexion_{side}",
+      "guardMetrics": ["elbow_extension_{side}"],
+      "aggregation": "max",
+      "invalidation": [
+        { "rule": "elbow_extension_{side} < 150", "code": "BENT_ELBOW", "message": "Keep your elbow straight — a bent elbow makes the reach look bigger than it is." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" },
+        { "rule": "yawDeg > 10", "code": "CAMERA_ANGLE" }
+      ],
+      "scoring": {
+        "type": "banded",
+        "unit": "deg",
+        "higherIsBetter": true,
+        "bands": {
+          "u40": { "low": 150, "normal": 165, "good": 175 },
+          "40-59": { "low": 140, "normal": 158, "good": 170 },
+          "60plus": { "low": 130, "normal": 150, "good": 165 }
+        },
+        "source": "PMC7549223 (n=2404, age/sex banded active ROM). Bands derived from cohort means, NOT clinical cutoffs.",
+        "region": "shoulder"
+      }
+    },
+    {
+      "id": "deep_squat",
+      "name": "Deep Squat",
+      "instruction": "Stand side-on to the camera, feet shoulder-width apart, arms forward. Squat as low as you comfortably can, hold for two seconds, then stand back up.",
+      "plane": "sagittal",
+      "perSide": false,
+      "reps": 3,
+      "holdSeconds": 2,
+      "confidenceClass": "A",
+      "primaryMetric": "knee_flexion_right",
+      "guardMetrics": ["heel_rise_right", "hip_flexion_right"],
+      "aggregation": "min",
+      "invalidation": [
+        { "rule": "heelRiseDelta > 0.05", "code": "HEEL_LIFT", "message": "Your heels came off the floor — go only as low as you can with heels down." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "ordinal",
+        "levels": [
+          { "level": 1, "label": "limited", "criteria": "Hip stays above knee height, or heels lift, or balance is lost." },
+          { "level": 2, "label": "partial", "criteria": "Hip reaches roughly knee height with heels down." },
+          { "level": 3, "label": "full", "criteria": "Hip drops below knee height with heels down and torso controlled." }
+        ],
+        "source": "No continuous degree norm exists for squat depth in the literature (PubMed 35321135 reports only between-group differences). Ordinal scoring is the honest option. Criteria are descriptive, NOT the proprietary FMS protocol.",
+        "region": "hip"
+      }
+    },
+    {
+      "id": "overhead_squat",
+      "name": "Overhead Squat",
+      "instruction": "Stand side-on to the camera. Raise both arms straight overhead and keep them there. Squat as low as you can while keeping your arms up, then stand back up.",
+      "plane": "sagittal",
+      "perSide": false,
+      "reps": 6,
+      "confidenceClass": "B",
+      "primaryMetric": "trunk_lean",
+      "guardMetrics": ["shoulder_flexion_right", "knee_flexion_right"],
+      "aggregation": "max",
+      "invalidation": [
+        { "rule": "shoulder_flexion_right < 140", "code": "ARMS_DROPPED", "message": "Your arms came forward — the test measures how well you keep them overhead." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "banded",
+        "unit": "deg",
+        "higherIsBetter": false,
+        "bands": {
+          "u40": { "low": 45, "normal": 35, "good": 25 },
+          "40-59": { "low": 50, "normal": 38, "good": 28 },
+          "60plus": { "low": 55, "normal": 42, "good": 32 }
+        },
+        "source": "UNVALIDATED — no normative forward-lean dataset was found for the overhead squat. Bands are an engineering starting point and MUST be recalibrated against real fixtures before any user-facing number is shown.",
+        "region": "thoracic"
+      }
+    },
+    {
+      "id": "ankle_dorsiflexion",
+      "name": "Ankle Mobility",
+      "instruction": "Face a wall, side-on to the camera. Place the foot nearest the camera about a hand's width from the wall, heel flat. Bend your knee forward to touch the wall without lifting the heel.",
+      "plane": "sagittal",
+      "perSide": true,
+      "reps": 3,
+      "confidenceClass": "C",
+      "primaryMetric": "tibia_inclination_{side}",
+      "guardMetrics": ["heel_rise_{side}"],
+      "aggregation": "max",
+      "invalidation": [
+        { "rule": "heelRiseDelta > 0.04", "code": "HEEL_LIFT", "message": "Keep the heel down — lifting it makes the range look larger." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "qualitative",
+        "levels": ["limited", "typical", "good"],
+        "source": "Literature norms for the weight-bearing lunge test are in CENTIMETRES (knee-to-wall distance); we measure tibia ANGLE. The conversion depends on shank length and no degree-based normative table was verified (source paywalled, 403). Ankle is also the least reliable joint on a single 2D camera (limits of agreement +-12-24 deg). Qualitative bands only until our own calibration exists.",
+        "region": "ankle"
+      }
+    },
+    {
+      "id": "hamstring_reach",
+      "name": "Standing Forward Reach",
+      "instruction": "Stand side-on to the camera with your legs straight. Bend forward from the hips and reach toward your toes. Go only as far as is comfortable, hold two seconds, then stand up slowly.",
+      "plane": "sagittal",
+      "perSide": true,
+      "reps": 3,
+      "holdSeconds": 2,
+      "confidenceClass": "B",
+      "primaryMetric": "reach_depth",
+      "guardMetrics": ["knee_flexion_{side}", "trunk_lean"],
+      "aggregation": "min",
+      "invalidation": [
+        { "rule": "knee_flexion_{side} < 165", "code": "BENT_KNEE", "message": "Keep your knees straight — bending them turns this into a different movement." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "banded",
+        "unit": "ratio",
+        "higherIsBetter": false,
+        "bands": {
+          "u40": { "low": 0.9, "normal": 0.6, "good": 0.35 },
+          "40-59": { "low": 1.0, "normal": 0.7, "good": 0.45 },
+          "60plus": { "low": 1.15, "normal": 0.85, "good": 0.6 }
+        },
+        "source": "UNVALIDATED — sit-and-reach norms exist in cm but are floor-referenced and sex-split; our metric is fingertip-to-ankle normalised by torso length, which is a different quantity. Bands are an engineering starting point. Sex split deferred pending real data.",
+        "region": "posterior_chain"
+      }
+    },
+    {
+      "id": "hip_hinge",
+      "name": "Hip Hinge",
+      "instruction": "Stand side-on to the camera with hands on your hips. Push your hips backward and fold forward while keeping your back flat, then return upright.",
+      "plane": "sagittal",
+      "perSide": false,
+      "reps": 3,
+      "confidenceClass": "B",
+      "primaryMetric": "trunk_lean",
+      "guardMetrics": ["hip_flexion_right", "knee_flexion_right"],
+      "aggregation": "max",
+      "invalidation": [
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "qualitative",
+        "levels": ["limited", "typical", "good"],
+        "source": "No degree-based normative threshold exists for the hip hinge / lumbo-pelvic rhythm; the literature evaluates it visually or ordinally, and even trained observers only detect posterior pelvic tilt reliably beyond ~34 deg. Qualitative only — a precise-looking number here would be false precision.",
+        "region": "posterior_chain",
+        "derived": "ratio of hip_flexion change to trunk_lean change — these two are NOT independent (a forward fold IS hip flexion); their ratio is the lumbo-pelvic rhythm we actually want."
+      }
+    },
+    {
+      "id": "lateral_bend",
+      "name": "Side Bend",
+      "instruction": "Stand facing the camera, feet hip-width apart, arms relaxed at your sides. Slide one hand down the side of your leg, bending sideways as far as is comfortable. Return upright, then repeat to the other side.",
+      "plane": "frontal",
+      "perSide": true,
+      "reps": 3,
+      "confidenceClass": "B",
+      "primaryMetric": "trunk_lateral_tilt",
+      "guardMetrics": [],
+      "aggregation": "max",
+      "invalidation": [
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" },
+        { "rule": "yawDeg > 10", "code": "CAMERA_ANGLE", "message": "Turn to face the camera squarely — this test is sensitive to camera angle." }
+      ],
+      "scoring": {
+        "type": "banded",
+        "unit": "deg",
+        "higherIsBetter": true,
+        "bands": {
+          "u40": { "low": 25, "normal": 33, "good": 38 },
+          "40-59": { "low": 22, "normal": 30, "good": 36 },
+          "60plus": { "low": 18, "normal": 26, "good": 32 }
+        },
+        "source": "AAOS 35 deg / Kendall 40 deg reference; measured cohort means ~32.6-36 deg with a documented decline with age. Age adjustment below 40 is extrapolated, not measured.",
+        "region": "lateral_chain",
+        "warning": "Most yaw-sensitive metric in the battery (5.73 deg drift at +-10 deg camera yaw, G1-a A5). Camera alignment gate is stricter here."
+      }
+    },
+    {
+      "id": "single_leg_balance",
+      "name": "Single-Leg Balance",
+      "instruction": "Stand facing the camera with your hands on your hips. Lift one foot off the floor and hold as steady as you can for up to 30 seconds. Put the foot down if you need to.",
+      "plane": "frontal",
+      "perSide": true,
+      "reps": 1,
+      "holdSeconds": 30,
+      "confidenceClass": "C",
+      "primaryMetric": "hold_duration",
+      "guardMetrics": ["trunk_lateral_tilt"],
+      "aggregation": "duration",
+      "invalidation": [
+        { "rule": "supportContact", "code": "USED_SUPPORT", "message": "Holding onto something ends the test — try again without support." },
+        { "rule": "footTouchdown", "code": "FOOT_DOWN" },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "banded",
+        "unit": "seconds",
+        "higherIsBetter": true,
+        "bands": {
+          "u40": { "low": 20, "normal": 40, "good": 60 },
+          "40-59": { "low": 15, "normal": 30, "good": 45 },
+          "60plus": { "low": 10, "normal": 27, "good": 40 }
+        },
+        "source": "Bohannon 2006 age-banded single-limb stance (60-69: 27.0s, 70-79: 17.2s, 80-99: 8.5s) plus midlife median ~30s.",
+        "region": "balance",
+        "warning": "Halo found the DURATION metric suffers a ceiling effect (most people last the full time), while sway metrics discriminated better. Sway is not scored in V1 because landmark jitter cannot be separated from real sway without our own calibration (research/04). Duration is the honest V1 metric, with its ceiling limitation acknowledged."
+      }
+    },
+    {
+      "id": "forward_lunge",
+      "name": "Forward Lunge",
+      "instruction": "Stand facing the camera. Step forward into a lunge, lowering your back knee toward the floor while keeping your torso upright. Push back to standing.",
+      "plane": "frontal",
+      "perSide": true,
+      "reps": 3,
+      "confidenceClass": "C",
+      "primaryMetric": "knee_height_{side}",
+      "guardMetrics": ["trunk_lateral_tilt"],
+      "aggregation": "min",
+      "invalidation": [
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "qualitative",
+        "levels": ["limited", "typical", "good"],
+        "source": "Halo used mean minimum knee-to-floor distance. We have no floor reference from pose alone, so we use a torso-normalised proxy. Knee valgus — the other thing this test could show — needs precise frontal-plane small-angle measurement, which a single camera cannot deliver reliably (research/05). Qualitative only.",
+        "region": "hip"
+      }
+    },
+    {
+      "id": "thoracic_rotation",
+      "name": "Seated Torso Rotation",
+      "instruction": "Sit on a chair facing the camera with your arms crossed over your chest and your knees pointing forward. Turn your upper body to one side as far as is comfortable, return to centre, then turn the other way.",
+      "plane": "frontal",
+      "perSide": true,
+      "reps": 3,
+      "confidenceClass": "C",
+      "primaryMetric": "shoulder_line_foreshortening",
+      "guardMetrics": [],
+      "aggregation": "min",
+      "invalidation": [
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "qualitative",
+        "levels": ["limited", "typical", "good"],
+        "source": "Transverse-plane rotation is not reliably recoverable from a single camera (PMC10635560). We measure an INDIRECT proxy: how much the shoulder line shortens in the frontal projection as the torso turns away. This is a rotation SIGN, not a rotation ANGLE, and is presented as such.",
+        "region": "thoracic",
+        "warning": "Weakest test in the battery. A leading candidate to be dropped at the G1-b gate if the proxy does not separate rotated from neutral postures on real footage."
+      }
+    }
+  ],
+  "excluded": [
+    {
+      "id": "hip_internal_external_rotation",
+      "reason": "A single 2D camera cannot recover transverse-plane rotation reliably. Measuring it anyway would mean showing a number we cannot stand behind. (L-006)"
+    },
+    {
+      "id": "cervical_rotation",
+      "reason": "Pose model facial/neck landmarks are too coarse for the precision neck rotation needs. Excluded rather than shown with a wide meaningless band. (L-006)"
+    }
+  ]
+}

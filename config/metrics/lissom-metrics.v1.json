@@ -107,6 +107,17 @@
       "description": "Fingertip-to-ankle distance normalised by torso length. Body-size independent forward reach measure."
     },
     {
+      "id": "knee_height_right",
+      "kind": "height_diff_norm",
+      "points": ["RIGHT_KNEE", "RIGHT_ANKLE"],
+      "plane": "none",
+      "unit": "ratio",
+      "mirror": true,
+      "confidenceClass": "C",
+      "test": "forward_lunge",
+      "description": "Vertical knee-above-ankle gap, normalised by torso length. Proxy for how far the trailing knee descends in a lunge. NOT a knee-to-floor distance: pose gives no ground plane, so this is measured against the body's own reference."
+    },
+    {
       "id": "shoulder_line_foreshortening",
       "kind": "distance_norm",
       "points": ["LEFT_SHOULDER", "RIGHT_SHOULDER"],
