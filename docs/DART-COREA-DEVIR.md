@@ -41,7 +41,7 @@ Dart ölçülemeyen açıyı `NaN` yapıyor. Python `INVALID_LOW_CONFIDENCE` / `
 Bunlar Dart'ta **yapılamaz** (MediaPipe yalnız Python/native'de var):
 
 - `extract_landmarks.py` — video dosyası → MediaPipe → fixture JSON. Kurucunun çekimlerini Dart'ın `fixture/replay.dart`'ının okuyabileceği veriye çeviren tek yol.
-- `fetch_models.sh` — model bundle'larını pinli sürümden indirip SHA-256 doğrulama (M-017: `latest` sessizce değişiyor).
+- `fetch_models.sh` — model bundle'larını pinli sürümden indirip SHA-256 doğrulama (M-L-01: `latest` sessizce değişiyor).
 - `gate_g1a.py` + `mocore/` — G1-a kapı ölçümü. Kurucu kararıyla ölçüm matematiği Dart'a devredildiği için bu kod **artık referans değil**; G1-a'nın Dart karşılığı yazıldığında bu koşucu emekliye ayrılabilir. O güne kadar bulgu üreten çalışır durumda bir kapı olarak duruyor.
 
 **Fixture JSON şeması uyumu:** Python `mocore/fixture.py` ile Dart `src/fixture/fixture.dart` aynı veriyi tanımlıyor. İki şema **karşılaştırılmadı** — çıkarma hattının ürettiği JSON'u Dart'ın okuyabildiği ilk gerçek fixture'la doğrulanmalı. Uyuşmazsa kanonik olan Dart şemasıdır ve Python yazıcısı ona uydurulur.
