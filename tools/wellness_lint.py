@@ -155,6 +155,15 @@ def main() -> int:
     print(f"Wellness dil süzgeci — {len(files)} dosya tarandı")
     print(f"Muaf: {', '.join(sorted(EXEMPT_FILES))}\n")
 
+    # Hiç dosya taranmadıysa "temiz" DEME. Bulmayan bir denetim ile bozuk bir
+    # denetim dışarıdan aynı görünür; CI'da yeşil yanan boş tarama, koruma
+    # olduğu sanılan bir boşluktur (L-011 dersinin denetim tarafındaki hâli).
+    if not files:
+        print(f"⚠️  Taranacak dosya bulunamadı: {target}")
+        print(f"    Beklenen uzantılar: .json · .arb")
+        print("    Bu bir GEÇİŞ DEĞİL — yol yanlış olabilir.")
+        return 2
+
     if not all_problems:
         print("✅ İhlal yok.")
         return 0
