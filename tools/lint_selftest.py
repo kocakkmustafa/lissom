@@ -42,6 +42,19 @@ def run(payload: dict) -> int:
         return r.returncode
 
 
+def run_in_content_dir(payload: dict) -> int:
+    """İçerik dizini gibi görünen bir yolda koştur — sessiz-tarama korumasını sınar."""
+    with tempfile.TemporaryDirectory() as d:
+        p = Path(d) / "config" / "content" / "case.json"
+        p.parent.mkdir(parents=True)
+        p.write_text(json.dumps(payload), encoding="utf-8")
+        r = subprocess.run(
+            [sys.executable, str(TOOLS / "wellness_lint.py"), "--path", str(p)],
+            capture_output=True, text=True,
+        )
+        return r.returncode
+
+
 def main() -> int:
     failures: list[str] = []
 
@@ -55,9 +68,24 @@ def main() -> int:
         if code != 0:
             failures.append(f"YANLIŞ ALARM ({label}): {text}")
 
-    total = len(MUST_CATCH) + len(MUST_PASS)
+    # İçerik şemasının alanları taranıyor mu? (egzersiz havuzu alan adları)
+    code = run({"schemaVersion": 1, "id": "t",
+                "exercises": [{"safetyNote": "Stop if this treats your sciatica."}]})
+    if code == 0:
+        failures.append("KAÇIRDI (içerik şeması): safetyNote alanı taranmıyor")
+
+    # Regresyon: tanınmayan alan adlarıyla dolu bir içerik dosyası SESSİZCE
+    # geçmemeli. Egzersiz havuzu ilk yazıldığında tam bu oldu — 72 hareketlik
+    # dosyadan 0 metin çıkarıldı ve süzgeç yeşil yandı.
+    code = run_in_content_dir({"schemaVersion": 1, "id": "t",
+                               "exercises": [{"someUnknownField": "text nobody scans"}]})
+    if code == 0:
+        failures.append(
+            "SESSİZ GEÇİŞ: içerik dosyasından hiç metin çıkmadığı hâlde süzgeç geçti")
+
+    total = len(MUST_CATCH) + len(MUST_PASS) + 2
     print(f"Süzgeç öz-testi — {total} vaka "
-          f"({len(MUST_CATCH)} yakalanmalı, {len(MUST_PASS)} geçmeli)")
+          f"({len(MUST_CATCH)+1} yakalanmalı, {len(MUST_PASS)} geçmeli, 1 sessiz-tarama)")
     if failures:
         print(f"\n❌ Süzgeç BOZUK — {len(failures)} vaka:")
         for f in failures:

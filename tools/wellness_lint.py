@@ -72,10 +72,29 @@ EXEMPT_FILES = {"disclaimers.en.json"}
 
 #: JSON içinde kullanıcıya GÖRÜNEN alanlar. Diğer alanlar (açıklama, kaynak,
 #: not) iç dokümandır ve taranmaz — yoksa her literatür atıfı false-positive olur.
+#:
+#: ⚠️ Yeni bir config şeması eklerken BU LİSTEYİ GÜNCELLE. Liste eksikse dosya
+#: taranır ama içinden hiç metin çıkarılmaz ve süzgeç "temiz" der — sessiz bir
+#: boşluk. `MIN_STRINGS_PER_FILE` koruması tam bunun için var.
 USER_FACING_KEYS = {
+    # genel
     "instruction", "message", "text", "label", "title", "name",
     "criteria", "hint", "cta", "body",
+    # içerik paketleri (egzersiz havuzu, yoga paketleri)
+    "nameEn", "regression", "progression", "safetyNote", "cameraNote",
+    "raw",           # dose.raw — kullanıcıya gösterilen doz metni
+    "breathCue", "description_en",
 }
+
+#: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
+#: hiç metin çıkmazsa bu "temiz" değil "hiç bakılmamış" demektir ve süzgeç
+#: kırılır. Egzersiz havuzu dosyasında tam olarak bu yaşandı: 72 hareketlik
+#: dosya tarandı, 0 metin çıkarıldı, süzgeç yeşil yandı.
+#:
+#: `config/metrics/` kasıtlı olarak DIŞARIDA: metrik tanımları teknik config'tir,
+#: içindeki `description` alanları geliştiriciye yazılmıştır, kullanıcıya değil.
+CONTENT_DIRS = ("config/content", "config/tests", "config/copy", "l10n")
+MIN_STRINGS_PER_FILE = 1
 
 
 def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
@@ -119,21 +138,30 @@ def scan_text(where: str, text: str) -> list[str]:
     return problems
 
 
-def scan_file(path: Path) -> list[str]:
+def scan_file(path: Path) -> tuple[list[str], int]:
+    """Dosyayı tara. Dönüş: (sorunlar, çıkarılan metin sayısı).
+
+    Metin sayısı, taramanın gerçekten yapılıp yapılmadığını gösterir —
+    çağıran taraf sıfır görürse bunu geçiş saymamalı.
+    """
     if path.name in EXEMPT_FILES:
-        return []
+        return [], -1  # -1 = kasıtlı atlandı, sayım anlamsız
     problems: list[str] = []
+    scanned = 0
     if path.suffix == ".json":
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
-            return [f"{path.name}: JSON okunamadı — {exc}"]
+            return [f"{path.name}: JSON okunamadı — {exc}"], 0
         for key, value in _walk_json(data):
+            scanned += 1
             problems += scan_text(f"{path.name} :: {key}", value)
     elif path.suffix in {".arb", ".md"}:
         for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if line.strip():
+                scanned += 1
             problems += scan_text(f"{path.name}:{i}", line)
-    return problems
+    return problems, scanned
 
 
 def main() -> int:
@@ -149,11 +177,31 @@ def main() -> int:
     )
 
     all_problems: list[str] = []
+    silent: list[str] = []          # tarandı ama içinden metin çıkmadı
+    total_strings = 0
     for f in files:
-        all_problems += scan_file(f)
+        probs, n = scan_file(f)
+        all_problems += probs
+        if n >= 0:
+            total_strings += n
+            rel = str(f.relative_to(ROOT)) if ROOT in f.parents else str(f)
+            expects_text = any(d in rel.replace("\\", "/") for d in CONTENT_DIRS)
+            if expects_text and n < MIN_STRINGS_PER_FILE:
+                silent.append(rel)
 
-    print(f"Wellness dil süzgeci — {len(files)} dosya tarandı")
+    print(f"Wellness dil süzgeci — {len(files)} dosya · {total_strings} metin tarandı")
     print(f"Muaf: {', '.join(sorted(EXEMPT_FILES))}\n")
+
+    # Dosya okundu ama içinden hiç metin çıkarılmadıysa bu bir GEÇİŞ DEĞİL.
+    # Şema alan adları USER_FACING_KEYS'te yoksa tam olarak bu olur ve süzgeç
+    # hiçbir şeye bakmadan yeşil yanar.
+    if silent:
+        print(f"⚠️  {len(silent)} dosyadan hiç metin çıkarılamadı — tarama YAPILMADI:")
+        for s in silent:
+            print(f"    {s}")
+        print("    Şemanın kullanıcıya görünen alan adları USER_FACING_KEYS'te")
+        print("    olmayabilir. Bu bir geçiş değildir.")
+        return 3
 
     # Hiç dosya taranmadıysa "temiz" DEME. Bulmayan bir denetim ile bozuk bir
     # denetim dışarıdan aynı görünür; CI'da yeşil yanan boş tarama, koruma
