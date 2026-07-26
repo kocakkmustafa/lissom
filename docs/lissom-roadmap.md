@@ -4,6 +4,8 @@
 **Hiyerarşi:** `00-AILE-MIMARISI.md` (D4 dahil) > `20-URETIM-SURECI.md` > `10-ARAC-KATALOGU.md` > bu dosya > `lissom-plan.md`.
 **Ürün dili: İNGİLİZCE** (UI+içerik+ses+store). İç doküman Türkçe.
 
+> ⚡ **REVİZYON 2026-07-26 (kurucu direktifi — KURUCUSUZ VERİ FABRİKASI + GENİŞ KÜTÜPHANE, M-F-13..16):** Bu haritadaki "kurucu çekimi / fixture çekim listesi kurucuya" varsayımları KALDIRILDI — kurucu çekim YAPMAZ. Birincil veri = kamu-video hasadı + sentetik + gerekirse ücretli klip (katalog §6.2); doğrulama = §6.3 merdiveni; öğretim görselleri = §6.4 katmanlı AI-eğitmen hattı (T1 = iskelet-sürümlü uygulama-içi avatar, $0 ve form-garantili). Kurucudan yalnız cihaz-benchmark'ı + onay/kapı kararları beklenir. **Geniş kütüphane:** Test bataryası + yoga asana aileleri + esneklik içerikleri GENİŞ hasat edilir (PT-kanal havuzu: Physiotutors/E3 Rehab/Clinical Physio/Movement by David + Emmet Louis/Merrick); G1-b gerçek-video bacağı kamu-video + MM-Fit/AIST++ + sentetik + gerekirse ücretli klip ile ölçülür; iç doğrulama çalışması TestFlight beta rızası/ücretli klip yoluyla. Sorularını bu çerçevede kendin karara bağla — kurucuya soru YOK.
+
 ## 1. Kimlik ve Kuzey Yıldızı
 
 **Lissom: Mobility & Yoga** — kamerayla hareket kapasiteni ölç, sana özel günlük programı hocan yanındaymış gibi sesli rehberlikle uygula, 4 haftada yeniden ölç. Aile sırası **1**: pose modelinin en güvenilir bölgesi (yavaş/statik pozlar) + en geniş pazar + ailenin ortak değerlendirme katmanı (Gravita bilek/omuz ön-şartı, JabLab ısınması buradan beslenecek).
