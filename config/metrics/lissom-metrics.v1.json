@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.assessment.metrics",
+  "version": "1.0.0",
+  "_notes": [
+    "Bu dosya Lissom'un ölçülebilir büyüklüklerinin TEK kaynağıdır.",
+    "Python referans yorumlayıcısı: motion-core tools/fixture_pipeline/mocore/measures.py",
+    "Native (Kotlin/Swift) motor AYNI dosyayı okur ve AYNI sayıyı üretmek zorundadır (G4 differential test).",
+    "L-009: acı metriklerinde 'plane' zorunludur — ham 3D acı ROM uclarinda ±5.7° sistematik hata verir.",
+    "confidenceClass: A/B/C — G1 kapı protokolü §1'deki eklem güven sınıfı; MAE eşiği buna göre uygulanır."
+  ],
+  "metrics": [
+    {
+      "id": "shoulder_flexion_right",
+      "kind": "angle3",
+      "points": ["RIGHT_HIP", "RIGHT_SHOULDER", "RIGHT_ELBOW"],
+      "plane": "sagittal",
+      "unit": "deg",
+      "mirror": true,
+      "confidenceClass": "A",
+      "test": "overhead_reach",
+      "description": "Shoulder flexion: angle between torso line and upper arm, sagittal plane. 0 = arm at side, 180 = fully overhead."
+    },
+    {
+      "id": "elbow_extension_right",
+      "kind": "angle3",
+      "points": ["RIGHT_SHOULDER", "RIGHT_ELBOW", "RIGHT_WRIST"],
+      "plane": "sagittal",
+      "unit": "deg",
+      "mirror": true,
+      "confidenceClass": "A",
+      "test": "overhead_reach",
+      "description": "Elbow angle. Used as an invalidation guard: a bent elbow inflates overhead reach."
+    },
+    {
+      "id": "hip_flexion_right",
+      "kind": "angle3",
+      "points": ["RIGHT_SHOULDER", "RIGHT_HIP", "RIGHT_KNEE"],
+      "plane": "sagittal",
+      "unit": "deg",
+      "mirror": true,
+      "confidenceClass": "A",
+      "test": "deep_squat",
+      "description": "Hip angle between torso and thigh, sagittal plane. Smaller = deeper flexion."
+    },
+    {
+      "id": "knee_flexion_right",
+      "kind": "angle3",
+      "points": ["RIGHT_HIP", "RIGHT_KNEE", "RIGHT_ANKLE"],
+      "plane": "sagittal",
+      "unit": "deg",
+      "mirror": true,
+      "confidenceClass": "A",
+      "test": "deep_squat",
+      "description": "Knee angle between thigh and shank, sagittal plane. 180 = straight leg."
+    },
+    {
+      "id": "trunk_lean",
+      "kind": "angle_vertical",
+      "points": ["MID_HIP", "MID_SHOULDER"],
+      "plane": "sagittal",
+      "unit": "deg",
+      "confidenceClass": "B",
+      "test": "hip_hinge",
+      "description": "Forward trunk inclination from vertical, sagittal plane. 0 = upright. Uses the derived mid-line (L-010)."
+    },
+    {
+      "id": "trunk_lateral_tilt",
+      "kind": "angle_vertical",
+      "points": ["MID_HIP", "MID_SHOULDER"],
+      "plane": "frontal",
+      "unit": "deg",
+      "confidenceClass": "B",
+      "test": "lateral_bend",
+      "description": "Sideways trunk inclination from vertical, frontal plane. MUST use the derived mid-line: a one-sided hip-to-shoulder vector carries a spurious lateral component (shoulder width != hip width) worth up to 11 deg (L-010)."
+    },
+    {
+      "id": "tibia_inclination_right",
+      "kind": "angle_vertical",
+      "points": ["RIGHT_ANKLE", "RIGHT_KNEE"],
+      "plane": "sagittal",
+      "unit": "deg",
+      "mirror": true,
+      "confidenceClass": "C",
+      "test": "ankle_dorsiflexion",
+      "description": "Shank angle from vertical during knee-to-wall. Proxy for ankle dorsiflexion range. Class C: ankle is the least reliable joint on a single 2D camera."
+    },
+    {
+      "id": "heel_rise_right",
+      "kind": "distance_norm",
+      "points": ["RIGHT_HEEL", "RIGHT_FOOT_INDEX"],
+      "plane": "none",
+      "unit": "ratio",
+      "mirror": true,
+      "confidenceClass": "C",
+      "test": "deep_squat",
+      "description": "Heel-to-toe separation normalised by torso length. Invalidation guard for heel lift during squat."
+    },
+    {
+      "id": "reach_depth",
+      "kind": "distance_norm",
+      "points": ["RIGHT_WRIST", "RIGHT_ANKLE"],
+      "plane": "none",
+      "unit": "ratio",
+      "confidenceClass": "B",
+      "test": "hamstring_reach",
+      "description": "Fingertip-to-ankle distance normalised by torso length. Body-size independent forward reach measure."
+    },
+    {
+      "id": "shoulder_line_foreshortening",
+      "kind": "distance_norm",
+      "points": ["LEFT_SHOULDER", "RIGHT_SHOULDER"],
+      "plane": "frontal",
+      "unit": "ratio",
+      "confidenceClass": "C",
+      "test": "thoracic_rotation",
+      "description": "Frontal-plane projected shoulder width, normalised by torso length. Shrinks as the torso rotates away from the camera — an INDIRECT proxy for transverse rotation, not a rotation angle. WARNING: transverse-plane rotation is not reliably recoverable from a single camera (research/05); qualitative bands only unless G1-b proves otherwise. Replaced an angle_vertical+transverse definition that was mathematically dead (constant 90 deg) — see L-011."
+    }
+  ]
+}
