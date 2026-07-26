@@ -87,14 +87,14 @@
     },
     {
       "id": "heel_rise_right",
-      "kind": "distance_norm",
+      "kind": "height_diff_norm",
       "points": ["RIGHT_HEEL", "RIGHT_FOOT_INDEX"],
       "plane": "none",
       "unit": "ratio",
       "mirror": true,
       "confidenceClass": "C",
       "test": "deep_squat",
-      "description": "Heel-to-toe separation normalised by torso length. Invalidation guard for heel lift during squat."
+      "description": "How far the heel sits above the toe line, normalised by torso length. Invalidation guard for heel lift during squat. NOTE: the first definition used heel-to-toe DISTANCE, which measures foot length and stays constant no matter what the heel does — the gate caught it as a dead metric (L-028)."
     },
     {
       "id": "reach_depth",

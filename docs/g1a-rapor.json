@@ -13,24 +13,24 @@
     "A1": {
       "value": 1.2074182791366184e-06,
       "pass": true,
-      "n": 492
+      "n": 782
     },
     "A2": {
-      "median": 0.8539893220323899,
-      "p95": 3.1973044792027565,
+      "median": 0.46654655119078825,
+      "p95": 2.757313649111069,
       "pass": true,
-      "n": 2460
+      "n": 3910
     },
     "A3": {
-      "median": 1.704624901159109,
-      "p95": 6.364203105166803,
+      "median": 0.9305353640945953,
+      "p95": 5.5734670657685115,
       "pass": true,
-      "n": 2460
+      "n": 3910
     },
     "A4": {
-      "value": 1.2074182791366184e-06,
+      "value": 0.040000000000000036,
       "pass": true,
-      "n": 984
+      "n": 1656
     },
     "A5": {
       "yaw_5": 0.0,
@@ -46,12 +46,7 @@
     "A9": {
       "dead": [],
       "uncovered": [
-        "heel_rise_right",
-        "heel_rise_left",
-        "reach_depth",
-        "knee_height_right",
-        "knee_height_left",
-        "shoulder_line_foreshortening"
+        "reach_depth"
       ],
       "pass": true
     },
