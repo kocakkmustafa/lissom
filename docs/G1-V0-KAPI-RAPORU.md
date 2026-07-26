@@ -52,7 +52,9 @@ Eşiksiz ölçüm; amacı kalibrasyon sihirbazının toleransını belirlemek.
 
 **Karar (L-013):** kalibrasyon sihirbazı omuz-kalça hattının kameraya göre yaw sapmasını **≤10° dayatır, ≤5° hedefler**; sapma 10°'yi aşarsa gövde metrikleri ölçülmez (test geçersiz), sagittal eklem metrikleri ölçülmeye devam edebilir.
 
-## 3. Kapının yakaladığı üç gerçek hata
+> **rev.2 (2026-07-26, aynı gün):** kapı kapsamı L-016 gereği genişletildi (beklenen-değer formülü olmayan metrikler artık A4/A5/A9'da) ve bu genişletme **iki hata daha** buldu. Güncel sayılar: A1 **0,000°** · A2 **0,467°** · A3 **0,931°** (n=3910) · A4 **0,040°** · A6 **0/120** · A9 **0/18 ölü**. Hüküm değişmedi: ŞARTLI GEÇTİ. Kurucu retrospektif onayı alındı (M-F-01).
+
+## 3. Kapının yakaladığı beş gerçek hata
 
 Kapı üç kez kırmızı yandı ve üçünde de kod/tanım hatası buldu. Bu, kapının çalıştığının kanıtı.
 
@@ -61,6 +63,10 @@ Kapı üç kez kırmızı yandı ve üçünde de kod/tanım hatası buldu. Bu, k
 | **L-009** | Ham 3D eklem açısı, omuz/kalça genişlik farkı yüzünden ROM uçlarında sistematik sapıyor | 5.71° | **0.00°** (düzlem izdüşümü zorunlu kılındı) |
 | **L-010** | Gövde açısı tek taraflı landmark çiftiyle ölçülemez; frontal düzlemde sahte yana-eğim | 11.31° | **0.00°** (türetilmiş orta-hat landmark'ları) |
 | **L-011** | `angle_vertical`+`transverse` matematiksel olarak ölü: her zaman tam 90° | sabit 90° | metrik yeniden tanımlandı + kombinasyon yasaklandı + A9 kriteri eklendi |
+| **L-028** | `heel_rise` topuk kalkmasını değil **ayak uzunluğunu** ölçüyordu; squat koruması hiç ateşlenmezdi. İkinci katman: üreteçte topuk-kalkma olgusu yoktu, metrik sınanmıyordu bile | sabit (hiç değişmiyor) | `height_diff_norm` + üretece `heel_lift` parametresi → A1 0,000° |
+| **L-029** | Normalizasyon referansı poza duyarlı: gövde yana eğilince `torso_length` kayıyor, ona bölünen **tüm** metrikler onunla kayıyor | %1,63 (40° yan eğim) | orta-hattan orta-hatta ölçüm → tüm pozlarda %0,00 |
+
+**L-029 ayrıca bir uyum bulgusu:** kanonik Dart çekirdeği bu referansı zaten doğru tanımlamış (`shoulderMid − hipMid`); Python hattı farklı bir literatür tanımını kullanıyordu. Differential test çalıştırılsaydı uyuşmazlık verirdi. Kalan uyumsuzluk L-031'de: Dart image düzleminde, Python 3D world uzayında ölçüyor.
 
 Dördüncü bir olay kapı hatası DEĞİLDİ: ilk koşuda `hip_flexion` 60° sapma gösterdi, incelendi, **ölçümün doğru testin yanlış** olduğu görüldü (kalça açısı tanım gereği gövde eğimini içerir). Beklenti formülü düzeltildi; ürün tarafı sonucu `hip_flexion` ile `trunk_lean`'in bağımsız olmadığı — hip hinge testindeki lumbo-pelvik ritim tam olarak bu oran.
 
