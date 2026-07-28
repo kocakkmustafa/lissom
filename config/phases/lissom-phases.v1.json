@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.phases",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "testSet": "lissom.assessment.battery@1.0.0",
   "_notes": [
@@ -33,14 +33,14 @@
         "fields": [
           "metric",
           "op",
-          "value"
+          "valuePerSecond"
         ],
-        "note": "önceki kareye göre işaretli değişim; 'hâlâ hareket ediyor mu' soruları",
+        "note": "SANİYE başına değişim — kare-başına eşik hem hareket genliğine hem cihaz fps'ine duyarlıydı (L-069/L-070)",
         "example": {
           "kind": "delta",
           "metric": "knee_flexion_right",
           "op": "<",
-          "value": -0.5
+          "valuePerSecond": -30.0
         }
       },
       {
@@ -126,7 +126,7 @@
             "kind": "delta",
             "metric": "shoulder_flexion_{side}",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 8000,
           "abort": {
@@ -145,7 +145,7 @@
                 "kind": "delta",
                 "metric": "shoulder_flexion_{side}",
                 "op": "<",
-                "value": 0.5
+                "valuePerSecond": 15.0
               },
               {
                 "kind": "metric",
@@ -172,7 +172,7 @@
             "kind": "delta",
             "metric": "shoulder_flexion_{side}",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 8000
         },
@@ -217,7 +217,7 @@
             "kind": "delta",
             "metric": "knee_flexion_right",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 10000,
           "abort": {
@@ -233,7 +233,7 @@
             "kind": "delta",
             "metric": "knee_flexion_right",
             "op": ">",
-            "value": -0.5
+            "valuePerSecond": -15.0
           },
           "minDurationMs": 1000,
           "timeoutMs": 8000,
@@ -252,7 +252,7 @@
             "kind": "delta",
             "metric": "knee_flexion_right",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 10000
         },
@@ -369,7 +369,7 @@
             "kind": "delta",
             "metric": "knee_flexion_right",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 10000,
           "abort": {
@@ -385,7 +385,7 @@
             "kind": "delta",
             "metric": "knee_flexion_right",
             "op": ">",
-            "value": -0.5
+            "valuePerSecond": -15.0
           },
           "minDurationMs": 1000,
           "timeoutMs": 8000,
@@ -404,7 +404,7 @@
             "kind": "delta",
             "metric": "knee_flexion_right",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 10000
         },
@@ -448,7 +448,7 @@
             "kind": "delta",
             "metric": "tibia_inclination_{side}",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 8000,
           "abort": {
@@ -467,7 +467,7 @@
                 "kind": "delta",
                 "metric": "tibia_inclination_{side}",
                 "op": "<",
-                "value": 0.5
+                "valuePerSecond": 15.0
               },
               {
                 "kind": "metric",
@@ -494,7 +494,7 @@
             "kind": "delta",
             "metric": "tibia_inclination_{side}",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 8000
         },
@@ -539,7 +539,7 @@
             "kind": "delta",
             "metric": "reach_depth",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 8000,
           "abort": {
@@ -555,7 +555,7 @@
             "kind": "delta",
             "metric": "reach_depth",
             "op": "<",
-            "value": 0.5
+            "valuePerSecond": 15.0
           },
           "minDurationMs": 1500,
           "timeoutMs": 6000,
@@ -574,7 +574,7 @@
             "kind": "delta",
             "metric": "reach_depth",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 8000
         },
@@ -618,7 +618,7 @@
             "kind": "delta",
             "metric": "trunk_lean",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 10000,
           "abort": {
@@ -634,7 +634,7 @@
             "kind": "delta",
             "metric": "trunk_lean",
             "op": "<",
-            "value": 0.5
+            "valuePerSecond": 15.0
           },
           "minDurationMs": 1000,
           "timeoutMs": 8000,
@@ -653,7 +653,7 @@
             "kind": "delta",
             "metric": "trunk_lean",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 10000
         },
@@ -697,7 +697,7 @@
             "kind": "delta",
             "metric": "trunk_lateral_tilt",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 12.0
           },
           "timeoutMs": 8000,
           "abort": {
@@ -716,7 +716,7 @@
                 "kind": "delta",
                 "metric": "trunk_lateral_tilt",
                 "op": "<",
-                "value": 0.5
+                "valuePerSecond": 15.0
               },
               {
                 "kind": "metric",
@@ -732,10 +732,11 @@
           "abort": {
             "kind": "metric",
             "metric": "shoulder_line_foreshortening",
-            "op": ">",
-            "value": 0.15
+            "op": "<",
+            "value": 0.6
           },
-          "abortCode": "TORSO_ROTATED"
+          "abortCode": "TORSO_ROTATED",
+          "_note": "Foreshortening rotasyonda KÜÇÜLÜR: nötr duruşta ~0,80 (omuz genişliği / gövde uzunluğu). İlk sürüm `> 0.15` yazılmıştı — koşul her duruşta doğruydu ve test hep abort ediyordu (L-072). Eşik 0,60 GEÇİCİ; gerçek fixture'la kalibre edilecek."
         },
         {
           "id": "returning",
@@ -743,7 +744,7 @@
             "kind": "delta",
             "metric": "trunk_lateral_tilt",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -12.0
           },
           "timeoutMs": 8000
         },
@@ -837,7 +838,7 @@
             "kind": "delta",
             "metric": "knee_height_{side}",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 10000,
           "abort": {
@@ -853,7 +854,7 @@
             "kind": "delta",
             "metric": "knee_height_{side}",
             "op": ">",
-            "value": -0.5
+            "valuePerSecond": -15.0
           },
           "minDurationMs": 1000,
           "timeoutMs": 8000,
@@ -872,7 +873,7 @@
             "kind": "delta",
             "metric": "knee_height_{side}",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 10000
         },
@@ -916,7 +917,7 @@
             "kind": "delta",
             "metric": "shoulder_line_foreshortening",
             "op": ">",
-            "value": 0.01
+            "valuePerSecond": 0.3
           },
           "timeoutMs": 8000,
           "abort": {
@@ -932,7 +933,7 @@
             "kind": "delta",
             "metric": "shoulder_line_foreshortening",
             "op": "<",
-            "value": 0.005
+            "valuePerSecond": 0.1
           },
           "minDurationMs": 1500,
           "timeoutMs": 6000,
@@ -951,7 +952,7 @@
             "kind": "delta",
             "metric": "shoulder_line_foreshortening",
             "op": "<",
-            "value": -0.01
+            "valuePerSecond": -0.3
           },
           "timeoutMs": 8000
         },
@@ -996,7 +997,7 @@
             "kind": "delta",
             "metric": "hip_flexion_{side}",
             "op": ">",
-            "value": 1.0
+            "valuePerSecond": 30.0
           },
           "timeoutMs": 8000,
           "abort": {
@@ -1012,7 +1013,7 @@
             "kind": "delta",
             "metric": "hip_flexion_{side}",
             "op": "<",
-            "value": 0.5
+            "valuePerSecond": 15.0
           },
           "minDurationMs": 1500,
           "timeoutMs": 6000,
@@ -1032,7 +1033,7 @@
             "kind": "delta",
             "metric": "hip_flexion_{side}",
             "op": "<",
-            "value": -1.0
+            "valuePerSecond": -30.0
           },
           "timeoutMs": 8000
         },
