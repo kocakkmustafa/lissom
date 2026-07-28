@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.assessment.phases",
+  "version": "1.0.0",
+  "metricSet": "lissom.assessment.metrics@1.0.0",
+  "testSet": "lissom.assessment.battery@1.0.0",
+  "_notes": [
+    "Test faz tanımları — motion_core `PhaseDefinition` üretimi için veri.",
+    "Faz MANTIĞI çekirdekte (PhaseCondition = tip-güvenli Dart fonksiyonu); bu dosya faz SIRASINI, EŞİKLERİNİ ve zamanlamalarını taşır. 'Yeni test = config' iddiası burada geçerli: yeni bir ROM testi eklemek kod değil kayıt ister.",
+    "Zorunlu değişmez: her test dizisinde tam bir terminal faz vardır ve her terminal olmayan fazın timeoutMs değeri bulunur. Timeout'suz faz, çıkış koşulunu kaçırdığında sonsuza park eder ve bu dışarıdan 'kullanıcı hareketsiz' gibi görünür (çekirdek dokümantasyonundaki uyarı).",
+    "Eşikler G1-a metodolojisiyle sentetik iskelette türetildi; gerçek fixture kalibrasyonu G1-b'de yapılacak ve bu dosyanın sürümü yükseltilecek."
+  ],
+  "conditionGrammar": {
+    "_note": "Çekirdeğin yorumlayacağı koşul dili. Her koşul saf fonksiyondur — kendi durumunu tutmaz.",
+    "forms": [
+      { "kind": "metric", "fields": ["metric", "op", "value"], "example": { "kind": "metric", "metric": "shoulder_flexion_{side}", "op": ">=", "value": 140 } },
+      { "kind": "delta", "fields": ["metric", "op", "value"], "note": "önceki kareye göre işaretli değişim; 'hâlâ hareket ediyor mu' soruları", "example": { "kind": "delta", "metric": "knee_flexion_right", "op": "<", "value": -0.5 } },
+      { "kind": "timeInPhase", "fields": ["op", "valueMs"], "example": { "kind": "timeInPhase", "op": ">=", "valueMs": 2000 } },
+      { "kind": "confidence", "fields": ["op", "value"], "note": "kare kalitesi kapısı", "example": { "kind": "confidence", "op": "<", "value": 0.6 } },
+      { "kind": "all", "fields": ["of"], "note": "VE" },
+      { "kind": "any", "fields": ["of"], "note": "VEYA" }
+    ],
+    "ops": [">", ">=", "<", "<=", "==", "!="]
+  },
+  "patterns": {
+    "_note": "Üç çekirdek desen; 12 testin tamamı bunlardan birine oturur.",
+    "rom_sweep": "READY → MOVING → PEAK_HOLD → RETURNING → COMPLETE. Ölçüm PEAK_HOLD'da alınır. (overhead_reach, hamstring_reach, lateral_bend, ankle_dorsiflexion, thoracic_rotation, aslr)",
+    "descend_return": "READY → DESCENDING → BOTTOM → ASCENDING → COMPLETE. Ölçüm BOTTOM'da. (deep_squat, overhead_squat, forward_lunge, hip_hinge)",
+    "timed_hold": "READY → HOLDING → COMPLETE|FAILED. Ölçüm süre + form bozulma anı. (single_leg_balance, plank_hold)"
+  },
+  "tests": [
+    {
+      "testId": "overhead_reach",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": { "kind": "metric", "metric": "shoulder_flexion_{side}", "op": "<", "value": 40 },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": ["{SIDE}_SHOULDER", "{SIDE}_ELBOW", "MID_HIP"]
+        },
+        {
+          "id": "raising",
+          "enter": { "kind": "delta", "metric": "shoulder_flexion_{side}", "op": ">", "value": 1.0 },
+          "timeoutMs": 8000,
+          "abort": { "kind": "confidence", "op": "<", "value": 0.6 },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "all",
+            "of": [
+              { "kind": "delta", "metric": "shoulder_flexion_{side}", "op": "<", "value": 0.5 },
+              { "kind": "metric", "metric": "shoulder_flexion_{side}", "op": ">=", "value": 60 }
+            ]
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": { "kind": "metric", "metric": "elbow_extension_{side}", "op": "<", "value": 150 },
+          "abortCode": "BENT_ELBOW"
+        },
+        {
+          "id": "returning",
+          "enter": { "kind": "delta", "metric": "shoulder_flexion_{side}", "op": "<", "value": -1.0 },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": { "kind": "metric", "metric": "shoulder_flexion_{side}", "op": "<", "value": 45 },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "deep_squat",
+      "pattern": "descend_return",
+      "perSide": false,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": { "kind": "metric", "metric": "knee_flexion_right", "op": ">", "value": 160 },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": ["RIGHT_HIP", "RIGHT_KNEE", "RIGHT_ANKLE", "RIGHT_HEEL", "MID_SHOULDER"]
+        },
+        {
+          "id": "descending",
+          "enter": { "kind": "delta", "metric": "knee_flexion_right", "op": "<", "value": -1.0 },
+          "timeoutMs": 10000,
+          "abort": { "kind": "confidence", "op": "<", "value": 0.6 },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "bottom",
+          "enter": { "kind": "delta", "metric": "knee_flexion_right", "op": ">", "value": -0.5 },
+          "minDurationMs": 1000,
+          "timeoutMs": 8000,
+          "measureHere": true,
+          "abort": { "kind": "metric", "metric": "heel_rise_right", "op": ">", "value": 0.05 },
+          "abortCode": "HEEL_LIFT"
+        },
+        {
+          "id": "ascending",
+          "enter": { "kind": "delta", "metric": "knee_flexion_right", "op": ">", "value": 1.0 },
+          "timeoutMs": 10000
+        },
+        {
+          "id": "complete",
+          "enter": { "kind": "metric", "metric": "knee_flexion_right", "op": ">", "value": 155 },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "plank_hold",
+      "pattern": "timed_hold",
+      "perSide": false,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": { "kind": "metric", "metric": "plank_hip_deviation", "op": "<", "value": 0.22 },
+          "minDurationMs": 1000,
+          "timeoutMs": 30000,
+          "requiredLandmarks": ["MID_SHOULDER", "MID_HIP", "RIGHT_ANKLE"]
+        },
+        {
+          "id": "holding",
+          "enter": { "kind": "timeInPhase", "op": ">=", "valueMs": 1000 },
+          "timeoutMs": 45000,
+          "measureHere": true,
+          "abort": {
+            "kind": "any",
+            "of": [
+              { "kind": "metric", "metric": "plank_hip_deviation", "op": ">", "value": 0.22 },
+              { "kind": "confidence", "op": "<", "value": 0.6 }
+            ]
+          },
+          "abortCode": "FORM_BREAK",
+          "_note": "Abort burada BAŞARISIZLIK DEĞİL, ölçümün bittiği andır: süre form bozulana kadar sayılır. Kullanıcıya 'başaramadın' denmez."
+        },
+        {
+          "id": "complete",
+          "enter": { "kind": "timeInPhase", "op": ">=", "valueMs": 45000 },
+          "isTerminal": true
+        }
+      ]
+    }
+  ]
+}

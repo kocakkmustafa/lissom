@@ -23,6 +23,13 @@ jobs:
         # patlamalı, tahmin etmemeli.
         run: python3 tools/config_check.py
 
+      - name: Faz config değişmezleri
+        # Timeout'suz bir faz, çıkış koşulunu kaçırdığında sonsuza park eder ve
+        # bu dışarıdan "kullanıcı hareketsiz" gibi görünür — çekirdeğin kendi
+        # uyarısı. Denetim: terminal faz · timeout · ölçüm fazı · abortCode ·
+        # metrik referansları · koşul dilbilgisi · batarya kapsamı.
+        run: python3 tools/phase_check.py
+
       - name: Wellness dil süzgeci
         # Tek bir aşırı ifade ürünü tıbbi cihaz sınırına iter (FDA General
         # Wellness / Apple 1.4.1). Süzgeç hiç dosya bulamazsa çıkış kodu 2 verir
