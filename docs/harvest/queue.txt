@@ -1,22 +1,23 @@
-# Lissom hasat kuyruğu — envanterden türetildi (7 kol, oEmbed doğrulamalı)
-# Ham çıktı ~/motion-harvest/lissom/ altına gider (M-F-26: repoya GİRMEZ)
+# Lissom hasat kuyruğu v1.2 — envanter + 2 tur hedefli arama (süre filtresi kaynakta)
+# Ham çıktı ~/motion-harvest/lissom/ (M-F-26: repoya GİRMEZ)
 
-# --- Overhead Reach / Shoulder Flexion Assessment ---
-https://www.youtube.com/watch?v=E3Eu0F73ROI
-https://www.youtube.com/watch?v=PfpJnU8x1kU
-https://www.youtube.com/watch?v=HVQ1YNtw_yQ
-https://www.youtube.com/watch?v=GL6kBBMtWkY
+# --- 90/90 hip switch ---
+https://www.youtube.com/watch?v=qq_Z7sAmVrA
 
-# --- Shoulder Mobility Screen (genel, ekipmansız) ---
-https://www.youtube.com/watch?v=2ejiBQ3mxQU
+# --- Active Straight Leg Raise (ASLR) ---
+https://www.youtube.com/watch?v=qhDv5ZmQFhs
+https://www.youtube.com/watch?v=zeDBw7Wi5dc
+https://www.youtube.com/watch?v=bjW4K-YwRK8
+https://www.youtube.com/watch?v=zyJf11ThX4g
 
-# --- Wall Angels / Wall Slides ---
-https://www.youtube.com/watch?v=cvx06snMQ3A
-https://www.youtube.com/watch?v=VZnhIQarBQc
-https://www.youtube.com/watch?v=KPcCg8RVUk0
-https://www.youtube.com/watch?v=NmrOMjNQNng
-https://www.youtube.com/watch?v=QlUhbo41GTg
-https://www.youtube.com/watch?v=GaP20t6ZOfU
+# --- Cat-Cow (Marjaryasana-Bitilasana) ---
+https://www.youtube.com/watch?v=y39PrKY_4JM
+https://www.youtube.com/watch?v=HYJhWVfFzVA
+https://www.youtube.com/watch?v=vJ0jg3xqaQk
+
+# --- Chair Pose (Utkatasana) ---
+https://www.youtube.com/watch?v=taYIpsxdwTM
+https://www.youtube.com/watch?v=s9ESgwn3k3k
 
 # --- Deep squat assessment / bodyweight squat screen ---
 https://www.youtube.com/watch?v=TuQ4jYbazuw
@@ -25,34 +26,26 @@ https://www.youtube.com/watch?v=YG-iGrQvw44
 https://www.youtube.com/watch?v=o0knCTTMZHM
 https://www.youtube.com/watch?v=yWfMPZWHnVw
 
-# --- Overhead squat assessment ---
-https://www.youtube.com/watch?v=9vmnmm7otao
-https://www.youtube.com/watch?v=ybBvcJ50UZ8
-https://www.youtube.com/watch?v=z65p0Bc0T-Q
-https://www.youtube.com/watch?v=LHZQF1vAjz4
+# --- Downward Dog (Adho Mukha Svanasana) ---
+https://www.youtube.com/watch?v=T7qT6l9npPg
+https://www.youtube.com/watch?v=F8q1kEF2JCA
+https://www.youtube.com/watch?v=Z3ZTAxVe90s
+
+# --- Forward lunge assessment (diz valgus gözlemi dahil) ---
+https://www.youtube.com/watch?v=s2eE4XqTBcw
+https://www.youtube.com/watch?v=iTBv9mmWNbU
+https://www.youtube.com/watch?v=_Ybr_84CG18
+https://www.youtube.com/watch?v=kEpN9ES6wpg
+
+# --- Half Moon (Ardha Chandrasana) ---
+https://www.youtube.com/watch?v=EriPRTk1ly0
+https://www.youtube.com/watch?v=HhApHbLgxMA
+https://www.youtube.com/watch?v=-wwRNGArTI0
 
 # --- Heel-elevated vs flat squat comparison ---
 https://www.youtube.com/watch?v=YECk8R-rVU4
 https://www.youtube.com/watch?v=5LeCCGjKQso
 https://www.youtube.com/watch?v=MKY-feF0dDo
-
-# --- Weight-bearing lunge test / knee-to-wall ankle dorsiflexion test ---
-https://www.youtube.com/watch?v=U7woPNLUT3Q
-https://www.youtube.com/watch?v=t9Lb-OUp9d0
-https://www.youtube.com/watch?v=cPN3-FR-clk
-https://www.youtube.com/watch?v=UzORz5em45s
-https://www.youtube.com/watch?v=kbzYML05Vac
-
-# --- Standing hamstring reach / toe touch assessment ---
-https://www.youtube.com/watch?v=bNio60auj5I
-https://www.youtube.com/watch?v=pxCh9Offmg0
-https://www.youtube.com/watch?v=C6fg7vQy8p8
-
-# --- Active Straight Leg Raise (ASLR) ---
-https://www.youtube.com/watch?v=qhDv5ZmQFhs
-https://www.youtube.com/watch?v=zeDBw7Wi5dc
-https://www.youtube.com/watch?v=bjW4K-YwRK8
-https://www.youtube.com/watch?v=zyJf11ThX4g
 
 # --- Hip hinge assessment / teaching the hip hinge ---
 https://www.youtube.com/watch?v=v0iMLWtkHD4
@@ -62,46 +55,84 @@ https://www.youtube.com/watch?v=PG67O49Hsso
 https://www.youtube.com/watch?v=lPOdTeASiyY
 https://www.youtube.com/watch?v=grxS8AIgWFw
 
-# --- Lateral trunk flexion / side bend assessment ---
-https://www.youtube.com/watch?v=Nbn2Yz52MVM
-https://www.youtube.com/watch?v=P-wNlwb_UJc
-https://www.youtube.com/watch?v=rgB2oVzDXgc
-https://www.youtube.com/watch?v=P4xeyw_6P1c
-
 # --- Hip mobility screen (ekipmansız, genel kalça mobilite değerlendirmesi) ---
 https://www.youtube.com/watch?v=idHgOkqvtKU
 https://www.youtube.com/watch?v=SNXlaqsUJMY
 https://www.youtube.com/watch?v=0Ttn3z_rVBk
 https://www.youtube.com/watch?v=syai-30jRgE
 
-# --- Single-leg stance / single-leg balance test ---
-https://www.youtube.com/watch?v=A9pi7_JRgwQ
-https://www.youtube.com/watch?v=3vdJhti9tZE
-https://www.youtube.com/watch?v=KOWGQVDx_8o
+# --- Lateral trunk flexion / side bend assessment ---
+https://www.youtube.com/watch?v=Nbn2Yz52MVM
+https://www.youtube.com/watch?v=P-wNlwb_UJc
+https://www.youtube.com/watch?v=rgB2oVzDXgc
+https://www.youtube.com/watch?v=P4xeyw_6P1c
 
-# --- Forward lunge assessment (diz valgus gözlemi dahil) ---
-https://www.youtube.com/watch?v=s2eE4XqTBcw
-https://www.youtube.com/watch?v=iTBv9mmWNbU
-https://www.youtube.com/watch?v=_Ybr_84CG18
-https://www.youtube.com/watch?v=kEpN9ES6wpg
-
-# --- Seated/quadruped thoracic rotation test (lumbar-locked pozisyon) ---
-https://www.youtube.com/watch?v=MrmJeKHmOoY
-https://www.youtube.com/watch?v=2MUD8ioDsPk
-https://www.youtube.com/watch?v=mGtD0v5uOiQ
+# --- Low Lunge (Anjaneyasana) ---
+https://www.youtube.com/watch?v=Y8jM-f_mUTM
+https://www.youtube.com/watch?v=MjiC4mGTnTw
+https://www.youtube.com/watch?v=hvfU9dp2eDA
 
 # --- Mountain Pose (Tadasana) ---
 https://www.youtube.com/watch?v=elBp2FpAOOI
 https://www.youtube.com/watch?v=NYhH8Gr35cI
 https://www.youtube.com/watch?v=5NxDs-ovJU8
 
+# --- Overhead Reach / Shoulder Flexion Assessment ---
+https://www.youtube.com/watch?v=E3Eu0F73ROI
+https://www.youtube.com/watch?v=PfpJnU8x1kU
+https://www.youtube.com/watch?v=HVQ1YNtw_yQ
+https://www.youtube.com/watch?v=GL6kBBMtWkY
+
+# --- Overhead squat assessment ---
+https://www.youtube.com/watch?v=9vmnmm7otao
+https://www.youtube.com/watch?v=ybBvcJ50UZ8
+https://www.youtube.com/watch?v=z65p0Bc0T-Q
+https://www.youtube.com/watch?v=LHZQF1vAjz4
+
+# --- Seated/quadruped thoracic rotation test (lumbar-locked pozisyon) ---
+https://www.youtube.com/watch?v=MrmJeKHmOoY
+https://www.youtube.com/watch?v=2MUD8ioDsPk
+https://www.youtube.com/watch?v=mGtD0v5uOiQ
+
+# --- Shoulder Mobility Screen (genel, ekipmansız) ---
+https://www.youtube.com/watch?v=2ejiBQ3mxQU
+
+# --- Single-leg stance / single-leg balance test ---
+https://www.youtube.com/watch?v=A9pi7_JRgwQ
+https://www.youtube.com/watch?v=3vdJhti9tZE
+https://www.youtube.com/watch?v=KOWGQVDx_8o
+
 # --- Standing Forward Fold (Uttanasana) ---
 https://www.youtube.com/watch?v=eTEBAanmDmA
 https://www.youtube.com/watch?v=0KzyEgkq7zw
 
-# --- Chair Pose (Utkatasana) ---
-https://www.youtube.com/watch?v=taYIpsxdwTM
-https://www.youtube.com/watch?v=s9ESgwn3k3k
+# --- Standing hamstring reach / toe touch assessment ---
+https://www.youtube.com/watch?v=bNio60auj5I
+https://www.youtube.com/watch?v=pxCh9Offmg0
+https://www.youtube.com/watch?v=C6fg7vQy8p8
+
+# --- Thread the Needle (Parsva Balasana) ---
+https://www.youtube.com/watch?v=vOukJVt56os
+https://www.youtube.com/watch?v=YjRBOASo3zM
+https://www.youtube.com/watch?v=SMhhMBqkZP4
+
+# --- Tree Pose (Vrksasana) ---
+https://www.youtube.com/watch?v=yVE4XXFFO70
+https://www.youtube.com/watch?v=ZRS0dXit51Q
+
+# --- Triangle Pose (Trikonasana) ---
+https://www.youtube.com/watch?v=mdRks-UG1qw
+https://www.youtube.com/watch?v=upFYlxZHif0
+https://www.youtube.com/watch?v=EPaf4b3pD84
+https://www.youtube.com/watch?v=5ZTXM4lbzXQ
+
+# --- Wall Angels / Wall Slides ---
+https://www.youtube.com/watch?v=cvx06snMQ3A
+https://www.youtube.com/watch?v=VZnhIQarBQc
+https://www.youtube.com/watch?v=KPcCg8RVUk0
+https://www.youtube.com/watch?v=NmrOMjNQNng
+https://www.youtube.com/watch?v=QlUhbo41GTg
+https://www.youtube.com/watch?v=GaP20t6ZOfU
 
 # --- Warrior I & II (Virabhadrasana I / II) ---
 https://www.youtube.com/watch?v=4Ejz7IgODlU
@@ -111,54 +142,219 @@ https://www.youtube.com/watch?v=pJhevMZfOHA
 https://www.youtube.com/watch?v=bclyJteWXic
 https://www.youtube.com/watch?v=IcAGektqvsc
 
-# --- Triangle Pose (Trikonasana) ---
-https://www.youtube.com/watch?v=mdRks-UG1qw
-https://www.youtube.com/watch?v=upFYlxZHif0
-https://www.youtube.com/watch?v=EPaf4b3pD84
-https://www.youtube.com/watch?v=5ZTXM4lbzXQ
+# --- Weight-bearing lunge test / knee-to-wall ankle dorsiflexion test ---
+https://www.youtube.com/watch?v=U7woPNLUT3Q
+https://www.youtube.com/watch?v=t9Lb-OUp9d0
+https://www.youtube.com/watch?v=cPN3-FR-clk
+https://www.youtube.com/watch?v=UzORz5em45s
+https://www.youtube.com/watch?v=kbzYML05Vac
 
-# --- Low Lunge (Anjaneyasana) ---
-https://www.youtube.com/watch?v=Y8jM-f_mUTM
-https://www.youtube.com/watch?v=MjiC4mGTnTw
-https://www.youtube.com/watch?v=hvfU9dp2eDA
-
-# --- Downward Dog (Adho Mukha Svanasana) ---
-https://www.youtube.com/watch?v=T7qT6l9npPg
-https://www.youtube.com/watch?v=F8q1kEF2JCA
-https://www.youtube.com/watch?v=Z3ZTAxVe90s
-
-# --- Cat-Cow (Marjaryasana-Bitilasana) ---
-https://www.youtube.com/watch?v=y39PrKY_4JM
-https://www.youtube.com/watch?v=HYJhWVfFzVA
-https://www.youtube.com/watch?v=vJ0jg3xqaQk
-
-# --- Thread the Needle (Parsva Balasana) ---
-https://www.youtube.com/watch?v=vOukJVt56os
-https://www.youtube.com/watch?v=YjRBOASo3zM
-https://www.youtube.com/watch?v=SMhhMBqkZP4
-
-# --- Half Moon (Ardha Chandrasana) ---
-https://www.youtube.com/watch?v=EriPRTk1ly0
-https://www.youtube.com/watch?v=HhApHbLgxMA
-https://www.youtube.com/watch?v=-wwRNGArTI0
-
-# --- Tree Pose (Vrksasana) ---
-https://www.youtube.com/watch?v=yVE4XXFFO70
-https://www.youtube.com/watch?v=ZRS0dXit51Q
+# --- active_straight_leg_raise ---
+https://www.youtube.com/watch?v=WXs5HoRPvm0
+https://www.youtube.com/watch?v=WZ0D9bcozzw
+https://www.youtube.com/watch?v=PwjTUmAT1eg
+https://www.youtube.com/watch?v=LdAD9GNv8FI
+https://www.youtube.com/watch?v=O6UuN3Qf7ug
+https://www.youtube.com/watch?v=biB4Os5EzWc
+https://www.youtube.com/watch?v=E_LSzTHZKLE
+https://www.youtube.com/watch?v=-FUylmgrbFk
+https://www.youtube.com/watch?v=Fv6AzBOAQj8
+https://www.youtube.com/watch?v=7v7JIdzpsBU
+https://www.youtube.com/watch?v=PgdTj97lL3o
+https://www.youtube.com/watch?v=ef4ceyfF52o
+https://www.youtube.com/watch?v=eHd7HDwGuNo
+https://www.youtube.com/watch?v=O8wq1q7jmAI
+https://www.youtube.com/watch?v=GeDi54P0aOA
+https://www.youtube.com/watch?v=klnNNmeiVf0
+https://www.youtube.com/watch?v=_8Yg7TQbAzk
 
 # --- ankle circles ---
 https://www.youtube.com/watch?v=rQ-EWPDUSNI
 
-# --- 90/90 hip switch ---
-https://www.youtube.com/watch?v=qq_Z7sAmVrA
+# --- ankle_dorsiflexion ---
+https://www.youtube.com/watch?v=7dpO5BbsbN4
+https://www.youtube.com/watch?v=u3NbKOXl75k
+https://www.youtube.com/watch?v=AtpiibNXDQA
+https://www.youtube.com/watch?v=MgKkevZ5qBI
+https://www.youtube.com/watch?v=wdsxep1BeMY
+https://www.youtube.com/watch?v=wLNb4S24GN0
+https://www.youtube.com/watch?v=zQaBdN2MR2Q
+https://www.youtube.com/watch?v=dCwLYUjzslY
+https://www.youtube.com/watch?v=Yr-D60IK5CY
+https://www.youtube.com/watch?v=wV9tITMsbDs
+https://www.youtube.com/watch?v=0EcFjHgBwWg
+
+# --- deep_squat ---
+https://www.youtube.com/watch?v=k1sUUVBWmU4
+https://www.youtube.com/watch?v=U5qlAYuZzCg
+https://www.youtube.com/watch?v=OpJiDo2SouU
+https://www.youtube.com/watch?v=feg9lJWYP2A
+https://www.youtube.com/watch?v=Iqqo7kLQ_x0
+https://www.youtube.com/watch?v=cGgGvPiyx0I
+https://www.youtube.com/watch?v=P2MbjX2FDi4
+https://www.youtube.com/watch?v=EoiQCWAfomk
+https://www.youtube.com/watch?v=8q2xQCq_PR8
+https://www.youtube.com/watch?v=bxMGzjwFzr4
+https://www.youtube.com/watch?v=yoHg6z2Pxcw
+https://www.youtube.com/watch?v=cBWOxA40o3U
+https://www.youtube.com/watch?v=R7BqGqvoTJw
+
+# --- forward_lunge ---
+https://www.youtube.com/watch?v=PW1pyvhviik
+https://www.youtube.com/watch?v=WBc8jm2De6Q
+https://www.youtube.com/watch?v=XTP0RlEcYq0
+https://www.youtube.com/watch?v=UloBnDDS_E4
+https://www.youtube.com/watch?v=s7D5ZNgdxIs
+https://www.youtube.com/watch?v=gztl8DEDOL4
+https://www.youtube.com/watch?v=1DZpWsB2RQo
 
 # --- half-kneeling hip flexor stretch ---
 https://www.youtube.com/watch?v=iQnNn67aAeg
 https://www.youtube.com/watch?v=Ujf2h0WWryw
 https://www.youtube.com/watch?v=Bfb-9dIWEr4
 
+# --- hamstring_reach ---
+https://www.youtube.com/watch?v=2omWte2UAbQ
+https://www.youtube.com/watch?v=BCnIIrXdKBI
+https://www.youtube.com/watch?v=5El09YJNrkY
+https://www.youtube.com/watch?v=SbHuDLIfyRo
+https://www.youtube.com/watch?v=5N114vBvJCI
+https://www.youtube.com/watch?v=2VIVU-h3gnM
+https://www.youtube.com/watch?v=TBnsce1cmb8
+https://www.youtube.com/watch?v=MkXxAI6VwWw
+https://www.youtube.com/watch?v=Y_sTz-FfYBk
+https://www.youtube.com/watch?v=muKFPa_w1og
+https://www.youtube.com/watch?v=xJnUZkwlREo
+https://www.youtube.com/watch?v=NqTmr3_MNT0
+
+# --- hip_hinge ---
+https://www.youtube.com/watch?v=HCj2iFmNox0
+https://www.youtube.com/watch?v=Nn9fBqy5778
+https://www.youtube.com/watch?v=pNmr4-nHJHY
+https://www.youtube.com/watch?v=5OGH0NlRGZI
+https://www.youtube.com/watch?v=rusQECelWMQ
+https://www.youtube.com/watch?v=suNpfQK9RcI
+https://www.youtube.com/watch?v=HcH9zFg2Wmk
+https://www.youtube.com/watch?v=RVogObIoOEk
+https://www.youtube.com/watch?v=Dn3GexXx228
+https://www.youtube.com/watch?v=3njtLxRY8ZA
+https://www.youtube.com/watch?v=sZn4LFSg_GI
+https://www.youtube.com/watch?v=3KD_dLuGges
+https://www.youtube.com/watch?v=mBi_D8wXUEc
+https://www.youtube.com/watch?v=DpYWbjr3Fhs
+https://www.youtube.com/watch?v=sLPMRWV89cE
+https://www.youtube.com/watch?v=z19HMvq0H-4
+https://www.youtube.com/watch?v=ip22yHOmEkU
+https://www.youtube.com/watch?v=mcZ3HCkXjH0
+
+# --- lateral_bend ---
+https://www.youtube.com/watch?v=c-IeFZkPEoE
+https://www.youtube.com/watch?v=sCDOYuG6oiY
+https://www.youtube.com/watch?v=8V3uad4MSaE
+https://www.youtube.com/watch?v=qcmUL4poIVk
+https://www.youtube.com/watch?v=q8cItxkIOQ4
+https://www.youtube.com/watch?v=fR3ipeZVib4
+https://www.youtube.com/watch?v=1Gyq3-Ltg74
+https://www.youtube.com/watch?v=TziMAn77ZRU
+https://www.youtube.com/watch?v=tkTZ2eQKGqA
+https://www.youtube.com/watch?v=oeoRP3ZiXQw
+https://www.youtube.com/watch?v=nwELtKGnjrI
+https://www.youtube.com/watch?v=HBapDoZZ_T8
+https://www.youtube.com/watch?v=cJi4dAifyPw
+https://www.youtube.com/watch?v=ghL3AJfRT6k
+https://www.youtube.com/watch?v=dn95zk-bx6A
+https://www.youtube.com/watch?v=6-nSvntEANY
+https://www.youtube.com/watch?v=dnmVk3gtz9c
+https://www.youtube.com/watch?v=hQP9qvUNDmc
+https://www.youtube.com/watch?v=r9DMLx37SCM
+https://www.youtube.com/watch?v=Ddw9WfS8W-I
+https://www.youtube.com/watch?v=kB2woSanHPc
+https://www.youtube.com/watch?v=XpMKV4cCxrc
+https://www.youtube.com/watch?v=WPIBXcMb9Is
+https://www.youtube.com/watch?v=J1Js0-1Vr6I
+
 # --- open-book / thoracic rotation reach ---
 https://www.youtube.com/watch?v=5TdmVlQe64c
+
+# --- overhead_reach ---
+https://www.youtube.com/watch?v=cP4LLJie9kw
+https://www.youtube.com/watch?v=V_NOw5VqpYA
+https://www.youtube.com/watch?v=OtE8CdyRtuk
+https://www.youtube.com/watch?v=Mthwzn8Vwt0
+https://www.youtube.com/watch?v=p8E_ksL96HI
+https://www.youtube.com/watch?v=n9HQIw1LHDY
+https://www.youtube.com/watch?v=D5uywZB79HY
+https://www.youtube.com/watch?v=ZFTY2UndWNI
+https://www.youtube.com/watch?v=b7yQwf-K7z0
+https://www.youtube.com/watch?v=zW8SE6WOxD0
+https://www.youtube.com/watch?v=VoWThqK8tCw
+https://www.youtube.com/watch?v=Q0TH_tJ5TsI
+https://www.youtube.com/watch?v=YP-QZTenli4
+https://www.youtube.com/watch?v=Iovy1VVmKLU
+https://www.youtube.com/watch?v=TDj_l5WFRtE
+https://www.youtube.com/watch?v=QkOl6noIgQM
+https://www.youtube.com/watch?v=fnc01OxSh-s
+https://www.youtube.com/watch?v=uu70iopTtq4
+
+# --- overhead_squat ---
+https://www.youtube.com/watch?v=qh2JJnvMKv0
+https://www.youtube.com/watch?v=dtBvwmMpcRg
+https://www.youtube.com/watch?v=JU38DOT4ctk
+https://www.youtube.com/watch?v=lTqQnvLBZBg
+https://www.youtube.com/watch?v=YUv-ZqW7PRs
+https://www.youtube.com/watch?v=DnW8HMAaTDo
+https://www.youtube.com/watch?v=3gkcbPrnGAY
+https://www.youtube.com/watch?v=qM0c_xXjKa8
+https://www.youtube.com/watch?v=Maf3K4bTSs8
+https://www.youtube.com/watch?v=kh5vtVPcELg
+https://www.youtube.com/watch?v=9PZ8Wp4TcdM
+https://www.youtube.com/watch?v=ggodA5XrUrU
+https://www.youtube.com/watch?v=G8p5GlVbBs0
+https://www.youtube.com/watch?v=mWGQ_83vG5U
+https://www.youtube.com/watch?v=vg5XWRuRECA
+
+# --- plank_hold ---
+https://www.youtube.com/watch?v=XuprZeJa7G0
+https://www.youtube.com/watch?v=V3Dk0uM35hA
+https://www.youtube.com/watch?v=UnLx0CB47rU
+https://www.youtube.com/watch?v=sGYRMk-UhxE
+https://www.youtube.com/watch?v=SLOPT0T1psk
+https://www.youtube.com/watch?v=qOIGqc7qhho
+https://www.youtube.com/watch?v=kU88KIbyOJ4
+https://www.youtube.com/watch?v=7XazEyDHGAc
+https://www.youtube.com/watch?v=AobElwmpDZc
+https://www.youtube.com/watch?v=41CrHqYPXLM
+https://www.youtube.com/watch?v=gb18r17Neew
+https://www.youtube.com/watch?v=DCGQeRv7so8
+https://www.youtube.com/watch?v=g_ERniqCvIM
+https://www.youtube.com/watch?v=UgomcNe4u_Q
+https://www.youtube.com/watch?v=6LqqeBtFn9M
+https://www.youtube.com/watch?v=ABzfaaVlZIU
+https://www.youtube.com/watch?v=A2b2EmIg0dA
+https://www.youtube.com/watch?v=0F0-9wxt7JQ
+https://www.youtube.com/watch?v=fU_xy-TOxc4
+https://www.youtube.com/watch?v=LIdYp7CU0D8
+https://www.youtube.com/watch?v=BQu26ABuVS0
+
+# --- single_leg_balance ---
+https://www.youtube.com/watch?v=H7ehsrCSdQM
+https://www.youtube.com/watch?v=Jvv7BFG3rPI
+https://www.youtube.com/watch?v=MJshi3fdxRM
+https://www.youtube.com/watch?v=n7FCqc5deys
+https://www.youtube.com/watch?v=4J0QFcFqRyQ
+https://www.youtube.com/watch?v=bQWZJJQ3ky0
+https://www.youtube.com/watch?v=u1v-dhexgW0
+
+# --- thoracic_rotation ---
+https://www.youtube.com/watch?v=5wv670fHuG4
+https://www.youtube.com/watch?v=1k9EL-jEMYs
+https://www.youtube.com/watch?v=_g817AzkvXU
+https://www.youtube.com/watch?v=40oaI9rRSUE
+https://www.youtube.com/watch?v=x0lV2mEbJ9E
+https://www.youtube.com/watch?v=kEuC_V9nAjw
+https://www.youtube.com/watch?v=0M4xbHqnADA
+https://www.youtube.com/watch?v=i_L8LlY9vio
+https://www.youtube.com/watch?v=5nbiroAor8c
 
 # --- thread the needle ---
 https://www.youtube.com/watch?v=7C8-zj3nRro

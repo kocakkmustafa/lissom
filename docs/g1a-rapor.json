@@ -51,16 +51,41 @@
       ],
       "pass": true
     },
-    "A7_A8": "NOT_MEASURED_state_machine_pending"
+    "A7": {
+      "pass": 5,
+      "total": 5,
+      "failures": []
+    },
+    "A8": {
+      "pass": 10,
+      "total": 10,
+      "failures": [],
+      "uncovered": [
+        "active_straight_leg_raise",
+        "ankle_dorsiflexion",
+        "forward_lunge",
+        "hamstring_reach",
+        "plank_hold",
+        "single_leg_balance",
+        "thoracic_rotation"
+      ]
+    },
+    "A10": {
+      "bad": [],
+      "checked": 11
+    }
   },
-  "verdict": "ŞARTLI GEÇTİ (A1-A6 tam; A7/A8 state machine bekliyor)",
+  "verdict": "GEÇTİ (A1-A9 tam)",
   "passed": [
     "A1",
     "A2",
     "A3",
     "A4",
     "A6",
-    "A9"
+    "A9",
+    "A7",
+    "A8",
+    "A10"
   ],
   "measured": [
     "A1",
@@ -68,6 +93,9 @@
     "A3",
     "A4",
     "A6",
-    "A9"
+    "A9",
+    "A7",
+    "A8",
+    "A10"
   ]
 }
