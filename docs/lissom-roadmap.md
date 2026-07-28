@@ -4,6 +4,8 @@
 **Hiyerarşi:** `00-AILE-MIMARISI.md` (D4 dahil) > `20-URETIM-SURECI.md` > `10-ARAC-KATALOGU.md` > bu dosya > `lissom-plan.md`.
 **Ürün dili: İNGİLİZCE** (UI+içerik+ses+store). İç doküman Türkçe.
 
+> ⚡ **REVİZYON 2026-07-26 (kurucu direktifi — KURUCUSUZ VERİ FABRİKASI + GENİŞ KÜTÜPHANE, M-F-13..16):** Bu haritadaki "kurucu çekimi / fixture çekim listesi kurucuya" varsayımları KALDIRILDI — kurucu çekim YAPMAZ. Birincil veri = kamu-video hasadı + sentetik (katalog §6.2; ücretli klip İPTAL — M-F-17); doğrulama = §6.3 merdiveni; öğretim görselleri = §6.4 katmanlı AI-eğitmen hattı (T1 = iskelet-sürümlü uygulama-içi avatar, $0 ve form-garantili). Kurucudan yalnız onay/kapı kararları + EN SONDA (G8'de, deneme amaçlı) cihaz-benchmark'ı beklenir — erken fazlar benchmark'ı BEKLEMEZ. **Geniş kütüphane:** Test bataryası + yoga asana aileleri + esneklik içerikleri GENİŞ hasat edilir (PT-kanal havuzu: Physiotutors/E3 Rehab/Clinical Physio/Movement by David + Emmet Louis/Merrick); G1-b gerçek-video bacağı kamu-video + MM-Fit/AIST++ + sentetik + gerekirse ücretli klip ile ölçülür; iç doğrulama çalışması TestFlight beta rızası/ücretli klip yoluyla. Sorularını bu çerçevede kendin karara bağla — kurucuya soru YOK.
+
 ## 1. Kimlik ve Kuzey Yıldızı
 
 **Lissom: Mobility & Yoga** — kamerayla hareket kapasiteni ölç, sana özel günlük programı hocan yanındaymış gibi sesli rehberlikle uygula, 4 haftada yeniden ölç. Aile sırası **1**: pose modelinin en güvenilir bölgesi (yavaş/statik pozlar) + en geniş pazar + ailenin ortak değerlendirme katmanı (Gravita bilek/omuz ön-şartı, JabLab ısınması buradan beslenecek).
@@ -83,14 +85,44 @@ Cihaz matrisi ölçümü (fps/ısı/pil — düşük-orta Android + eski iPhone)
 - Lansman planı (`growth-marketing-strategist`): soft launch → ölçüm döngüsü kanıtı → genel lansman; reklam kreatif brief'leri (`brand-identity-designer`): "before/after ROM" dürüst anlatı.
 - **Submission = kurucu tetiği.**
 
-## 5. Fixture & veri planı (özet)
-Birincil: kendi kayıtlarımız (G1 çekim listesi). Destek: InfiniteRep (ticari-OK teyitli), Halo protokol tanımları, 3D-Yoga lisans sorusu (çıkarsa eşik tohumu). Yoga-82 yalnız taksonomi. Bilinen-açı referans çekimleri = iç doğrulama çalışması (n≥20-30 hedefi manuel listeye — "ölçer" iddiası öncesi).
+## 4.5 Dalga planı (kapsam otoritesi: `LISSOM-BLUEPRINT.md`)
+
+G-fazları dalga-bazlı koşulur: **her dalga için G3→G6 içerik/motor döngüsü, platform katmanı bir kez (G5'te)** — standart §4.2.
+
+| Dalga | Kapsam | Fizibilite notu |
+|---|---|---|
+| **W0** | PRD blueprint kapsamıyla güncelle · IA çatısı (tüm aile sayfaları "yakında" durumlu) · platform katmanı · **batarya genişletme** (ASLR + plank/rotasyon-stabilite; tek-bacak denge ve overhead squat zaten V1 havuzunda) | G1-a metodolojisi yeni testlere aynen uygulanır |
+| **W1** | Yoga: Hatha · Vinyasa · Yin (Tier-1 pozlar) + esneklik hedefleri (Front/Middle Split · Kalça · Hamstring) + günlük program motoru → G5 iskelet → G6 içerik | Vinyasa'da poz-poz düzeltme İDDİASIZ; akış+nefes-tempo koçluğu ("flow modu" gevşek skor) |
+| **W2** | Chair/Office Yoga + popülasyon paketleri (Masa-başı · Koşucu · Lifter) + Backbend/Omuz-açma | Backbend wheel ⚠️ güven-sönümleme |
+| **W3** | Ashtanga temel seri + aile ısınma paketleri (JabLab/Choreia/Gravita deep-link) + nefes/meditasyon (yalnız ses-rehberli) | **Nefes kamerayla ÖLÇÜLMEZ** — iddia yok |
+| **W4** | Senior Mobility (doktor-onayı kapısı) + Prenatal (ACOG-hizalı güvenli-poz alt-kümesi) | En son; uzman turu zorunlu |
+
+**Poz kütüphanesi katmanları:** Tier-1 ~150-250 poz (ayakta/oturan/diz-üstü) tam koçluk · Tier-2 yer/supine gevşek-skor · Tier-3 inversiyonlar avatar-demo-only. "Complete" tanımı bu üç katmandır.
+
+**Kapsam dışı** (tek "Neden yok?" sayfasında açıklanır): çocuk paketi · kamera ile nefes/meditasyon ölçümü · klinik FMS/tanı/düşme-riski iddiası · Bikram · hip iç/dış rotasyon ölçümü (L-006).
+
+## 5. Fixture & veri planı — ⚡ REVİZE (M-F-13/17)
+
+**Kurucu çekimi YOK.** `FIXTURE-CEKIM-LISTESI.md` artık **opsiyonel şablon** (ileride TestFlight kohortu veya gönüllü çekim olursa protokol hazır dursun diye korunuyor).
+
+Birincil: **kamu PT/klinik kanal hasadı** (≥3 bağımsız eğitmen/hareket — `docs/harvest/`) + **kendi sentetiğimiz** (Unity Perception). Doğrulama merdiveni katalog §6.3:
+
+| Kapı türü | Kaynak |
+|---|---|
+| Doğruluk (açı) | AIST++ (CC-BY) + MM-Fit (CC-BY — Zenodo'da teyit edildi) + sentetik |
+| Güvenilirlik/çeşitlilik | Kamu-video çeşitliliği + sentetik vücut-tipi varyasyonu · TestFlight beta (ileride) |
+| Cihaz (fps/termal) | **G8'de, deneme amaçlı** — erken fazlar beklemez; o güne dek muhafazakâr fps varsayımı, eşikler "cihazda doğrulanacak" etiketli |
+
+❌ **Yasak-varsayılan:** Human3.6M · MPI-INF-3DHP · 3DPW · AMASS · BEDLAM (yazılı izinsiz iç-QA'da bile) · **Fit3D** (`/legal` okundu: ticari kullanım VE eşik/parametre türetme açıkça yasak) · ücretli klip (M-F-17) · Yoga-82 (non-commercial, yalnız taksonomi).
 
 ## 6. Riskler / DEFTER tohumları
 L-001 (mevcut): aşırı-zorlama + 3D yanılsaması — ağrı-durdurma akışı tavizsiz. Yeni: L-002 GOWOD mekanizma belirsizliği (G0'da kapat) · L-003 2D iç-rotasyon sınırı (skor bandı politikası) · L-004 "Preview" statülü MediaPipe sürüm pinleme · L-005 assessment-doğrulama çalışması yapılmadan "measures" iddiasının sınırlandırılması.
 
-## 7. Manuel / kurucu görevleri (oturum sonlarında birikir)
-Fixture çekimleri (çekim listesiyle) · GOWOD hesabı (ücretliyse onay) · voice-pack üretim harcaması · uzman doğrulaması (mobilite/fitness uzmanı bul) · iç doğrulama çalışması katılımcıları · fiyat onayı · store submission · domain (lissom.fit $2.99 / lissom.yoga — M-006).
+## 7. Manuel / kurucu görevleri — ⚡ REVİZE
+
+~~Fixture çekimleri~~ **DÜŞTÜ** (M-F-13: kurucu çekim yapmaz) · ~~ücretli klip bütçesi~~ **DÜŞTÜ** (M-F-17).
+
+Kalan: mobilite/fizyo **uzman turu** (batarya + senior/prenatal kapıları) · iç doğrulama çalışması (TestFlight beta kohortu kurulunca) · **cihaz-benchmark (G8, deneme amaçlı)** · voice-pack üretim bütçesi · fiyat onayı · store submission · domain (lissom.fit / lissom.yoga — M-006) · GOWOD hesabı (ücretliyse onay).
 
 ## 8. Oturum örgütlenmesi
 Ana oturum Fable/high; fan-out `sonnet`; IAP/güvenlik doğrulaması Opus; /loop ile tempo; kapı kanıtı olmadan faz geçişi yok. Başlangıç promptu: vault `20 Şirketler/Motion/🚀 Başlangıç Promptu — Lissom`.

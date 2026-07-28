@@ -1,0 +1,34 @@
+name: checks
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  content-guards:
+    name: İçerik ve uyum denetimleri
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # mocore hattı MediaPipe yüzünden 3.12'ye sabit (3.13/3.14 wheel yok).
+          # Bu iş yalnız stdlib kullanıyor ama sürümü aynı tutuyoruz.
+          python-version: "3.12"
+
+      - name: Config JSON geçerliliği + şema sürümü
+        # Sürümsüz config sessizce yorumlanır; yorumlayıcı sürüm uyumsuzluğunda
+        # patlamalı, tahmin etmemeli.
+        run: python3 tools/config_check.py
+
+      - name: Wellness dil süzgeci
+        # Tek bir aşırı ifade ürünü tıbbi cihaz sınırına iter (FDA General
+        # Wellness / Apple 1.4.1). Süzgeç hiç dosya bulamazsa çıkış kodu 2 verir
+        # ve iş yine kırılır — "hiçbir şey taramadım" bir geçiş değildir.
+        run: python3 tools/wellness_lint.py
+
+      - name: Süzgecin kendisi çalışıyor mu (negatif test)
+        # Bulmayan bir denetim ile bozuk bir denetim dışarıdan aynı görünür.
+        run: python3 tools/lint_selftest.py

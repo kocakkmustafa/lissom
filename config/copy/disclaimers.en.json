@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.copy.disclaimers",
+  "version": "1.0.0",
+  "locale": "en",
+  "_notes": [
+    "Zorunlu wellness sınırı metinleri. Kaynak: research/09-wellness-dil-suzgeci.md (FDA General Wellness 2026 + Apple 1.4.1/5.1.1 + Play Health).",
+    "Bu dosya wellness_lint.py denetiminde MUAF tutulur: burada 'diagnose' gibi kelimeler OLUMSUZLAMA içinde meşru kullanılır ('does not diagnose').",
+    "Hukuki inceleme yapılmadı — bunlar avukat-öncesi taslaklardır (legal-contracts-advisor + store-policy-officer turu G9'da zorunlu)."
+  ],
+  "disclaimers": {
+    "onboarding": {
+      "surface": "First launch, one-time screen, must be acknowledged",
+      "text": "Lissom is a general wellness app. It uses your phone's camera to estimate movement capacity for tracking purposes only. It is not a medical device, does not diagnose or treat any condition, and is not a substitute for professional medical or physical therapy advice. If you have pain, an injury, or a medical condition, talk to a qualified healthcare provider before starting any new movement routine."
+    },
+    "scoreScreen": {
+      "surface": "Persistent small print under every assessment result",
+      "text": "This score reflects your movement pattern compared with your own history. It is not a medical measurement and should not be used to identify or rule out any condition."
+    },
+    "painFlow": {
+      "surface": "Triggered whenever the user reports discomfort",
+      "text": "We're sorry you're feeling discomfort. Lissom cannot assess what is causing pain and cannot give medical advice. If pain is new, severe, or persistent, please speak to a doctor or physical therapist. We'll make today's routine gentler, but this is not a substitute for professional care."
+    },
+    "storeListing": {
+      "surface": "App Store / Play description, short variant",
+      "text": "Lissom is a wellness app for tracking mobility and yoga practice using your phone's camera — everything runs on your device and nothing is uploaded. Not a medical device; not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    "measurementLimits": {
+      "surface": "Shown once before the first assessment, and in Settings > How measurement works",
+      "text": "A single phone camera gives an approximate picture of how you move. Results depend on where the camera sits, the light in the room, and what you're wearing. Some joints can be estimated more confidently than others, and Lissom tells you when a reading was not reliable enough to score."
+    }
+  },
+  "safeAlternatives": {
+    "_purpose": "Denetim bir ihlal bulduğunda geliştiriciye önerilecek yeniden yazımlar",
+    "Your ROM is 87 degrees, below the clinical threshold": "Your shoulder mobility is in the lower part of your own recent range",
+    "signs of impingement": "this test showed limited range today",
+    "diagnoses your posture problem": "gives you a snapshot of how you moved in this test",
+    "treats your shoulder pain": "offers a gentle daily routine that may help you feel more comfortable moving",
+    "clinically proven to improve flexibility": "designed using published mobility research; individual results vary",
+    "your prescribed program": "your personalised routine",
+    "risk of osteoarthritis: high": "REMOVE ENTIRELY — a disease name combined with a risk score cannot be made safe by rewording"
+  }
+}

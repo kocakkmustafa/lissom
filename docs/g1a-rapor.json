@@ -1,0 +1,73 @@
+{
+  "config": "lissom-metrics.v1.json",
+  "configVersion": "1.0.0",
+  "thresholds": {
+    "A1_clean_error_deg": 0.5,
+    "A2_noise_005_median_deg": 2.0,
+    "A3_noise_010_median_deg": 5.0,
+    "A4_body_scale_drift_deg": 1.0,
+    "A6_confidence_gate_leaks": 0,
+    "A9_dead_metrics": 0
+  },
+  "results": {
+    "A1": {
+      "value": 1.2074182791366184e-06,
+      "pass": true,
+      "n": 782
+    },
+    "A2": {
+      "median": 0.46654655119078825,
+      "p95": 2.757313649111069,
+      "pass": true,
+      "n": 3910
+    },
+    "A3": {
+      "median": 0.9305353640945953,
+      "p95": 5.5734670657685115,
+      "pass": true,
+      "n": 3910
+    },
+    "A4": {
+      "value": 0.040000000000000036,
+      "pass": true,
+      "n": 1748
+    },
+    "A5": {
+      "yaw_5": 0.0,
+      "yaw_10": 0.0,
+      "yaw_15": 0.0,
+      "yaw_30": 0.0
+    },
+    "A6": {
+      "leaks": 0,
+      "checked": 125,
+      "pass": true
+    },
+    "A9": {
+      "dead": [],
+      "uncovered": [
+        "reach_depth",
+        "plank_hip_deviation"
+      ],
+      "pass": true
+    },
+    "A7_A8": "NOT_MEASURED_state_machine_pending"
+  },
+  "verdict": "ŞARTLI GEÇTİ (A1-A6 tam; A7/A8 state machine bekliyor)",
+  "passed": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A6",
+    "A9"
+  ],
+  "measured": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A6",
+    "A9"
+  ]
+}
