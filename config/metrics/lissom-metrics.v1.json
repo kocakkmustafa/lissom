@@ -118,6 +118,16 @@
       "description": "Vertical knee-above-ankle gap, normalised by torso length. Proxy for how far the trailing knee descends in a lunge. NOT a knee-to-floor distance: pose gives no ground plane, so this is measured against the body's own reference."
     },
     {
+      "id": "plank_hip_deviation",
+      "kind": "line_deviation_norm",
+      "points": ["MID_HIP", "MID_SHOULDER", "RIGHT_ANKLE"],
+      "plane": "sagittal",
+      "unit": "ratio",
+      "confidenceClass": "B",
+      "test": "plank_hold",
+      "description": "Perpendicular distance of the hip mid-point from the shoulder-to-ankle line, normalised by torso length. 0 = straight body line; grows as the hips sag or pike. Sagittal plane so that sagging is not confused with lateral drift."
+    },
+    {
       "id": "shoulder_line_foreshortening",
       "kind": "distance_norm",
       "points": ["LEFT_SHOULDER", "RIGHT_SHOULDER"],

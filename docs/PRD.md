@@ -17,7 +17,21 @@
 
 **Ürün DEĞİLDİR:** tıbbi cihaz · teşhis aracı · fizyoterapi ikamesi. Wellness sınırı `config/copy/disclaimers.en.json` ve `tools/wellness_lint.py` ile korunur.
 
-**V1 kapsam dışı** (plan §18 geçerli) + bu PRD'nin eklediği: sayısal skor gösterimi (§6.1), groove/akıcılık gibi nitel yargılar, çoklu kamera, giyilebilir entegrasyonu.
+**Kapsam otoritesi:** `LISSOM-BLUEPRINT.md` (motion-core `30-URUN-BLUEPRINT-STANDARDI.md` omurgası). "Bitti" tanımı standart §1'den: kullanıcı store'dan indirir → onboarding → **kütüphanenin TAMAMI düzenli sayfalarda gezilebilir** → kurs seçer → canlı seansta sesli koçluk → grafiklerle ilerleme → abonelik akışı → çökmez, offline çalışır.
+
+### 1.1 Dalga kapsamı
+
+| Dalga | İçerik |
+|---|---|
+| **W0** | PRD + IA çatısı + platform katmanı + batarya genişletme (**12 test**) |
+| **W1** | Yoga: Hatha · Vinyasa · Yin (Tier-1) + esneklik hedefleri (Front/Middle Split · Kalça · Hamstring) + program motoru |
+| **W2** | Chair/Office Yoga + popülasyon paketleri (Masa-başı · Koşucu · Lifter) + Backbend/Omuz-açma |
+| **W3** | Ashtanga + aile ısınmaları (JabLab/Choreia/Gravita deep-link) + nefes/meditasyon (ses-rehberli) |
+| **W4** | Senior (doktor-onayı kapısı) + Prenatal (ACOG-hizalı alt-küme) |
+
+**Poz kütüphanesi katmanları:** Tier-1 ~150-250 poz (ayakta/oturan/diz-üstü) tam koçluk · Tier-2 yer/supine gevşek skor · Tier-3 inversiyonlar yalnız avatar demosu. Tier-3'ün gerekçesi ölçülmüş: pose modeli ters vücutta uzuv etiketlerini **yüksek güvenle** takas ediyor (aile bulgusu M-019).
+
+**V1 kapsam dışı** (plan §18 + blueprint §1): sayısal skor gösterimi (§6.1) · çocuk paketi · kamerayla nefes/meditasyon ölçümü · klinik screen/tanı/düşme-riski iddiası · Bikram · hip iç/dış rotasyon (L-006) · çoklu kamera · giyilebilir. Hepsi tek bir **"Neden yok?" sayfasında** kullanıcıya açıklanır (`config/ia/library.v1.json → whyNotPage`).
 
 ---
 
@@ -88,11 +102,36 @@ Kalibrasyon pozunda kullanıcının sol/sağ tarafı **geometrik olarak** belirl
 
 ---
 
+## 4.5 Bilgi mimarisi
+
+Kaynak: `config/ia/library.v1.json` (standart §2 — "her öğe kendi sayfası").
+
+```
+Ana Sayfa (bugünkü plan · yeniden-test sayacı · devam eden · hızlı başlat)
+└── Kütüphane (arama + filtre + tüm-kurslar dizini ZORUNLU)
+    ├── Değerlendirme Bataryası      → her test kendi alt-sayfası + trend grafiği
+    ├── Yoga Stilleri                → Hatha · Vinyasa · Yin · Ashtanga · Chair
+    ├── Esneklik Hedefleri           → her hedef kendi "path" sayfası + haftalık açı trendi
+    ├── Popülasyon Paketleri         → Masa-başı · Koşucu · Lifter · Senior* · Prenatal*
+    ├── Aile Isınmaları              → JabLab · Choreia · Gravita (deep-link)
+    ├── Nefes & Wind-down            → yalnız ses-rehberli, kamera KAPALI
+    └── "Neden yok?"                 → kapsam-dışı öğeler + gerekçeleri
+```
+`*` doktor/medikal kapı arkasında.
+
+**Kapsamın tamamı baştan görünür:** açılmamış dalgalar `coming_soon` durumuyla listelenir — dar-app algısı yaratılmaz. Ama **sahte/boş kurs asla listelenmez**: `coming_soon` sayfası kurs listesi göstermez, ne geleceğini anlatır.
+
+**Her aile sayfası bir dürüstlük kutusu taşır** (opsiyonel değil): bu öğede *neler ölçülür* / *neler ölçülmez*. Örnek — Nefes sayfası: *"Nothing. These sessions are guided by audio and timed — the camera stays off."*
+
+**Navigasyon:** ana sayfadan aktif kursa ≤2 dokunuş, kütüphaneden herhangi bir kursa ≤3.
+
 ## 5. Değerlendirme
 
 ### 5.1 Test seti
 
-Aday havuz `config/tests/lissom-assessment.v1.json` (10 test). V1 seti **G1-b kapısından** çıkar: 🟢 nicel / 🟡 nitel / 🔴 düşer sınıflaması ölçümle belirlenir.
+Aday havuz `config/tests/lissom-assessment.v1.json` — **12 test** (W0'da ASLR ve plank/rotasyon-stabilite eklendi). V1 seti **G1-b kapısından** çıkar: 🟢 nicel / 🟡 nitel / 🔴 düşer sınıflaması ölçümle belirlenir.
+
+İki yeni testin taşıdığı özel riskler config'te açıkça yazılı: **ASLR supine** (yerde yatan vücut, tek kameranın en zayıf olduğu yer — G1-b'de düşme adayı) ve **plank** (dayanıklılık testi; kullanıcıyı fazla zorlama riski en yüksek olan, bu yüzden "rekorunu kır" teşviki yok, durma kararı kullanıcıda).
 
 Her test: talimat metni (EN) → kalibrasyon kontrolü → kayıt → metrik çıkarımı → geçersizlik kontrolü → sonuç.
 
@@ -245,6 +284,9 @@ Ek kısıt: Halo verisi, tekrarlanabilirliğin hareket-kısıtlı grupta %35 dah
 | 10 | 2 program profili + 3 yoga paketi + ≥10 kamera-doğrulamalı egzersiz |
 | 11 | MDC eşiği hesaplanmış ve karşılaştırma ekranı ona bağlı |
 | 12 | `StructuralValidator` çekirdekten tüketiliyor (Lissom kendi kontrolünü yazmıyor) |
+| 13 | Kütüphanenin TAMAMI gezilebilir; açılmamış dalgalar `coming_soon` görünür, sahte kurs yok |
+| 14 | Her aile sayfasında dürüstlük kutusu var; "Neden yok?" sayfası kapsam-dışını açıklıyor |
+| 15 | 2-tık kuralı sağlanıyor (ana→aktif kurs ≤2, kütüphane→kurs ≤3); arama + filtre + tüm-kurslar dizini çalışıyor |
 
 ---
 

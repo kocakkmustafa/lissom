@@ -280,6 +280,60 @@
         "region": "thoracic",
         "warning": "Weakest test in the battery. A leading candidate to be dropped at the G1-b gate if the proxy does not separate rotated from neutral postures on real footage."
       }
+    },
+    {
+      "id": "active_straight_leg_raise",
+      "name": "Active Straight Leg Raise",
+      "instruction": "Lie on your back, side-on to the camera, with both legs straight. Keeping the other leg flat on the floor, raise the leg nearest the camera as high as you can with the knee straight. Lower it slowly.",
+      "plane": "sagittal",
+      "perSide": true,
+      "reps": 3,
+      "confidenceClass": "B",
+      "primaryMetric": "hip_flexion_{side}",
+      "guardMetrics": ["knee_flexion_{side}", "hip_flexion_{opposite}"],
+      "aggregation": "min",
+      "invalidation": [
+        { "rule": "knee_flexion_{side} < 165", "code": "BENT_KNEE", "message": "Keep the raised leg straight — bending the knee makes the range look larger." },
+        { "rule": "hip_flexion_{opposite} < 170", "code": "OPPOSITE_LEG_LIFTED", "message": "Keep your other leg flat on the floor." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "banded",
+        "unit": "deg",
+        "higherIsBetter": false,
+        "bands": {
+          "u40": { "low": 110, "normal": 100, "good": 90 },
+          "40-59": { "low": 115, "normal": 105, "good": 95 },
+          "60plus": { "low": 125, "normal": 112, "good": 100 }
+        },
+        "source": "Straight-leg-raise literature puts normal hamstring length at roughly 80-85 deg of hip flexion with the lumbar spine flat. Our metric is the torso-thigh angle, so smaller = more range: 90 deg torso-thigh corresponds to ~90 deg of raise. Bands are an engineering starting point derived from that reference, NOT clinical cutoffs.",
+        "region": "posterior_chain",
+        "warning": "SUPINE test — the body lies on the floor, which is exactly where single-camera pose is weakest (self-occlusion, research/07). Camera must be side-on and low. A leading candidate to be dropped at the G1-b gate if detection proves unreliable on the floor."
+      }
+    },
+    {
+      "id": "plank_hold",
+      "name": "Plank Hold",
+      "instruction": "Set up side-on to the camera in a forearm plank, body in one straight line from head to heels. Hold as steady as you can for up to 45 seconds. Come down when your form breaks or you need to stop.",
+      "plane": "sagittal",
+      "perSide": false,
+      "reps": 1,
+      "holdSeconds": 45,
+      "confidenceClass": "B",
+      "primaryMetric": "hold_duration",
+      "guardMetrics": ["plank_hip_deviation", "trunk_lateral_tilt"],
+      "aggregation": "duration",
+      "invalidation": [
+        { "rule": "plank_hip_deviation > 0.22", "code": "FORM_BREAK", "message": "Your hips dropped or lifted out of line — the hold is timed only while the line holds." },
+        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+      ],
+      "scoring": {
+        "type": "qualitative",
+        "levels": ["limited", "typical", "good"],
+        "source": "This test measures endurance under a form constraint, not range of motion. Duration norms for the plank vary widely across populations and protocols, and the timing depends on where we set the form-break threshold — a number would be false precision. The form threshold (0.22 normalised deviation) corresponds to roughly 20 deg of hip drift and was measured on the synthetic rig, not calibrated on people.",
+        "region": "core_stability",
+        "warning": "Endurance tests fatigue the user and are the most likely place for a wellness product to push someone too far. The instruction deliberately hands the stopping decision to the user; there is no 'beat your record' prompt on this test."
+      }
     }
   ],
   "excluded": [

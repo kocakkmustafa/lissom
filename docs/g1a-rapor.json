@@ -30,7 +30,7 @@
     "A4": {
       "value": 0.040000000000000036,
       "pass": true,
-      "n": 1656
+      "n": 1748
     },
     "A5": {
       "yaw_5": 0.0,
@@ -40,13 +40,14 @@
     },
     "A6": {
       "leaks": 0,
-      "checked": 120,
+      "checked": 125,
       "pass": true
     },
     "A9": {
       "dead": [],
       "uncovered": [
-        "reach_depth"
+        "reach_depth",
+        "plank_hip_deviation"
       ],
       "pass": true
     },

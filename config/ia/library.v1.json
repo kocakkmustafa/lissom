@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.ia.library",
+  "version": "1.0.0",
+  "_notes": [
+    "Kütüphane bilgi mimarisi — motion-core 30-URUN-BLUEPRINT-STANDARDI §2 'her öğe kendi sayfası' direktifi.",
+    "Kapsamın TAMAMI kullanıcıya baştan görünür: açılmamış dalgalar 'coming_soon' durumuyla listelenir, böylece dar-app algısı oluşmaz. Ama SAHTE/boş kurs asla listelenmez — coming_soon sayfası kurs listesi göstermez, ne geleceğini anlatır.",
+    "Her aile sayfası bir 'honestyBox' taşır: bu öğede NELER ÖLÇÜLÜR / NELER ÖLÇÜLMEZ. Bu kutu opsiyonel değil.",
+    "Navigasyon kuralı: ana sayfadan aktif kursa ≤2 dokunuş, kütüphaneden herhangi bir kursa ≤3."
+  ],
+  "tabs": ["home", "library", "progress", "profile"],
+  "home": {
+    "sections": [
+      { "id": "today", "title": "Today's plan", "source": "program_engine" },
+      { "id": "retest_countdown", "title": "Next re-assessment", "source": "assessment_cycle", "note": "Kuzey Yıldızı döngüsünün görünür yüzü" },
+      { "id": "continue", "title": "Continue", "source": "last_session" },
+      { "id": "quick_start", "title": "Quick start", "source": "shortcuts" }
+    ]
+  },
+  "families": [
+    {
+      "id": "assessment_battery",
+      "title": "Assessment Battery",
+      "status": "in_progress",
+      "wave": 0,
+      "intro": "Twelve camera-based movement tests. Each one measures a specific area, tells you what it could and could not see, and feeds your daily plan.",
+      "itemsSource": "config/tests/lissom-assessment.v1.json",
+      "hasTrendChart": true,
+      "honestyBox": {
+        "measured": [
+          "Joint angles in the sagittal and frontal planes (shoulder, hip, knee, trunk, shank)",
+          "Left/right difference — but only once side identity is established in the calibration pose",
+          "Hold duration and gross balance"
+        ],
+        "notMeasured": [
+          "Rotation of the hip or shoulder (a single camera cannot recover transverse-plane twist)",
+          "Anything clinical: this is not a screen, a diagnosis, or an injury-risk prediction",
+          "Exact degrees, until our own validation study is done — you will see bands, not numbers"
+        ]
+      }
+    },
+    {
+      "id": "yoga_styles",
+      "title": "Yoga Styles",
+      "status": "coming_soon",
+      "wave": 1,
+      "intro": "Hatha, Vinyasa and Yin — each with its own page, level map and course list.",
+      "children": [
+        { "id": "hatha", "title": "Hatha", "status": "coming_soon", "wave": 1, "coachingMode": "pose_by_pose" },
+        { "id": "vinyasa", "title": "Vinyasa", "status": "coming_soon", "wave": 1, "coachingMode": "flow",
+          "note": "Flow modu: poz-poz düzeltme İDDİASIZ — akış ve nefes temposu koçluğu, gevşek skorlama" },
+        { "id": "yin", "title": "Yin", "status": "coming_soon", "wave": 1, "coachingMode": "long_hold" },
+        { "id": "ashtanga", "title": "Ashtanga (primary series)", "status": "coming_soon", "wave": 3, "coachingMode": "sequence" },
+        { "id": "chair_yoga", "title": "Chair / Office Yoga", "status": "coming_soon", "wave": 2, "coachingMode": "pose_by_pose" }
+      ],
+      "honestyBox": {
+        "measured": ["Standing, seated and kneeling poses — joint angles and hold time"],
+        "notMeasured": [
+          "Floor and prone poses are guided but not scored: lying on the floor is where a single camera is weakest",
+          "Inversions are demonstrated by the avatar only",
+          "Breath is never measured by the camera"
+        ]
+      }
+    },
+    {
+      "id": "flexibility_goals",
+      "title": "Flexibility Goals",
+      "status": "coming_soon",
+      "wave": 1,
+      "intro": "Long-run paths with a weekly angle trend, not a stack of videos.",
+      "children": [
+        { "id": "front_split", "title": "Path to Front Split", "status": "coming_soon", "wave": 1 },
+        { "id": "middle_split", "title": "Path to Middle Split", "status": "coming_soon", "wave": 1 },
+        { "id": "hip_opening", "title": "Hip Opening", "status": "coming_soon", "wave": 1 },
+        { "id": "hamstring", "title": "Hamstring Length", "status": "coming_soon", "wave": 1 },
+        { "id": "backbend", "title": "Backbend", "status": "coming_soon", "wave": 2,
+          "note": "Wheel/derin backbend'de güven sönümlemesi uygulanır" },
+        { "id": "shoulder_opening", "title": "Shoulder Opening", "status": "coming_soon", "wave": 2 }
+      ],
+      "hasTrendChart": true,
+      "honestyBox": {
+        "measured": ["The joint angle the goal is defined by, re-measured on a fixed cadence"],
+        "notMeasured": [
+          "How close you are in weeks or months — progress rate is individual and we do not predict it",
+          "Changes smaller than our measurement noise: below that threshold we say 'no change', not 'improved'"
+        ]
+      }
+    },
+    {
+      "id": "population_packs",
+      "title": "For Your Day",
+      "status": "coming_soon",
+      "wave": 2,
+      "intro": "Programmes shaped around what your body does all day.",
+      "children": [
+        { "id": "desk_worker", "title": "Desk Worker", "status": "coming_soon", "wave": 2 },
+        { "id": "runner", "title": "Runner", "status": "coming_soon", "wave": 2 },
+        { "id": "lifter", "title": "Lifter", "status": "coming_soon", "wave": 2 },
+        { "id": "senior", "title": "Senior Mobility", "status": "coming_soon", "wave": 4,
+          "gate": "clinician_confirmation", "note": "Doktor-onayı kapısı + tanı-değil dili; uzman turu zorunlu" },
+        { "id": "prenatal", "title": "Prenatal", "status": "coming_soon", "wave": 4,
+          "gate": "medical_confirmation", "note": "ACOG-hizalı güvenli-poz alt-kümesi: derin backbend/twist yok, 20. haftadan sonra sırtüstü yok" }
+      ],
+      "honestyBox": {
+        "measured": ["The same movement tests, weighted toward the areas your routine loads most"],
+        "notMeasured": ["Your occupation's injury risk — we shape content, we do not assess risk"]
+      }
+    },
+    {
+      "id": "family_warmups",
+      "title": "Warm-ups for Other Sports",
+      "status": "coming_soon",
+      "wave": 3,
+      "intro": "Mobility prep that hands off to the training app you actually use.",
+      "children": [
+        { "id": "fighter_warmup", "title": "Fighter Warm-up", "status": "coming_soon", "wave": 3, "deepLink": "jablab" },
+        { "id": "dancer_warmup", "title": "Dancer Warm-up", "status": "coming_soon", "wave": 3, "deepLink": "choreia" },
+        { "id": "calisthenics_warmup", "title": "Calisthenics Prep", "status": "coming_soon", "wave": 3, "deepLink": "gravita" }
+      ],
+      "honestyBox": {
+        "measured": ["The mobility prerequisites the partner app's skills depend on"],
+        "notMeasured": ["Anything about the sport itself — that is the partner app's job"]
+      }
+    },
+    {
+      "id": "breath_meditation",
+      "title": "Breath & Wind-down",
+      "status": "coming_soon",
+      "wave": 3,
+      "intro": "Voice-guided only. No camera, no scoring.",
+      "honestyBox": {
+        "measured": ["Nothing. These sessions are guided by audio and timed — the camera stays off."],
+        "notMeasured": [
+          "Breath rate, depth or quality — a phone camera cannot measure breathing and we do not pretend otherwise",
+          "Meditation state or relaxation of any kind"
+        ]
+      }
+    }
+  ],
+  "poseLibraryTiers": [
+    { "tier": 1, "scope": "Standing, seated and kneeling poses (~150-250)", "coaching": "full", "scored": true },
+    { "tier": 2, "scope": "Floor and supine poses", "coaching": "guided", "scored": "loose",
+      "reason": "Self-occlusion: lying on the floor hides most landmarks from a side camera" },
+    { "tier": 3, "scope": "Inversions", "coaching": "avatar_demo_only", "scored": false,
+      "reason": "Pose models silently swap limb labels on inverted bodies with high confidence (family finding M-019)" }
+  ],
+  "whyNotPage": {
+    "id": "why_not",
+    "title": "What Lissom doesn't do",
+    "status": "available",
+    "intro": "Some things we deliberately left out. Here is what, and why.",
+    "items": [
+      { "topic": "Programmes for children", "reason": "The pose model is validated on adults, and content for minors carries a duty of care we are not set up to meet." },
+      { "topic": "Breath or meditation measurement", "reason": "A phone camera cannot measure breathing. Our breath sessions are voice-guided and untimed by the camera." },
+      { "topic": "Clinical screens and risk scores", "reason": "Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking." },
+      { "topic": "Hot yoga (Bikram)", "reason": "The practice depends on room temperature, which an app cannot provide or verify." },
+      { "topic": "Hip internal / external rotation measurement", "reason": "A single camera cannot recover this reliably. We would rather leave it out than show a number we cannot stand behind." }
+    ]
+  },
+  "navigationRules": {
+    "maxTapsHomeToActiveCourse": 2,
+    "maxTapsLibraryToAnyCourse": 3,
+    "librarySearchRequired": true,
+    "libraryFilters": ["level", "duration", "equipment", "region"],
+    "allCoursesIndexRequired": true
+  }
+}

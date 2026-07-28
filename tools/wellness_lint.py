@@ -84,6 +84,8 @@ USER_FACING_KEYS = {
     "nameEn", "regression", "progression", "safetyNote", "cameraNote",
     "raw",           # dose.raw — kullanıcıya gösterilen doz metni
     "breathCue", "description_en",
+    # bilgi mimarisi (kütüphane sayfaları, dürüstlük kutuları, "neden yok" sayfası)
+    "intro", "topic", "reason", "scope", "measured", "notMeasured",
 }
 
 #: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
@@ -93,7 +95,7 @@ USER_FACING_KEYS = {
 #:
 #: `config/metrics/` kasıtlı olarak DIŞARIDA: metrik tanımları teknik config'tir,
 #: içindeki `description` alanları geliştiriciye yazılmıştır, kullanıcıya değil.
-CONTENT_DIRS = ("config/content", "config/tests", "config/copy", "l10n")
+CONTENT_DIRS = ("config/content", "config/tests", "config/copy", "config/ia", "l10n")
 MIN_STRINGS_PER_FILE = 1
 
 
