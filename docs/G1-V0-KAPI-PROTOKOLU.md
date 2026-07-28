@@ -92,7 +92,28 @@ Sentetik senaryolar (her test için):
 
 ---
 
-## 3. G1-b — Görüntü güvenilirlik kapısı (kurucu çekimi gerekir)
+## 3.0 rev.4 — G1-b KAYNAK DEVRİ (M-F-13/16/17; koordinatör çerçevesi onaylı)
+
+**Kurucu çekimi yok.** Aşağıdaki B1-B7 kriterleri **silinmedi**; her biri yeni kaynak merdivenine (katalog §6.3) göre yeniden tanımlandı. Ölçülemeyen kriter iptal edilmez — **koşullu ertelenir** ve "cihaz kapısında doğrulanacak" etiketiyle taşınır.
+
+| # | Kriter | Eski kaynak | **Yeni ölçüm yolu** | Durum |
+|---|---|---|---|---|
+| **B1** | VMR — iyi koşul ≥%90 | Kurucu, kontrollü çekim | **PT kanal klipleri**, triyajdan geçmiş alt-küme (net · tek sahne · tam vücut · yatay). Triyaj etiketi "iyi koşul" tanımının yerine geçer | ✅ ölçülebilir |
+| **B2** | VMR — zorlu koşul ≥%75 | Kurucu, loş ışık / bol kıyafet | **Aynı havuzun triyajda "sınırda" işaretlenen klipleri** (düşük ışık, bol kıyafet, kısmi kadraj). Doğal varyasyon; kontrollü değil | ✅ ölçülebilir, ⚠️ koşullar etiketli değil-kontrollü |
+| **B3** | TRV — test-retest ≤5° | Aynı kişi, ayrı oturum | **İki katman:** (a) aynı eğitmenin FARKLI videoları (aynı hareketi ayrı çekimde yapmış) → gerçek oturumlar-arası; (b) klip-içi ardışık tekrarlar → kısa-vadeli. **(c) sentetik jitter perturbasyonu** ölçümün gürültü tabanını verir | ✅ ölçülebilir (üç katman ayrı raporlanır) |
+| **B4** | CS — koşul kayması ≤5° | Kontrollü ışık/kıyafet varyasyonu | ⚠️ **TANIM DEĞİŞTİ:** kontrollü varyasyon yok. Yerine **kaynak-arası varyans** ölçülür (eğitmen × kadraj × ışık karışık). Bu, B4'ün ölçtüğü şeyin ÜST sınırıdır — koşul etkisi ile eğitmen farkı ayrışmaz | ⚠️ ölçülebilir ama farklı büyüklük; skor bandı kararı bu üst sınıra göre muhafazakâr verilir |
+| **B5** | MAE — mutlak doğruluk | Bilinen-açı referansı (goniometre) | **AIST++** (çok-kameralı rekonstrüksiyon, CC-BY) + **kendi sentetiğimiz** (ground truth %100 bizim). ⚠️ **MM-Fit pose'u "estimates"** — mocap değil, model çıktısı; MM-Fit yalnız VMR/dayanıklılık için kullanılır, MAE için DEĞİL | ⚠️ kısmi: sentetikte tam, gerçek görüntüde yalnız AIST++ hareket örtüşmesi kadar |
+| **B6** | TTF — ilk geçerli ölçüme süre ≤8 s | Kurucu, canlı kullanım | ❌ Kamu videosunda "kullanıcı testi başlattı" anı yok — ölçülemez. **KOŞULLU ERTELEME: cihaz kapısında (G8) doğrulanacak** | ⏸️ ertelendi, silinmedi |
+| **B7** | Geçersizlik yakalama ≥%90 | Kasıtlı bozuk çekimler | **Triyajın REDDETTİĞİ klipler** doğal negatif fixture havuzudur (kadraj dışı, kesik, çok sahne, bulanık) + sentetik bozulma (`SyntheticNoise` + açı perturbasyonu). Etiket bedava: bozulmayı biz uyguladık | ✅ ölçülebilir, hatta eskisinden zengin |
+
+**Kaynak devrinin bedeli (dürüstlük kaydı):** B4 artık farklı bir büyüklük ölçüyor ve B5 gerçek görüntüde ancak AIST++'ın kapsadığı hareketler kadar geçerli. Bu iki kısıt, "measures your mobility" iddiasının sınırını daha da daraltır (L-005) ve skor bantlarının **nitel** kalmasının gerekçesini güçlendirir (ADR-003).
+
+**Çekirdek v0.1.0 API'lerinin kapıya etkisi:**
+- `StructuralValidator.check(frame, expected:)` — **yatay/supine gövdede eksen hükmü VERMEZ.** ASLR testinin supine riski (L-036) için doğrudan ilgili: yerde yatan vücutta "eksen ters" alarmı üretmeyecek, ama uzuv-oranı ve kemik-kararlılığı denetimleri sürüyor.
+- `AttemptProvenance` — 4-hafta karşılaştırması **farklı enstrümanla ölçülmüş kayıtlar arasında API düzeyinde reddedilir** (M-F-07 artık kod seviyesinde zorunlu, PRD §9.1'in karşılığı).
+- Fixture şeması **v2** — hasat provenance bloku taşır; v1 dosyalar okunmaya devam eder.
+
+## 3. G1-b — Görüntü güvenilirlik kapısı (kaynak: kamu hasadı + sentetik; kurucu çekimi YOK)
 
 ### 3.1 Ölçülecek metrikler (tanımlar — muğlaklık bırakmadan)
 
