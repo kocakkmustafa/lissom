@@ -1,0 +1,1052 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.assessment.phases",
+  "version": "1.0.0",
+  "metricSet": "lissom.assessment.metrics@1.0.0",
+  "testSet": "lissom.assessment.battery@1.0.0",
+  "_notes": [
+    "Test faz tanımları — motion_core `PhaseDefinition` üretimi için veri.",
+    "Faz MANTIĞI çekirdekte (PhaseCondition = tip-güvenli Dart fonksiyonu); bu dosya faz SIRASINI, EŞİKLERİNİ ve zamanlamalarını taşır. 'Yeni test = config' iddiası burada geçerli: yeni bir ROM testi eklemek kod değil kayıt ister.",
+    "Zorunlu değişmez: her test dizisinde tam bir terminal faz vardır ve her terminal olmayan fazın timeoutMs değeri bulunur. Timeout'suz faz, çıkış koşulunu kaçırdığında sonsuza park eder ve bu dışarıdan 'kullanıcı hareketsiz' gibi görünür (çekirdek dokümantasyonundaki uyarı).",
+    "Eşikler G1-a metodolojisiyle sentetik iskelette türetildi; gerçek fixture kalibrasyonu G1-b'de yapılacak ve bu dosyanın sürümü yükseltilecek.",
+    "FAZ SÜRÜCÜSÜ ≠ ÖLÇÜM METRİĞİ (L-055). Faz geçişlerini süren metrik, hareketin KENDİSİNİ tarif etmeli; ölçtüğümüz kusuru değil. overhead_squat'ta ölçüm trunk_lean'dir ama faz sürücüsü knee_flexion'dır: gövde eğimi bir HATA ölçüsüdür ve iyi performansta ~0 kalır — faz geçişini ona bağlamak, mükemmel yapan kullanıcıda 'descending' fazının HİÇ tetiklenmemesi demek olurdu. Aynı ayrım hip_hinge'de tersine döner: orada öne eğilme hareketin kendisidir, o yüzden trunk_lean hem sürücü hem ölçümdür."
+  ],
+  "conditionGrammar": {
+    "_note": "Çekirdeğin yorumlayacağı koşul dili. Her koşul saf fonksiyondur — kendi durumunu tutmaz.",
+    "forms": [
+      {
+        "kind": "metric",
+        "fields": [
+          "metric",
+          "op",
+          "value"
+        ],
+        "example": {
+          "kind": "metric",
+          "metric": "shoulder_flexion_{side}",
+          "op": ">=",
+          "value": 140
+        }
+      },
+      {
+        "kind": "delta",
+        "fields": [
+          "metric",
+          "op",
+          "value"
+        ],
+        "note": "önceki kareye göre işaretli değişim; 'hâlâ hareket ediyor mu' soruları",
+        "example": {
+          "kind": "delta",
+          "metric": "knee_flexion_right",
+          "op": "<",
+          "value": -0.5
+        }
+      },
+      {
+        "kind": "timeInPhase",
+        "fields": [
+          "op",
+          "valueMs"
+        ],
+        "example": {
+          "kind": "timeInPhase",
+          "op": ">=",
+          "valueMs": 2000
+        }
+      },
+      {
+        "kind": "confidence",
+        "fields": [
+          "op",
+          "value"
+        ],
+        "note": "kare kalitesi kapısı",
+        "example": {
+          "kind": "confidence",
+          "op": "<",
+          "value": 0.6
+        }
+      },
+      {
+        "kind": "all",
+        "fields": [
+          "of"
+        ],
+        "note": "VE"
+      },
+      {
+        "kind": "any",
+        "fields": [
+          "of"
+        ],
+        "note": "VEYA"
+      }
+    ],
+    "ops": [
+      ">",
+      ">=",
+      "<",
+      "<=",
+      "==",
+      "!="
+    ]
+  },
+  "patterns": {
+    "_note": "Üç çekirdek desen; 12 testin tamamı bunlardan birine oturur.",
+    "rom_sweep": "READY → MOVING → PEAK_HOLD → RETURNING → COMPLETE. Ölçüm PEAK_HOLD'da alınır. (overhead_reach, hamstring_reach, lateral_bend, ankle_dorsiflexion, thoracic_rotation, aslr)",
+    "descend_return": "READY → DESCENDING → BOTTOM → ASCENDING → COMPLETE. Ölçüm BOTTOM'da. (deep_squat, overhead_squat, forward_lunge, hip_hinge)",
+    "timed_hold": "READY → HOLDING → COMPLETE|FAILED. Ölçüm süre + form bozulma anı. (single_leg_balance, plank_hold)"
+  },
+  "tests": [
+    {
+      "testId": "overhead_reach",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "shoulder_flexion_{side}",
+            "op": "<",
+            "value": 40
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "{SIDE}_SHOULDER",
+            "{SIDE}_ELBOW",
+            "MID_HIP"
+          ]
+        },
+        {
+          "id": "raising",
+          "enter": {
+            "kind": "delta",
+            "metric": "shoulder_flexion_{side}",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 8000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "delta",
+                "metric": "shoulder_flexion_{side}",
+                "op": "<",
+                "value": 0.5
+              },
+              {
+                "kind": "metric",
+                "metric": "shoulder_flexion_{side}",
+                "op": ">=",
+                "value": 60
+              }
+            ]
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "elbow_extension_{side}",
+            "op": "<",
+            "value": 150
+          },
+          "abortCode": "BENT_ELBOW"
+        },
+        {
+          "id": "returning",
+          "enter": {
+            "kind": "delta",
+            "metric": "shoulder_flexion_{side}",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "shoulder_flexion_{side}",
+            "op": "<",
+            "value": 45
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "deep_squat",
+      "pattern": "descend_return",
+      "perSide": false,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": 160
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "RIGHT_HIP",
+            "RIGHT_KNEE",
+            "RIGHT_ANKLE",
+            "RIGHT_HEEL",
+            "MID_SHOULDER"
+          ]
+        },
+        {
+          "id": "descending",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_flexion_right",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 10000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "bottom",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": -0.5
+          },
+          "minDurationMs": 1000,
+          "timeoutMs": 8000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "heel_rise_right",
+            "op": ">",
+            "value": 0.05
+          },
+          "abortCode": "HEEL_LIFT"
+        },
+        {
+          "id": "ascending",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 10000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": 155
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "plank_hold",
+      "pattern": "timed_hold",
+      "perSide": false,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "plank_hip_deviation",
+            "op": "<",
+            "value": 0.22
+          },
+          "minDurationMs": 1000,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "MID_SHOULDER",
+            "MID_HIP",
+            "RIGHT_ANKLE"
+          ]
+        },
+        {
+          "id": "holding",
+          "enter": {
+            "kind": "timeInPhase",
+            "op": ">=",
+            "valueMs": 1000
+          },
+          "timeoutMs": 45000,
+          "measureHere": true,
+          "abort": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "metric",
+                "metric": "plank_hip_deviation",
+                "op": ">",
+                "value": 0.22
+              },
+              {
+                "kind": "confidence",
+                "op": "<",
+                "value": 0.6
+              }
+            ]
+          },
+          "abortCode": "FORM_BREAK",
+          "_note": "Abort burada BAŞARISIZLIK DEĞİL, ölçümün bittiği andır: süre form bozulana kadar sayılır. Kullanıcıya 'başaramadın' denmez."
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "timeInPhase",
+            "op": ">=",
+            "valueMs": 45000
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "overhead_squat",
+      "pattern": "descend_return",
+      "perSide": false,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "metric",
+                "metric": "knee_flexion_right",
+                "op": ">",
+                "value": 160
+              },
+              {
+                "kind": "metric",
+                "metric": "shoulder_flexion_right",
+                "op": ">=",
+                "value": 140
+              }
+            ]
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "RIGHT_SHOULDER",
+            "RIGHT_ELBOW",
+            "RIGHT_HIP",
+            "RIGHT_KNEE",
+            "RIGHT_ANKLE",
+            "MID_SHOULDER"
+          ]
+        },
+        {
+          "id": "descending",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_flexion_right",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 10000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "bottom",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": -0.5
+          },
+          "minDurationMs": 1000,
+          "timeoutMs": 8000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "shoulder_flexion_right",
+            "op": "<",
+            "value": 140
+          },
+          "abortCode": "ARMS_DROPPED"
+        },
+        {
+          "id": "ascending",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 10000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "knee_flexion_right",
+            "op": ">",
+            "value": 155
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "ankle_dorsiflexion",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "tibia_inclination_{side}",
+            "op": "<",
+            "value": 5
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "{SIDE}_ANKLE",
+            "{SIDE}_KNEE",
+            "{SIDE}_HEEL",
+            "{SIDE}_FOOT_INDEX"
+          ]
+        },
+        {
+          "id": "bending",
+          "enter": {
+            "kind": "delta",
+            "metric": "tibia_inclination_{side}",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 8000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "delta",
+                "metric": "tibia_inclination_{side}",
+                "op": "<",
+                "value": 0.5
+              },
+              {
+                "kind": "metric",
+                "metric": "tibia_inclination_{side}",
+                "op": ">=",
+                "value": 15
+              }
+            ]
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "heel_rise_{side}",
+            "op": ">",
+            "value": 0.04
+          },
+          "abortCode": "HEEL_LIFT"
+        },
+        {
+          "id": "returning",
+          "enter": {
+            "kind": "delta",
+            "metric": "tibia_inclination_{side}",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "tibia_inclination_{side}",
+            "op": "<",
+            "value": 5
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "hamstring_reach",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "reach_depth",
+            "op": "<",
+            "value": 0
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "{SIDE}_SHOULDER",
+            "{SIDE}_WRIST",
+            "{SIDE}_HIP",
+            "{SIDE}_KNEE",
+            "{SIDE}_ANKLE"
+          ]
+        },
+        {
+          "id": "reaching",
+          "enter": {
+            "kind": "delta",
+            "metric": "reach_depth",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 8000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "delta",
+            "metric": "reach_depth",
+            "op": "<",
+            "value": 0.5
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "knee_flexion_{side}",
+            "op": "<",
+            "value": 165
+          },
+          "abortCode": "BENT_KNEE"
+        },
+        {
+          "id": "returning",
+          "enter": {
+            "kind": "delta",
+            "metric": "reach_depth",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "reach_depth",
+            "op": "<",
+            "value": 5
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "hip_hinge",
+      "pattern": "descend_return",
+      "perSide": false,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "trunk_lean",
+            "op": "<",
+            "value": 10
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "MID_SHOULDER",
+            "MID_HIP",
+            "RIGHT_KNEE",
+            "RIGHT_ANKLE"
+          ]
+        },
+        {
+          "id": "descending",
+          "enter": {
+            "kind": "delta",
+            "metric": "trunk_lean",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 10000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "bottom",
+          "enter": {
+            "kind": "delta",
+            "metric": "trunk_lean",
+            "op": "<",
+            "value": 0.5
+          },
+          "minDurationMs": 1000,
+          "timeoutMs": 8000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "knee_flexion_right",
+            "op": "<",
+            "value": 150
+          },
+          "abortCode": "KNEES_BENDING"
+        },
+        {
+          "id": "ascending",
+          "enter": {
+            "kind": "delta",
+            "metric": "trunk_lean",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 10000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "trunk_lean",
+            "op": "<",
+            "value": 10
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "lateral_bend",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "trunk_lateral_tilt",
+            "op": "<",
+            "value": 5
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "MID_SHOULDER",
+            "MID_HIP",
+            "{SIDE}_SHOULDER",
+            "{SIDE}_HIP"
+          ]
+        },
+        {
+          "id": "bending",
+          "enter": {
+            "kind": "delta",
+            "metric": "trunk_lateral_tilt",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 8000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "delta",
+                "metric": "trunk_lateral_tilt",
+                "op": "<",
+                "value": 0.5
+              },
+              {
+                "kind": "metric",
+                "metric": "trunk_lateral_tilt",
+                "op": ">=",
+                "value": 15
+              }
+            ]
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "shoulder_line_foreshortening",
+            "op": ">",
+            "value": 0.15
+          },
+          "abortCode": "TORSO_ROTATED"
+        },
+        {
+          "id": "returning",
+          "enter": {
+            "kind": "delta",
+            "metric": "trunk_lateral_tilt",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "trunk_lateral_tilt",
+            "op": "<",
+            "value": 5
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "single_leg_balance",
+      "pattern": "timed_hold",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "confidence",
+            "op": ">=",
+            "value": 0.6
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "{SIDE}_HIP",
+            "{SIDE}_KNEE",
+            "{SIDE}_ANKLE",
+            "MID_HIP"
+          ]
+        },
+        {
+          "id": "holding",
+          "enter": {
+            "kind": "timeInPhase",
+            "op": ">=",
+            "valueMs": 1000
+          },
+          "timeoutMs": 30000,
+          "measureHere": true,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOST_TRACKING",
+          "_note": "USED_SUPPORT / FOOT_DOWN tespiti V1'de metrikle yapılamıyor — destek alma veya ayağın yere değmesi doğrudan ölçülemiyor, yalnız izleme kalitesi (confidence) düşüşü ve geçen süre üzerinden dolaylı modelleniyor. Gerçek destek/ayak-yere-değme tespiti kullanıcı beyanına düşüyor."
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "timeInPhase",
+            "op": ">=",
+            "valueMs": 30000
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "forward_lunge",
+      "pattern": "descend_return",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "knee_height_{side}",
+            "op": ">",
+            "value": 30
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "{SIDE}_HIP",
+            "{SIDE}_KNEE",
+            "{SIDE}_ANKLE",
+            "{SIDE}_HEEL",
+            "MID_HIP"
+          ]
+        },
+        {
+          "id": "descending",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_height_{side}",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 10000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "bottom",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_height_{side}",
+            "op": ">",
+            "value": -0.5
+          },
+          "minDurationMs": 1000,
+          "timeoutMs": 8000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "trunk_lean",
+            "op": ">",
+            "value": 25
+          },
+          "abortCode": "TRUNK_LEAN_EXCESS"
+        },
+        {
+          "id": "ascending",
+          "enter": {
+            "kind": "delta",
+            "metric": "knee_height_{side}",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 10000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "knee_height_{side}",
+            "op": ">",
+            "value": 25
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "thoracic_rotation",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "shoulder_line_foreshortening",
+            "op": "<",
+            "value": 0.05
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "LEFT_SHOULDER",
+            "RIGHT_SHOULDER",
+            "LEFT_HIP",
+            "RIGHT_HIP"
+          ]
+        },
+        {
+          "id": "rotating",
+          "enter": {
+            "kind": "delta",
+            "metric": "shoulder_line_foreshortening",
+            "op": ">",
+            "value": 0.01
+          },
+          "timeoutMs": 8000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "delta",
+            "metric": "shoulder_line_foreshortening",
+            "op": "<",
+            "value": 0.005
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "trunk_lateral_tilt",
+            "op": ">",
+            "value": 10
+          },
+          "abortCode": "LATERAL_LEAN"
+        },
+        {
+          "id": "returning",
+          "enter": {
+            "kind": "delta",
+            "metric": "shoulder_line_foreshortening",
+            "op": "<",
+            "value": -0.01
+          },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "shoulder_line_foreshortening",
+            "op": "<",
+            "value": 0.05
+          },
+          "isTerminal": true
+        }
+      ]
+    },
+    {
+      "testId": "active_straight_leg_raise",
+      "pattern": "rom_sweep",
+      "perSide": true,
+      "phases": [
+        {
+          "id": "ready",
+          "enter": {
+            "kind": "metric",
+            "metric": "hip_flexion_{side}",
+            "op": "<",
+            "value": 10
+          },
+          "minDurationMs": 500,
+          "timeoutMs": 30000,
+          "requiredLandmarks": [
+            "{SIDE}_HIP",
+            "{SIDE}_KNEE",
+            "{SIDE}_ANKLE",
+            "MID_SHOULDER",
+            "MID_HIP"
+          ]
+        },
+        {
+          "id": "raising",
+          "enter": {
+            "kind": "delta",
+            "metric": "hip_flexion_{side}",
+            "op": ">",
+            "value": 1.0
+          },
+          "timeoutMs": 8000,
+          "abort": {
+            "kind": "confidence",
+            "op": "<",
+            "value": 0.6
+          },
+          "abortCode": "LOW_CONFIDENCE"
+        },
+        {
+          "id": "peak_hold",
+          "enter": {
+            "kind": "delta",
+            "metric": "hip_flexion_{side}",
+            "op": "<",
+            "value": 0.5
+          },
+          "minDurationMs": 1500,
+          "timeoutMs": 6000,
+          "measureHere": true,
+          "abort": {
+            "kind": "metric",
+            "metric": "knee_flexion_{side}",
+            "op": "<",
+            "value": 165
+          },
+          "abortCode": "BENT_KNEE",
+          "_note": "SUPINE (sırtüstü) test — tek kameranın en zayıf olduğu konum (kalça/bacak kamera eksenine büyük ölçüde paralel, oklüzyon riski yüksek); G1-b doğrulamasında düşme adayı."
+        },
+        {
+          "id": "returning",
+          "enter": {
+            "kind": "delta",
+            "metric": "hip_flexion_{side}",
+            "op": "<",
+            "value": -1.0
+          },
+          "timeoutMs": 8000
+        },
+        {
+          "id": "complete",
+          "enter": {
+            "kind": "metric",
+            "metric": "hip_flexion_{side}",
+            "op": "<",
+            "value": 10
+          },
+          "isTerminal": true
+        }
+      ]
+    }
+  ]
+}
