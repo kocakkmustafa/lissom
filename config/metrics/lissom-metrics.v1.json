@@ -1,14 +1,15 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.metrics",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "_notes": [
     "Bu dosya Lissom'un ölçülebilir büyüklüklerinin TEK kaynağıdır.",
     "Python referans yorumlayıcısı: motion-core tools/fixture_pipeline/mocore/measures.py",
     "Native (Kotlin/Swift) motor AYNI dosyayı okur ve AYNI sayıyı üretmek zorundadır (G4 differential test).",
     "L-009: acı metriklerinde 'plane' zorunludur — ham 3D acı ROM uclarinda ±5.7° sistematik hata verir.",
     "confidenceClass: A/B/C — G1 kapı protokolü §1'deki eklem güven sınıfı; MAE eşiği buna göre uygulanır.",
-    "M-F-34 taban-değeri kuralı: tolerans taşıyan oran metrikleri kusursuz-durum `baseline` değerini beyan eder; tolerans TABAN-göreli yorumlanır. Tabanı sıfır sanmak sessiz hata üretir — L-072 tam olarak buydu: `shoulder_line_foreshortening` tabanı 0,80 iken guard `> 0.15` yazılmış, her duruşta tetiklenmişti. Değerler sentetik nötr duruşta ÖLÇÜLDÜ, tahmin edilmedi; kapı A11 beyanı doğruluyor."
+    "M-F-34 taban-değeri kuralı: tolerans taşıyan oran metrikleri kusursuz-durum `baseline` değerini beyan eder; tolerans TABAN-göreli yorumlanır. Tabanı sıfır sanmak sessiz hata üretir — L-072 tam olarak buydu: `shoulder_line_foreshortening` tabanı 0,80 iken guard `> 0.15` yazılmış, her duruşta tetiklenmişti. Değerler sentetik nötr duruşta ÖLÇÜLDÜ, tahmin edilmedi; kapı A11 beyanı doğruluyor.",
+    "range (D5/v3): metriğin FİZİKSEL olarak mümkün aralığı — hareketin beklenen aralığı DEĞİL. İki iş görür: config yazımında saçma eşiği reddeder ve ÖLÇÜLEN veriyi süzer. İkincisi olmadan izleme artefaktları referansa sızıyordu: deep_squat fixture'larında diz fleksiyonu minimumları 0-3° ölçüldü (tam bükülü diz ~30-40°) ve trunk_lateral_tilt 180° verdi. Güven kapısı bunları YAKALAMIYOR — landmark yüksek görünürlükle ama yanlış yerde kestirilebiliyor (L-107)."
   ],
   "metrics": [
     {
@@ -24,7 +25,11 @@
       "mirror": true,
       "confidenceClass": "A",
       "test": "overhead_reach",
-      "description": "Shoulder flexion: angle between torso line and upper arm, sagittal plane. 0 = arm at side, 180 = fully overhead."
+      "description": "Shoulder flexion: angle between torso line and upper arm, sagittal plane. 0 = arm at side, 180 = fully overhead.",
+      "range": [
+        0,
+        190
+      ]
     },
     {
       "id": "elbow_extension_right",
@@ -39,7 +44,11 @@
       "mirror": true,
       "confidenceClass": "A",
       "test": "overhead_reach",
-      "description": "Elbow angle. Used as an invalidation guard: a bent elbow inflates overhead reach."
+      "description": "Elbow angle. Used as an invalidation guard: a bent elbow inflates overhead reach.",
+      "range": [
+        20,
+        190
+      ]
     },
     {
       "id": "hip_flexion_right",
@@ -54,7 +63,11 @@
       "mirror": true,
       "confidenceClass": "A",
       "test": "deep_squat",
-      "description": "Hip angle between torso and thigh, sagittal plane. Smaller = deeper flexion."
+      "description": "Hip angle between torso and thigh, sagittal plane. Smaller = deeper flexion.",
+      "range": [
+        20,
+        200
+      ]
     },
     {
       "id": "knee_flexion_right",
@@ -69,7 +82,11 @@
       "mirror": true,
       "confidenceClass": "A",
       "test": "deep_squat",
-      "description": "Knee angle between thigh and shank, sagittal plane. 180 = straight leg."
+      "description": "Knee angle between thigh and shank, sagittal plane. 180 = straight leg.",
+      "range": [
+        30,
+        195
+      ]
     },
     {
       "id": "trunk_lean",
@@ -82,7 +99,11 @@
       "unit": "deg",
       "confidenceClass": "B",
       "test": "hip_hinge",
-      "description": "Forward trunk inclination from vertical, sagittal plane. 0 = upright. Uses the derived mid-line (L-010)."
+      "description": "Forward trunk inclination from vertical, sagittal plane. 0 = upright. Uses the derived mid-line (L-010).",
+      "range": [
+        0,
+        120
+      ]
     },
     {
       "id": "trunk_lateral_tilt",
@@ -95,7 +116,11 @@
       "unit": "deg",
       "confidenceClass": "B",
       "test": "lateral_bend",
-      "description": "Sideways trunk inclination from vertical, frontal plane. MUST use the derived mid-line: a one-sided hip-to-shoulder vector carries a spurious lateral component (shoulder width != hip width) worth up to 11 deg (L-010)."
+      "description": "Sideways trunk inclination from vertical, frontal plane. MUST use the derived mid-line: a one-sided hip-to-shoulder vector carries a spurious lateral component (shoulder width != hip width) worth up to 11 deg (L-010).",
+      "range": [
+        0,
+        75
+      ]
     },
     {
       "id": "tibia_inclination_right",
@@ -109,7 +134,11 @@
       "mirror": true,
       "confidenceClass": "C",
       "test": "ankle_dorsiflexion",
-      "description": "Shank angle from vertical during knee-to-wall. Proxy for ankle dorsiflexion range. Class C: ankle is the least reliable joint on a single 2D camera."
+      "description": "Shank angle from vertical during knee-to-wall. Proxy for ankle dorsiflexion range. Class C: ankle is the least reliable joint on a single 2D camera.",
+      "range": [
+        0,
+        90
+      ]
     },
     {
       "id": "heel_rise_right",
@@ -124,7 +153,11 @@
       "confidenceClass": "C",
       "test": "deep_squat",
       "description": "How far the heel sits above the toe line, normalised by torso length. Invalidation guard for heel lift during squat. NOTE: the first definition used heel-to-toe DISTANCE, which measures foot length and stays constant no matter what the heel does — the gate caught it as a dead metric (L-028).",
-      "baseline": 0.0
+      "baseline": 0.0,
+      "range": [
+        -0.5,
+        0.8
+      ]
     },
     {
       "id": "reach_depth",
@@ -138,7 +171,11 @@
       "confidenceClass": "B",
       "test": "hamstring_reach",
       "description": "Fingertip-to-ankle distance normalised by torso length. Body-size independent forward reach measure.",
-      "baseline": 1.6031
+      "baseline": 1.6031,
+      "range": [
+        0.0,
+        3.0
+      ]
     },
     {
       "id": "knee_height_right",
@@ -153,7 +190,11 @@
       "confidenceClass": "C",
       "test": "forward_lunge",
       "description": "Vertical knee-above-ankle gap, normalised by torso length. Proxy for how far the trailing knee descends in a lunge. NOT a knee-to-floor distance: pose gives no ground plane, so this is measured against the body's own reference.",
-      "baseline": 0.84
+      "baseline": 0.84,
+      "range": [
+        -0.5,
+        2.0
+      ]
     },
     {
       "id": "plank_hip_deviation",
@@ -168,7 +209,11 @@
       "confidenceClass": "B",
       "test": "plank_hold",
       "description": "Perpendicular distance of the hip mid-point from the shoulder-to-ankle line, normalised by torso length. 0 = straight body line; grows as the hips sag or pike. Sagittal plane so that sagging is not confused with lateral drift.",
-      "baseline": 0.0
+      "baseline": 0.0,
+      "range": [
+        0.0,
+        1.5
+      ]
     },
     {
       "id": "shoulder_line_foreshortening",
@@ -182,7 +227,11 @@
       "confidenceClass": "C",
       "test": "thoracic_rotation",
       "description": "Frontal-plane projected shoulder width, normalised by torso length. Shrinks as the torso rotates away from the camera — an INDIRECT proxy for transverse rotation, not a rotation angle. WARNING: transverse-plane rotation is not reliably recoverable from a single camera (research/05); qualitative bands only unless G1-b proves otherwise. Replaced an angle_vertical+transverse definition that was mathematically dead (constant 90 deg) — see L-011.",
-      "baseline": 0.8
+      "baseline": 0.8,
+      "range": [
+        0.0,
+        2.0
+      ]
     }
   ]
 }
