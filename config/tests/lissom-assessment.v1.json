@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.battery",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
     "Lissom V1 aday test bataryası. G1-b kapısı bu testlerden hangilerinin V1'e gireceğine karar verir.",
@@ -13,7 +13,8 @@
     "derivedMeasures: bataryanın adını andığı ama METRİK OLMAYAN büyüklükler burada beyan edilir. Beyansızken hiçbir kontrol bunlara bakmıyordu ve batarya→metrik referansları TAMAMEN doğrulanmamıştı; bu boşluk `hip_flexion_{opposite}` guard'ının asla çözülemediğini gizledi (L-081).",
     "derivedMeasures.requiredLandmarks ZORUNLU: geometrik olmayan bir ölçü de kadraj ister — `footTouchdown` ayağı görmeden ayak inişini saptayamaz. Alan olmadan triyaj `single_leg_balance` için ayak bileği aramıyordu, yani düzeltmenin kendisi yeni bir sessiz boşluk açmıştı.",
     "Kural metinlerinde geçen TÜM adlar beyan edilmek zorunda. Envanter çıkarılınca üç tanesi ne metrik ne beyandı (`confidence`, `heelRiseDelta`, `yawDeg`) — yani batarya, hiçbir kontrolün bakmadığı adlara dayanıyordu.",
-    "movementPresence: bir fixture'ın HAREKETİ içerdiğini kanıtlar. Triyaj kadrajı ölçer, bu hareketi. Kesintisiz tutuş istenir (testin holdSeconds'ünün yarısı); kümülatif kare sayısı YETMEZ — gürültü ve kısa pasif hareketler toplamda eşiği geçip tutuş üretmeyebilir. Beyansız test için fixture_check SERT HATA verir."
+    "movementPresence: bir fixture'ın HAREKETİ içerdiğini kanıtlar. Triyaj kadrajı ölçer, bu hareketi. Kesintisiz tutuş istenir (testin holdSeconds'ünün yarısı); kümülatif kare sayısı YETMEZ — gürültü ve kısa pasif hareketler toplamda eşiği geçip tutuş üretmeyebilir. Beyansız test için fixture_check SERT HATA verir.",
+    "passiveExecutionPossible (M-F-45): pasif icranın BİYOMEKANİK olarak mümkün olup olmadığı. VARSAYILMAZ, açıkça beyan edilir — beyan listesi ileride movement-science merceğinden geçecek. `false` olan harekette M-F-43'ün koruduğu tehdit yapısal olarak yoktur, bu yüzden `unknown` kaynak referansa girebilir; `passive` işareti bulunursa YİNE giremez (o durumda kaynak muhtemelen bu hareketi göstermiyordur). `true` olan her harekette fail-closed aynen sürer."
   ],
   "globalCameraSetup": {
     "distanceCm": [
@@ -92,7 +93,9 @@
         "op": "gte",
         "value": 140,
         "rationale": "Tam bir baş-üstü uzanma 150-180° omuz fleksiyonudur; 140° muhafazakâr bir TABAN — normal aralığı değil, hareketin gerçekleşip gerçekleşmediğini ayırt eder. Ölçüldü: hasat edilen 4 fixture'ın tepe (p95) değerleri 85/76/152/92°; yalnız biri gerçek uzanma içeriyordu (L-092)."
-      }
+      },
+      "passiveExecutionPossible": true,
+      "passiveExecutionRationale": "Klinisyen kolu kaldırabilir — pasif/dirençli omuz ROM standart bir muayenedir."
     },
     {
       "id": "deep_squat",
@@ -141,7 +144,9 @@
         ],
         "source": "No continuous degree norm exists for squat depth in the literature (PubMed 35321135 reports only between-group differences). Ordinal scoring is the honest option. Criteria are descriptive, NOT the proprietary FMS protocol.",
         "region": "hip"
-      }
+      },
+      "passiveExecutionPossible": false,
+      "passiveExecutionRationale": "Ağırlık taşıyan tüm-vücut görevi: klinisyen kimseyi pasif çömeltemez."
     },
     {
       "id": "overhead_squat",
@@ -191,7 +196,9 @@
         },
         "source": "UNVALIDATED — no normative forward-lean dataset was found for the overhead squat. Bands are an engineering starting point and MUST be recalibrated against real fixtures before any user-facing number is shown.",
         "region": "thoracic"
-      }
+      },
+      "passiveExecutionPossible": false,
+      "passiveExecutionRationale": "Aynı — ağırlık taşıyan çömelme, üstüne aktif kol pozisyonu."
     },
     {
       "id": "ankle_dorsiflexion",
@@ -226,7 +233,9 @@
         ],
         "source": "Literature norms for the weight-bearing lunge test are in CENTIMETRES (knee-to-wall distance); we measure tibia ANGLE. The conversion depends on shank length and no degree-based normative table was verified (source paywalled, 403). Ankle is also the least reliable joint on a single 2D camera (limits of agreement +-12-24 deg). Qualitative bands only until our own calibration exists.",
         "region": "ankle"
-      }
+      },
+      "passiveExecutionPossible": true,
+      "passiveExecutionRationale": "Pasif dorsifleksiyon standart bir ölçümdür."
     },
     {
       "id": "hamstring_reach",
@@ -277,7 +286,9 @@
         },
         "source": "UNVALIDATED — sit-and-reach norms exist in cm but are floor-referenced and sex-split; our metric is fingertip-to-ankle normalised by torso length, which is a different quantity. Bands are an engineering starting point. Sex split deferred pending real data.",
         "region": "posterior_chain"
-      }
+      },
+      "passiveExecutionPossible": true,
+      "passiveExecutionRationale": "Pasif hamstring germe standart uygulamadır."
     },
     {
       "id": "hip_hinge",
@@ -309,7 +320,9 @@
         "source": "No degree-based normative threshold exists for the hip hinge / lumbo-pelvic rhythm; the literature evaluates it visually or ordinally, and even trained observers only detect posterior pelvic tilt reliably beyond ~34 deg. Qualitative only — a precise-looking number here would be false precision.",
         "region": "posterior_chain",
         "derived": "ratio of hip_flexion change to trunk_lean change — these two are NOT independent (a forward fold IS hip flexion); their ratio is the lumbo-pelvic rhythm we actually want."
-      }
+      },
+      "passiveExecutionPossible": false,
+      "passiveExecutionRationale": "Ayakta ağırlık taşıyan kalça menteşesi; pasif icrası yok."
     },
     {
       "id": "lateral_bend",
@@ -364,7 +377,9 @@
         "value": 15,
         "minHoldS": 0.5,
         "rationale": "Eşik testin KENDİ skorlama bantlarından türetildi: en düşük bant 18° (60+ yaş, 'low'). 15° onun da altında — yani skorlanabilirlik değil, HAREKETİN OLUP OLMADIĞI ölçülüyor. Normal duruş salınımı birkaç derecedir, 15° kasıtlı bir yana eğilmedir. minHoldS 0.5: bu testte tutuş fazı YOK (reps:3, holdSeconds yok), dinamik bir uzanma — 1 sn şartı gerçek tekrarları eleyebilirdi."
-      }
+      },
+      "passiveExecutionPossible": true,
+      "passiveExecutionRationale": "Ayakta yapılsa da gövde yana eğilmesi oturur/yatar pozisyonda pasif uygulanabilir — muhafazakâr taraf."
     },
     {
       "id": "single_leg_balance",
@@ -419,7 +434,9 @@
         "source": "Bohannon 2006 age-banded single-limb stance (60-69: 27.0s, 70-79: 17.2s, 80-99: 8.5s) plus midlife median ~30s.",
         "region": "balance",
         "warning": "Halo found the DURATION metric suffers a ceiling effect (most people last the full time), while sway metrics discriminated better. Sway is not scored in V1 because landmark jitter cannot be separated from real sway without our own calibration (research/04). Duration is the honest V1 metric, with its ceiling limitation acknowledged."
-      }
+      },
+      "passiveExecutionPossible": false,
+      "passiveExecutionRationale": "Denge görevi tanımı gereği aktif: destek verilirse test zaten geçersiz (USED_SUPPORT)."
     },
     {
       "id": "forward_lunge",
@@ -449,7 +466,9 @@
         ],
         "source": "Halo used mean minimum knee-to-floor distance. We have no floor reference from pose alone, so we use a torso-normalised proxy. Knee valgus — the other thing this test could show — needs precise frontal-plane small-angle measurement, which a single camera cannot deliver reliably (research/05). Qualitative only.",
         "region": "hip"
-      }
+      },
+      "passiveExecutionPossible": false,
+      "passiveExecutionRationale": "Ağırlık taşıyan adım; pasif üretilemez."
     },
     {
       "id": "thoracic_rotation",
@@ -478,7 +497,9 @@
         "source": "Transverse-plane rotation is not reliably recoverable from a single camera (PMC10635560). We measure an INDIRECT proxy: how much the shoulder line shortens in the frontal projection as the torso turns away. This is a rotation SIGN, not a rotation ANGLE, and is presented as such.",
         "region": "thoracic",
         "warning": "Weakest test in the battery. A leading candidate to be dropped at the G1-b gate if the proxy does not separate rotated from neutral postures on real footage."
-      }
+      },
+      "passiveExecutionPossible": true,
+      "passiveExecutionRationale": "Yardımlı/pasif torasik rotasyon uygulanabilir."
     },
     {
       "id": "active_straight_leg_raise",
@@ -534,7 +555,9 @@
         "source": "Straight-leg-raise literature puts normal hamstring length at roughly 80-85 deg of hip flexion with the lumbar spine flat. Our metric is the torso-thigh angle, so smaller = more range: 90 deg torso-thigh corresponds to ~90 deg of raise. Bands are an engineering starting point derived from that reference, NOT clinical cutoffs.",
         "region": "posterior_chain",
         "warning": "SUPINE test — the body lies on the floor, which is exactly where single-camera pose is weakest (self-occlusion, research/07). Camera must be side-on and low. A leading candidate to be dropped at the G1-b gate if detection proves unreliable on the floor."
-      }
+      },
+      "passiveExecutionPossible": true,
+      "passiveExecutionRationale": "Pasif SLR klasik bir testtir; kaynakların çoğu pasif olabilir."
     },
     {
       "id": "plank_hold",
@@ -572,7 +595,9 @@
         "source": "This test measures endurance under a form constraint, not range of motion. Duration norms for the plank vary widely across populations and protocols, and the timing depends on where we set the form-break threshold — a number would be false precision. The form threshold (0.22 normalised deviation) corresponds to roughly 20 deg of hip drift and was measured on the synthetic rig, not calibrated on people.",
         "region": "core_stability",
         "warning": "Endurance tests fatigue the user and are the most likely place for a wellness product to push someone too far. The instruction deliberately hands the stopping decision to the user; there is no 'beat your record' prompt on this test."
-      }
+      },
+      "passiveExecutionPossible": false,
+      "passiveExecutionRationale": "İzometrik kendi-ağırlığı tutuşu; pasif tutuş kavramsal olarak yok."
     }
   ],
   "excluded": [

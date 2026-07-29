@@ -167,8 +167,21 @@ def main() -> int:
     profile = json.loads(PROFILE.read_text(encoding="utf-8"))
     current = profile.get("perMovement")
 
+    # M-F-45 politikası da TÜRETİLİR: batarya beyanı tek kaynak, profil onun
+    # kopyası. Elle yazılsaydı ikisi ayrışır ve hasat yanlış politikayla koşardı.
+    policy = {}
+    for t in battery["tests"]:
+        if "passiveExecutionPossible" not in t:
+            raise KeyError(
+                f"{t['id']}: `passiveExecutionPossible` beyan edilmemiş — "
+                "M-F-45 varsayıma izin vermiyor (varsayılan sessizce "
+                "fail-closed'u ya da tersini uygular)"
+            )
+        policy[t["id"]] = bool(t["passiveExecutionPossible"])
+
     if write:
         profile["perMovement"] = derived
+        profile["movementRomPolicy"] = policy
         profile.setdefault("_notes", []).append(
             "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle "
             "düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu "
@@ -182,6 +195,10 @@ def main() -> int:
         print(f"✅ perMovement yazıldı — {len(derived)} test")
         return 0
 
+    if profile.get("movementRomPolicy") != policy:
+        print("❌ triyaj profilindeki romMode politikası BAYAT (batarya ile uyuşmuyor).")
+        print("  Düzeltme:  python3 tools/triage_landmarks.py --write")
+        return 1
     if current != derived:
         print("❌ triyaj profili BAYAT — metrik config'iyle uyuşmuyor.")
         for t in sorted(set(derived) | set(current or {})):

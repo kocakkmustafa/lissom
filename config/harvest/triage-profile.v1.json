@@ -11,7 +11,8 @@
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
-    "min_usable_window_s=6: fixture bir temiz TEKRAR ister, temiz bir VİDEO değil. Genel görünürlük oranı videonun tamamından hesaplanıyor ve giriş/konuşma bölümleri ölçülebilir klipleri aşağı çekiyordu. ÖLÇÜLDÜ (L-085): reddedilen 6 overhead_reach klibinin 6'sında da kesintisiz pencere vardı — 114/54/36/19/9/7 sn; 114 saniye kusursuz görünürlük taşıyan klip genel oranı 0,47 diye elenmişti. 6 sn bir tekrar için makul alt sınır. Eşik SAYI TUTSUN diye gevşetilmedi; ölçülen şey değiştirildi. UYARI: pencere GÖRÜNÜRLÜK garantisi verir, tekrarın gerçekleştiğini DEĞİL — hareket-varlığı ayrı bir kontroldür."
+    "min_usable_window_s=6: fixture bir temiz TEKRAR ister, temiz bir VİDEO değil. Genel görünürlük oranı videonun tamamından hesaplanıyor ve giriş/konuşma bölümleri ölçülebilir klipleri aşağı çekiyordu. ÖLÇÜLDÜ (L-085): reddedilen 6 overhead_reach klibinin 6'sında da kesintisiz pencere vardı — 114/54/36/19/9/7 sn; 114 saniye kusursuz görünürlük taşıyan klip genel oranı 0,47 diye elenmişti. 6 sn bir tekrar için makul alt sınır. Eşik SAYI TUTSUN diye gevşetilmedi; ölçülen şey değiştirildi. UYARI: pencere GÖRÜNÜRLÜK garantisi verir, tekrarın gerçekleştiğini DEĞİL — hareket-varlığı ayrı bir kontroldür.",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080)."
   ],
   "thresholds": {
     "min_duration_s": 90.0,
@@ -151,5 +152,19 @@
       24,
       28
     ]
+  },
+  "movementRomPolicy": {
+    "overhead_reach": true,
+    "deep_squat": false,
+    "overhead_squat": false,
+    "ankle_dorsiflexion": true,
+    "hamstring_reach": true,
+    "hip_hinge": false,
+    "lateral_bend": true,
+    "single_leg_balance": false,
+    "forward_lunge": false,
+    "thoracic_rotation": true,
+    "active_straight_leg_raise": true,
+    "plank_hold": false
   }
 }
