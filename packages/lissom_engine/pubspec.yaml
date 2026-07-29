@@ -1,0 +1,27 @@
+name: lissom_engine
+description: >-
+  ROM Assessment Engine — Lissom'un hareket-ölçümü motoru. Test tanımları,
+  eşikler ve skorlama bantları versiyonlu config'ten gelir (config/tests,
+  config/metrics, config/phases); motor kodunda hiçbir test adı ya da eşik
+  sabit DEĞİLDİR. Saf Dart.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  # PİNLİ TÜKETİM (M-F-03). Path bağımlılığı KASITLI olarak kullanılmıyor:
+  # paylaşımlı çalışma ağacında (ventures/motion-core/lib) path, o an hangi
+  # dal çıkılıysa onu okur — bağımlılığımız başka bir oturumun dal
+  # değiştirmesiyle sessizce değişirdi. Tag'e pinleme bunu imkânsız kılar
+  # (M-F-22 paylaşımlı-ağaç kuralıyla da uyumlu).
+  motion_core:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_core
+      ref: motion_core-v0.8.4
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^5.0.0
