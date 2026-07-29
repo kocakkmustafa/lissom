@@ -20,4 +20,5 @@ library;
 export 'src/assessment_engine.dart';
 export 'src/assessment_result.dart';
 export 'src/battery.dart';
+export 'src/assessment_session.dart';
 export 'src/metric_bridge.dart';

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.assessment.blocks",
+  "version": "1.0.0",
+  "testSet": "lissom.assessment.battery@1.8.0",
+  "_notes": [
+    "M-F-133 madde 3 hükmü: 12 test BÖLÜNEBİLİR, blok-sınırı kuralıyla. Bağlayıcı kural: bir blok TEK calibrationProfile içinde tamamlanır (biter ya da yeniden başlar).",
+    "⚠️ HÜKMÜN ÖRNEĞİ İLE VERİNİN AYRIŞTIĞI YER (koordinatöre bildirildi, L-165): hüküm 'ayakta-bloğu / yer-bloğu' örneğini veriyor, ama batarya talimatları ölçüldüğünde ayakta testler İKİ FARKLI kamera konumuna bölünüyor — 6'sı 'stand SIDE-ON', 3'ü 'stand FACING'. Yan-duruş ve önden çekim AYNI kalibrasyon profili DEĞİLDİR; ikisini tek blokta toplamak hükmün bağlayıcı kuralını (tek kalibrasyon) ihlal ederdi. Bu yüzden bloklar (kamera görüşü × vücut konumu) ile tanımlandı; 'ayakta/yer' örneği bu veride yetersiz kalıyor. Hüküm revizesi koordinatörde.",
+    "Yorgunluk sırası hükümden: plank_hold kendi bloğunun SONUNDA; active_straight_leg_raise yer-bloğunda (kamera zaten konumlanmış).",
+    "Blok sırası kolaydan-zora ve kamera-hareketini-azaltacak biçimde: side-on ayakta (en kalabalık) → önden ayakta → oturarak → yer. Yer bloğu sonda çünkü zemine inmek geri dönüşü en zor konum.",
+    "Tamamlanan blokların ölçümleri yarım kalan oturumda KORUNUR (M-F-71: tamamlanmış ölçüm atılmaz). Bunu motor tutar (AssessmentSession), config yalnız sınırı tanımlar."
+  ],
+  "blocks": [
+    {
+      "id": "standing_sagittal",
+      "title": "Standing, side-on",
+      "cameraView": "sagittal",
+      "bodyPosition": "standing",
+      "setupNote": "Stand side-on to the camera, full body in frame.",
+      "tests": [
+        "overhead_reach",
+        "hip_hinge",
+        "hamstring_reach",
+        "deep_squat",
+        "overhead_squat",
+        "ankle_dorsiflexion"
+      ]
+    },
+    {
+      "id": "standing_frontal",
+      "title": "Standing, facing",
+      "cameraView": "frontal",
+      "bodyPosition": "standing",
+      "setupNote": "Turn to face the camera squarely, full body in frame.",
+      "tests": [
+        "lateral_bend",
+        "single_leg_balance",
+        "forward_lunge"
+      ]
+    },
+    {
+      "id": "seated_frontal",
+      "title": "Seated, facing",
+      "cameraView": "frontal",
+      "bodyPosition": "seated",
+      "setupNote": "Sit on a chair facing the camera.",
+      "tests": [
+        "thoracic_rotation"
+      ]
+    },
+    {
+      "id": "floor_sagittal",
+      "title": "On the floor, side-on",
+      "cameraView": "sagittal",
+      "bodyPosition": "floor",
+      "setupNote": "Lower the camera to floor height, side-on.",
+      "_fatigueNote": "plank_hold SON — dayanıklılık testi; kendisinden sonra ölçüm yok ki yorgunluk başka testi bozmasın (hüküm M-F-133/3).",
+      "tests": [
+        "active_straight_leg_raise",
+        "plank_hold"
+      ]
+    }
+  ]
+}

@@ -55,14 +55,17 @@ starting point — we'll track it from here." · ❌ "Poor mobility detected."
 `home` · `library` · `progress` · `profile` (IA config'ten).
 
 **home** — 4 bölüm: `today` (günün planı) · `retest_countdown` ("next
-re-assessment" — Kuzey Yıldızı döngüsünün görünür yüzü) · `continue` ·
-`quick_start`.
+re-assessment" — Kuzey Yıldızı döngüsünün görünür yüzü; **§5.2 hükmü: sakin
+DAVET kartı, geri-sayım estetiği YASAK, gecikme ASLA suçlanmaz**) ·
+`continue` · `quick_start`.
 
 **library** — 6 aile: `assessment_battery` (aktif, wave 0) + 5 tanesi
 `coming_soon` (yoga_styles, flexibility_goals, population_packs,
 family_warmups, breath_meditation). **Kapsamın tamamı baştan görünür** ama
 SAHTE kurs asla listelenmez: `coming_soon` sayfası kurs listesi göstermez,
-ne geleceğini anlatır. Arama ZORUNLU; filtreler: level/duration/equipment/region.
+ne geleceğini anlatır. **Yerleşim §5.4 hükmüyle: aktif dalga birinci-sınıf,
+coming_soon aileler görsel-ayrı kompakt bölümde tek-satır durumla** — ayrı
+yol-haritası sayfası ve eşit-ağırlık listeleme YASAK. Arama ZORUNLU; filtreler: level/duration/equipment/region.
 Her aile sayfasında **honestyBox** (ölçülenler / ölçülmeyenler) — opsiyonel değil.
 
 **progress** — trend grafiği (assessment_battery + flexibility_goals'da var).
@@ -77,18 +80,29 @@ klinik tarama, hot yoga, kalça rotasyonu). Bu sayfa bir özellik, bir özür de
 
 ### 2.3 Değerlendirme akışı (ürünün kalbi)
 
+**Oturum BLOKLARDAN oluşur** (§5.3 hükmü, `config/tests/assessment-blocks.v1.json`):
+`standing` (8 test, `plank_hold` SONDA) → `floor` (4 test, ASLR dahil).
+Her blok TEK kalibrasyonda tamamlanır; bloklar arasında kamera yeniden
+konumlanır ve yeni bir kalibrasyon alınır.
+
 Test başına: **talimat → kalibrasyon kontrolü → canlı tur → sonuç.**
 
 | # | Ekran | Kritik davranış |
 |---|---|---|
+| B0 | **Block intro** | Hangi blok, kaç test, kamera nereye. Blok = bir kalibrasyon penceresi |
 | A1 | Test instruction | Config'in `instruction` metni + hangi tarafla başlanacağı |
 | A2 | Calibration check | Sert kapı; geçmezse ölçüm BAŞLAMAZ (dürüst ret) |
 | A3 | **Live capture** | Sesli sayım/tutuş yönlendirmesi (ses-gecikme kalibrasyonu çekirdekten). İskelet overlay. Guard uyarıları ANLIK ("keep the elbow straight") |
 | A4 | **Attempt result** | Aşağıdaki 4 sonuç katmanı (§2.4) |
+| B1 | **Block complete** | Bloğun ölçümleri KAYDEDİLDİ — burada bırakılabilir |
 | A5 | Battery summary | 12 testin tablosu; ölçülemeyenler İSİMLE ve sebebiyle |
 
 **Tekrar kuralı:** 3 deneme de geçersizse test "not measured" olarak KAPANIR,
 kullanıcı ilerler. **Tahmin edilmez, boş bırakılır** (PRD §5.2).
+
+⚠️ **Yarım kalan oturum:** tamamlanmış blokların ölçümleri KORUNUR (§5.3).
+Tasarım "oturumu bitirmedin, hiçbir şey kaydedilmedi" DEMEZ — B1 ekranı bu
+sözü verir, motor (`AssessmentSession.completedBlocks`) tutar.
 
 ### 2.4 Sonuç ekranı — dört katman (M-F-71, motorla birebir)
 
@@ -98,7 +112,7 @@ Bu, tasarımın en önemli parçası. `lissom_engine`'in `ResultTier`'ı dört d
 | Katman | Kullanıcı ne görür | Ton |
 |---|---|---|
 | `scored` | Değer + bant etiketi (low/normal/good) + bandın anlamı | Nötr-bilgilendirici |
-| `measuredBelowRange` | **Değer + "başlangıç noktan bu" anlatısı. Bant etiketi YOK** (bandın altındaki değere bant adı vermek, ölçmediğimiz bir sınıflandırmayı iddia etmek olurdu). Hedef taban gösterilebilir | **KOÇLANAN** — skorlanan değil |
+| `measuredBelowRange` | **Değer + "başlangıç noktan bu" anlatısı. Bant etiketi YOK** (bandın altındaki değere bant adı vermek, ölçmediğimiz bir sınıflandırmayı iddia etmek olurdu). ⚠️ **Hedef taban DOLUM-ÇUBUĞU OLARAK GÖSTERİLMEZ** — §5.1 hükmü; sönük detay metni olabilir | **KOÇLANAN** — skorlanan değil |
 | `measuredNoBands` | Değer + "bu test için sayısal norm yok, nitel seviye kullanıyoruz" | Dürüst-sınırlı |
 | `notMeasured` | **Sebep İSİMLİ** (aşağıdaki kodlar) + ne yapması gerektiği | Suçlayıcı DEĞİL |
 
@@ -171,16 +185,64 @@ Değerlendirme (bir test):
 Her yerden: ağrı bildirimi → §2.5 pain flow (rutin yumuşatılır)
 ```
 
-## 5. Tasarımcıya açık sorular (kurucu/koordinatör kararı)
+## 5. TASARIM HÜKÜMLERİ (koordinatör, M-F-133 — bağlayıcı)
 
-1. `measuredBelowRange` görselleştirmesi: hedef tabanı bir ilerleme çubuğu
-   olarak göstermek motive edici mi, yoksa "yetersizsin" hissi mi yaratır?
-2. `retest_countdown` ana ekranda ne kadar öne çıkmalı — döngü ürünün Kuzey
-   Yıldızı ama geri sayım baskı da yaratabilir.
-3. 12 testin tamamı tek oturumda mı, bölünebilir mi? (plank dayanıklılık
-   testi ve ASLR supine yorgunluk sırası etkiler.)
-4. `coming_soon` ailelerin görünürlüğü: kapsam algısı için gerekli ama
-   "boş uygulama" hissi riski var.
+Bu bölüm daha önce "açık sorular"dı; dördü de hükme bağlandı. **Bunlar
+tercih değil, kısıt.**
+
+### 5.1 `measuredBelowRange` görselleştirmesi
+
+**HÜKÜM: (b) → MDC sonrası (c). Dolum-çubuğu (a) ASLA.**
+
+- **İlk ölçümde:** çıplak değer + "başlangıç noktan bu" anlatısı.
+  **Ölçümün kendisi üründür** — motive edici bir sarmalayıcıya ihtiyacı yok.
+- **MDC eşiği açıldıktan sonra:** kişisel trend (kendine-göre ilerleme).
+  Donmuş-omuz kullanıcısı için davranışsal olarak doğru referans kendisi,
+  norm değil.
+- **YASAK:** hedefe-uzaklık dolum çubuğu. 50°'de neredeyse-boş bir çubuk,
+  görsel bir "yetersizsin" hükmüdür — L-135'in yasakladığı zararın ta
+  kendisi, sayıyla değil grafikle söylenmiş hâli.
+- Bant bilgisi **sönük detay metni** olarak gösterilebilir; **dolum
+  göstergesi olarak asla**.
+
+### 5.2 `retest_countdown`
+
+**HÜKÜM: DAVET, geri-sayım-estetiği DEĞİL.**
+
+- Ana ekranda **sakin kart**: "yeniden ölçüm: X gün".
+- **YASAK:** tık-tak saat, kırmızı aciliyet, yanıp sönen sayaç.
+- Vakti gelince **birincil CTA'ya yükselir** (Kuzey-Yıldızı işlevi korunur).
+- **Gecikme durumu ASLA suçlamaz:** "kaçırdın" yok; ton "hazır olduğunda".
+
+### 5.3 12 testin oturum yapısı
+
+**HÜKÜM: BÖLÜNEBİLİR — blok-sınırı kuralıyla.**
+
+- **Ölçüm-bütünlüğü kuralı:** bir karşılaştırma kümesi TEK
+  `calibrationProfile` içinde tamamlanır.
+- Testler **BLOKLARA** gruplanır: **ayakta-bloğu** / **yer-bloğu** — bu
+  aynı zamanda kamera yeniden-konumlamayı azaltır.
+- Bir blok tek kalibrasyonda **biter ya da yeniden başlar**.
+- Karşılaştırmalar test-başına-zamanla yapıldığından **bloklar-arası
+  bölünme karşılaştırmayı etkilemez**.
+- **Yorgunluk sırası:** `plank_hold` kendi bloğunun **SONUNDA**;
+  `active_straight_leg_raise` **yer-bloğunda** (kamera zaten konumlanmış).
+- **Yarım kalan oturumda tamamlanan blokların ölçümleri KORUNUR**
+  (M-F-71: tamamlanmış ölçüm atılmaz). Tasarım "oturumu bitirmedin,
+  hiçbir şey kaydedilmedi" DEMEZ.
+- Uygulama: `config/tests/assessment-blocks.v1.json` + `AssessmentSession`
+  (bkz. §2.3).
+
+### 5.4 `coming_soon` ailelerin görünürlüğü
+
+**HÜKÜM: TAM GENİŞLİK, KATMANLI.**
+
+- Aktif dalga (`assessment_battery`) **birinci-sınıf** yerleşim.
+- `coming_soon` aileler **görsel olarak ayrı, kompakt bir bölümde**, her
+  biri **dürüst tek-satır durumla**.
+- **YASAK:** ayrı yol-haritası sayfası (genişliği saklar) · eşit-ağırlık
+  listeleme (sahte-doluluk üretir).
+- Desen kaynağı: Choreia'nın "sahte-doluluk olmadan genişlik" çözümü.
 
 ## 6. Bu brief'in kapsamadığı
 
