@@ -15,6 +15,7 @@
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080)."
   ],
   "thresholds": {
@@ -70,14 +71,26 @@
     ]
   },
   "perMovement": {
-    "overhead_reach": [
-      13,
-      14,
-      15,
-      16,
-      23,
-      24
-    ],
+    "overhead_reach": {
+      "lower_body_ids": [
+        13,
+        14,
+        15,
+        16,
+        23,
+        24
+      ],
+      "presence": {
+        "proximal": "MID_HIP",
+        "joint": "{side}_SHOULDER",
+        "distal": "{side}_ELBOW",
+        "op": ">=",
+        "thresholdDeg": 140,
+        "minHoldS": 1.0,
+        "status": "provisional",
+        "basis": "Eşik movementPresence'tan (L-092, ölçülmüş) devralındı — ayrıca türetilmedi. minHoldS fixture_check.py'nin longest_hold_s gereğiyle aynı (max(1.0, holdSeconds/2)). PROVISIONAL olan şey eşik değil, İZOLATÖRÜN PROKSİSİ: presence_isolator ham 2D görüntü-düzlemi HIP-SHOULDER-ELBOW açısını kullanır, mocore'un gerçek (isotropic/world) shoulder_flexion'ı değil. L-151 sonrası gerçek fixture'larda sınandı: 5 kaynağın 3'ü makul (1,3-3,3sn tutuş), 2'si şüpheli uzun pencereler verdi (12-30sn) — proksinin bazı kadrajlarda gerçek metrikten saptığına işaret; kesmeden önce insan gözden geçirmesi önerilir."
+      }
+    },
     "deep_squat": {
       "lower_body_ids": [
         24,

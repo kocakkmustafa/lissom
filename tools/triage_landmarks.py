@@ -183,15 +183,23 @@ def main() -> int:
     # yazılsaydı ikisi ayrışır ve app kapısı bayat sinyal tüketirdi.
     identity = {t["id"]: t["identity"] for t in battery["tests"] if "identity" in t}
 
+    # M-F-85: presence_isolator'ın sürücü sözlüğü — identity'nin kardeşi,
+    # AYNI gerekçeyle TEK yerden (batarya) türetilir. Elle yazılsaydı
+    # movementPresence ile presence_isolator'ın eşiği ayrışabilirdi.
+    presence = {t["id"]: t["presence"] for t in battery["tests"] if "presence" in t}
+
     # Beklenen yapı TEK yerde kurulur ve hem yazma hem kontrol onu kullanır.
     # İlk sürümde yazma sözlük üretiyor, kontrol liste bekliyordu; kontrol
     # kendi yazdığı dosyayı "bayat" sanıyordu. Doğrulayıcı ile ürettiği yapı
     # ayrışırsa kapı ölçmek istediği şeyi ölçmez.
-    expected = {
-        mv: ({"lower_body_ids": ids, "identity": identity[mv]}
-             if mv in identity else ids)
-        for mv, ids in derived.items()
-    }
+    expected = {}
+    for mv, ids in derived.items():
+        extra = {}
+        if mv in identity:
+            extra["identity"] = identity[mv]
+        if mv in presence:
+            extra["presence"] = presence[mv]
+        expected[mv] = {"lower_body_ids": ids, **extra} if extra else ids
 
     if write:
         profile["perMovement"] = expected
