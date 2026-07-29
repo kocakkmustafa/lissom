@@ -35,6 +35,14 @@ BLAZEPOSE_INDEX = {
     "RIGHT_ANKLE": 28, "LEFT_HEEL": 29, "RIGHT_HEEL": 30,
     "LEFT_FOOT_INDEX": 31, "RIGHT_FOOT_INDEX": 32,
 }
+#: Sanal landmark'lar gerçek noktaların orta noktasıdır (metrik config'i
+#: bunları doğrudan kullanıyor: trunk_lateral_tilt = MID_HIP -> MID_SHOULDER).
+VIRTUAL = {
+    "MID_HIP": ("LEFT_HIP", "RIGHT_HIP"),
+    "MID_SHOULDER": ("LEFT_SHOULDER", "RIGHT_SHOULDER"),
+    "MID_KNEE": ("LEFT_KNEE", "RIGHT_KNEE"),
+    "MID_ANKLE": ("LEFT_ANKLE", "RIGHT_ANKLE"),
+}
 MIN_VISIBILITY = 0.5
 
 
@@ -49,17 +57,55 @@ def _angle3(a, b, c) -> float | None:
     return math.degrees(math.acos(d))
 
 
-def _series(frames: list[dict], points: list[str]) -> list[tuple[float, float]]:
-    """(t_ms, açı) dizisi — yalnız tüm noktaları güvenle görünen kareler."""
-    ids = [BLAZEPOSE_INDEX[p] for p in points]
+def _angle_vertical(p_from, p_to) -> float:
+    """`p_from -> p_to` vektörünün DİKEYDEN sapması (derece).
+
+    Görüntü koordinatlarında y aşağı büyür; dik duruşta gövde vektörü yukarı
+    bakar. 0° = tam dik, büyüdükçe yana eğilme.
+    """
+    dx = p_to[0] - p_from[0]
+    dy = p_to[1] - p_from[1]
+    return abs(math.degrees(math.atan2(dx, -dy)))
+
+
+def _resolve(points: list[str]) -> list[tuple[int, ...]]:
+    """Her noktayı, ortalaması alınacak gerçek landmark indekslerine çevirir."""
+    out: list[tuple[int, ...]] = []
+    for name in points:
+        parts = VIRTUAL.get(name, (name,))
+        missing = [q for q in parts if q not in BLAZEPOSE_INDEX]
+        if missing:
+            raise SystemExit(f"BlazePose sözlüğünde olmayan landmark: {missing}")
+        out.append(tuple(BLAZEPOSE_INDEX[q] for q in parts))
+    return out
+
+
+def _series(frames: list[dict], points: list[str], kind: str = "angle3"):
+    """(t_ms, açı) dizisi — yalnız tüm noktaları güvenle görünen kareler.
+
+    `kind` metriğin türünü izler: `angle3` üç noktalı eklem açısı,
+    `angle_vertical` iki noktalı gövde/uzuv eğimi. Türü yok saymak sessizce
+    YANLIŞ sayı üretir — iki noktalı bir metriği angle3 sanmak çöker ya da
+    anlamsız açı verir.
+    """
+    groups = _resolve(points)
     out: list[tuple[float, float]] = []
     for k in frames:
         if not k.get("detected"):
             continue
         lm = k["lm"]
-        if any(lm[i][3] < MIN_VISIBILITY for i in ids):
+        if any(lm[i][3] < MIN_VISIBILITY for g in groups for i in g):
             continue
-        val = _angle3(*(lm[i] for i in ids))
+        pts = [(sum(lm[i][0] for i in g) / len(g),
+                sum(lm[i][1] for i in g) / len(g)) for g in groups]
+        if kind == "angle_vertical":
+            if len(pts) != 2:
+                raise SystemExit(f"angle_vertical iki nokta ister, {len(pts)} geldi")
+            val = _angle_vertical(*pts)
+        else:
+            if len(pts) != 3:
+                raise SystemExit(f"angle3 üç nokta ister, {len(pts)} geldi")
+            val = _angle3(*pts)
         if val is not None:
             out.append((k["t"], val))
     return out
@@ -130,7 +176,9 @@ def check(fixture: Path, test_id: str) -> tuple[bool, str]:
         if cand != base["id"]:
             pts = [p.replace("RIGHT_", "§").replace("LEFT_", "RIGHT_").replace("§", "LEFT_")
                    for p in pts]
-        best = max(best, longest_hold_s(_series(frames, pts), mp["op"], mp["value"]))
+        best = max(best, longest_hold_s(
+            _series(frames, pts, base.get("kind", "angle3")),
+            mp["op"], mp["value"]))
 
     ok = best >= need_s
     return ok, (f"en uzun tutuş {best:.1f}sn "

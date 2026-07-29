@@ -357,6 +357,13 @@
         "source": "AAOS 35 deg / Kendall 40 deg reference; measured cohort means ~32.6-36 deg with a documented decline with age. Age adjustment below 40 is extrapolated, not measured.",
         "region": "lateral_chain",
         "warning": "Most yaw-sensitive metric in the battery (5.73 deg drift at +-10 deg camera yaw, G1-a A5). Camera alignment gate is stricter here."
+      },
+      "movementPresence": {
+        "metric": "trunk_lateral_tilt",
+        "op": "gte",
+        "value": 15,
+        "minHoldS": 0.5,
+        "rationale": "Eşik testin KENDİ skorlama bantlarından türetildi: en düşük bant 18° (60+ yaş, 'low'). 15° onun da altında — yani skorlanabilirlik değil, HAREKETİN OLUP OLMADIĞI ölçülüyor. Normal duruş salınımı birkaç derecedir, 15° kasıtlı bir yana eğilmedir. minHoldS 0.5: bu testte tutuş fazı YOK (reps:3, holdSeconds yok), dinamik bir uzanma — 1 sn şartı gerçek tekrarları eleyebilirdi."
       }
     },
     {
