@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.battery",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
     "Lissom V1 aday test bataryası. G1-b kapısı bu testlerden hangilerinin V1'e gireceğine karar verir.",
@@ -9,16 +9,29 @@
     "DÜRÜSTLÜK NOTU: Halo'nun genel skoru referans fonksiyonel testlerle yalnız r=0.29-0.63 korelasyon aldı. Bu bataryanın da doğruluğu kanıtlanmış DEĞİLDİR; bandlar literatür ortalamalarından TÜRETİLMİŞ başlangıç kalibrasyonudur, klinik kesim noktası değil.",
     "Halo bulgusu (bizim için kritik): test-tekrar güvenilirliği hareket-KISITLI grupta %35 daha kötü (CV %2.16 vs %1.60) — yani tam hedef kitlemizde en gürültülü. Kısıtlı uçta bandlar daha geniş, dil daha temkinli.",
     "Yaş bandı ZORUNLU: denge süresi 60-69 -> 80-99 arası 27 sn'den 8.5 sn'ye düşüyor; tek bant yaşlı kullanıcıya sistematik haksızlık olur.",
-    "cameraDistanceCm 180-200: JMIR e82412'nin en yüksek doğruluk bandı. yawToleranceDeg 10: G1-a A5 ölçümü (gövde metrikleri +-10 derecede 5.7 sapıyor)."
+    "cameraDistanceCm 180-200: JMIR e82412'nin en yüksek doğruluk bandı. yawToleranceDeg 10: G1-a A5 ölçümü (gövde metrikleri +-10 derecede 5.7 sapıyor).",
+    "derivedMeasures: bataryanın adını andığı ama METRİK OLMAYAN büyüklükler burada beyan edilir. Beyansızken hiçbir kontrol bunlara bakmıyordu ve batarya→metrik referansları TAMAMEN doğrulanmamıştı; bu boşluk `hip_flexion_{opposite}` guard'ının asla çözülemediğini gizledi (L-081).",
+    "derivedMeasures.requiredLandmarks ZORUNLU: geometrik olmayan bir ölçü de kadraj ister — `footTouchdown` ayağı görmeden ayak inişini saptayamaz. Alan olmadan triyaj `single_leg_balance` için ayak bileği aramıyordu, yani düzeltmenin kendisi yeni bir sessiz boşluk açmıştı.",
+    "Kural metinlerinde geçen TÜM adlar beyan edilmek zorunda. Envanter çıkarılınca üç tanesi ne metrik ne beyandı (`confidence`, `heelRiseDelta`, `yawDeg`) — yani batarya, hiçbir kontrolün bakmadığı adlara dayanıyordu."
   ],
   "globalCameraSetup": {
-    "distanceCm": [180, 200],
-    "heightCm": [90, 110],
+    "distanceCm": [
+      180,
+      200
+    ],
+    "heightCm": [
+      90,
+      110
+    ],
     "yawToleranceDeg": 10,
     "yawWarnDeg": 5,
     "framingRule": "Head and feet must stay in frame through the full range of motion."
   },
-  "ageBands": ["u40", "40-59", "60plus"],
+  "ageBands": [
+    "u40",
+    "40-59",
+    "60plus"
+  ],
   "tests": [
     {
       "id": "overhead_reach",
@@ -30,21 +43,45 @@
       "holdSeconds": 2,
       "confidenceClass": "A",
       "primaryMetric": "shoulder_flexion_{side}",
-      "guardMetrics": ["elbow_extension_{side}"],
+      "guardMetrics": [
+        "elbow_extension_{side}"
+      ],
       "aggregation": "max",
       "invalidation": [
-        { "rule": "elbow_extension_{side} < 150", "code": "BENT_ELBOW", "message": "Keep your elbow straight — a bent elbow makes the reach look bigger than it is." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" },
-        { "rule": "yawDeg > 10", "code": "CAMERA_ANGLE" }
+        {
+          "rule": "elbow_extension_{side} < 150",
+          "code": "BENT_ELBOW",
+          "message": "Keep your elbow straight — a bent elbow makes the reach look bigger than it is."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        },
+        {
+          "rule": "yawDeg > 10",
+          "code": "CAMERA_ANGLE"
+        }
       ],
       "scoring": {
         "type": "banded",
         "unit": "deg",
         "higherIsBetter": true,
         "bands": {
-          "u40": { "low": 150, "normal": 165, "good": 175 },
-          "40-59": { "low": 140, "normal": 158, "good": 170 },
-          "60plus": { "low": 130, "normal": 150, "good": 165 }
+          "u40": {
+            "low": 150,
+            "normal": 165,
+            "good": 175
+          },
+          "40-59": {
+            "low": 140,
+            "normal": 158,
+            "good": 170
+          },
+          "60plus": {
+            "low": 130,
+            "normal": 150,
+            "good": 165
+          }
         },
         "source": "PMC7549223 (n=2404, age/sex banded active ROM). Bands derived from cohort means, NOT clinical cutoffs.",
         "region": "shoulder"
@@ -60,18 +97,40 @@
       "holdSeconds": 2,
       "confidenceClass": "A",
       "primaryMetric": "knee_flexion_right",
-      "guardMetrics": ["heel_rise_right", "hip_flexion_right"],
+      "guardMetrics": [
+        "heel_rise_right",
+        "hip_flexion_right"
+      ],
       "aggregation": "min",
       "invalidation": [
-        { "rule": "heelRiseDelta > 0.05", "code": "HEEL_LIFT", "message": "Your heels came off the floor — go only as low as you can with heels down." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "heelRiseDelta > 0.05",
+          "code": "HEEL_LIFT",
+          "message": "Your heels came off the floor — go only as low as you can with heels down."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "ordinal",
         "levels": [
-          { "level": 1, "label": "limited", "criteria": "Hip stays above knee height, or heels lift, or balance is lost." },
-          { "level": 2, "label": "partial", "criteria": "Hip reaches roughly knee height with heels down." },
-          { "level": 3, "label": "full", "criteria": "Hip drops below knee height with heels down and torso controlled." }
+          {
+            "level": 1,
+            "label": "limited",
+            "criteria": "Hip stays above knee height, or heels lift, or balance is lost."
+          },
+          {
+            "level": 2,
+            "label": "partial",
+            "criteria": "Hip reaches roughly knee height with heels down."
+          },
+          {
+            "level": 3,
+            "label": "full",
+            "criteria": "Hip drops below knee height with heels down and torso controlled."
+          }
         ],
         "source": "No continuous degree norm exists for squat depth in the literature (PubMed 35321135 reports only between-group differences). Ordinal scoring is the honest option. Criteria are descriptive, NOT the proprietary FMS protocol.",
         "region": "hip"
@@ -86,20 +145,42 @@
       "reps": 6,
       "confidenceClass": "B",
       "primaryMetric": "trunk_lean",
-      "guardMetrics": ["shoulder_flexion_right", "knee_flexion_right"],
+      "guardMetrics": [
+        "shoulder_flexion_right",
+        "knee_flexion_right"
+      ],
       "aggregation": "max",
       "invalidation": [
-        { "rule": "shoulder_flexion_right < 140", "code": "ARMS_DROPPED", "message": "Your arms came forward — the test measures how well you keep them overhead." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "shoulder_flexion_right < 140",
+          "code": "ARMS_DROPPED",
+          "message": "Your arms came forward — the test measures how well you keep them overhead."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "banded",
         "unit": "deg",
         "higherIsBetter": false,
         "bands": {
-          "u40": { "low": 45, "normal": 35, "good": 25 },
-          "40-59": { "low": 50, "normal": 38, "good": 28 },
-          "60plus": { "low": 55, "normal": 42, "good": 32 }
+          "u40": {
+            "low": 45,
+            "normal": 35,
+            "good": 25
+          },
+          "40-59": {
+            "low": 50,
+            "normal": 38,
+            "good": 28
+          },
+          "60plus": {
+            "low": 55,
+            "normal": 42,
+            "good": 32
+          }
         },
         "source": "UNVALIDATED — no normative forward-lean dataset was found for the overhead squat. Bands are an engineering starting point and MUST be recalibrated against real fixtures before any user-facing number is shown.",
         "region": "thoracic"
@@ -114,15 +195,28 @@
       "reps": 3,
       "confidenceClass": "C",
       "primaryMetric": "tibia_inclination_{side}",
-      "guardMetrics": ["heel_rise_{side}"],
+      "guardMetrics": [
+        "heel_rise_{side}"
+      ],
       "aggregation": "max",
       "invalidation": [
-        { "rule": "heelRiseDelta > 0.04", "code": "HEEL_LIFT", "message": "Keep the heel down — lifting it makes the range look larger." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "heelRiseDelta > 0.04",
+          "code": "HEEL_LIFT",
+          "message": "Keep the heel down — lifting it makes the range look larger."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "qualitative",
-        "levels": ["limited", "typical", "good"],
+        "levels": [
+          "limited",
+          "typical",
+          "good"
+        ],
         "source": "Literature norms for the weight-bearing lunge test are in CENTIMETRES (knee-to-wall distance); we measure tibia ANGLE. The conversion depends on shank length and no degree-based normative table was verified (source paywalled, 403). Ankle is also the least reliable joint on a single 2D camera (limits of agreement +-12-24 deg). Qualitative bands only until our own calibration exists.",
         "region": "ankle"
       }
@@ -137,20 +231,42 @@
       "holdSeconds": 2,
       "confidenceClass": "B",
       "primaryMetric": "reach_depth",
-      "guardMetrics": ["knee_flexion_{side}", "trunk_lean"],
+      "guardMetrics": [
+        "knee_flexion_{side}",
+        "trunk_lean"
+      ],
       "aggregation": "min",
       "invalidation": [
-        { "rule": "knee_flexion_{side} < 165", "code": "BENT_KNEE", "message": "Keep your knees straight — bending them turns this into a different movement." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "knee_flexion_{side} < 165",
+          "code": "BENT_KNEE",
+          "message": "Keep your knees straight — bending them turns this into a different movement."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "banded",
         "unit": "ratio",
         "higherIsBetter": false,
         "bands": {
-          "u40": { "low": 0.9, "normal": 0.6, "good": 0.35 },
-          "40-59": { "low": 1.0, "normal": 0.7, "good": 0.45 },
-          "60plus": { "low": 1.15, "normal": 0.85, "good": 0.6 }
+          "u40": {
+            "low": 0.9,
+            "normal": 0.6,
+            "good": 0.35
+          },
+          "40-59": {
+            "low": 1.0,
+            "normal": 0.7,
+            "good": 0.45
+          },
+          "60plus": {
+            "low": 1.15,
+            "normal": 0.85,
+            "good": 0.6
+          }
         },
         "source": "UNVALIDATED — sit-and-reach norms exist in cm but are floor-referenced and sex-split; our metric is fingertip-to-ankle normalised by torso length, which is a different quantity. Bands are an engineering starting point. Sex split deferred pending real data.",
         "region": "posterior_chain"
@@ -165,14 +281,24 @@
       "reps": 3,
       "confidenceClass": "B",
       "primaryMetric": "trunk_lean",
-      "guardMetrics": ["hip_flexion_right", "knee_flexion_right"],
+      "guardMetrics": [
+        "hip_flexion_right",
+        "knee_flexion_right"
+      ],
       "aggregation": "max",
       "invalidation": [
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "qualitative",
-        "levels": ["limited", "typical", "good"],
+        "levels": [
+          "limited",
+          "typical",
+          "good"
+        ],
         "source": "No degree-based normative threshold exists for the hip hinge / lumbo-pelvic rhythm; the literature evaluates it visually or ordinally, and even trained observers only detect posterior pelvic tilt reliably beyond ~34 deg. Qualitative only — a precise-looking number here would be false precision.",
         "region": "posterior_chain",
         "derived": "ratio of hip_flexion change to trunk_lean change — these two are NOT independent (a forward fold IS hip flexion); their ratio is the lumbo-pelvic rhythm we actually want."
@@ -190,17 +316,36 @@
       "guardMetrics": [],
       "aggregation": "max",
       "invalidation": [
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" },
-        { "rule": "yawDeg > 10", "code": "CAMERA_ANGLE", "message": "Turn to face the camera squarely — this test is sensitive to camera angle." }
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        },
+        {
+          "rule": "yawDeg > 10",
+          "code": "CAMERA_ANGLE",
+          "message": "Turn to face the camera squarely — this test is sensitive to camera angle."
+        }
       ],
       "scoring": {
         "type": "banded",
         "unit": "deg",
         "higherIsBetter": true,
         "bands": {
-          "u40": { "low": 25, "normal": 33, "good": 38 },
-          "40-59": { "low": 22, "normal": 30, "good": 36 },
-          "60plus": { "low": 18, "normal": 26, "good": 32 }
+          "u40": {
+            "low": 25,
+            "normal": 33,
+            "good": 38
+          },
+          "40-59": {
+            "low": 22,
+            "normal": 30,
+            "good": 36
+          },
+          "60plus": {
+            "low": 18,
+            "normal": 26,
+            "good": 32
+          }
         },
         "source": "AAOS 35 deg / Kendall 40 deg reference; measured cohort means ~32.6-36 deg with a documented decline with age. Age adjustment below 40 is extrapolated, not measured.",
         "region": "lateral_chain",
@@ -217,21 +362,45 @@
       "holdSeconds": 30,
       "confidenceClass": "C",
       "primaryMetric": "hold_duration",
-      "guardMetrics": ["trunk_lateral_tilt"],
+      "guardMetrics": [
+        "trunk_lateral_tilt"
+      ],
       "aggregation": "duration",
       "invalidation": [
-        { "rule": "supportContact", "code": "USED_SUPPORT", "message": "Holding onto something ends the test — try again without support." },
-        { "rule": "footTouchdown", "code": "FOOT_DOWN" },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "supportContact",
+          "code": "USED_SUPPORT",
+          "message": "Holding onto something ends the test — try again without support."
+        },
+        {
+          "rule": "footTouchdown",
+          "code": "FOOT_DOWN"
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "banded",
         "unit": "seconds",
         "higherIsBetter": true,
         "bands": {
-          "u40": { "low": 20, "normal": 40, "good": 60 },
-          "40-59": { "low": 15, "normal": 30, "good": 45 },
-          "60plus": { "low": 10, "normal": 27, "good": 40 }
+          "u40": {
+            "low": 20,
+            "normal": 40,
+            "good": 60
+          },
+          "40-59": {
+            "low": 15,
+            "normal": 30,
+            "good": 45
+          },
+          "60plus": {
+            "low": 10,
+            "normal": 27,
+            "good": 40
+          }
         },
         "source": "Bohannon 2006 age-banded single-limb stance (60-69: 27.0s, 70-79: 17.2s, 80-99: 8.5s) plus midlife median ~30s.",
         "region": "balance",
@@ -247,14 +416,23 @@
       "reps": 3,
       "confidenceClass": "C",
       "primaryMetric": "knee_height_{side}",
-      "guardMetrics": ["trunk_lateral_tilt"],
+      "guardMetrics": [
+        "trunk_lateral_tilt"
+      ],
       "aggregation": "min",
       "invalidation": [
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "qualitative",
-        "levels": ["limited", "typical", "good"],
+        "levels": [
+          "limited",
+          "typical",
+          "good"
+        ],
         "source": "Halo used mean minimum knee-to-floor distance. We have no floor reference from pose alone, so we use a torso-normalised proxy. Knee valgus — the other thing this test could show — needs precise frontal-plane small-angle measurement, which a single camera cannot deliver reliably (research/05). Qualitative only.",
         "region": "hip"
       }
@@ -271,11 +449,18 @@
       "guardMetrics": [],
       "aggregation": "min",
       "invalidation": [
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "qualitative",
-        "levels": ["limited", "typical", "good"],
+        "levels": [
+          "limited",
+          "typical",
+          "good"
+        ],
         "source": "Transverse-plane rotation is not reliably recoverable from a single camera (PMC10635560). We measure an INDIRECT proxy: how much the shoulder line shortens in the frontal projection as the torso turns away. This is a rotation SIGN, not a rotation ANGLE, and is presented as such.",
         "region": "thoracic",
         "warning": "Weakest test in the battery. A leading candidate to be dropped at the G1-b gate if the proxy does not separate rotated from neutral postures on real footage."
@@ -290,21 +475,47 @@
       "reps": 3,
       "confidenceClass": "B",
       "primaryMetric": "hip_flexion_{side}",
-      "guardMetrics": ["knee_flexion_{side}", "hip_flexion_{opposite}"],
+      "guardMetrics": [
+        "knee_flexion_{side}",
+        "hip_flexion_{opposite}"
+      ],
       "aggregation": "min",
       "invalidation": [
-        { "rule": "knee_flexion_{side} < 165", "code": "BENT_KNEE", "message": "Keep the raised leg straight — bending the knee makes the range look larger." },
-        { "rule": "hip_flexion_{opposite} < 170", "code": "OPPOSITE_LEG_LIFTED", "message": "Keep your other leg flat on the floor." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "knee_flexion_{side} < 165",
+          "code": "BENT_KNEE",
+          "message": "Keep the raised leg straight — bending the knee makes the range look larger."
+        },
+        {
+          "rule": "hip_flexion_{opposite} < 170",
+          "code": "OPPOSITE_LEG_LIFTED",
+          "message": "Keep your other leg flat on the floor."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "banded",
         "unit": "deg",
         "higherIsBetter": false,
         "bands": {
-          "u40": { "low": 110, "normal": 100, "good": 90 },
-          "40-59": { "low": 115, "normal": 105, "good": 95 },
-          "60plus": { "low": 125, "normal": 112, "good": 100 }
+          "u40": {
+            "low": 110,
+            "normal": 100,
+            "good": 90
+          },
+          "40-59": {
+            "low": 115,
+            "normal": 105,
+            "good": 95
+          },
+          "60plus": {
+            "low": 125,
+            "normal": 112,
+            "good": 100
+          }
         },
         "source": "Straight-leg-raise literature puts normal hamstring length at roughly 80-85 deg of hip flexion with the lumbar spine flat. Our metric is the torso-thigh angle, so smaller = more range: 90 deg torso-thigh corresponds to ~90 deg of raise. Bands are an engineering starting point derived from that reference, NOT clinical cutoffs.",
         "region": "posterior_chain",
@@ -321,15 +532,29 @@
       "holdSeconds": 45,
       "confidenceClass": "B",
       "primaryMetric": "hold_duration",
-      "guardMetrics": ["plank_hip_deviation", "trunk_lateral_tilt"],
+      "guardMetrics": [
+        "plank_hip_deviation",
+        "trunk_lateral_tilt"
+      ],
       "aggregation": "duration",
       "invalidation": [
-        { "rule": "plank_hip_deviation > 0.22", "code": "FORM_BREAK", "message": "Your hips dropped or lifted out of line — the hold is timed only while the line holds." },
-        { "rule": "confidence < 0.6", "code": "LOW_CONFIDENCE" }
+        {
+          "rule": "plank_hip_deviation > 0.22",
+          "code": "FORM_BREAK",
+          "message": "Your hips dropped or lifted out of line — the hold is timed only while the line holds."
+        },
+        {
+          "rule": "confidence < 0.6",
+          "code": "LOW_CONFIDENCE"
+        }
       ],
       "scoring": {
         "type": "qualitative",
-        "levels": ["limited", "typical", "good"],
+        "levels": [
+          "limited",
+          "typical",
+          "good"
+        ],
         "source": "This test measures endurance under a form constraint, not range of motion. Duration norms for the plank vary widely across populations and protocols, and the timing depends on where we set the form-break threshold — a number would be false precision. The form threshold (0.22 normalised deviation) corresponds to roughly 20 deg of hip drift and was measured on the synthetic rig, not calibrated on people.",
         "region": "core_stability",
         "warning": "Endurance tests fatigue the user and are the most likely place for a wellness product to push someone too far. The instruction deliberately hands the stopping decision to the user; there is no 'beat your record' prompt on this test."
@@ -345,5 +570,61 @@
       "id": "cervical_rotation",
       "reason": "Pose model facial/neck landmarks are too coarse for the precision neck rotation needs. Excluded rather than shown with a wide meaningless band. (L-006)"
     }
-  ]
+  ],
+  "derivedMeasures": {
+    "hold_duration": {
+      "unit": "s",
+      "source": "phase",
+      "description": "Seconds the qualifying posture was held. Produced by the phase machine, not from landmark geometry — timing runs only while every guard holds.",
+      "requiredLandmarks": []
+    },
+    "supportContact": {
+      "unit": "bool",
+      "source": "phase",
+      "description": "Hand or body contacted a support surface. Ends a balance attempt.",
+      "requiredLandmarks": [
+        "LEFT_WRIST",
+        "RIGHT_WRIST"
+      ]
+    },
+    "footTouchdown": {
+      "unit": "bool",
+      "source": "phase",
+      "description": "The raised foot touched the floor. Ends a single-leg attempt.",
+      "requiredLandmarks": [
+        "LEFT_ANKLE",
+        "RIGHT_ANKLE",
+        "LEFT_FOOT_INDEX",
+        "RIGHT_FOOT_INDEX"
+      ]
+    },
+    "confidence": {
+      "unit": "ratio",
+      "source": "frame",
+      "requiredLandmarks": [],
+      "description": "Weakest landmark confidence in the frame. Global frame-quality signal; imposes no framing requirement of its own."
+    },
+    "heelRiseDelta": {
+      "unit": "ratio",
+      "source": "frame",
+      "requiredLandmarks": [
+        "LEFT_HEEL",
+        "RIGHT_HEEL",
+        "LEFT_FOOT_INDEX",
+        "RIGHT_FOOT_INDEX"
+      ],
+      "description": "Heel lift relative to the neutral stance baseline. Invalidates squat and dorsiflexion tests when the heel leaves the floor."
+    },
+    "yawDeg": {
+      "unit": "deg",
+      "source": "frame",
+      "requiredLandmarks": [
+        "LEFT_SHOULDER",
+        "RIGHT_SHOULDER",
+        "LEFT_HIP",
+        "RIGHT_HIP"
+      ],
+      "description": "Body rotation away from the intended camera plane. Guards tests whose measurement plane assumes a fixed orientation."
+    }
+  }
 }

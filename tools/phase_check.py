@@ -48,10 +48,19 @@ def _metric_names(doc: dict) -> set[str]:
 
 
 def _resolve(name: str, per_side: bool) -> list[str]:
-    """`{side}` yer tutucusunu iki tarafa da açar."""
-    if "{side}" not in name:
+    """`{side}` / `{opposite}` yer tutucularını iki tarafa da açar.
+
+    `{opposite}` karşı tarafı gösterir — ASLR'de kaldırılan bacak `{side}`,
+    yerde kalması gereken bacak `{opposite}`. Çözülmediği sürece o guard hiçbir
+    metriğe bağlanamıyordu (L-081).
+    """
+    if "{side}" not in name and "{opposite}" not in name:
         return [name]
-    return [name.replace("{side}", s) for s in ("right", "left")]
+    out = []
+    for s in ("right", "left"):
+        o = "left" if s == "right" else "right"
+        out.append(name.replace("{side}", s).replace("{opposite}", o))
+    return out
 
 
 def _walk_conditions(cond: dict, path: str, out: list[tuple[str, dict]]) -> None:

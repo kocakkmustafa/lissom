@@ -1,19 +1,24 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.metrics",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "_notes": [
     "Bu dosya Lissom'un ölçülebilir büyüklüklerinin TEK kaynağıdır.",
     "Python referans yorumlayıcısı: motion-core tools/fixture_pipeline/mocore/measures.py",
     "Native (Kotlin/Swift) motor AYNI dosyayı okur ve AYNI sayıyı üretmek zorundadır (G4 differential test).",
     "L-009: acı metriklerinde 'plane' zorunludur — ham 3D acı ROM uclarinda ±5.7° sistematik hata verir.",
-    "confidenceClass: A/B/C — G1 kapı protokolü §1'deki eklem güven sınıfı; MAE eşiği buna göre uygulanır."
+    "confidenceClass: A/B/C — G1 kapı protokolü §1'deki eklem güven sınıfı; MAE eşiği buna göre uygulanır.",
+    "M-F-34 taban-değeri kuralı: tolerans taşıyan oran metrikleri kusursuz-durum `baseline` değerini beyan eder; tolerans TABAN-göreli yorumlanır. Tabanı sıfır sanmak sessiz hata üretir — L-072 tam olarak buydu: `shoulder_line_foreshortening` tabanı 0,80 iken guard `> 0.15` yazılmış, her duruşta tetiklenmişti. Değerler sentetik nötr duruşta ÖLÇÜLDÜ, tahmin edilmedi; kapı A11 beyanı doğruluyor."
   ],
   "metrics": [
     {
       "id": "shoulder_flexion_right",
       "kind": "angle3",
-      "points": ["RIGHT_HIP", "RIGHT_SHOULDER", "RIGHT_ELBOW"],
+      "points": [
+        "RIGHT_HIP",
+        "RIGHT_SHOULDER",
+        "RIGHT_ELBOW"
+      ],
       "plane": "sagittal",
       "unit": "deg",
       "mirror": true,
@@ -24,7 +29,11 @@
     {
       "id": "elbow_extension_right",
       "kind": "angle3",
-      "points": ["RIGHT_SHOULDER", "RIGHT_ELBOW", "RIGHT_WRIST"],
+      "points": [
+        "RIGHT_SHOULDER",
+        "RIGHT_ELBOW",
+        "RIGHT_WRIST"
+      ],
       "plane": "sagittal",
       "unit": "deg",
       "mirror": true,
@@ -35,7 +44,11 @@
     {
       "id": "hip_flexion_right",
       "kind": "angle3",
-      "points": ["RIGHT_SHOULDER", "RIGHT_HIP", "RIGHT_KNEE"],
+      "points": [
+        "RIGHT_SHOULDER",
+        "RIGHT_HIP",
+        "RIGHT_KNEE"
+      ],
       "plane": "sagittal",
       "unit": "deg",
       "mirror": true,
@@ -46,7 +59,11 @@
     {
       "id": "knee_flexion_right",
       "kind": "angle3",
-      "points": ["RIGHT_HIP", "RIGHT_KNEE", "RIGHT_ANKLE"],
+      "points": [
+        "RIGHT_HIP",
+        "RIGHT_KNEE",
+        "RIGHT_ANKLE"
+      ],
       "plane": "sagittal",
       "unit": "deg",
       "mirror": true,
@@ -57,7 +74,10 @@
     {
       "id": "trunk_lean",
       "kind": "angle_vertical",
-      "points": ["MID_HIP", "MID_SHOULDER"],
+      "points": [
+        "MID_HIP",
+        "MID_SHOULDER"
+      ],
       "plane": "sagittal",
       "unit": "deg",
       "confidenceClass": "B",
@@ -67,7 +87,10 @@
     {
       "id": "trunk_lateral_tilt",
       "kind": "angle_vertical",
-      "points": ["MID_HIP", "MID_SHOULDER"],
+      "points": [
+        "MID_HIP",
+        "MID_SHOULDER"
+      ],
       "plane": "frontal",
       "unit": "deg",
       "confidenceClass": "B",
@@ -77,7 +100,10 @@
     {
       "id": "tibia_inclination_right",
       "kind": "angle_vertical",
-      "points": ["RIGHT_ANKLE", "RIGHT_KNEE"],
+      "points": [
+        "RIGHT_ANKLE",
+        "RIGHT_KNEE"
+      ],
       "plane": "sagittal",
       "unit": "deg",
       "mirror": true,
@@ -88,54 +114,75 @@
     {
       "id": "heel_rise_right",
       "kind": "height_diff_norm",
-      "points": ["RIGHT_HEEL", "RIGHT_FOOT_INDEX"],
+      "points": [
+        "RIGHT_HEEL",
+        "RIGHT_FOOT_INDEX"
+      ],
       "plane": "none",
       "unit": "ratio",
       "mirror": true,
       "confidenceClass": "C",
       "test": "deep_squat",
-      "description": "How far the heel sits above the toe line, normalised by torso length. Invalidation guard for heel lift during squat. NOTE: the first definition used heel-to-toe DISTANCE, which measures foot length and stays constant no matter what the heel does — the gate caught it as a dead metric (L-028)."
+      "description": "How far the heel sits above the toe line, normalised by torso length. Invalidation guard for heel lift during squat. NOTE: the first definition used heel-to-toe DISTANCE, which measures foot length and stays constant no matter what the heel does — the gate caught it as a dead metric (L-028).",
+      "baseline": 0.0
     },
     {
       "id": "reach_depth",
       "kind": "distance_norm",
-      "points": ["RIGHT_WRIST", "RIGHT_ANKLE"],
+      "points": [
+        "RIGHT_WRIST",
+        "RIGHT_ANKLE"
+      ],
       "plane": "none",
       "unit": "ratio",
       "confidenceClass": "B",
       "test": "hamstring_reach",
-      "description": "Fingertip-to-ankle distance normalised by torso length. Body-size independent forward reach measure."
+      "description": "Fingertip-to-ankle distance normalised by torso length. Body-size independent forward reach measure.",
+      "baseline": 1.6031
     },
     {
       "id": "knee_height_right",
       "kind": "height_diff_norm",
-      "points": ["RIGHT_KNEE", "RIGHT_ANKLE"],
+      "points": [
+        "RIGHT_KNEE",
+        "RIGHT_ANKLE"
+      ],
       "plane": "none",
       "unit": "ratio",
       "mirror": true,
       "confidenceClass": "C",
       "test": "forward_lunge",
-      "description": "Vertical knee-above-ankle gap, normalised by torso length. Proxy for how far the trailing knee descends in a lunge. NOT a knee-to-floor distance: pose gives no ground plane, so this is measured against the body's own reference."
+      "description": "Vertical knee-above-ankle gap, normalised by torso length. Proxy for how far the trailing knee descends in a lunge. NOT a knee-to-floor distance: pose gives no ground plane, so this is measured against the body's own reference.",
+      "baseline": 0.84
     },
     {
       "id": "plank_hip_deviation",
       "kind": "line_deviation_norm",
-      "points": ["MID_HIP", "MID_SHOULDER", "RIGHT_ANKLE"],
+      "points": [
+        "MID_HIP",
+        "MID_SHOULDER",
+        "RIGHT_ANKLE"
+      ],
       "plane": "sagittal",
       "unit": "ratio",
       "confidenceClass": "B",
       "test": "plank_hold",
-      "description": "Perpendicular distance of the hip mid-point from the shoulder-to-ankle line, normalised by torso length. 0 = straight body line; grows as the hips sag or pike. Sagittal plane so that sagging is not confused with lateral drift."
+      "description": "Perpendicular distance of the hip mid-point from the shoulder-to-ankle line, normalised by torso length. 0 = straight body line; grows as the hips sag or pike. Sagittal plane so that sagging is not confused with lateral drift.",
+      "baseline": 0.0
     },
     {
       "id": "shoulder_line_foreshortening",
       "kind": "distance_norm",
-      "points": ["LEFT_SHOULDER", "RIGHT_SHOULDER"],
+      "points": [
+        "LEFT_SHOULDER",
+        "RIGHT_SHOULDER"
+      ],
       "plane": "frontal",
       "unit": "ratio",
       "confidenceClass": "C",
       "test": "thoracic_rotation",
-      "description": "Frontal-plane projected shoulder width, normalised by torso length. Shrinks as the torso rotates away from the camera — an INDIRECT proxy for transverse rotation, not a rotation angle. WARNING: transverse-plane rotation is not reliably recoverable from a single camera (research/05); qualitative bands only unless G1-b proves otherwise. Replaced an angle_vertical+transverse definition that was mathematically dead (constant 90 deg) — see L-011."
+      "description": "Frontal-plane projected shoulder width, normalised by torso length. Shrinks as the torso rotates away from the camera — an INDIRECT proxy for transverse rotation, not a rotation angle. WARNING: transverse-plane rotation is not reliably recoverable from a single camera (research/05); qualitative bands only unless G1-b proves otherwise. Replaced an angle_vertical+transverse definition that was mathematically dead (constant 90 deg) — see L-011.",
+      "baseline": 0.8
     }
   ]
 }

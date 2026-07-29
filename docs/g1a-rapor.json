@@ -1,6 +1,6 @@
 {
   "config": "lissom-metrics.v1.json",
-  "configVersion": "1.0.0",
+  "configVersion": "1.1.0",
   "thresholds": {
     "A1_clean_error_deg": 0.5,
     "A2_noise_005_median_deg": 2.0,
@@ -73,6 +73,10 @@
     "A10": {
       "bad": [],
       "checked": 11
+    },
+    "A11": {
+      "bad": [],
+      "checked": 7
     }
   },
   "verdict": "GEÇTİ (A1-A9 tam)",
@@ -85,7 +89,8 @@
     "A9",
     "A7",
     "A8",
-    "A10"
+    "A10",
+    "A11"
   ],
   "measured": [
     "A1",
@@ -96,6 +101,7 @@
     "A9",
     "A7",
     "A8",
-    "A10"
+    "A10",
+    "A11"
   ]
 }

@@ -30,6 +30,16 @@ jobs:
         # metrik referansları · koşul dilbilgisi · batarya kapsamı.
         run: python3 tools/phase_check.py
 
+      - name: Triyaj landmark sarti bayat mi
+        # Kadrajda hangi landmark'larin aranacagi HAREKETE gore degisir ve
+        # metrik config'inden turetilir. Elle yazilan liste bayatlar, bayat
+        # liste sessizce yanlis reddeder: sabit "tam govde" sarti bir OMUZ
+        # testinin (overhead_reach) adaylarinin 8'de 7'sini eledi - gercek
+        # veride olculdu, kalca orani 0.75-1.00 iken ayak bilegi 0.00'di.
+        # Bu adim ayrica bataryanin andigi HER adin (metrik ya da
+        # derivedMeasures) beyan edilmis olmasini zorlar.
+        run: python3 tools/triage_landmarks.py
+
       - name: Wellness dil süzgeci
         # Tek bir aşırı ifade ürünü tıbbi cihaz sınırına iter (FDA General
         # Wellness / Apple 1.4.1). Süzgeç hiç dosya bulamazsa çıkış kodu 2 verir
