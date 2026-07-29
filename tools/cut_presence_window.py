@@ -52,7 +52,28 @@ def cut(fixture_path: str, profile_path: str, movement: str, out_path: str) -> d
     # SİLMİYORUZ (aşağı-akış onu bekliyor) ama TÜRETİLDİĞİ KAYNAĞI ve zamanı
     # isimle yazıyoruz, böylece tazelik SORULABİLİR hâle gelir. Sorulamayan
     # bir snapshot, bayat olduğunu asla söylemez.
+    # M-F-138 UYGULAMASI (çekirdek 94b4ae9 ile aynı ilke): uygunluk KARAR
+    # ANINDA KAYNAKTAN çözülür, fixture'ın snapshot'ından okunmaz.
+    # ÖLÇÜLDÜ: `GaP20t6ZOfU.full.json` romMode hattından ÖNCE çıkarılmış, yani
+    # provenance'ında `referenceEligible` alanı HİÇ YOK. Manifest c561204
+    # rig'iyle `active`e döndü ama fixture bunu bilmiyordu; kanonik CLI onu
+    # fail-closed `unattested` sayıp kapıda bıraktı — havuz gerçekte
+    # olduğundan KÜÇÜK görünüyordu. Bayat YOKLUK, bayat VARLIK kadar zararlı.
+    manifest = (Path.home() / "motion-harvest/lissom/manifests"
+                / f"{Path(fixture_path).stem.replace('.full', '')}.json")
+    resolved: dict = {}
+    if manifest.exists():
+        mm = json.loads(manifest.read_text(encoding="utf-8"))
+        for src_key, dst_key in (("rom_mode", "romMode"),
+                                 ("reference_eligible", "referenceEligible")):
+            if mm.get(src_key) is not None:
+                prov[dst_key] = mm[src_key]
+                resolved[dst_key] = mm[src_key]
+        resolved["fromManifest"] = manifest.name
+        resolved["classifiedBy"] = mm.get("romModeClassifiedBy")
+
     prov["derivedFrom"] = {
+        "eligibilityResolvedAtCut": resolved or "manifest yok — çözülemedi",
         "sourceFixture": str(Path(fixture_path).name),
         "sourceVideoId": Path(fixture_path).stem.replace(".full", ""),
         "eligibilitySnapshot": {

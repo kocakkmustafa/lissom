@@ -2,14 +2,26 @@
 
 **Hüküm: `overhead_reach` ve `deep_squat` MEVCUT malzemeyle referans
 KURAMAZ.** Bu bir başarısızlık raporu değil, bir ÖLÇÜM raporu: havuzun
-neden yetmediği iki bağımsız eksende sayıyla gösterilmiştir ve neyin
-değişmesi gerektiği isimlidir.
+neden yetmediği eksenlerde sayıyla gösterilmiştir ve neyin değişmesi
+gerektiği isimlidir.
 
-**Tarih:** 2026-07-30 · **Çekirdek:** `motion_core-v0.8.4` · **İlgili kayıtlar:**
-L-147 · L-148 · L-149 · L-153 · L-157 · L-162 · L-166
-**Aile bağlamı:** aile "havuz büyütmek anlaşma getirmiyor" sınırını başka
-ürünlerde de ölçtü (Ostinato üç çalgı · JabLab stance). Lissom'un havuzu
-aynı sınıfta — utanç değil, veri.
+**Tarih:** 2026-07-30 · **Çekirdek:** `motion_core` @ `c561204` ·
+**İlgili kayıtlar:** L-147 · L-148 · L-149 · L-153 · L-157 · L-162 · L-166 ·
+**L-169 (bu raporun ÖNEMLİ REVİZESİ — §1b)**
+
+> ## ⚠️ REVİZE 2026-07-30 (L-169) — bu raporun ana çıkarımı DEĞİŞTİ
+>
+> İlk sürümde aile bağlamına dayanarak "Lissom'un havuzu da *havuz
+> büyütmek anlaşma getirmiyor* sınıfında" denmişti. **Ölçüm bunu
+> ÇÜRÜTTÜ.** Koordinatörün talimatıyla havuz `c561204` rig'iyle yeniden
+> sınıflandırıldı, bir kaynak daha uygun hâle geldi ve deneme 7 kaynakla
+> yeniden koşuldu: **tek kaynak eklemek sapmaların BEŞİNİN DÖRDÜNÜ
+> düşürdü, ortalamayı %22 indirdi** (75,2° → 58,3°), en iyi kaynağı
+> 52,7° → **32,8°** yaptı. Hüküm hâlâ RET (eşik ≤14°) ama **yön ters
+> yönde:** bu havuz heterojen olmaktan çok **AZ-NÜFUSLU**. Ayrıntı §1b.
+>
+> Sonuç: §5'teki "hedefli hasat" artık bir umut değil, **ölçülmüş bir
+> beklenti** — ve aile sınırını Lissom'a peşinen uygulamam yanlıştı.
 
 ---
 
@@ -25,6 +37,48 @@ aynı sınıfta — utanç değil, veri.
 
 `deep_squat` paralel: tam video 34-43° → presence-pencereli 23,4/33,8/38,6°
 (karışık: biri iyileşti, biri kötüleşti). Hâlâ RET.
+
+## 1b. Tur 6 — HAVUZ TAZELENDİ, YÖN DEĞİŞTİ (L-169)
+
+Koordinatör talimatı: JabLab'ın ikinci-şahıs emir-kipi sınıfı (`c561204`)
+merge'lendikten sonra havuzu YENİDEN SINIFLANDIR, deneme en dolu havuzla
+yapılsın.
+
+**Yeniden sınıflandırma** (`tools/reclassify_pool.py`, 68 manifest):
+6 kaynak `None` → **`active`** oldu. Yalnız 1'inin çıkarılmış fixture'ı
+var (`GaP20t6ZOfU`, InvictusFitness, `overhead_reach`) — kalan 5 çıkarım
+ister, o da hasat sıramı bekler.
+
+**Yol boyunca bulunan M-F-138 İKİZİ — bayat YOKLUK:** `GaP20t6ZOfU`'nun
+landmark fixture'ı romMode hattından ÖNCE çıkarılmış, provenance'ında
+`referenceEligible` alanı HİÇ YOK. Manifest tazelendi ama fixture bunu
+bilmiyordu; kanonik CLI fail-closed davranıp `unattested` saydı ve kapıda
+bıraktı — **havuz gerçekte olduğundan KÜÇÜK görünüyordu.** Kesici artık
+uygunluğu KESİM ANINDA MANİFESTTEN çözüyor (çekirdek `94b4ae9` ile aynı
+ilke). Bayat yokluk, bayat varlık kadar zararlı.
+
+**Kesin koşum — 7 kaynak, taze uygunluk (6 ölçülebilir take):**
+
+| kaynak | 5-take | 6-take | değişim |
+|---|---|---|---|
+| Igzmhbghcd4 | 72,3° | 57,2° | **−15,1** |
+| SfxyICleU4I | 108,2° | 97,7° | **−10,5** |
+| T8KTiE9bTZI | 70,1° | 49,7° | **−20,4** |
+| X2u_vGL0qJU | 52,7° | **32,8°** | **−19,9** |
+| gsz3BLAkkQ4 | 72,9° | 72,9° | 0,0 |
+| GaP20t6ZOfU | — | 39,7° | (yeni) |
+
+**Ortalama sapma 75,2° → 58,3° (−%22). En iyi kaynak 52,7° → 32,8°.**
+
+**Bu, ilk raporumun ana çıkarımını çürütüyor.** Havuzu heterojen sayıp
+aile sınırını ("havuz büyütmek anlaşma getirmiyor") Lissom'a peşinen
+uygulamıştım. Ölçüm tersini söylüyor: **tek kaynak eklemek beşin dördünü
+düşürdü.** Mekanizma açık — konsensüs medoid ve hücre-bazlı ortalamadan
+türetiliyor, az-nüfuslu bir havuzda her yeni take konsensüsü daha tutarlı
+bir merkeze çekiyor. Bu havuz **heterojen değil, AZ-NÜFUSLU.**
+
+Hüküm hâlâ RET (32,8° ≫ 14°) ve §2'nin üç-eksen bulgusu AYAKTA — ama
+§5'in "hedefli hasat" maddesi artık umut değil, **ölçülmüş eğilim.**
 
 **Pencerelemenin kötüleştirmesi bir çelişki değil, bir kanıt:** kesilen
 pencereler 129-1294 kare arasında (10× yayılım) — L-153'ün "şüpheli uzun
@@ -96,6 +150,9 @@ Bunlar sırayla denendi ve ELENDİ (her biri ölçümle):
 - ❌ **"Tam video sulandırıyor"** — pencereleme sapmaları KÖTÜLEŞTİRDİ.
 - ❌ **"Tek kötü kaynak var"** — iki yatay-gövde kaynağı dışlandı, kalan
   3'te 43-80°.
+- ⚠️ **"Havuz büyütmek anlaşma getirmez"** — BEN İDDİA ETTİM, ÖLÇÜM
+  ÇÜRÜTTÜ (§1b): tek kaynak eklemek ortalamayı %22 düşürdü. Bu madde
+  artık çürütülenler listesinde DEĞİL, **desteklenenler** tarafında.
 - ❌ **"Metin ön-elemesiyle daha iyi kaynak seçilebilir"** — 6/6 kaynağın
   metninde kamera görüşü hiç geçmiyor; ön-eleme kullanılabilir TEK kaynağı
   eliyordu (L-166).
@@ -111,6 +168,14 @@ Bunlar sırayla denendi ve ELENDİ (her biri ölçümle):
    kamera görüşü · hareket kimliği). Mevcut oran 1/6 ve 1/4 olduğuna göre
    ~9-18 aday taranmalı — bu bir TAHMİN, ölçüm değil; gerçek verim
    hasat turunda ölçülür.
+   **§1b'nin katkısı:** eklenen her uygun kaynak sapmaları ölçülebilir
+   biçimde düşürüyor (1 kaynak = −%22 ortalama). Bu, hasatın işe
+   yarayacağının KANITI değil ama EĞİLİM kanıtı — ve eğilim doğru yönde.
+3. **Bekleyen 5 yeni-uygun kaynak** (`c561204` yeniden-sınıflandırması):
+   `IHApHfNA2Ag` (deep_squat) · `QlUhbo41GTg` (overhead_reach) ·
+   `8V3uad4MSaE`/`ghL3AJfRT6k` (lateral_bend) · `lr3_bA48EBM`. Hepsi
+   ÇIKARIM ister → hasat sıramda (üçüncü) ilk iş bunlar; yeni arama
+   yapmadan havuz büyüyor.
 3. **Havuz kuru çıkarsa** meşru sonuç: bu iki test referanssız kalır,
    `measuredNoBands` / nitel bant yolunda yaşar (motor bunu zaten
    destekliyor — `lissom_engine` `ResultTier.measuredNoBands`), ve ürün
