@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.battery",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
+    "1.5.0 (M-F-71 / L-135): ankle_dorsiflexion'a movementPresence eklendi (PROVISIONAL, 15° — daha önce hiç beyan edilmemişti). overhead_reach/lateral_bend'in movementPresence eşikleri (140°/15°) değişmedi; peak_hold faz-kapısı olarak KULLANILMALARI phases/lissom-phases.v1.json 1.2.0'da kaldırıldı — girişim eşiği artık yalnız hız (delta) koşuluyla, movementPresence bu dosyada yalnız fixture doğrulaması (fixture_check.py) içindir.",
     "Lissom V1 aday test bataryası. G1-b kapısı bu testlerden hangilerinin V1'e gireceğine karar verir.",
     "Şablon: Amazon Halo Movement (npj Digital Medicine 2022) — kamera-tabanlı mobilite değerlendirmesinin tek hakemli emsali.",
     "DÜRÜSTLÜK NOTU: Halo'nun genel skoru referans fonksiyonel testlerle yalnız r=0.29-0.63 korelasyon aldı. Bu bataryanın da doğruluğu kanıtlanmış DEĞİLDİR; bandlar literatür ortalamalarından TÜRETİLMİŞ başlangıç kalibrasyonudur, klinik kesim noktası değil.",
@@ -251,6 +252,12 @@
         ],
         "source": "Literature norms for the weight-bearing lunge test are in CENTIMETRES (knee-to-wall distance); we measure tibia ANGLE. The conversion depends on shank length and no degree-based normative table was verified (source paywalled, 403). Ankle is also the least reliable joint on a single 2D camera (limits of agreement +-12-24 deg). Qualitative bands only until our own calibration exists.",
         "region": "ankle"
+      },
+      "movementPresence": {
+        "metric": "tibia_inclination_{side}",
+        "op": "gte",
+        "value": 15,
+        "rationale": "PROVISIONAL — bu testte movementPresence hiç beyan edilmemişti (M-F-71 önce fixture_check.py bunu SystemExit ile reddederdi). 15° eski peak_hold faz-kapısından devralındı: kendi başına fixture'lardan yeniden türetilmedi. lateral_bend'in aynı 15° değeri (KENDİ skor bantlarının tabanı 18°'nin altında seçilmişti) emsal alındı, ama ankle_dorsiflexion'ın sayısal bant tabanı yok (yalnız nitel limited/typical/good) — bu yüzden kıyas zayıf. Gerçek fixture geldiğinde ölçülüp değiştirilmeli; şimdilik yalnız 'hareket var mı' ayrımı için muhafazakâr bir taban."
       },
       "passiveExecutionPossible": true,
       "passiveExecutionRationale": "Pasif dorsifleksiyon standart bir ölçümdür."

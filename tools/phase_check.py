@@ -14,6 +14,13 @@ Denetlenen değişmezler:
   5. Koşul dilbilgisi geçerli (bilinen `kind`, bilinen `op`)
   6. Faz id'leri test içinde benzersiz
   7. Batarya'daki her testin faz tanımı var (kapsam boşluğu yok)
+  8. Terminal olmayan her fazın `timeoutCode`'u var — `timeoutMs` yalnız
+     sonsuz-parkı önler, kullanıcıya bir SONUÇ ulaştırmaz. `abort`/`abortCode`
+     eşleşmesi (madde 9) bunu abort için zaten sağlıyordu; plain timeout aynı
+     korumadan yoksundu ve `peak_hold`'a hiç girilmeden `raising`/`bending`
+     timeout'u sessizce düşebiliyordu (L-135/L-146, M-F-71 madde 4) — bu artık
+     kapı, gözlem değil.
+  9. `abort` koşulu olan her fazın `abortCode`'u var
 
 Bağımlılık YOK — saf stdlib.
 """
@@ -69,13 +76,18 @@ def _walk_conditions(cond: dict, path: str, out: list[tuple[str, dict]]) -> None
         _walk_conditions(sub, f"{path}.of[{i}]", out)
 
 
-def main() -> int:
-    problems: list[str] = []
+def check(phases_doc: dict, metrics_doc: dict, battery_doc: dict) -> list[str]:
+    """Tüm değişmezleri sınar, sorun cümlelerinin listesini döner (boşsa temiz).
 
-    phases_doc = json.loads(PHASES.read_text(encoding="utf-8"))
-    metrics = _metric_names(json.loads(METRICS.read_text(encoding="utf-8")))
-    battery = json.loads(BATTERY.read_text(encoding="utf-8"))
-    battery_ids = {t["id"] for t in battery["tests"]}
+    `main()`'den ayrı: `phase_check_selftest.py` gerçek dosyaları OKUMADAN,
+    bozulmuş bir in-memory kopyayla bu fonksiyonu çağırıp denetimin gerçekten
+    yakaladığını kanıtlar — `wellness_lint.py`'nin `--path` deseninin
+    faz-config eşdeğeri (burada CLI parametre yerine fonksiyon parametresi:
+    faz denetimi tek dosya değil üç dosyanın çapraz-tutarlılığını okur).
+    """
+    problems: list[str] = []
+    battery_ids = {t["id"] for t in battery_doc["tests"]}
+    metrics = _metric_names(metrics_doc)
 
     defined: set[str] = set()
     for test in phases_doc["tests"]:
@@ -109,6 +121,12 @@ def main() -> int:
                     f"{tid}.{p['id']}: `timeoutMs` YOK — çıkış koşulu kaçarsa faz "
                     "sonsuza park eder ve bu 'kullanıcı hareketsiz' gibi görünür"
                 )
+            if not p.get("isTerminal") and "timeoutMs" in p and "timeoutCode" not in p:
+                problems.append(
+                    f"{tid}.{p['id']}: `timeoutMs` var ama `timeoutCode` yok — "
+                    "zaman aşımı sessizce düşer, kullanıcıya ulaşan bir sonuç "
+                    "kodu üretmez (L-135/L-146, M-F-71 madde 4)"
+                )
             conds: list[tuple[str, dict]] = []
             for key in ("enter", "exit", "abort"):
                 if key in p and p[key]:
@@ -138,7 +156,19 @@ def main() -> int:
             f"Bataryada olup faz tanımı OLMAYAN test(ler): {', '.join(sorted(missing))}"
         )
 
-    print(f"Faz denetimi — {len(defined)}/{len(battery_ids)} test tanımlı")
+    return problems
+
+
+def main() -> int:
+    phases_doc = json.loads(PHASES.read_text(encoding="utf-8"))
+    metrics_doc = json.loads(METRICS.read_text(encoding="utf-8"))
+    battery_doc = json.loads(BATTERY.read_text(encoding="utf-8"))
+    battery_ids = {t["id"] for t in battery_doc["tests"]}
+    defined = {t["testId"] for t in phases_doc["tests"]}
+
+    problems = check(phases_doc, metrics_doc, battery_doc)
+
+    print(f"Faz denetimi — {len(defined & battery_ids)}/{len(battery_ids)} test tanımlı")
     if problems:
         print(f"\n❌ {len(problems)} sorun:")
         for p in problems:
