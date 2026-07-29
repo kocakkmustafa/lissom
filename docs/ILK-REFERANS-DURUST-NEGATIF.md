@@ -85,6 +85,50 @@ pencereler 129-1294 kare arasında (10× yayılım) — L-153'ün "şüpheli uzu
 tutuş" bulgusunu doğruluyor. Pencereler aynı uzunlukta OLMADIĞI için DTW
 çok farklı süreleri hizalamak zorunda kaldı.
 
+## 1c. Tur 7 — "5 bekleyen kaynak" ÇÜRÜTÜLDÜ; havuz 7'de sabit (L-170)
+
+Hasat sırası bana geçti; paket "5 bekleyen kaynağın çıkarımı → 11-kaynak
+havuzu" diyordu. **İkisi de ölçümle çürüdü.**
+
+**(a) Beş kaynak "çıkarım bekliyor" DEĞİL, TRİYAJ-REDDİ taşıyor:**
+
+| kaynak | hareket | triyaj reddi | romMode geri alır mı |
+|---|---|---|---|
+| `QlUhbo41GTg` | overhead_reach | netlik **28** < 40 (bulanık) | **hayır** |
+| `IHApHfNA2Ag` | deep_squat | süre **69s** < 90s | **hayır** |
+| `8V3uad4MSaE` | lateral_bend | **dikey format** 480×854 | **hayır** |
+| `ghL3AJfRT6k` | lateral_bend | netlik **14** < 40 | **hayır** |
+| `lr3_bA48EBM` | ? | netlik **37,8** < 40 (**SINIRDA**) | hayır |
+
+`rom_mode` gösterim-modunu sorar; triyaj kadraj/netlik/süre/format sorar.
+**Biri aktifleşince öteki geri alınmaz.** Bunları çıkarmak = triyaj kapısını
+gevşetmek; yapılmadı. Aynı sınıf: §2/§3'ün "üç ölçüt bağımsız" bulgusu, bir
+kat daha yukarıda (uygunluk ölçütleri de birbirinin yerine geçmez).
+
+**(b) "11-kaynak havuzu" YOK.** `overhead_reach`'in gerçek uygun+fixture'lı
+havuzu **7** (L-141'in 6'sı + `GaP20t6ZOfU`) ve yedisi de ÇOKTAN
+çıkarılmıştı — yani §1b'nin koşumu zaten "en dolu havuz"du. `deep_squat` 3.
+
+**(c) v0.8.8 doğrulaması** (pinli tag, M-F-154): sapmalar 0.8.4 ile
+**BİREBİR AYNI** — `overhead_reach` 57,2/97,7/49,7/32,8/72,9/39,7 ·
+`deep_squat` 23,4/33,8/38,6. `medoidTakeId`/`gateJoints` sürümü sayıları
+oynatmadı (beklenen: ikisi de bu yolda devreye girmiyor).
+
+**(d) `evidenceThickness`/`capFillShare`/`medoidTakeId` dağılımı
+RAPORLANAMADI** — bu alanlar artefaktta yaşıyor, artefakt ancak kurulum
+BAŞARILI olunca üretiliyor. Üç koşumun üçü de anlaşma kapısında reddedildi,
+dolayısıyla artefakt YOK. Aile eşik-tabanına Lissom verisi ilk BAŞARILI
+kurulumda gelebilir; şimdi vermek uydurma olurdu.
+
+**(e) `gateJoints` KULLANILMADI, gerekçeli:** `overhead_reach`'te kollar
+hareketin KENDİSİ; kapı-daraltması yalnız ÖLÇÜLMÜŞ `coached_only` temeliyle
+meşru (M-F-143). Elimde öyle bir ölçüm yok — daraltma sapmaları düşürürdü
+ama gerekçesiz olurdu, yani eşiği gevşetmenin başka bir adı.
+
+**Tek açık kalem:** `lr3_bA48EBM` netliği **37,8 vs eşik 40** — sınırda.
+L-141'de de benzer bir sınırda-ret vardı (38<40). Bu bir EŞİK sorusu,
+override sorusu değil; koordinatöre bırakıyorum.
+
 ## 2. Kök neden: kaynaklar aynı şeyi göstermiyor — İKİ BAĞIMSIZ EKSEN
 
 `tools/identity_review.py` kaynak-başına profil çıkardı (medyan değerler,
@@ -171,11 +215,9 @@ Bunlar sırayla denendi ve ELENDİ (her biri ölçümle):
    **§1b'nin katkısı:** eklenen her uygun kaynak sapmaları ölçülebilir
    biçimde düşürüyor (1 kaynak = −%22 ortalama). Bu, hasatın işe
    yarayacağının KANITI değil ama EĞİLİM kanıtı — ve eğilim doğru yönde.
-3. **Bekleyen 5 yeni-uygun kaynak** (`c561204` yeniden-sınıflandırması):
-   `IHApHfNA2Ag` (deep_squat) · `QlUhbo41GTg` (overhead_reach) ·
-   `8V3uad4MSaE`/`ghL3AJfRT6k` (lateral_bend) · `lr3_bA48EBM`. Hepsi
-   ÇIKARIM ister → hasat sıramda (üçüncü) ilk iş bunlar; yeni arama
-   yapmadan havuz büyüyor.
+3. ~~**Bekleyen 5 yeni-uygun kaynak** çıkarım ister~~ → **ÇÜRÜTÜLDÜ,
+   §1c.** Beşi de TRİYAJ-REDDİ taşıyor; romMode'un aktifleşmesi başka bir
+   eksendeki reddi geri almaz. Havuz bu yolla BÜYÜMEZ.
 3. **Havuz kuru çıkarsa** meşru sonuç: bu iki test referanssız kalır,
    `measuredNoBands` / nitel bant yolunda yaşar (motor bunu zaten
    destekliyor — `lissom_engine` `ResultTier.measuredNoBands`), ve ürün
