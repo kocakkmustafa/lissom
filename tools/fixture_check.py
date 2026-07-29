@@ -54,9 +54,26 @@ MOCORE = Path(
 )
 sys.path.insert(0, str(MOCORE))
 
+import os  # noqa: E402
+
 import numpy as np  # noqa: E402
 from mocore import geometry as geo  # noqa: E402
 from mocore import measures as mz  # noqa: E402
+
+#: M-F-53/M-F-54 taksonomisinin `frameRef` beyanını (gravityYaw/proximal)
+#: gerçekten UYGULAYIP uygulamayacağı — `gate_g1a.py`'nin AYNI bayrağı.
+#: BULGU (Gravita talebiyle bulundu): bu dosya `mz.evaluate` çağrısında
+#: `anatomical` HİÇ geçirmiyordu; varsayılan `False` = "eski davranış,
+#: dünya ekseni" (measures.py/geometry.py'nin kendi belgesi). Yani
+#: `identity_check`'in ürettiği TÜM açılar (hipKneeCoupling dahil, L-139)
+#: M-F-54'ün "proximal" çerçevesini hiç kullanmamıştı — config'in beyan
+#: ettiği ile ölçülenin ayrıştığı L-131/L-146 sınıfının bir örneği daha.
+#: Ölçüldü (4 deep_squat fixture, hipKneeCoupling): anatomical=False
+#: eski değerleri (+0,56/+0,45/+0,57/-0,46) birebir üretti; anatomical=True
+#: ile +0,31/+0,77/+0,62/-0,07 — kapı kararı DEĞİŞMEDİ (hepsi hâlâ aynı
+#: tarafta 0,20 eşiğine göre) ama "işaret döner, ayrım kategorik" iddiası
+#: zayıfladı (kötü örnek -0,46'dan -0,07'ye, neredeyse sıfıra yaklaştı).
+ANATOMICAL = os.environ.get("MOCORE_ANATOMICAL") == "1"
 
 
 def _series(frames: list[dict], metric_raw: dict) -> list[tuple[float, float]]:
@@ -89,7 +106,7 @@ def _series(frames: list[dict], metric_raw: dict) -> list[tuple[float, float]]:
                                 dtype=float),
             t_ms=float(k["t"]),
         )
-        res = mz.evaluate(md, frame)
+        res = mz.evaluate(md, frame, anatomical=ANATOMICAL)
         if res.valid and np.isfinite(res.value):
             out.append((frame.t_ms, float(res.value)))
     return out

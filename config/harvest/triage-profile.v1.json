@@ -16,6 +16,7 @@
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080)."
   ],
   "thresholds": {
@@ -106,7 +107,7 @@
           "metric": "pearson(hip_flexion_right,knee_flexion_right)",
           "status": "provisional",
           "min": 0.2,
-          "basis": "Lissom n=4: iyi kaynaklar +0,56/+0,45/+0,57, çömelme OLMAYAN kaynak -0,46. İşaret döner — ayrım kategorik, ince eşik ayarı değil. 0,20 iyi kümenin en düşüğünün (0,45) yarısı; provisional çünkü tek negatif örnekle türetildi."
+          "basis": "Lissom n=4, `MOCORE_ANATOMICAL` KAPALIYKEN (eski dünya-ekseni çerçevesi) ölçüldü: iyi kaynaklar +0,56/+0,45/+0,57, çömelme OLMAYAN kaynak -0,46. DÜZELTME (Gravita G-064 talebiyle bulundu, L-154): fixture_check.py `mz.evaluate`'e `anatomical` hiç geçirmiyordu — metriklerin M-F-54 `frameRef` beyanı (hip_flexion_right: proximal) hiç UYGULANMIYORDU. `MOCORE_ANATOMICAL=1` (doğru çerçeve) ile yeniden ölçüldü: +0,31/+0,77/+0,62/**-0,07**. Kapı KARARI değişmedi (hepsi hâlâ 0,20 eşiğine göre aynı tarafta) ama 'işaret döner, ayrım kategorik' iddiası zayıfladı — kötü örnek artık neredeyse sıfır, güçlü negatif değil. provisional kalıyor: hem tek-negatif-örnek sınırı hem de bu düzeltme birlikte, eşiğin (0,20) yeniden gözden geçirilmesi gerekebilir."
         },
         "kneeSymmetry": {
           "metric": "kneeAngleAsymmetry",
