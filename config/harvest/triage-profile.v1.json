@@ -5,7 +5,12 @@
   "_notes": [
     "motion-core harvest_rig TriageThresholds için Lissom profili.",
     "Varsayılan rig eşikleri 'kişi kadrajda mı' sorusunu yanıtlar; Lissom'un testlerinin çoğu (squat, ayak bileği, lunge, hamstring) ALT vücut ister ve o soru ayrı.",
-    "min_full_body_ratio ÖLÇÜMLE gerekçelendirildi (L-046): 4 pilot klipte tam-gövde oranı, alt-vücut geçerli-ölçüm oranını neredeyse birebir öngördü; üst-gövde oranı hiç öngörmedi (92% üst-gövde → %52 VMR)."
+    "min_full_body_ratio ÖLÇÜMLE gerekçelendirildi (L-046): 4 pilot klipte tam-gövde oranı, alt-vücut geçerli-ölçüm oranını neredeyse birebir öngördü; üst-gövde oranı hiç öngörmedi (92% üst-gövde → %52 VMR).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080)."
   ],
   "thresholds": {
     "min_duration_s": 90.0,
@@ -18,16 +23,131 @@
   "evidence": {
     "measuredOn": "2026-07-29",
     "clips": [
-      { "id": "GaP20t6ZOfU", "upperBodyRatio": 0.92, "fullBodyRatio": 0.83, "lowerBodyVmr": 0.97, "verdict": "accept" },
-      { "id": "YG-iGrQvw44", "upperBodyRatio": 0.83, "fullBodyRatio": 0.83, "lowerBodyVmr": 0.96, "verdict": "accept" },
-      { "id": "HVQ1YNtw_yQ", "upperBodyRatio": 0.92, "fullBodyRatio": 0.50, "lowerBodyVmr": 0.52, "verdict": "reject" },
-      { "id": "PfpJnU8x1kU", "upperBodyRatio": 0.83, "fullBodyRatio": 0.17, "lowerBodyVmr": 0.07, "verdict": "reject" }
+      {
+        "id": "GaP20t6ZOfU",
+        "upperBodyRatio": 0.92,
+        "fullBodyRatio": 0.83,
+        "lowerBodyVmr": 0.97,
+        "verdict": "accept"
+      },
+      {
+        "id": "YG-iGrQvw44",
+        "upperBodyRatio": 0.83,
+        "fullBodyRatio": 0.83,
+        "lowerBodyVmr": 0.96,
+        "verdict": "accept"
+      },
+      {
+        "id": "HVQ1YNtw_yQ",
+        "upperBodyRatio": 0.92,
+        "fullBodyRatio": 0.5,
+        "lowerBodyVmr": 0.52,
+        "verdict": "reject"
+      },
+      {
+        "id": "PfpJnU8x1kU",
+        "upperBodyRatio": 0.83,
+        "fullBodyRatio": 0.17,
+        "lowerBodyVmr": 0.07,
+        "verdict": "reject"
+      }
     ],
     "conclusion": "0.6 eşiği iki düşük-VMR klibi eler; geçenlerin alt-vücut VMR'ı %96-97, yani kapı kriteri B1 (>=%90) doğrudan sağlanır. n=4 — sinyal güçlü ama örneklem küçük, geniş hasatta yeniden ölçülecek.",
     "caveat": "Bu bir KABUL eşiğidir, doğruluk garantisi değil. Kadraj yeterli olsa bile hareketin Lissom testiyle eşleşmesi ve aynalama yönü ayrı sorulardır."
   },
   "upperBodyOnlyTests": {
     "_note": "Bu testler alt vücut istemez; onlar için min_full_body_ratio gevşetilebilir (ayrı hasat turu).",
-    "tests": ["overhead_reach", "thoracic_rotation", "lateral_bend"]
+    "tests": [
+      "overhead_reach",
+      "thoracic_rotation",
+      "lateral_bend"
+    ]
+  },
+  "perMovement": {
+    "overhead_reach": [
+      13,
+      14,
+      15,
+      16,
+      23,
+      24
+    ],
+    "deep_squat": [
+      24,
+      26,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "overhead_squat": [
+      14,
+      23,
+      24,
+      26,
+      28
+    ],
+    "ankle_dorsiflexion": [
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "hamstring_reach": [
+      16,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ],
+    "hip_hinge": [
+      23,
+      24,
+      26,
+      28
+    ],
+    "lateral_bend": [
+      23,
+      24
+    ],
+    "single_leg_balance": [
+      15,
+      16,
+      23,
+      24,
+      27,
+      28,
+      31,
+      32
+    ],
+    "forward_lunge": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ],
+    "thoracic_rotation": [],
+    "active_straight_leg_raise": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ],
+    "plank_hold": [
+      23,
+      24,
+      28
+    ]
   }
 }
