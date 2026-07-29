@@ -21,12 +21,14 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 METRICS = ROOT / "config/metrics/lissom-metrics.v1.json"
 BATTERY = ROOT / "config/tests/lissom-assessment.v1.json"
+PROFILE = ROOT / "config/harvest/triage-profile.v1.json"
 
 BLAZEPOSE_INDEX = {
     "NOSE": 0, "LEFT_SHOULDER": 11, "RIGHT_SHOULDER": 12, "LEFT_ELBOW": 13,
@@ -112,6 +114,52 @@ def longest_hold_s(series, op: str, value: float) -> float:
     return best
 
 
+def _pearson(a: list[float], b: list[float]) -> float:
+    n = len(a)
+    ma, mb = sum(a) / n, sum(b) / n
+    sa = (sum((x - ma) ** 2 for x in a) / n) ** 0.5
+    sb = (sum((x - mb) ** 2 for x in b) / n) ** 0.5
+    if sa < 1e-9 or sb < 1e-9:
+        return float("nan")
+    return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (n * sa * sb)
+
+
+def identity_check(frames, test_id, metrics, window) -> list[str]:
+    """Hareket-KİMLİĞİ kapısı — sözlük rig profilinden TÜKETİLİR (M-F-60/63).
+
+    Tek metrikle "hareket var" demek yetmiyor: `deep_squat`'ta diz büken ama
+    kalçası AÇIK kalan bir klip (diz çökme / yüzüstü diz bükme) birincil
+    metrik kapısını 24,2 sn ile geçmişti ve kanonik CLI'ın anlaşma kapısında
+    patladı (L-138). Kimlik sinyalleri burada kendi sözlüğünü KURMAZ; rig'in
+    perMovement.identity bloğunu okur.
+    """
+    prof = json.loads(PROFILE.read_text(encoding="utf-8"))
+    entry = (prof.get("perMovement") or {}).get(test_id)
+    ident = entry.get("identity") if isinstance(entry, dict) else None
+    if not ident:
+        return []
+    bad: list[str] = []
+    for sig, spec in ident.items():
+        if spec.get("status") == "pending":
+            continue          # ölçülmemiş sinyal sınır TAŞIMAZ, kapı da kurmaz
+        m = re.match(r"pearson\(([\w]+),\s*([\w]+)\)", spec.get("metric", ""))
+        if not m:
+            bad.append(f"{sig}: metrik ifadesi yorumlanamadı ({spec.get('metric')!r})")
+            continue
+        xa = dict(_series(frames, metrics[m.group(1)]))
+        xb = dict(_series(frames, metrics[m.group(2)]))
+        ts = [t for t in sorted(set(xa) & set(xb)) if t in window]
+        if len(ts) < 30:
+            bad.append(f"{sig}: pencerede yeterli ortak kare yok ({len(ts)})")
+            continue
+        r = _pearson([xa[t] for t in ts], [xb[t] for t in ts])
+        lo, hi = spec.get("min"), spec.get("max")
+        if (lo is not None and r < lo) or (hi is not None and r > hi):
+            bad.append(f"{sig}={r:+.2f} sınır dışı (min={lo} max={hi}) "
+                       f"[{spec.get('status')}]")
+    return bad
+
+
 def check(fixture: Path, test_id: str) -> tuple[bool, str]:
     battery = json.loads(BATTERY.read_text(encoding="utf-8"))
     metrics = {m["id"]: m for m in json.loads(METRICS.read_text(encoding="utf-8"))["metrics"]}
@@ -164,6 +212,11 @@ def check(fixture: Path, test_id: str) -> tuple[bool, str]:
         best = max(best, longest_hold_s(_series(frames, raw), mp["op"], mp["value"]))
 
     ok = best >= need_s
+    win = {t for t, v in _series(frames, metrics.get(cands[0], base))
+           if (v >= mp["value"] if mp["op"] == "gte" else v <= mp["value"])}
+    idbad = identity_check(frames, test_id, metrics, win) if ok else []
+    if idbad:
+        return False, "KİMLİK: " + "; ".join(idbad)
     return ok, (f"en uzun tutuş {best:.1f}sn "
                 f"({mp['metric']} {mp['op']} {mp['value']}) · gereken {need_s:.1f}sn")
 

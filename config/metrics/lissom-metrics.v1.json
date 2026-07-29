@@ -9,7 +9,9 @@
     "L-009: acı metriklerinde 'plane' zorunludur — ham 3D acı ROM uclarinda ±5.7° sistematik hata verir.",
     "confidenceClass: A/B/C — G1 kapı protokolü §1'deki eklem güven sınıfı; MAE eşiği buna göre uygulanır.",
     "M-F-34 taban-değeri kuralı: tolerans taşıyan oran metrikleri kusursuz-durum `baseline` değerini beyan eder; tolerans TABAN-göreli yorumlanır. Tabanı sıfır sanmak sessiz hata üretir — L-072 tam olarak buydu: `shoulder_line_foreshortening` tabanı 0,80 iken guard `> 0.15` yazılmış, her duruşta tetiklenmişti. Değerler sentetik nötr duruşta ÖLÇÜLDÜ, tahmin edilmedi; kapı A11 beyanı doğruluyor.",
-    "range (D5/v3): metriğin FİZİKSEL olarak mümkün aralığı — hareketin beklenen aralığı DEĞİL. İki iş görür: config yazımında saçma eşiği reddeder ve ÖLÇÜLEN veriyi süzer. İkincisi olmadan izleme artefaktları referansa sızıyordu: deep_squat fixture'larında diz fleksiyonu minimumları 0-3° ölçüldü (tam bükülü diz ~30-40°) ve trunk_lateral_tilt 180° verdi. Güven kapısı bunları YAKALAMIYOR — landmark yüksek görünürlükle ama yanlış yerde kestirilebiliyor (L-107)."
+    "range (D5/v3): metriğin FİZİKSEL olarak mümkün aralığı — hareketin beklenen aralığı DEĞİL. İki iş görür: config yazımında saçma eşiği reddeder ve ÖLÇÜLEN veriyi süzer. İkincisi olmadan izleme artefaktları referansa sızıyordu: deep_squat fixture'larında diz fleksiyonu minimumları 0-3° ölçüldü (tam bükülü diz ~30-40°) ve trunk_lateral_tilt 180° verdi. Güven kapısı bunları YAKALAMIYOR — landmark yüksek görünürlükle ama yanlış yerde kestirilebiliyor (L-107).",
+    "frameRef (M-F-53): metrik anatomik çerçevede mi dünya çerçevesinde mi ölçülür. Varsayılan anatomical. shoulder_line_foreshortening KAMERA çerçevesinde kalır — kameraya göre yönelimi ÖLÇEN bir teşhistir; anatomik çerçeve yaw bağımlılığını kaldırdığı için orada sabitleşir ve göç kapısı bunu ölü metrik olarak yakaladı (A9).",
+    "frameRef (M-F-54): POSTÜR açıları yerçekimi-göreli (`gravityYaw`), KÜRESEL-EKLEM fleksiyonu proksimal-segment-göreli (`proximal`), MENTEŞE eklemler doğrudan 3D (`none`, izdüşüm yok), kameraya-göre yönelimi ölçenler dünya çerçevesinde (`camera`). Tek çerçeveyi her metriğe uygulamak yanlıştı: gravityYaw ile hip_flexion ±30° yaw'da 16,96° kayıyordu; gövde eğilince uzvun sagittal düzlemi de eğilir. knee_flexion'ın 2,80°'lik sapması menteşe eklemin izdüşüme hiç ihtiyacı olmadığını gösteriyordu."
   ],
   "metrics": [
     {
@@ -29,7 +31,8 @@
       "range": [
         0,
         190
-      ]
+      ],
+      "frameRef": "proximal"
     },
     {
       "id": "elbow_extension_right",
@@ -48,7 +51,8 @@
       "range": [
         20,
         190
-      ]
+      ],
+      "frameRef": "none"
     },
     {
       "id": "hip_flexion_right",
@@ -67,7 +71,8 @@
       "range": [
         20,
         200
-      ]
+      ],
+      "frameRef": "proximal"
     },
     {
       "id": "knee_flexion_right",
@@ -86,7 +91,8 @@
       "range": [
         30,
         195
-      ]
+      ],
+      "frameRef": "none"
     },
     {
       "id": "trunk_lean",
@@ -103,7 +109,8 @@
       "range": [
         0,
         120
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "trunk_lateral_tilt",
@@ -120,7 +127,8 @@
       "range": [
         0,
         75
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "tibia_inclination_right",
@@ -138,7 +146,8 @@
       "range": [
         0,
         90
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "heel_rise_right",
@@ -157,7 +166,8 @@
       "range": [
         -0.5,
         0.8
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "reach_depth",
@@ -175,7 +185,8 @@
       "range": [
         0.0,
         3.0
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "knee_height_right",
@@ -194,7 +205,8 @@
       "range": [
         -0.5,
         2.0
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "plank_hip_deviation",
@@ -213,7 +225,8 @@
       "range": [
         0.0,
         1.5
-      ]
+      ],
+      "frameRef": "gravityYaw"
     },
     {
       "id": "shoulder_line_foreshortening",
@@ -226,12 +239,13 @@
       "unit": "ratio",
       "confidenceClass": "C",
       "test": "thoracic_rotation",
-      "description": "Frontal-plane projected shoulder width, normalised by torso length. Shrinks as the torso rotates away from the camera — an INDIRECT proxy for transverse rotation, not a rotation angle. WARNING: transverse-plane rotation is not reliably recoverable from a single camera (research/05); qualitative bands only unless G1-b proves otherwise. Replaced an angle_vertical+transverse definition that was mathematically dead (constant 90 deg) — see L-011.",
+      "description": "Frontal-plane projected shoulder width, normalised by torso length. Shrinks as the torso rotates away from the camera — an INDIRECT proxy for transverse rotation, not a rotation angle. WARNING: transverse-plane rotation is not reliably recoverable from a single camera (research/05); qualitative bands only unless G1-b proves otherwise. Replaced an angle_vertical+transverse definition that was mathematically dead (constant 90 deg) — see L-011. Measured in the CAMERA frame: this metric exists to detect rotation away from the camera, which anatomical projection removes by construction.",
       "baseline": 0.8,
       "range": [
         0.0,
         2.0
-      ]
+      ],
+      "frameRef": "camera"
     }
   ]
 }

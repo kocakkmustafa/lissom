@@ -179,8 +179,22 @@ def main() -> int:
             )
         policy[t["id"]] = bool(t["passiveExecutionPossible"])
 
+    # M-F-60/63: hareket-kimliği sözlüğü de bataryadan TÜRETİLİR. Profile elle
+    # yazılsaydı ikisi ayrışır ve app kapısı bayat sinyal tüketirdi.
+    identity = {t["id"]: t["identity"] for t in battery["tests"] if "identity" in t}
+
+    # Beklenen yapı TEK yerde kurulur ve hem yazma hem kontrol onu kullanır.
+    # İlk sürümde yazma sözlük üretiyor, kontrol liste bekliyordu; kontrol
+    # kendi yazdığı dosyayı "bayat" sanıyordu. Doğrulayıcı ile ürettiği yapı
+    # ayrışırsa kapı ölçmek istediği şeyi ölçmez.
+    expected = {
+        mv: ({"lower_body_ids": ids, "identity": identity[mv]}
+             if mv in identity else ids)
+        for mv, ids in derived.items()
+    }
+
     if write:
-        profile["perMovement"] = derived
+        profile["perMovement"] = expected
         profile["movementRomPolicy"] = policy
         profile.setdefault("_notes", []).append(
             "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle "
@@ -192,18 +206,18 @@ def main() -> int:
         PROFILE.write_text(
             json.dumps(profile, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
-        print(f"✅ perMovement yazıldı — {len(derived)} test")
+        print(f"✅ perMovement yazıldı — {len(expected)} test")
         return 0
 
     if profile.get("movementRomPolicy") != policy:
         print("❌ triyaj profilindeki romMode politikası BAYAT (batarya ile uyuşmuyor).")
         print("  Düzeltme:  python3 tools/triage_landmarks.py --write")
         return 1
-    if current != derived:
+    if current != expected:
         print("❌ triyaj profili BAYAT — metrik config'iyle uyuşmuyor.")
-        for t in sorted(set(derived) | set(current or {})):
-            if (current or {}).get(t) != derived.get(t):
-                print(f"  {t}: profil={(current or {}).get(t)} türetilen={derived.get(t)}")
+        for t in sorted(set(expected) | set(current or {})):
+            if (current or {}).get(t) != expected.get(t):
+                print(f"  {t}: profil={(current or {}).get(t)} türetilen={expected.get(t)}")
         print("\n  Düzeltme:  python3 tools/triage_landmarks.py --write")
         return 1
     print(f"✅ triyaj profili metrik config'iyle tutarlı — {len(derived)} test")
