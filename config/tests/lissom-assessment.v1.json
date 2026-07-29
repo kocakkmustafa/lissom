@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.battery",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
+    "1.8.0 (gece paketi madde 3): deep_squat'a presence eklendi (movementPresence'tan devralınan 110° eşik, PROVISIONAL) — presence_isolator penceresi denemesi için.",
     "1.7.1 (koordinatör hükmü M-F-92): hipKneeCoupling basis'ine marjlar isimli eklendi (confounder 0,27 · squat-sınıfı en düşük 0,11) ve eşik-kararı (0,20 PROVISIONAL kalır, yeniden-türetme ertelendi) kayda geçti.",
     "1.7.0 (L-154, Gravita G-064): hipKneeCoupling basis'i düzeltildi — fixture_check.py `anatomical` bayrağını hiç kullanmıyordu (bkz. tools/fixture_check.py ANATOMICAL notu), M-F-54 frameRef beyanı ölçüme hiç girmiyordu. `MOCORE_ANATOMICAL=1` ile yeniden ölçülen değerler basis'e eklendi; eşik (0,20) DEĞİŞMEDİ, yalnız gerekçe metni düzeltildi.",
     "1.6.0 (M-F-85 / L-151): overhead_reach'e `presence` alanı eklendi — motion-core'un yeni `presence_isolator`'ının sürücü sözlüğü (identity'nin kardeşi, tools/triage_landmarks.py tarafından perMovement.overhead_reach.presence'a türetilir). Eşik movementPresence'tan devralındı; PROVISIONAL olan izolatörün 2D-proksi geometrisi, eşik değil — ayrıntı presence bloğunun basis'inde.",
@@ -166,6 +167,16 @@
         "op": "lte",
         "value": 110,
         "rationale": "DİKKAT: bu testin skorlama bantları henüz BOŞ, yani eşik lateral_bend'deki gibi testin kendi bantlarından türetilemedi — hareket tanımına dayanıyor ve bantlar geldiğinde gözden geçirilmeli. Dik duruşta diz açısı ~175-180°; kasıtlı bir çömelme bunun çok altına iner. 110° dik duruştan açıkça uzak ama derin çömelmenin uç değerinden (~70-80°) yüksek: DERİNLİK değil, çömelmenin OLUP OLMADIĞI ölçülüyor. minHoldS beyan edilmedi; testin kendi holdSeconds=2 değerinden 1,0 sn türetilir."
+      },
+      "presence": {
+        "proximal": "RIGHT_HIP",
+        "joint": "RIGHT_KNEE",
+        "distal": "RIGHT_ANKLE",
+        "op": "<=",
+        "thresholdDeg": 110,
+        "minHoldS": 1.0,
+        "status": "provisional",
+        "basis": "Eşik movementPresence'tan (knee_flexion_right <=110) devralındı, ayrıca türetilmedi. perSide=false — {side} şablonu yok, tek triplet. PROVISIONAL: presence_isolator'ın 2D görüntü-düzlemi diz açısı proksisi mocore'un gerçek sagittal-izdüşümlü ölçümüyle henüz karşılaştırılmadı."
       },
       "identity": {
         "hipKneeCoupling": {

@@ -18,6 +18,7 @@
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
+    "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080).",
     "perMovement TÜRETİLMİŞTİR (tools/triage_landmarks.py) — elle düzenlenmez. Her test yalnız kendi metriklerinin dokunduğu landmark'ların kadrajda olmasını şart koşar; sabit 'tam gövde' şartı bir OMUZ testinin adaylarını ayak bileği görünmüyor diye reddediyordu (L-080)."
   ],
   "thresholds": {
@@ -114,6 +115,16 @@
           "metric": "kneeAngleAsymmetry",
           "status": "pending"
         }
+      },
+      "presence": {
+        "proximal": "RIGHT_HIP",
+        "joint": "RIGHT_KNEE",
+        "distal": "RIGHT_ANKLE",
+        "op": "<=",
+        "thresholdDeg": 110,
+        "minHoldS": 1.0,
+        "status": "provisional",
+        "basis": "Eşik movementPresence'tan (knee_flexion_right <=110) devralındı, ayrıca türetilmedi. perSide=false — {side} şablonu yok, tek triplet. PROVISIONAL: presence_isolator'ın 2D görüntü-düzlemi diz açısı proksisi mocore'un gerçek sagittal-izdüşümlü ölçümüyle henüz karşılaştırılmadı."
       }
     },
     "overhead_squat": [
