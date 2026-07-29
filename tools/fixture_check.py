@@ -46,68 +46,50 @@ VIRTUAL = {
 MIN_VISIBILITY = 0.5
 
 
-def _angle3(a, b, c) -> float | None:
-    """b köşesindeki açı, görüntü düzleminde (derece)."""
-    v1 = (a[0] - b[0], a[1] - b[1])
-    v2 = (c[0] - b[0], c[1] - b[1])
-    n1, n2 = math.hypot(*v1), math.hypot(*v2)
-    if n1 < 1e-9 or n2 < 1e-9:
-        return None
-    d = max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))
-    return math.degrees(math.acos(d))
+MOCORE = Path(
+    "/Users/mustafakaankocak/Documents/YULAlab-AI/ventures/motion-core/lib"
+    "/tools/fixture_pipeline"
+)
+sys.path.insert(0, str(MOCORE))
+
+import numpy as np  # noqa: E402
+from mocore import geometry as geo  # noqa: E402
+from mocore import measures as mz  # noqa: E402
 
 
-def _angle_vertical(p_from, p_to) -> float:
-    """`p_from -> p_to` vektörünün DİKEYDEN sapması (derece).
+def _series(frames: list[dict], metric_raw: dict) -> list[tuple[float, float]]:
+    """(t_ms, değer) dizisi — KANONİK ölçümle, WORLD uzayında.
 
-    Görüntü koordinatlarında y aşağı büyür; dik duruşta gövde vektörü yukarı
-    bakar. 0° = tam dik, büyüdükçe yana eğilme.
+    Neden elle hesaplamıyoruz: ilk sürüm görüntü düzleminde ham açı alıyor ve
+    metriğin `plane` alanını yok sayıyordu — üçüncü bir paralel geometri
+    implementasyonu, farklı-sonuç riski demektir. Ölçüm tek yerden gelmeli.
+
+    DÜRÜSTLÜK NOTU: bu devir, `trunk_lateral_tilt`in anatomik olarak imkânsız
+    değerler (tepe ~180°) üretmesini AÇIKLAMADI. Düzlem projeksiyonunun eksik
+    olduğunu sanmıştım; kanonik ölçüm de aynı dağılımı veriyor (p90 90,3° /
+    tepe 180,0°), yani hipotez YANLIŞTI. Değişiklik mimari olarak yine doğru
+    ama anomali AÇIK: kaynakta ya da izlemede bir sorun var ve sayıdan
+    ayırt edilemiyor (L-100).
     """
-    dx = p_to[0] - p_from[0]
-    dy = p_to[1] - p_from[1]
-    return abs(math.degrees(math.atan2(dx, -dy)))
-
-
-def _resolve(points: list[str]) -> list[tuple[int, ...]]:
-    """Her noktayı, ortalaması alınacak gerçek landmark indekslerine çevirir."""
-    out: list[tuple[int, ...]] = []
-    for name in points:
-        parts = VIRTUAL.get(name, (name,))
-        missing = [q for q in parts if q not in BLAZEPOSE_INDEX]
-        if missing:
-            raise SystemExit(f"BlazePose sözlüğünde olmayan landmark: {missing}")
-        out.append(tuple(BLAZEPOSE_INDEX[q] for q in parts))
-    return out
-
-
-def _series(frames: list[dict], points: list[str], kind: str = "angle3"):
-    """(t_ms, açı) dizisi — yalnız tüm noktaları güvenle görünen kareler.
-
-    `kind` metriğin türünü izler: `angle3` üç noktalı eklem açısı,
-    `angle_vertical` iki noktalı gövde/uzuv eğimi. Türü yok saymak sessizce
-    YANLIŞ sayı üretir — iki noktalı bir metriği angle3 sanmak çöker ya da
-    anlamsız açı verir.
-    """
-    groups = _resolve(points)
+    md = mz.MetricDef.from_dict(metric_raw)
     out: list[tuple[float, float]] = []
     for k in frames:
         if not k.get("detected"):
             continue
-        lm = k["lm"]
-        if any(lm[i][3] < MIN_VISIBILITY for g in groups for i in g):
+        world = k.get("world")
+        if not world:
             continue
-        pts = [(sum(lm[i][0] for i in g) / len(g),
-                sum(lm[i][1] for i in g) / len(g)) for g in groups]
-        if kind == "angle_vertical":
-            if len(pts) != 2:
-                raise SystemExit(f"angle_vertical iki nokta ister, {len(pts)} geldi")
-            val = _angle_vertical(*pts)
-        else:
-            if len(pts) != 3:
-                raise SystemExit(f"angle3 üç nokta ister, {len(pts)} geldi")
-            val = _angle3(*pts)
-        if val is not None:
-            out.append((k["t"], val))
+        lm_img = k["lm"]
+        frame = geo.Frame(
+            xyz=np.asarray(world, dtype=float),
+            visibility=np.asarray([p[3] for p in lm_img], dtype=float),
+            presence=np.asarray([p[4] if len(p) > 4 else p[3] for p in lm_img],
+                                dtype=float),
+            t_ms=float(k["t"]),
+        )
+        res = mz.evaluate(md, frame)
+        if res.valid and np.isfinite(res.value):
+            out.append((frame.t_ms, float(res.value)))
     return out
 
 
@@ -172,13 +154,14 @@ def check(fixture: Path, test_id: str) -> tuple[bool, str]:
                     break
         if base is None:
             raise SystemExit(f"{test_id}: metrik config'te yok — {cand}")
-        pts = list(base["points"])
+        raw = dict(base)
         if cand != base["id"]:
-            pts = [p.replace("RIGHT_", "§").replace("LEFT_", "RIGHT_").replace("§", "LEFT_")
-                   for p in pts]
-        best = max(best, longest_hold_s(
-            _series(frames, pts, base.get("kind", "angle3")),
-            mp["op"], mp["value"]))
+            raw["id"] = cand
+            raw["points"] = [
+                p.replace("RIGHT_", "§").replace("LEFT_", "RIGHT_").replace("§", "LEFT_")
+                for p in base["points"]
+            ]
+        best = max(best, longest_hold_s(_series(frames, raw), mp["op"], mp["value"]))
 
     ok = best >= need_s
     return ok, (f"en uzun tutuş {best:.1f}sn "
