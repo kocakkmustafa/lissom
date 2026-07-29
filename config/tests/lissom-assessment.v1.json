@@ -328,7 +328,14 @@
         "derived": "ratio of hip_flexion change to trunk_lean change — these two are NOT independent (a forward fold IS hip flexion); their ratio is the lumbo-pelvic rhythm we actually want."
       },
       "passiveExecutionPossible": false,
-      "passiveExecutionRationale": "Ayakta ağırlık taşıyan kalça menteşesi; pasif icrası yok."
+      "passiveExecutionRationale": "Ayakta ağırlık taşıyan kalça menteşesi; pasif icrası yok.",
+      "movementPresence": {
+        "metric": "trunk_lean",
+        "op": "gte",
+        "value": 45,
+        "minHoldS": 0.5,
+        "rationale": "DİKKAT: `deep_squat` gibi bu testin de skorlama bantları BOŞ, yani eşik testin kendi bantlarından türetilemedi — hareket tanımına dayanıyor ve bantlar geldiğinde gözden geçirilmeli. Dik duruşta gövde eğimi ~0°; bir kalça menteşesinde gövde belirgin biçimde öne katlanır. 45° dik duruştan açıkça uzak ama tam öne katlanmanın (~90°) altında: DERİNLİK değil, menteşenin OLUP OLMADIĞI ölçülüyor. minHoldS 0,5 çünkü bu testte tutuş fazı YOK (reps:3, holdSeconds yok) — dinamik bir hareket, 1 sn şartı gerçek tekrarları elerdi."
+      }
     },
     {
       "id": "lateral_bend",
