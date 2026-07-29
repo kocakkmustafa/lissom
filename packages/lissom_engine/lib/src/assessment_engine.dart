@@ -194,9 +194,26 @@ final class AssessmentEngine {
       );
     }
 
-    // İzleme kaybı / düşük güven: kare çoğunluğu hüküm-dışıysa ölçüm
-    // güvenilir değildir. Bu bir "başarısızlık" değil, "ölçemedim" —
-    // ve sebebi isimlidir.
+    final int end = nowUs ?? _lastHoldUs ?? _firstFrameUs ?? 0;
+
+    // ⚠️ SIRA M-F-71 MADDE 2'NİN TA KENDİSİ — gerçek fixture bunu yakaladı.
+    //
+    // İlk sürümde izleme-kaybı ve düşük-güven kontrolleri ölçüm raporundan
+    // ÖNCE geliyordu. Gerçek videoda kişi tekrarını yapıp kadrajdan çıkıyor
+    // (ya da video kararıyor), yani KUYRUK kareleri hüküm-dışı oluyor —
+    // ve tamamlanmış, geçerli bir ölçüm `trackingLost` diye ÇÖPE GİDİYORDU.
+    // Ölçüldü: `X2u_vGL0qJU` fixture'ında 5899/10730 kare okundu, girişim
+    // algılandı, tepe değer birikti, sonuç yine "notMeasured/trackingLost".
+    //
+    // Doğru semantik: izleme kaybı ölçümü ENGELLEDİYSE bir sebeptir; ölçüm
+    // ZATEN tamamlandıysa sebep değil, sonrasında olmuş bir olaydır.
+    // Bu yüzden ölçüm önce raporlanır, kalite kodları yalnız ölçüm YOKKEN
+    // sebep olarak konuşur.
+    if (_attemptStartUs != null && _peak != null) {
+      return _measuredResult(end);
+    }
+
+    // Buradan aşağısı: ölçüm ALINAMADI. Sebep ZORUNLU ve isimli.
     if (_totalFrames > 0 && _lowConfidenceFrames * 2 > _totalFrames) {
       return AssessmentResult.notMeasured(
         testId: test.id,
@@ -206,7 +223,6 @@ final class AssessmentEngine {
       );
     }
     final int? lost = _lostSinceUs;
-    final int end = nowUs ?? _lastHoldUs ?? _firstFrameUs ?? 0;
     if (lost != null && (end - lost) > trackingLostGraceMs * 1000) {
       return AssessmentResult.notMeasured(
         testId: test.id,
@@ -216,22 +232,21 @@ final class AssessmentEngine {
       );
     }
 
-    // Girişim hiç algılanmadıysa: hazırlık zaman aşımı mı, hiç deneme mi?
-    if (_attemptStartUs == null) {
-      final int elapsed = end - (_firstFrameUs ?? end);
-      return AssessmentResult.notMeasured(
-        testId: test.id,
-        side: side,
-        code: elapsed >= setupTimeoutMs * 1000
-            ? ResultCode.setupTimedOut
-            : ResultCode.noAttemptDetected,
-        provenance: provenance,
-        timedOutPhase: elapsed >= setupTimeoutMs * 1000 ? 'ready' : null,
-      );
-    }
+    // Girişim hiç algılanmadı: hazırlık zaman aşımı mı, hiç deneme mi?
+    final int elapsed = end - (_firstFrameUs ?? end);
+    return AssessmentResult.notMeasured(
+      testId: test.id,
+      side: side,
+      code: elapsed >= setupTimeoutMs * 1000
+          ? ResultCode.setupTimedOut
+          : ResultCode.noAttemptDetected,
+      provenance: provenance,
+      timedOutPhase: elapsed >= setupTimeoutMs * 1000 ? 'ready' : null,
+    );
+  }
 
-    // Girişim VAR → ölçüm daima raporlanır. Tepe değer null olamaz:
-    // girişim kapısı ancak bir değer okunduğunda açılır.
+  /// Ölçüm raporu — timeout değeri KORUR, yalnız kodu değiştirir.
+  AssessmentResult _measuredResult(int end) {
     final double value = _peak!;
     final int measuring = end - _attemptStartUs!;
     final AssessmentResult measured = AssessmentResult.measured(
