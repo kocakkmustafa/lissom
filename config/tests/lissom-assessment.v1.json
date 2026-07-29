@@ -146,7 +146,13 @@
         "region": "hip"
       },
       "passiveExecutionPossible": false,
-      "passiveExecutionRationale": "Ağırlık taşıyan tüm-vücut görevi: klinisyen kimseyi pasif çömeltemez."
+      "passiveExecutionRationale": "Ağırlık taşıyan tüm-vücut görevi: klinisyen kimseyi pasif çömeltemez.",
+      "movementPresence": {
+        "metric": "knee_flexion_right",
+        "op": "lte",
+        "value": 110,
+        "rationale": "DİKKAT: bu testin skorlama bantları henüz BOŞ, yani eşik lateral_bend'deki gibi testin kendi bantlarından türetilemedi — hareket tanımına dayanıyor ve bantlar geldiğinde gözden geçirilmeli. Dik duruşta diz açısı ~175-180°; kasıtlı bir çömelme bunun çok altına iner. 110° dik duruştan açıkça uzak ama derin çömelmenin uç değerinden (~70-80°) yüksek: DERİNLİK değil, çömelmenin OLUP OLMADIĞI ölçülüyor. minHoldS beyan edilmedi; testin kendi holdSeconds=2 değerinden 1,0 sn türetilir."
+      }
     },
     {
       "id": "overhead_squat",
