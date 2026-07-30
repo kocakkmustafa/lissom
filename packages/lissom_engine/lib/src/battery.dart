@@ -350,7 +350,18 @@ final class Battery {
       scoring: ScoringSpec(
         type: type,
         unit: rawScoring['unit'] as String?,
-        higherIsBetter: rawScoring['higherIsBetter'] as bool? ?? true,
+        // ⚠️ VARSAYILAN YOK — ve bu bir katılık gösterisi değil, ölçülmüş bir
+        // kusurun panzehiri. Eskiden `?? true` idi; motor bu alanla tepe
+        // yönünü seçiyor (`higherIsBetter ? v > peak : v < peak`), yani
+        // alanın SESSİZ varsayılanı üç testte ölçümü TERS yönde topluyordu
+        // (deep_squat, forward_lunge, thoracic_rotation — L-181). Bir yön
+        // alanının güvenli varsayılanı OLAMAZ: "büyük olan iyidir" bir
+        // iddiadır ve beyan edilmediği yerde iddia edilmemelidir.
+        higherIsBetter: rawScoring['higherIsBetter'] as bool? ??
+            (throw BatteryError('$path.scoring.higherIsBetter',
+                'zorunlu — yön beyan edilmeden ölçüm hangi uca doğru '
+                'toplanacağını bilemez; sessiz varsayılan ölçümü ters '
+                'çevirir (L-181)')),
         bandFloorsByAge: floors,
         qualitativeLevels: <String>[
           if (type == 'qualitative')

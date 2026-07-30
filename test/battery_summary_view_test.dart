@@ -193,9 +193,17 @@ void main() {
               provenance: const <String, String>{'t': 'x'},
             ),
           }));
-      final Iterable<String> all = tester
+      final List<String> all = tester
           .widgetList<Text>(find.byType(Text))
-          .map((Text t) => (t.data ?? '').toLowerCase());
+          .map((Text t) => (t.data ?? '').toLowerCase())
+          .toList(growable: false);
+      // POZİTİF ÇAPA (ikiz taraması bulgusu): yalnız-yokluk iddiası, ağaç
+      // HİÇ bir şey basmasa da geçerdi. Boş bir ekranda "yasak sözcük yok"
+      // doğrudur ve hiçbir şey kanıtlamaz.
+      expect(all.length, greaterThan(6),
+          reason: 'üç satır + başlıklar basılmalı; boş ağaçta bu tarama '
+              'boşa geçer');
+      expect(all, contains(SummaryStrings.header.toLowerCase()));
       for (final String word in SummaryStrings.forbiddenSurfaceWords) {
         for (final String rendered in all) {
           expect(rendered.contains(word), isFalse,
@@ -205,26 +213,13 @@ void main() {
       }
     });
 
-    test('mobilya metinlerinin KENDİSİ de yasak sözcük taşımaz', () {
-      const List<String> furniture = <String>[
-        SummaryStrings.header,
-        SummaryStrings.scoredSection,
-        SummaryStrings.scoredSubtitle,
-        SummaryStrings.belowRangeSection,
-        SummaryStrings.belowRangeSubtitle,
-        SummaryStrings.noBandsSection,
-        SummaryStrings.noBandsSubtitle,
-        SummaryStrings.notComparedSection,
-        SummaryStrings.notComparedSubtitle,
-        SummaryStrings.notMeasuredSection,
-        SummaryStrings.notMeasuredSubtitle,
-      ];
-      for (final String s in furniture) {
-        for (final String word in SummaryStrings.forbiddenSurfaceWords) {
-          expect(s.toLowerCase().contains(word), isFalse, reason: '"$s"');
-        }
-      }
-    });
+    // NOT: "mobilya sabitlerinin kendisi yasak sözcük taşımaz" iddiası
+    // BURADAN KALDIRILDI ve `tools/status_weave_check.py`'ye taşındı.
+    // Sebep ikiz taramasından çıktı: elle yazılmış bir sabit LİSTESİ
+    // üzerinde dönen test, biri sabiti yeniden adlandırıp listeden
+    // düşürdüğünde SESSİZCE geçmeye devam ederdi — yalnız-yokluk iddiasının
+    // en sinsi hâli. Python kapısı dosyadaki TÜM `static const String`
+    // değerlerini TÜRETEREK tarıyor; liste küçülemez.
   });
 
   group('ölçülemeyen satır', () {

@@ -83,7 +83,7 @@ void main() {
       const String half = '''
       {"id":"t","version":"1","tests":[{
         "id":"x","perSide":false,"primaryMetric":"m",
-        "scoring":{"type":"qualitative","levels":["a"],"source":"s"},
+        "scoring":{"type":"qualitative","higherIsBetter":true,"levels":["a"],"source":"s"},
         "referenceStatus":{"state":"measurementOnly",
           "statusBasis":{"code":"c","measured":"m"},
           "promotionPath":{"unblockedBy":"u","criterion":"c","measuredGap":"1"}}
@@ -112,6 +112,10 @@ void main() {
       // lateral_bend referenceStatus beyan etmiyor → normal rejim.
       final TestSpec t = _b().tests['lateral_bend']!;
       final AssessmentResult r = _run(t, List<double>.filled(30, 30));
+      // POZİTİF ÇAPA (ikiz taraması bulgusu): ölçüm ALINMADIYSA lessonClass
+      // da null olurdu ve bu test "normal rejim" hakkında hiçbir şey
+      // kanıtlamadan geçerdi. Vacuous yol kapatıldı.
+      expect(r.isMeasured, isTrue, reason: 'iddia ölçülmüş bir sonuç hakkında');
       expect(r.lessonClass, isNull);
       expect(r.isMeasurementOnly, isFalse);
     });

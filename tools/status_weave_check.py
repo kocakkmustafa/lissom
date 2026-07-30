@@ -27,6 +27,7 @@ Bağımlılık YOK — saf stdlib.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -37,8 +38,52 @@ IA = ROOT / "config/ia/library.v1.json"
 #: Testte GÖRÜLMESİ YASAK "yakında" sözcükleri — statü-örgüsü kaçağı.
 FORBIDDEN_TEST_KEYS = {"comingSoon", "coming_soon", "beta", "unavailable"}
 
+#: YÜZEY sabitlerinde görülmesi yasak sözcükler. `SummaryStrings.
+#: forbiddenSurfaceWords` ile AYNI küme; ikisinin ayrışmaması `--self-test`
+#: içinde iddia ediliyor (iki liste tutmak, birinin bayatlaması demektir).
+FORBIDDEN_SURFACE_WORDS = {
+    "coming soon", "yakında", "beta", "unavailable", "not available",
+    "work in progress",
+}
+
 #: Ailenin CANLI sayıldığı durumlar.
 LIVE_FAMILY_STATES = {"in_progress", "available"}
+
+
+#: Yüzey mobilyasının yaşadığı dosya — yasak sözcük taraması TÜRETİLİR.
+STRINGS = ROOT / "lib/app/summary_strings.dart"
+
+
+def check_surface(strings_src: str) -> list[str]:
+    """Yüzey SABİTLERİ yasak sözcük taşıyor mu — liste elle DEĞİL, türetilmiş.
+
+    Bu denetim bir Dart testinden BURAYA taşındı (pozitif-ikiz taraması
+    bulgusu): orada elle yazılmış bir sabit listesi üzerinde dönüyordu, yani
+    biri bir sabiti yeniden adlandırıp listeden düşürdüğünde test SESSİZCE
+    geçmeye devam ederdi. Yalnız-yokluk iddiasının en sinsi hâli: taranan
+    küme boşalırsa iddia trivially doğru olur. Burada küme dosyadan
+    TÜRETİLİYOR — küçülemez.
+    """
+    problems: list[str] = []
+    # `static const String x = '...';` (çok satırlı bitişik literaller dahil)
+    consts = re.findall(
+        r"static const String (\w+)\s*=\s*((?:'[^']*'\s*)+);", strings_src
+    )
+    if len(consts) < 5:
+        problems.append(
+            f"summary_strings.dart'ta yalnız {len(consts)} sabit ayrıştırıldı — "
+            "tarama büyük olasılıkla dosyayı okuyamadı (sessiz yeşil riski)"
+        )
+    for name, raw in consts:
+        text = " ".join(re.findall(r"'([^']*)'", raw)).lower()
+        for word in FORBIDDEN_SURFACE_WORDS:
+            if word in text:
+                problems.append(
+                    f"SummaryStrings.{name}: '{word}' geçiyor — çalışan bir "
+                    "ölçümün yanında bu sözcük, kullanıcının yaptığı işi "
+                    "sahiplenmemektir (M-F-186)"
+                )
+    return problems
 
 
 def check(battery: dict, ia: dict) -> list[str]:
@@ -114,7 +159,29 @@ def _self_test() -> int:
     if check({"tests": [mo_test]}, live_ia):
         fails.append("YANLIŞ ALARM: canlı aile + measurementOnly geçmeliydi")
 
-    print(f"statü-örgüsü öz-testi — 4 vaka (3 yakalanmalı, 1 geçmeli)")
+    # Yüzey taraması: yasak sözcük taşıyan sabit YAKALANMALI
+    if not check_surface(
+            "static const String a = 'Coming soon';\n"
+            "static const String b = 'x';\nstatic const String c = 'y';\n"
+            "static const String d = 'z';\nstatic const String e = 'w';\n"):
+        fails.append("yüzey sabitindeki 'Coming soon' yakalanmadı")
+    # Dosya okunamadıysa SESSİZ YEŞİL olmamalı
+    if not check_surface("// hiç sabit yok"):
+        fails.append("boş yüzey dosyası sessiz geçti")
+    # İKİ LİSTE AYRIŞMASIN: Dart tarafındaki küme ile aynı olmalı
+    dart = STRINGS.read_text(encoding="utf-8") if STRINGS.exists() else ""
+    m = re.search(r"forbiddenSurfaceWords = <String>\[(.*?)\];", dart, re.S)
+    if m:
+        dart_words = set(re.findall(r"'([^']*)'", m.group(1)))
+        if dart_words != FORBIDDEN_SURFACE_WORDS:
+            fails.append(
+                "Dart ve Python yasak-sözcük kümeleri AYRIŞMIŞ: "
+                f"yalnız-Dart={dart_words - FORBIDDEN_SURFACE_WORDS} "
+                f"yalnız-Python={FORBIDDEN_SURFACE_WORDS - dart_words}")
+    else:
+        fails.append("Dart tarafındaki forbiddenSurfaceWords bulunamadı")
+
+    print("statü-örgüsü öz-testi — 7 vaka (5 yakalanmalı, 2 geçmeli)")
     if fails:
         print(f"\n❌ Kapı BOZUK — {len(fails)} vaka:")
         for f in fails:
@@ -130,12 +197,14 @@ def main() -> int:
 
     battery = json.loads(BATTERY.read_text(encoding="utf-8"))
     ia = json.loads(IA.read_text(encoding="utf-8"))
-    problems = check(battery, ia)
+    strings_src = STRINGS.read_text(encoding="utf-8")
+    problems = check(battery, ia) + check_surface(strings_src)
 
     mo = sum(1 for t in battery.get("tests", [])
              if isinstance(t.get("referenceStatus"), dict))
+    consts = len(re.findall(r"static const String \w+\s*=", strings_src))
     print(f"Statü-örgüsü denetimi — {len(battery.get('tests', []))} test, "
-          f"{mo} measurementOnly beyanı")
+          f"{mo} measurementOnly beyanı, {consts} yüzey sabiti")
     if problems:
         print(f"\n❌ {len(problems)} sorun:")
         for p in problems:

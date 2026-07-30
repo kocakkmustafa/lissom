@@ -137,6 +137,29 @@ Sentetik senaryolar (her test için):
 | B6 | TTF (medyan) | **≤ 8 s** | UX eşiği: bundan uzunu kullanıcının "bozuk" diye algıladığı sınır |
 | B7 | Geçersizlik yakalama | Kasıtlı hatalı çekimlerin **≥ %90'ı** doğru geçersizlik koduyla reddedilmeli | Yanlış ölçüm vermektense ölçmemek daima üstün (`00-AILE-MIMARISI §7`) |
 
+### 3.2b ⚠️ TABAN-ORAN ÖN KOŞULU — B1/B2 okunmadan ÖNCE ölçülecek
+
+*(Aile hizalama süpürmesi, JabLab'ın taban-oran eki. Eşikler DEĞİŞTİRİLMEDİ —
+eşik tasarımı koordinatörün; burada eklenen şey, o eşiklerin ne zaman
+OKUNABİLİR hâle geldiğine dair bir ön koşul.)*
+
+B1 (≥%90) ve B2 (≥%75), farklı iki popülasyondan (triyajı geçen alt-küme vs
+triyajda "sınırda" işaretlenenler) gelen iki VMR'yi bir **koşul etkisi** gibi
+okuyor. Bu okuma, **kontrol koşulu ölçülmeden geçerli değildir:**
+
+| Ölçülecek | Neden |
+|---|---|
+| **Taban (floor):** triyajın REDDETTİĞİ kliplerde VMR | Reddedilenler de %88 veriyorsa, B1'in %90'ı "iyi koşul çalışıyor"u değil **poz modelinin taban oranını** ölçüyor demektir — eşik hiçbir şeyi ayırt etmez |
+| **Tavan (ceiling):** sentetik ground-truth kliplerde VMR | %100'e ulaşılamıyorsa fark koşuldan değil **hattın kendisinden** gelir; B1/B2 arasındaki boşluk o kaybı da içerir |
+
+**Kural:** bir orana "düşük/yüksek" demeden önce kontrol koşulu ölçülür. Taban
+ile B2 eşiği arasındaki mesafe, B2'nin ayırt edici GÜCÜdür; mesafe küçükse
+eşik geçse bile ürün hakkında bir şey söylemez.
+
+Bu ön koşul şu an **ölçülemedi**: triyaj reddettiği klipleri indirmiyor, yani
+taban popülasyonu elde YOK. Ölçüm yolu, reddedilen kliplerden karantina-örnek
+çekmeyi gerektirir (L-171'de kurulan karantina-çıkarma yolunun aynısı).
+
 ### 3.3 Test-başına sınıflandırma (kapı çıktısı)
 
 Her test, ölçüm sonrası şu üç kovadan birine düşer:

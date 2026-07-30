@@ -51,6 +51,7 @@ final Battery _battery = Battery.parseJson('''
       "primaryMetric": "tibia_inclination_{side}",
       "scoring": {
         "type": "qualitative",
+        "higherIsBetter": true,
         "levels": ["limited", "typical", "good"],
         "source": "Literature norms are in CENTIMETRES; we measure ANGLE."
       },
@@ -58,6 +59,27 @@ final Battery _battery = Battery.parseJson('''
         "metric": "tibia_inclination_{side}",
         "op": "gte",
         "value": 15
+      }
+    },
+    {
+      "id": "deep_squat",
+      "name": "Deep Squat",
+      "instruction": "Squat as low as you comfortably can.",
+      "perSide": false,
+      "holdSeconds": 2,
+      "confidenceClass": "A",
+      "primaryMetric": "knee_flexion_right",
+      "aggregation": "min",
+      "scoring": {
+        "type": "qualitative",
+        "higherIsBetter": false,
+        "levels": ["limited", "typical", "good"],
+        "source": "Direction proven, bands deliberately absent."
+      },
+      "movementPresence": {
+        "metric": "knee_flexion_right",
+        "op": "lte",
+        "value": 110
       }
     }
   ]
@@ -311,6 +333,9 @@ void main() {
 
     test('girişim HİÇ algılanmadıysa null — 0 DEĞİL', () {
       final AssessmentResult r = _run(reach, _hold(60, 3.0));
+      // Pozitif çapa: sebep İSİMLE iddia ediliyor. Yalnız "ölçülmedi +
+      // pencere null" demek, motor bambaşka bir sebeple düşse de geçerdi.
+      expect(r.code, ResultCode.noAttemptDetected);
       expect(r.isMeasured, isFalse);
       expect(r.attemptMicros, isNull,
           reason: '0 "çalışma oldu ama sıfır sürdü" derdi; doğru beyan '
@@ -327,6 +352,59 @@ void main() {
       expect(r.attemptMicros, isNotNull,
           reason: 'hüküm verilemedi ama çalışma gerçekten oldu — '
               'kaydedilmemesi yarın yüzeyi yalancı yapardı');
+    });
+  });
+
+  group('ölçüm YÖNÜ — L-181 pozitif ikizi', () {
+    // Bu grup "yanlış olan olmuyor" demiyor, "DOĞRU olan OLUYOR" diyor.
+    // Yön kusurunun sinsiliği tam buradaydı: hiçbir test yanlış yönde
+    // toplandığını iddia etmiyordu, çünkü hiçbir test min-yönlü bir testin
+    // değerini HİÇ sınamıyordu — negatif iddia, ölü özellikte de geçer.
+    final TestSpec squat = _battery.tests['deep_squat']!;
+
+    test('min-yönlü testte raporlanan değer EN KÜÇÜK olan', () {
+      expect(squat.scoring.higherIsBetter, isFalse,
+          reason: 'vaka gerçekten min-yönlü olmalı');
+      expect(squat.presenceGate, isNotNull,
+          reason: 'girişim kapısı olmadan deneme hiç açılmaz');
+      final AssessmentResult r = _run(squat, <double>[
+        ..._hold(170, 1.0), // ayakta
+        ..._hold(95, 2.0), // çömelme — girişim kapısı burada açılır (<=110)
+        ..._hold(150, 1.0), // kalkış
+      ]);
+      expect(r.isMeasured, isTrue);
+      expect(r.value, 95,
+          reason: 'ters yön 170 raporlardı: EN AZ çömelinen an "ölçüm" olarak '
+              'geçerdi (L-181 kusurunun kullanıcıya görünen hâli)');
+    });
+
+    test('max-yönlü testte raporlanan değer EN BÜYÜK olan', () {
+      // Simetrik ikiz: yön alanı gerçekten OKUNUYOR mu, yoksa min her yerde
+      // mi kazanıyor? İki yön ayrı ayrı kanıtlanmadan "yön çalışıyor"
+      // denemez.
+      expect(reach.scoring.higherIsBetter, isTrue);
+      final AssessmentResult r = _run(reach, <double>[
+        ..._hold(60, 1.0),
+        ..._hold(170, 2.0),
+        ..._hold(120, 1.0),
+      ]);
+      expect(r.value, 170);
+    });
+
+    test('yön BEYANSIZ config SERT HATA — sessiz varsayılan yok', () {
+      const String noDirection = '''
+{"id":"t","version":"0.0.1","metricSet":"m","tests":[
+ {"id":"x","name":"X","primaryMetric":"a","aggregation":"min",
+  "scoring":{"type":"qualitative","levels":["a"],"source":"s"}}]}''';
+      expect(
+          () => Battery.parseJson(noDirection),
+          throwsA(isA<BatteryError>().having((BatteryError e) => e.path,
+              'path', contains('higherIsBetter'))),
+          reason: 'bir yön alanının güvenli varsayılanı olamaz — "büyük olan '
+              'iyidir" bir İDDİADIR. NOT: hatanın PATH\'i iddia ediliyor, '
+              'yalnız tipi değil — ilk yazımda fixture source alanını da '
+              'atlıyordu ve parse DAHA ÖNCE patlıyordu; tip-only bir iddia '
+              'bunu geçer, higherIsBetter hakkında hiçbir şey kanıtlamadan');
     });
   });
 

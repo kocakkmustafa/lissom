@@ -101,6 +101,18 @@ void main() {
       expect(ds.scoring.floorsFor(null), isNull,
           reason: 'bantlar eklendiyse bu testi ve M-F-71 sınıflandırmasını '
               'gözden geçir — davranış sessizce değişmesin');
+      // POZİTİF İKİZ (ikiz taraması bulgusu): başlık "dürüstçe
+      // measuredNoBands'e düşer" diyordu ama gövde bunu HİÇ sınamıyordu —
+      // yalnız bantların boş olduğunu iddia ediyordu. Bir başlığın
+      // vaat ettiği davranış, gövdede iddia edilmediyse yoktur.
+      final AssessmentResult r = AssessmentResult.measured(
+        testId: ds.id, side: 'bilateral', value: 95, unit: 'deg',
+        provenance: const <String, String>{'t': 'x'},
+        bandFloors: ds.scoring.floorsFor(null),
+      );
+      expect(r.tier, ResultTier.measuredNoBands);
+      expect(r.value, 95, reason: 'değer RAPORLANIR — bant iddiası edilmez');
+      expect(r.bandLabel, isNull);
     });
   });
 }
