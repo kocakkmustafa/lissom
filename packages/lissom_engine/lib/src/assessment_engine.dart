@@ -183,6 +183,8 @@ final class AssessmentEngine {
       );
     }
 
+    final int end = nowUs ?? _lastHoldUs ?? _firstFrameUs ?? 0;
+
     // İptal, her şeyden önce gelir: guard bir ölçümü geçersiz kılar.
     final String? abort = _abortCode;
     if (abort != null) {
@@ -193,10 +195,9 @@ final class AssessmentEngine {
         provenance: provenance,
         abortCode: abort,
         lessonClass: _lessonClass,
+        attemptMicros: _attemptMicros(end),
       );
     }
-
-    final int end = nowUs ?? _lastHoldUs ?? _firstFrameUs ?? 0;
 
     // ⚠️ SIRA M-F-71 MADDE 2'NİN TA KENDİSİ — gerçek fixture bunu yakaladı.
     //
@@ -223,6 +224,7 @@ final class AssessmentEngine {
         code: ResultCode.lowConfidence,
         provenance: provenance,
         lessonClass: _lessonClass,
+        attemptMicros: _attemptMicros(end),
       );
     }
     final int? lost = _lostSinceUs;
@@ -233,6 +235,7 @@ final class AssessmentEngine {
         code: ResultCode.trackingLost,
         provenance: provenance,
         lessonClass: _lessonClass,
+        attemptMicros: _attemptMicros(end),
       );
     }
 
@@ -247,7 +250,15 @@ final class AssessmentEngine {
       provenance: provenance,
       timedOutPhase: elapsed >= setupTimeoutMs * 1000 ? 'ready' : null,
       lessonClass: _lessonClass,
+      attemptMicros: _attemptMicros(end),
     );
+  }
+
+  /// Girişim penceresi — girişim hiç başlamadıysa null (0 DEĞİL: "çalışma
+  /// olmadı" ile "çalışma oldu ama sıfır sürdü" farklı iddialardır).
+  int? _attemptMicros(int end) {
+    final int? start = _attemptStartUs;
+    return start == null ? null : end - start;
   }
 
   /// Ölçüm raporu — timeout değeri KORUR, yalnız kodu değiştirir.
@@ -262,6 +273,7 @@ final class AssessmentEngine {
       provenance: provenance,
       bandFloors: test.scoring.floorsFor(ageBand),
       lessonClass: _lessonClass,
+      attemptMicros: measuring,
     );
     if (measuring >= measurementTimeoutMs * 1000) {
       // ⚠️ Timeout ölçümü ÇÖPE ATMAZ — değeri korur, kodu değiştirir.

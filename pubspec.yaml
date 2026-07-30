@@ -16,6 +16,22 @@ dependencies:
   lissom_engine:
     path: packages/lissom_engine
 
+  # Terfi edilmiş aile kalıcılık şeması (SessionStore/SessionRecord, M-F-193).
+  # Motorla AYNI tag'e pinli olmak ZORUNDA: aynı paketin iki farklı ref'i
+  # çözümlenemez, ve sürüm ayrışması "kaydettiğim şema ile okuduğum şema
+  # farklı" sınıfını doğurur.
+  motion_core:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_core
+      ref: motion_core-v0.9.0
+
+  # Yalnız uygulama-özel dizini bulmak için. Depo BİÇİMİ çekirdekte
+  # (append-only JSONL); kurucusu `File` alıyor, çünkü path_provider
+  # ÇAĞIRANA ait (Gravita'nın terfi koşulu #1) — böylece depo saf Dart
+  # kalıyor ve testler geçici bir dosyayla koşabiliyor.
+  path_provider: ^2.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

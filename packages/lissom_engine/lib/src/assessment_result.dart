@@ -87,6 +87,7 @@ final class AssessmentResult {
     this.timedOutPhase,
     this.abortCode,
     this.lessonClass,
+    this.attemptMicros,
   });
 
   /// Ölçüm ALINDI kurucusu — değeri bandlara göre sınıflandırır.
@@ -104,6 +105,7 @@ final class AssessmentResult {
     required Map<String, String> provenance,
     Map<String, double>? bandFloors,
     String? lessonClass,
+    int? attemptMicros,
   }) {
     if (bandFloors == null || bandFloors.isEmpty) {
       return AssessmentResult(
@@ -115,6 +117,7 @@ final class AssessmentResult {
         value: value,
         unit: unit,
         lessonClass: lessonClass,
+        attemptMicros: attemptMicros,
       );
     }
     // En düşük taban = tüm yaş bantlarının en alt eşiği. Bunun ALTI
@@ -139,6 +142,7 @@ final class AssessmentResult {
       bandLabel: value < floor ? null : label,
       lowestBandFloor: floor,
       lessonClass: lessonClass,
+      attemptMicros: attemptMicros,
     );
   }
 
@@ -151,6 +155,7 @@ final class AssessmentResult {
     String? timedOutPhase,
     String? abortCode,
     String? lessonClass,
+    int? attemptMicros,
   }) {
     assert(code != ResultCode.measured,
         'notMeasured bir "measured" kodu taşıyamaz — sonuç kodu sonucu tarif eder');
@@ -163,6 +168,7 @@ final class AssessmentResult {
       timedOutPhase: timedOutPhase,
       abortCode: abortCode,
       lessonClass: lessonClass,
+      attemptMicros: attemptMicros,
     );
   }
 
@@ -192,6 +198,18 @@ final class AssessmentResult {
 
   final String? timedOutPhase;
   final String? abortCode;
+
+  /// **Deneme PENCERESİNİN süresi** (µs) — girişim algılandığı andan denemenin
+  /// kapandığı ana kadar. Hazırlık/`ready` fazı DIŞARIDA: aile kalıcılık
+  /// şeması `workedSeconds`'ı "gerçekten ÇALIŞILAN saniye, dinlenme hariç"
+  /// diye tanımlıyor ve ilerleme kapıları onu sayıyor — duvar-saati süresi
+  /// kullanmak kullanıcının kazanmadığı kapıları geçirirdi.
+  ///
+  /// Girişim hiç algılanmadıysa null. Girişim BAŞLADI ama hüküm verilemediyse
+  /// (izleme kaybı, düşük güven, iptal) **null DEĞİL** — o çalışma gerçekten
+  /// oldu ve `unmeasuredUnits` ile birlikte kaydedilmeli; sessizlik yalan
+  /// söyler.
+  final int? attemptMicros;
 
   /// **YAZIM ANINDA damgalanan ders-sınıfı** (aile standardı, M-F-185(c)).
   ///

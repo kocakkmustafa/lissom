@@ -292,6 +292,44 @@ void main() {
     });
   });
 
+  group('attemptMicros — "çalışma oldu" ile "çalışma olmadı" ayrı iddialar', () {
+    test('ölçülen denemede pencere VAR ve hazırlığı İÇERMEZ', () {
+      // 2s hazırlık (eşik altında), sonra 3s tutuş.
+      final AssessmentResult r = _run(reach, <double>[
+        ..._hold(60, 2.0),
+        ..._hold(170, 3.0),
+      ]);
+      expect(r.isMeasured, isTrue);
+      final int? us = r.attemptMicros;
+      expect(us, isNotNull);
+      // Pencere yalnız girişim algılandıktan SONRASI: 5s'nin tamamı değil.
+      expect(us! / 1e6, lessThan(4.0),
+          reason: 'hazırlık fazı dâhil olsaydı kullanıcı kazanmadığı '
+              'çalışma-saniyesi biriktirirdi (aile şeması: dinlenme hariç)');
+      expect(us / 1e6, greaterThan(0.5));
+    });
+
+    test('girişim HİÇ algılanmadıysa null — 0 DEĞİL', () {
+      final AssessmentResult r = _run(reach, _hold(60, 3.0));
+      expect(r.isMeasured, isFalse);
+      expect(r.attemptMicros, isNull,
+          reason: '0 "çalışma oldu ama sıfır sürdü" derdi; doğru beyan '
+              '"sayılacak çalışma yok"');
+    });
+
+    test('girişim başladı ama iptal edildi → pencere KORUNUR', () {
+      final AssessmentResult r = _run(
+        reach,
+        <double>[..._hold(170, 3.0)],
+        abortCode: 'BENT_ELBOW',
+      );
+      expect(r.code, ResultCode.aborted);
+      expect(r.attemptMicros, isNotNull,
+          reason: 'hüküm verilemedi ama çalışma gerçekten oldu — '
+              'kaydedilmemesi yarın yüzeyi yalancı yapardı');
+    });
+  });
+
   group('türetme kuralları tek yerden gelir', () {
     test('requiredHoldS fixture_check.py ile AYNI kuralı uygular', () {
       // holdSeconds=2 → max(1.0, 2/2) = 1.0
