@@ -37,17 +37,43 @@ from pathlib import Path
 
 LIB = Path.home() / "motion-harvest/lissom"
 MANIFESTS = LIB / "manifests"
-SUBS = LIB / "subs"
+
+#: ⚠️ İKİ transkript deposu var ve NEREDEYSE AYRIK (ölçüldü: `subs/` 27 kimlik
+#: `.en.vtt`, `transcripts/` 20 kimlik `.transcript.json`, kesişim 1). İki
+#: farklı çekim mekanizması iki farklı yere yazmış.
+#:
+#: Bu betik ilk yazımında YALNIZ `subs/`u okuyordu (L-184). Sonuç: 19 videonun
+#: metni hiç görülmedi ve sınıflandırma `unknown`a fail-closed oldu —
+#: gerekçesine "TRANSKRİPT YOK" yazarak. **11 manifestte o gerekçe FİİLEN
+#: YANLIŞTI**: transkript dosyası duruyordu, betik yanlış klasöre bakıyordu.
+#: Fail-closed olmak doğruydu; YANLIŞ BİR ÖNCÜLLE fail-closed olmak değil —
+#: ve kayda geçen sahte gerekçe, hatayı arayan bir sonraki kişiyi de
+#: yanıltıyordu.
+TRANSCRIPT_DIRS = (LIB / "subs", LIB / "transcripts")
 
 
 def _transcript(vid: str) -> str:
-    out = []
-    for p in SUBS.glob(f"{vid}*"):
-        try:
-            out.append(p.read_text(errors="ignore"))
-        except OSError:
-            pass
+    """Bir videonun metni — TÜM depolardan birleşik.
+
+    JSON transkriptler zaman-damgalı segment listesi; regex aileleri düz metin
+    beklediği için `json.dumps` yeterli (alan adları kalıp eşleşmesini
+    bozmuyor, ölçüldü). VTT'ler zaten düz metin.
+    """
+    out: list[str] = []
+    for d in TRANSCRIPT_DIRS:
+        if not d.exists():
+            continue
+        for p in d.glob(f"{vid}*"):
+            try:
+                out.append(p.read_text(errors="ignore"))
+            except OSError:
+                pass
     return "\n".join(out)
+
+
+def _transcript_files(vid: str) -> list[Path]:
+    """Bu kimliğe ait metin dosyaları — "yok" demeden ÖNCE sorulur."""
+    return [p for d in TRANSCRIPT_DIRS if d.exists() for p in d.glob(f"{vid}*")]
 
 
 def main() -> int:
@@ -62,15 +88,33 @@ def main() -> int:
 
     changed: list[dict] = []
     recut: list[str] = []
+    #: YANLIŞ ÖNCÜLLE fail-closed olan manifestler (L-184 panzehiri): gerekçe
+    #: "transkript yok" derken dosya duruyorsa, bu bir okuma hatasıdır ve
+    #: SESSİZ kalmamalı. Kapı, kendi öncülünü sorguluyor.
+    false_premise: list[str] = []
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     for p in sorted(MANIFESTS.glob("*.json")):
         m = json.loads(p.read_text(encoding="utf-8"))
         vid = m.get("video_id") or p.stem
+        text = _transcript(vid)
+        files = _transcript_files(vid)
+        if files and not text.strip():
+            false_premise.append(
+                f"{vid}: {len(files)} metin dosyası VAR ama okunan metin BOŞ "
+                f"({', '.join(f.name for f in files[:3])})"
+            )
+        old_reason = (m.get("romModeClassifiedBy") or {}).get("reason", "")
+        if files and ("TRANSKRİPT YOK" in old_reason or
+                      "TRANSKRIPT YOK" in old_reason):
+            false_premise.append(
+                f"{vid}: ESKİ gerekçe 'TRANSKRİPT YOK' diyor ama dosya VAR "
+                f"({files[0].parent.name}/) — yanlış öncülle fail-closed"
+            )
         v = rom_mode.classify(
             title=m.get("title", ""),
             description=m.get("description", ""),
-            transcript=_transcript(vid),
+            transcript=text,
         )
         old_mode = m.get("rom_mode")
         old_elig = m.get("reference_eligible")
@@ -101,6 +145,9 @@ def main() -> int:
 
     print(json.dumps({
         "manifests": len(list(MANIFESTS.glob("*.json"))),
+        "transcriptStores": {d.name: len(list(d.glob("*"))) if d.exists() else 0
+                             for d in TRANSCRIPT_DIRS},
+        "falsePremise": false_premise,
         "changed": len(changed),
         "written": args.write,
         "rigSha": args.sha,
