@@ -82,21 +82,50 @@ final class SummaryRow {
   bool get mayShowAsComingSoon => false;
 }
 
-/// A5 ekranının tamamı.
+/// A5 ekranının tamamı — **TÜRÜN KENDİSİ bölümleri ayırır.**
+///
+/// Burada BİRLEŞİK bir satır listesi YOKTUR ve bu bir eksiklik değil, hükmün
+/// kendisidir. Widget'ı yazarken gördüm ki tek bir `rows` listesi bir
+/// BİRLEŞTİRME DAVETİDİR: yüzey onu tek döngüde gezip hepsini aynı görsel
+/// grupta basabilir, ve o an `valueNotCompared` bir ölçüm KIYASLANMIŞ gibi
+/// okunur — M-F-186'nın yasakladığı tam olarak bu. Kendi kuralımı kendime
+/// uyguladım (§5.1: **alanı vermemek, "yapma" yazmaktan güçlüdür**) —
+/// birleşik listeyi belgelemekle yetinmedim, KALDIRDIM. Choreia'nın
+/// ProgressSummary tür-ayrımı emsali.
+///
+/// Beş liste, beş farklı DÜRÜSTLÜK İDDİASI (birleştirilemez oldukları için
+/// ayrı):
+///   [scored]      ölçüldü, bantla kıyaslandı
+///   [belowRange]  ölçüldü, kıyaslandı, en alt çizginin altında (koçlanan)
+///   [noBands]     ölçüldü, sayısal bant TASARIMLA yok (nitel/ordinal)
+///   [notCompared] ölçüldü, referans HENÜZ yok (ölçülmüş gerekçe + terfi yolu)
+///   [notMeasured] sayı yok, sebep isimli
+///
+/// [noBands] ile [notCompared] ayrımı özellikle önemli: ikisi de "ölçüm var,
+/// hüküm yok" ama biri **tasarımla** öyle (asla bant almayacak), diğeri
+/// **henüz** öyle (terfi yolu var). Tek bölümde birleştirmek bu ikisini
+/// bulanıklaştırırdı.
 final class BatterySummary {
   const BatterySummary({
-    required this.rows,
-    required this.measuredCount,
-    required this.notMeasuredCount,
-    required this.notComparedCount,
+    required this.scored,
+    required this.belowRange,
+    required this.noBands,
+    required this.notCompared,
+    required this.notMeasured,
   });
 
-  final List<SummaryRow> rows;
+  final List<SummaryRow> scored;
+  final List<SummaryRow> belowRange;
+  final List<SummaryRow> noBands;
+  final List<SummaryRow> notCompared;
+  final List<SummaryRow> notMeasured;
 
   /// Sayılar TÜRETİLİR, yazılmaz (M-O-28) — kurucu bunu zorlar.
-  final int measuredCount;
-  final int notMeasuredCount;
-  final int notComparedCount;
+  int get measuredCount =>
+      scored.length + belowRange.length + noBands.length + notCompared.length;
+  int get notMeasuredCount => notMeasured.length;
+  int get notComparedCount => notCompared.length;
+  int get testCount => measuredCount + notMeasuredCount;
 
   /// Oturum sonuçlarından özet üretir.
   ///
@@ -109,7 +138,11 @@ final class BatterySummary {
     required Battery battery,
     required Map<String, AssessmentResult> results,
   }) {
-    final List<SummaryRow> rows = <SummaryRow>[];
+    final Map<SummaryPresentation, List<SummaryRow>> byKind =
+        <SummaryPresentation, List<SummaryRow>>{
+      for (final SummaryPresentation p in SummaryPresentation.values)
+        p: <SummaryRow>[],
+    };
     for (final MapEntry<String, AssessmentResult> e in results.entries) {
       final TestSpec? t = battery.tests[e.key];
       if (t == null) {
@@ -118,20 +151,18 @@ final class BatterySummary {
           'sonuç sessizce gösterilemez',
         );
       }
-      rows.add(_row(t, e.value));
+      final SummaryRow row = _row(t, e.value);
+      byKind[row.presentation]!.add(row);
     }
-    rows.sort((SummaryRow a, SummaryRow b) => a.testId.compareTo(b.testId));
+    for (final List<SummaryRow> l in byKind.values) {
+      l.sort((SummaryRow a, SummaryRow b) => a.testId.compareTo(b.testId));
+    }
     return BatterySummary(
-      rows: rows,
-      measuredCount: rows.where((SummaryRow r) => r.hasValue).length,
-      notMeasuredCount: rows
-          .where((SummaryRow r) =>
-              r.presentation == SummaryPresentation.notMeasuredWithReason)
-          .length,
-      notComparedCount: rows
-          .where((SummaryRow r) =>
-              r.presentation == SummaryPresentation.valueNotCompared)
-          .length,
+      scored: byKind[SummaryPresentation.scoredWithBand]!,
+      belowRange: byKind[SummaryPresentation.valueBelowRange]!,
+      noBands: byKind[SummaryPresentation.valueNoBands]!,
+      notCompared: byKind[SummaryPresentation.valueNotCompared]!,
+      notMeasured: byKind[SummaryPresentation.notMeasuredWithReason]!,
     );
   }
 

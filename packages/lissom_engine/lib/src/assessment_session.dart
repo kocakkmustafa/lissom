@@ -65,7 +65,7 @@ enum BlockState {
 /// koşturmak `AssessmentEngine`'in işi.
 final class AssessmentSession {
   AssessmentSession({required this.blocks})
-      : assert(blocks.length > 0, 'oturum en az bir blok ister');
+      : assert(blocks.isNotEmpty, 'oturum en az bir blok ister');
 
   final List<AssessmentBlock> blocks;
 

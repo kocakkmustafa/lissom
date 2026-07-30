@@ -1,0 +1,33 @@
+name: lissom
+description: Lissom — movement-health assessment. Camera-based, on device.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Motor AYRI bir paket ve Flutter'a HİÇ bağımlı değil (M-F-160, JabLab
+  # ayrımının aynısı): ölçüm/skorlama mantığı bir widget ağacı olmadan
+  # test edilebilir kalmalı, kabuk da ona yandan uzanamamalı.
+  lissom_engine:
+    path: packages/lissom_engine
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    # Test tanımları, eşikler ve bantlar RUNTIME'da okunan versiyonlu
+    # config'tir (CLAUDE.md sert kuralı: "kural = versiyonlu config").
+    # Yeni bir ROM testi eklemek kod değil KAYIT ister.
+    - config/tests/
+    - config/metrics/
+    - config/phases/
+    - config/ia/
