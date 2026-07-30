@@ -192,6 +192,52 @@ konsensüsü çekiyor çünkü konsensüs zaten tek bir hareketin değil, bir
 egzersiz KARIŞIMININ ortalaması. Hedefli hasat hâlâ doğru yol — ama
 kriter "daha çok kaynak" değil, **tek-egzersiz kaynağı**.
 
+## 1e. Tur 9 — HEDEFLİ HASAT KOŞTU: 5 giren, 0 kullanılabilir (L-174)
+
+Hedefli tur `f34acd8` pinli izole worktree'de koşuldu (M-F-139/154).
+
+**Zincir, her adımda sayıyla:**
+
+| adım | sayı | not |
+|---|---|---|
+| arama + ön-eleme | 45 görülen → **17 aday** | 16 bağımsız kanal; süre<90s **44** adayı ÖNCE düşürdü |
+| hasat (ilk 5) | 5 → **5 fixture** | triyaj 5/5 GEÇTİ (netlik/kadraj/süre sorun değil) |
+| romMode | 5 → **3 uygun** | 2'si `unknown` (fail-closed; `overhead_reach`'te pasif icra mümkün) |
+| **üç-eksen ölçümü** | 3 → **0** | hepsi düştü |
+
+**Üç-eksen ölçümü (`identity_review.py`) — hüküm burada:**
+
+| kaynak | başlık | trunk | foreshort (~yaw) | hüküm |
+|---|---|---|---|---|
+| `lrhDL2sLd28` | "ONE Exercise That Can Fix Everything" | 2,8° ✓ | 0,6 (~41°) | **kamera ✗** |
+| `xbsjy1Z08pQ` | "The Science of Shoulder **Internal Rotation**" | **101,4°** | 0,7 (~29°) | **duruş ✗** (yatay-ötesi) |
+| `_XP9Y4cnz88` | "ROM for Shoulder \| **CNA Skills**" | 52,3° | 0,2 (~76°) ✓ | **duruş ✗** |
+
+Üçü de metin ön-elemesinden GEÇMİŞTİ (varyant bayrağı yok, eleyici yok) —
+L-166'nın bir kez daha doğrulanması: **metin, hükmü veremez.** İkisi
+başlığından bile anlaşılıyordu (iç-rotasyon ≠ baş-üstü fleksiyon; "CNA
+Skills" = bakıcının HASTANIN kolunu hareket ettirmesi) ama ön-eleme
+yakalamadı; landmark ölçümü yakaladı.
+
+**ULAŞILAN ÇIKIŞ: (b) — İSİMLİ KAPANIŞ.** Koordinatörün iki dürüst
+çıkışından ikincisi. Sayılarla: `overhead_reach` havuzu **7 kaynak, 7/7
+varyant-uyumsuz** (§1d) + hedefli turdan **0 kullanılabilir ekleme** →
+mevcut malzemeyle referans kurulamaz. `deep_squat` **3 kaynak** (varyant
+taraması temiz, ama sayı kapısı 3'te ve anlaşma 23-39°).
+
+**Kapanışın içeriği (öneri — ürün yüzeyi değişikliği koordinatör onayıyla):**
+`overhead_reach` ve `deep_squat` **ölçülmüş gerekçeyle** referanssız
+yaşar — motor bunu ZATEN destekliyor (`ResultTier.measuredNoBands`:
+değer raporlanır, bant iddiası edilmez) ve ürün J-038 desenindeki gibi
+eksik ÖLÇÜMÜN adıyla konuşur. Lissom'un bugün ship edebildiği yüzey
+etkilenmez: `lissom_engine` + `assessment-blocks` hattı + UI-BRIEF akışı
+referans BEKLEMİYOR.
+
+**Bir sonraki turun kriteri DEĞİŞTİ** (L-173'ten): "daha çok kaynak"
+değil **TEK-EGZERSİZ kaynağı** — arama terimleri "routine/follow along"
+malzemesini getirmeyecek biçimde yenilenmeli, ve varyant kimliği
+PENCERE düzeyinde sorulmalı (tasarım koordinatörde).
+
 ## 2. Kök neden: kaynaklar aynı şeyi göstermiyor — İKİ BAĞIMSIZ EKSEN
 
 `tools/identity_review.py` kaynak-başına profil çıkardı (medyan değerler,
