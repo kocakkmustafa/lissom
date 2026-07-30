@@ -138,6 +138,31 @@ NEGATIVE = {
     ],
 }
 
+#: VARYANT-KİMLİĞİ işaretleri — **BAYRAK, ELEYİCİ DEĞİL** (M-F-175).
+#:
+#: Yeni aile sınıfı, romMode'un kardeşi: "gösterilen, ARANAN varyant mı?"
+#: Gravita'nın yayımlı squat referansında ölçüldü — medoid 198 kg barbell
+#: triple çıktı (%17 katkı) ve gövde-eğimi farkı tolerans bandı kadardı,
+#: yani yüklü varyant referansı SESSİZCE kaydırıyordu.
+#:
+#: Neden ELEYİCİ değil: metin kanıtı ZAYIF (bir video "barbell" derken
+#: ısınmada vücut-ağırlığı da gösterebilir). Oto-ret, L-166'nın hatasını
+#: tekrarlamak olurdu — işaretle, insan/ölçüm doğrulasın.
+VARIANT_MARKERS = [
+    (r"\bbarbell\b|\bback squat\b|\bfront squat\b|\b\d+\s?(kg|lbs?|pounds)\b",
+     "yüklü varyant (barbell/ağırlık)"),
+    (r"\bdumbbell\b|\bkettlebell\b|\bgoblet\b|\bweighted\b|\bloaded\b",
+     "yüklü varyant (serbest ağırlık)"),
+    (r"\bband(ed)?\b|\bresistance band\b", "bantlı varyant"),
+    (r"\bassisted\b|\bwith support\b|\bholding on(to)?\b|\bTRX\b",
+     "asistanlı/destekli varyant"),
+    (r"\bsmith machine\b|\bhack squat\b|\bleg press\b|\bmachine\b",
+     "makine varyantı"),
+    (r"\bheels? elevated\b|\bwedge\b|\bplate under\b",
+     "yükseltilmiş-topuk varyantı"),
+    (r"\bjump\b|\bplyo\w*|\bexplosive\b", "pliometrik varyant"),
+]
+
 #: Çoklu-kişi işaretleri — **BAYRAK, ELEYİCİ DEĞİL** (kasıtlı).
 #:
 #: Tek-kişi malzemesi isteriz (izleme belirsizliği: hangi iskelet?), ama bir
@@ -177,6 +202,9 @@ def score_text(title: str, description: str = "", subtitles: str = "") -> dict:
                 blocks.append({"kind": kind, "reason": why, "pattern": pat})
     multi = [{"reason": why, "pattern": p} for p, why in MULTI_PERSON
              if re.search(p, blob)]
+    # M-F-175 varyant-kimliği: BAYRAK. Oto-ret YOK — metin kanıtı zayıf.
+    variants = [{"reason": why, "pattern": p} for p, why in VARIANT_MARKERS
+                if re.search(p, blob)]
 
     # SADECE ELEYİCİ. Pozitif skor YOK (L-166: ölçüldü, sinyal yok).
     # "Engel yoksa geçer" — yani filtre adayı SEÇMEZ, yalnız açıkça
@@ -187,12 +215,16 @@ def score_text(title: str, description: str = "", subtitles: str = "") -> dict:
         "informationalSignals": seen,
         "blockers": blocks,
         "multiPerson": multi,
+        "variantFlags": variants,
+        "needsVariantCheck": bool(variants),
         # Tek hüküm: açık bir eleme gerekçesi var mı?
         "eliminated": bool(blocks),
         "eliminationReasons": [b["reason"] for b in blocks],
         "note": "YALNIZ ELEYİCİ — aday SEÇMEZ. Kamera görüşü metinden "
                 "öngörülemez (L-166: 6/6 kaynakta sinyal yok); görüş ve duruş "
-                "hükmü landmark ölçümündedir (identity_review.py).",
+                "hükmü landmark ölçümündedir (identity_review.py). "
+                "variantFlags (M-F-175) BAYRAKTIR, ret değil: işaretli aday "
+                "ölçümle/gözle doğrulanır.",
     }
 
 

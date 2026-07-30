@@ -22,6 +22,17 @@ gerektiği isimlidir.
 >
 > Sonuç: §5'teki "hedefli hasat" artık bir umut değil, **ölçülmüş bir
 > beklenti** — ve aile sınırını Lissom'a peşinen uygulamam yanlıştı.
+>
+> ## ⚠️⚠️ REVİZE-2 (L-173) — KÖK NEDEN BULUNDU, "az-nüfus" AÇIKLAMASININ ÜSTÜNDE
+>
+> M-F-175'in **varyant-kimliği** ölçütü havuzuma uygulandı ve asıl sebep
+> çıktı: **7 kaynağın 7'si TEK bir baş-üstü uzanma testi DEĞİL** —
+> altısı çok-egzersizli rutin ("10 MIN MOBILITY ROUTINE", "Follow Along",
+> "5 Moves"), yedincisi ise adıyla **"Wall Slides"** (duvar-destekli
+> varyant). `presence_isolator` her birinde "bir kol baş üstüne çıktı ve
+> orada kaldı" penceresi buldu — ama **hangi EGZERSİZ olduğunu sormadı.**
+> Yedi kaynak yedi FARKLI egzersizden pencere verdi; 42-108° anlaşmazlık
+> bunun doğal sonucu. Ayrıntı §1d.
 
 ---
 
@@ -128,6 +139,58 @@ ama gerekçesiz olurdu, yani eşiği gevşetmenin başka bir adı.
 **Tek açık kalem:** `lr3_bA48EBM` netliği **37,8 vs eşik 40** — sınırda.
 L-141'de de benzer bir sınırda-ret vardı (38<40). Bu bir EŞİK sorusu,
 override sorusu değil; koordinatöre bırakıyorum.
+
+## 1d. Tur 8 — VARYANT-KİMLİĞİ: kök neden (L-173)
+
+Koordinatör M-F-175'i ekledi (Gravita'nın yayımlı squat referansında yüklü
+varyant kirlenmesi: medoid 198 kg barbell triple, %17 katkı). Ölçüt benim
+havuzuma uygulandı.
+
+**(a) Metin taraması — 1 bayrak, ve EN KÖTÜ yerde.** `deep_squat`'ın 3
+kaynağı **temiz**. `overhead_reach`'te tek bayrak: **`X2u_vGL0qJU`** —
+yani L-162'nin iki ölçütünü de geçen TEK kaynak, §1b'de sapması en çok
+düşen (52,7→32,8°) kaynak. Gerekçe zayıf-kanıt değil, SPESİFİK: video
+5 egzersizlik bir dizi ve #2'si *"banded inferior shoulder
+mobilizations"* (açıklamada zaman damgalarıyla).
+
+**(b) Pencere haritalandı — bayraktan DAHA KÖTÜ çıktı.** Kesilen pencere
+kare 4080-4221 @25fps = **2:43-2:49**. Video bölümleri: 2:24 *wall
+slides* · 3:11 *banded mobilizations* · 3:44 *bench opener*. Pencere
+bantlı bölümde DEĞİL — **wall slides** bölümünde. Ve wall slides de aranan
+varyant değil: test *"Stand side-on… let your arms hang… raise the arm as
+high overhead as you can"* diyor; wall slides duvara dayalı bir skapular
+egzersizdir.
+
+**(c) ASIL BULGU — havuzun TAMAMI varyant-uyumsuz:**
+
+| kaynak | başlık | ne | zaman damgası |
+|---|---|---|---|
+| 6u_rV3C80wU | 10-Minute Shoulder Arthritis Exercises: **Follow Along Routine** | çok-egzersiz | — |
+| Igzmhbghcd4 | 10 MIN PERFECT MOBILITY **ROUTINE** | çok-egzersiz | — |
+| SfxyICleU4I | Unlock your Chest and Shoulders (**Follow Along**) | çok-egzersiz | — |
+| T8KTiE9bTZI | Shoulder Mobility **Follow-Along** | çok-egzersiz | — |
+| X2u_vGL0qJU | **5 Moves** You've Never Tried | çok-egzersiz | 7 |
+| gsz3BLAkkQ4 | Essential Shoulder Mobility **Tests** | çok-egzersiz | 8 |
+| GaP20t6ZOfU | **Wall Slides** | yanlış varyant | — |
+
+**Hiçbiri tek bir baş-üstü uzanma testi değil.** `presence_isolator`
+"birincil metrik eşiği aştı ve tuttu" penceresi buluyor — bu soru
+"hareket var mı"dır, **"hangi egzersiz"** değil. Yedi kaynak yedi farklı
+egzersizden pencere verdi.
+
+**(d) AİLE KATKISI — varyant-kimliği KAYNAK düzeyinde çözülemez:**
+M-F-175 kaynak-başına bayrak öneriyor; ölçüm bunun YETMEDİĞİNİ gösterdi.
+Çok-egzersizli bir kaynakta bayrak "bu videoda bantlı bir şey var" der,
+ama KESİLEN PENCERENİN hangi egzersiz olduğunu söylemez — benim vakamda
+bayrak bantlı bölümü işaret etti, pencere ise başka (yine yanlış) bir
+bölümdeydi. **Varyant kimliği PENCERE düzeyinde sorulmalı.**
+
+**(e) L-169 ile ilişki — çürütme değil, ALTINI AÇIKLAMA:** "bir kaynak
+eklemek sapmaları %22 düşürdü" ölçümü AYAKTA; ama mekanizma artık daha
+net. Havuz yalnız az-nüfuslu değil, **karışık-egzersizli**; yeni take
+konsensüsü çekiyor çünkü konsensüs zaten tek bir hareketin değil, bir
+egzersiz KARIŞIMININ ortalaması. Hedefli hasat hâlâ doğru yol — ama
+kriter "daha çok kaynak" değil, **tek-egzersiz kaynağı**.
 
 ## 2. Kök neden: kaynaklar aynı şeyi göstermiyor — İKİ BAĞIMSIZ EKSEN
 
