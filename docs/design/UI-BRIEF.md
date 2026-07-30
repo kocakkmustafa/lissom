@@ -129,6 +129,39 @@ Tasarım bu dört katmanı ayırt etmezse hata geri gelir.
 
 **Her sonuç ekranında** `disclaimers.scoreScreen` küçük punto ile kalıcı.
 
+### 2.4b "MEASUREMENTS, NOT MARKS" — referanssız-canlı testler (M-F-185)
+
+**İki test referansSIZ yaşıyor ve bunu SAKLAMIYOR:** `overhead_reach` ve
+`deep_squat`. Sebep ölçülmüş, gerekçe config'te (`referenceStatus`), ve
+tasarımın bunu YÜZEYE taşıması bağlayıcı.
+
+**Ürün duruşu — beyan cümlesi:** *"We show you measurements, not marks."*
+Bu bir özür değil, konumlandırma: rakip (GOWOD) kullanıcıya slider'la
+kendini puanlatıyor; biz gerçekten ölçüyoruz ve **ölçmediğimiz şeyi de
+söylüyoruz.**
+
+| ekran | ne göster |
+|---|---|
+| test sonucu (A4) | değer + `referenceStatus.statusBasis.userText` (sönük, ikincil) |
+| batarya özeti (A5) | bu iki test "measured" olarak, bant/skor SÜTUNU BOŞ ve sebebi tıklanabilir |
+| kütüphane / test sayfası | honestyBox'ın içinde: ne ölçülür / neden referans yok / **neyin açacağı** |
+| progress | bu iki testin trendi GÖSTERİLİR (kendine-göre), norm kıyası YOK |
+
+**Terfi yolu görünür olmalı** (`referenceStatus.promotionPath`): kullanıcı
+"bu neden böyle ve değişecek mi?" sorusunun cevabını bulabilmeli —
+*"unblocked by: single-exercise harvest round"*. Kapalı bir kapı değil,
+**adı olan bir bekleyen iş.**
+
+⚠️ **YASAK:** bu iki testi "coming soon" ya da "beta" diye göstermek.
+Ölçüm ÇALIŞIYOR ve değer GERÇEK — eksik olan referans kıyası. "Coming
+soon" demek, çalışan bir ölçümü yok saymak olurdu (ve L-135'in
+"kullanıcı hiçbir şey görmüyor" zararının yeni bir kılığı).
+
+**Motor tarafı hazır:** her sonuç kaydı yazım anında
+`lessonClass: measurementOnly` damgası taşıyor — yani geçmiş kayıtlar da
+hangi rejimde alındıklarını biliyor; tasarım geriye dönük "bu ölçüm
+kıyaslandı mı?" sorusunu güvenle sorabilir.
+
 ### 2.5 Ağrı akışı (her yerden tetiklenebilir)
 
 Kullanıcı rahatsızlık bildirdiğinde: `disclaimers.painFlow` + o günün rutini

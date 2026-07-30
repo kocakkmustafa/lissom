@@ -179,6 +179,7 @@ final class AssessmentEngine {
         side: side,
         code: ResultCode.noAttemptDetected,
         provenance: provenance,
+        lessonClass: _lessonClass,
       );
     }
 
@@ -191,6 +192,7 @@ final class AssessmentEngine {
         code: ResultCode.aborted,
         provenance: provenance,
         abortCode: abort,
+        lessonClass: _lessonClass,
       );
     }
 
@@ -220,6 +222,7 @@ final class AssessmentEngine {
         side: side,
         code: ResultCode.lowConfidence,
         provenance: provenance,
+        lessonClass: _lessonClass,
       );
     }
     final int? lost = _lostSinceUs;
@@ -229,6 +232,7 @@ final class AssessmentEngine {
         side: side,
         code: ResultCode.trackingLost,
         provenance: provenance,
+        lessonClass: _lessonClass,
       );
     }
 
@@ -242,6 +246,7 @@ final class AssessmentEngine {
           : ResultCode.noAttemptDetected,
       provenance: provenance,
       timedOutPhase: elapsed >= setupTimeoutMs * 1000 ? 'ready' : null,
+      lessonClass: _lessonClass,
     );
   }
 
@@ -256,6 +261,7 @@ final class AssessmentEngine {
       unit: test.scoring.unit ?? '',
       provenance: provenance,
       bandFloors: test.scoring.floorsFor(ageBand),
+      lessonClass: _lessonClass,
     );
     if (measuring >= measurementTimeoutMs * 1000) {
       // ⚠️ Timeout ölçümü ÇÖPE ATMAZ — değeri korur, kodu değiştirir.
@@ -271,10 +277,15 @@ final class AssessmentEngine {
         bandLabel: measured.bandLabel,
         lowestBandFloor: measured.lowestBandFloor,
         timedOutPhase: 'peak_hold',
+        lessonClass: measured.lessonClass,
       );
     }
     return measured;
   }
+
+  /// M-F-185(c): ders-sınıfı YAZIM ANINDA testin referans durumundan gelir.
+  String? get _lessonClass =>
+      test.referenceStatus?.isMeasurementOnly == true ? 'measurementOnly' : null;
 
   _FrameReading _read(PoseFrame frame) {
     final String metricName = test.primaryMetricFor(side);

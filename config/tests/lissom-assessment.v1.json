@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.battery",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
+    "1.9.0 (M-F-185 (b)-çıkışı MÜHÜRLÜ): overhead_reach ve deep_squat `referenceStatus` taşıyor — state=measurementOnly + ÖLÇÜLMÜŞ statusBasis (kullanıcı diliyle) + İSİMLİ promotionPath. Aile doktrini: 'ölçüm var, hüküm yok' (M-F-71 skorsuz-ama-ölçülü bölge). Motor bunu ResultTier.measuredNoBands ile zaten destekliyordu; bu blok GEREKÇEYİ yüzeye taşır.",
     "1.8.0 (gece paketi madde 3): deep_squat'a presence eklendi (movementPresence'tan devralınan 110° eşik, PROVISIONAL) — presence_isolator penceresi denemesi için.",
     "1.7.1 (koordinatör hükmü M-F-92): hipKneeCoupling basis'ine marjlar isimli eklendi (confounder 0,27 · squat-sınıfı en düşük 0,11) ve eşik-kararı (0,20 PROVISIONAL kalır, yeniden-türetme ertelendi) kayda geçti.",
     "1.7.0 (L-154, Gravita G-064): hipKneeCoupling basis'i düzeltildi — fixture_check.py `anatomical` bayrağını hiç kullanmıyordu (bkz. tools/fixture_check.py ANATOMICAL notu), M-F-54 frameRef beyanı ölçüme hiç girmiyordu. `MOCORE_ANATOMICAL=1` ile yeniden ölçülen değerler basis'e eklendi; eşik (0,20) DEĞİŞMEDİ, yalnız gerekçe metni düzeltildi.",
@@ -93,6 +94,19 @@
         "source": "PMC7549223 (n=2404, age/sex banded active ROM). Bands derived from cohort means, NOT clinical cutoffs.",
         "region": "shoulder"
       },
+      "referenceStatus": {
+        "state": "measurementOnly",
+        "statusBasis": {
+          "code": "variant-mismatch",
+          "measured": "Aday havuzun 7/7'si TEK bir baş-üstü uzanma testi değil: 6'sı çok-egzersizli rutin, 1'i duvar-destekli varyant (wall slides). Hedefli hasat turu 5 yeni kaynak getirdi, üç-eksen ölçümünden 0'ı geçti. L-173/L-174.",
+          "userText": "We measure how far you reach, and we show you the number. We are not yet comparing it to a reference range — the instructor videos we found each demonstrate a different exercise, so building one honestly is not possible yet."
+        },
+        "promotionPath": {
+          "unblockedBy": "single-exercise harvest round",
+          "criterion": "≥3 bağımsız kaynak, ÜÇ ölçütü birlikte geçen (duruş <25° · kamera foreshortening ≤0,25 · hareket kimliği)",
+          "measuredGap": "şu an 0/7 kaynak üçünü birlikte geçiyor; en iyi sapma 32,8° (eşik ≤14°)"
+        }
+      },
       "movementPresence": {
         "metric": "shoulder_flexion_{side}",
         "op": "gte",
@@ -159,6 +173,19 @@
         ],
         "source": "No continuous degree norm exists for squat depth in the literature (PubMed 35321135 reports only between-group differences). Ordinal scoring is the honest option. Criteria are descriptive, NOT the proprietary FMS protocol.",
         "region": "hip"
+      },
+      "referenceStatus": {
+        "state": "measurementOnly",
+        "statusBasis": {
+          "code": "count-gate",
+          "measured": "3 uygun kaynak var (varyant taraması TEMİZ) ama minSources=3'te anlaşma kapısı reddediyor: sapmalar 23,4/33,8/38,6° (eşik ≤14°). Dördüncü kaynak (IHApHfNA2Ag) süre<90s triyaj reddi taşıyor. L-174.",
+          "userText": "We measure your squat depth and show you the number. A reference range needs more instructor sources than we have — three is not enough for the agreement we require."
+        },
+        "promotionPath": {
+          "unblockedBy": "single-exercise harvest round",
+          "criterion": "≥3 kaynak ≤14° anlaşma kümesinde (M-F-47)",
+          "measuredGap": "3 kaynak var, anlaşma 23-39° — küme kurulamıyor"
+        }
       },
       "passiveExecutionPossible": false,
       "passiveExecutionRationale": "Ağırlık taşıyan tüm-vücut görevi: klinisyen kimseyi pasif çömeltemez.",

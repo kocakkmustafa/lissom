@@ -31,6 +31,44 @@ final class OrdinalLevel {
   final String criteria;
 }
 
+/// Bir testin REFERANS DURUMU — "ölçüm var, hüküm yok" beyanı (M-F-185).
+///
+/// Aile doktrini: bir test referanssız YAŞAYABİLİR, ama gerekçesi ÖLÇÜLMÜŞ
+/// olmalı ve YÜZEYDE görünmeli. `measurementOnly` bir eksiklik itirafı
+/// değil, bir dürüstlük beyanıdır — değeri gösteririz, hükmü vermeyiz
+/// (M-F-71'in skorsuz-ama-ölçülü bölgesinin test düzeyindeki hâli).
+final class ReferenceStatus {
+  const ReferenceStatus({
+    required this.state,
+    required this.basisCode,
+    required this.basisMeasured,
+    required this.basisUserText,
+    required this.unblockedBy,
+    required this.criterion,
+    required this.measuredGap,
+  });
+
+  /// `measurementOnly` — ölçüm raporlanır, referans/bant iddiası EDİLMEZ.
+  final String state;
+
+  /// Makine-okur gerekçe kodu (`variant-mismatch` · `count-gate` …).
+  final String basisCode;
+
+  /// ÖLÇÜLMÜŞ gerekçe — sayılarla, kayıt atıflı. Boş olamaz.
+  final String basisMeasured;
+
+  /// Aynı gerekçenin KULLANICI diliyle hâli. Yüzeyde bu görünür.
+  final String basisUserText;
+
+  /// TERFİ YOLU — neyin açacağı İSİMLİ (Choreia promotionPath deseni).
+  /// "Bir gün belki" değil, adı olan bir iş.
+  final String unblockedBy;
+  final String criterion;
+  final String measuredGap;
+
+  bool get isMeasurementOnly => state == 'measurementOnly';
+}
+
 /// Bir testin skorlama beyanı.
 final class ScoringSpec {
   const ScoringSpec({
@@ -125,6 +163,7 @@ final class TestSpec {
     required this.presenceGate,
     required this.holdSeconds,
     required this.confidenceClass,
+    this.referenceStatus,
   });
 
   final String id;
@@ -144,6 +183,9 @@ final class TestSpec {
 
   final double? holdSeconds;
   final String confidenceClass;
+
+  /// null = normal (referanslı/bantlı) test. Dolu = "ölçüm var, hüküm yok".
+  final ReferenceStatus? referenceStatus;
 
   /// Girişim kapısı için gereken minimum tutuş (sn).
   ///
@@ -321,6 +363,48 @@ final class Battery {
       presenceGate: gate,
       holdSeconds: (raw['holdSeconds'] as num?)?.toDouble(),
       confidenceClass: raw['confidenceClass'] as String? ?? 'C',
+      referenceStatus: _parseRefStatus(raw['referenceStatus'], path),
+    );
+  }
+
+  /// `referenceStatus` KATI okunur: beyan varsa EKSİKSİZ olmalı.
+  /// Yarım bir beyan, gerekçesiz bir "measurementOnly" üretir — yani
+  /// kullanıcıya sebebini söylemeyen bir eksiklik (L-135 sınıfı).
+  static ReferenceStatus? _parseRefStatus(Object? raw, String path) {
+    if (raw == null) return null;
+    if (raw is! Map<String, dynamic>) {
+      throw BatteryError('$path.referenceStatus', 'nesne olmalı');
+    }
+    final Object? basis = raw['statusBasis'];
+    final Object? promo = raw['promotionPath'];
+    if (basis is! Map<String, dynamic> || promo is! Map<String, dynamic>) {
+      throw BatteryError('$path.referenceStatus',
+          '`statusBasis` ve `promotionPath` ZORUNLU — gerekçesiz bir '
+          'measurementOnly, sebebini söylemeyen bir eksikliktir');
+    }
+    for (final (Map<String, dynamic> m, String k, String where) in <
+        (Map<String, dynamic>, String, String)>[
+      (basis, 'code', 'statusBasis'),
+      (basis, 'measured', 'statusBasis'),
+      (basis, 'userText', 'statusBasis'),
+      (promo, 'unblockedBy', 'promotionPath'),
+      (promo, 'criterion', 'promotionPath'),
+      (promo, 'measuredGap', 'promotionPath'),
+    ]) {
+      final Object? v = m[k];
+      if (v is! String || v.trim().isEmpty) {
+        throw BatteryError('$path.referenceStatus.$where.$k',
+            'zorunlu ve boş olamaz');
+      }
+    }
+    return ReferenceStatus(
+      state: raw['state'] as String? ?? 'measurementOnly',
+      basisCode: basis['code'] as String,
+      basisMeasured: basis['measured'] as String,
+      basisUserText: basis['userText'] as String,
+      unblockedBy: promo['unblockedBy'] as String,
+      criterion: promo['criterion'] as String,
+      measuredGap: promo['measuredGap'] as String,
     );
   }
 

@@ -86,6 +86,7 @@ final class AssessmentResult {
     this.lowestBandFloor,
     this.timedOutPhase,
     this.abortCode,
+    this.lessonClass,
   });
 
   /// Ölçüm ALINDI kurucusu — değeri bandlara göre sınıflandırır.
@@ -102,6 +103,7 @@ final class AssessmentResult {
     required String unit,
     required Map<String, String> provenance,
     Map<String, double>? bandFloors,
+    String? lessonClass,
   }) {
     if (bandFloors == null || bandFloors.isEmpty) {
       return AssessmentResult(
@@ -112,6 +114,7 @@ final class AssessmentResult {
         provenance: provenance,
         value: value,
         unit: unit,
+        lessonClass: lessonClass,
       );
     }
     // En düşük taban = tüm yaş bantlarının en alt eşiği. Bunun ALTI
@@ -135,6 +138,7 @@ final class AssessmentResult {
       unit: unit,
       bandLabel: value < floor ? null : label,
       lowestBandFloor: floor,
+      lessonClass: lessonClass,
     );
   }
 
@@ -146,6 +150,7 @@ final class AssessmentResult {
     required Map<String, String> provenance,
     String? timedOutPhase,
     String? abortCode,
+    String? lessonClass,
   }) {
     assert(code != ResultCode.measured,
         'notMeasured bir "measured" kodu taşıyamaz — sonuç kodu sonucu tarif eder');
@@ -157,6 +162,7 @@ final class AssessmentResult {
       provenance: provenance,
       timedOutPhase: timedOutPhase,
       abortCode: abortCode,
+      lessonClass: lessonClass,
     );
   }
 
@@ -186,6 +192,19 @@ final class AssessmentResult {
 
   final String? timedOutPhase;
   final String? abortCode;
+
+  /// **YAZIM ANINDA damgalanan ders-sınıfı** (aile standardı, M-F-185(c)).
+  ///
+  /// `measurementOnly` = bu ölçüm bir referansa karşı KIYASLANMADI, çünkü
+  /// testin referansı ölçülmüş bir gerekçeyle YOK (`TestSpec.referenceStatus`).
+  /// Neden yazım anında: sonradan türetilen bir sınıf, config değişince
+  /// SESSİZCE anlam değiştirir — kayıt hangi rejimde alındığını kendi
+  /// üstünde taşımalı (M-F-138'in oturum-kaydı düzeyindeki karşılığı).
+  ///
+  /// null = normal rejim (referanslı/bantlı test).
+  final String? lessonClass;
+
+  bool get isMeasurementOnly => lessonClass == 'measurementOnly';
 
   bool get isMeasured => tier != ResultTier.notMeasured;
 
