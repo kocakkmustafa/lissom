@@ -8,3 +8,9 @@ __pycache__/
 
 # Flutter eklenti çözümlemesi — ÜRETİLEN dosya (pub get yeniden yazar)
 .flutter-plugins-dependencies
+*.iml
+.idea/
+/build
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
