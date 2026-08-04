@@ -94,6 +94,14 @@ enum BridgeBlocker {
   /// düzlem metriği istiyor (sagittal `trunk_lean`, frontal
   /// `trunk_lateral_tilt`). İkisini aynı sayıya bağlamak L-011'in ölü-metrik
   /// sınıfı olurdu — iki farklı metrik, tek bir sayı.
+  ///
+  /// ⚠️ **İKİNCİ gerekçe, L-190 turunda ölçüldü:** düzlem ayrımı gelse bile
+  /// çekirdeğin `trunkTilt`i dikeyi **görüntü dikeyi** sayıyor
+  /// (`rawTorsoAxisAngle − (−π/2)`), yani kamera roll'unda yerçekimi
+  /// dikeyinden sapar. Config ise `gravityYaw` BEYAN EDİYOR. Bu, L-190/2'nin
+  /// (`height_diff_norm` dalının ham dünya-y kullanması) Dart'taki MEVCUT
+  /// örneğidir — Python'da düzeltilecek olan sınıfın aynısı. Köprü bugün
+  /// bunu tüketmiyor; tüketirse aynı beyan-uygulama ayrışmasını devralır.
   corePlaneSeparationMissing,
 }
 

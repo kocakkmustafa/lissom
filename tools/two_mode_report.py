@@ -60,6 +60,36 @@ FLAG_TOUCHES = ("gravityYaw", "proximal", "none")
 #: Bit-aynılığı DOĞRU davranış olan çerçeve.
 FLAG_IGNORES = ("camera",)
 
+#: Bayrağın YAPISAL OLARAK değiştiremediği metrikler + GEREKÇE.
+#:
+#: Bu liste kapının ikinci yönüdür ve iki işi birlikte yapar:
+#:   • listede OLMAYAN bir "dokunulan" metrik bit-aynı çıkarsa → bayrak
+#:     bağlanmamış, tur GEÇERSİZ (M-F-230).
+#:   • listede OLAN bir metrik DEĞİŞİRSE → gerekçe çürümüş, liste bayat;
+#:     kapı yine kırmızı yanar. Yani muafiyet sessiz bir istisna değil,
+#:     kendi kendini sınayan bir İDDİA.
+#:
+#: Bu yüzden bir düzeltmenin TAMAMLANDIĞINI da bu liste kanıtlar: çekirdek
+#: `height_diff_norm` dalına dikey projeksiyonu eklediğinde ilgili satırlar
+#: buradan ÇIKAR ve o metriklerin artık değişmesi BEKLENİR.
+EXPECTED_INVARIANT: dict[str, str] = {
+    # L-190 hükmü madde 1 (ÇÖZÜLDÜ, beyan düşürüldü): 3B Euclidean mesafe
+    # rotasyon-değişmezi ve `plane: none` olduğu için izdüşüm de yok.
+    # `frameRef` artık `none` — bayrak `plane`i `none`a zorluyor, o da zaten
+    # `none`; yani bit-değişmezlik DOĞRU davranış.
+    "reach_depth": "distance_norm + plane:none → mesafe çerçeve-değişmezi "
+                   "(L-190/1, beyan `none`a düşürüldü)",
+    # L-190 hükmü madde 2 (AÇIK, çekirdekte, koordinatörde): `evaluate`'in
+    # `height_diff_norm` dalı `axes`i HİÇ kullanmıyor — yalnız dünya y'si.
+    # Bunlar gerçekten yerçekimi-dikeyi İSTER, o yüzden muafiyet GEÇİCİ:
+    # çekirdek düzeltmesi inince bu üç satır SİLİNECEK ve değişmeleri
+    # beklenecek. Silmeyi unutmak = kapının o düzeltmeyi doğrulamaması.
+    "heel_rise_right": "height_diff_norm dalı axes kullanmıyor — GEÇİCİ "
+                       "muafiyet, çekirdek düzeltmesi bekliyor (L-190/2)",
+    "knee_height_right": "height_diff_norm dalı axes kullanmıyor — GEÇİCİ "
+                         "muafiyet, çekirdek düzeltmesi bekliyor (L-190/2)",
+}
+
 
 def load_defs() -> list[mz.MetricDef]:
     raw = json.loads((REPO / "config/metrics/lissom-metrics.v1.json").read_text())
@@ -152,6 +182,7 @@ def main(argv: list[str]) -> int:
     touched_changed = 0
     touched_total = 0
     ignored_changed: list[str] = []
+    stale_exemptions: list[str] = []
     rows: list[tuple] = []
 
     for path in paths:
@@ -173,7 +204,15 @@ def main(argv: list[str]) -> int:
             same = np.array_equal(anat["values"], cam["values"], equal_nan=True)
             dmed = anat["med"] - cam["med"]
             flag = ""
-            if md.frame_ref in FLAG_TOUCHES:
+            exempt = EXPECTED_INVARIANT.get(md.id)
+            if exempt is not None:
+                # Muafiyet bir İDDİADIR ve sınanır: değişirse gerekçe çürük.
+                if same:
+                    flag = "  ← bit-aynı (BEKLENEN: muaf)"
+                else:
+                    stale_exemptions.append(f"{md.id}@{path.name}")
+                    flag = "  ← DEĞİŞTİ ama MUAF sayılmış (gerekçe çürük)"
+            elif md.frame_ref in FLAG_TOUCHES:
                 touched_total += 1
                 if not same:
                     touched_changed += 1
@@ -210,6 +249,16 @@ def main(argv: list[str]) -> int:
     else:
         print(f"\n✅ POZİTİF KONTROL GEÇTİ: {touched_changed}/{touched_total} "
               f"çiftte mod gerçek-veride ölçülebilir fark üretti.")
+    if stale_exemptions:
+        print(f"\n⚠️ BAYAT MUAFİYET: `EXPECTED_INVARIANT` bu metrikleri "
+              f"değişmez sayıyor ama DEĞİŞTİLER — gerekçe çürümüş, listeyi "
+              f"güncelle ({len(stale_exemptions)} çift):")
+        for x in stale_exemptions[:10]:
+            print(f"    {x}")
+        verdict = 1
+    else:
+        print(f"✅ MUAFİYETLER TUTARLI: {len(EXPECTED_INVARIANT)} kayıtlı "
+              f"muafiyetin hiçbiri çürümemiş.")
     if ignored_changed:
         print(f"\n⚠️ NEGATİF KONTROL KIRMIZI: `camera` çerçeveli metrikler "
               f"bayraktan etkilenmemeli ama {len(ignored_changed)} çift "
