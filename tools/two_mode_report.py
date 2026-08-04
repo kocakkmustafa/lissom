@@ -38,17 +38,29 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
 import numpy as np
 
 REPO = Path(__file__).resolve().parent.parent
-MOCORE = (REPO / "../../motion-core/lib/tools/fixture_pipeline").resolve()
 HARVEST = Path.home() / "motion-harvest/lissom/landmarks"
 
+#: Rig (kanonik yorumlayıcı) yolu — `MOCORE_RIG` ile DEĞİŞTİRİLEBİLİR.
+#:
+#: Neden parametrik: varsayılan yol PAYLAŞIMLI ağaç ve o ağacın dalını
+#: değiştirmek YASAK (M-F-22) — yani taze bir çekirdek düzeltmesini oradan
+#: okumak imkânsız. Rig işi izole worktree'de yapılır (M-F-139/154), ve araç
+#: onu okuyabilmeli. Env yoksa paylaşımlı ağaç kullanılır ve HANGİSİ
+#: okunduğu rapora BASILIR — hangi rig'e karşı ölçtüğünü bilmeden "temiz"
+#: demek, bayat pinle temiz demektir.
+_DEFAULT_RIG = (REPO / "../../motion-core/lib/tools/fixture_pipeline").resolve()
+MOCORE = Path(os.environ.get("MOCORE_RIG", str(_DEFAULT_RIG))).resolve()
+
 if not MOCORE.exists():  # pragma: no cover
-    sys.exit(f"kanonik yorumlayıcı bulunamadı: {MOCORE}")
+    sys.exit(f"kanonik yorumlayıcı bulunamadı: {MOCORE}\n"
+             f"(MOCORE_RIG ile izole worktree'yi gösterebilirsin)")
 sys.path.insert(0, str(MOCORE))
 
 from mocore import geometry as geo  # noqa: E402
@@ -70,24 +82,44 @@ FLAG_IGNORES = ("camera",)
 #:     kendi kendini sınayan bir İDDİA.
 #:
 #: Bu yüzden bir düzeltmenin TAMAMLANDIĞINI da bu liste kanıtlar: çekirdek
-#: `height_diff_norm` dalına dikey projeksiyonu eklediğinde ilgili satırlar
-#: buradan ÇIKAR ve o metriklerin artık değişmesi BEKLENİR.
+#: düzeltmesi indiğinde (a4a1ac2) `height_diff_norm` satırlarının GEREKÇESİ
+#: değişti — "axes kullanmıyor" yerine "gravityYaw'da SI = dünya-y, tüketim
+#: BİT-AYNI". Gerekçenin güncellenmesi zorunlu; muafiyet aynı kalsa da
+#: SEBEBİ artık başka.
+#:
+#: Muafiyet SINIFLARI (koordinatör zeyli, M-F-233 revizesi) — "bit-aynı"
+#: tek bir şey demiyor, ÜÇ ayrı şey diyor ve üçü ayrı ayrı isimlendirilmeli:
+#:   camera-negatif : `frameRef: camera` → bayrak dokunmaz, bit-aynılık DOĞRU
+#:   yaw-değişmez   : ölçü yaw'dan yapısal olarak bağımsız (gravityYaw'da
+#:                    SI = dünya-y olduğu için height_diff ham-y ile BİT-AYNI)
+#:   frame-değişmez : ölçünün kendisi çerçeveden bağımsız (düzlemsiz mesafe)
+#: Eskiden hepsi "bit-aynı (beklenmiyor)" diye tek torbaya giriyordu ve
+#: "bağlanmamış bayrak" ile karışıyordu.
+CLASS_CAMERA_NEG = "camera-negatif"
+CLASS_YAW_INVARIANT = "yaw-değişmez"
+CLASS_FRAME_INVARIANT = "frame-değişmez"
+
 EXPECTED_INVARIANT: dict[str, str] = {
     # L-190 hükmü madde 1 (ÇÖZÜLDÜ, beyan düşürüldü): 3B Euclidean mesafe
     # rotasyon-değişmezi ve `plane: none` olduğu için izdüşüm de yok.
     # `frameRef` artık `none` — bayrak `plane`i `none`a zorluyor, o da zaten
     # `none`; yani bit-değişmezlik DOĞRU davranış.
-    "reach_depth": "distance_norm + plane:none → mesafe çerçeve-değişmezi "
-                   "(L-190/1, beyan `none`a düşürüldü)",
-    # L-190 hükmü madde 2 (AÇIK, çekirdekte, koordinatörde): `evaluate`'in
-    # `height_diff_norm` dalı `axes`i HİÇ kullanmıyor — yalnız dünya y'si.
-    # Bunlar gerçekten yerçekimi-dikeyi İSTER, o yüzden muafiyet GEÇİCİ:
-    # çekirdek düzeltmesi inince bu üç satır SİLİNECEK ve değişmeleri
-    # beklenecek. Silmeyi unutmak = kapının o düzeltmeyi doğrulamaması.
-    "heel_rise_right": "height_diff_norm dalı axes kullanmıyor — GEÇİCİ "
-                       "muafiyet, çekirdek düzeltmesi bekliyor (L-190/2)",
-    "knee_height_right": "height_diff_norm dalı axes kullanmıyor — GEÇİCİ "
-                         "muafiyet, çekirdek düzeltmesi bekliyor (L-190/2)",
+    "reach_depth": f"[{CLASS_FRAME_INVARIANT}] düzlemsiz distance_norm "
+                   f"rotasyon-değişmezi; beyan `none`a düşürüldü ve taze "
+                   f"rig'in guard'ı eski `gravityYaw` hâlini REDDEDİYOR "
+                   f"(L-190/1 · L-192)",
+    # L-190/2 ÇÖZÜLDÜ (çekirdek a4a1ac2): height_diff_norm artık beyan edilen
+    # çerçevenin SI'ını tüketiyor. gravityYaw'da SI = dünya-y ([0,-1,0])
+    # olduğu için sonuç ham-y yoluyla BİT-AYNI — ölçüldü, iki rig birebir
+    # eşleşti. Yani bunlar artık "bağlanmamış bayrak" DEĞİL, kalıcı
+    # `yaw-değişmez` sınıfı. Davranış farkı yalnız `proximal` beyanında
+    # doğardı ve Lissom'un iki height metriği de gravityYaw.
+    "heel_rise_right": f"[{CLASS_YAW_INVARIANT}] height_diff_norm, gravityYaw "
+                       f"SI = dünya-y → çerçeve tüketimi BİT-AYNI (L-190/2 "
+                       f"çözüldü, a4a1ac2)",
+    "knee_height_right": f"[{CLASS_YAW_INVARIANT}] height_diff_norm, "
+                         f"gravityYaw SI = dünya-y → BİT-AYNI (L-190/2 "
+                         f"çözüldü, a4a1ac2)",
 }
 
 
@@ -129,21 +161,40 @@ def measure(md: mz.MetricDef, frames: list[geo.Frame], anatomical: bool) -> dict
     belirliyor — yani mod değişimi değeri değiştirmese bile GEÇERLİLİĞİ
     değiştirebilir. İkisini bir sayıya karıştırmak o etkiyi görünmez yapardı.
     """
-    vals: list[float] = []
-    valid = 0
+    # ⚠️ ÖZET İSTATİSTİKLER YALNIZ `valid` ÖLÇÜMLERDEN — ve bu bir üslup
+    # tercihi değil, ölçülmüş bir kusurun panzehiri.
+    #
+    # İlk sürüm `float(r.value)`'yu KOŞULSUZ toplayıp medyanı `isfinite`
+    # süzgeciyle alıyordu. Rig `mask_invalid=True` varsayılanını getirmeden
+    # ÖNCE (05aacaf) geçersiz ölçümler `value` alanında HAM/ÇÖP sayı
+    # taşıyordu — yalnız `valid=False` yan-kanal bayrağıyla işaretli. Yani
+    # `isfinite` onları geçiriyordu ve medyanım geçersiz ölçümlerle
+    # KİRLENİYORDU. Taze rig (a4a1ac2) onları NaN'a maskeleyince aynı
+    # fixture'da medyanlar sıçradı (`heel_rise` 0,01→0,11 · `reach_depth`
+    # 1,47→2,23 · `plank_hip_deviation` 0,21→0,05) ve bunu bir an için
+    # "çekirdek düzeltmesi bit-aynılık iddiasını ihlal etti" sandım.
+    # Etmemişti: kusur bendeydi. `valid` bayrağına göre filtrelemek her iki
+    # rig'de DOĞRU sonuç verir — bu yüzden `isfinite` değil `valid` otorite.
+    #
+    # Ders (L-155/M-F-114'ün tüketici tarafı): yan-kanal geçerlilik bayrağı
+    # taşıyan bir API'de "sayıyı al, sonra NaN'ları at" YETMEZ — bayrağı
+    # okumayan kod çöpü gerçek ölçüm sanar.
+    values_all: list[float] = []   # kare-hizalı seri (bit-aynılık kıyası için)
+    values_valid: list[float] = []  # yalnız geçerli (istatistik için)
     for fr in frames:
         r = mz.evaluate(md, fr, anatomical=anatomical)
-        vals.append(float(r.value))
-        if r.valid and math.isfinite(r.value):
-            valid += 1
-    a = np.asarray(vals, dtype=float)
-    fin = a[np.isfinite(a)]
+        values_all.append(float(r.value))
+        if r.valid:
+            values_valid.append(float(r.value))
+    a = np.asarray(values_all, dtype=float)
+    v = np.asarray(values_valid, dtype=float)
+    v = v[np.isfinite(v)]
     return dict(
-        n=len(vals),
-        valid=valid,
-        vmr=valid / len(vals) if vals else float("nan"),
-        med=float(np.median(fin)) if fin.size else float("nan"),
-        p95=float(np.percentile(fin, 95)) if fin.size else float("nan"),
+        n=len(values_all),
+        valid=len(values_valid),
+        vmr=len(values_valid) / len(values_all) if values_all else float("nan"),
+        med=float(np.median(v)) if v.size else float("nan"),
+        p95=float(np.percentile(v, 95)) if v.size else float("nan"),
         values=a,
     )
 
@@ -178,6 +229,9 @@ def main(argv: list[str]) -> int:
         print("fixture verilmedi (ya da --all)", file=sys.stderr)
         return 64
 
+    print(f"rig (kanonik yorumlayıcı): {MOCORE}")
+    print(f"  {'MOCORE_RIG env ile verildi' if os.environ.get('MOCORE_RIG') else 'VARSAYILAN (paylaşımlı ağaç) — taze düzeltme okunmuyor olabilir'}")
+
     defs = load_defs()
     touched_changed = 0
     touched_total = 0
@@ -208,7 +262,7 @@ def main(argv: list[str]) -> int:
             if exempt is not None:
                 # Muafiyet bir İDDİADIR ve sınanır: değişirse gerekçe çürük.
                 if same:
-                    flag = "  ← bit-aynı (BEKLENEN: muaf)"
+                    flag = f"  ← bit-aynı ({exempt.split(']')[0].lstrip('[')})"
                 else:
                     stale_exemptions.append(f"{md.id}@{path.name}")
                     flag = "  ← DEĞİŞTİ ama MUAF sayılmış (gerekçe çürük)"
@@ -223,7 +277,7 @@ def main(argv: list[str]) -> int:
                     ignored_changed.append(f"{md.id}@{path.name}")
                     flag = "  ← DEĞİŞTİ (beklenmiyor)"
                 else:
-                    flag = "  ← bit-aynı (DOĞRU: camera)"
+                    flag = f"  ← bit-aynı ({CLASS_CAMERA_NEG})"
             print(f"  {md.id:32s} {md.frame_ref:10s} "
                   f"{anat['med']:10.2f} {cam['med']:10.2f} {dmed:+9.2f} "
                   f"{anat['vmr']:9.3f} {cam['vmr']:9.3f}{flag}")

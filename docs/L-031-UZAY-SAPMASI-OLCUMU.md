@@ -61,9 +61,19 @@ konulmadı (yanlış oran, düzeltmemekten kötüdür çünkü "düzeltildi" gö
 
 | | medyan \|sapma\| | p95 \|sapma\| |
 |---|---|---|
-| HAM ↔ REF | 18,20° | 67,55° |
-| İZO ↔ REF | **14,30°** | **60,64°** |
-| değişim | **−21,4%** | **−10,2%** |
+| HAM ↔ REF | 14,83° | 45,91° |
+| İZO ↔ REF | **11,29°** | **37,47°** |
+| değişim | **−23,9%** | **−18,4%** |
+
+> ⚠️ **SAYI DÜZELTMESİ (L-197, 2026-08-04).** Bu tablonun ilk sürümünde
+> 18,20° → 14,30° (−21,4%) ve 67,55° → 60,64° (−10,2%) yazıyordu. **Sayılar
+> ŞİŞKİNDİ ve kusur bendeydi:** karşılaştırma betiği `evaluate(...).value`'yu
+> `valid` bayrağını OKUMADAN topluyordu. Rig `mask_invalid` varsayılanından
+> önce geçersiz ölçümler `value` alanında HAM/ÇÖP sayı taşıyordu (yalnız
+> `valid=False` yan-kanal bayrağıyla işaretli), dolayısıyla REF serisi
+> geçersiz ölçümlerle kirlenmişti. `valid` otorite yapıldı; yukarıdaki
+> sayılar temiz seriden. **Hüküm DEĞİŞMEDİ** (L-031 açık ve büyük), ama
+> J-028 düzeltmesinin kazancı aslında rapor ettiğimden DAHA İYİ çıktı.
 
 24 hücrenin (3 fixture × 8 metrik) 23'ünde medyan iyileşti veya sabit kaldı;
 **1 hücrede kötüleşti** (`knee_flexion_left` / `-wwRNGArTI0`: 15,94° → 17,42°).
@@ -75,20 +85,23 @@ düzeltme dönük öznede *medyanı iyileştirirken en kötü durumu kötüleşt
 
 Düzeltmeden **sonra kalan** sapma L-031'in kendisidir:
 
-**medyan 14,30° · p95 60,64° · tepe 160,47°**
+**medyan 11,29° · p95 37,47° · tepe 124,62°**
 
 En kötü hücreler (İZO↔REF, p95):
 
 | fixture | metrik | medyan | p95 |
 |---|---|---|---|
-| X2u_vGL0qJU | `hip_flexion_right` | 18,11° | **160,47°** |
-| X2u_vGL0qJU | `knee_flexion_right` | 27,24° | **155,63°** |
-| X2u_vGL0qJU | `knee_flexion_left` | 29,54° | 151,34° |
-| X2u_vGL0qJU | `elbow_extension_right` | 23,33° | 78,39° |
+| 0Ttn3z_rVBk | `elbow_extension_right` | 21,32° | **64,06°** |
+| -wwRNGArTI0 | `shoulder_flexion_right` | 19,35° | **59,81°** |
+| -wwRNGArTI0 | `shoulder_flexion_left` | 16,09° | 58,71° |
+| X2u_vGL0qJU | `elbow_extension_right` | 11,08° | 55,86° |
+| 0Ttn3z_rVBk | `hip_flexion_right` | 8,01° | 53,67° |
 
 Bu **yuvarlama farkı değil, yön farkı.** `overhead_reach`'in girişim kapısı
-140°'de; skorlama bantları derece cinsinden. 14° medyan kayma + 60° p95, hem
-kapı geçişini hem bant atamasını değiştirir.
+140°'de; skorlama bantları derece cinsinden. 11° medyan kayma + 37° p95, hem
+kapı geçişini hem bant atamasını değiştirir. (Temiz seride en kötü hücreler
+`elbow_extension` ve `shoulder_flexion`'a kaydı — kirli seride tepeyi tutan
+`knee`/`hip` hücreleri şişkinliğin kendisiydi.)
 
 ### Neden kapanmıyor: sebep zaten kayıtlı
 

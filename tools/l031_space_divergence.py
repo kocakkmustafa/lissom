@@ -105,8 +105,18 @@ def main(argv: list[str]) -> int:
             if md is None:
                 print(f"  {metric}: config'te TANIMSIZ — atlandı")
                 continue
-            ref = np.array([ms.evaluate(md, fr, anatomical=True).value
-                            for fr in frames], dtype=float)
+            # ⚠️ `valid` OTORİTE, `isfinite` DEĞİL (L-197, ölçülmüş kusur):
+            # rig'in `mask_invalid` varsayılanından ÖNCE geçersiz ölçümler
+            # `value` alanında HAM/ÇÖP sayı taşıyordu, yalnız `valid=False`
+            # yan-kanal bayrağıyla işaretli. Bu döngü bayrağı okumuyordu, yani
+            # REF serisi geçersiz ölçümlerle KİRLENİYORDU ve L-187'nin sapma
+            # sayıları o kirlilikle raporlanmıştı. Geçersizi NaN'a çevirmek
+            # aşağı akıştaki `isfinite` süzgeciyle onu dürüstçe DIŞLAR.
+            ref = np.array(
+                [(m.value if m.valid else np.nan)
+                 for m in (ms.evaluate(md, fr, anatomical=True)
+                           for fr in frames)],
+                dtype=float)
             raw = np.array([np.nan if v is None else v
                             for v in block["raw"][metric]], dtype=float)
             iso = np.array([np.nan if v is None else v

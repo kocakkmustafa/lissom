@@ -24,8 +24,10 @@
 /// `lm` (görüntü-normalize x,y) üzerinde HAM 2D açı hesaplıyor; normatif
 /// Python yorumlayıcısı `world` (metrik 3D) üzerinde config'in
 /// `frameRef`/`plane` taksonomisiyle hesaplıyor (M-F-53/54). Fark:
-/// medyan 5,8–31,2°, p95 23,7–156,1°, tepe 176,8° (kanıt:
-/// `docs/L-031-UZAY-SAPMASI-OLCUMU.md`). Yani bu okuyucunun ürettiği sayı
+/// **medyan 11,29°, p95 37,47°, tepe 124,62°** (kanıt:
+/// `docs/L-031-UZAY-SAPMASI-OLCUMU.md`; ilk raporladığım 14,30°/60,64°
+/// ŞİŞKİNDİ — karşılaştırma betiği `valid` bayrağını okumuyordu, L-197).
+/// Yani bu okuyucunun ürettiği sayı
 /// canlı-tur ekranında **referans-derecesi ölçüm olarak sunulamaz**;
 /// [kUnbridgedMetrics] ve `metric_coverage_test.dart` bunu yapısal olarak
 /// zorlar. Kanonik-uzay kararı: `docs/KARAR-BRIFI-kanonik-uzay.md` seçenek C
