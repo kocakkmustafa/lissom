@@ -24,7 +24,25 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: motion_core-v0.9.0
+      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+
+  # Kamera → PoseSource. Motorla AYNI 40-SHA'dan, TEK pin (J-071).
+  #
+  # ⚠️ TAM-40-SHA yazılıyor, kısa SHA ya da tag adı DEĞİL: pub `ref:` değerini
+  # METİN olarak karşılaştırır, commit olarak değil (Choreia ölçtü, M-F-265).
+  # Aynı commit'i iki farklı yazımla (tag adı + kısa SHA) bildirmek pub'a
+  # İKİ AYRI KAYNAK gibi görünür ve `motion_core` iki kez çözülmeye çalışılır.
+  #
+  # Ek olarak ölçüldü: `motion_camera`'nın KENDİ `motion_core` bağımlılığı
+  # `f13bdc9`'te `path: ../motion_core` (tam-SHA DEĞİL). Bu bizim için daha
+  # güçlü — aynı url+ref tek git checkout'una çözüldüğü için kameranın
+  # gördüğü çekirdek ile bizim gördüğümüz ÇEKİRDEK AYNI dosyalar oluyor.
+  # Pin-eşitliği testi bunu kilitten doğrular (varsayım değil).
+  motion_camera:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_camera
+      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
 
   # Yalnız uygulama-özel dizini bulmak için. Depo BİÇİMİ çekirdekte
   # (append-only JSONL); kurucusu `File` alıyor, çünkü path_provider
