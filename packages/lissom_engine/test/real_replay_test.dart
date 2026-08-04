@@ -34,7 +34,10 @@ void main() {
       // Sentetik iskelet: çekirdeğin iç-açısı ile Lissom'un ROM dili TERS
       // yönde artar. Bu test o dönüşümün İŞARETİNİ çiviler — sessiz bir
       // ters-çevirme, ölçülen her şeyi bozar ve makul GÖRÜNÜR.
-      final CoreMetricReader reader = CoreMetricReader();
+      // Sentetik iskelet 1:1 uzayda kuruldu — kare KARE, izotropik
+      // düzeltme kimlik dönüşümü (a=1). Gerçek fixture'da böyle DEĞİL.
+      final CoreMetricReader reader =
+          CoreMetricReader(frameSize: const FrameSize(1000, 1000));
 
       // Kol yanda aşağı: omuz ve dirsek kalçanın üstünde, dikey hizada.
       final PoseFrame armDown = _frame(<int, List<double>>{
@@ -62,7 +65,8 @@ void main() {
     });
 
     test('eşlenmemiş metrik SESSİZCE null dönmez, ADIYLA reddedilir', () {
-      final CoreMetricReader reader = CoreMetricReader();
+      final CoreMetricReader reader =
+          CoreMetricReader(frameSize: const FrameSize(1000, 1000));
       expect(
           () => reader.read(_frame(const <int, List<double>>{}),
               'tibia_inclination_right'),
@@ -83,7 +87,8 @@ void main() {
           Battery.parseJson(_batteryFile.readAsStringSync());
       final TestSpec test = battery.tests['overhead_reach']!;
       final Fixture fx = Fixture.decode(_fixture.readAsStringSync());
-      final CoreMetricReader reader = CoreMetricReader();
+      final CoreMetricReader reader =
+          CoreMetricReader(frameSize: _frameSizeOf(fx));
 
       final AssessmentEngine engine = AssessmentEngine(
         test: test,
@@ -129,7 +134,8 @@ void main() {
       // ölçüm bandın altına düşerse motor onu measuredBelowRange olarak
       // sınıflandırmalı ve bant ETİKETİ vermemeli.
       final Fixture fx = Fixture.decode(_fixture.readAsStringSync());
-      final CoreMetricReader reader = CoreMetricReader();
+      final CoreMetricReader reader =
+          CoreMetricReader(frameSize: _frameSizeOf(fx));
       final Battery synthetic = Battery.parseJson('''
       {
         "id": "t", "version": "1",
@@ -167,6 +173,22 @@ void main() {
       expect(r.speaksAsCoaching, isTrue);
     }, skip: haveFixture ? null : 'fixture kütüphanesi yok');
   });
+}
+
+/// Fixture'ın KENDİ kare boyutu — yoksa İSİMLE durur.
+///
+/// Varsayılan bir en-boy oranı uydurmak (ör. 16:9) tam olarak M-F-30'un
+/// yakaladığı sessiz bükülmeyi geri getirir: yanlış oran, düzeltmemiş olmaktan
+/// daha kötüdür çünkü "düzeltildi" görünür. 34/34 hasat fixture'ı
+/// `resolution` taşıyor, yani bu yol fail-closed olmayı KARŞILAYABİLİYOR.
+FrameSize _frameSizeOf(Fixture fx) {
+  final FrameSize? s = fx.recordingMeta.frameSize;
+  if (s == null) {
+    throw StateError('fixture `resolution` taşımıyor — izotropik düzeltme '
+        'yapılamaz ve ham anizotropik uzayda ölçmek açıları büker (M-F-30 / '
+        'J-028). Uydurma oran KOYULMAZ.');
+  }
+  return s;
 }
 
 /// Verilen landmark'ları yerleştirir, kalanını görünür ama nötr bırakır.
