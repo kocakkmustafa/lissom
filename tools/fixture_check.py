@@ -48,13 +48,19 @@ VIRTUAL = {
 MIN_VISIBILITY = 0.5
 
 
-MOCORE = Path(
-    "/Users/mustafakaankocak/Documents/YULAlab-AI/ventures/motion-core/lib"
-    "/tools/fixture_pipeline"
-)
-sys.path.insert(0, str(MOCORE))
-
 import os  # noqa: E402
+
+#: Rig yolu — `MOCORE_RIG` ile değiştirilebilir (varsayılan: paylaşımlı ağaç).
+#:
+#: Sabit yol yeterli DEĞİLDİ: paylaşımlı ağacın dalını değiştirmek yasak
+#: (M-F-22), dolayısıyla taze bir çekirdek sürümü oradan okunamıyor ve rig
+#: işi izole worktree'de yapılıyor (M-F-139/154). Araç onu okuyabilmeli.
+MOCORE = Path(os.environ.get(
+    "MOCORE_RIG",
+    "/Users/mustafakaankocak/Documents/YULAlab-AI/ventures/motion-core/lib"
+    "/tools/fixture_pipeline",
+))
+sys.path.insert(0, str(MOCORE))
 
 import numpy as np  # noqa: E402
 from mocore import geometry as geo  # noqa: E402
@@ -73,7 +79,27 @@ from mocore import measures as mz  # noqa: E402
 #: ile +0,31/+0,77/+0,62/-0,07 — kapı kararı DEĞİŞMEDİ (hepsi hâlâ aynı
 #: tarafta 0,20 eşiğine göre) ama "işaret döner, ayrım kategorik" iddiası
 #: zayıfladı (kötü örnek -0,46'dan -0,07'ye, neredeyse sıfıra yaklaştı).
-ANATOMICAL = os.environ.get("MOCORE_ANATOMICAL") == "1"
+#:
+#: ⚠️ **ELLE env OKUMASI KALDIRILDI (M-F-241 dağınık-okuma yasağı).** Eski
+#: satır `os.environ.get("MOCORE_ANATOMICAL") == "1"` idi ve flip'ten sonra
+#: (çekirdek `4204272`, varsayılan ANATOMİK) **kanonik çözücüyle ÇELİŞİYORDU:**
+#: ölçüldü — env yokken `mz.anatomical_mode()` **True**, bu satır **False**.
+#: Yani env set edilmemiş her koşum sessizce KAMERA modunda ölçüyordu, oysa
+#: sistemin kanonik varsayılanı anatomik. Tek kanonik okuma noktası artık
+#: `mz.anatomical_mode()` ('1' → anatomik · '0' → açık opt-out · unset →
+#: `ANATOMICAL_DEFAULT`).
+#:
+#: Çözücü YOKSA sessizce eski davranışa DÜŞMEZ, İSİMLE durur: bayat bir rig'e
+#: karşı "anatomik koştum" sanmak, tam olarak bu satırın ürettiği kusurun
+#: tekrarı olurdu.
+if not hasattr(mz, "anatomical_mode"):
+    raise SystemExit(
+        f"Bu rig kanonik `anatomical_mode()` taşımıyor: {MOCORE}\n"
+        "Flip sonrası (çekirdek 4204272+) zorunlu. Rig'i tazeleyin ya da "
+        "MOCORE_RIG ile güncel bir worktree gösterin — elle env okumasına "
+        "geri dönmek M-F-241 ihlalidir."
+    )
+ANATOMICAL = mz.anatomical_mode()
 
 
 def _series(frames: list[dict], metric_raw: dict) -> list[tuple[float, float]]:
