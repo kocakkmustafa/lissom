@@ -22,4 +22,5 @@ export 'src/assessment_result.dart';
 export 'src/battery.dart';
 export 'src/battery_summary.dart';
 export 'src/assessment_session.dart';
+export 'src/live_session_state.dart';
 export 'src/metric_bridge.dart';
