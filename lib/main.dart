@@ -17,6 +17,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'app/assessment_home.dart';
+
 void main() => runApp(const LissomApp());
 
 class LissomApp extends StatelessWidget {
@@ -29,60 +31,6 @@ class LissomApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3A7D6E)),
           useMaterial3: true,
         ),
-        home: const MeasurementOnlyBanner(),
+        home: const AssessmentHomeScreen(),
       );
-}
-
-/// Yüzeyin TEPESİNDEKİ beyan (M-F-186 koşul 4).
-///
-/// Aşağıya konulsaydı kaydırmayan kullanıcı hiç görmezdi — beyanın yeri
-/// içeriğinin bir parçası.
-class MeasurementOnlyBanner extends StatelessWidget {
-  const MeasurementOnlyBanner({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData t = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Lissom')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
-          Card(
-            color: t.colorScheme.secondaryContainer,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('ÖLÇÜM, NOT DEĞİL', style: t.textTheme.labelLarge),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Burada gördüğünüz sayılar hareket açıklığı ÖLÇÜMÜdür — '
-                    'puan, teşhis ya da başkalarıyla kıyas değil. '
-                    'Başlangıç noktanızı gösterir.',
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Kamera akışı ve canlı-3 yüzeyi bir sonraki adımda bu kabuğa
-          // bağlanır; hâl tipleri `lissom_engine/live_session_state.dart`'ta
-          // hazır (SetupFailed · PermissionDenied · NoPersonDetected ·
-          // JointsOutOfFrame · Measuring).
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.videocam_outlined),
-              title: const Text('Kamera akışı bağlanmadı'),
-              subtitle: const Text(
-                'Platform kabuğu bu turda kuruldu; PoseSource köprüsü ve '
-                'cihaz-kanıtı beklemede.',
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

@@ -38,6 +38,8 @@ import 'dart:math' as math;
 
 import 'package:motion_core/motion_core.dart';
 
+import 'battery.dart';
+
 /// Bu köprünün ürettiği sayı normatif Python yorumlayıcısıyla aynı mı?
 ///
 /// **Hayır — ve bu ÖLÇÜLDÜ, varsayılmadı.** `true` yapılabilmesi için
@@ -187,6 +189,91 @@ const List<MetricBinding> kMetricBindings = <MetricBinding>[
       invert: false,
       configFrameRef: 'none'),
 ];
+
+/// Bir testin canlı koşabilme durumu — **türetilir, elle yazılmaz.**
+final class TestLiveness {
+  const TestLiveness({
+    required this.testId,
+    required this.metrics,
+    required this.blocker,
+  });
+
+  final String testId;
+
+  /// Testin ihtiyaç duyduğu (`{side}` çözülmüş) birincil metrikler.
+  final List<String> metrics;
+
+  /// `null` = canlı koşabilir. Dolu = İSİMLİ engel.
+  ///
+  /// Metin NEDEN'i taşır ve **vaat dili İÇERMEZ** (M-F-186): "yakında"
+  /// bilmediğimiz bir tarihi ima eder — ölçüm yerine sayı uydurmakla aynı
+  /// dürüstlük sınıfı.
+  final String? blocker;
+
+  bool get isLive => blocker == null;
+}
+
+/// Bataryanın her testi için canlılık durumunu TÜRETİR.
+///
+/// Kapsam hükmü (M-F-272 / L-206) burada bir SABİT değil bir SONUÇ: köprü
+/// büyüdükçe canlı küme kendiliğinden büyür, kimse listeyi güncellemeyi
+/// unutamaz. Elle yazılmış bir "canlı testler" listesi, köprü değişince
+/// sessizce bayatlardı — `reps`/`aggregation` ailesinin (L-178/L-181) tam
+/// aynı tuzağı.
+List<TestLiveness> deriveLiveness(Battery battery) {
+  final Set<String> bridged =
+      kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+  final List<TestLiveness> out = <TestLiveness>[];
+
+  for (final TestSpec t in battery.tests.values) {
+    final List<String> sides =
+        t.perSide ? <String>['right', 'left'] : <String>['right'];
+    final List<String> metrics =
+        sides.map(t.primaryMetricFor).toSet().toList()..sort();
+
+    final List<String> missing =
+        metrics.where((String m) => !bridged.contains(m)).toList();
+    if (missing.isEmpty) {
+      out.add(TestLiveness(testId: t.id, metrics: metrics, blocker: null));
+      continue;
+    }
+    // Engel gerekçesi metriğin KENDİ blocker'ından gelir; "bir şeyler eksik"
+    // değil, hangi kapı olduğu isimli (M-F-272 kapsam hükmü).
+    final Set<String> reasons = <String>{
+      for (final String m in missing) _blockerText(m),
+    };
+    out.add(TestLiveness(
+      testId: t.id,
+      metrics: metrics,
+      blocker: reasons.join(' · '),
+    ));
+  }
+  out.sort((TestLiveness a, TestLiveness b) => a.testId.compareTo(b.testId));
+  return out;
+}
+
+/// Bir metriğin engel gerekçesi — kullanıcı diliyle, vaat İÇERMEDEN.
+String _blockerText(String metric) {
+  final BridgeBlocker? b = kUnbridgedMetrics[metric];
+  return switch (b) {
+    BridgeBlocker.coreLacksMeasureKind =>
+      'bu ölçü tipi ölçüm çekirdeğinde henüz yok',
+    // ⚠️ İlk yazımda "gövde açısı iki ayrı düzlemde ölçülemiyor" yazıyordu ve
+    // SİM EKRANINDA yakalandı: `ankle_dorsiflexion` bu blocker'ı taşıyor ama
+    // metriği `tibia_inclination` — kaval kemiği, GÖVDE DEĞİL. Yani kullanıcıya
+    // yanlış anatomi söylüyordum. L-184/L-196'nın aynı sınıfı (kendinden emin
+    // YANLIŞ GEREKÇE) ve bu kez ekran kanıtı yakaladı, test değil: dört metrik
+    // aynı blocker'ı paylaşıyor (trunk_lean · trunk_lateral_tilt ·
+    // tibia_inclination L/R), o yüzden metin İKİSİNİ de kapsayacak kadar genel
+    // ama sebebi hâlâ İSİMLİ olmalı.
+    BridgeBlocker.corePlaneSeparationMissing =>
+      'bu açının gerektirdiği düzlem ayrımı ölçüm çekirdeğinde yok',
+    // Beyan edilmemiş bir metrik: sessizce "engelli" saymak yerine
+    // BİLİNMEDİĞİNİ söyler. `metric_coverage_test` bu durumu kırmızı yakar,
+    // yani buraya düşmek zaten bir kapı ihlalidir.
+    null => 'ölçüm köprüsü beyan edilmemiş ($metric)',
+  };
+}
 
 MetricBinding bindingFor(String lissomMetric) {
   for (final MetricBinding b in kMetricBindings) {
