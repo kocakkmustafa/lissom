@@ -43,6 +43,30 @@ HARD = [
     r"\bclinical threshold\b", r"\bdiagnostic threshold\b",
 ]
 
+# PROMISE: M-F-186 vaat dili. HARD sınıfı — olumsuzlama KAÇIŞI YOK.
+#
+# ⚠️ **Bu kategori bir KÖRLÜKTEN doğdu (L-229), ve körlüğün yeri öğretici.**
+# Widget ağacını tarayan `test/support/copy_gate.dart` bu üç ihlali GÖREMEDİ:
+#
+#   1. `summary_strings.dart` metinleri `BatterySummaryView`e gidiyor, o da
+#      kabuktan ERİŞİLEMEZ (L-225). **Ulaşılamayan ama yine de GÖNDERİLEN
+#      kodu, ağaç-tarayan bir kapı tanımı gereği göremez.**
+#   2. Config `userText` alanı `USER_FACING_KEYS`te hiç YOKTU — o alan bugüne
+#      dek hiçbir denetimden geçmemişti, ve doğrudan yüzeye gidiyor.
+#
+# Kaynak-düzeyi tarama ikisini de kapatır: erişilebilirlikten bağımsız, ve
+# config alanı listeye girdiği anda geçmişe dönük de tarar.
+#
+# Aile dersi 8'in uygulanışı: **tuzak dosyaya değil DESENE yazılır.** Kuralı
+# `library_screen.dart`ta doğru yazmış olmam, iki dosya öteki ihlali
+# engellemedi — kural yorumda yaşarsa yalnız o dosyada yaşar.
+PROMISE = [
+    r"\byet\b",
+    r"coming soon",
+    r"comingSoon",
+    r"\bsoon\b",
+]
+
 # SOFT: olumsuzlama içinde meşru olabilir ("does not diagnose", "not a medical
 # device"). Olumsuzlanmamışsa ihlaldir.
 SOFT = [
@@ -86,6 +110,12 @@ USER_FACING_KEYS = {
     "breathCue", "description_en",
     # bilgi mimarisi (kütüphane sayfaları, dürüstlük kutuları, "neden yok" sayfası)
     "intro", "topic", "reason", "scope", "measured", "notMeasured",
+    # ⚠️ ÜÇÜ DE 2026-08-07'de EKLENDİ ve üçü de o güne kadar HİÇ TARANMAMIŞTI
+    # (L-229). `userText` doğrudan sonuç ekranına gidiyor ve içinde iki tane
+    # `yet` vardı; `setupNote`/`framingRule` kullanıcıya kamerayı nasıl
+    # kuracağını anlatıyor. Listede olmayan alan "temiz" değil, BAKILMAMIŞTIR
+    # — dosyanın kendisi tarandığı için sayaç da uyarmıyordu.
+    "userText", "setupNote", "framingRule",
 }
 
 #: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
@@ -156,6 +186,12 @@ def scan_text(where: str, text: str) -> list[str]:
     for pat in HARD:
         for m in re.finditer(pat, text, re.IGNORECASE):
             problems.append(f"{where}: HARD  «{m.group(0)}»  — {text[:90]}…")
+    for pat in PROMISE:
+        for m in re.finditer(pat, text, re.IGNORECASE):
+            problems.append(
+                f"{where}: VAAT  «{m.group(0)}»  — M-F-186: bilmediğimiz bir "
+                f"tarihi ima eder  — {text[:90]}…"
+            )
     for pat in SOFT:
         for m in re.finditer(pat, text, re.IGNORECASE):
             if not _is_negated(text, m.start()):

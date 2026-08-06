@@ -33,9 +33,16 @@ abstract final class SummaryStrings {
   static const String noBandsSubtitle =
       'These tests have no numeric range to compare against, by design.';
 
-  static const String notComparedSection = 'Measured — not compared yet';
+  /// ⚠️ Buradaki iki metin `yet` taşıyordu ve `yet` M-F-186'nın yasakladığı
+  /// üç kelimeden biri. İhlal ÜSLUP meselesi değildi: *"not compared **yet**"*,
+  /// karşılaştırmama kararını **tasarlanmış bir hâlden eksik bir hâle**
+  /// indiriyordu — oysa Progress'in kıyas yapmaması bir eksiklik değil, bu
+  /// ürünün en dürüst kararı. Sebep zaten her satırda; `yet` bilgi eklemiyor,
+  /// yalnız söz veriyor. (Ostinato'nun hükmü, koordinatör taşıdı:
+  /// *"gerekçenin varlığı 'yet'i affetmiyor."*)
+  static const String notComparedSection = 'Measured — not compared';
   static const String notComparedSubtitle =
-      'The number is real. Why we cannot compare it yet is on each row.';
+      'The number is real. Why we cannot compare it is on each row.';
 
   static const String notMeasuredSection = 'Not measured';
   static const String notMeasuredSubtitle =
@@ -66,18 +73,14 @@ abstract final class SummaryStrings {
         _ => 'Not measured ($code).',
       };
 
-  /// **Yüzeyde GÖRÜLMESİ YASAK sözcükler** (M-F-186, aile yüzey-kuralı).
-  ///
-  /// Çalışan bir ölçümü "yakında/beta" diye etiketlemek kullanıcının yaptığı
-  /// işi sahiplenmemektir. `tools/status_weave_check.py` bunu CONFIG tarafında
-  /// kapatıyor; bu liste aynı yasağın YÜZEY tarafındaki ikizi — testler hem bu
-  /// listeyi hem basılan ağacı tarar.
-  static const List<String> forbiddenSurfaceWords = <String>[
-    'coming soon',
-    'yakında',
-    'beta',
-    'unavailable',
-    'not available',
-    'work in progress',
-  ];
+  // NOT: `forbiddenSurfaceWords` listesi BURADAN KALDIRILDI (L-229).
+  //
+  // Aynı sözlük `test/support/copy_gate.dart`ta da vardı — ikiz. Ve ikizin
+  // bedeli ölçüldü: bu dosyanın KENDİSİ iki `yet` ihlali taşırken, listesinde
+  // `yet` YOKTU; üstelik liste `lib/` içinde yaşadığı için kaynak-düzeyi
+  // süzgeç onu "yasak kelime kullanımı" sanıp false-positive üretiyordu.
+  //
+  // Yasaklı sözcük sözlüğü bir ÜRÜN verisi değil bir KAPI verisidir; yeri
+  // test katmanı. Tek kaynak artık `copy_gate.kBannedSurfaceCopy` ve o liste
+  // `yet`i de taşıyor.
 }

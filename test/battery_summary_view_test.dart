@@ -12,6 +12,7 @@ import 'package:lissom/app/battery_summary_view.dart';
 import 'package:lissom/app/summary_strings.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
+import 'support/copy_gate.dart';
 import 'support/narrow_surface.dart';
 
 Battery _battery() => Battery.parseJson(
@@ -212,13 +213,12 @@ void main() {
           reason: 'üç satır + başlıklar basılmalı; boş ağaçta bu tarama '
               'boşa geçer');
       expect(all, contains(SummaryStrings.header.toLowerCase()));
-      for (final String word in SummaryStrings.forbiddenSurfaceWords) {
-        for (final String rendered in all) {
-          expect(rendered.contains(word), isFalse,
-              reason: 'çalışan bir ölçümün yanında "$word" yazmak, '
-                  'kullanıcının yaptığı işi sahiplenmemektir (M-F-186)');
-        }
-      }
+      // TEK sözlük (L-229): eskiden bu döngü `SummaryStrings
+      // .forbiddenSurfaceWords` üzerinde dönüyordu — `copy_gate`in ikizi, ve
+      // içinde `yet` YOKTU. Bu ekranın iki başlığı `yet` taşırken test yeşil
+      // yandı. Artık aynı kapı: `yet` · tezahürat · improved/worsened ·
+      // defter atfı, hepsi.
+      expectNoBannedCopy(tester);
     });
 
     // NOT: "mobilya sabitlerinin kendisi yasak sözcük taşımaz" iddiası

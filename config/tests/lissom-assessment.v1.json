@@ -99,7 +99,7 @@
         "statusBasis": {
           "code": "variant-mismatch",
           "measured": "Aday havuzun 7/7'si TEK bir baş-üstü uzanma testi değil: 6'sı çok-egzersizli rutin, 1'i duvar-destekli varyant (wall slides). Hedefli hasat turu 5 yeni kaynak getirdi, üç-eksen ölçümünden 0'ı geçti. L-173/L-174.",
-          "userText": "We measure how far you reach, and we show you the number. We are not yet comparing it to a reference range — the instructor videos we found each demonstrate a different exercise, so building one honestly is not possible yet."
+          "userText": "We measure how far you reach, and we show you the number. We do not compare it to a reference range — the instructor videos we found each demonstrate a different exercise, so there is nothing honest to compare against. The reason is on the row."
         },
         "promotionPath": {
           "unblockedBy": "single-exercise harvest round",
