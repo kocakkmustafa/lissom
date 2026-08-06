@@ -50,6 +50,10 @@ dependencies:
   # kalıyor ve testler geçici bir dosyayla koşabiliyor.
   path_provider: ^2.1.0
 
+  # Tasarım paneli tipografisi (Newsreader/Nunito Sans/IBM Plex Mono) — aynı
+  # paket Choreia ve Ostinato'da da kullanılıyor (aile emsali).
+  google_fonts: ^6.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

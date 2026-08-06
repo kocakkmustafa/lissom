@@ -18,6 +18,7 @@ library;
 import 'package:flutter/material.dart';
 
 import 'app/assessment_home.dart';
+import 'app/lissom_theme.dart';
 
 void main() => runApp(const LissomApp());
 
@@ -27,10 +28,7 @@ class LissomApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'Lissom',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF3A7D6E)),
-          useMaterial3: true,
-        ),
+        theme: buildLissomTheme(),
         home: const AssessmentHomeScreen(),
       );
 }

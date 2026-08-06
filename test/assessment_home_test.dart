@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/assessment_home.dart';
+import 'package:lissom/app/summary_strings.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
 /// Config'i DOSYADAN okur — `rootBundle` widget testinde kilitlenebiliyor
@@ -57,20 +58,22 @@ void main() {
         home: AssessmentHomeScreen(livenessLoader: _fromDisk)));
     await tester.pumpAndSettle();
 
-    // YÖN 1 — canlı testler yüzeyde.
-    expect(find.text('overhead_reach'), findsOneWidget);
-    expect(find.text('deep_squat'), findsOneWidget);
-    expect(find.text('active_straight_leg_raise'), findsOneWidget);
-    expect(find.textContaining('Kamerayla ölçülebilen testler (3)'),
-        findsOneWidget);
+    // YÖN 1 — canlı testler yüzeyde (insan-okur ad, TestSpec.name'den TAŞINIR).
+    expect(find.text('Overhead Reach'), findsOneWidget);
+    expect(find.text('Deep Squat'), findsOneWidget);
+    expect(find.text('Active Straight Leg Raise'), findsOneWidget);
+    // Bölüm etiketleri `LissomEyebrow` ile basılır ve BÜYÜK HARFE çevrilir
+    // (tasarımın eyebrow-etiket dili) — arama da büyük harfle olmalı.
+    expect(find.textContaining('MEASURED BY CAMERA NOW (3)'), findsOneWidget);
 
     // YÖN 2 — engelli testler de yüzeyde, GEREKÇELİ.
-    expect(find.textContaining('Şu an ölçülemeyen testler (9)'),
-        findsOneWidget);
+    expect(find.textContaining('NOT MEASURABLE YET (9)'), findsOneWidget);
     // Kaydırmadan görünmeyenler için: bölüm başlığı ve sayı yeterli kanıt,
-    // ama en az bir engel gerekçesinin metni de yüzeyde olmalı.
+    // ama en az bir engel gerekçesinin metni de yüzeyde olmalı. Ortak alt-dize
+    // her iki blocker varyantında da geçer (bkz. metric_bridge.dart._blockerText).
     expect(
-        find.textContaining('ölçüm çekirdeğinde henüz yok', skipOffstage: false),
+        find.textContaining('in the measurement engine yet',
+            skipOffstage: false),
         findsWidgets,
         reason: 'engel gerekçesi yüzeyde görünmüyorsa "isimli engel" iddiası '
             'boş kalır');
@@ -82,12 +85,12 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: AssessmentHomeScreen(livenessLoader: _fromDisk)));
     await tester.pumpAndSettle();
-    expect(find.text('ÖLÇÜM, NOT DEĞİL'), findsOneWidget);
+    expect(find.text(SummaryStrings.header), findsOneWidget);
     // Beyan, ilk test kartından ÖNCE gelmeli — aşağıda olsaydı kaydırmayan
     // kullanıcı hiç görmezdi.
-    final double declY = tester.getTopLeft(find.text('ÖLÇÜM, NOT DEĞİL')).dy;
+    final double declY = tester.getTopLeft(find.text(SummaryStrings.header)).dy;
     final double firstTestY =
-        tester.getTopLeft(find.text('overhead_reach')).dy;
+        tester.getTopLeft(find.text('Overhead Reach')).dy;
     expect(declY, lessThan(firstTestY));
   });
 
@@ -123,8 +126,8 @@ void main() {
     ));
     await tester.pumpAndSettle();
     // Sessiz boş ekran YASAK: hem beyan hem hata görünür.
-    expect(find.text('ÖLÇÜM, NOT DEĞİL'), findsOneWidget);
-    expect(find.text('Test listesi okunamadı'), findsOneWidget);
+    expect(find.text(SummaryStrings.header), findsOneWidget);
+    expect(find.text("We couldn't read the test list"), findsOneWidget);
     expect(find.textContaining('bozuk config'), findsOneWidget,
         reason: 'sebep YUTULMAZ — kullanıcı neyin patladığını görür');
   });

@@ -194,11 +194,16 @@ const List<MetricBinding> kMetricBindings = <MetricBinding>[
 final class TestLiveness {
   const TestLiveness({
     required this.testId,
+    required this.name,
     required this.metrics,
     required this.blocker,
   });
 
   final String testId;
+
+  /// `TestSpec.name` — config'ten TAŞINIR, burada yeniden yazılmaz. Yüzeyin
+  /// ham `testId` yerine insan-okur ad göstermesi bu alanı gerektirdi.
+  final String name;
 
   /// Testin ihtiyaç duyduğu (`{side}` çözülmüş) birincil metrikler.
   final List<String> metrics;
@@ -234,7 +239,8 @@ List<TestLiveness> deriveLiveness(Battery battery) {
     final List<String> missing =
         metrics.where((String m) => !bridged.contains(m)).toList();
     if (missing.isEmpty) {
-      out.add(TestLiveness(testId: t.id, metrics: metrics, blocker: null));
+      out.add(TestLiveness(
+          testId: t.id, name: t.name, metrics: metrics, blocker: null));
       continue;
     }
     // Engel gerekçesi metriğin KENDİ blocker'ından gelir; "bir şeyler eksik"
@@ -244,6 +250,7 @@ List<TestLiveness> deriveLiveness(Battery battery) {
     };
     out.add(TestLiveness(
       testId: t.id,
+      name: t.name,
       metrics: metrics,
       blocker: reasons.join(' · '),
     ));
@@ -252,26 +259,28 @@ List<TestLiveness> deriveLiveness(Battery battery) {
   return out;
 }
 
-/// Bir metriğin engel gerekçesi — kullanıcı diliyle, vaat İÇERMEDEN.
+/// Bir metriğin engel gerekçesi — kullanıcı diliyle (İngilizce, arayüz dili),
+/// vaat İÇERMEDEN.
+///
+/// ⚠️ İlk yazımda "the trunk angle can't be measured in two planes" yazıyordu
+/// ve SİM EKRANINDA yakalandı: `ankle_dorsiflexion` bu blocker'ı taşıyor ama
+/// metriği `tibia_inclination` — kaval kemiği, GÖVDE DEĞİL. Yani kullanıcıya
+/// yanlış anatomi söylüyordum. L-184/L-196'nın aynı sınıfı (kendinden emin
+/// YANLIŞ GEREKÇE) ve bu kez ekran kanıtı yakaladı, test değil: dört metrik
+/// aynı blocker'ı paylaşıyor (trunk_lean · trunk_lateral_tilt ·
+/// tibia_inclination L/R), o yüzden metin İKİSİNİ de kapsayacak kadar genel
+/// kalmalı ("this angle") — belirli bir vücut bölgesi ADI VERMEMELİ.
 String _blockerText(String metric) {
   final BridgeBlocker? b = kUnbridgedMetrics[metric];
   return switch (b) {
     BridgeBlocker.coreLacksMeasureKind =>
-      'bu ölçü tipi ölçüm çekirdeğinde henüz yok',
-    // ⚠️ İlk yazımda "gövde açısı iki ayrı düzlemde ölçülemiyor" yazıyordu ve
-    // SİM EKRANINDA yakalandı: `ankle_dorsiflexion` bu blocker'ı taşıyor ama
-    // metriği `tibia_inclination` — kaval kemiği, GÖVDE DEĞİL. Yani kullanıcıya
-    // yanlış anatomi söylüyordum. L-184/L-196'nın aynı sınıfı (kendinden emin
-    // YANLIŞ GEREKÇE) ve bu kez ekran kanıtı yakaladı, test değil: dört metrik
-    // aynı blocker'ı paylaşıyor (trunk_lean · trunk_lateral_tilt ·
-    // tibia_inclination L/R), o yüzden metin İKİSİNİ de kapsayacak kadar genel
-    // ama sebebi hâlâ İSİMLİ olmalı.
+      "this measurement type isn't in the measurement engine yet",
     BridgeBlocker.corePlaneSeparationMissing =>
-      'bu açının gerektirdiği düzlem ayrımı ölçüm çekirdeğinde yok',
+      "the plane separation this angle needs isn't in the measurement engine yet",
     // Beyan edilmemiş bir metrik: sessizce "engelli" saymak yerine
     // BİLİNMEDİĞİNİ söyler. `metric_coverage_test` bu durumu kırmızı yakar,
     // yani buraya düşmek zaten bir kapı ihlalidir.
-    null => 'ölçüm köprüsü beyan edilmemiş ($metric)',
+    null => 'measurement bridge not declared ($metric)',
   };
 }
 
