@@ -43,13 +43,20 @@ class AssessmentHomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Lissom'),
         actions: <Widget>[
-          TextButton(
+          // İkon+tooltip — AppBar'ın actions Row'u (bizim yazmadığımız,
+          // dolayısıyla Expanded ile koruyamadığımız bir Row) uzun bir metin
+          // etiketiyle dar cihazda/büyük yazı tipinde taşabilirdi (aile dersi,
+          // Choreia — "gerçek metin fixture'dan uzundur, taşma ancak gerçek
+          // metinle görünür"). Sabit genişlikli ikon bu sınıfı yapısal olarak
+          // ORTADAN KALDIRIR.
+          IconButton(
+            tooltip: "What Lissom doesn't do",
+            icon: const Icon(Icons.info_outline),
             onPressed: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => const WhatLissomDoesntDoScreen(),
               ),
             ),
-            child: const Text("What Lissom doesn't do"),
           ),
         ],
       ),
