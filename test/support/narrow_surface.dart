@@ -13,7 +13,15 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// iPhone SE (3rd gen) mantıksal genişliği — en dar yaygın cihaz.
+/// En dar yaygın **genişlik** (375pt, iPhone SE 3. nesil) × iPhone X sınıfı
+/// **yükseklik** (812pt).
+///
+/// ⚠️ **Bu bir cihaz değil, bir STRES YÜZEYİ** — ve karışıklık gerçekten
+/// oldu: gerçek iPhone SE 3. nesil **375×667**tir, 812 değil (simülatörde
+/// ölçüldü, 750×1334 piksel). Taşmayı belirleyen şey GENİŞLİK olduğu için
+/// kapı geçerli; yükseklik bilerek daha uzun tutuluyor ki test tek ekranda
+/// daha çok içerik görebilsin. Adın "SE" demediğine dikkat: bir cihaz adı
+/// yazsaydık, yanlış bir cihaz iddiası taşırdı.
 const Size kNarrowStressSurface = Size(375, 812);
 
 /// `tester.view`'ı [kNarrowStressSurface]'a sabitler ve testin sonunda

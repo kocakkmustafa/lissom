@@ -49,3 +49,39 @@ bu metrik sınıfı için yanlış), **test kör değil.**
 - `giydirme-tasma-stres-testi-375pt-2026-08-06.png` (19:28) — en-dar-cihaz
   taşma stres testi (L-214)
 - `sim-canli3-engelli9.png` (önceki tur, kamera entegrasyonu)
+
+
+---
+
+# Güncelleme — 2026-08-07, dört sekme turu
+
+Aşağıdaki maddeler **yüzey yokluğu** yüzünden `ölçülmedi` idi; sekmeler
+geldiği için artık ölçülebilir hâle geldiler.
+
+| # | Madde | Önceki | Şimdi | Kanıt / gerekçe |
+|---|---|---|---|---|
+| ③ | improved/worsened yasağı | ölçülmedi | **uyumlu** | Progress yüzeyi kuruldu ve iki kelime de yasak listesinde: `test/support/copy_gate.dart` her `Text`i tarıyor. Ayrıca kıyasın NEDEN yapılmadığı ekranın tepesinde yazılı — yokluk sessiz değil, beyanlı |
+| ⑧ | geri sayım estetiği yasağı | ölçülmedi | **uyumlu** | `home_screen.dart` `retest_countdown`: vade YOK, gün sayısı YOK, göreli süre ("3 gün önce") BİLEREK yok — göreli süre gecikme duygusu üretmenin en sessiz yolu. Kapı `home_screen_test.dart`: `days left`/`overdue`/`missed`/`late`/`due`/`streak` aranıyor ve bulunmuyor; pozitif ikizi *"when you are ready"* aranıyor ve bulunuyor |
+| ⑪ | yol-haritası sayfası / eşit-ağırlık yasağı | ölçülmedi | **uyumlu** | `library_screen_test.dart` YAPISAL olarak ölçüyor: altı ailenin ADI da kütüphane ekranının kendisinde (yol-haritası alt sayfası yok) **ve** `LissomCard` sayısı = inşa edilmiş aile sayısı, inşa edilmemiş bölümde SIFIR kart (eşit ağırlık yok). Ekran: `docs/kanit/sim-375pt-*` |
+| ⑮ | kütüphane katmanlaması | ölçülmedi | **uyumlu** | Aynı test + `builtY < pendingY` konum iddiası |
+| ⑱ | kalıcı ölçüm-sınırı beyanı | **ihlal** | **uyumlu** | `MeasurementLimitsFootnote` — `disclaimers.measurementLimits` BİREBİR + marjın **ölçülmediğini** söyleyen isimli cümle. Sayı UYDURULMADI; kapı `±` işaretinin yüzeyde belirmemesini sınıyor |
+| ② | tezahürat yasağı | uyumlu | **uyumlu (artık KAPILI)** | Elle kontrol yerine `copy_gate.dart`: `!` · `keep going` · `well done` · `great job` |
+
+## Bu turda AÇILAN yeni ihlaller (hepsi kapatıldı, biri açık)
+
+| Bulgu | Sınıf | Durum |
+|---|---|---|
+| `yet` canlı koddaydı (`_blockerText` × 2) — vaat dili kapısı yalnız `comingSoon`/`yakında` arıyordu | M-F-186 | **kapalı** — kapı genişletildi |
+| Ham metrik id + jargon yüzeyde (`hold_duration`) | dahili sözlük sızıntısı | **kapalı** (L-220) |
+| Dahili defter atfı `(L-006)` yüzeyde | aynı sınıf | **kapalı** (L-223) |
+| `wellness_lint` Dart'a hiç bakmıyordu | kapı boşluğu | **kapalı** (L-221) |
+| `google_fonts` çalışma anında yazı tipi indiriyor | çevrimdışı + gizlilik | **AÇIK — koordinatörde** (L-222) |
+| `disclaimers.scoreScreen` ürünün kendi hükümleriyle çelişiyor | dürüstlük | **AÇIK — koordinatörde** (L-227) |
+
+## Kanıtın SINIRI — isimle
+
+`docs/kanit/ia-375pt-*.png` golden'ları **375×812'de yapıyı** kanıtlar,
+**tipografiyi kanıtlamaz**: `google_fonts` `flutter_test` altında yazı tipi
+yükleyemediği için metin Ahem bloklarıyla çizilir. Metin DOĞRULUĞUNUN kanıtı
+`docs/kanit/sim-375pt-*.png` — gerçek iPhone SE, gerçek glifler. Bu turdaki
+üç sızıntının üçünü de o kanıt yakaladı, golden değil.
