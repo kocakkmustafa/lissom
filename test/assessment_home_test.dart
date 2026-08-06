@@ -14,6 +14,8 @@ import 'package:lissom/app/assessment_home.dart';
 import 'package:lissom/app/summary_strings.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
+import 'support/narrow_surface.dart';
+
 /// Config'i DOSYADAN okur — `rootBundle` widget testinde kilitlenebiliyor
 /// (aile gotcha'sı), o yüzden yükleyici enjekte edilir.
 Future<List<TestLiveness>> _fromDisk() async {
@@ -26,6 +28,7 @@ void main() {
   testWidgets('türetim: 3 canlı · 9 engelli — sayılar TÜRETİLİR', (
     WidgetTester tester,
   ) async {
+    pinNarrowSurface(tester);
     final List<TestLiveness> all = await _fromDisk();
     final List<TestLiveness> live =
         all.where((TestLiveness x) => x.isLive).toList();
@@ -54,6 +57,7 @@ void main() {
   testWidgets('YÜZEY: canlı-3 canlı görünür VE engelli-9 isimli görünür', (
     WidgetTester tester,
   ) async {
+    pinNarrowSurface(tester);
     await tester.pumpWidget(MaterialApp(
         home: AssessmentHomeScreen(livenessLoader: _fromDisk)));
     await tester.pumpAndSettle();
@@ -82,6 +86,7 @@ void main() {
   testWidgets('BEYAN yüzeyin TEPESİNDE (M-F-186 koşul 4)', (
     WidgetTester tester,
   ) async {
+    pinNarrowSurface(tester);
     await tester.pumpWidget(MaterialApp(
         home: AssessmentHomeScreen(livenessLoader: _fromDisk)));
     await tester.pumpAndSettle();
@@ -97,6 +102,7 @@ void main() {
   testWidgets('VAAT DİLİ YOK — "yakında"/comingSoon yüzeyde geçmez', (
     WidgetTester tester,
   ) async {
+    pinNarrowSurface(tester);
     await tester.pumpWidget(MaterialApp(
         home: AssessmentHomeScreen(livenessLoader: _fromDisk)));
     await tester.pumpAndSettle();
@@ -119,6 +125,7 @@ void main() {
   testWidgets('ÇIKMAZ-SOKAK YASAĞI: config patlasa da ekran AÇILIR ve söyler', (
     WidgetTester tester,
   ) async {
+    pinNarrowSurface(tester);
     await tester.pumpWidget(MaterialApp(
       home: AssessmentHomeScreen(
         livenessLoader: () async => throw const FormatException('bozuk config'),

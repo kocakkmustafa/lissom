@@ -1,0 +1,26 @@
+/// Aile standardı (Ostinato ölçtü, 2026-08-06): `flutter_test`in varsayılan
+/// yüzeyi **800 mantıksal piksel** — gerçek en-dar yaygın telefonun
+/// (iPhone SE, 375pt) neredeyse İKİ KATI. Bu genişlikte koşan bir taşma testi
+/// YEŞİL yanabilir ve YANLIŞ GÜVEN verir; Ostinato tam bunu ölçtü (Live
+/// ekranının başlık çubuğu 375pt'e sabitlenince 112–195px taştı, 800pt'te
+/// hiçbir işaret yoktu).
+///
+/// `pumpWidget` çağıran HER taşma/yerleşim testi bu genişliğe SABİTLENİR —
+/// tercih değil, kapı. Ekran kanıtını en dar cihazda almak (L-214) yalnız
+/// TEK BİR anlık kontroldü; bu, aynı sınırı KALICI REGRESYON KAPISI yapar.
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+/// iPhone SE (3rd gen) mantıksal genişliği — en dar yaygın cihaz.
+const Size kNarrowStressSurface = Size(375, 812);
+
+/// `tester.view`'ı [kNarrowStressSurface]'a sabitler ve testin sonunda
+/// otomatik geri alır. Her `testWidgets` gövdesinin İLK satırı olmalı.
+void pinNarrowSurface(WidgetTester tester) {
+  tester.view.physicalSize = kNarrowStressSurface;
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}

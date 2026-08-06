@@ -12,6 +12,8 @@ import 'package:lissom/app/battery_summary_view.dart';
 import 'package:lissom/app/summary_strings.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
+import 'support/narrow_surface.dart';
+
 Battery _battery() => Battery.parseJson(
     File('config/tests/lissom-assessment.v1.json').readAsStringSync());
 
@@ -31,11 +33,17 @@ void main() {
   BatterySummary summaryOf(Map<String, AssessmentResult> results) =>
       BatterySummary.from(battery: _battery(), results: results);
 
-  Future<void> pump(WidgetTester tester, BatterySummary s) =>
-      tester.pumpWidget(Directionality(
-        textDirection: TextDirection.ltr,
-        child: BatterySummaryView(summary: s),
-      ));
+  // Tek nokta: HER `testWidgets` bu yoldan pompalıyor, o yüzden en-dar-cihaz
+  // sabitlemesi burada — 9 çağrı sitesine dokunmaya gerek yok ve yeni bir
+  // test yazan biri unutamaz (L-214 aile standardı, Ostinato ölçtü: varsayılan
+  // test yüzeyi 800pt, gerçek en-dar telefonun neredeyse iki katı).
+  Future<void> pump(WidgetTester tester, BatterySummary s) {
+    pinNarrowSurface(tester);
+    return tester.pumpWidget(Directionality(
+      textDirection: TextDirection.ltr,
+      child: BatterySummaryView(summary: s),
+    ));
+  }
 
   Finder inSection(Key section, String text) =>
       find.descendant(of: find.byKey(section), matching: find.text(text));
