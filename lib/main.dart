@@ -5,20 +5,21 @@
 /// "başlangıç noktan bu" anlatı sınıfı.
 ///
 /// Kabuk yalnız KABLOLAMA (G-100): hiçbir hüküm burada yaşamaz, hepsi
-/// `lissom_engine`'de. Bu dosya hâlleri GÖSTERİR, karar VERMEZ.
+/// `lissom_engine`'de ve versiyonlu config'te. Bu dosya hâlleri GÖSTERİR,
+/// karar VERMEZ.
 ///
-/// **Kapsam hükmü (M-F-272 / L-206):** bataryanın 12 testinden 3'ü canlı
-/// koşabilir (`overhead_reach` · `deep_squat` · `active_straight_leg_raise`);
-/// kalan 9'un metrik köprüsü yok ve bu **isimli engelle** görünür.
-/// `comingSoon`/vaat dili KULLANILMAZ (M-F-186): "yakında" bir söz verir, oysa
-/// engelin ne zaman kalkacağı bilinmiyor — bilmediğimiz bir tarihi ima etmek,
-/// ölçüm yerine sayı uydurmakla aynı dürüstlük sınıfı.
+/// **Bilgi mimarisi (2026-08-07):** dört sekme — `home` · `library` ·
+/// `progress` · `profile` — `config/ia/library.v1.json`'dan TÜRETİLİR.
+/// Sekmelerden önce uygulama tek ekrandı ve tasarımın dört sekmesi kodda
+/// karşılıksızdı; bu tur o boşluğu kapattı. Her sekmenin dürüst hâli
+/// birinci-sınıf ekrandır: ölçülemeyen şey İSİMLİ gerekçeyle görünür,
+/// vaat diliyle değil (M-F-186).
 library;
 
 import 'package:flutter/material.dart';
 
-import 'app/assessment_home.dart';
 import 'app/lissom_theme.dart';
+import 'app/shell.dart';
 
 void main() => runApp(const LissomApp());
 
@@ -29,6 +30,6 @@ class LissomApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         title: 'Lissom',
         theme: buildLissomTheme(),
-        home: const AssessmentHomeScreen(),
+        home: const LissomShell(),
       );
 }

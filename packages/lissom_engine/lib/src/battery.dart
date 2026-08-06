@@ -206,16 +206,48 @@ final class TestSpec {
           '{opposite}', side == 'right' ? 'left' : 'right');
 }
 
+/// Bataryaya KASITLI olarak alınmamış bir test — ve gerekçesi.
+///
+/// **Bu alanın iki yıl okuyucusu yoktu** (L-181 sınıfı: bilgi taşıyan config
+/// alanı süs olarak bırakılmış). Sonuç: iki test ÖLÇÜLDÜ, gerekçeleriyle
+/// birlikte dışarıda bırakıldı ve kullanıcı bunu HİÇ ÖĞRENEMEDİ —
+/// `cervical_rotation` hiçbir yüzeyde geçmiyordu. Oysa "neyi ölçmediğimizi
+/// söylemek" bu ürünün konumlandırmasının kendisi.
+final class ExcludedTest {
+  const ExcludedTest({
+    required this.id,
+    required this.reason,
+    required this.whyNotTopic,
+  });
+
+  final String id;
+
+  /// ÖLÇÜLMÜŞ gerekçe, kullanıcı diliyle. Boş olamaz.
+  final String reason;
+
+  /// Bu dışlamanın ürün-düzeyi karşılığı (`whyNotPage.items[].topic`), varsa.
+  ///
+  /// Dolu olduğunda yüzey iki kaydı BİRLEŞTİRİR: ürün sınırı üstte, ölçülmüş
+  /// gerekçe altında. Dolu değilse dışlama KENDİ satırını alır — sessizce
+  /// kaybolmaz. Eşleştirme metin karşılaştırmasıyla TAHMİN EDİLMEZ; config
+  /// bunu BEYAN eder, çünkü tahmini bir eşleşme bir gün sessizce kayar.
+  final String? whyNotTopic;
+}
+
 final class Battery {
   const Battery({
     required this.id,
     required this.version,
     required this.tests,
+    required this.excluded,
   });
 
   final String id;
   final String version;
   final Map<String, TestSpec> tests;
+
+  /// Bataryaya alınmamış testler — İSİMLİ gerekçeleriyle.
+  final List<ExcludedTest> excluded;
 
   static Battery parseJson(String source) =>
       parse(jsonDecode(source) as Map<String, dynamic>);
@@ -243,7 +275,39 @@ final class Battery {
       id: root['id'] as String? ?? 'lissom.assessment.battery',
       version: version,
       tests: tests,
+      excluded: _parseExcluded(root['excluded']),
     );
+  }
+
+  /// `excluded` YOKSA boş liste meşrudur (bir batarya hiçbir şeyi dışlamamış
+  /// olabilir); ama VARSA katı okunur — gerekçesiz bir dışlama, "bir şey
+  /// eksik ama nedenini söylemiyoruz" demektir ve bu ürünün reddettiği tek
+  /// şeydir.
+  static List<ExcludedTest> _parseExcluded(Object? raw) {
+    if (raw == null) return const <ExcludedTest>[];
+    if (raw is! List) throw BatteryError('excluded', 'liste olmalı');
+    final List<ExcludedTest> out = <ExcludedTest>[];
+    for (int i = 0; i < raw.length; i++) {
+      final Object? e = raw[i];
+      if (e is! Map<String, dynamic>) {
+        throw BatteryError('excluded[$i]', 'nesne olmalı');
+      }
+      final Object? id = e['id'];
+      final Object? reason = e['reason'];
+      if (id is! String || id.trim().isEmpty) {
+        throw BatteryError('excluded[$i].id', 'zorunlu');
+      }
+      if (reason is! String || reason.trim().isEmpty) {
+        throw BatteryError('excluded[$i].reason',
+            'zorunlu — gerekçesiz dışlama, sebebini saklayan bir eksikliktir');
+      }
+      out.add(ExcludedTest(
+        id: id,
+        reason: reason,
+        whyNotTopic: e['whyNotTopic'] as String?,
+      ));
+    }
+    return out;
   }
 
   static TestSpec _parseTest(Map<String, dynamic> raw, String path) {

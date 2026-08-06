@@ -116,18 +116,87 @@ enum BridgeBlocker {
 /// köprülenmiş ∪ burada beyan edilmiş kümesine eşit olmasını zorlar. Yeni bir
 /// metrik config'e girdiğinde ne sessizce çalışır görünür ne de canlı turda
 /// patlar — kapı derhal kırmızı yanar.
-const Map<String, BridgeBlocker> kUnbridgedMetrics = <String, BridgeBlocker>{
-  'trunk_lean': BridgeBlocker.corePlaneSeparationMissing,
-  'trunk_lateral_tilt': BridgeBlocker.corePlaneSeparationMissing,
-  'tibia_inclination_right': BridgeBlocker.corePlaneSeparationMissing,
-  'tibia_inclination_left': BridgeBlocker.corePlaneSeparationMissing,
-  'heel_rise_right': BridgeBlocker.coreLacksMeasureKind,
-  'heel_rise_left': BridgeBlocker.coreLacksMeasureKind,
-  'knee_height_right': BridgeBlocker.coreLacksMeasureKind,
-  'knee_height_left': BridgeBlocker.coreLacksMeasureKind,
-  'reach_depth': BridgeBlocker.coreLacksMeasureKind,
-  'shoulder_line_foreshortening': BridgeBlocker.coreLacksMeasureKind,
-  'plank_hip_deviation': BridgeBlocker.coreLacksMeasureKind,
+/// Köprülenmemiş bir metriğin BEYANI — engel sınıfı + kullanıcının göreceği
+/// ANATOMİ + config'in ilan ettiği ölçü tipi.
+///
+/// **Neden üç alan da ZORUNLU:** engel sınıfı tek başına yeterliydi ve bir
+/// kusur doğurdu. Dört metrik aynı sınıfı paylaştığı için gerekçe metni
+/// "ikisini de kapsayacak kadar genel" yazılmıştı ("this angle") — bu, bir
+/// önceki turda kullanıcıya YANLIŞ ANATOMİ söylememizin (ankle_dorsiflexion
+/// için "gövde", oysa metrik KAVAL KEMİĞİ) tekrarını önleyen bir çare değil,
+/// onun yumuşatılmış hâliydi: *"belirli olma ki yanlış olma."*
+///
+/// Doğru çözüm, hatayı önlemek değil **hatanın imkânsız olduğu yapıyı**
+/// seçmek (aile dersi 7): artık her metrik KENDİ anatomisini beyan ediyor, ve
+/// [measureKind] `config/metrics/lissom-metrics.v1.json` ile **kapıda
+/// karşılaştırılıyor** (`metric_coverage_test.dart`). Yanlış bir ölçü-tipi
+/// iddiası sessiz kalamaz; beyansız bir metrik zaten derlenemez.
+final class UnbridgedMetric {
+  const UnbridgedMetric({
+    required this.blocker,
+    required this.subject,
+    required this.measureKind,
+  });
+
+  final BridgeBlocker blocker;
+
+  /// Kullanıcının okuyacağı ad — DOĞRU vücut bölgesi. Taraf EKLENMEZ: çift
+  /// taraflı bir metrik yüzeyde "Shin angle" olarak tek kez görünür, iki kez
+  /// değil.
+  final String subject;
+
+  /// Config'in bu metrik için ilan ettiği `kind`. Kapı bunu config'e karşı
+  /// doğrular — kod ile config'in ölçü tipi konusunda ayrışması, tam olarak
+  /// L-154'ün sınıfıdır (iki hat aynı metriği farklı çerçevede ölçüyordu).
+  final String measureKind;
+}
+
+const Map<String, UnbridgedMetric> kUnbridgedMetrics =
+    <String, UnbridgedMetric>{
+  'trunk_lean': UnbridgedMetric(
+      blocker: BridgeBlocker.corePlaneSeparationMissing,
+      subject: 'Forward trunk lean',
+      measureKind: 'angle_vertical'),
+  'trunk_lateral_tilt': UnbridgedMetric(
+      blocker: BridgeBlocker.corePlaneSeparationMissing,
+      subject: 'Sideways trunk tilt',
+      measureKind: 'angle_vertical'),
+  'tibia_inclination_right': UnbridgedMetric(
+      blocker: BridgeBlocker.corePlaneSeparationMissing,
+      subject: 'Shin angle',
+      measureKind: 'angle_vertical'),
+  'tibia_inclination_left': UnbridgedMetric(
+      blocker: BridgeBlocker.corePlaneSeparationMissing,
+      subject: 'Shin angle',
+      measureKind: 'angle_vertical'),
+  'heel_rise_right': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Heel lift',
+      measureKind: 'height_diff_norm'),
+  'heel_rise_left': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Heel lift',
+      measureKind: 'height_diff_norm'),
+  'knee_height_right': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Knee height',
+      measureKind: 'height_diff_norm'),
+  'knee_height_left': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Knee height',
+      measureKind: 'height_diff_norm'),
+  'reach_depth': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Reach depth',
+      measureKind: 'distance_norm'),
+  'shoulder_line_foreshortening': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Shoulder-line width',
+      measureKind: 'distance_norm'),
+  'plank_hip_deviation': UnbridgedMetric(
+      blocker: BridgeBlocker.coreLacksMeasureKind,
+      subject: 'Hip line in the plank',
+      measureKind: 'line_deviation_norm'),
 };
 
 /// V0 kapsamı: `AssessmentEngine`'in bugün gerçek fixture'la koşturulabildiği
@@ -243,46 +312,83 @@ List<TestLiveness> deriveLiveness(Battery battery) {
           testId: t.id, name: t.name, metrics: metrics, blocker: null));
       continue;
     }
-    // Engel gerekçesi metriğin KENDİ blocker'ından gelir; "bir şeyler eksik"
-    // değil, hangi kapı olduğu isimli (M-F-272 kapsam hükmü).
-    final Set<String> reasons = <String>{
-      for (final String m in missing) _blockerText(m),
-    };
     out.add(TestLiveness(
       testId: t.id,
       name: t.name,
       metrics: metrics,
-      blocker: reasons.join(' · '),
+      blocker: blockerTextFor(missing),
     ));
   }
   out.sort((TestLiveness a, TestLiveness b) => a.testId.compareTo(b.testId));
   return out;
 }
 
-/// Bir metriğin engel gerekçesi — kullanıcı diliyle (İngilizce, arayüz dili),
-/// vaat İÇERMEDEN.
+/// Eksik metrik kümesinin engel gerekçesi — kullanıcı diliyle, **DOĞRU
+/// anatomiyle** ve **vaat İÇERMEDEN.**
 ///
-/// ⚠️ İlk yazımda "the trunk angle can't be measured in two planes" yazıyordu
-/// ve SİM EKRANINDA yakalandı: `ankle_dorsiflexion` bu blocker'ı taşıyor ama
-/// metriği `tibia_inclination` — kaval kemiği, GÖVDE DEĞİL. Yani kullanıcıya
-/// yanlış anatomi söylüyordum. L-184/L-196'nın aynı sınıfı (kendinden emin
-/// YANLIŞ GEREKÇE) ve bu kez ekran kanıtı yakaladı, test değil: dört metrik
-/// aynı blocker'ı paylaşıyor (trunk_lean · trunk_lateral_tilt ·
-/// tibia_inclination L/R), o yüzden metin İKİSİNİ de kapsayacak kadar genel
-/// kalmalı ("this angle") — belirli bir vücut bölgesi ADI VERMEMELİ.
-String _blockerText(String metric) {
-  final BridgeBlocker? b = kUnbridgedMetrics[metric];
-  return switch (b) {
-    BridgeBlocker.coreLacksMeasureKind =>
-      "this measurement type isn't in the measurement engine yet",
-    BridgeBlocker.corePlaneSeparationMissing =>
-      "the plane separation this angle needs isn't in the measurement engine yet",
-    // Beyan edilmemiş bir metrik: sessizce "engelli" saymak yerine
-    // BİLİNMEDİĞİNİ söyler. `metric_coverage_test` bu durumu kırmızı yakar,
-    // yani buraya düşmek zaten bir kapı ihlalidir.
-    null => 'measurement bridge not declared ($metric)',
-  };
+/// ⚠️ Bu fonksiyonun tarihi iki kusur taşıyor, ikisi de kayıtlı:
+///
+/// **(a) YANLIŞ ANATOMİ (önceki tur, sim ekranında yakalandı).** İlk yazımda
+/// "the trunk angle…" yazıyordu; `ankle_dorsiflexion` bu engeli taşıyor ama
+/// metriği `tibia_inclination` — **kaval kemiği, gövde DEĞİL.** O turda çare
+/// metni GENELLEŞTİRMEKTİ ("this angle"), yani belirsizleşerek yanlış
+/// olmamak. Bu tur çare değişti: her metrik kendi anatomisini BEYAN ediyor
+/// ([UnbridgedMetric.subject]) ve beyan config'e karşı kapıda doğrulanıyor.
+///
+/// **(b) VAAT DİLİ (bu turda bulundu).** Metin *"isn't in the measurement
+/// engine **yet**"* diyordu. `yet` M-F-186'nın açıkça yasakladığı üç
+/// kelimeden biri — bilmediğimiz bir tarihi ima eder. Yüzey testleri bunu
+/// göremezdi: `assessment_home_test`in vaat-dili kapısı `comingSoon` ve
+/// `yakında` arıyordu, `yet` aramıyordu. **Kapı genişletildi.**
+String blockerTextFor(List<String> missingMetrics) {
+  // Sınıfa göre GRUPLA: aynı gerekçeyi iki kez yazmak (sol/sağ aynı engelde)
+  // metni şişirir ve kullanıcı ikinci kopyayı okumaz.
+  final Map<BridgeBlocker, List<String>> bySubject =
+      <BridgeBlocker, List<String>>{};
+  final List<String> undeclared = <String>[];
+
+  for (final String m in missingMetrics) {
+    final UnbridgedMetric? u = kUnbridgedMetrics[m];
+    if (u == null) {
+      // Beyan edilmemiş bir metrik: sessizce "engelli" saymak yerine
+      // BİLİNMEDİĞİNİ söyler. `metric_coverage_test` bu durumu kırmızı yakar,
+      // yani buraya düşmek zaten bir kapı ihlalidir.
+      undeclared.add(m);
+      continue;
+    }
+    final List<String> subjects =
+        bySubject.putIfAbsent(u.blocker, () => <String>[]);
+    if (!subjects.contains(u.subject)) subjects.add(u.subject);
+  }
+
+  final List<String> parts = <String>[
+    for (final MapEntry<BridgeBlocker, List<String>> e in bySubject.entries)
+      '${_join(e.value)} — ${_reasonFor(e.key)}',
+    for (final String m in undeclared) 'measurement bridge not declared ($m)',
+  ];
+  return parts.join(' · ');
 }
+
+String _join(List<String> subjects) => switch (subjects.length) {
+      0 => '',
+      1 => subjects.first,
+      _ =>
+        '${subjects.sublist(0, subjects.length - 1).join(", ")} and ${subjects.last}',
+    };
+
+/// Engel sınıfının kullanıcı diliyle gerekçesi.
+///
+/// ⛔ `yet` · `soon` · `coming` KULLANILMAZ. Cümle NEDEN'i söyler, NE ZAMAN'ı
+/// değil — çünkü ne zamanı bilmiyoruz ve bilmediğimiz bir tarihi ima etmek,
+/// ölçüm yerine sayı uydurmakla aynı dürüstlük sınıfı.
+String _reasonFor(BridgeBlocker b) => switch (b) {
+      BridgeBlocker.coreLacksMeasureKind =>
+        'the measurement engine reads angles between body points, and this is '
+            'a distance rather than an angle',
+      BridgeBlocker.corePlaneSeparationMissing =>
+        'the measurement engine keeps a single tilt figure and cannot tell '
+            'forward lean apart from sideways lean',
+    };
 
 MetricBinding bindingFor(String lissomMetric) {
   for (final MetricBinding b in kMetricBindings) {

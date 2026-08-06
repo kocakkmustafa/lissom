@@ -24,3 +24,21 @@ void pinNarrowSurface(WidgetTester tester) {
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
 }
+
+/// [finder] görünene kadar kaydırır.
+///
+/// **Neden gerekli ve neden bu bir TUZAK:** `ListView(children: …)` çocukları
+/// TEMBEL kurar — ekranın altında kalan bir widget ağaçta HİÇ YOKTUR ve
+/// `skipOffstage: false` bile onu bulamaz. Yani kaydırmadan yazılmış bir
+/// "bu beyan sayfada var" testi, beyan silinse bile aynı şekilde kırmızı
+/// yanar — ve daha kötüsü, ekrana SIĞAN bir sayfada yanlışlıkla yeşil yanıp
+/// beyanın varlığını KANITLAMIŞ gibi görünür. Dar yüzeyde (375pt) bu fark
+/// büyür, çünkü daha az şey sığar.
+Future<void> scrollTo(WidgetTester tester, Finder finder) async {
+  await tester.scrollUntilVisible(
+    finder,
+    260,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.pumpAndSettle();
+}

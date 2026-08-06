@@ -1,57 +1,66 @@
 /// "What Lissom doesn't do" — bir özellik değil, bir duruş (design brief §2).
 ///
-/// Metin design paneli çıktısından BİREBİR taşındı, uydurulmadı: beş kalem +
-/// gerekçe, `Lissom.dc.html` "07 · What Lissom doesn't do" mockup'ı.
+/// **Bu tur: elle yazılmış liste SİLİNDİ, sayfa TÜRETİLDİ.**
+///
+/// Önceki hâlde beş sınır Dart'ta sabit bir `List<_Boundary>` olarak
+/// duruyordu — oysa aynı beş kalem `config/ia/library.v1.json` →
+/// `whyNotPage.items` içinde de vardı, **farklı kelimelerle.** İki kopya,
+/// tek gerçek: config değişince Dart bayatlar ve kimse fark etmez (L-178/
+/// L-181'in aynı sınıfı). Artık tek kaynak config.
+///
+/// **İkinci katman, bu turda AÇILDI:** bataryanın `excluded` bloğu iki testi
+/// ÖLÇÜLMÜŞ gerekçeyle dışarıda bırakıyor ve o bloğun hiç okuyucusu yoktu
+/// (L-217) — `cervical_rotation` kullanıcının hiçbir zaman göremediği bir
+/// karardı. Şimdi:
+///
+///   - Ürün sınırı ile ölçülmüş dışlama AYNI ŞEYSE (`whyNotTopic` BEYAN
+///     eder), ikisi tek kalemde birleşir: sınır üstte, ölçüm altında.
+///   - Eşleşmeyen dışlama KENDİ satırını alır. Sessizce kaybolmaz.
 library;
 
 import 'package:flutter/material.dart';
+import 'package:lissom_engine/lissom_engine.dart';
 
+import 'ia.dart';
 import 'lissom_theme.dart';
-
-final class _Boundary {
-  const _Boundary(this.title, this.reason);
-  final String title;
-  final String reason;
-}
-
-const List<_Boundary> _boundaries = <_Boundary>[
-  _Boundary(
-    'Programmes for children',
-    'Our angle models were built and checked on adult bodies. '
-        "We won't apply them to growing ones.",
-  ),
-  _Boundary(
-    'Breath measurement',
-    'A phone camera cannot see your breathing well enough to measure it. '
-        "We won't estimate a number we can't take.",
-  ),
-  _Boundary(
-    'Clinical screening',
-    "We measure movement. We don't screen for conditions, and no number "
-        'here means anything about your health.',
-  ),
-  _Boundary(
-    'Hot yoga',
-    "Heat changes your range while you're in it. We can't separate that "
-        'from your own range, so we leave the format out.',
-  ),
-  _Boundary(
-    'Hip rotation',
-    "One camera can't isolate the joint from the pelvis reliably. "
-        'Until it can, this test stays out of the battery.',
-  ),
-];
+import 'surfaces.dart';
 
 class WhatLissomDoesntDoScreen extends StatelessWidget {
-  const WhatLissomDoesntDoScreen({super.key});
+  const WhatLissomDoesntDoScreen({
+    required this.items,
+    required this.excluded,
+    super.key,
+  });
+
+  static const Key boundariesKey = Key('whyNot.boundaries');
+  static const Key excludedKey = Key('whyNot.excludedTests');
+
+  final List<WhyNotItem> items;
+
+  /// Bataryadan İSİMLİ gerekçeyle çıkarılmış testler.
+  final List<ExcludedTest> excluded;
+
+  /// Ürün sınırına BAĞLANMIŞ dışlamalar — kalemin altında ölçüm satırı olur.
+  Map<String, ExcludedTest> get _linked => <String, ExcludedTest>{
+        for (final ExcludedTest e in excluded)
+          if (e.whyNotTopic != null) e.whyNotTopic!: e,
+      };
+
+  /// Hiçbir ürün sınırına bağlanmamış dışlamalar — kendi bölümlerini alırlar.
+  List<ExcludedTest> get _unlinked => excluded
+      .where((ExcludedTest e) => e.whyNotTopic == null)
+      .toList(growable: false);
 
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
+    final Map<String, ExcludedTest> linked = _linked;
+    final List<ExcludedTest> loose = _unlinked;
+
     return Scaffold(
-      // Başlıksız — "Profile" yazmak, henüz var olmayan bir sekmeye ait
-      // gibi göründüğü için bir önceki taslakta kaldırıldı (DESIGN-AHEAD-OF-
-      // CODE.md "kod > tasarım"). Sayfa kendi serif başlığıyla tanıtılıyor.
+      // Başlıksız — bu sayfa Profile sekmesinin İÇİNDE yaşıyor ve kendi serif
+      // başlığıyla tanıtılıyor; AppBar'a ikinci bir başlık koymak aynı adı iki
+      // kez söylerdi.
       appBar: AppBar(),
       body: DecoratedBox(
         decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
@@ -62,28 +71,102 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'We would rather be clear about the edges of the product than '
-              'let you find them mid-session. Five things we deliberately '
-              'leave out.',
+              'let you find them mid-session. This is not a list of things '
+              'we ran out of time for — every line below is a decision.',
               style: t.textTheme.bodyMedium,
             ),
             const SizedBox(height: 20),
-            for (final _Boundary b in _boundaries)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 11),
-                child: LissomCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(b.title, style: t.textTheme.titleMedium),
-                      const SizedBox(height: 6),
-                      Text(b.reason, style: t.textTheme.bodyMedium),
-                    ],
+            Column(
+              key: boundariesKey,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                for (final WhyNotItem b in items)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 11),
+                    child: _BoundaryCard(
+                      title: b.topic,
+                      reason: b.reason,
+                      measured: linked[b.topic]?.reason,
+                    ),
                   ),
-                ),
+              ],
+            ),
+            if (loose.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 14),
+              LissomEyebrow('Tests we took out of the battery (${loose.length})'),
+              const SizedBox(height: 4),
+              Text(
+                'These were considered for the twelve-test battery and left '
+                'out. The reason is the measurement, not the effort.',
+                style: t.textTheme.bodySmall,
               ),
+              const SizedBox(height: 12),
+              Column(
+                key: excludedKey,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  for (final ExcludedTest e in loose)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 11),
+                      child: _BoundaryCard(
+                        title: _humanise(e.id),
+                        reason: e.reason,
+                      ),
+                    ),
+                ],
+              ),
+            ],
+            const MeasurementLimitsFootnote(),
           ],
         ),
+      ),
+    );
+  }
+
+  /// `cervical_rotation` → `Cervical rotation`. Ham id yüzeye SIZMAZ (bu
+  /// ailenin ölçülmüş kusuru: dahili metrik sözlüğü bir kez kullanıcı
+  /// altyazısına düşmüştü). Dışlanan testin `TestSpec.name`'i YOKTUR —
+  /// bataryada olmadığı için — o yüzden ad id'den TÜRETİLİR, uydurulmaz.
+  static String _humanise(String id) {
+    final String spaced = id.replaceAll('_', ' ');
+    return spaced.isEmpty
+        ? id
+        : '${spaced[0].toUpperCase()}${spaced.substring(1)}';
+  }
+}
+
+class _BoundaryCard extends StatelessWidget {
+  const _BoundaryCard({
+    required this.title,
+    required this.reason,
+    this.measured,
+  });
+
+  final String title;
+  final String reason;
+
+  /// Ölçülmüş dışlama gerekçesi — varsa. Sönük ve İKİNCİL: ürün sınırı ne
+  /// yapmadığımızı söyler, bu satır onu neyin ölçtüğünü söyler.
+  final String? measured;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData t = Theme.of(context);
+    return LissomCard(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(title, style: t.textTheme.titleMedium),
+          const SizedBox(height: 6),
+          Text(reason, style: t.textTheme.bodyMedium),
+          if (measured != null) ...<Widget>[
+            const SizedBox(height: 10),
+            Text(measured!,
+                style: t.textTheme.bodySmall
+                    ?.copyWith(color: LissomColors.metaMono)),
+          ],
+        ],
       ),
     );
   }
