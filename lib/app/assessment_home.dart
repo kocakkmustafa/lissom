@@ -130,7 +130,6 @@ class AssessmentHomeScreen extends StatelessWidget {
                       icon: Icons.videocam_outlined,
                       iconColor: t.colorScheme.primary,
                       title: x.name,
-                      subtitle: x.metrics.join(' · '),
                     ),
                   ),
                 const SizedBox(height: 22),
@@ -202,13 +201,19 @@ class _TestRow extends StatelessWidget {
     required this.icon,
     required this.iconColor,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
   });
 
   final IconData icon;
   final Color iconColor;
   final String title;
-  final String subtitle;
+
+  /// Yalnız engelli satırlarda dolu — engel gerekçesi kullanıcı diliyle,
+  /// gerçek metindir. Canlı satırda YOK: ham metrik id'si (`shoulder_flexion_
+  /// left`) tasarımın hiçbir mockup'ında görünmeyen dahili sözlük — bu turda
+  /// bir önceki taslakta sızmıştı, DESIGN-AHEAD-OF-CODE.md'de "kod > tasarım"
+  /// bulgusu olarak kayıtlı, burada kapatıldı.
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -225,8 +230,10 @@ class _TestRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(title, style: t.textTheme.titleMedium),
-                const SizedBox(height: 3),
-                Text(subtitle, style: t.textTheme.bodySmall),
+                if (subtitle != null) ...<Widget>[
+                  const SizedBox(height: 3),
+                  Text(subtitle!, style: t.textTheme.bodySmall),
+                ],
               ],
             ),
           ),

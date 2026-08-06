@@ -49,7 +49,10 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      // Başlıksız — "Profile" yazmak, henüz var olmayan bir sekmeye ait
+      // gibi göründüğü için bir önceki taslakta kaldırıldı (DESIGN-AHEAD-OF-
+      // CODE.md "kod > tasarım"). Sayfa kendi serif başlığıyla tanıtılıyor.
+      appBar: AppBar(),
       body: DecoratedBox(
         decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
         child: ListView(
