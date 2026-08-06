@@ -33,6 +33,16 @@ const List<(Pattern, String)> kBannedSurfaceCopy = <(Pattern, String)>[
   (r'keep going', 'tezahürat yasağı'),
   (r'well done', 'tezahürat yasağı'),
   (r'great job', 'tezahürat yasağı'),
+  // Dahili defter atfı — `(L-006)` · `(M-F-71)` · `(J-064)`. Kullanıcı için
+  // anlamsız bir şifre, ham metrik-id sızıntısıyla AYNI sınıf. Bu kalıbı
+  // buraya koymanın sebebi bir varsayım değil: `(L-006)` config'in
+  // `excluded[].reason` metninin sonunda duruyordu ve SİMÜLATÖR EKRANINDA
+  // "What Lissom doesn't do" sayfasında görüldü (L-223). Testlerin hiçbiri
+  // görmedi — metnin VARLIĞINI sınıyorlardı, İÇERİĞİNİ değil.
+  (
+    r'\((?:L|G|J|O|M-F|M-[A-Z])-\d{2,3}\)',
+    'dahili defter atfı yüzeye sızdı — kayıt config alanında kalır, metinde değil',
+  ),
 ];
 
 /// Ağaçtaki HER `Text`i (offstage dahil) yasaklı kopyaya karşı tarar.

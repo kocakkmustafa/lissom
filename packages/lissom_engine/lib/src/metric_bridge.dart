@@ -107,6 +107,22 @@ enum BridgeBlocker {
   /// örneğidir — Python'da düzeltilecek olan sınıfın aynısı. Köprü bugün
   /// bunu tüketmiyor; tüketirse aynı beyan-uygulama ayrışmasını devralır.
   corePlaneSeparationMissing,
+
+  /// Büyüklük GEOMETRİK DEĞİL — config'in `derivedMeasures` bloğu onu
+  /// `source: "phase"` diye beyan ediyor (*"Produced by the phase machine,
+  /// not from landmark geometry"*).
+  ///
+  /// **Bu sınıf bir EKRAN KANITINDAN doğdu (L-220).** Önceden bu metrikler
+  /// hiçbir sınıfa girmiyor ve `null` dalına düşüyordu; kullanıcı
+  /// *"measurement bridge not declared (hold_duration)"* görüyordu — ham
+  /// metrik id'si + geliştirici jargonu. Sınıf yoktu, o yüzden gerekçe de
+  /// yoktu; şimdi ikisi de var.
+  ///
+  /// ⚠️ Bu sınıf *"çalışmıyor"* DEMEZ. Söylediği şey dar ve doğru: bu
+  /// büyüklüğü KÖPRÜ üretmiyor, dolayısıyla köprüye bakan canlılık türetimi
+  /// bu test hakkında hüküm veremez. Faz makinesinin onu gerçekten üretip
+  /// üretemediği AYRI bir ölçüm ister ve o ölçüm YAPILMADI.
+  measureIsPhaseDerived,
 }
 
 /// Bataryanın İSTEDİĞİ ama köprülenmemiş metrikler — her biri İSİMLİ engelle.
@@ -297,6 +313,14 @@ final class TestLiveness {
 List<TestLiveness> deriveLiveness(Battery battery) {
   final Set<String> bridged =
       kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+  // Geometri-dışı büyüklükler config'ten TÜRETİLİR — Dart'ta ikinci bir
+  // liste tutulmaz. `hold_duration`ı buraya elle yazmak, config'in
+  // `derivedMeasures` bloğu değiştiğinde sessizce bayatlayacak bir ikiz
+  // olurdu (L-178/L-181 sınıfı).
+  final Set<String> derived = battery.derivedMeasures.entries
+      .where((MapEntry<String, DerivedMeasure> e) => e.value.isPhaseDerived)
+      .map((MapEntry<String, DerivedMeasure> e) => e.key)
+      .toSet();
   final List<TestLiveness> out = <TestLiveness>[];
 
   for (final TestSpec t in battery.tests.values) {
@@ -316,7 +340,7 @@ List<TestLiveness> deriveLiveness(Battery battery) {
       testId: t.id,
       name: t.name,
       metrics: metrics,
-      blocker: blockerTextFor(missing),
+      blocker: blockerTextFor(missing, phaseDerived: derived),
     ));
   }
   out.sort((TestLiveness a, TestLiveness b) => a.testId.compareTo(b.testId));
@@ -340,7 +364,10 @@ List<TestLiveness> deriveLiveness(Battery battery) {
 /// kelimeden biri — bilmediğimiz bir tarihi ima eder. Yüzey testleri bunu
 /// göremezdi: `assessment_home_test`in vaat-dili kapısı `comingSoon` ve
 /// `yakında` arıyordu, `yet` aramıyordu. **Kapı genişletildi.**
-String blockerTextFor(List<String> missingMetrics) {
+String blockerTextFor(
+  List<String> missingMetrics, {
+  Set<String> phaseDerived = const <String>{},
+}) {
   // Sınıfa göre GRUPLA: aynı gerekçeyi iki kez yazmak (sol/sağ aynı engelde)
   // metni şişirir ve kullanıcı ikinci kopyayı okumaz.
   final Map<BridgeBlocker, List<String>> bySubject =
@@ -348,11 +375,18 @@ String blockerTextFor(List<String> missingMetrics) {
   final List<String> undeclared = <String>[];
 
   for (final String m in missingMetrics) {
+    if (phaseDerived.contains(m)) {
+      final List<String> subjects = bySubject.putIfAbsent(
+          BridgeBlocker.measureIsPhaseDerived, () => <String>[]);
+      const String subject = 'Hold time';
+      if (!subjects.contains(subject)) subjects.add(subject);
+      continue;
+    }
     final UnbridgedMetric? u = kUnbridgedMetrics[m];
     if (u == null) {
-      // Beyan edilmemiş bir metrik: sessizce "engelli" saymak yerine
-      // BİLİNMEDİĞİNİ söyler. `metric_coverage_test` bu durumu kırmızı yakar,
-      // yani buraya düşmek zaten bir kapı ihlalidir.
+      // Beyan edilmemiş bir metrik. Bir yüzey buraya düşerse kullanıcıya
+      // METRİK ADI GÖSTERİLMEZ — ham id dahili sözlüktür ve bir kez daha
+      // sızmayacak (ekran kanıtı L-220).
       undeclared.add(m);
       continue;
     }
@@ -364,7 +398,11 @@ String blockerTextFor(List<String> missingMetrics) {
   final List<String> parts = <String>[
     for (final MapEntry<BridgeBlocker, List<String>> e in bySubject.entries)
       '${_join(e.value)} — ${_reasonFor(e.key)}',
-    for (final String m in undeclared) 'measurement bridge not declared ($m)',
+    // Ham id YOK. Bu dal bir HATA hâlidir ve hatanın adı kullanıcının değil
+    // geliştiricinin işidir; `metric_coverage_test` onu kırmızı yakar.
+    if (undeclared.isNotEmpty)
+      'one of the readings this test needs is not declared anywhere in the '
+          'app, so we cannot say what it would take to run it',
   ];
   return parts.join(' · ');
 }
@@ -388,6 +426,12 @@ String _reasonFor(BridgeBlocker b) => switch (b) {
       BridgeBlocker.corePlaneSeparationMissing =>
         'the measurement engine keeps a single tilt figure and cannot tell '
             'forward lean apart from sideways lean',
+      // ⚠️ Bu cümle "çalışmıyor" demez, "köprü bunu yanıtlamaz" der. Faz
+      // makinesinin bu süreyi gerçekten üretip üretemediği ÖLÇÜLMEDİ ve
+      // burada iddia EDİLMİYOR.
+      BridgeBlocker.measureIsPhaseDerived =>
+        'this test is timed by the session rather than measured from camera '
+            'angles, and the camera-measurement bridge does not cover it',
     };
 
 MetricBinding bindingFor(String lissomMetric) {

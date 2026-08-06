@@ -78,7 +78,7 @@ void main() {
     }
   });
 
-  group('batarya `excluded` bloğu — L-217, okuyucusu YOKTU', () {
+  group('batarya `excluded` bloğu — L-219, okuyucusu YOKTU', () {
     test('iki dışlama da gerekçesiyle okunur', () {
       final Battery b = batteryFromDisk();
       expect(b.excluded, hasLength(2));

@@ -4,7 +4,7 @@
   "version": "1.12.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
-    "1.12.0 (L-217): `excluded` bloğunun İKİ YILDIR OKUYUCUSU YOKTU — Battery.parse onu hiç ayrıştırmıyordu, dolayısıyla iki test (hip_internal_external_rotation, cervical_rotation) ÖLÇÜLMÜŞ gerekçeleriyle dışarıda bırakılmış ama kullanıcı bunu hiçbir yüzeyde ÖĞRENEMEMİŞTİ. L-181'in (okuyucusuz config alanı) yeni örneği. Bu sürümde okuyucu eklendi ve `whyNotTopic` alanı geldi: bir dışlamanın ürün-düzeyi karşılığı (whyNotPage.items[].topic) BEYAN edilir, metin benzerliğinden TAHMİN EDİLMEZ — tahmini eşleşme bir gün sessizce kayar. Alanı olmayan dışlama (cervical_rotation) 'What Lissom doesn't do' sayfasında KENDİ satırını alır.",
+    "1.12.0 (L-219): `excluded` bloğunun İKİ YILDIR OKUYUCUSU YOKTU — Battery.parse onu hiç ayrıştırmıyordu, dolayısıyla iki test (hip_internal_external_rotation, cervical_rotation) ÖLÇÜLMÜŞ gerekçeleriyle dışarıda bırakılmış ama kullanıcı bunu hiçbir yüzeyde ÖĞRENEMEMİŞTİ. L-181'in (okuyucusuz config alanı) yeni örneği. Bu sürümde okuyucu eklendi ve `whyNotTopic` alanı geldi: bir dışlamanın ürün-düzeyi karşılığı (whyNotPage.items[].topic) BEYAN edilir, metin benzerliğinden TAHMİN EDİLMEZ — tahmini eşleşme bir gün sessizce kayar. Alanı olmayan dışlama (cervical_rotation) 'What Lissom doesn't do' sayfasında KENDİ satırını alır.",
     "1.9.0 (M-F-185 (b)-çıkışı MÜHÜRLÜ): overhead_reach ve deep_squat `referenceStatus` taşıyor — state=measurementOnly + ÖLÇÜLMÜŞ statusBasis (kullanıcı diliyle) + İSİMLİ promotionPath. Aile doktrini: 'ölçüm var, hüküm yok' (M-F-71 skorsuz-ama-ölçülü bölge). Motor bunu ResultTier.measuredNoBands ile zaten destekliyordu; bu blok GEREKÇEYİ yüzeye taşır.",
     "1.8.0 (gece paketi madde 3): deep_squat'a presence eklendi (movementPresence'tan devralınan 110° eşik, PROVISIONAL) — presence_isolator penceresi denemesi için.",
     "1.7.1 (koordinatör hükmü M-F-92): hipKneeCoupling basis'ine marjlar isimli eklendi (confounder 0,27 · squat-sınıfı en düşük 0,11) ve eşik-kararı (0,20 PROVISIONAL kalır, yeniden-türetme ertelendi) kayda geçti.",
@@ -681,12 +681,14 @@
   "excluded": [
     {
       "id": "hip_internal_external_rotation",
-      "reason": "A single 2D camera cannot recover transverse-plane rotation reliably. Measuring it anyway would mean showing a number we cannot stand behind. (L-006)",
+      "reason": "A single 2D camera cannot recover transverse-plane rotation reliably. Measuring it anyway would mean showing a number we cannot stand behind.",
+      "record": "L-006",
       "whyNotTopic": "Hip internal / external rotation measurement"
     },
     {
       "id": "cervical_rotation",
-      "reason": "Pose model facial/neck landmarks are too coarse for the precision neck rotation needs. Excluded rather than shown with a wide meaningless band. (L-006)"
+      "reason": "Pose model facial/neck landmarks are too coarse for the precision neck rotation needs. Excluded rather than shown with a wide meaningless band.",
+      "record": "L-006"
     }
   ],
   "derivedMeasures": {

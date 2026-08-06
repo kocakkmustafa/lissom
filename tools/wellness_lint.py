@@ -98,6 +98,31 @@ USER_FACING_KEYS = {
 CONTENT_DIRS = ("config/content", "config/tests", "config/copy", "config/ia", "l10n")
 MIN_STRINGS_PER_FILE = 1
 
+#: Kullanıcı metni TAŞIYAN Dart kaynağı.
+#:
+#: ⚠️ **BU SÜZGEÇ İKİ YIL BOYUNCA DART'A HİÇ BAKMADI (L-221).** Yalnız
+#: `.json`/`.arb` taranıyordu; oysa yüzeyin İngilizce kopyasının BÜYÜK KISMI
+#: Dart'ta yaşıyor (ekran metinleri, engel gerekçeleri, sonuç sınıfı
+#: cümleleri). "Yeni Dart kopyası elle de kontrol edildi" diye kayda geçen
+#: şey tam olarak bunun itirafıydı — elle kontrol bir kapı değildir.
+#:
+#: `lib/` dört sekmenin kopyasını, `packages/lissom_engine/lib/` ise engel
+#: gerekçelerini ve sonuç metinlerini taşıyor. `test/` KASITLI dışarıda:
+#: testler yasaklı kelimeyi ARAMAK zorunda (copy_gate.dart'ın kendisi yasaklı
+#: kalıpların listesidir) ve onu taramak süzgeci kendi kapısına takardı.
+DART_DIRS = ("lib", "packages/lissom_engine/lib")
+
+#: Dart yorumları — taramadan ÖNCE silinir. Türkçe geliştirici yorumları
+#: kullanıcı metni değildir ve İngilizce kalıp aramak orada anlamsız
+#: false-positive üretir (ör. bu dosyadaki "diagnose" örnekleri).
+_DART_COMMENT = re.compile(r"//[^\n]*|/\*.*?\*/", re.DOTALL)
+
+#: Dart string sabitleri. Bitişik-birleştirme (`'a' 'b'`) AYRI eşleşir —
+#: bilinen sınır: iki parçaya BÖLÜNMÜŞ yasaklı bir kelime kaçar. Pratikte
+#: kelimeler bölünmüyor; sınır burada yazılı ki "temiz" iddiası kapsamını
+#: da söylesin.
+_DART_STRING = re.compile(r"'((?:[^'\\\n]|\\.)*)'|\"((?:[^\"\\\n]|\\.)*)\"")
+
 
 def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
     """JSON ağacından yalnız kullanıcıya görünen string alanları topla."""
@@ -158,6 +183,15 @@ def scan_file(path: Path) -> tuple[list[str], int]:
         for key, value in _walk_json(data):
             scanned += 1
             problems += scan_text(f"{path.name} :: {key}", value)
+    elif path.suffix == ".dart":
+        source = _DART_COMMENT.sub(" ", path.read_text(encoding="utf-8"))
+        for m in _DART_STRING.finditer(source):
+            literal = m.group(1) if m.group(1) is not None else m.group(2)
+            if not literal or not literal.strip():
+                continue
+            scanned += 1
+            line = source.count("\n", 0, m.start()) + 1
+            problems += scan_text(f"{path.name}:{line}", literal)
     elif path.suffix in {".arb", ".md"}:
         for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             if line.strip():
@@ -178,6 +212,19 @@ def main() -> int:
         else [target]
     )
 
+    # Yol ELLE verilmediyse Dart kaynağı da taranır. Elle verildiyse
+    # KARIŞTIRILMAZ: `--path X` "yalnız X'e bak" demektir.
+    dart_files: list[Path] = []
+    if args.path == str(ROOT / "config"):
+        for d in DART_DIRS:
+            dart_files += sorted((ROOT / d).rglob("*.dart"))
+        # Üretilen/geçici Dart'ı dışarıda tut — kullanıcı metni taşımaz ve
+        # taranması "temiz" sayımını şişirir.
+        dart_files = [
+            p for p in dart_files if ".dart_tool" not in p.parts and "build" not in p.parts
+        ]
+        files += dart_files
+
     all_problems: list[str] = []
     silent: list[str] = []          # tarandı ama içinden metin çıkmadı
     total_strings = 0
@@ -192,7 +239,18 @@ def main() -> int:
                 silent.append(rel)
 
     print(f"Wellness dil süzgeci — {len(files)} dosya · {total_strings} metin tarandı")
+    if dart_files:
+        print(f"  ({len(dart_files)} Dart dosyası dahil — yorumlar hariç, "
+              "yalnız string sabitleri)")
     print(f"Muaf: {', '.join(sorted(EXEMPT_FILES))}\n")
+
+    # Dart dosyaları tarandı ama HİÇ string çıkmadıysa, çıkarıcı bozuktur ve
+    # süzgeç Dart tarafına hiç bakmamış olur — yeşil yanan boş tarama (L-011
+    # dersinin denetim tarafındaki hâli).
+    if dart_files and not any(scan_file(p)[1] > 0 for p in dart_files[:20]):
+        print("⚠️  Dart dosyalarından hiç string çıkarılamadı — çıkarıcı BOZUK.")
+        print("    Bu bir GEÇİŞ DEĞİL.")
+        return 4
 
     # Dosya okundu ama içinden hiç metin çıkarılmadıysa bu bir GEÇİŞ DEĞİL.
     # Şema alan adları USER_FACING_KEYS'te yoksa tam olarak bu olur ve süzgeç

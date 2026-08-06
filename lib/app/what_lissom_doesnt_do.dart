@@ -10,7 +10,7 @@
 ///
 /// **İkinci katman, bu turda AÇILDI:** bataryanın `excluded` bloğu iki testi
 /// ÖLÇÜLMÜŞ gerekçeyle dışarıda bırakıyor ve o bloğun hiç okuyucusu yoktu
-/// (L-217) — `cervical_rotation` kullanıcının hiçbir zaman göremediği bir
+/// (L-219) — `cervical_rotation` kullanıcının hiçbir zaman göremediği bir
 /// karardı. Şimdi:
 ///
 ///   - Ürün sınırı ile ölçülmüş dışlama AYNI ŞEYSE (`whyNotTopic` BEYAN

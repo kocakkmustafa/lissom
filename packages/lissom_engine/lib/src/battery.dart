@@ -218,12 +218,23 @@ final class ExcludedTest {
     required this.id,
     required this.reason,
     required this.whyNotTopic,
+    required this.record,
   });
 
   final String id;
 
   /// ÖLÇÜLMÜŞ gerekçe, kullanıcı diliyle. Boş olamaz.
+  ///
+  /// ⚠️ **DEFTER ATFI BU ALANDA DEĞİL, [record]'da yaşar (L-223).** Metin
+  /// eskiden `… stand behind. (L-006)` diye bitiyordu ve o parantez SİMÜLATÖR
+  /// EKRANINDA görüldü: `(L-006)` bir iç-defter numarası, kullanıcı için
+  /// anlamsız bir şifre. Ham metrik-id sızıntısıyla aynı sınıf — dahili
+  /// sözlüğün yüzeye düşmesi — ve yine ekran yakaladı, test değil.
   final String reason;
+
+  /// İç defter atfı (`L-006`). **Yüzeye BASILMAZ**; kaydın izlenebilirliği
+  /// için config'te durur.
+  final String? record;
 
   /// Bu dışlamanın ürün-düzeyi karşılığı (`whyNotPage.items[].topic`), varsa.
   ///
@@ -234,12 +245,45 @@ final class ExcludedTest {
   final String? whyNotTopic;
 }
 
+/// Geometriden DEĞİL, oturumun kendisinden gelen bir büyüklük.
+///
+/// Config `derivedMeasures` bloğunda `source: "phase"` diye beyan ediyor:
+/// *"Produced by the phase machine, not from landmark geometry."*
+///
+/// **Bu bloğun da okuyucusu yoktu (L-220) ve bedeli ekranda görüldü.**
+/// `hold_duration` iki testin (`plank_hold`, `single_leg_balance`) birincil
+/// büyüklüğü; köprü onu tanımadığı için ikisi de kullanıcıya
+/// *"measurement bridge not declared (hold_duration)"* diyordu — hem
+/// geliştirici jargonu hem HAM METRİK ID'si, ikisi de yüzeye sızmaması
+/// gereken şeyler. Üstelik kapsam kapısı bunu göremiyordu: kapı gereken
+/// metrikleri `known` kümesine göre SÜZÜYOR ve `hold_duration` o kümede
+/// olmadığı için sessizce eleniyordu — yokluk iddiasını vakum-doğru yapan
+/// bir süzgeç (aile dersi 4).
+final class DerivedMeasure {
+  const DerivedMeasure({
+    required this.id,
+    required this.unit,
+    required this.source,
+    required this.description,
+  });
+
+  final String id;
+  final String unit;
+
+  /// `phase` (oturum makinesi) · `frame` (kare-düzeyi sinyal).
+  final String source;
+  final String description;
+
+  bool get isPhaseDerived => source == 'phase';
+}
+
 final class Battery {
   const Battery({
     required this.id,
     required this.version,
     required this.tests,
     required this.excluded,
+    required this.derivedMeasures,
   });
 
   final String id;
@@ -248,6 +292,9 @@ final class Battery {
 
   /// Bataryaya alınmamış testler — İSİMLİ gerekçeleriyle.
   final List<ExcludedTest> excluded;
+
+  /// Geometri-dışı büyüklükler (faz makinesi / kare sinyali).
+  final Map<String, DerivedMeasure> derivedMeasures;
 
   static Battery parseJson(String source) =>
       parse(jsonDecode(source) as Map<String, dynamic>);
@@ -276,7 +323,33 @@ final class Battery {
       version: version,
       tests: tests,
       excluded: _parseExcluded(root['excluded']),
+      derivedMeasures: _parseDerived(root['derivedMeasures']),
     );
+  }
+
+  static Map<String, DerivedMeasure> _parseDerived(Object? raw) {
+    if (raw == null) return const <String, DerivedMeasure>{};
+    if (raw is! Map<String, dynamic>) {
+      throw BatteryError('derivedMeasures', 'nesne olmalı');
+    }
+    final Map<String, DerivedMeasure> out = <String, DerivedMeasure>{};
+    for (final MapEntry<String, dynamic> e in raw.entries) {
+      final Object? v = e.value;
+      if (v is! Map<String, dynamic>) {
+        throw BatteryError('derivedMeasures.${e.key}', 'nesne olmalı');
+      }
+      final Object? source = v['source'];
+      final Object? unit = v['unit'];
+      final Object? desc = v['description'];
+      if (source is! String || unit is! String || desc is! String) {
+        throw BatteryError('derivedMeasures.${e.key}',
+            '`unit`, `source` ve `description` zorunlu — kaynağı beyan '
+            'edilmemiş bir büyüklük, nereden geldiği bilinmeyen bir sayıdır');
+      }
+      out[e.key] = DerivedMeasure(
+          id: e.key, unit: unit, source: source, description: desc);
+    }
+    return out;
   }
 
   /// `excluded` YOKSA boş liste meşrudur (bir batarya hiçbir şeyi dışlamamış
@@ -305,6 +378,7 @@ final class Battery {
         id: id,
         reason: reason,
         whyNotTopic: e['whyNotTopic'] as String?,
+        record: e['record'] as String?,
       ));
     }
     return out;

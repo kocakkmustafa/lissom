@@ -149,8 +149,12 @@ class ProgressScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
         child: Text(
           '$unreadable stored record${unreadable == 1 ? '' : 's'} on this '
+          // ⚠️ Burada eskiden "treat it as a floor" yazıyordu ve genişletilmiş
+          // wellness süzgeci ilk koşuşunda yakaladı. Masum anlamda kullanılmış
+          // olsa da `treat` mağaza incelemesinin taradığı kelimelerden biri —
+          // bir wellness ürününde onu hiç kullanmamak en ucuz seçenek.
           'device could not be read. The list below is what we could read — '
-          'treat it as a floor, not a total.',
+          'a floor, not a total.',
           style: t.textTheme.bodyMedium
               ?.copyWith(color: LissomColors.roseDeepHover),
         ),
