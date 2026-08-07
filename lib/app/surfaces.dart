@@ -95,6 +95,10 @@ class NamedGapCard extends StatelessWidget {
 /// metnidir**, burada ikinci kez yazılmaz (iki metin ayrışır, biri bayatlar).
 typedef ClaimLiveness = String? Function(HonestyClaim claim);
 
+/// Canlı bir iddianın HÜKÜM sınırı — *"ölçtük"* ile *"değerlendirdik"*
+/// arasındaki mesafe (L-233). `null` = söylenecek bir sınır yok.
+typedef ClaimVerdictNote = String? Function(HonestyClaim claim);
+
 /// Dürüstlük kutusu — **her aile sayfasında ZORUNLU** (IA config hükmü,
 /// [LibraryIa] okuyucusunda tip düzeyinde zorlanıyor).
 ///
@@ -103,7 +107,8 @@ typedef ClaimLiveness = String? Function(HonestyClaim claim);
 /// onu köprüye karşı sınar, canlı olmayan iddia silinmez — İSİMLİ gerekçeyle
 /// sönük gösterilir.
 class HonestyBoxCard extends StatelessWidget {
-  const HonestyBoxCard(this.box, {required this.liveness, super.key});
+  const HonestyBoxCard(this.box,
+      {required this.liveness, required this.verdictNote, super.key});
 
   static const Key measuredKey = Key('honesty.measured');
   static const Key notMeasuredKey = Key('honesty.notMeasured');
@@ -114,6 +119,12 @@ class HonestyBoxCard extends StatelessWidget {
   /// iddia canlı değilse SİLİNMEZ (kapsamı saklamak olurdu) — sönük gösterilir
   /// ve nedeni yanına yazılır, tıpkı engelli testler gibi.
   final ClaimLiveness liveness;
+
+  /// **Kutunun iki yarısını SİMETRİK yapan şey (L-233).** `notMeasured`
+  /// tarafı zaten uzun ve gerekçeliydi; `measured` tarafı sınırsızdı. Canlı
+  /// bir iddia artık ölçümün NE OLDUĞUNU da söylüyor: referansa kıyaslandı
+  /// mı, yoksa hükümsüz bir okuma mı.
+  final ClaimVerdictNote verdictNote;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +142,7 @@ class HonestyBoxCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               for (final HonestyClaim c in box.measured)
-                _claimRow(t, c, liveness(c)),
+                _claimRow(t, c, liveness(c), verdictNote(c)),
             ],
           ),
           const SizedBox(height: 18),
@@ -149,7 +160,8 @@ class HonestyBoxCard extends StatelessWidget {
   /// Canlı iddia: kamera ikonu, normal metin. Canlı OLMAYAN: sönük ikon,
   /// sönük metin **ve altında gerekçe.** Görsel ayrım kasıtlı — ikisi aynı
   /// görünseydi kutu yine "hepsini ölçüyoruz" der gibi okunurdu.
-  static Widget _claimRow(ThemeData t, HonestyClaim c, String? blocker) {
+  static Widget _claimRow(
+      ThemeData t, HonestyClaim c, String? blocker, String? verdict) {
     final bool live = blocker == null;
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
@@ -174,6 +186,12 @@ class HonestyBoxCard extends StatelessWidget {
                         ? t.textTheme.bodyMedium
                         : t.textTheme.bodyMedium
                             ?.copyWith(color: LissomColors.labelMuted)),
+                if (live && verdict != null) ...<Widget>[
+                  const SizedBox(height: 3),
+                  Text(verdict,
+                      style: t.textTheme.bodySmall
+                          ?.copyWith(color: LissomColors.metaMono)),
+                ],
                 if (!live) ...<Widget>[
                   const SizedBox(height: 3),
                   // ⚠️ Ayraç TİRE DEĞİL orta-nokta: engel metni ZATEN

@@ -80,6 +80,60 @@ final class AppFacts {
     return blockerTextFor(missing, phaseDerived: phase);
   }
 
+  /// **Bir iddianın HÜKÜM sınırı — cümlenin İÇİNE (L-233, JabLab J-113).**
+  ///
+  /// L-230 iddiaların **varlığını** denetliyordu ("bu gerçekten ölçülüyor
+  /// mu?"). Bu ayrı bir eksen: **sınıf.** *"Omuz, kalça ve diz açıları"*
+  /// diyen bir satır, kullanıcı tarafından *"ve bize nasıl olduğunu
+  /// söyleyeceksiniz"* diye okunur — oysa ölçüldü:
+  ///
+  ///   - `overhead_reach` (omuz) → **measurementOnly**, referans YOK
+  ///   - `deep_squat` (diz)      → **measurementOnly**, referans YOK
+  ///   - `active_straight_leg_raise` (kalça) → bantlı, referansa kıyaslanır
+  ///
+  /// Yani **tek bir cümle, iki farklı hüküm sınıfını tek başlıkta
+  /// topluyordu** ve görünen taraf FAZLA iddia ediyordu. Bu, bir sınırı
+  /// olduğundan geniş yazmanın TERSİ değil aynısı ama daha tehlikelisi:
+  /// hata kullanıcının ALEYHİNE. Kıyasın zaten kapalı olduğu (MDC eşiği yok)
+  /// bir üründe *"ölçtük"* ile *"iyi/kötü dedik"* arasındaki mesafe,
+  /// korumaya çalıştığımız şeyin ta kendisi.
+  ///
+  /// Kutunun iki yarısı arasındaki ASİMETRİ buydu: `notMeasured` tarafı uzun
+  /// ve gerekçeliydi, `measured` tarafı sınırsızdı.
+  ///
+  /// **TÜRETİLİR, yazılmaz:** bir test terfi ederse (`measurementOnly` →
+  /// bantlı) cümle kendiliğinden değişir. Elle yazılsaydı bayatlardı.
+  String? verdictNoteFor(HonestyClaim claim) {
+    if (!claim.isCheckable || blockerForClaim(claim) != null) return null;
+    final Set<String> needed = claim.requires.toSet();
+    final Set<String> withRef = <String>{};
+    final Set<String> withoutRef = <String>{};
+    for (final TestSpec t in battery.tests.values) {
+      final List<String> sides =
+          t.perSide ? <String>['right', 'left'] : <String>['right'];
+      final bool touches =
+          sides.any((String s) => needed.contains(t.primaryMetricFor(s)));
+      if (!touches) continue;
+      if (t.referenceStatus?.isMeasurementOnly ?? false) {
+        withoutRef.add(t.id);
+      } else {
+        withRef.add(t.id);
+      }
+    }
+    if (withRef.isEmpty && withoutRef.isEmpty) return null;
+    if (withoutRef.isEmpty) {
+      return 'Compared against an age-banded reference range.';
+    }
+    if (withRef.isEmpty) {
+      return 'Reported without any reference range — the number is a reading, '
+          'not a verdict.';
+    }
+    return 'Of the ${withRef.length + withoutRef.length} tests behind this '
+        'line, ${withRef.length} is compared against a reference range and '
+        '${withoutRef.length} are reported without one — the second kind '
+        'carries no verdict.';
+  }
+
   static Future<AppFacts> load() async {
     final String batteryRaw =
         await rootBundle.loadString('config/tests/lissom-assessment.v1.json');

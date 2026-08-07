@@ -94,6 +94,45 @@ void main() {
       }
     });
 
+    test('L-233 — CANLI iddia HÜKÜM SINIRINI cümlenin içinde taşır', () {
+      final AppFacts f = factsFromDisk();
+      final LibraryFamily b = f.ia.built
+          .singleWhere((LibraryFamily x) => x.id == 'assessment_battery');
+      final List<HonestyClaim> live = b.honestyBox.measured
+          .where((HonestyClaim c) => f.blockerForClaim(c) == null)
+          .toList();
+      expect(live, isNotEmpty, reason: 'pozitif kontrol');
+
+      for (final HonestyClaim c in live) {
+        final String? note = f.verdictNoteFor(c);
+        expect(note, isNotNull,
+            reason: 'canlı iddia sınırsız kaldı: «${c.claim}» — J-113 sınıfı '
+                '(bir yeteneği olduğundan GENİŞ yazmak)');
+        // Ölçüldü: omuz+diz `measurementOnly`, kalça bantlı → KARIŞIK sınıf.
+        // Bunu tek bir "ölçüyoruz" cümlesine sıkıştırmak, kullanıcının
+        // ALEYHİNE bir fazla-iddiadır.
+        expect(note, contains('carries no verdict'),
+            reason: 'karışık sınıf gizlenmiş: «$note»');
+      }
+
+      // ⛔ Ölü iddiaya hüküm notu ASILMAZ — ölçülmeyen şeyin hükmü de yoktur.
+      for (final HonestyClaim c in b.honestyBox.measured
+          .where((HonestyClaim c) => f.blockerForClaim(c) != null)) {
+        expect(f.verdictNoteFor(c), isNull);
+      }
+    });
+
+    test('hüküm notu TÜRETİLİR — terfi olsa cümle kendiliğinden değişir', () {
+      // Karşıt yön: yalnız-bantlı bir metrik kümesi "no verdict" DEMEMELİ.
+      // Tek yön sınanırsa, her zaman aynı cümleyi basan bir kod da geçerdi.
+      final AppFacts f = factsFromDisk();
+      const HonestyClaim onlyBanded = HonestyClaim(
+          claim: 'x', requires: <String>['hip_flexion_right']);
+      final String? note = f.verdictNoteFor(onlyBanded);
+      expect(note, 'Compared against an age-banded reference range.');
+      expect(note, isNot(contains('no verdict')));
+    });
+
     test('"frontal plane" iddiası ARTIK YOK — hiçbir metrik için doğru değildi',
         () {
       final LibraryFamily b = iaFromDisk()
