@@ -25,6 +25,10 @@ import 'ia.dart';
 import 'lissom_theme.dart';
 
 class WhatLissomDoesntDoScreen extends StatelessWidget {
+  /// Her sınır kartındaki SINIF etiketi — testler yapısal olarak bunu arar
+  /// (özel bir karta anahtar koymak, testten görünmez olurdu).
+  static const Key kindKey = Key('whyNot.kind');
+
   const WhatLissomDoesntDoScreen({
     required this.items,
     required this.excluded,
@@ -79,9 +83,15 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
             Text("What Lissom doesn't do", style: t.textTheme.headlineLarge),
             const SizedBox(height: 10),
             Text(
+              // ⚠️ Bu cümle ÖNCE şöyleydi: "…every line below is a
+              // decision." Ölçüldü: beş kalemin ÜÇÜ karar DEĞİL, yapamadığımız
+              // şeyler (L-265). Yapamamayı ilke gibi göstermek, kendi lehine
+              // bir yanlış okuma üretiyordu — ve hiçbir cümle yalan
+              // söylemeden.
               'We would rather be clear about the edges of the product than '
-              'let you find them mid-session. This is not a list of things '
-              'we ran out of time for — every line below is a decision.',
+              'let you find them mid-session. Some of these are choices and '
+              'some are things we cannot do; each line says which, because '
+              'the difference decides whether it could ever change.',
               style: t.textTheme.bodyMedium,
             ),
             const SizedBox(height: 20),
@@ -95,6 +105,7 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                     child: _BoundaryCard(
                       title: b.topic,
                       reason: b.reason,
+                      kind: b.kind,
                       measured: linked[b.topic]?.reason,
                     ),
                   ),
@@ -120,6 +131,11 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                       child: _BoundaryCard(
                         title: _humanise(e.id),
                         reason: e.reason,
+                        // Bu bölümün kendi girişi zaten söylüyor: "The reason
+                        // is the measurement, not the effort." Sınıf o
+                        // cümleyle AYNI şeyi söylemek zorunda — ikisi
+                        // ayrışırsa sayfa kendi içinde çelişir.
+                        kind: LimitKind.measurement,
                       ),
                     ),
                 ],
@@ -146,6 +162,9 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                         title: tier.scope,
                         reason: _tierLine(tier),
                         measured: tier.reason,
+                        // "Not every position is equally readable by one
+                        // camera" — kameranın yapabildiğinin sınırı.
+                        kind: LimitKind.capability,
                       ),
                     ),
                 ],
@@ -189,11 +208,16 @@ class _BoundaryCard extends StatelessWidget {
   const _BoundaryCard({
     required this.title,
     required this.reason,
+    required this.kind,
     this.measured,
   });
 
   final String title;
   final String reason;
+
+  /// Bu sınırın SINIFI. Kartta görünür, çünkü sayfa girişi tek başına
+  /// üç sınıfı birden anlatamaz (L-265).
+  final LimitKind kind;
 
   /// Ölçülmüş dışlama gerekçesi — varsa. Sönük ve İKİNCİL: ürün sınırı ne
   /// yapmadığımızı söyler, bu satır onu neyin ölçtüğünü söyler.
@@ -210,6 +234,18 @@ class _BoundaryCard extends StatelessWidget {
           Text(title, style: t.textTheme.titleMedium),
           const SizedBox(height: 6),
           Text(reason, style: t.textTheme.bodyMedium),
+          const SizedBox(height: 7),
+          // SINIF — sayfa girişi üç sınıfı birden anlatamaz, o yüzden her
+          // satır kendi sınıfını söylüyor (L-265). Makine adı SIZMAZ:
+          // `LimitKind.userText` cümleye çevirir (G-100).
+          Text(
+            kind.userText,
+            key: WhatLissomDoesntDoScreen.kindKey,
+            style: t.textTheme.bodySmall?.copyWith(
+              color: LissomColors.bodySecondary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           if (measured != null) ...<Widget>[
             const SizedBox(height: 10),
             Text(measured!,

@@ -97,6 +97,71 @@ void main() {
             'boşaltılabilir');
   });
 
+  testWidgets('HER sınır satırı SINIFINI söylüyor — tek sebep gibi anlatılmaz',
+      (WidgetTester tester) async {
+    // ⚠️ L-265 (J-153 aktarımı). Sayfa girişi *"every line below is a
+    // decision"* diyordu; ölçüm: **beş kalemin ÜÇÜ karar DEĞİL**, yapamadığımız
+    // şeyler. JabLab'ın hatasının AYNADAKİ hâli — onlar kararı teknik kısıt
+    // gibi anlatıyordu, biz teknik kısıtı karar gibi.
+    //
+    // > Teknik kısıt örtük bir VAAT taşır ("daha iyi teknoloji çözer");
+    // > kasıtlı karar taşımaz.
+    //
+    // Ve kusur **cümle düzeyinde görünmüyordu**: hiçbir cümle yalan
+    // söylemeden sayfa yanlış okunuyordu. Düzeltme de yapısal.
+    //
+    // ⛔ **Bu kapı sınıflandırmanın DOĞRU olduğunu ölçmez** — o semantik bir
+    // yargı ve ölçütü yok (koordinatör hükmü: kör nokta olarak kaydet).
+    // Ölçtüğü: her satır bir sınıf BEYAN ediyor mu, ve o beyan YÜZEYDE
+    // görünüyor mu.
+    pinTallSurface(tester, height: 6000);
+    final AppFacts f = factsFromDisk();
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: WhatLissomDoesntDoScreen(
+          items: f.ia.whyNot,
+          excluded: f.battery.excluded,
+          poseTiers: f.ia.poseTiers),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(f.ia.whyNot, isNotEmpty, reason: 'pozitif çapa: sınır satırı var');
+
+    // ① Sayfa TEK sebep ilan etmiyor.
+    expect(find.textContaining('every line below is a decision'), findsNothing,
+        reason: 'Sayfa yine tek sınıf ilan ediyor. Kalemlerin bir kısmı '
+            'KARAR, bir kısmı YAPAMADIĞIMIZ ŞEY — ikisini tek cümlede '
+            'toplamak, yapamamayı ilke gibi gösterir.');
+
+    // ② Her sınıf etiketi ÇİZİLİYOR ve makine adı SIZMIYOR.
+    final int labels = find.byKey(WhatLissomDoesntDoScreen.kindKey).evaluate().length;
+    expect(labels, greaterThanOrEqualTo(f.ia.whyNot.length),
+        reason: 'Her sınır satırı sınıfını söylemeli; $labels etiket var, '
+            '${f.ia.whyNot.length} satır bekleniyordu');
+    // ⚠️ İlk hâli `textContaining(k.name)` idi ve **meşru İngilizceyi**
+    // yakaladı: *"The reason is the measurement, not the effort."*
+    // `capability` · `measurement` · `judgement` sıradan kelimeler; sızıntı
+    // olan şey onların **ETİKET olarak** görünmesi, cümle içinde geçmesi
+    // değil. Kapı bir kelimeyi değil bir KONUMU ölçmeli.
+    final Set<String> machineNames =
+        LimitKind.values.map((LimitKind k) => k.name).toSet();
+    for (final Element e in find.byType(Text).evaluate()) {
+      final String? data = (e.widget as Text).data;
+      expect(machineNames.contains(data?.trim().toLowerCase()), isFalse,
+          reason: 'MAKİNE ADI SIZDI: «$data» tek başına bir etiket olarak '
+              'çiziliyor. Sınıf, cümleye çevrilir (G-100).');
+    }
+
+    // ③ Ve sınıflar GERÇEKTEN ayrışıyor — hepsi aynı sınıfsa etiket bir
+    //    bilgi taşımaz, süs olur.
+    final Set<LimitKind> distinct =
+        f.ia.whyNot.map((WhyNotItem w) => w.kind).toSet();
+    expect(distinct.length, greaterThan(1),
+        reason: 'Bütün satırlar aynı sınıftan. Ya ölçüm yanlış ya da etiket '
+            'hiçbir ayrım taşımıyor — ikisi de bu kapının varlık sebebini '
+            'ortadan kaldırır.');
+  });
+
   testWidgets('KAYNAK→YÜZEY: her ölçülmüş dışlama ekranda GÖRÜNÜR', (
     WidgetTester tester,
   ) async {

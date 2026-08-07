@@ -266,10 +266,65 @@ final class NavigationRules {
   final bool allCoursesIndexRequired;
 }
 
+/// Bir sınırın **SINIFI** — hangi tür kısıt olduğu.
+///
+/// **Neden zorunlu (L-265):** sayfanın girişi *"Some things we deliberately
+/// left out"* diyordu ve **beş kalemin üçü kasıtlı karar DEĞİLDİ** —
+/// yapamadığımız şeylerdi. Yapamamayı ilke gibi göstermek, JabLab'ın
+/// hatasının **aynadaki** hâli: onlar kararı teknik kısıt gibi anlatıyordu,
+/// biz teknik kısıtı karar gibi.
+///
+/// > ***Teknik kısıt örtük bir VAAT taşır ("daha iyi teknoloji çözer");
+/// > kasıtlı karar taşımaz.***
+///
+/// Ve bu kusur **cümle düzeyinde görünmüyordu** — hiçbir cümle yalan
+/// söylemeden sayfa yanlış okunuyordu. O yüzden düzeltme de **yapısal**:
+/// her satır sınıfını kendisi söylüyor.
+enum LimitKind {
+  /// Kameranın/donanımın yapamadığı. **Teknoloji değişirse değişebilir.**
+  capability,
+
+  /// Ölçebiliyoruz ama güvenilir ayıramıyoruz — karışma, kalibrasyon, referans
+  /// eksikliği. **Bizim ölçüm boşluğumuz.**
+  measurement,
+
+  /// **Mükemmel ölçümle de vermeyeceğimiz hüküm.** Veri sorunu değil, YETKİ.
+  judgement;
+
+  /// Kullanıcının okuyacağı hâl — makine adı yüzeye SIZMAZ (G-100).
+  String get userText => switch (this) {
+        LimitKind.capability =>
+          'A limit of what a phone camera can do. Better hardware could '
+              'change this.',
+        LimitKind.measurement =>
+          'A limit of what we can measure apart from everything else.',
+        LimitKind.judgement =>
+          'A choice. We would keep it even with perfect measurement.',
+      };
+}
+
+/// Sınıf adını çözer — bilinmeyen bir ad SESSİZCE varsayılana düşmez.
+LimitKind _limitKind(String name, int index) {
+  for (final LimitKind k in LimitKind.values) {
+    if (k.name == name) return k;
+  }
+  final String valid = LimitKind.values.map((LimitKind k) => k.name).join(', ');
+  throw StateError(
+      'whyNotPage.items[$index].kind bilinmiyor: "$name" — geçerli: $valid');
+}
+
 final class WhyNotItem {
-  const WhyNotItem({required this.topic, required this.reason});
+  const WhyNotItem({
+    required this.topic,
+    required this.reason,
+    required this.kind,
+  });
   final String topic;
   final String reason;
+
+  /// Hangi SINIFTAN bir sınır. Okuyucu bunu zorunlu tutuyor: sınıfsız bir
+  /// satır, okuyucunun kendi varsayımına bırakılmış demektir.
+  final LimitKind kind;
 }
 
 final class LibraryIa {
@@ -364,6 +419,11 @@ final class LibraryIa {
       whyNot.add(WhyNotItem(
         topic: _str(it['topic'], 'whyNotPage.items[$i].topic'),
         reason: _str(it['reason'], 'whyNotPage.items[$i].reason'),
+        // Sınıf ZORUNLU: sınıfsız bir sınır satırı, okuyucunun kendi
+        // varsayımına bırakılır — ve varsayılan varsayım "teknoloji çözer"
+        // olur (L-265).
+        kind: _limitKind(
+            _str(it['kind'], 'whyNotPage.items[$i].kind'), i),
       ));
     }
 

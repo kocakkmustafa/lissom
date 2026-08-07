@@ -358,27 +358,32 @@
     "id": "why_not",
     "title": "What Lissom doesn't do",
     "status": "available",
-    "intro": "Some things we deliberately left out. Here is what, and why.",
+    "intro": "Some of this we chose to leave out. Some of it we cannot do. Those are not the same thing, so every line below says which it is.",
     "items": [
       {
         "topic": "Programmes for children",
-        "reason": "The pose model is validated on adults, and the youngest reference band we hold is a single 'under 40' group — a nine-year-old and a thirty-nine-year-old would be read against the same line. That is not a measurement, it is an average with a child inside it. Content for minors also carries a duty of care we are not set up to meet."
+        "reason": "The pose model is validated on adults, and the youngest reference band we hold is a single 'under 40' group — a nine-year-old and a thirty-nine-year-old would be read against the same line. That is not a measurement, it is an average with a child inside it. Content for minors also carries a duty of care we are not set up to meet.",
+        "kind": "judgement"
       },
       {
         "topic": "Breath or meditation measurement",
-        "reason": "A phone camera cannot see breathing well enough to measure it, and we will not estimate a number we cannot take — there is nothing there for a camera to read. This build carries no breath or meditation content at all: the family is named in the library and nothing sits behind that name."
+        "reason": "A phone camera cannot see breathing well enough to measure it, and we will not estimate a number we cannot take — there is nothing there for a camera to read. This build carries no breath or meditation content at all: the family is named in the library and nothing sits behind that name.",
+        "kind": "capability"
       },
       {
         "topic": "Clinical screens and risk scores",
-        "reason": "Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking. A movement reading, however carefully taken, is not evidence about your health."
+        "reason": "Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking. A movement reading, however carefully taken, is not evidence about your health.",
+        "kind": "judgement"
       },
       {
         "topic": "Hot yoga (Bikram)",
-        "reason": "Heat lends you range while you are in it, and we cannot tell borrowed range from your own — a reading taken in a hot room would quietly overstate you. Room temperature is also something an app can neither provide nor verify."
+        "reason": "Heat lends you range while you are in it, and we cannot tell borrowed range from your own — a reading taken in a hot room would quietly overstate you. Room temperature is also something an app can neither provide nor verify.",
+        "kind": "measurement"
       },
       {
         "topic": "Hip internal / external rotation measurement",
-        "reason": "Rotation happens in the plane the camera is looking down, so a single lens cannot recover it. We would rather leave the test out of the battery than print a number we cannot stand behind."
+        "reason": "Rotation happens in the plane the camera is looking down, so a single lens cannot recover it. We would rather leave the test out of the battery than print a number we cannot stand behind.",
+        "kind": "capability"
       }
     ]
   },
