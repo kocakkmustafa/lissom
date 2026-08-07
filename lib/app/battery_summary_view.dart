@@ -186,7 +186,7 @@ class BatterySummaryView extends StatelessWidget {
           ? const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[LissomColors.card, Color(0xFFFCF5F0)],
+              colors: <Color>[LissomColors.card, LissomColors.cardWarmEnd],
             )
           : null,
     );
@@ -225,7 +225,7 @@ class BatterySummaryView extends StatelessWidget {
       gradient: const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: <Color>[LissomColors.card, Color(0xFFF7F3F0)],
+        colors: <Color>[LissomColors.card, LissomColors.cardNeutralEnd],
       ),
     );
   }

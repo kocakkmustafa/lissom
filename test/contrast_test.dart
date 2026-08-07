@@ -33,6 +33,8 @@
 /// o bir tasarım yönü kararı.
 library;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/lissom_theme.dart';
@@ -49,7 +51,29 @@ const List<(String, Color)> _backgrounds = <(String, Color)>[
   ('gradyan-orta', Color(0xFFF5E8E4)),
   ('gradyan-son (EN KOYU)', Color(0xFFEEDDE7)),
   ('canvas', LissomColors.canvas),
+  // ⚠️ Bu ikisi kapıya SONRADAN eklendi (L-236): `battery_summary_view` içinde
+  // HAM `Color(0x…)` olarak gömülüydüler ve kapı onları hiç ölçmedi. Geçtiler
+  // (5,56 / 5,43) — ama bu ŞANStı, kapı değildi.
+  ('kart gradyanı sıcak uç', LissomColors.cardWarmEnd),
+  ('kart gradyanı nötr uç', LissomColors.cardNeutralEnd),
 ];
+
+/// Metin/ikon rengi olarak kullanılan token'lar — **ön plan** tarafı.
+const List<(String, Color)> _foregrounds = <(String, Color)>[
+  ('ink', LissomColors.ink),
+  ('bodySecondary', LissomColors.bodySecondary),
+  ('roseDeepHover', LissomColors.roseDeepHover),
+];
+
+/// Ne zemin ne ön plan — dolgu/süs. **Metin olarak KULLANILMAZ**, o yüzden
+/// metin eşiği yok. Kova bir MUAFİYET değil bir SINIFLANDIRMA: aşağıdaki
+/// kaynak taraması bu sınıflandırmanın doğru kaldığını sınıyor.
+const List<String> _decorativeTokens = <String>[
+  'rose', 'mist', 'mistDeep', 'labelMuted', 'metaMono',
+];
+
+/// Dolgu/çizgi/ikon olarak meşru — metin eşiğine tabi değil.
+const List<String> _fillTokens = <String>['roseDeep', 'hairline'];
 
 /// Beyan kartı (cream→peach) **genel listede DEĞİL** ve bu bir muafiyet değil
 /// bir OLGU: peach ucunda hiçbir gövde/vurgu tonu 4.5'e çıkmıyor (ölçüldü —
@@ -174,6 +198,82 @@ void main() {
           reason: 'beyan kartında `ink` dışında bir renk: $c — peach ucunda '
               'okunmaz');
     }
+  });
+
+  test('BÜTÜNLÜK: paletteki HER token bir kovada — kapı kendi eksiğini görür',
+      () {
+    // ⚠️ **L-236, JabLab J-116 aktarımı: "örüntüyü değil örneği düzeltmek."**
+    //
+    // Bu kapının zemin listesi ELLE yazılmıştı ve iki kart-gradyanı ucunu
+    // hiç içermiyordu — onlar `battery_summary_view` içinde ham `Color(0x…)`
+    // olarak gömülüydü. Kapı yeşil yanıyordu çünkü BAKMADIĞI bir yer vardı.
+    //
+    // Çözüm listeyi uzatmak DEĞİL (aynı hata yarın yeni bir token'la döner):
+    // palet KAYNAKTAN okunuyor ve her token üç kovadan birine girmek ZORUNDA.
+    // Yeni bir renk eklenip kovalanmazsa bu test kırmızı yanar — yani kapı
+    // artık kendi eksikliğini görebiliyor.
+    final String src =
+        File('lib/app/lissom_theme.dart').readAsStringSync();
+    final Set<String> declared = RegExp(r'static const Color (\w+)')
+        .allMatches(src)
+        .map((RegExpMatch m) => m.group(1)!)
+        .toSet();
+    expect(declared.length, greaterThan(8), reason: 'pozitif kontrol: palet '
+        'kaynaktan okundu (${declared.length} token)');
+
+    // Kovalar listelerden TÜRETİLİR — elle yazılmış ikinci bir küme, kapının
+    // düzeltmeye çalıştığı hatanın aynısını üretirdi.
+    final Set<String> bucketed = <String>{
+      'card', 'canvas', 'cream', 'peach', 'cardWarmEnd', 'cardNeutralEnd',
+      ..._foregrounds.map(((String, Color) e) => e.$1),
+      ..._decorativeTokens,
+      ..._fillTokens,
+    };
+    expect(declared.difference(bucketed), isEmpty,
+        reason: 'KOVASIZ token — kontrast kapısı onu hiç ölçmez:\n'
+            '${declared.difference(bucketed).join(", ")}');
+    expect(bucketed.difference(declared), isEmpty,
+        reason: 'kovada olup palette OLMAYAN token (yeniden adlandırılmış ya '
+            'da silinmiş — yetim kova girdisi):\n'
+            '${bucketed.difference(declared).join(", ")}');
+
+    // Süs kovası bir SINIFLANDIRMA: oradaki token metin olarak kullanılırsa
+    // kapı susar. O yüzden kaynağı da tarıyoruz.
+    //
+    // ⚠️ SINIR EŞLEŞMESİ ŞART — ilk yazımım sınırsız `contains` ile
+    // arıyordu ve `rose` deseni `roseDeepHover`u da eşliyordu: kapı KENDİ
+    // testinde yanlış-pozitif üretti, ve bunu ancak koşunca gördüm.
+    // Tanımlayıcı eşleşmesi harf sınırı ister.
+    final String uses = Directory('lib/app')
+        .listSync()
+        .whereType<File>()
+        .map((File f) => f.readAsStringSync())
+        .join('\n');
+    for (final String token in _decorativeTokens) {
+      final RegExp asColor =
+          RegExp('color:\\s*LissomColors\\.$token(?![A-Za-z0-9_])');
+      expect(asColor.hasMatch(uses), isFalse,
+          reason: '$token METİN rengi olarak kullanılmış — süs kovasında '
+              'olmasının anlamı "metin eşiği yok" idi');
+    }
+  });
+
+  test('HİYERARŞİ ÜST SINIRI: okunurluk uğruna ayrım feda edilmemiş', () {
+    // Kontrastı yükseltmenin ucuz yolu HER ŞEYİ koyulaştırmaktır — o da
+    // birincil ↔ ikincil ayrımını yok eder. Bu üründe o ayrım bir MESAJ
+    // taşıyor: "bu bir hüküm değil, bir ölçüm."
+    //
+    // Alt sınır okunurluk (diğer testler), ÜST sınır hiyerarşi (bu test).
+    final double primary =
+        contrastRatio(LissomColors.ink, LissomColors.card);
+    final double secondary =
+        contrastRatio(LissomColors.bodySecondary, LissomColors.card);
+    expect(secondary, greaterThanOrEqualTo(Wcag.normalText),
+        reason: 'alt sınır: ikincil metin okunmalı');
+    expect(primary / secondary, greaterThan(2.0),
+        reason: 'üst sınır: birincil ile ikincil arasında en az 2× ayrım '
+            'olmalı — yoksa okunurluk uğruna hiyerarşi feda edilmiş demektir '
+            '(ölçülen: ${(primary / secondary).toStringAsFixed(2)}×)');
   });
 
   test('alfa ZEMİNE bindirilir — saydam rengin kendi parlaklığı ölçülmez', () {

@@ -41,7 +41,21 @@ abstract final class LissomColors {
   /// şey [bodySecondary] kullanır. `contrast_test.dart` bunu zorluyor.
   static const Color labelMuted = Color(0xFF9C929B);
 
-  static const Color note = Color(0xFF8B7F88);
+  // NOT: `note` (#8B7F88) KALDIRILDI — `LissomMono` ve `LissomColors.note`
+  // aynı sınıftı: hiçbir çağıranı yoktu VE metin olarak kullanılsaydı 3,75:1
+  // ile doğardı (eşik 4.5). Ölü bir token, bir gün birinin eline geçen
+  // yüklü bir silahtır.
+
+  /// Kart gradyanlarının koyu uçları — **metin bunların üstünde çiziliyor**,
+  /// o yüzden kontrast kapısının ZEMİN listesinde yer almak zorundalar.
+  ///
+  /// ⚠️ Bu ikisi `battery_summary_view.dart` içinde HAM `Color(0x…)` olarak
+  /// gömülüydü ve kapı onları HİÇ ÖLÇMEDİ (L-236). Geçiyorlar (5,56 / 5,43) —
+  /// ama bu şans, kapı değildi. JabLab'ın cümlesi: *"örüntüyü değil örneği
+  /// düzeltmişim."* Token'a çevrilmelerinin sebebi renkleri değil, kapının
+  /// onları GÖREBİLMESİ.
+  static const Color cardWarmEnd = Color(0xFFFCF5F0);
+  static const Color cardNeutralEnd = Color(0xFFF7F3F0);
 
   /// ⚠️ **METİN İÇİN KULLANILMAZ (L-234).** Kart üstünde 2,57:1, gradyan
   /// üstünde **2,01:1** — bu depodaki en okunmaz renkti ve tam olarak
