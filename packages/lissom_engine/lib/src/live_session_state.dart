@@ -96,7 +96,7 @@ sealed class LiveSessionState {
 final class LiveIdle extends LiveSessionState {
   const LiveIdle();
   @override
-  String get userText => 'Kamera hazırlanıyor.';
+  String get userText => 'Getting the camera ready.';
 }
 
 /// **ÇIKMAZ-SOKAK YASAĞININ TİPİ (desen 1).** Kurulum patladı — ama ekran
@@ -134,7 +134,7 @@ final class PermissionDenied extends LiveSessionState {
 final class NoPersonDetected extends LiveSessionState {
   const NoPersonDetected();
   @override
-  String get userText => 'Kimseyi görmüyorum — kadraja girin.';
+  String get userText => 'No one is in frame. Step into the camera view.';
 }
 
 /// Kişi var ama testin istediği eklemler kadrajda değil.
@@ -142,14 +142,21 @@ final class NoPersonDetected extends LiveSessionState {
 /// L-201'in ürün yüzeyindeki karşılığı; [NoPersonDetected]'den ayrı çünkü
 /// eylem farklı ("geri çekil" ≠ "kadraja gir").
 final class JointsOutOfFrame extends LiveSessionState {
-  const JointsOutOfFrame({required this.missingGroup, required this.userText});
+  const JointsOutOfFrame({required this.missingGroup});
 
   /// Hangi grup eksik (`lower-body` · `upper-body`) — isimli, "bir şeyler
   /// görünmüyor" değil.
   final String missingGroup;
 
+  /// Cümle gruptan **TÜRETİLİR.**
+  ///
+  /// Önce iki alan aynı olguyu ayrı ayrı taşıyordu: `missingGroup` ve elle
+  /// yazılmış bir `userText`. İki kaynak ayrışır — grup değişir, cümle kalır
+  /// ve yüzey yanlış yeri gösterir. Üstelik elle yazılan cümle grubu hiç
+  /// ANMIYORDU, yani M-F-186'nın "isimli gerekçe" hükmünü de karşılamıyordu.
   @override
-  final String userText;
+  String get userText =>
+      'The $missingGroup joints this measurement needs are out of frame.';
 }
 
 /// Ölçüm koşuyor. **Tek `canMeasure == true` hâli.**
@@ -165,6 +172,6 @@ final class Measuring extends LiveSessionState {
 
   @override
   String get userText => reading.hasMeasurement
-      ? 'Ölçüyorum: ${reading.display}'
+      ? 'Measuring: ${reading.display}'
       : reading.narrative!;
 }

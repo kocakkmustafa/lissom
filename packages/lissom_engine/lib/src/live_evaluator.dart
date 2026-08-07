@@ -91,17 +91,14 @@ final class LiveEvaluator {
           // bir ARIZA değil — akış sürer ve o anki tepe korunur.
           final FrameQuality q = _gate.evaluate(f, required: const <int>[]);
           if (!q.judgeable) {
-            yield Measuring(reading: _reading(peak, 'Görüntü net değil.'));
+            yield Measuring(reading: _reading(peak, 'The view is not clear enough to measure.'));
             continue;
           }
           final double? v = CoreMetricReader(frameSize: z).read(f, metricName);
           if (v == null) {
             // Metrik okunamadı (landmark güvensiz) — L-201'in tam hâli:
             // "landmark bulundu ≠ geçerli ölçüm".
-            yield JointsOutOfFrame(
-              missingGroup: _groupOf(metricName),
-              userText: 'Ölçüm için gereken eklemler görünmüyor.',
-            );
+            yield JointsOutOfFrame(missingGroup: _groupOf(metricName));
             continue;
           }
           // Tepe yönü config'ten gelir — sessiz varsayılan YOK (L-181).

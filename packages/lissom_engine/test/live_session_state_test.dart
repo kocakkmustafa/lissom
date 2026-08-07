@@ -29,8 +29,7 @@ void main() {
         const PermissionDenied(
             kind: PermissionDenialKind.transient, userText: 'izin yok'),
         const NoPersonDetected(),
-        const JointsOutOfFrame(
-            missingGroup: 'lower-body', userText: 'geri çekilin'),
+        const JointsOutOfFrame(missingGroup: 'lower-body'),
         Measuring(
             reading: const LiveReading.absent(
                 metric: 'shoulder_flexion_right',
@@ -109,9 +108,8 @@ void main() {
   group('kadraj: "landmark bulundu ≠ geçerli ölçüm" (L-201 ürün yüzeyi)', () {
     test('kimse-yok ile eklem-kadraj-dışı AYRI tipler (eylem farklı)', () {
       const LiveSessionState noPerson = NoPersonDetected();
-      const LiveSessionState outOfFrame = JointsOutOfFrame(
-          missingGroup: 'lower-body',
-          userText: 'Biraz geri çekilin — dizleriniz kadrajda değil.');
+      const LiveSessionState outOfFrame =
+          JointsOutOfFrame(missingGroup: 'lower-body');
       expect(noPerson.runtimeType, isNot(outOfFrame.runtimeType),
           reason: '"kadraja gir" ile "geri çekil" farklı eylemler; tek tipe '
               'indirilirse kullanıcı yanlış şeyi dener');
