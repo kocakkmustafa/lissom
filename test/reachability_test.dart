@@ -1,0 +1,174 @@
+/// **GEZİLEBİLİR EKRAN SAYISI — KAPIDAN ÖLÇÜLÜR (L-270).**
+///
+/// Koordinatörün sorusu tek cümle:
+///
+/// > ***Bugün, uygulamayı açan bir kullanıcı kaç ayrı ekrana GİDEBİLİYOR?***
+///
+/// Kurucu sabah **inşa turu sırasına** karar verecek ve elindeki sayı
+/// **02:00'de** ölçülmüş; arada 200+ commit geçti. **Bayat öncülle verilen
+/// sıra kararı yanlış çıkar** — bu gecenin dört-tur blokajıyla (*"M-F-22
+/// yasaklıyor"* sanısı) **aynı sınıf**.
+///
+/// ## Sayma kuralı (beş hatta ORTAK, karşılaştırılabilir olsun diye)
+///
+/// **Sayılır:** açılıştan başlayarak, **yalnız ekranda görünen kontrollere
+/// basarak** ulaşılan her ayrı ekran.
+/// **Sayılmaz:** kodda tanımlı ama hiçbir yerden ulaşılamayan · yalnız
+/// derin-bağlantı/test kancasıyla açılan · ayrı ekran olmayan modal/sheet.
+///
+/// ## Neden statik tarama DEĞİL
+///
+/// Önce sınıf-atıf taraması yaptım ve **`FamilyPage`'i "erişilemez" gösterdi**
+/// — oysa Library'den bir dokunuşla açılıyor. Sebep: sınıf kendi tanım
+/// dosyasında kullanılıyordu ve filtrem o dosyayı dışlıyordu. *Ölçüm aracı
+/// yanlış sayı verdi;* koordinatörün kendi deseninin Ostinato'ya **3** deyip
+/// gerçeğin **11** çıkmasıyla aynı sınıf.
+///
+/// **Bu yüzden sayı KABUĞU SÜREREK ölçülüyor** ve kapı kalıcı: sayı bir daha
+/// bayatlamaz.
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:lissom/app/app_facts.dart';
+import 'package:lissom/app/home_screen.dart';
+import 'package:lissom/app/ia.dart';
+import 'package:lissom/app/library_screen.dart';
+import 'package:lissom/app/lissom_theme.dart';
+import 'package:lissom/app/profile_screen.dart';
+import 'package:lissom/app/progress_screen.dart';
+import 'package:lissom/app/shell.dart';
+import 'package:lissom/app/what_lissom_doesnt_do.dart';
+
+import 'support/facts_from_disk.dart';
+import 'support/narrow_surface.dart';
+
+/// Ekran sayılan tipler — **tek adres**. Kabuk kromu (NavigationBar) ve
+/// yükleme/hata hâlleri ekran değildir.
+const List<Type> kCountableScreens = <Type>[
+  HomeScreen,
+  LibraryScreen,
+  ProgressScreen,
+  ProfileScreen,
+  FamilyPage,
+  WhatLissomDoesntDoScreen,
+];
+
+Type? _visibleScreen(WidgetTester tester) {
+  for (final Type t in kCountableScreens) {
+    if (find.byType(t).evaluate().isNotEmpty) return t;
+  }
+  return null;
+}
+
+/// Taze kabuk açar — alt ekrana girince kabuk çubuğu kaybolduğu için her
+/// yol SIFIRDAN yürünür. Deterministik ve "geri düğmesi var mı" varsayımı
+/// yapmaz.
+Future<AppFacts> _boot(WidgetTester tester) async {
+  // Boş ağaç: aksi hâlde aynı tipteki kabuk yeniden kullanılıyor ve ÖNCEKİ
+  // turda itilmiş rota ayakta kalıyor — tur kendi geçmişini ölçer.
+  await tester.pumpWidget(const SizedBox.shrink());
+  await tester.pumpAndSettle();
+  final AppFacts facts = factsFromDisk();
+  await tester.pumpWidget(MaterialApp(
+    theme: buildLissomTheme(),
+    home: LissomShell(loader: () async => facts),
+  ));
+  await tester.pumpAndSettle();
+  return facts;
+}
+
+Future<void> _openTab(WidgetTester tester, AppFacts f, String id) async {
+  await tester.tap(find.byType(NavigationDestination).at(f.ia.tabs.indexOf(id)));
+  await tester.pumpAndSettle();
+}
+
+void main() {
+  testWidgets('GEZİLEBİLİR EKRAN SAYISI — kabuğu sürerek', (
+    WidgetTester tester,
+  ) async {
+    pinTallSurface(tester, height: 6000);
+    final Set<Type> reached = <Type>{};
+    final List<String> paths = <String>[];
+
+    // ① Sekmeler — kabuğun KENDİ rotasından, elle liste değil.
+    AppFacts facts = await _boot(tester);
+    for (final String tab in facts.ia.tabs) {
+      await _openTab(tester, facts, tab);
+      final Type? s = _visibleScreen(tester);
+      if (s != null && reached.add(s)) paths.add('$s  ← sekme «$tab»');
+    }
+
+    // ② Her sekmede GÖRÜNEN her butona bir kez bas (her seferinde taze kabuk).
+    for (final String tab in facts.ia.tabs) {
+      for (int b = 0; b < 12; b++) {
+        facts = await _boot(tester);
+        await _openTab(tester, facts, tab);
+        // ⚠️ Tur ÖNCE yalnız butonlara basıyordu ve `WhatLissomDoesntDoScreen`i
+        // "ulaşılamıyor" saydı — oysa Profile'daki bir KARTIN `onTap`'iyle
+        // açılıyor. Ölçüm aracı eksik saydı; koordinatörün deseninin
+        // Ostinato'ya 3 deyip gerçeğin 11 çıkmasıyla aynı sınıf.
+        final Finder all = find.byWidgetPredicate((Widget w) =>
+            w is FilledButton ||
+            w is TextButton ||
+            (w is InkWell && w.onTap != null) ||
+            (w is GestureDetector && w.onTap != null));
+        if (all.evaluate().length <= b) break;
+        await tester.tap(all.at(b), warnIfMissed: false);
+        await tester.pumpAndSettle();
+        final Type? s = _visibleScreen(tester);
+        if (s != null && reached.add(s)) {
+          paths.add('$s  ← «$tab» sekmesindeki ${b + 1}. buton');
+        }
+      }
+    }
+
+    // ③ Library'deki aile kartları — liste öğeleri de GÖRÜNEN kontrol.
+    final List<String> titles =
+        facts.ia.families.map((LibraryFamily f) => f.title).toList();
+    for (final String title in titles) {
+      facts = await _boot(tester);
+      await _openTab(tester, facts, 'library');
+      final Finder card = find.text(title);
+      if (card.evaluate().isEmpty) continue;
+      await tester.tap(card.first, warnIfMissed: false);
+      await tester.pumpAndSettle();
+      final Type? s = _visibleScreen(tester);
+      if (s != null && reached.add(s)) paths.add('$s  ← Library «$title»');
+    }
+
+    // POZİTİF ÇAPA: tur gerçekten gezdi mi (L-183)?
+    expect(reached, isNotEmpty,
+        reason: 'hiçbir ekrana ulaşılamadı — tur çalışmıyor ve aşağıdaki '
+            'sayı vakum-doğru');
+
+    // ignore: avoid_print
+    print('\n═══ GEZİLEBİLİR EKRAN: ${reached.length} ═══');
+    for (final String p in paths) {
+      // ignore: avoid_print
+      print('  · $p');
+    }
+    final List<Type> unreached =
+        kCountableScreens.where((Type t) => !reached.contains(t)).toList();
+    // ignore: avoid_print
+    print('═══ VAR AMA ULAŞILAMIYOR: ${unreached.length} ═══');
+    for (final Type t in unreached) {
+      // ignore: avoid_print
+      print('  🔴 $t');
+    }
+
+    // KALICI KAPI: sayı DÜŞERSE kırmızı. Üst sınır YOK — kapı büyümeyi
+    // yasaklamaz, KÜÇÜLMEYİ yakalar (L-239: sayıyı değil kuralı ölç; buradaki
+    // kural "gezilebilirlik geriye gitmez").
+    // Ve KODDA TANIMLI ama sayılmayanlar ayrıca raporlanır — `BatterySummaryView`
+    // bu listede (L-225: kabuktan hiçbir atıf yok, karar koordinatörde).
+    // ignore: avoid_print
+    print('═══ SAYIM DIŞI (tanımlı, kabuğa hiç bağlanmamış) ═══\n'
+        '  🔴 BatterySummaryView — L-225, açık karar');
+
+    expect(reached.length, greaterThanOrEqualTo(6),
+        reason: 'Gezilebilir ekran sayısı 6\'nın altına düştü. Bir ekran kodda '
+            'DURUYOR ama artık ulaşılamıyor olabilir — repliğin varlığı, '
+            'tetiğinin varlığı değildir.');
+  });
+}

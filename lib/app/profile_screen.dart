@@ -46,7 +46,11 @@ class ProfileScreen extends StatelessWidget {
           _EntryCard(
             key: whyNotEntryKey,
             title: "What Lissom doesn't do",
-            subtitle: 'The decisions behind the edges of the product.',
+            // ⚠️ ÖNCE 'The decisions behind the edges of the product.'
+            // diyordu — L-265'te düzelttiğim çerçevenin BAŞKA BİR YÜZEYDEKİ
+            // kopyası: beş kalemin üçü karar DEĞİL. Kusuru bulduğun yüzeyde
+            // düzeltmek, ürünün geri kalanında düzeltmek değildir (J-151).
+            subtitle: 'What we chose not to do, and what we cannot do.',
             onTap: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => WhatLissomDoesntDoScreen(
