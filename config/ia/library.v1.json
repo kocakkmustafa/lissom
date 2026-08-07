@@ -26,9 +26,9 @@
       },
       {
         "id": "retest_countdown",
-        "title": "Next re-assessment",
+        "title": "Measuring again",
         "source": "assessment_cycle",
-        "note": "Kuzey Yıldızı döngüsünün görünür yüzü"
+        "note": "Kuzey Yıldızı döngüsünün görünür yüzü. ⚠️ Başlık ÖNCE 'Next re-assessment' idi (L-266): kartın GÖVDESİ 'we are not going to schedule you' derken başlık planlanmış bir sonraki ölçüm ilan ediyordu. Başlık sistemin YUVASINI, gövde kullanıcının gerçeğini anlatıyordu — ve kullanıcı önce başlığı okur."
       },
       {
         "id": "continue",
