@@ -59,3 +59,22 @@ class ProbePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+/// **UYGULAMANIN ÇİZDİĞİ** painter'lar — çerçevenin kendi çizimi HARİÇ.
+///
+/// [paintersIn] tam kabukta **fazla genişti**: Flutter'ın `Material` widget'ı
+/// her kart/çubuk için `_ShapeBorderPainter` üretiyor. O painter'ları
+/// yasaklamak, **ürün doğru davranırken kırmızıya dönen** bir kapı olurdu
+/// (JabLab dersi).
+///
+/// Ayrım **türetilmiş**, elle yazılmış liste değil: çerçevenin dahili
+/// painter'ları kütüphane-özel (`_` ile başlar); sevk edilen bir uygulama
+/// painter'ı ise **public** bir sınıftır.
+///
+/// ⚠️ **Bu katmanın ölçmediği:** dosya-içi `_GaugePainter` gibi ÖZEL bir
+/// uygulama painter'ı. Onu **kaynak katmanı** yakalar (`lib/` içinde
+/// `extends CustomPainter` / `painter:` YASAK) — iki katman birlikte kapatır,
+/// tek başına hiçbiri kapatmaz.
+Iterable<Element> appAuthoredPainters(WidgetTester tester) =>
+    paintersIn(tester).where((Element e) =>
+        !'${(e.widget as CustomPaint).painter.runtimeType}'.startsWith('_'));
