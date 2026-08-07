@@ -84,19 +84,24 @@ class NamedGapCard extends StatelessWidget {
   }
 }
 
-/// Dürüstlük kutusu — **her aile sayfasında ZORUNLU** (IA config hükmü,
-/// [LibraryIa] okuyucusunda tip düzeyinde zorlanıyor).
-///
-/// İki liste GÖRSEL OLARAK AYRI: "ölçülenler" ile "ölçülmeyenler" aynı
-/// biçimde dizilirse kutu bir özellik listesine benzer ve ikinci yarısı
-/// okunmaz. Ayrımı taşıyan şey ikon ve zemin — renk kodlaması (yeşil/kırmızı)
-/// KULLANILMIYOR: "ölçülmüyor" bir başarısızlık değil, bir sınırdır.
+// Kutu tasarımının kuralı: "ölçülenler" ile "ölçülmeyenler" aynı biçimde
+// dizilirse kutu bir özellik listesine benzer ve ikinci yarısı okunmaz.
+// Ayrımı taşıyan şey ikon ve zemin — renk kodlaması (yeşil/kırmızı)
+// KULLANILMIYOR: "ölçülmüyor" bir başarısızlık değil, bir sınırdır.
+
 /// Bir iddianın dayandığı metrikler bugün gerçekten ölçülebiliyor mu?
 ///
 /// Dönüş `null` = canlı. Dolu = İSİMLİ gerekçe — ve gerekçe **köprünün kendi
 /// metnidir**, burada ikinci kez yazılmaz (iki metin ayrışır, biri bayatlar).
 typedef ClaimLiveness = String? Function(HonestyClaim claim);
 
+/// Dürüstlük kutusu — **her aile sayfasında ZORUNLU** (IA config hükmü,
+/// [LibraryIa] okuyucusunda tip düzeyinde zorlanıyor).
+///
+/// İki liste GÖRSEL OLARAK AYRI, ve **`measured` tarafı artık kendini
+/// doğruluyor** (L-230): her iddia dayandığı metrikleri beyan eder, kabuk
+/// onu köprüye karşı sınar, canlı olmayan iddia silinmez — İSİMLİ gerekçeyle
+/// sönük gösterilir.
 class HonestyBoxCard extends StatelessWidget {
   const HonestyBoxCard(this.box, {required this.liveness, super.key});
 
@@ -171,7 +176,12 @@ class HonestyBoxCard extends StatelessWidget {
                             ?.copyWith(color: LissomColors.labelMuted)),
                 if (!live) ...<Widget>[
                   const SizedBox(height: 3),
-                  Text('Not in this build — $blocker',
+                  // ⚠️ Ayraç TİRE DEĞİL orta-nokta: engel metni ZATEN
+                  // "<özne> — <gerekçe>" biçiminde geliyor, tire kullanmak
+                  // ekranda "Not in this build — Hold time — this test is…"
+                  // gibi ÇİFT TİRE üretiyordu ve cümle okunmuyordu.
+                  // Simülatör ekranı yakaladı, test değil.
+                  Text('Not in this build · $blocker',
                       style: t.textTheme.bodySmall
                           ?.copyWith(color: LissomColors.metaMono)),
                 ],
