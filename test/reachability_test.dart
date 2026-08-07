@@ -89,6 +89,15 @@ void main() {
   ) async {
     pinTallSurface(tester, height: 6000);
     final Set<Type> reached = <Type>{};
+    // İKİ OKUMA ayrı tutulur (L-271). Koordinatörün kanonik kuralı "ayrı
+    // ROTA"; ama Lissom'un kabuğu TEK Scaffold içinde `switch`le gövde
+    // değiştiriyor ve `NavigationBar` HEP görünür — yani sekmelerim, kuralın
+    // "sayılmaz" dediği üç maddenin üçüne birden uyuyor. Kuralın AMACI ise
+    // "navigasyon kabuğu eksik mi" ve sekmeler kabuğun KENDİSİ.
+    //
+    // Bu yüzden tek sayı beyan etmiyorum: ikisi de ölçülüyor ve hangi kural
+    // kazanırsa kazansın ölçüm geçerli kalıyor.
+    final Set<Type> pushedRoutes = <Type>{};
     final List<String> paths = <String>[];
 
     // ① Sekmeler — kabuğun KENDİ rotasından, elle liste değil.
@@ -118,7 +127,8 @@ void main() {
         await tester.pumpAndSettle();
         final Type? s = _visibleScreen(tester);
         if (s != null && reached.add(s)) {
-          paths.add('$s  ← «$tab» sekmesindeki ${b + 1}. buton');
+          pushedRoutes.add(s);
+          paths.add('$s  ← «$tab» sekmesindeki ${b + 1}. buton  [ROTA]');
         }
       }
     }
@@ -134,7 +144,10 @@ void main() {
       await tester.tap(card.first, warnIfMissed: false);
       await tester.pumpAndSettle();
       final Type? s = _visibleScreen(tester);
-      if (s != null && reached.add(s)) paths.add('$s  ← Library «$title»');
+      if (s != null && reached.add(s)) {
+        pushedRoutes.add(s);
+        paths.add('$s  ← Library «$title»  [ROTA]');
+      }
     }
 
     // POZİTİF ÇAPA: tur gerçekten gezdi mi (L-183)?
@@ -143,7 +156,11 @@ void main() {
             'sayı vakum-doğru');
 
     // ignore: avoid_print
-    print('\n═══ GEZİLEBİLİR EKRAN: ${reached.length} ═══');
+    print('\n═══ GEZİLEBİLİR EKRAN — İKİ OKUMA ═══');
+    // ignore: avoid_print
+    print('  KATI  (yalnız ayrı ROTA, push/go)        : ${pushedRoutes.length}');
+    // ignore: avoid_print
+    print('  GENİŞ (sekme hedefleri + rotalar)        : ${reached.length}');
     for (final String p in paths) {
       // ignore: avoid_print
       print('  · $p');
@@ -166,8 +183,11 @@ void main() {
     print('═══ SAYIM DIŞI (tanımlı, kabuğa hiç bağlanmamış) ═══\n'
         '  🔴 BatterySummaryView — L-225, açık karar');
 
+    // Kapı GENİŞ okumayı tutuyor (kullanıcının gidebildiği ayrı yer sayısı);
+    // KATI okuma raporda ayrıca basılıyor. Hangi kural kazanırsa kazansın
+    // ölçüm geçerli kalır (L-271).
     expect(reached.length, greaterThanOrEqualTo(6),
-        reason: 'Gezilebilir ekran sayısı 6\'nın altına düştü. Bir ekran kodda '
+        reason: 'Gezilebilir ekran (GENİŞ) 6\'nın altına düştü. Bir ekran kodda '
             'DURUYOR ama artık ulaşılamıyor olabilir — repliğin varlığı, '
             'tetiğinin varlığı değildir.');
   });
