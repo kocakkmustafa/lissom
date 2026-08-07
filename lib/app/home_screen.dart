@@ -151,16 +151,20 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
+            // ⚠️ Eskiden *"Measure when you are ready"* yazıyordu ve bu bir
+            // DAVETTİ — yapılamayan bir eyleme. §5.2 hükmü "davet, geri sayım
+            // değil" diyor; davetin ön koşulu eylemin MÜMKÜN olması.
+            // (L-242, yayın envanteri.)
             last == null
-                ? 'Measure when you are ready'
-                : 'Measure again when you are ready',
+                ? 'No measurement has been taken here'
+                : 'Your last measurement on this device',
             style: t.textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
           Text(
             last == null
-                ? 'Nothing has been measured on this device. There is no '
-                    'right day to start.'
+                ? 'Nothing has been measured on this device — and nothing can '
+                    'be, until the camera run is wired to a screen.'
                 : 'Last measurement on this device: '
                     '${_formatDate(last.completedAt)}.',
             style: t.textTheme.bodyMedium,
@@ -198,7 +202,8 @@ class HomeScreen extends StatelessWidget {
     if (last == null) {
       return const NamedGapCard(
         title: 'Nothing in progress',
-        reason: 'Nothing has been measured on this device.',
+        reason: 'Nothing has been measured on this device, and no session '
+            'can be started here.',
       );
     }
     return LissomCard(
@@ -227,9 +232,11 @@ class HomeScreen extends StatelessWidget {
         children: <Widget>[
           Text(
             live.isEmpty
-                ? 'No test can be measured by camera in this build'
-                : '${live.length} of ${facts.liveness.length} tests can be '
-                    'measured by camera',
+                // Sayı MOTOR yeteneğini anlatıyor, kullanıcının
+                // yapabileceğini DEĞİL — cümle bunu söylemeli (L-242).
+                ? 'The measurement engine can read none of the twelve tests'
+                : 'The measurement engine can read ${live.length} of '
+                    '${facts.liveness.length} tests',
             style: t.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),

@@ -29,10 +29,12 @@ Future<void> pump(WidgetTester tester, SessionHistoryView h) async {
 }
 
 void main() {
-  testWidgets('KIYAS KAPALI beyanı ekranın TEPESİNDE ve sebebi yazılı', (
+  testWidgets('KIYAS KAPALI beyanı defterden ÖNCE ve sebebi yazılı', (
     WidgetTester tester,
   ) async {
-    pinNarrowSurface(tester);
+    // Sıra iddiası → uzun yüzey (genişlik yine 375). Kısa yüzeyde defter
+    // katlamanın altında kalıyor ve tembel liste onu hiç kurmuyor.
+    pinTallSurface(tester);
     await pump(
       tester,
       SessionHistoryView.ok(<SessionRecord>[
@@ -41,12 +43,17 @@ void main() {
     );
 
     expect(find.byKey(ProgressScreen.comparisonNoticeKey), findsOneWidget);
-    // Beyan, defterden ÖNCE gelmeli — aşağıda olsaydı kaydırmayan kullanıcı
-    // listeyi bir ilerleme grafiği sanardı.
+    // ⚠️ Burada eskiden `noticeY < 400` yazıyordu — SİHİRLİ SAYI, ve tam da
+    // kendi "sayıyı değil kuralı ölç" dersimin (L-239) ihlali. Ekrana bir
+    // beyan kartı eklenince 429'a kaydı ve test ürün DOĞRU değişirken
+    // kırmızı yandı. Ölçülen kural: beyan defterden ÖNCE gelir.
     final double noticeY =
         tester.getTopLeft(find.byKey(ProgressScreen.comparisonNoticeKey)).dy;
-    await scrollTo(tester, find.byKey(ProgressScreen.ledgerKey));
-    expect(noticeY, lessThan(400));
+    final double ledgerY =
+        tester.getTopLeft(find.byKey(ProgressScreen.ledgerKey)).dy;
+    expect(noticeY, lessThan(ledgerY),
+        reason: 'kıyas beyanı defterin ALTINDA kalırsa, kaydırmayan kullanıcı '
+            'listeyi bir ilerleme grafiği sanar');
 
     // Sebep GERÇEKTEN yazılı: hangi üç koşulun doğrulanamadığı.
     expect(find.textContaining('same model'), findsOneWidget);

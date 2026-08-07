@@ -15,6 +15,7 @@ import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/profile_screen.dart';
 import 'package:lissom/app/progress_screen.dart';
 import 'package:lissom/app/shell.dart';
+import 'package:lissom/app/surfaces.dart';
 
 import 'support/copy_gate.dart';
 import 'support/facts_from_disk.dart';
@@ -110,6 +111,31 @@ void main() {
     expect(find.text("Lissom couldn't start"), findsOneWidget);
     expect(find.textContaining('bozuk ia config'), findsOneWidget,
         reason: 'sebep YUTULMAZ — kullanıcı neyin patladığını görür');
+  });
+
+  testWidgets('L-242: ÖLÇÜM İMA EDEN her sekme, capture beyanını TAŞIR', (
+    WidgetTester tester,
+  ) async {
+    // Yayın envanterinin bulgusu: boşluğu YALNIZ Home söylüyordu. Library'den
+    // ya da Progress'ten başlayan kullanıcı onu hiç görmüyordu — yani
+    // uygulamanın büyük kısmı çalışan bir ölçüm döngüsünün şimdiki zamanıyla
+    // konuşuyordu.
+    //
+    // Home'un KENDİ beyanı ayrı (`DeclarationBanner`); bu kapı ölçümü ima
+    // eden DİĞER iki sekmeyi tutuyor.
+    pinNarrowSurface(tester);
+    await _pump(tester, () async => factsFromDisk());
+    for (final String tab in <String>['Library', 'Progress']) {
+      await tester.tap(find.text(tab));
+      await tester.pumpAndSettle();
+      expect(find.byKey(CaptureUnavailableNote.key_), findsOneWidget,
+          reason: '$tab sekmesi ölçümden bahsediyor ama capture beyanını '
+              'taşımıyor — kullanıcı buradan başlarsa yanlış bilgilenir');
+    }
+    // Home kendi beyanını taşıyor (aynı olguyu iki kez basmaz).
+    await tester.tap(find.text('Home'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('camera run is not wired'), findsOneWidget);
   });
 
   testWidgets('dört sekmenin HİÇBİRİNDE yasaklı yüzey kopyası yok', (

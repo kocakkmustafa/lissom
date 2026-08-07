@@ -33,6 +33,23 @@ void pinNarrowSurface(WidgetTester tester) {
   addTearDown(tester.view.resetDevicePixelRatio);
 }
 
+/// **BELGE SIRASI** iddiaları için uzun yüzey — 375 GENİŞ, 2400 yüksek.
+///
+/// Neden ayrı: *"A, B'den önce gelir"* iddiası bir YERLEŞİM kuralıdır, bir
+/// sığma kuralı değil. Dar-ve-kısa yüzeyde ikisinden biri katlamanın altında
+/// kalır, tembel liste onu HİÇ KURMAZ ve `getTopLeft` "bulunamadı" der —
+/// yani test, ölçmek istediği şeyi değil ekran boyunu ölçer. Kaydırmak da
+/// çözmez: kaydırınca bu kez öteki ağaçtan düşer.
+///
+/// ⚠️ **Genişlik AYNEN 375 kalıyor.** Taşma/okunabilirlik kapıları hâlâ
+/// `pinNarrowSurface` kullanır; bu yalnız sıra sorusu içindir.
+void pinTallSurface(WidgetTester tester) {
+  tester.view.physicalSize = const Size(375, 2400);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}
+
 /// [finder] görünene kadar kaydırır.
 ///
 /// **Neden gerekli ve neden bu bir TUZAK:** `ListView(children: …)` çocukları

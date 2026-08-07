@@ -54,6 +54,7 @@ class ProgressScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
+          const CaptureUnavailableNote(),
           const SectionHeading(
             'Your record',
             subtitle: 'What was measured, when, and under what conditions.',
@@ -113,9 +114,9 @@ class ProgressScreen extends StatelessWidget {
             const NamedGapCard(
               key: emptyKey,
               title: 'Nothing recorded on this device',
-              reason: 'Once a session is measured, every reading it produced '
-                  'is listed here with the date and the conditions it was '
-                  'taken under.',
+              reason: 'No session can be captured in this build, so there is '
+                  'nothing to list. When one can, every reading it produced '
+                  'appears here with its date and conditions.',
             )
           else ...<Widget>[
             if (h.countsAreFloor) ...<Widget>[

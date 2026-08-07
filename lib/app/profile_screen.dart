@@ -83,10 +83,22 @@ class ProfileScreen extends StatelessWidget {
                     // Ölçülmüş ve doğrulanabilir: uygulamanın hesabı yok,
                     // sunucusu yok, yükleme yolu yok. Bu bir vaat değil bir
                     // yapı beyanı — kodda gönderilecek bir yer YOK.
+                    // ⚠️ **SONUCU DOĞRU, GEREKÇESİ YANLIŞTI (L-242).** Eski
+                    // cümle "Your camera images and your readings stay on
+                    // this phone" diyordu — gizlilik iddiası sağlam (hesap
+                    // yok, sunucu yok, gönderilecek yer yok) ama dayandığı
+                    // mekanizma YOK: uygulama kamerayı hiç açmıyor, ortada
+                    // görüntü de okuma da yok.
+                    //
+                    // Doğru sonucu yanlış gerekçeyle söylemek en zor
+                    // yakalanan hatadır: kimse sonucu sorgulamaz. Ve gerekçe
+                    // bir gün gerçekleştiğinde cümle aynen kalır, yalnız
+                    // artık denetlenmemiş olur.
                     Text(
-                      'Your camera images and your readings stay on this '
-                      'phone. Lissom has no account, no server of its own, '
-                      'and nowhere to send them.',
+                      'Lissom has no account and no server of its own, so '
+                      'there is nowhere for your data to go. Nothing is '
+                      'captured by the camera in this build either — when it '
+                      'is, it will stay on this phone for the same reason.',
                       style: t.textTheme.bodyMedium,
                     ),
                   ],

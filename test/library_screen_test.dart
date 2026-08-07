@@ -65,7 +65,8 @@ void main() {
   testWidgets('KATMANLI: aktif aile ÖNCE, inşa edilmemişler AYRI bölümde', (
     WidgetTester tester,
   ) async {
-    pinNarrowSurface(tester);
+    // Sıra iddiası → uzun yüzey (genişlik yine 375).
+    pinTallSurface(tester);
     await pump(tester, factsFromDisk());
 
     final double builtY =

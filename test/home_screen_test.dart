@@ -84,9 +84,13 @@ void main() {
               'diyor, vade değil');
     }
 
-    // Pozitif yön: davet GERÇEKTEN orada (yokluk testi tek başına, ekran
-    // boşsa da geçerdi — L-183).
-    expect(find.textContaining('when you are ready', skipOffstage: false),
+    // Pozitif yön: kart GERÇEKTEN bir şey söylüyor (yokluk testi tek başına,
+    // ekran boşsa da geçerdi — L-183).
+    //
+    // ⚠️ Çapa değişti (L-242): eskiden *"when you are ready"* arıyordu, ama o
+    // cümle YAPILAMAYAN bir eyleme davetti — kullanıcı ölçüm başlatamıyor.
+    // Yayın envanteri onu "fazla" olarak işaretledi ve kaldırıldı.
+    expect(find.textContaining('Your last measurement', skipOffstage: false),
         findsWidgets);
   });
 

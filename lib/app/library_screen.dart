@@ -43,13 +43,21 @@ class LibraryScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
+          // ⚠️ Beyan bölümün DIŞINDA: içine koymak onu bir "aile kartı"
+          // yapardı ve eşit-ağırlık kapısı (kart sayısı = aile sayısı)
+          // yanlış sayardı. Kapı bunu anında yakaladı.
+          const CaptureUnavailableNote(),
           Column(
             key: builtSectionKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SectionHeading(
                 'In this build',
-                subtitle: 'What Lissom can actually do on your phone today.',
+                // ⚠️ Eskiden "What Lissom can actually do on your phone
+                // today" yazıyordu — Home'un beyanıyla DOĞRUDAN çelişiyordu
+                // (L-242). Batarya telefonda çalıştırılamıyor.
+                subtitle: 'What the measurement engine covers. Running it is '
+                    'a separate thing — see the note above.',
               ),
               const SizedBox(height: 14),
               for (final LibraryFamily f in built)

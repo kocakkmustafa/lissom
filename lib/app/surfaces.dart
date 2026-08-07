@@ -281,6 +281,54 @@ class DeclarationBanner extends StatelessWidget {
   }
 }
 
+/// **Kamera turu bu derlemede bağlı DEĞİL — tek kaynak (L-242).**
+///
+/// Yayın envanteri (`docs/YAYIN-ENVANTERI-2026-08-07.md`) tek bir örüntü
+/// buldu: **uygulamanın tamamı çalışan bir ölçüm döngüsünün şimdiki
+/// zamanıyla konuşuyordu**, oysa kullanıcı hiçbir ölçüm yapamıyor. Bu gerçeği
+/// yalnız Home'un tepesindeki beyan söylüyordu; Library'den ya da
+/// Progress'ten başlayan kullanıcı onu hiç görmüyordu.
+///
+/// Yokluk sessiz değil, **konuşkan**dı: yedi yüzey var olmayan bir mekanizmayı
+/// anlatıyordu. Sınıf *"beyan var üretici yok"*un TERSİ.
+///
+/// Boşluğu yedi yerde yeniden anlatmak, aynı hatayı yeni bir ikizle kapatmak
+/// olurdu — metin bir kez yazılır, gerektiği her yerde GÖSTERİLİR.
+class CaptureUnavailableNote extends StatelessWidget {
+  const CaptureUnavailableNote({super.key});
+
+  static const Key key_ = Key('note.captureUnavailable');
+
+  static const String text =
+      'No session can be captured in this build: the camera run is not wired '
+      'to any screen. Everything below describes what the measurement engine '
+      'can and cannot read — not something you can start today.';
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData t = Theme.of(context);
+    return Padding(
+      key: key_,
+      padding: const EdgeInsets.only(bottom: 16),
+      child: LissomCard(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 2),
+              child: Icon(Icons.videocam_off_outlined,
+                  size: 17, color: LissomColors.bodySecondary),
+            ),
+            const SizedBox(width: 11),
+            Expanded(child: Text(text, style: t.textTheme.bodyMedium)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Kalıcı ölçüm-sınırı beyanı — **küçük punto, her ölçüm yüzeyinin dibinde.**
 ///
 /// Uyum denetimi maddesi ⑱'in kapanışı. İki parçası var ve ikisi de ÖLÇÜLMÜŞ
