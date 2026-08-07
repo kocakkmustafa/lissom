@@ -59,6 +59,23 @@ void pinTallSurface(WidgetTester tester) {
 /// yanar — ve daha kötüsü, ekrana SIĞAN bir sayfada yanlışlıkla yeşil yanıp
 /// beyanın varlığını KANITLAMIŞ gibi görünür. Dar yüzeyde (375pt) bu fark
 /// büyür, çünkü daha az şey sığar.
+/// **YATAY yüzey — 812×375.** Kapı envanterinin bulduğu kör nokta (L-244).
+///
+/// 375pt kapısı ailenin en olgun taşma kapısı, ama **yalnız PORTRE ölçüyordu.**
+/// Ölçüldü: `lib/` altında `setPreferredOrientations` HİÇ YOK ve
+/// `ios/Runner/Info.plist` üç yönü birden açıyor
+/// (`Portrait` · `LandscapeLeft` · `LandscapeRight`). Yani telefonu çeviren
+/// kullanıcı **hiç sınanmamış bir yerleşim** görüyor.
+///
+/// Kapı bir ekseni ölçüyordu ve o eksende çok iyiydi; ikinci eksende hiç
+/// bakılmamıştı — *yeşil bir kapı, bakılmayan bir alan üretir.*
+void pinLandscapeSurface(WidgetTester tester) {
+  tester.view.physicalSize = const Size(812, 375);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}
+
 Future<void> scrollTo(WidgetTester tester, Finder finder) async {
   await tester.scrollUntilVisible(
     finder,

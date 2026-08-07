@@ -67,6 +67,27 @@ PROMISE = [
     r"\bsoon\b",
 ]
 
+#: KOŞULLU VAAT: `will` üç ayrı sınıf taşır ve süzgeç ikisini ayırt etmeliydi
+#: — ama **hiç bakmıyordu** (L-245, kapı envanteri):
+#:
+#:   ① *"the number **will** appear here"* tek başına → TARİHSİZ VAAT
+#:   ② *"**When** that study is run, the number **will** appear here"* →
+#:      ADI OLAN BİR KOŞULA bağlı, M-F-186 uyumlu (`promotionPath` deseni)
+#:   ③ *"we are not going to guess **when** they **will**"* → vaadin REDDİ
+#:
+#: Depodaki üç `will` kullanımının üçü de ②/③ sınıfında — yani ihlal YOK, ama
+#: **hiçbir şey onları o sınıfta tutmuyordu.** Kapı kelimeyi değil BİÇİMİ
+#: ölçmeli.
+CONDITIONAL_PROMISE = [r"\bwill\b"]
+
+#: `will`i meşru kılan koşul çapaları. NEGATION'dan farklı olarak PENCERE YOK:
+#: koşul cümlesi tüm cümleyi yönetir ("When that study is run, the number will
+#: appear here" — arada altı kelime var). Bedeli isimli: aynı dizede alakasız
+#: bir "when" de geçerse kapı susar. Dar pencere bu meşru biçimi kırardı;
+#: yanlış alarmı insan eler, ama meşru biçimi kıran kapı insanı kapıdan soğutur.
+CONDITION = re.compile(
+    r"\b(when|once|if|until|after|as long as)\b", re.IGNORECASE)
+
 # SOFT: olumsuzlama içinde meşru olabilir ("does not diagnose", "not a medical
 # device"). Olumsuzlanmamışsa ihlaldir.
 SOFT = [
@@ -151,11 +172,20 @@ DART_DIRS = ("lib", "packages/lissom_engine/lib")
 #: false-positive üretir (ör. bu dosyadaki "diagnose" örnekleri).
 _DART_COMMENT = re.compile(r"//[^\n]*|/\*.*?\*/", re.DOTALL)
 
-#: Dart string sabitleri. Bitişik-birleştirme (`'a' 'b'`) AYRI eşleşir —
-#: bilinen sınır: iki parçaya BÖLÜNMÜŞ yasaklı bir kelime kaçar. Pratikte
-#: kelimeler bölünmüyor; sınır burada yazılı ki "temiz" iddiası kapsamını
-#: da söylesin.
+#: Dart string sabitleri.
+#:
+#: ⚠️ **BİTİŞİK LİTERALLER BİRLEŞTİRİLİR (L-245).** Dart'ta `'a' 'b'` tek bir
+#: dizedir ve bu dosya onları AYRI tarıyordu. Bedeli ölçüldü: koşullu-vaat
+#: kapısı eklenince `'…When that study is ' 'run, the number will appear
+#: here.'` cümlesinde **"When" bir parçada, "will" ötekindeydi** — kapı
+#: cümleyi değil PARÇAYI gördü ve meşru bir biçimi ihlal sandı.
+#:
+#: `roseDeepHover`ı `rose` sanan alt-dize hatasıyla aynı sınıf: **doğru şeyi
+#: yanlış BİRİMDE ölçmek.** Ölçüm birimi cümledir, parça değil.
 _DART_STRING = re.compile(r"'((?:[^'\\\n]|\\.)*)'|\"((?:[^\"\\\n]|\\.)*)\"")
+
+#: Yalnız boşluk/yorum-sonrası satır başıyla ayrılmış ardışık literaller.
+_ADJACENT = re.compile(r"\s+\Z")
 
 
 def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
@@ -196,6 +226,18 @@ def scan_text(where: str, text: str) -> list[str]:
                 f"{where}: VAAT  «{m.group(0)}»  — M-F-186: bilmediğimiz bir "
                 f"tarihi ima eder  — {text[:90]}…"
             )
+    for pat in CONDITIONAL_PROMISE:
+        for m in re.finditer(pat, text, re.IGNORECASE):
+            # ÜÇÜNCÜ SINIF: `will not` / `won't` bir vaat DEĞİL, vaadin
+            # REDDİ — "we will not estimate a number we can't take" bu ürünün
+            # en dürüst cümlelerinden biri. Kapı onu ihlal sayarsa, doğru
+            # davranışı cezalandırır.
+            if re.match(r"will\s+not\b", text[m.start():], re.IGNORECASE):
+                continue
+            if not CONDITION.search(text[:m.start()]):
+                problems.append(
+                    f"{where}: VAAT  «{m.group(0)}» KOŞULSUZ  — adı olan bir "
+                    f"koşula bağlanmamış gelecek zaman  — {text[:90]}…")
     for pat in SOFT:
         for m in re.finditer(pat, text, re.IGNORECASE):
             if not _is_negated(text, m.start()):
@@ -225,12 +267,25 @@ def scan_file(path: Path) -> tuple[list[str], int]:
             problems += scan_text(f"{path.name} :: {key}", value)
     elif path.suffix == ".dart":
         source = _DART_COMMENT.sub(" ", path.read_text(encoding="utf-8"))
+        # Bitişik literalleri BİRLEŞTİR: aralarında yalnız boşluk varsa Dart
+        # onları tek dize sayar, süzgeç de saymalı.
+        merged: list[tuple[int, str]] = []
+        prev_end = -1
         for m in _DART_STRING.finditer(source):
             literal = m.group(1) if m.group(1) is not None else m.group(2)
-            if not literal or not literal.strip():
+            if literal is None:
+                continue
+            line = source.count("\n", 0, m.start()) + 1
+            gap = source[prev_end:m.start()] if prev_end >= 0 else None
+            if merged and gap is not None and gap.strip() == "":
+                merged[-1] = (merged[-1][0], merged[-1][1] + literal)
+            else:
+                merged.append((line, literal))
+            prev_end = m.end()
+        for line, literal in merged:
+            if not literal.strip():
                 continue
             scanned += 1
-            line = source.count("\n", 0, m.start()) + 1
             problems += scan_text(f"{path.name}:{line}", literal)
     elif path.suffix in {".arb", ".md"}:
         for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
