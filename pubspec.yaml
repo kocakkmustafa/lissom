@@ -69,3 +69,16 @@ flutter:
     - config/metrics/
     - config/phases/
     - config/ia/
+
+    # ⚠️ POZ MODELİ — `motion_camera` modeli **KASITLI taşımıyor**:
+    # "the plugin deliberately bundles no model (apps pin their own and ship
+    #  it as an asset)". Model yoksa kamera **hiç başlamaz** (L-274).
+    #
+    # ⚠️ Ve `.task` dosyası git'te DEĞİL (aile kuralı: 9,4 MB'lık ikili her
+    # klonda taşınmaz). Pin URL+SHA olarak yaşıyor ve doğrulama bir BUILD
+    # KAPISI: `tool/fetch_pose_model.sh`.
+    #
+    # 🪤 **Yorum bloğu listeyi KESMEZ** — bu satırların ARDINDAN gelen giriş
+    # de okunur; koordinatörün andığı "yorum bloğunun listeyi kesme tuzağı"na
+    # karşı burada kasten liste SONUNA konmadı.
+    - assets/models/
