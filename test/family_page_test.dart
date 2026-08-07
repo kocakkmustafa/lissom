@@ -201,7 +201,7 @@ void main() {
 
     // Kutunun İÇERİĞİ config'ten TAŞINIR — widget'ın kendi metni değil.
     final HonestyBox box = _batteryFamily(f).honestyBox;
-    expect(find.text(box.notMeasured.first, skipOffstage: false),
+    expect(find.text(box.notMeasured.first.claim, skipOffstage: false),
         findsOneWidget,
         reason: 'kutu var ama config metnini taşımıyorsa kutu bir dekordur');
   });

@@ -166,7 +166,11 @@ void main() {
             reason: 'köprü uzayı isotropic; düzlem ayrımı çekirdekte YOK');
       }
       // ...ve yokluğu bir SESSİZLİK değil: notMeasured tarafında İSİMLİ.
-      expect(b.honestyBox.notMeasured.join(' ').toLowerCase(),
+      expect(
+          b.honestyBox.notMeasured
+              .map((NotMeasuredLine l) => l.claim)
+              .join(' ')
+              .toLowerCase(),
           contains('frontal plane'));
     });
   });

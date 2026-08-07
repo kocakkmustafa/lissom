@@ -90,6 +90,18 @@ final class HonestyClaim {
   bool get isCheckable => requires.isNotEmpty;
 }
 
+/// Bir "şunu ölçmüyoruz" satırı — ve varsa, onu YALANLAYACAK koşul.
+final class NotMeasuredLine {
+  const NotMeasuredLine({required this.claim, required this.falsifiedIfBridged});
+
+  final String claim;
+
+  /// Bu satırı yalanlayacak metrikler. Biri köprüye girdiği an cümle YANLIŞ
+  /// olur ve yeniden yazılmalıdır. Boş = satır bir ÜRÜN DURUŞU (klinik iddia
+  /// yok, doğrulama çalışması yapılmadı) ve köprüyle ilgisi yok.
+  final List<String> falsifiedIfBridged;
+}
+
 /// Ne ölçülür / ne ölçülmez. **İkisi de zorunlu ve ikisi de boş olamaz.**
 final class HonestyBox {
   const HonestyBox({required this.measured, required this.notMeasured});
@@ -97,10 +109,21 @@ final class HonestyBox {
   /// Kanıt taşıyan iddialar.
   final List<HonestyClaim> measured;
 
-  /// Sınırlar — düz metin. Burada kanıt İSTENMEZ: bir şeyi ölçmediğimizi
-  /// söylemek, ölçtüğümüzü söylemekle aynı ispat yükünü taşımaz. Fazla iddia
-  /// eden taraf ispatlar.
-  final List<String> notMeasured;
+  /// Sınırlar. Metin, ama **motor sınırı anan satır kanıt TAŞIR** (L-251).
+  ///
+  /// İlk tasarımda burası düz metindi ve gerekçem şuydu: *"bir şeyi
+  /// ölçmediğimizi söylemek, ölçtüğümüzü söylemekle aynı ispat yükünü
+  /// taşımaz."* Doğruydu ama EKSİKTİ (J-133 ölçütü):
+  ///
+  /// > **Bir cümle sevk edildiyse, onu yanlışa çevirecek en MAKUL
+  /// > değişikliği sor. Makulse, kapı gerekir.**
+  ///
+  /// *"the measurement engine keeps a single tilt"* bugün doğru — ve
+  /// **L-187 göçü tam onu değiştirecek.** O gün cümle yalan olur, ve kimse
+  /// yalan söylemeye karar vermez: bir göç yapar. [NotMeasuredLine
+  /// .falsifiedIfBridged] o metrikleri BEYAN eder; kapı biri köprüye girdiği
+  /// an kırmızı yanar.
+  final List<NotMeasuredLine> notMeasured;
 }
 
 final class FamilyChild {
@@ -145,6 +168,9 @@ final class LibraryFamily {
   final String? itemsSource;
 
   bool get isBuilt => status == FamilyStatus.inProgress;
+
+  /// Sınır satırları — kanıt alanlarıyla birlikte.
+  List<NotMeasuredLine> get notMeasuredLines => honestyBox.notMeasured;
 
   /// **Dürüst tek satırlık durum (§5.4).** Sayı config'ten TÜRETİLİR: kaç yol
   /// İSİMLENDİRİLMİŞ. "Yakında N kurs" demez — *"N yol isimlendirildi, hiçbiri
@@ -456,8 +482,8 @@ final class LibraryIa {
     }
     final List<HonestyClaim> measured =
         _claims(raw['measured'], '$path.measured', requireEvidence);
-    final List<String> notMeasured =
-        _strList(raw['notMeasured'], '$path.notMeasured');
+    final List<NotMeasuredLine> notMeasured =
+        _notMeasured(raw['notMeasured'], '$path.notMeasured');
     if (notMeasured.isEmpty) {
       throw IaError('$path.notMeasured',
           'boş olamaz — "neler ölçülmez" boş bir liste, dürüstlük kutusunu '
@@ -501,6 +527,28 @@ final class LibraryIa {
       }
       out.add(HonestyClaim(
           claim: _str(e['claim'], '$path[$i].claim'), requires: requires));
+    }
+    return out;
+  }
+
+  /// Düz dize ya da `{claim, falsifiedIfBridged}` nesnesi.
+  static List<NotMeasuredLine> _notMeasured(Object? raw, String path) {
+    if (raw is! List) throw IaError(path, 'liste olmalı');
+    final List<NotMeasuredLine> out = <NotMeasuredLine>[];
+    for (int i = 0; i < raw.length; i++) {
+      final Object? e = raw[i];
+      if (e is String) {
+        out.add(NotMeasuredLine(claim: e, falsifiedIfBridged: const <String>[]));
+        continue;
+      }
+      if (e is! Map<String, dynamic>) {
+        throw IaError('$path[$i]', 'dize ya da nesne olmalı');
+      }
+      out.add(NotMeasuredLine(
+        claim: _str(e['claim'], '$path[$i].claim'),
+        falsifiedIfBridged:
+            _strList(e['falsifiedIfBridged'] ?? <String>[], '$path[$i].falsifiedIfBridged'),
+      ));
     }
     return out;
   }
