@@ -220,6 +220,25 @@ void main() {
             'işareti belirdiyse uydurulmuş demektir (madde ⑫)');
   });
 
+  test('TERS İKİZ: kapı fazla genişlerse canlı cümleler ölür (L-248)', () {
+    // Cümleler DEPODAN türetilir — kopyalansalardı üründen ayrışır ve ikiz
+    // var olmayan bir metni korurdu.
+    final AppFacts f = factsFromDisk();
+    final List<String> live = <String>[
+      // whyNot sınırları — parantez içinde GERÇEK gerekçe taşıyorlar
+      ...f.ia.whyNot.map((WhyNotItem w) => w.reason),
+      // engel gerekçeleri — "not"/"does not" dolu ama ihlal DEĞİL
+      ...f.blocked.map((TestLiveness x) => x.blocker!),
+      // ölçülmüş dışlamalar
+      ...f.battery.excluded.map((ExcludedTest e) => e.reason),
+      // poz katmanlarının gerekçeleri
+      ...f.ia.poseTiers
+          .where((PoseTier t) => t.reason != null)
+          .map((PoseTier t) => t.reason!),
+    ];
+    expectGateStaysNarrow(live);
+  });
+
   testWidgets('VAAT DİLİ ve TEZAHÜRAT yok — "yet" dahil', (
     WidgetTester tester,
   ) async {

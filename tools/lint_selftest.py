@@ -9,12 +9,14 @@ yakalamazsa denetim bozulmuş demektir ve CI kırılır.
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 TOOLS = Path(__file__).resolve().parent
+ROOT = TOOLS.parent
 
 #: Yakalanması ZORUNLU örnekler — her biri gerçek bir red gerekçesi.
 MUST_CATCH = {
@@ -29,6 +31,60 @@ MUST_PASS = {
     "olumsuzlama": "Lissom is not a medical device and does not diagnose any condition.",
     "nötr yönerge": "Raise your arm slowly overhead and hold for two seconds.",
 }
+
+
+# --------------------------------------------------------------------------
+# TERS NEGATİF İKİZ (JabLab aktarımı)
+# --------------------------------------------------------------------------
+#: Şimdiye kadarki negatif ikizler *"düzeltme kaldırılırsa kırılır mı"* diye
+#: soruyordu. **Ters ikiz, kapının kendisi FAZLA GENİŞLERSE kırılıyor.**
+#:
+#: Gerekçesi ölçülmüş: fazla geniş bir kapı bu depoda iki kez ödendi ve iki
+#: kez de kapıyı geri daraltan şey bir ölçüm değil, İNSANIN FARK ETMESİYDİ —
+#: `will not`u vaat sanması (L-246) ve `rose` deseninin `roseDeepHover`ı
+#: eşlemesi (L-237). İkiz o refleksi mekanikleştiriyor.
+#:
+#: > **Her dar kapı, darlığını koruyan bir ikiz taşımalı.**
+#:
+#: ⚠️ **Cümleler KOPYALANMAZ, DEPODAN OKUNUR.** Kopyalanan bir cümle üründen
+#: ayrışır ve ikiz artık var olmayan bir metni korur — bu dosyanın kendi
+#: uyardığı ikiz-sınıfının ta kendisi olurdu.
+
+
+def _live_sentences() -> dict[str, str]:
+    """Fazla geniş bir kapının ÖLDÜRECEĞİ, üründe CANLI cümleler."""
+    out: dict[str, str] = {}
+
+    # ① Güvenlik notları — 21 egzersizde `pain` geçiyor. Biri bir gün
+    #    "`pain` kelimesini tamamen yasaklayalım" derse, kullanıcının kendi
+    #    sınırını anlatan dürüst uyarı ölür. Kapı çalışan bir dürüstlüğü
+    #    kelimenin BİÇİMİ yüzünden kaybetmemeli.
+    pool = json.loads(
+        (ROOT / "config/content/exercise-pool.v1.json").read_text(encoding="utf-8"))
+    notes = [e["safetyNote"] for e in pool["exercises"]
+             if e.get("safetyNote") and "pain" in e["safetyNote"].lower()]
+    if notes:
+        out["güvenlik notu (pain)"] = notes[0]
+        out["güvenlik notu (sharp pain)"] = notes[-1]
+
+    # ② Ölçüm-sınırı beyanı — açık ihlal ⑱'in KAPANIŞI. İçinde koşullu bir
+    #    `will` var; dar bir vaat kapısı bu cümleyi YANLIŞLIKLA yakalar ve
+    #    ürünün en dürüst beyanını öldürür.
+    surfaces = (ROOT / "lib/app/surfaces.dart").read_text(encoding="utf-8")
+    for name in ("accuracyStatement", "limitsCopy"):
+        m = re.search(rf"String {name} =\s*((?:\s*'(?:[^'\\]|\\.)*')+);", surfaces)
+        if m:
+            out[f"⑱ beyanı ({name})"] = "".join(
+                re.findall(r"'((?:[^'\\]|\\.)*)'", m.group(1)))
+
+    # ③ Vaadin REDDİ — `will not` bir vaat değil, bu ürünün en dürüst
+    #    cümlelerinden biri.
+    ia = json.loads((ROOT / "config/ia/library.v1.json").read_text(encoding="utf-8"))
+    for item in ia["whyNotPage"]["items"]:
+        if "will not" in item["reason"]:
+            out["vaadin reddi (will not)"] = item["reason"]
+            break
+    return out
 
 
 def run(payload: dict) -> int:
@@ -83,9 +139,23 @@ def main() -> int:
         failures.append(
             "SESSİZ GEÇİŞ: içerik dosyasından hiç metin çıkmadığı hâlde süzgeç geçti")
 
-    total = len(MUST_CATCH) + len(MUST_PASS) + 2
+    # ---- TERS İKİZ: kapı fazla genişlerse bu cümleler ölür ----------------
+    live = _live_sentences()
+    if len(live) < 4:
+        failures.append(
+            f"TERS İKİZ BOŞ: depodan yalnız {len(live)} canlı cümle okunabildi "
+            "— okuyucu bozulmuş, ikiz hiçbir şeyi korumuyor")
+    for label, text in live.items():
+        code = run({"schemaVersion": 1, "id": "t", "tests": [{"instruction": text}]})
+        if code != 0:
+            failures.append(
+                f"KAPI FAZLA GENİŞ ({label}): üründe CANLI olan bu cümle "
+                f"yakalandı — «{text[:70]}…»")
+
+    total = len(MUST_CATCH) + len(MUST_PASS) + len(live) + 2
     print(f"Süzgeç öz-testi — {total} vaka "
-          f"({len(MUST_CATCH)+1} yakalanmalı, {len(MUST_PASS)} geçmeli, 1 sessiz-tarama)")
+          f"({len(MUST_CATCH)+1} yakalanmalı, {len(MUST_PASS)} geçmeli, "
+          f"{len(live)} TERS İKİZ, 1 sessiz-tarama)")
     if failures:
         print(f"\n❌ Süzgeç BOZUK — {len(failures)} vaka:")
         for f in failures:
