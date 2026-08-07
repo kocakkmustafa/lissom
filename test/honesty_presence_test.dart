@@ -97,6 +97,73 @@ void main() {
             'boşaltılabilir');
   });
 
+  test('SINIF, gerekçenin KENDİ İÇERİĞİYLE tutarlı — dar dilim (L-269)', () {
+    // ⚠️ Bu kural bir gece önce **"imkânsız"** kutusundaydı (L-265): *"bir
+    // sınırın hangi sınıftan olduğu semantik bir yargı, ölçütü yok."*
+    //
+    // JabLab dersi (J-165): ***bazı şeyler "imkânsız" değil, sadece FAZLA
+    // GENİŞ tanımlanmış.*** Ölçütü *"sınıflandırma semantik olarak doğru mu?"*
+    // diye yazmıştım — o gerçekten ölçülemez. Ama **dar dilim ölçülebilir**:
+    //
+    //   capability  ⟹ gerekçe bir DONANIM kısıtı anar (kamera/lens/sensör)
+    //   judgement   ⟹ gerekçe donanıma DAYANMAZ ve bir YETKİ/karar sebebi anar
+    //   measurement ⟹ donanım anmaz (anarsa zaten capability'dir)
+    //
+    // Beş kalemin beşi de bu dilimden geçiyor — yani kural bugünü tarif
+    // ediyor, yarını tutuyor.
+    //
+    // ⛔ **Hâlâ ölçmediği:** sınıfın *doğru* olduğu. `judgement` yazılmış bir
+    // kalem gerçekten mükemmel ölçümle de değişmez mi — bunu kimse mekanik
+    // olarak söyleyemez. Kutu küçüldü, boşalmadı.
+    final RegExp hardware =
+        RegExp(r'\b(camera|lens|sensor|hardware|phone)\b', caseSensitive: false);
+    final RegExp authority = RegExp(
+        r'\b(medical device|clinical validation|duty of care|'
+        r'we would rather|not set up to|choice)\b',
+        caseSensitive: false);
+
+    // POZİTİF İKİZ: iki desen de gerçekten eşleşiyor mu (L-255)?
+    expect(hardware.hasMatch('a single lens cannot recover it'), isTrue,
+        reason: 'BULUCU BOZUK: donanım deseni apaçık bir lens kısıtını '
+            'bulamıyor');
+    expect(authority.hasMatch('is not a medical device'), isTrue,
+        reason: 'BULUCU BOZUK: yetki deseni apaçık bir sınır cümlesini '
+            'bulamıyor');
+
+    final AppFacts f = factsFromDisk();
+    expect(f.ia.whyNot, isNotEmpty, reason: 'pozitif çapa');
+    final List<String> bad = <String>[];
+    for (final WhyNotItem w in f.ia.whyNot) {
+      final bool hw = hardware.hasMatch(w.reason);
+      final bool au = authority.hasMatch(w.reason);
+      switch (w.kind) {
+        case LimitKind.capability:
+          if (!hw) {
+            bad.add('«${w.topic}» capability ama gerekçesi hiçbir DONANIM '
+                'kısıtı anmıyor — o hâlde "daha iyi donanım çözer" iddiası '
+                'dayanaksız');
+          }
+        case LimitKind.judgement:
+          if (hw) {
+            bad.add('«${w.topic}» judgement ama gerekçesi bir DONANIM kısıtına '
+                'dayanıyor. judgement "mükemmel ölçümle de değişmez" demek; '
+                'donanım anan bir gerekçe bunu YALANLAR — yapamamayı ilke '
+                'gibi göstermek (L-265) tam buradan girer');
+          }
+          if (!au) {
+            bad.add('«${w.topic}» judgement ama bir YETKİ/karar sebebi '
+                'anmıyor — sınıf gerekçesiz kalıyor');
+          }
+        case LimitKind.measurement:
+          if (hw) {
+            bad.add('«${w.topic}» measurement ama donanım kısıtı anıyor — '
+                'bu capability sınıfıdır');
+          }
+      }
+    }
+    expect(bad, isEmpty, reason: bad.join('\n'));
+  });
+
   testWidgets('HER sınır satırı SINIFINI söylüyor — tek sebep gibi anlatılmaz',
       (WidgetTester tester) async {
     // ⚠️ L-265 (J-153 aktarımı). Sayfa girişi *"every line below is a
