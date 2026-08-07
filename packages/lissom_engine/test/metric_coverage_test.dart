@@ -172,18 +172,43 @@ void main() {
   });
 
   group('ölçüm uzayı — beyan ölçümle tutarlı', () {
-    test('köprü referans-eşdeğeri DEĞİL ve bunu beyan ediyor', () {
-      // L-031: Dart `lm` görüntü düzleminde, normatif Python `world` 3D +
-      // frameRef ile ölçüyor. Sapma ÖLÇÜLDÜ (medyan 5,8–31,2°, p95 156,1°'e
-      // kadar — `docs/L-031-UZAY-SAPMASI-OLCUMU.md`). Bu test, sapma
-      // kapanmadan birinin sessizce "referans-eşdeğeri" iddia etmesini
-      // engeller: iddia `true`ya çekilirse kapı kırmızı yanar ve kanıt ister.
-      expect(kBridgeIsReferenceEquivalent, isFalse,
-          reason: 'referans-eşdeğerliği İDDİA edilmiş — L-031 kapanmadan bu '
-              'iddia edilemez; kapanmışsa bu testi ölçüm raporuyla '
-              'birlikte güncelle');
-      expect(kBridgeSpace, MeasurementSpace.isotropic,
-          reason: 'köprünün uzayı değişmiş ama beyan güncellenmemiş');
+    test('referans-eşdeğerliği İDDİASI, ölçüm UZAYIYLA tutarlı olmak zorunda',
+        () {
+      // ⚠️ BU TEST BİR KUSURU KORUYORDU (L-261, JabLab J-144 sınıfı).
+      //
+      // Önceki hâli `expect(kBridgeIsReferenceEquivalent, isFalse)` idi ve
+      // kendi yorumu bile *"kapanmışsa bu testi elle güncelle"* diyordu.
+      // Yani: **L-187 göçü BAŞARILI olduğu gün bu test kırmızı yanacaktı** —
+      // ve yanan şey bir kusur değil, BUGÜNÜN KORUNMASI olacaktı. O anda
+      // doğru refleks "kapıyı gevşet" gibi görünür; oysa kapı zaten yanlış
+      // şeyi ölçüyordu.
+      //
+      // ⭐ M-F-317: **sayıyı/değeri değil KURALI ölç.** Kural şu — iddia,
+      // ölçümün yapıldığı UZAYLA tutarlı olmak zorunda:
+      //   referans-eşdeğeri  ⟺  köprü referans uzayında (`world`) ölçüyor
+      //
+      // Bu türetilmiş bir hüküm, çivilenmiş bir değer değil: göç `kBridgeSpace`i
+      // `world`e taşırsa bayrak MEŞRU olarak `true` olabilir ve test **elle
+      // güncellenmeden** yeşil kalır. Ters yön de tutuluyor.
+      const bool inReferenceSpace = kBridgeSpace == MeasurementSpace.world;
+
+      expect(kBridgeIsReferenceEquivalent, inReferenceSpace,
+          reason: kBridgeIsReferenceEquivalent
+              ? 'Referans-eşdeğerliği İDDİA edilmiş ama köprü hâlâ '
+                  '${kBridgeSpace.name} uzayında ölçüyor. Normatif yorumlayıcı '
+                  '`world` (metrik 3D) kullanıyor — farklı uzayda ölçen bir '
+                  'hat, tanımı gereği referans-eşdeğeri OLAMAZ. Bu bir EŞİK '
+                  'İCADIDIR (L-187 şartı).'
+              : 'Köprü ${kBridgeSpace.name} = REFERANS uzayına geçmiş ama '
+                  '`kBridgeIsReferenceEquivalent` hâlâ `false`. Bu da bir '
+                  'beyan hatası: artık ölçülmesi gereken bir iddiayı '
+                  'ihtiyattan dolayı bastırmak, dürüstlük değil GÜRÜLTÜDÜR. '
+                  'Sapmayı yeniden ölçün ve bayrağı ölçüme göre ayarlayın.');
+
+      // Ve uzayın KENDİSİ beyansız değişmesin: `kBridgeSpace` bir olgu, ve
+      // bugünkü olgu ölçülmüş (docs/L-031-UZAY-SAPMASI-OLCUMU.md).
+      expect(MeasurementSpace.values, contains(kBridgeSpace),
+          reason: 'pozitif çapa: uzay beyanı gerçekten okunuyor');
     });
 
     test('çerçeve gerektiren metrikler UYGULANMAYAN çerçeveyle işaretli', () {

@@ -123,10 +123,23 @@ void main() {
     expect(find.text(yoga.inventoryLine), findsWidgets);
 
     // Çocuğu olmayan aile için SAYI UYDURULMAZ.
-    final LibraryFamily breath = f.ia.families
-        .singleWhere((LibraryFamily x) => x.id == 'breath_meditation');
-    expect(breath.children, isEmpty);
-    expect(breath.inventoryLine, isNot(contains('0 named')));
+    //
+    // ⚠️ Önce `breath_meditation` ADIYLA çivilenmişti ve `children.isEmpty`
+    // bir ÖN KOŞUL olarak yazılmıştı (L-261). O aile bir gün çocuk kazanırsa
+    // test **yanlış gerekçeyle** kırılır — ve asıl kural ("0 named" uydurma)
+    // sessizce sınanmaz olur. Kural aileye değil, HÂLE bağlı: çocuksuz OLAN
+    // her aile.
+    final Iterable<LibraryFamily> childless =
+        f.ia.families.where((LibraryFamily x) => x.children.isEmpty);
+    expect(childless, isNotEmpty,
+        reason: 'VAKUM: hiçbir aile çocuksuz değil, yani "sayı uydurma" '
+            'kuralı bu turda HİÇ sınanmadı. Kural hâlâ geçerli — sınayacak '
+            'örnek kalmadıysa bu bir olgudur, sessizce geçilmez.');
+    for (final LibraryFamily fam in childless) {
+      expect(fam.inventoryLine, isNot(contains('0 named')),
+          reason: '«${fam.title}» çocuksuz ama envanter satırı bir SAYI '
+              'uyduruyor. Yokluk, sıfırla anlatılmaz.');
+    }
   });
 
   testWidgets('aile sayfasına gitmek ÇALIŞIR (≤3 dokunuş kuralı)', (

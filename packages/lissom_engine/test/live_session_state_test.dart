@@ -117,8 +117,19 @@ void main() {
           reason: 'eksik grup İSİMLİ olmalı — "bir şeyler görünmüyor" değil');
     });
 
-    test('kadraj durumu iki değerli (pozitif kontrol)', () {
-      expect(JointCoverage.values.length, 2);
+    test('kadraj durumu İKİ değerli — üçüncüsü eklenirse YÜZEY de dallanmalı',
+        () {
+      // Bu bir "beni uyandır" çivisi (L-261) ve GEREKÇESİ olmadan yazılmıştı:
+      // kırmızı yandığı gün doğru refleks sayıyı büyütmek gibi görünür.
+      // Oysa çivinin işi tam tersi — yüzeyin ikili dallanmasının artık
+      // eksik olduğunu HABER VERMEK.
+      expect(JointCoverage.values.length, 2,
+          reason: 'JointCoverage\'a üçüncü bir değer eklenmiş. Bu sayıyı '
+              'BÜYÜTMEDEN önce yüzeyi kontrol edin: "kimse yok" ile '
+              '"eklem kadraj dışı" AYRI eylemler gerektirdiği için ayrı '
+              'tiplerdi (bkz. yukarıdaki test). Üçüncü hâl de kendi '
+              'eylemini istiyor olabilir — sessizce ikisinden birine '
+              'düşerse kullanıcı YANLIŞ şeyi dener.');
     });
   });
 }
