@@ -320,7 +320,7 @@
       "title": "Breath & Wind-down",
       "status": "coming_soon",
       "wave": 3,
-      "intro": "Voice-guided only. No camera, no scoring.",
+      "intro": "No camera and no scoring in this family. Nothing is built behind this name in this build.",
       "honestyBox": {
         "measured": [
           "Nothing. These sessions are guided by audio and timed — the camera stays off."
@@ -366,7 +366,7 @@
       },
       {
         "topic": "Breath or meditation measurement",
-        "reason": "A phone camera cannot see breathing well enough to measure it, and we will not estimate a number we cannot take. Our breath sessions are voice-guided with the camera off — not a limitation we are working around, but the honest shape of the thing: there is nothing there for a camera to read."
+        "reason": "A phone camera cannot see breathing well enough to measure it, and we will not estimate a number we cannot take — there is nothing there for a camera to read. This build carries no breath or meditation content at all: the family is named in the library and nothing sits behind that name."
       },
       {
         "topic": "Clinical screens and risk scores",
