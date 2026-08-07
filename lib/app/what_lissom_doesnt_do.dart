@@ -23,7 +23,6 @@ import 'package:lissom_engine/lissom_engine.dart';
 
 import 'ia.dart';
 import 'lissom_theme.dart';
-import 'surfaces.dart';
 
 class WhatLissomDoesntDoScreen extends StatelessWidget {
   const WhatLissomDoesntDoScreen({
@@ -152,7 +151,11 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                 ],
               ),
             ],
-            const MeasurementLimitsFootnote(),
+            // ⚠️ `MeasurementLimitsFootnote` BİLEREK YOK (L-249). O dipnot
+            // ÖLÇÜM yüzeylerinin dibine ait; bu sayfanın KENDİSİ zaten sınır
+            // sayfası. Aynı beyanı burada tekrarlamak, gerçek sınırların
+            // ağırlığını düşüren caveat enflasyonu olurdu:
+            // **her şeye caveat eklenirse hiçbiri okunmaz.**
           ],
         ),
       ),

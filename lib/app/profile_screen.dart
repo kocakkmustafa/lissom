@@ -115,10 +115,19 @@ class ProfileScreen extends StatelessWidget {
             children: <Widget>[
               LissomEyebrow('Settings'),
               const SizedBox(height: 10),
+              // ⚠️ Eskiden *"no account, no sync and no reminder **in this
+              // build**"* yazıyordu — üçünü de bir DERLEME EKSİĞİ gibi
+              // sunuyordu. Oysa hesap ve senkron **tasarım kararı**: gidecek
+              // bir sunucu yok ve olmayacak. **Olmayan bir sınırı beyan
+              // etmek dürüstlük değil gürültüdür (L-249)** — üstelik
+              // "in this build" senkronun geleceğini ima ediyordu.
+              //
+              // Gerçek sınır olan tek kalem hatırlatıcı; o da isimli kalıyor.
               const NamedGapCard(
                 title: 'Nothing to set',
-                reason: 'There is no account, no sync and no reminder in this '
-                    'build, so there is nothing here to switch on or off.',
+                reason: 'Lissom has no account and nothing to sync — not '
+                    'because they are missing, but because everything stays '
+                    'on this phone. Reminders are not in this build.',
                 detail: 'We would rather leave the section empty than fill it '
                     'with switches that do nothing.',
               ),
