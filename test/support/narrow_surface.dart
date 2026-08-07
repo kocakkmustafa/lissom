@@ -43,8 +43,8 @@ void pinNarrowSurface(WidgetTester tester) {
 ///
 /// ⚠️ **Genişlik AYNEN 375 kalıyor.** Taşma/okunabilirlik kapıları hâlâ
 /// `pinNarrowSurface` kullanır; bu yalnız sıra sorusu içindir.
-void pinTallSurface(WidgetTester tester) {
-  tester.view.physicalSize = const Size(375, 2400);
+void pinTallSurface(WidgetTester tester, {double height = 2400}) {
+  tester.view.physicalSize = Size(375, height);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);

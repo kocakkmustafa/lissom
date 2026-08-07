@@ -258,6 +258,29 @@ void main() {
     }
   });
 
+  test('HAM RENK YASAĞI: her renk kovalı paletten geçer', () {
+    // ⚠️ Bu, bütünlük kapısının ÖN KOŞULU ve bugüne kadar yalnız ELLE
+    // doğrulanmıştı (L-247). Palet bütünlüğü "her token bir kovada" diyor —
+    // ama bir yüzey `Color(0xFF…)` yazarsa o renk hiçbir kovada DEĞİLDİR ve
+    // kapı onu hiç görmez. Nitekim iki kart-gradyanı ucu tam böyle gizlenmişti
+    // (L-236). Elle kontrol bir kapı değildir.
+    final List<String> raw = <String>[];
+    for (final FileSystemEntity f in Directory('lib/app').listSync()) {
+      if (f is! File || !f.path.endsWith('.dart')) continue;
+      if (f.path.endsWith('lissom_theme.dart')) continue; // paletin evi
+      final String src = File(f.path)
+          .readAsStringSync()
+          .replaceAll(RegExp(r'//[^\n]*'), ' ');
+      for (final RegExpMatch m
+          in RegExp(r'Color\(0x[0-9A-Fa-f]{8}\)').allMatches(src)) {
+        raw.add('${f.uri.pathSegments.last}: ${m.group(0)}');
+      }
+    }
+    expect(raw, isEmpty,
+        reason: 'ham renk kovasız kalır ve kontrast kapısı onu HİÇ ölçmez — '
+            'palete token olarak ekleyin:\n${raw.join("\n")}');
+  });
+
   test('HİYERARŞİ ÜST SINIRI: okunurluk uğruna ayrım feda edilmemiş', () {
     // Kontrastı yükseltmenin ucuz yolu HER ŞEYİ koyulaştırmaktır — o da
     // birincil ↔ ikincil ayrımını yok eder. Bu üründe o ayrım bir MESAJ
