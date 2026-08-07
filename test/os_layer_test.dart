@@ -55,12 +55,33 @@ void main() {
               '`NSCameraUsageDescription` YOK — iOS izin isteyen uygulamayı '
               'bu anahtar olmadan ANINDA çökertir');
     } else {
-      // Simetrik yön: capture yokken izin metni OLMAMALI. Olmayan bir
-      // yeteneği beyan etmek de gürültüdür (L-249'un ikizi).
-      expect(hasKey, isFalse,
-          reason: 'capture yolu yokken kamera izni beyan edilmiş — '
-              'kullanılmayan bir yetenek beyanı, kullanıcıya olmayan bir '
-              'şeyi anlatır');
+      // ⚠️ **BU DAL GEVŞETİLDİ (L-273) ve gerekçesi ölçüldü.**
+      //
+      // Önce `expect(hasKey, isFalse)` idi: *"capture yokken izin metni
+      // olmamalı — olmayan bir yeteneği beyan etmek."* Koordinatör anahtarı
+      // istediğinde kapı reddetti ve ilk refleksim kapıyı savunmak oldu.
+      //
+      // Sonra ölçtüm: **L-262'nin zararı "KULLANICIYA olmayan bir yeteneği
+      // anlatmak"tı.** İzin metnini kullanıcıya gösteren şey **izin
+      // diyaloğudur**, ve kamera hiç çalışmadığı için o diyalog **hiç
+      // açılmıyor** — metin bugün **hiçbir kullanıcıya görünmüyor.** Yani
+      // korumaya çalıştığım zarar **oluşamıyor**.
+      //
+      // Buna karşılık `motion_camera` **bağlı bir bağımlılık**: Apple'ın
+      // statik denetimi kamera API'sini görür ve string yoksa **reddeder**.
+      //
+      // Kapı **fazla genişti** — bu gece defalarca başkasında bulduğum kusur,
+      // bu kez benim kapımdaydı ve **kendi kapımı savunarak** onu bir tur
+      // daha yaşattım.
+      //
+      // Kalan kural (dar ve gerçek): metin varsa **dürüst** olmalı — ne
+      // yaptığını söylemeli, olmayan bir şeyi vaat etmemeli.
+      if (hasKey) {
+        expect(_infoPlist(), isNot(contains('NSMicrophoneUsageDescription')),
+            reason: 'Ürün ses KAYDETMİYOR (beş hatta ölçülü sıfır ses '
+                'hattı) — mikrofon izni istemek, olmayan bir yeteneği '
+                'BEYAN ETMEK olurdu ve o diyalog kullanıcıya GÖRÜNÜR.');
+      }
     }
   });
 
@@ -82,10 +103,43 @@ void main() {
         reason: 'BULUCU BOZUK: desen apaçık bir izin anahtarını bile '
             'bulamıyor — aşağıdaki "izin metni yok" iddiası vakum-doğru');
 
-    final Iterable<RegExpMatch> usage = usagePattern.allMatches(plist);
-    expect(usage.map((RegExpMatch m) => m.group(1)).toList(), isEmpty,
-        reason: 'yeni bir izin metni eklendi — `wellness_lint`in OS katmanına '
-            'da bakması gerekiyor (tools/wellness_lint.py `--path` ile '
-            'plist taranabilir)');
+    // ⚠️ Bu iddia ÖNCE `isEmpty` idi: *"linter OS katmanına bakana kadar
+    // hiç izin metni olmasın."* Doğru bir bekçilikti ama **karşılanamaz**
+    // biçimde yazılmıştı — metni ekleyen her commit'i, linter genişletilse
+    // bile kırmızıya çeviriyordu.
+    //
+    // Linter artık plist'i tarıyor (L-273: `OS_FILES` + `strings_from_plist`),
+    // yani kural **karşılanabilir** hâle geldi. Gerçek kural şu: **her izin
+    // metni denetimden GEÇMİŞ olmalı** — yokluğu değil, KAPSANMASI ölçülür.
+    final List<String> keys = usagePattern
+        .allMatches(plist)
+        .map((RegExpMatch m) => m.group(1)!)
+        .toList();
+    final String lint = File('tools/wellness_lint.py').readAsStringSync();
+    if (keys.isNotEmpty) {
+      // ⚠️ Bu iddia önce `lint.contains('strings_from_plist')` idi ve
+      // **sabotajı geçti**: fonksiyonu yeniden adlandırdım, çağrı yeri hâlâ
+      // o adı taşıdığı için metin eşleşti. *Kelimenin varlığı, çağrının
+      // çalıştığı değildir.* Davranış artık `lint_selftest.py`de gerçek
+      // linter koşturularak sınanıyor; burada o ÖZ-TESTİN varlığını
+      // çiviliyorum — silinirse davranış denetimi sessizce kaybolur.
+      final String selftest =
+          File('tools/lint_selftest.py').readAsStringSync();
+      expect(selftest, contains('run_plist'),
+          reason: 'İzin metni var (${keys.join(", ")}) ama linter\'in OS '
+              'katmanı DAVRANIŞSAL olarak sınanmıyor — uygulamanın DIŞINA '
+              'çıkan ilk cümle hiçbir denetimden geçmemiş olur.');
+      expect(lint, contains('Info.plist'),
+          reason: 'plist tarama listesinde DEĞİL — kod duruyor, tetiği yok.');
+      // Ve metin BOŞ olamaz: Apple gerekçesiz izin isteğini reddeder.
+      for (final String k in keys) {
+        final RegExpMatch? m = RegExp(
+                '<key>$k</key>\\s*<string>([^<]*)</string>')
+            .firstMatch(plist);
+        expect((m?.group(1) ?? '').trim().length, greaterThan(20),
+            reason: '$k metni boş ya da çok kısa — Apple gerekçe ister, '
+                've kullanıcı o cümleyi izin diyaloğunda OKUR');
+      }
+    }
   });
 }

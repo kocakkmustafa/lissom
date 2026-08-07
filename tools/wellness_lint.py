@@ -167,6 +167,12 @@ MIN_STRINGS_PER_FILE = 1
 #: kalıpların listesidir) ve onu taramak süzgeci kendi kapısına takardı.
 DART_DIRS = ("lib", "packages/lissom_engine/lib")
 
+# İŞLETİM SİSTEMİ KATMANI (L-273). İzin metinleri kullanıcıya **iOS'un kendi
+# diyaloğunda** gösterilir — uygulamanın dışına çıkan ilk cümledir. Diğer
+# kullanıcı metinleri gibi vaat/wellness yasaklarına tabidir, ama linter bu
+# katmana HİÇ bakmıyordu (`os_layer_test` kapısı bunu yakaladı).
+OS_FILES = ("ios/Runner/Info.plist",)
+
 #: Dart yorumları — taramadan ÖNCE silinir. Türkçe geliştirici yorumları
 #: kullanıcı metni değildir ve İngilizce kalıp aramak orada anlamsız
 #: false-positive üretir (ör. bu dosyadaki "diagnose" örnekleri).
@@ -265,6 +271,12 @@ def scan_file(path: Path) -> tuple[list[str], int]:
         for key, value in _walk_json(data):
             scanned += 1
             problems += scan_text(f"{path.name} :: {key}", value)
+    elif path.suffix == ".plist":
+        # OS katmanı (L-273): izin metinleri kullanıcıya iOS'un KENDİ
+        # diyaloğunda gösterilir. Yalnız `*UsageDescription` taranır.
+        for key, value in strings_from_plist(path.read_text(encoding="utf-8")):
+            scanned += 1
+            problems += scan_text(f"{path.name} :: {key}", value)
     elif path.suffix == ".dart":
         source = _DART_COMMENT.sub(" ", path.read_text(encoding="utf-8"))
         # Bitişik literalleri BİRLEŞTİR: aralarında yalnız boşluk varsa Dart
@@ -295,6 +307,20 @@ def scan_file(path: Path) -> tuple[list[str], int]:
     return problems, scanned
 
 
+def strings_from_plist(text: str) -> list[tuple[str, str]]:
+    """`*UsageDescription` anahtarlarının metinleri — **kullanıcı yüzü.**
+
+    Diğer plist anahtarları makine değeridir (bundle id, sürüm, yönelim) ve
+    taranmaz: kapıyı geniş yazmak, ölçmediğini ölçüyor göstermek olurdu.
+    """
+    out: list[tuple[str, str]] = []
+    for m in re.finditer(
+        r"<key>(\w*UsageDescription)</key>\s*<string>([^<]*)</string>", text
+    ):
+        out.append((m.group(1), m.group(2)))
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--path", default=str(ROOT / "config"))
@@ -319,6 +345,12 @@ def main() -> int:
             p for p in dart_files if ".dart_tool" not in p.parts and "build" not in p.parts
         ]
         files += dart_files
+        # OS katmanı: yalnız İZİN metinleri (diğer plist anahtarları makine
+        # değeri; hepsini taramak gürültü olurdu).
+        for rel in OS_FILES:
+            q = ROOT / rel
+            if q.exists():
+                files.append(q)
 
     all_problems: list[str] = []
     silent: list[str] = []          # tarandı ama içinden metin çıkmadı

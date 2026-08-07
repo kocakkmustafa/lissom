@@ -66,5 +66,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Lissom uses the camera to estimate how you move during a movement test. Video stays on this device and is never uploaded.</string>
 </dict>
 </plist>

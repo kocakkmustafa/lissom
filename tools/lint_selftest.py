@@ -111,8 +111,46 @@ def run_in_content_dir(payload: dict) -> int:
         return r.returncode
 
 
+def run_plist(usage_text: str) -> int:
+    """OS katmanını DAVRANIŞLA sına (L-273).
+
+    Dart tarafındaki kapı önce `wellness_lint.py` içinde
+    `strings_from_plist` **kelimesini** arıyordu; fonksiyonu yeniden
+    adlandırdığımda kapı **geçti**, çünkü çağrı yeri hâlâ o adı taşıyordu.
+    *Kelimenin varlığı, çağrının çalıştığı değildir.* Burada linter gerçekten
+    **koşturuluyor**.
+    """
+    with tempfile.TemporaryDirectory() as d:
+        p = Path(d) / "Info.plist"
+        p.write_text(
+            '<?xml version="1.0"?><plist><dict>'
+            "<key>NSCameraUsageDescription</key>"
+            f"<string>{usage_text}</string>"
+            "</dict></plist>",
+            encoding="utf-8",
+        )
+        r = subprocess.run(
+            [sys.executable, str(TOOLS / "wellness_lint.py"), "--path", str(p)],
+            capture_output=True, text=True,
+        )
+        return r.returncode
+
+
 def main() -> int:
     failures: list[str] = []
+
+    # OS KATMANI — davranışsal (L-273).
+    if run_plist("Coaching features are coming soon.") == 0:
+        failures.append(
+            "OS katmanı: izin metnindeki VAAT dili yakalanmadı — plist "
+            "taraması ya kapalı ya bozuk"
+        )
+    if run_plist(
+        "Lissom uses the camera to estimate how you move during a test."
+    ) != 0:
+        failures.append(
+            "OS katmanı FAZLA GENİŞ: dürüst bir izin metni reddedildi"
+        )
 
     for label, text in MUST_CATCH.items():
         code = run({"schemaVersion": 1, "id": "t", "tests": [{"instruction": text}]})
