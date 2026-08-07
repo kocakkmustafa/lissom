@@ -24,6 +24,22 @@ abstract final class LissomColors {
   /// bir marj (4,565) alınıyor — eşiğe teğet geçen bir renk, ilk yuvarlama
   /// farkında geri döner.
   static const Color roseDeepHover = Color(0xFF86556D);
+
+  /// **Beyaz metin taşıyan dolgular için** — adı rengini değil SÖZLEŞMESİNİ
+  /// söyler.
+  ///
+  /// [roseDeep] marka/seed rengidir ve beyazla **3,66:1** verir; 13,5px
+  /// normal ağırlıktaki bir buton etiketi için WCAG AA eşiği **4,5**.
+  /// Yani birincil buton etiketi ölçülebilir biçimde okunmuyordu
+  /// (L-264 — sekme turu açılır açılmaz yakaladı).
+  ///
+  /// Üç yol vardı ve en dar olanı seçildi:
+  ///   - `roseDeep`i koyulaştırmak → **marka/seed rengini** değiştirirdi
+  ///   - `roseDeepHover` kullanmak → hover ile durgun hâl **aynılaşırdı**
+  ///   - **bu:** yalnız dolgu için asgari koyulaştırma (ton korunur, ×0,89)
+  ///
+  /// Eşik icat değil: **4,5 dış bir standart** (WCAG 2.2 AA, normal metin).
+  static const Color fillForWhiteText = Color(0xFF9C677F);
   static const Color mistDeep = Color(0xFF8FAEC8);
   static const Color canvas = Color(0xFFF3EDE9);
   static const Color card = Color(0xFFFFFCFA);
@@ -181,7 +197,7 @@ ThemeData buildLissomTheme() {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        backgroundColor: LissomColors.roseDeep,
+        backgroundColor: LissomColors.fillForWhiteText,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
         shape: const StadiumBorder(),

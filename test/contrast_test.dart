@@ -75,6 +75,15 @@ const List<String> _decorativeTokens = <String>[
 /// Dolgu/çizgi/ikon olarak meşru — metin eşiğine tabi değil.
 const List<String> _fillTokens = <String>['roseDeep', 'hairline'];
 
+/// **Beyaz metin TAŞIYAN dolgular.** Kova bir muafiyet değil, bir SÖZLEŞME:
+/// buraya konan her token, beyazla **4,5:1**'i geçmek ZORUNDA.
+///
+/// `_fillTokens`a koymak yanlış olurdu — o kova *"metin eşiğine tabi değil"*
+/// diyor, oysa bunlar tam olarak tabi. Yanlış kova, sessiz bir muafiyettir.
+const List<(String, Color)> _whiteTextFills = <(String, Color)>[
+  ('fillForWhiteText', LissomColors.fillForWhiteText),
+];
+
 /// Beyan kartı (cream→peach) **genel listede DEĞİL** ve bu bir muafiyet değil
 /// bir OLGU: peach ucunda hiçbir gövde/vurgu tonu 4.5'e çıkmıyor (ölçüldü —
 /// `bodySecondary` bile 3,76). O kart bu yüzden metnini `ink` ile çiziyor ve
@@ -84,6 +93,21 @@ const List<String> _fillTokens = <String>['roseDeep', 'hairline'];
 const Color _bannerDarkEnd = LissomColors.peach;
 
 void main() {
+  test('BEYAZ METİN TAŞIYAN dolgular WCAG AA geçer — sınıf, örnek değil', () {
+    // J-151/L-264: kusuru bulduğun yerde düzeltmek, sınıfı düzeltmek değil.
+    // Birincil butonun dolgusu beyazla 3,66:1'di (13,5px normal metin için
+    // eşik 4,5) ve sekme turu açılır açılmaz yakaladı. Bu kapı ÖRNEĞİ değil
+    // SINIFI tutuyor: beyaz metin taşıyan her dolgu buradan geçer.
+    expect(_whiteTextFills, isNotEmpty, reason: 'pozitif çapa: kova boş');
+    for (final (String name, Color fill) in _whiteTextFills) {
+      final double r = contrastRatio(const Color(0xFFFFFFFF), fill);
+      expect(r, greaterThanOrEqualTo(4.5),
+          reason: '$name beyaz metinle ${r.toStringAsFixed(2)}:1 veriyor. '
+              'Eşik 4,5 — İCAT DEĞİL, WCAG 2.2 AA normal metin. Dolguyu '
+              'koyulaştırın ya da o yüzeyde beyaz metin kullanmayın.');
+    }
+  });
+
   // ⚠️ Aile gotcha'sının ÜÇÜNCÜ yüzü: `buildLissomTheme()` `google_fonts`
   // çağırıyor, o da `ServicesBinding.instance` istiyor. Temayı `main()`in
   // TEPESİNDE (binding kurulmadan) kurmak "Binding has not yet been
@@ -227,6 +251,7 @@ void main() {
       'card', 'canvas', 'cream', 'peach', 'cardWarmEnd', 'cardNeutralEnd',
       ..._foregrounds.map(((String, Color) e) => e.$1),
       ..._decorativeTokens,
+      ..._whiteTextFills.map(((String, Color) t) => t.$1),
       ..._fillTokens,
     };
     expect(declared.difference(bucketed), isEmpty,
