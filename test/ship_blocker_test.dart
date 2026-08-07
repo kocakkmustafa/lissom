@@ -51,6 +51,22 @@ List<String> runtimeAssetPaths() => <String>[
               .map((RegExpMatch m) => m.group(1)!),
     ];
 
+/// Kabukta bir kamera/capture yolu var mı — **tek adres**, `os_layer_test`in
+/// yüklemiyle aynı desen (ikisi ayrışırsa iki kapı farklı dünyayı ölçer).
+bool hasCapturePath() {
+  for (final FileSystemEntity f in Directory('lib').listSync(recursive: true)) {
+    if (f is! File || !f.path.endsWith('.dart')) continue;
+    final String src = File(f.path)
+        .readAsStringSync()
+        .replaceAll(RegExp(r'//[^\n]*'), ' ');
+    if (RegExp(r'\bCameraController\b|\bmotion_camera\b|\bstartImageStream\b')
+        .hasMatch(src)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool _covered(String path, List<String> declared) => declared.any((String d) =>
     d == path || (d.endsWith('/') && path.startsWith(d)));
 
@@ -104,6 +120,56 @@ void main() {
             'BİRLİKTE ölçmüyor. Kamerayı bağlayan commit, izin metnini '
             'eklemeden yeşil geçebilir hâle gelir — ve o build cihazda '
             'ANINDA çöker.');
+  });
+
+  test('POZ MODELİ, CAPTURE YOLUNA BAĞLI — model yoksa kamera BAŞLAMAZ', () {
+    // Koordinatör ölçümü (12:13) ve kendi kapımla doğrulandı:
+    //   `.task` dosyası YOK · pubspec beyanı 0 · `tool/fetch_*` YOK ·
+    //   `path_provider` bağımlılıkta ama YALNIZ geçmiş dosyası için.
+    //
+    // `motion_camera` modeli **kasıtlı taşımıyor**:
+    //   "the plugin deliberately bundles no model (apps pin their own and
+    //    ship it as an asset)"
+    // ⚠️ Ve sözleşme `modelPath` için **MUTLAK DOSYA YOLU** istiyor, bundle
+    // anahtarı DEĞİL → `pubspec`'e eklemek YETMEZ; bundle→dosya sistemi bir
+    // **hazırlama adımı** gerekiyor.
+    //
+    // Bu, izin anahtarıyla AYNI eşleme: bugün capture yolu yok, o yüzden
+    // model de gerekmiyor — ama kamerayı bağlayan commit modeli VE hazırlama
+    // adımını getirmeden yeşil geçemez. Üç kardeş hat bunu çözmüş; bu bir
+    // bilinmezlik değil, YAPILMAMIŞ İŞ.
+    if (!hasCapturePath()) {
+      // Simetrik yön: capture yokken 8 MB'lık bir model taşımak da gürültü.
+      return;
+    }
+    final List<String> declared = declaredAssets();
+    expect(declared.any((String d) => d.endsWith('.task') || d.endsWith('/')),
+        isTrue,
+        reason: 'Kamera yolu var ama `pubspec` hiçbir `.task` modeli beyan '
+            'etmiyor — kamera cihazda HİÇ BAŞLAMAZ.');
+    expect(
+        Directory('.')
+            .listSync(recursive: true)
+            .whereType<File>()
+            .any((File f) =>
+                f.path.endsWith('.task') && !f.path.contains('/build/')),
+        isTrue,
+        reason: 'Model dosyası depoda yok. `tool/fetch_pose_model.sh` gibi '
+            'bir getirme adımı ve pin\'li bir model gerekiyor.');
+    final bool materializes = Directory('lib')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((File f) => f.path.endsWith('.dart'))
+        .any((File f) {
+      final String src = f.readAsStringSync();
+      return src.contains('rootBundle.load') &&
+          RegExp(r'getApplicationSupportDirectory|getTemporaryDirectory')
+              .hasMatch(src);
+    });
+    expect(materializes, isTrue,
+        reason: 'Model `pubspec`\'te beyanlı olabilir ama plugin MUTLAK YOL '
+            'istiyor. Bundle→dosya sistemi hazırlama adımı (bundle\'dan oku, '
+            'destek dizinine yaz, o yolu ver) YOK — kamera başlamaz.');
   });
 
   test('İKİ KAYNAK TEK OLGU: limitsCopy config\'ten sapmamış', () {

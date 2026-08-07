@@ -17,6 +17,7 @@ Uygulamanın kendi metni bunu zaten söylüyor:
 |---|---|---|---|
 | 1 | **Kamera kabuğa hiç bağlı değil.** `lib/` içinde `motion_camera` · `PoseSource` · `LiveEvaluator` · `AssessmentEngine` çağrısı **SIFIR** — bulunan tüm "camera" geçişleri kameradan *bahseden metin*. Kullanıcı **hiçbir ölçüm yapamaz**, tek bir seans bile. | `kod` | **gün** (kamera ekranı + izin akışı + sonuç yazımı + geçmiş) |
 | 2 | **`NSCameraUsageDescription` yok** — ama **bağımsız engel DEĞİL, ①'e BAĞLI.** Bugün hiçbir capture yolu olmadığı için etkisi **gizil**; ①'i çözen commit onu **aktif bir çökme yoluna** çevirir. ⚠️ Anahtarı tek başına eklemeyi denedim ve **kendi kapım reddetti** (`os_layer_test`, L-250): *"capture yolu yokken kamera izni beyan edilmiş — kullanılmayan bir yetenek beyanı"*. Kapı haklıydı: iOS izin diyaloğu uygulamanın **dışına çıkan ilk cümlesi** ve olmayan bir yeteneği anlatırdı (L-262 sınıfı). Kapı eşlemeyi **iki yönde** tutuyor → kamerayı bağlayan commit anahtarı eklemeden **yeşil geçemez.** | `kod` (①'le AYNI commit) | **dakika** |
+| 2b | **Poz modeli (`.task`, ~8 MB) YOK — kamera hiç BAŞLAMAZ.** `motion_camera` modeli **kasıtlı taşımıyor** (*"apps pin their own and ship it as an asset"*). Ölçüm: `.task` dosyası **yok** · pubspec beyanı **0** · `tool/fetch_*` betiği **yok** · `path_provider` bağımlılıkta ama **yalnız geçmiş dosyası için** kullanılıyor. ⚠️ Ve plugin sözleşmesi `modelPath` için **MUTLAK DOSYA YOLU** istiyor, bundle anahtarı değil → `pubspec`'e eklemek **yetmez**, bundle→dosya sistemi **hazırlama adımı** gerekiyor. **Üç kardeş hat bunu çözmüş** — bilinmezlik değil, **yapılmamış iş**. | `kod` + `varlık` | **saat** (reçete hazır) |
 | 3 | **`PrivacyInfo.xcprivacy` yok.** 2024'ten beri **zorunlu**; eksikse yükleme/inceleme reddedilir. | `kod` | **saat** |
 | 4 | **App ikonu = Flutter varsayılanı** (mavi "F"; `Icon-App-1024x1024@1x.png` doğrudan görüldü). Guideline reddi. | `içerik` (marka görseli) | **kurucu** |
 | 5 | **Onboarding yok.** `lib/app/` altında onboarding/welcome/intro dosyası **yok**. İlk açılışta kullanıcıya ne yapacağı söylenmiyor. Gece direktifinin *ortak yayın blokajı*. | `kod` + `içerik` | **gün** |
@@ -58,8 +59,13 @@ Uygulamanın kendi metni bunu zaten söylüyor:
 > bağlanmadı. Bugün gönderilse, kamerasız bir kamera uygulaması gönderilmiş
 > olur.**
 
-**Kritik yol:** ①+② (kamera bağlama + izin metni — **aynı commit, kapı zorunlu
-kılıyor**) → ⑤ onboarding → ③④ store teknik/görsel → ⑥ metadata.
+**Kameranın çalışmaması ÜÇ ayrı sebepten, ve üçü de bağımsız:**
+① kabuk kamerayı **hiç çağırmıyor** · ②b poz modeli **yok** (kamera *başlamaz*)
+· ② izin metni yok (kamera *çökertir*). **Üçü de aynı commit ailesinde
+çözülmeli**, yoksa her biri diğerinin arkasına saklanır.
+
+**Kritik yol:** ①+②+②b (kamera bağlama + izin metni + poz modeli — **aynı
+commit ailesi**; izin metnini kapı zorunlu kılıyor) → ⑤ onboarding → ③④ store teknik/görsel → ⑥ metadata.
 
 ---
 
