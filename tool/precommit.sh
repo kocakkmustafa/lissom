@@ -15,6 +15,20 @@
 # olur ve `cd ../..` depo köküne DEĞİL `.git/`e gider. İlk denemede tam bu
 # oldu — commit DURDU ama YANLIŞ GEREKÇEYLE (betik bulunamadı). Doğru sonuç,
 # yanlış sebep: pozitif kontrol olmasa "kapı çalışıyor" diye kaydedecektim.
+# ⛔ SIFIRINCI ŞART: KAPININ VAR OLMASI (M-F-399, Choreia). Zincirin üç şartı
+#    — kurulmuş · düşebilir · okunur — üçü de kapının VARLIĞINI varsayıyordu.
+#    Choreia'da kapı `&&` bile değil İKİ AYRI SATIRDI: commit test sonucundan
+#    tamamen bağımsız koşuyordu.
+#
+# ⛔ BORU HATTI YASAK, ve sebebi ölçüldü: `false | tail -1` çıkış kodu **0**.
+#    Bu dosyada yorumlar hariç boru sayısı: 0 (ölçüldü).
+#
+# ✅ DÜŞEBİLDİĞİ ÖLÇÜLDÜ — ve sabotajın İNDİĞİ ayrıca doğrulandı:
+#    Choreia'nın kazası: sabotaj dizgisi dosyada YOKTU, düzenleme sessizce
+#    hiçbir şey yapmamıştı, kapı yeşil döndü ve "kapı bozuk" yazılacaktı.
+#    ⭐ *Bir pozitif kontrol, KENDİSİNİN indiği doğrulanmadan kanıt değildir.*
+#    Burada: python `assert n != s` ile iniş zorlandı + `grep -c` ile sayıldı
+#    + testin gerçekten kırmızı olduğu ölçüldü → SONRA commit denendi → DURDU.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 python3 tools/all_gates.py
