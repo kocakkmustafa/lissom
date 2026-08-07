@@ -7,9 +7,15 @@
 ///
 /// ## Neden simülatör değil, golden
 ///
-/// Bu makinede kurulabilen en dar iPhone simülatörü **390pt** (iPhone 16e);
-/// `iPhone SE` cihaz tipi hiç yok. 375pt standardını simülatörle tutmak
-/// mümkün DEĞİL. Golden, yüzeyi tam olarak 375×812'de kurar.
+/// ⚠️ **BU BÖLÜMDE BİR İDDİAM YANLIŞ ÇIKTI.** Önce *"bu makinede iPhone SE
+/// cihaz tipi hiç yok"* yazmıştım — `simctl list devicetypes` çıktısını
+/// KIRPMIŞTIM. SE 3. nesil hem cihaz tipi olarak var hem de
+/// `Lissom-Narrow-StressTest` adıyla kurulu. Metin kanıt gibi duruyordu;
+/// oysa eksik bir komut çıktısıydı.
+///
+/// Golden yine de değerli ve sebebi başka: **gerçek SE 375×667** iken bu
+/// yüzey 375×812 — aynı genişlikte DAHA ÇOK içerik tek karede görünüyor.
+/// Yani golden yapıyı, simülatör metni kanıtlıyor.
 ///
 /// ## Bu kanıtın SINIRI — isimle
 ///
@@ -154,7 +160,9 @@ void main() {
     await _shot(
       tester,
       WhatLissomDoesntDoScreen(
-          items: facts.ia.whyNot, excluded: facts.battery.excluded),
+          items: facts.ia.whyNot,
+          excluded: facts.battery.excluded,
+          poseTiers: facts.ia.poseTiers),
       'ia-375pt-what-lissom-doesnt-do-2026-08-07',
     );
   }, skip: !_enabled);

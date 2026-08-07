@@ -257,7 +257,9 @@ void main() {
     final AppFacts f = factsFromDisk();
     await tester.pumpWidget(MaterialApp(
       home: WhatLissomDoesntDoScreen(
-          items: f.ia.whyNot, excluded: f.battery.excluded),
+          items: f.ia.whyNot,
+          excluded: f.battery.excluded,
+          poseTiers: f.ia.poseTiers),
     ));
     await tester.pumpAndSettle();
 

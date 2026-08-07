@@ -18,6 +18,7 @@ import 'package:lissom/app/app_facts.dart';
 import 'package:lissom/app/ia.dart';
 import 'package:lissom/app/library_screen.dart';
 import 'package:lissom/app/lissom_theme.dart';
+import 'package:lissom/app/shell.dart';
 
 import 'support/copy_gate.dart';
 import 'support/facts_from_disk.dart';
@@ -135,6 +136,42 @@ void main() {
     await tester.tap(find.text('Assessment Battery'));
     await tester.pumpAndSettle();
     expect(find.byType(FamilyPage), findsOneWidget);
+  });
+
+  testWidgets('GEZİNME KURALI: beyan edilen dokunuş sınırı ÖLÇÜLÜR (L-240)',
+      (WidgetTester tester) async {
+    // `navigationRules` bloğunun okuyucusu YOKTU — beyan edilmiş, ölçülebilir
+    // bir kısıt iki yıl boyunca hiç sınanmadı. Artık sınanıyor: sayı
+    // config'ten TÜRETİLİR, teste yazılmaz.
+    pinNarrowSurface(tester);
+    final AppFacts f = factsFromDisk();
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: LissomShell(loader: () async => f),
+    ));
+    await tester.pumpAndSettle();
+
+    // HOME → aktif kurs: kaç DOKUNUŞ?
+    //
+    // ⚠️ **KAPININ SINIRI — isimle:** kural DOKUNUŞ sayıyor, kaydırma değil.
+    // Düğme ekranın altında olduğu için önce kaydırıyoruz ve bu sayıya
+    // GİRMİYOR. Yani kapı "kaç dokunuş" sorusunu kapatır, "ne kadar zahmet"
+    // sorusunu kapatmaz — uzun bir kaydırma iki dokunuşu ucuz göstermez.
+    // (WCAG kapısının "luminans ölçer, ayırt edilebilirliği değil" sınırının
+    // aynı sınıfı.)
+    int taps = 0;
+    await scrollTo(tester, find.text('See what each test measures'));
+    await tester.tap(find.text('See what each test measures'));
+    taps++;
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Assessment Battery'));
+    taps++;
+    await tester.pumpAndSettle();
+    expect(find.byType(FamilyPage), findsOneWidget,
+        reason: 'aktif kursa ulaşılamadı');
+    expect(taps, lessThanOrEqualTo(f.ia.navigation.maxTapsHomeToActiveCourse),
+        reason: 'home→aktif kurs $taps dokunuş, beyan edilen sınır '
+            '${f.ia.navigation.maxTapsHomeToActiveCourse}');
   });
 
   testWidgets('yasaklı yüzey kopyası yok', (WidgetTester tester) async {

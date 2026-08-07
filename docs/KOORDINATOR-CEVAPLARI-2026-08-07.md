@@ -131,3 +131,5 @@ vermez.
 | L-226 | §5.2 hükmü *"yeniden ölçüm: X gün"* diyor ama **X hiçbir config'te yok** | eşik icadı yasak; kadans artefaktı kararı |
 | L-227 | `disclaimers.scoreScreen` ürünün kendi hükümleriyle çelişiyor (*"score"*, *"compared with your own history"*) | yasal metin revizyonu |
 | L-225 | `BatterySummaryView` erişilemez — **ve L-229 gösterdi ki denetimsiz de** | canlı-capture UI'a bağlı |
+| L-235 | Dört-katman ayrımının görsel yükü artık yalnız ikon+sözcükte (bu palette üçüncü bir luminans katmanı mümkün değil — ölçüldü) | tasarım yönü |
+| **L-241** | **İki beyan edilmiş gezinme kuralı karşılanmıyor:** `librarySearchRequired: true` (arama YOK) · `allCoursesIndexRequired: true` (dizin YOK). Okuyucu eklendi, ihlal artık görünür — ama tek aile + sıfır kurs varken arama kutusunun anlamı tartışmalı | IA kararı |

@@ -182,6 +182,64 @@ final class HomeSection {
   final String source;
 }
 
+/// Poz kütüphanesinin KOÇLUK KATMANI — ve neden o katmanda olduğu.
+///
+/// **Bu blok da okuyucusuz duruyordu (L-240)** ve bedeli ölçüldü: tier 3'ün
+/// gerekçesi — *"pose models silently swap limb labels on inverted bodies
+/// with high confidence"* (aile bulgusu M-019) — **hiçbir yüzeyde yoktu.**
+/// Yoga ailesinin dürüstlük kutusu yalnız *"Inversions are demonstrated by
+/// the avatar only"* diyordu: OLGU vardı, GEREKÇE yoktu. Oysa bu ailenin
+/// tüm duruşu gerekçenin kendisi.
+///
+/// ⚠️ Sınıfın acı tarafı: bu okuyucuyu, "okuyucusuz config alanı" sınıfını
+/// (L-219 `excluded` · L-220 `derivedMeasures`) kapatırken YAZDIM ve aynı
+/// dosyada aynı sınıfı ürettim. Bir kusur sınıfını teşhis etmek, onu aynı
+/// commit'te üretmene engel değil.
+final class PoseTier {
+  const PoseTier({
+    required this.tier,
+    required this.scope,
+    required this.coaching,
+    required this.scoredLabel,
+    required this.reason,
+  });
+
+  final int tier;
+  final String scope;
+
+  /// `full` · `guided` · `avatar_demo_only` — MAKİNE değeri, yüzeye çıkmaz.
+  final String coaching;
+
+  /// `true` · `loose` · `false` — config bunu karışık tipte yazıyor, o yüzden
+  /// dize olarak taşınıyor ve yüzey kendi cümlesini kurar.
+  final String scoredLabel;
+
+  /// **Tam skorlanmayan her katman için ZORUNLU.** Gerekçesiz bir sınır,
+  /// açıklanmamış bir eksikliktir.
+  final String? reason;
+
+  bool get isFullyScored => scoredLabel == 'true';
+}
+
+/// Bilgi mimarisinin gezinme KURALLARI — beyan edilmiş, ölçülebilir kısıtlar.
+///
+/// **Okuyucusu yoktu (L-240) ve iki kural SESSİZCE karşılanmıyordu:**
+/// [searchRequired] ve [allCoursesIndexRequired] ikisi de `true`, ikisi de
+/// üründe YOK. Bir kural okunmuyorsa ihlal edilip edilmediği de bilinmez.
+final class NavigationRules {
+  const NavigationRules({
+    required this.maxTapsHomeToActiveCourse,
+    required this.maxTapsLibraryToAnyCourse,
+    required this.searchRequired,
+    required this.allCoursesIndexRequired,
+  });
+
+  final int maxTapsHomeToActiveCourse;
+  final int maxTapsLibraryToAnyCourse;
+  final bool searchRequired;
+  final bool allCoursesIndexRequired;
+}
+
 final class WhyNotItem {
   const WhyNotItem({required this.topic, required this.reason});
   final String topic;
@@ -194,12 +252,20 @@ final class LibraryIa {
     required this.homeSections,
     required this.families,
     required this.whyNot,
+    required this.poseTiers,
+    required this.navigation,
   });
 
   final List<String> tabs;
   final List<HomeSection> homeSections;
   final List<LibraryFamily> families;
   final List<WhyNotItem> whyNot;
+
+  /// Poz kütüphanesinin koçluk katmanları — gerekçeleriyle.
+  final List<PoseTier> poseTiers;
+
+  /// Beyan edilmiş gezinme kısıtları.
+  final NavigationRules navigation;
 
   List<LibraryFamily> get built =>
       families.where((LibraryFamily f) => f.isBuilt).toList(growable: false);
@@ -280,6 +346,59 @@ final class LibraryIa {
       homeSections: sections,
       families: families,
       whyNot: whyNot,
+      poseTiers: _tiers(decoded['poseLibraryTiers']),
+      navigation: _navigation(decoded['navigationRules']),
+    );
+  }
+
+  static List<PoseTier> _tiers(Object? raw) {
+    if (raw == null) return const <PoseTier>[];
+    if (raw is! List) throw IaError('poseLibraryTiers', 'liste olmalı');
+    final List<PoseTier> out = <PoseTier>[];
+    for (int i = 0; i < raw.length; i++) {
+      final Object? e = raw[i];
+      if (e is! Map<String, dynamic>) {
+        throw IaError('poseLibraryTiers[$i]', 'nesne olmalı');
+      }
+      final String scored = '${e['scored']}';
+      final String? reason = e['reason'] as String?;
+      // Tam skorlanmayan katman GEREKÇESİZ olamaz: bu ürünün tüm duruşu
+      // "neyi ölçmediğimizi SEBEBİYLE söylemek".
+      if (scored != 'true' && (reason == null || reason.trim().isEmpty)) {
+        throw IaError('poseLibraryTiers[$i].reason',
+            'tam skorlanmayan katman için ZORUNLU — gerekçesiz sınır, '
+            'açıklanmamış bir eksikliktir');
+      }
+      out.add(PoseTier(
+        tier: (e['tier'] as num).toInt(),
+        scope: _str(e['scope'], 'poseLibraryTiers[$i].scope'),
+        coaching: _str(e['coaching'], 'poseLibraryTiers[$i].coaching'),
+        scoredLabel: scored,
+        reason: reason,
+      ));
+    }
+    return out;
+  }
+
+  static NavigationRules _navigation(Object? raw) {
+    if (raw is! Map<String, dynamic>) {
+      throw IaError('navigationRules', 'nesne olmalı');
+    }
+    int req(String k) {
+      final Object? v = raw[k];
+      if (v is! num) throw IaError('navigationRules.$k', 'sayı zorunlu');
+      return v.toInt();
+    }
+    bool flag(String k) {
+      final Object? v = raw[k];
+      if (v is! bool) throw IaError('navigationRules.$k', 'bool zorunlu');
+      return v;
+    }
+    return NavigationRules(
+      maxTapsHomeToActiveCourse: req('maxTapsHomeToActiveCourse'),
+      maxTapsLibraryToAnyCourse: req('maxTapsLibraryToAnyCourse'),
+      searchRequired: flag('librarySearchRequired'),
+      allCoursesIndexRequired: flag('allCoursesIndexRequired'),
     );
   }
 

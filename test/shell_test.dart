@@ -82,6 +82,8 @@ void main() {
         homeSections: base.ia.homeSections,
         families: base.ia.families,
         whyNot: base.ia.whyNot,
+        poseTiers: base.ia.poseTiers,
+        navigation: base.ia.navigation,
       ),
       battery: base.battery,
       liveness: base.liveness,

@@ -29,11 +29,21 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
   const WhatLissomDoesntDoScreen({
     required this.items,
     required this.excluded,
+    required this.poseTiers,
     super.key,
   });
 
   static const Key boundariesKey = Key('whyNot.boundaries');
   static const Key excludedKey = Key('whyNot.excludedTests');
+  static const Key tiersKey = Key('whyNot.poseTiers');
+
+  /// Poz kütüphanesinin koçluk katmanları — **gerekçeleriyle (L-240).**
+  /// Bu blok config'te iki yıldır duruyordu ve okuyucusu yoktu; sonucu:
+  /// tier 3'ün gerekçesi (*"pose models silently swap limb labels on
+  /// inverted bodies with high confidence"* — aile bulgusu M-019) hiçbir
+  /// yüzeyde YOKTU. Yoga kutusu yalnız "avatar only" diyordu: olgu vardı,
+  /// **sebep yoktu** — oysa bu ürünün duruşu sebebin kendisi.
+  final List<PoseTier> poseTiers;
 
   final List<WhyNotItem> items;
 
@@ -116,12 +126,49 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                 ],
               ),
             ],
+            if (poseTiers.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 14),
+              LissomEyebrow('How much of a pose can be scored'),
+              const SizedBox(height: 4),
+              Text(
+                'Not every position is equally readable by one camera. These '
+                'are the three levels, and what puts a pose in each.',
+                style: t.textTheme.bodySmall,
+              ),
+              const SizedBox(height: 12),
+              Column(
+                key: tiersKey,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  for (final PoseTier tier in poseTiers)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 11),
+                      child: _BoundaryCard(
+                        title: tier.scope,
+                        reason: _tierLine(tier),
+                        measured: tier.reason,
+                      ),
+                    ),
+                ],
+              ),
+            ],
             const MeasurementLimitsFootnote(),
           ],
         ),
       ),
     );
   }
+
+  /// Katmanın ne yaptığı — makine değerleri (`full` · `guided` ·
+  /// `avatar_demo_only` · `loose`) yüzeye SIZMAZ, cümleye çevrilir.
+  static String _tierLine(PoseTier tier) => switch (tier.coaching) {
+        'full' => 'Coached pose by pose, and set against a reference range.',
+        'guided' =>
+          'Guided, but scored loosely — we say less because we can see less.',
+        'avatar_demo_only' =>
+          'Shown by the avatar only. Nothing here is scored.',
+        _ => 'Coaching level not declared.',
+      };
 
   /// `cervical_rotation` → `Cervical rotation`. Ham id yüzeye SIZMAZ (bu
   /// ailenin ölçülmüş kusuru: dahili metrik sözlüğü bir kez kullanıcı

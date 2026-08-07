@@ -52,6 +52,7 @@ class ProfileScreen extends StatelessWidget {
                 builder: (_) => WhatLissomDoesntDoScreen(
                   items: facts.ia.whyNot,
                   excluded: facts.battery.excluded,
+                  poseTiers: facts.ia.poseTiers,
                 ),
               ),
             ),
