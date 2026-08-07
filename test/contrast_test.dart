@@ -249,6 +249,16 @@ void main() {
         .whereType<File>()
         .map((File f) => f.readAsStringSync())
         .join('\n');
+    // POZİTİF İKİZ (L-255): desen GERÇEKTEN eşleşiyor mu? Bu bir YOKLUK
+    // iddiası — bozuk bir desenle de sonsuza kadar geçer.
+    expect(
+        RegExp('color:\\s*LissomColors\\.bodySecondary(?![A-Za-z0-9_])')
+            .hasMatch(uses),
+        isTrue,
+        reason: 'BULUCU BOZUK: desen, kaynakta APAÇIK var olan '
+            '`color: LissomColors.bodySecondary` kullanımını bile bulamıyor — '
+            'süs-token yasağının her yeşili vakum-doğru');
+
     for (final String token in _decorativeTokens) {
       final RegExp asColor =
           RegExp('color:\\s*LissomColors\\.$token(?![A-Za-z0-9_])');

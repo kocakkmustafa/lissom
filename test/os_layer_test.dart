@@ -74,8 +74,15 @@ void main() {
     // Yeni bir `*UsageDescription` eklendiğinde bu liste büyümeli ve o metin
     // `wellness_lint`ten geçmeli; aksi hâlde uygulamanın dışına çıkan ilk
     // cümle hiçbir denetimden geçmemiş olur.
-    final Iterable<RegExpMatch> usage =
-        RegExp(r'<key>(NS\w*UsageDescription)</key>').allMatches(plist);
+    // POZİTİF İKİZ (L-255): desen, olması gereken şeyi buluyor mu? Bu bir
+    // YOKLUK iddiası — bozuk bir desen ile doğru bir sonuç ayırt edilemez.
+    final RegExp usagePattern = RegExp(r'<key>(NS\w*UsageDescription)</key>');
+    expect(
+        usagePattern.hasMatch('<key>NSCameraUsageDescription</key>'), isTrue,
+        reason: 'BULUCU BOZUK: desen apaçık bir izin anahtarını bile '
+            'bulamıyor — aşağıdaki "izin metni yok" iddiası vakum-doğru');
+
+    final Iterable<RegExpMatch> usage = usagePattern.allMatches(plist);
     expect(usage.map((RegExpMatch m) => m.group(1)).toList(), isEmpty,
         reason: 'yeni bir izin metni eklendi — `wellness_lint`in OS katmanına '
             'da bakması gerekiyor (tools/wellness_lint.py `--path` ile '

@@ -39,6 +39,20 @@ const List<String> _mdcKeys = <String>[
   'testRetest',
 ];
 
+/// MDC-sınıfı anahtar deseni — **TEK ADRES.**
+///
+/// ⚠️ Bu desen L-252'de bir kez BOZUK yazıldı (`\s` kaçışı Dart kaynağında
+/// çözülüyordu), hiç eşleşmiyordu ve kapı **yeşilken hiçbir şey ölçmüyordu.**
+/// O gün yalnız elle ters-sabotaj gösterdi.
+///
+/// Sonra ikinci kez, pozitif ikizi yazarken deseni **kopyaladım** ve kopya da
+/// bozuktu (`\$k` Dart'ta düz dolar işareti, interpolasyon DEĞİL). İkiz
+/// bunu ANINDA yakaladı — ama asıl ders şu: **ikiz kendi kopyasını
+/// kanıtlıyordu, iddianınkini değil.** Bir ikiz ancak iddiayla AYNI kodu
+/// çağırırsa kanıttır.
+RegExp _mdcPattern(String key) =>
+    RegExp('"$key[A-Za-z]*"\\s*:', caseSensitive: false);
+
 void main() {
   test('① KIYAS-KAPALI beyanı: MDC rakamı belirirse cümle YENİDEN YAZILMALI',
       () {
@@ -49,13 +63,10 @@ void main() {
       if (f is! File || !f.path.endsWith('.json')) continue;
       final String raw = File(f.path).readAsStringSync();
       for (final String k in _mdcKeys) {
-        // ⚠️ Kaçış BİR KEZ YANLIŞ YAZILDI ve sabotaj 0 yakaladı: `\\\\s`
-        // Dart kaynağında düz eğik-çizgi+s'ye çözülüyordu, yani regex hiç
-        // eşleşmiyordu. **Kapının kendi ölçüsü yalan söylüyordu** — ve bunu
-        // yalnız TERS SABOTAJ gösterdi. Yeşil bir kapı, ölçtüğünü ölçtüğünü
-        // kanıtlamaz.
-        if (RegExp('"$k[A-Za-z]*"\\s*:', caseSensitive: false)
-            .hasMatch(raw)) {
+        // Desen TEK ADRESTEN (`_mdcPattern`) — iddia ve pozitif ikiz AYNI
+        // kodu çağırmak ZORUNDA. İlk yazımda iki ayrı kopya vardı, ikizdeki
+        // bozuktu ve ikiz kendi kopyasını kanıtlıyordu.
+        if (_mdcPattern(k).hasMatch(raw)) {
           found.add('${f.uri.pathSegments.last}: $k');
         }
       }
@@ -69,10 +80,21 @@ void main() {
             'Bu kapı, kimsenin yalan söylemeye karar vermeden bir cümleyi '
             'yalana çevirmesini engellemek için var (J-133).');
 
-    // POZİTİF ÇAPA: tarama gerçekten config okuyor mu? Boş ağaçta yukarıdaki
-    // iddia trivially geçerdi.
+    // POZİTİF ÇAPA #1: tarama gerçekten config okuyor mu?
     expect(Directory('config').listSync(recursive: true).whereType<File>(),
         isNotEmpty);
+
+    // POZİTİF ÇAPA #2 — BULUCUNUN KENDİSİ (L-255).
+    // ⚠️ Bu tam olarak L-252'nin olduğu yer: desendeki kaçış yanlıştı, regex
+    // HİÇ eşleşmiyordu, kapı yeşildi ve hiçbir şey ölçmüyordu. O gün yalnız
+    // elle sabotaj gösterdi. Artık KALICI: desen, olması gereken şeyi
+    // bulduğunu her koşuda kanıtlıyor.
+    const String synthetic = '{"mdcDegrees": 4.5, "other": 1}';
+    final bool patternWorks =
+        _mdcKeys.any((String k) => _mdcPattern(k).hasMatch(synthetic));
+    expect(patternWorks, isTrue,
+        reason: 'BULUCU BOZUK: MDC deseni, apaçık bir `"mdcDegrees":` '
+            'anahtarını bile bulamıyor — bu kapının her yeşili vakum-doğru');
   });
 
   test('② notMeasured satırı: yalanlayan metrik köprüye girerse KIRMIZI', () {

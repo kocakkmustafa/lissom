@@ -16,6 +16,7 @@ import 'package:lissom/app/session_history_view.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'support/copy_gate.dart';
+import 'support/finder_twin.dart';
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
 
@@ -78,14 +79,45 @@ void main() {
     expectNoBannedCopy(tester);
 
     // ⛔ Dolum/gauge yasağı — tip düzeyinde.
+    //
+    // ⚠️ Bu üç iddia YOKLUK ölçüyor, yani **bozuk bir bulucu ile doğru bir
+    // sonuç birbirinden ayırt edilemez** (L-255). Bulucuların çalıştığını
+    // aşağıdaki POZİTİF İKİZ kanıtlıyor — o test olmadan bu satırlar
+    // vakum-doğru olabilir ve sonsuza kadar yeşil kalır.
     expect(find.byType(LinearProgressIndicator), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(find.byType(CustomPaint).evaluate().where((Element e) {
-      final CustomPaint p = e.widget as CustomPaint;
-      return p.painter != null;
-    }), isEmpty,
+    expect(paintersIn(tester), isEmpty,
         reason: 'çizilmiş bir grafik/gösterge belirdi — §5.1 hükmü ölçüm için '
             'dolum/trend göstergesini yasaklıyor');
+  });
+
+  testWidgets('POZİTİF İKİZ: gauge bulucuları GERÇEKTEN buluyor (L-255)', (
+    WidgetTester tester,
+  ) async {
+    // *Sıfır bekleyen bir kapı, bozuk aracı asla göstermez.* Gauge yasağı bu
+    // ürünün en sert kuralı (§5.1: "50°'de neredeyse boş bir çubuk, grafikle
+    // söylenmiş bir yetersizsin hükmüdür") — bulucusu kanıtsız kalamaz.
+    pinNarrowSurface(tester);
+    await expectFinderWorks(tester,
+        probe: const LinearProgressIndicator(value: 0.4),
+        finder: find.byType(LinearProgressIndicator),
+        what: 'dolum çubuğu bulucusu');
+    await expectFinderWorks(tester,
+        probe: const CircularProgressIndicator(value: 0.4),
+        finder: find.byType(CircularProgressIndicator),
+        what: 'ilerleme halkası bulucusu');
+
+    // `CustomPaint` YÜKLEMİ de ikizlenir — ve iddia ile ikiz AYNI fonksiyonu
+    // kullanır (`paintersIn`), yoksa ikiz kendi kopyasını kanıtlar.
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
+        body: CustomPaint(painter: ProbePainter(), size: Size(10, 10)),
+      ),
+    ));
+    await tester.pump();
+    expect(paintersIn(tester), isNotEmpty,
+        reason: 'BULUCU BOZUK: çizen bir CustomPaint bile görülmüyor — '
+            'gauge yasağının yüklemi vakum-doğru');
   });
 
   testWidgets('BOŞ hâl: kayıt yok — ve bu bir HATA değil', (

@@ -152,7 +152,15 @@ void main() {
 
     // Ölçüm BAŞLATAN bir düğme YOK (canlı-tur ekranı yok — olsaydı ölü buton
     // olurdu); olan düğme gerçekten çalışıyor.
+    //
+    // ⚠️ Bu bir YOKLUK iddiası: `FilledButton` yanlış/soyut bir tip olsaydı
+    // her zaman sıfır dönerdi ve iddia sonsuza kadar yeşil kalırdı (L-255).
+    // POZİTİF İKİZ aşağıda: aynı bulucu, GERÇEK bir düğmeyi buluyor.
     expect(find.widgetWithText(FilledButton, 'Start'), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'See what each test measures'),
+        findsOneWidget,
+        reason: 'BULUCU BOZUK: ekrandaki gerçek FilledButton bile '
+            'bulunamıyorsa, "Start yok" iddiası hiçbir şey kanıtlamaz');
     await tester.tap(find.text('See what each test measures'));
     await tester.pumpAndSettle();
     expect(opened, isTrue);
