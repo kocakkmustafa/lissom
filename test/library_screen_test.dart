@@ -39,9 +39,19 @@ void main() {
     final AppFacts f = factsFromDisk();
     await pump(tester, f);
 
-    expect(f.ia.families, hasLength(6), reason: 'pozitif kontrol');
-    expect(f.ia.built, hasLength(1));
-    expect(f.ia.notBuilt, hasLength(5));
+    // ⚠️ SAYI DEĞİL KURAL (L-239): "6 aile · 1 inşa · 5 bekleyen" bugünün
+    // hâli. Bir aile inşa edilince (ürünün AMACI bu) `built hasLength(1)`
+    // kırmızı yanardı — ilerleme, kusur değil. Ölçülen kural: her aile iki
+    // kovadan BİRİNDE ve toplam korunuyor.
+    expect(f.ia.built.length + f.ia.notBuilt.length, f.ia.families.length,
+        reason: 'bir aile iki kovada birden ya da hiçbirinde');
+    expect(f.ia.families, isNotEmpty, reason: 'pozitif çapa');
+    expect(f.ia.built, isNotEmpty,
+        reason: 'hiç inşa edilmiş aile yok — kütüphane "bu derlemede" '
+            'bölümü boş kalır');
+    expect(f.ia.notBuilt, isNotEmpty,
+        reason: 'hiç bekleyen aile yok — ya hepsi inşa edildi (bu satır '
+            'ZAFERLE silinir) ya da config kırık');
 
     for (final LibraryFamily fam in f.ia.families) {
       await scrollTo(tester, find.text(fam.title));
@@ -99,9 +109,11 @@ void main() {
 
     final LibraryFamily yoga =
         f.ia.families.singleWhere((LibraryFamily x) => x.id == 'yoga_styles');
-    // 5 çocuk config'te — satır bu sayıyı TÜRETİR, elle yazmaz.
-    expect(yoga.children, hasLength(5));
-    expect(yoga.inventoryLine, '5 named · none in this build.');
+    // Satır sayıyı TÜRETİR — testin de türetmesi gerekir, yoksa config'e
+    // altıncı bir stil eklendiğinde test ürün doğru büyürken kırmızı yanar.
+    expect(yoga.children, isNotEmpty, reason: 'pozitif çapa');
+    expect(yoga.inventoryLine,
+        '${yoga.children.length} named · none in this build.');
     await scrollTo(tester, find.text(yoga.title));
     // `findsWidgets`: `population_packs` de 5 çocuk taşıyor, yani AYNI dürüst
     // satırı üretiyor. Bu bir çakışma değil bir olgu — satır türetimli olduğu

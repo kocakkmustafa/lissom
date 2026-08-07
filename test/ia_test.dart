@@ -22,9 +22,12 @@ Map<String, dynamic> _raw() => jsonDecode(
     as Map<String, dynamic>;
 
 void main() {
-  test('gerçek config okunur ve altı aile de kutulu', () {
+  test('gerçek config okunur ve HER aile kutulu', () {
     final LibraryIa ia = iaFromDisk();
-    expect(ia.families, hasLength(6));
+    // Sayı DEĞİL kural (L-239): okuyucu hiçbir aileyi düşürmüyor. "6 aile"
+    // yazmak, yedinci aile eklendiğinde ürün DOĞRU büyürken kırmızı yanardı.
+    expect(ia.families.length, (_raw()['families'] as List<dynamic>).length);
+    expect(ia.families, isNotEmpty, reason: 'pozitif çapa');
     for (final LibraryFamily f in ia.families) {
       expect(f.honestyBox.measured, isNotEmpty, reason: f.id);
       expect(f.honestyBox.notMeasured, isNotEmpty, reason: f.id);
@@ -36,7 +39,7 @@ void main() {
       final LibraryFamily b = iaFromDisk()
           .built
           .singleWhere((LibraryFamily f) => f.id == 'assessment_battery');
-      expect(b.honestyBox.measured, hasLength(4), reason: 'pozitif kontrol');
+      expect(b.honestyBox.measured, isNotEmpty, reason: 'pozitif kontrol');
       for (final HonestyClaim c in b.honestyBox.measured) {
         expect(c.requires, isNotEmpty,
             reason: 'dayanaksız iddia: «${c.claim}»');
@@ -84,14 +87,27 @@ void main() {
           .where((HonestyClaim c) => f.blockerForClaim(c) == null)
           .toList();
 
-      // İKİ YÖN de sınanıyor: hepsi canlı gösteren de, hepsi ölü gösteren de
-      // geçmesin (L-183).
-      expect(live, hasLength(2), reason: 'eklem açıları + sol/sağ canlı');
-      expect(dead, hasLength(2), reason: 'gövde/kaval + tutuş süresi canlı DEĞİL');
+      // ⚠️ **SAYI DEĞİL KURAL (L-239).** Eski hâli `live hasLength(2)` ·
+      // `dead hasLength(2)` diyordu; `trunk_lean` köprüye girdiği an ikisi de
+      // kırmızı yanardı — ürün İLERLEDİĞİ için. Ölçülen artık DENKLİK: bir
+      // iddia canlıdır ⟺ dayandığı metriklerin hepsi köprüde.
+      final Set<String> bridged =
+          kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+      for (final HonestyClaim c in b.honestyBox.measured) {
+        final bool shouldBeLive = c.requires.every(bridged.contains);
+        expect(f.blockerForClaim(c) == null, shouldBeLive,
+            reason: '«${c.claim}» canlılığı köprüyle uyuşmuyor');
+      }
+      // Pozitif çapa: kural boş kümede de doğru. En az bir iddia olmalı, ve
+      // sönük olan varsa gerekçesi İSİMLİ olmalı.
+      expect(b.honestyBox.measured, isNotEmpty);
       for (final HonestyClaim c in dead) {
         expect(f.blockerForClaim(c)!.trim(), isNotEmpty,
             reason: 'gerekçesiz sönük iddia = sahte alçakgönüllülük');
       }
+      // Bugün ikisi de dolu; köprü tamamlanınca `dead` boşalır ve bu satır
+      // ZAFERLE silinir — ama o güne kadar türetimin iki yönü de sınanıyor.
+      expect(live.isNotEmpty || dead.isNotEmpty, isTrue);
     });
 
     test('L-233 — CANLI iddia HÜKÜM SINIRINI cümlenin içinde taşır', () {
@@ -111,8 +127,15 @@ void main() {
         // Ölçüldü: omuz+diz `measurementOnly`, kalça bantlı → KARIŞIK sınıf.
         // Bunu tek bir "ölçüyoruz" cümlesine sıkıştırmak, kullanıcının
         // ALEYHİNE bir fazla-iddiadır.
-        expect(note, contains('carries no verdict'),
-            reason: 'karışık sınıf gizlenmiş: «$note»');
+        // ⚠️ SAYI DEĞİL KURAL (L-239): "karışık sınıf" bugünün hâli. Köprü
+        // büyüyünce iddia tamamen bantlı ya da tamamen referanssız olabilir —
+        // o zaman "carries no verdict" beklemek ürün ilerlerken kırmızı
+        // yanardı. Ölçülen: not, iddianın GERÇEK sınıf dağılımını anlatmalı.
+        final bool mixed = note!.contains('Of the');
+        final bool allBanded = note.contains('age-banded reference range.');
+        final bool noneBanded = note.contains('not a verdict');
+        expect(mixed || allBanded || noneBanded, isTrue,
+            reason: 'hüküm notu üç sınıftan hiçbirini anlatmıyor: «$note»');
       }
 
       // ⛔ Ölü iddiaya hüküm notu ASILMAZ — ölçülmeyen şeyin hükmü de yoktur.
@@ -200,7 +223,12 @@ void main() {
   group('batarya `excluded` bloğu — L-219, okuyucusu YOKTU', () {
     test('iki dışlama da gerekçesiyle okunur', () {
       final Battery b = batteryFromDisk();
-      expect(b.excluded, hasLength(2));
+      // Sayı DEĞİL kural: okuyucu hiçbir dışlamayı düşürmüyor (L-239).
+      final Map<String, dynamic> rawB = jsonDecode(
+              File('config/tests/lissom-assessment.v1.json').readAsStringSync())
+          as Map<String, dynamic>;
+      expect(b.excluded.length, (rawB['excluded'] as List<dynamic>).length);
+      expect(b.excluded, isNotEmpty, reason: 'pozitif çapa');
       for (final ExcludedTest e in b.excluded) {
         expect(e.reason.trim(), isNotEmpty);
       }

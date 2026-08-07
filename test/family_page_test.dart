@@ -32,22 +32,49 @@ Future<void> _pumpBattery(WidgetTester tester, AppFacts f) async {
 }
 
 void main() {
-  testWidgets('türetim: 3 canlı · 9 engelli — sayılar TÜRETİLİR', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('KURAL: canlılık köprüden TÜRETİLİR — sayı DEĞİL, kural ölçülür',
+      (WidgetTester tester) async {
     pinNarrowSurface(tester);
     final AppFacts f = factsFromDisk();
 
-    // Pozitif kontrol: config GERÇEKTEN okundu mu? Boşsa aşağıdaki iki yön de
-    // trivially geçerdi (L-183 vacuous-geçiş sınıfı).
-    expect(f.liveness.length, 12,
-        reason: 'batarya 12 test taşımalı, okunan: ${f.liveness.length}');
-    expect(f.live.map((TestLiveness x) => x.testId).toList()..sort(),
-        <String>['active_straight_leg_raise', 'deep_squat', 'overhead_reach'],
-        reason: 'canlı küme köprüden TÜRETİLİR; değiştiyse köprü değişmiş '
-            'olmalı (kMetricBindings) — burayı elle güncellemek türetimi '
-            'yalana çevirir');
-    expect(f.blocked, hasLength(9));
+    // ⚠️ **BU TEST BİR KEZ YENİDEN YAZILDI (L-239, JabLab aktarımı):**
+    // *"Fazla geniş bir test, ürün DOĞRU genişlerken kırmızıya döner."*
+    //
+    // Eski hâli bugünün sayılarını çiviliyordu — `liveness.length == 12`,
+    // canlı küme `['active_straight_leg_raise','deep_squat',
+    // 'overhead_reach']`, `blocked hasLength(9)`. Köprü 8/19'dan büyüdüğü an
+    // üçü de kırmızı yanardı: **bir şey bozulduğu için değil, İLERLEDİĞİ
+    // için.** Ve düzeltme yolu "beklenen listeyi elle güncellemek" olurdu —
+    // yani türetimi elle yazmak, testin kapatmaya çalıştığı hatanın ta
+    // kendisi.
+    //
+    // Ölçülen şey artık bir DENKLİK: bir test canlıdır ⟺ birincil
+    // metriklerinin HEPSİ köprüde. Bu kural köprü büyüse de küçülse de aynı
+    // kalır.
+    final Set<String> bridged =
+        kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+    for (final TestLiveness x in f.liveness) {
+      final bool shouldBeLive = x.metrics.every(bridged.contains);
+      expect(x.isLive, shouldBeLive,
+          reason: '${x.testId}: canlılık köprüyle uyuşmuyor — '
+              'metrikler ${x.metrics}, köprüde ${x.metrics.where(bridged.contains)}');
+    }
+
+    // POZİTİF ÇAPA (iki yönlü): kural boş kümede de doğrudur. Hem canlı hem
+    // engelli EN AZ BİR üye olmalı — yoksa yukarıdaki döngü hiçbir şey
+    // kanıtlamaz (L-183).
+    expect(f.live, isNotEmpty, reason: 'hiç canlı test yok — türetim ölmüş');
+    expect(f.blocked, isNotEmpty,
+        reason: 'hiç engelli test yok — ya köprü tamamlandı (o zaman bu satır '
+            'ZAFERLE silinir) ya da türetim kırık');
+
+    // Okuyucu hiçbir testi DÜŞÜRMÜYOR — sayı çivilemeden bütünlük kontrolü.
+    final Map<String, dynamic> raw = jsonDecode(
+        File('config/tests/lissom-assessment.v1.json').readAsStringSync())
+        as Map<String, dynamic>;
+    expect(f.liveness.length, (raw['tests'] as List<dynamic>).length,
+        reason: 'config\'te N test var ama türetim M üretti — okuyucu kayıt '
+            'düşürüyor');
 
     for (final TestLiveness x in f.blocked) {
       expect(x.blocker, isNotNull);
@@ -56,21 +83,29 @@ void main() {
     }
   });
 
-  testWidgets('YÜZEY: canlı-3 canlı görünür VE engelli-9 isimli görünür', (
+  testWidgets('YÜZEY: canlı görünür VE engelli İSİMLİ görünür', (
     WidgetTester tester,
   ) async {
     pinNarrowSurface(tester);
-    await _pumpBattery(tester, factsFromDisk());
+    final AppFacts f = factsFromDisk();
+    await _pumpBattery(tester, f);
 
-    // YÖN 1 — canlı testler yüzeyde (insan-okur ad, TestSpec.name'den TAŞINIR).
-    expect(find.text('Overhead Reach'), findsOneWidget);
-    expect(find.text('Deep Squat'), findsOneWidget);
-    expect(find.text('Active Straight Leg Raise'), findsOneWidget);
-    expect(find.textContaining('MEASURED BY CAMERA IN THIS BUILD (3)'),
+    // YÖN 1 — canlı testlerin ADI yüzeyde. Ad listesi TÜRETİLİR: elle yazılmış
+    // üç ad, köprü büyüyünce eksik kalırdı ve test yine de yeşil yanardı.
+    for (final TestLiveness x in f.live) {
+      expect(find.text(x.name, skipOffstage: false), findsOneWidget,
+          reason: 'canlı test yüzeyde yok: ${x.name}');
+    }
+    // Başlıktaki SAYI da türetilir — "3" yazmak, ürün ilerleyince yalan olurdu.
+    expect(
+        find.textContaining(
+            'MEASURED BY CAMERA IN THIS BUILD (${f.live.length})'),
         findsOneWidget);
 
     // YÖN 2 — engelli testler de yüzeyde, GEREKÇELİ.
-    expect(find.textContaining('NOT MEASURED BY CAMERA (9)'), findsOneWidget);
+    expect(
+        find.textContaining('NOT MEASURED BY CAMERA (${f.blocked.length})'),
+        findsOneWidget);
     expect(
         find.textContaining('measurement engine', skipOffstage: false),
         findsWidgets,
@@ -227,7 +262,16 @@ void main() {
     await tester.pumpAndSettle();
 
     // Ürün sınırları config'ten (5 kalem, elle yazılmış Dart ikizi SİLİNDİ).
-    expect(f.ia.whyNot, hasLength(5));
+    // Sayı DEĞİL kural: okuyucu hiçbir kalemi düşürmüyor (L-239).
+    final Map<String, dynamic> rawIa = jsonDecode(
+        File('config/ia/library.v1.json').readAsStringSync())
+        as Map<String, dynamic>;
+    expect(
+        f.ia.whyNot.length,
+        ((rawIa['whyNotPage'] as Map<String, dynamic>)['items']
+                as List<dynamic>)
+            .length);
+    expect(f.ia.whyNot, isNotEmpty, reason: 'pozitif çapa');
     expect(find.byKey(WhatLissomDoesntDoScreen.boundariesKey), findsOneWidget);
 
     // Bağlanmamış dışlama KENDİ satırını alır — `cervical_rotation` daha önce
