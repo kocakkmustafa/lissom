@@ -97,3 +97,50 @@ Yani bu değişiklik Lissom'un tek başına alacağı bir karar değil:
 
 **Bu üçü cevaplanana kadar göç başlatılamaz — ama artık sebep "yapamıyorum"
 değil, İSİMLİ bir kapsam kararı.**
+
+---
+
+## EK (11:4x) — «Bu yapısal eksik BAŞKA neyi kırıyor?» (JabLab dersi)
+
+Koordinatörün sorusu: *aynı eksik yapı, iki farklı kusur sınıfı üretir.*
+Ölçtüm — ve cevap **rahatlatıcı yönde**, ama göç kapsamını **büyütüyor**.
+
+### Ölçüm
+
+`motion_core`'un açı çıkarıcısı bir anahtar taşıyor:
+
+```dart
+out[i] = planar ? jointAngle2D(a, b, c) : jointAngle(a, b, c);
+// JointAngleExtractor({... this.planar = true});
+```
+
+Ve Lissom'un `CoreMetricReader`'ı **bu varsayılanı ezmiyor** →
+**`planar = true`**.
+
+### Sonuç ①: sevk edilen ölçümler TEMİZ
+
+Lissom açıları **tamamen 2D**; `z`'ye **hiç dokunmuyorlar**. Yani native'in
+sözde-derinlik yollaması, **bugün sevk edilen 8 köprülü metriği
+bozmuyor** — gizli bir çarpıtma YOK. Ölçümler kendi içinde tutarlı.
+
+### Sonuç ②: göç kapsamı ÜÇÜNCÜ boyut kazandı
+
+Göç yalnız *"native'i `worldLandmarks`e çevir"* değil; `planar` da `false`
+olmalı, yoksa dünya koordinatları gelir ve **kullanılmaz**. Ve `planar`
+**paylaşımlı bir varsayılan**: onu çevirmek **beş hattın da** açı
+semantiğini değiştirir.
+
+**Güncel kapsam — 3 değil, 6:**
+
+1. `android/…/MotionCameraPlugin.kt` → `worldLandmarks()`
+2. `ios/Classes/MotionCameraPlugin.swift` → aynısı
+3. `JointAngleExtractor.planar` → `false` (**paylaşımlı varsayılan**)
+4. `geometry/joint_angles.dart` → 3B açı yolu
+5. `geometry/normalization.dart` → dünya-uzayı normalizasyonu
+6. `lissom_engine/metric_bridge.dart` → `kBridgeSpace` + 4 metrik
+
+### Ve L-031'in sayısı açıklandı
+
+Dart **2D görüntü-düzlemi** açısı ölçüyor, normatif Python **3D dünya** açısı.
+Medyan **11,29°** sapma tam olarak bu farkın kendisi — bir hata değil, **iki
+farklı ölçünün** farkı.
