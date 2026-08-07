@@ -16,7 +16,7 @@ Uygulamanın kendi metni bunu zaten söylüyor:
 | # | Engel | Sınıf | Büyüklük |
 |---|---|---|---|
 | 1 | **Kamera kabuğa hiç bağlı değil.** `lib/` içinde `motion_camera` · `PoseSource` · `LiveEvaluator` · `AssessmentEngine` çağrısı **SIFIR** — bulunan tüm "camera" geçişleri kameradan *bahseden metin*. Kullanıcı **hiçbir ölçüm yapamaz**, tek bir seans bile. | `kod` | **gün** (kamera ekranı + izin akışı + sonuç yazımı + geçmiş) |
-| 2 | **`NSCameraUsageDescription` yok** (`ios/Runner/Info.plist` → 0 eşleşme). Kamera bağlansa bile iOS uygulamayı **anında sonlandırır**; store ayrıca reddeder. | `kod` | **dakika** |
+| 2 | **`NSCameraUsageDescription` yok** — ama **bağımsız engel DEĞİL, ①'e BAĞLI.** Bugün hiçbir capture yolu olmadığı için etkisi **gizil**; ①'i çözen commit onu **aktif bir çökme yoluna** çevirir. ⚠️ Anahtarı tek başına eklemeyi denedim ve **kendi kapım reddetti** (`os_layer_test`, L-250): *"capture yolu yokken kamera izni beyan edilmiş — kullanılmayan bir yetenek beyanı"*. Kapı haklıydı: iOS izin diyaloğu uygulamanın **dışına çıkan ilk cümlesi** ve olmayan bir yeteneği anlatırdı (L-262 sınıfı). Kapı eşlemeyi **iki yönde** tutuyor → kamerayı bağlayan commit anahtarı eklemeden **yeşil geçemez.** | `kod` (①'le AYNI commit) | **dakika** |
 | 3 | **`PrivacyInfo.xcprivacy` yok.** 2024'ten beri **zorunlu**; eksikse yükleme/inceleme reddedilir. | `kod` | **saat** |
 | 4 | **App ikonu = Flutter varsayılanı** (mavi "F"; `Icon-App-1024x1024@1x.png` doğrudan görüldü). Guideline reddi. | `içerik` (marka görseli) | **kurucu** |
 | 5 | **Onboarding yok.** `lib/app/` altında onboarding/welcome/intro dosyası **yok**. İlk açılışta kullanıcıya ne yapacağı söylenmiyor. Gece direktifinin *ortak yayın blokajı*. | `kod` + `içerik` | **gün** |
@@ -58,5 +58,25 @@ Uygulamanın kendi metni bunu zaten söylüyor:
 > bağlanmadı. Bugün gönderilse, kamerasız bir kamera uygulaması gönderilmiş
 > olur.**
 
-**Kritik yol:** ①+② (kamera bağlama + izin metni) → ⑤ onboarding → ③④ store
-teknik/görsel → ⑥ metadata.
+**Kritik yol:** ①+② (kamera bağlama + izin metni — **aynı commit, kapı zorunlu
+kılıyor**) → ⑤ onboarding → ③④ store teknik/görsel → ⑥ metadata.
+
+---
+
+## EK ÖLÇÜM (11:5x) — Choreia tuzağı ve dokunulabilirlik
+
+**② `pubspec` varlık beyanı:** `rootBundle` bugün **iki** yol okuyor
+(`config/tests/…`, `config/ia/…`) ve **ikisi de beyanlı** → **çökme yok**.
+Ama `config/copy/` · `config/content/` · `config/harvest/` **beyansız** ve
+diskte duruyor. Testler `File()` ile **diskten**, cihaz `rootBundle` ile
+**bundle'dan** okuyor — biri `rootBundle`'a girdiği an **cihazda çöker,
+testler yeşil kalarak.** → kapı kuruldu (`ship_blocker_test`), sabotajla
+kanıtlandı.
+
+**İki kaynak tek olgu:** `limitsCopy` config'ten **elle taşınmış** bir kopya;
+bugün **birebir** ama kapısı yoktu → kapılandı.
+
+⚠️ **Kendi ölçüm aracım bu turda üç kez yanlış rapor verdi** — `assets:`
+parser'ı *"hiçbiri beyanlı değil"* dedi (yanlış), iç içe JSON anahtarını
+bulamayıp **iki boş dizeyi eşitledi** (vakum-doğru "✅"), ve tırnak karışımı
+yüzünden Dart sabitini okuyamadı. Üçü de **düzeltilip yeniden ölçüldü**.
