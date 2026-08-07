@@ -108,6 +108,25 @@ enum BridgeBlocker {
   /// bunu tüketmiyor; tüketirse aynı beyan-uygulama ayrışmasını devralır.
   corePlaneSeparationMissing,
 
+  /// Çekirdekte bir uzvu **DİKEYE** göre ölçen hiçbir tür yok.
+  ///
+  /// ⚠️ **Bu sınıf L-268'de AYRILDI ve ayrılma bir SINIF KUSURUYDU** (J-163).
+  /// `tibia_inclination_left/right` [corePlaneSeparationMissing] kutusundaydı,
+  /// ama o kutunun gerekçesi **gövdeye özgü**: *"çekirdekte tek ve işaretli
+  /// bir `trunk_tilt` var, config iki ayrı düzlem metriği istiyor."*
+  /// **Kaval kemiği açısı `trunk_tilt`ten türemiyor** — o gerekçe ona hiç
+  /// uymuyordu.
+  ///
+  /// Gerçek engel: çekirdeğin `AngleKind`'ı üç tür taşıyor — `flexion`
+  /// (eklem içi açı), `orientation` (**gövde eksenine** göre yön), `trunkTilt`
+  /// (yalnız gövde). Bir uzvun **yerçekimi dikeyine** göre açısı **hiçbirinde
+  /// yok.**
+  ///
+  /// > ***Sınıf kusuru yanlış İŞ verir:*** *"düzlem ayrımı ekle"* ile
+  /// > *"uzuv-dikey ölçüsü ekle"* farklı işlerdir, ve ilki kaval kemiğini
+  /// > hiç açmazdı.
+  coreLacksVerticalReference,
+
   /// Büyüklük GEOMETRİK DEĞİL — config'in `derivedMeasures` bloğu onu
   /// `source: "phase"` diye beyan ediyor (*"Produced by the phase machine,
   /// not from landmark geometry"*).
@@ -178,11 +197,11 @@ const Map<String, UnbridgedMetric> kUnbridgedMetrics =
       subject: 'Sideways trunk tilt',
       measureKind: 'angle_vertical'),
   'tibia_inclination_right': UnbridgedMetric(
-      blocker: BridgeBlocker.corePlaneSeparationMissing,
+      blocker: BridgeBlocker.coreLacksVerticalReference,
       subject: 'Shin angle',
       measureKind: 'angle_vertical'),
   'tibia_inclination_left': UnbridgedMetric(
-      blocker: BridgeBlocker.corePlaneSeparationMissing,
+      blocker: BridgeBlocker.coreLacksVerticalReference,
       subject: 'Shin angle',
       measureKind: 'angle_vertical'),
   'heel_rise_right': UnbridgedMetric(
@@ -426,6 +445,10 @@ String _reasonFor(BridgeBlocker b) => switch (b) {
       BridgeBlocker.corePlaneSeparationMissing =>
         'the measurement engine keeps a single tilt figure and cannot tell '
             'forward lean apart from sideways lean',
+      BridgeBlocker.coreLacksVerticalReference =>
+        'the measurement engine reads a limb against the line of your torso, '
+            'not against upright, so it cannot say how far this one is from '
+            'vertical',
       // ⚠️ Bu cümle "çalışmıyor" demez, "köprü bunu yanıtlamaz" der. Faz
       // makinesinin bu süreyi gerçekten üretip üretemediği ÖLÇÜLMEDİ ve
       // burada iddia EDİLMİYOR.

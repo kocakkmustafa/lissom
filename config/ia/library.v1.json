@@ -101,6 +101,13 @@
             ]
           },
           {
+            "claim": "How far your shin leans from upright — the measurement engine reads a limb against the line of your torso, not against upright, so a shin angle measured this way would change when you lean",
+            "falsifiedIfBridged": [
+              "tibia_inclination_right",
+              "tibia_inclination_left"
+            ]
+          },
+          {
             "claim": "Distances and heights — how far your fingertips reach, how high a heel or knee lifts, how far the hips drop in a plank. The measurement engine reads angles between body points and does not read distances at all.",
             "falsifiedIfBridged": [
               "reach_depth",
