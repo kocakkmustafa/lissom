@@ -166,7 +166,7 @@ class _PendingFamilyRow extends StatelessWidget {
                 ),
               ),
               const Icon(Icons.chevron_right,
-                  size: 18, color: LissomColors.labelMuted),
+                  size: 18, color: LissomColors.bodySecondary),
             ],
           ),
         ),
@@ -261,7 +261,7 @@ class FamilyPage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: _TestRow(
                 icon: Icons.block_outlined,
-                iconColor: LissomColors.labelMuted,
+                iconColor: LissomColors.bodySecondary,
                 title: x.name,
                 subtitle: x.blocker!,
               ),
@@ -305,7 +305,7 @@ class FamilyPage extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: Icon(Icons.circle_outlined,
-                        size: 9, color: LissomColors.labelMuted),
+                        size: 9, color: LissomColors.bodySecondary),
                   ),
                   const SizedBox(width: 11),
                   Expanded(

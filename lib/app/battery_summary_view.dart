@@ -44,7 +44,6 @@ class BatterySummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData t = Theme.of(context);
     return DecoratedBox(
       decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
       child: ListView(
@@ -54,7 +53,7 @@ class BatterySummaryView extends StatelessWidget {
             key: headerKey,
             padding: const EdgeInsets.only(bottom: 22),
             child: LissomEyebrow(SummaryStrings.header,
-                color: t.colorScheme.primary),
+                color: LissomColors.roseDeepHover),
           ),
           if (summary.scored.isNotEmpty)
             _section(
@@ -180,7 +179,7 @@ class BatterySummaryView extends StatelessWidget {
           const SizedBox(height: 4),
           Text(SummaryStrings.noJudgement,
               style: t.textTheme.bodyMedium
-                  ?.copyWith(color: LissomColors.metaMono)),
+                  ?.copyWith(color: LissomColors.bodySecondary)),
         ],
       ),
       gradient: coached
@@ -210,7 +209,7 @@ class BatterySummaryView extends StatelessWidget {
           const SizedBox(height: 4),
           Text(SummaryStrings.noJudgement,
               style: t.textTheme.bodyMedium
-                  ?.copyWith(color: LissomColors.metaMono)),
+                  ?.copyWith(color: LissomColors.bodySecondary)),
           if (r.userNote != null) ...<Widget>[
             const SizedBox(height: 10),
             Text(r.userNote!, style: t.textTheme.bodyMedium),
@@ -219,7 +218,7 @@ class BatterySummaryView extends StatelessWidget {
             const SizedBox(height: 6),
             Text(r.promotionNote!,
                 style: t.textTheme.bodySmall
-                    ?.copyWith(color: t.colorScheme.primary)),
+                    ?.copyWith(color: LissomColors.roseDeepHover)),
           ],
         ],
       ),
@@ -243,7 +242,7 @@ class BatterySummaryView extends StatelessWidget {
         children: <Widget>[
           Text(r.testName,
               style: t.textTheme.labelLarge
-                  ?.copyWith(color: LissomColors.labelMuted)),
+                  ?.copyWith(color: LissomColors.bodySecondary)),
           const SizedBox(height: 8),
           Text(SummaryStrings.reason(r.reasonCode ?? 'unknown'),
               style: t.textTheme.headlineSmall),

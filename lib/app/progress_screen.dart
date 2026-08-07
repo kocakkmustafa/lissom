@@ -193,7 +193,7 @@ class _LedgerRow extends StatelessWidget {
               '${record.unmeasuredReason == null ? '' : ' · '
                   '${_reasonText(record.unmeasuredReason!)}'}',
               style:
-                  t.textTheme.bodySmall?.copyWith(color: LissomColors.metaMono),
+                  t.textTheme.bodySmall?.copyWith(color: LissomColors.bodySecondary),
             ),
           ],
         ],

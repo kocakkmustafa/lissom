@@ -164,7 +164,7 @@ class _BoundaryCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(measured!,
                 style: t.textTheme.bodySmall
-                    ?.copyWith(color: LissomColors.metaMono)),
+                    ?.copyWith(color: LissomColors.bodySecondary)),
           ],
         ],
       ),

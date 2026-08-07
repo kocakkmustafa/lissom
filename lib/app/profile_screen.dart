@@ -149,7 +149,7 @@ class _EntryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            const Icon(Icons.chevron_right, color: LissomColors.labelMuted),
+            const Icon(Icons.chevron_right, color: LissomColors.bodySecondary),
           ],
         ),
       ),

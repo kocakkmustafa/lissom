@@ -257,7 +257,7 @@ class HomeScreen extends StatelessWidget {
   static Widget _floorNote(ThemeData t, int unreadable) => Text(
         '$unreadable stored record${unreadable == 1 ? '' : 's'} could not be '
         'read, so anything counted here is a floor, not a total.',
-        style: t.textTheme.bodySmall?.copyWith(color: t.colorScheme.primary),
+        style: t.textTheme.bodySmall?.copyWith(color: LissomColors.roseDeepHover),
       );
 
   /// Kaydın SINIFI kullanıcı diliyle. `lessonClass` yazım anında damgalanır —

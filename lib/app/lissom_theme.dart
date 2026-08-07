@@ -14,16 +14,41 @@ abstract final class LissomColors {
   static const Color mist = Color(0xFFBACDDE);
   static const Color cream = Color(0xFFF5E6D0);
   static const Color roseDeep = Color(0xFFB0748F);
-  static const Color roseDeepHover = Color(0xFF8E5A73);
+  /// **Vurgu METNİ tonu.** #8E5A73'ten #86556D'ye koyulaştırıldı (L-234):
+  /// eskisi ekranın en koyu gradyan durağında **4,18:1** veriyordu, eşik 4.5.
+  /// Ton (331°) ve doygunluk (0,224) AYNEN korundu — yalnız açıklık düştü,
+  /// yani tasarımın rengi değil okunabilirliği değişti.
+  ///
+  /// ⚠️ Eşiğe TAM oturan değer (#87566E, 4,498) BİLEREK seçilmedi: kayan
+  /// noktada 4,498 < 4,5 ve kapı kıl payı kırmızı yanıyordu. Sınırın ÜSTÜNDE
+  /// bir marj (4,565) alınıyor — eşiğe teğet geçen bir renk, ilk yuvarlama
+  /// farkında geri döner.
+  static const Color roseDeepHover = Color(0xFF86556D);
   static const Color mistDeep = Color(0xFF8FAEC8);
   static const Color canvas = Color(0xFFF3EDE9);
   static const Color card = Color(0xFFFFFCFA);
   static const Color ink = Color(0xFF38313A);
 
   static const Color bodySecondary = Color(0xFF6B6069);
+
+  /// ⚠️ **METİN İÇİN KULLANILMAZ (L-234).** Ölçüldü: kart üstünde **2,94:1**,
+  /// gradyan sonunda **2,31:1** — WCAG normal-metin eşiği 4.5. Bu bir üslup
+  /// notu değil: 11px bir bölüm başlığı 2,94:1'de *okunmuyor*, yalnız
+  /// *duruyor*. Aile hükmü: **"görünmeyen bir dürüst hâl, susmakla aynı
+  /// şeydir."**
+  ///
+  /// Süs amaçlı, anlam TAŞIMAYAN ikon/çizgi için kalabilir; anlam taşıyan her
+  /// şey [bodySecondary] kullanır. `contrast_test.dart` bunu zorluyor.
   static const Color labelMuted = Color(0xFF9C929B);
+
   static const Color note = Color(0xFF8B7F88);
+
+  /// ⚠️ **METİN İÇİN KULLANILMAZ (L-234).** Kart üstünde 2,57:1, gradyan
+  /// üstünde **2,01:1** — bu depodaki en okunmaz renkti ve tam olarak
+  /// ölçüm-sınırı beyanının (açık ihlal ⑱'in kapanışı) rengiydi. Yani
+  /// uygulamanın en önemli dürüstlük cümlesi, en okunmaz cümlesiydi.
   static const Color metaMono = Color(0xFFA79DA5);
+
   static const Color hairline = Color(0xFFF2EBEC);
 
   /// Ekran zemini — her mockup ekranında tekrarlanan sıcak diyagonal gradyan.
@@ -65,15 +90,12 @@ abstract final class LissomMotion {
   static const Duration breathe = Duration(seconds: 14);
 }
 
-/// IBM Plex Mono — `TextTheme`'de karşılığı olmayan meta/birim/referans metni.
-abstract final class LissomMono {
-  static TextStyle style({double fontSize = 12, Color? color}) =>
-      GoogleFonts.ibmPlexMono(
-        fontSize: fontSize,
-        color: color ?? LissomColors.metaMono,
-        height: 1,
-      );
-}
+// NOT: `LissomMono` (IBM Plex Mono token'ı) KALDIRILDI — iki ayrı kusuru
+// birden taşıyordu (L-224 + L-234): ① hiçbir çağıranı yoktu, ② varsayılan
+// rengi `metaMono`ydu, yani kullanılsaydı 2,57:1 ile doğardı. Ayrıca
+// kullanılması `google_fonts`un ÜÇÜNCÜ bir yazı tipini çalışma anında
+// indirmesine yol açardı (L-222). Tasarımın mono token'ı gerekirse geri
+// gelir — ama okunabilir bir renkle ve gömülü bir yazı tipiyle.
 
 ThemeData buildLissomTheme() {
   final TextTheme sans = GoogleFonts.nunitoSansTextTheme();
@@ -114,10 +136,10 @@ ThemeData buildLissomTheme() {
     bodyMedium: sans.bodyMedium!.copyWith(
         fontSize: 14, height: 1.6, color: LissomColors.bodySecondary),
     bodySmall: sans.bodySmall!.copyWith(
-        fontSize: 12.5, height: 1.5, color: LissomColors.labelMuted),
-    labelLarge: label(11, LissomColors.labelMuted),
+        fontSize: 12.5, height: 1.5, color: LissomColors.bodySecondary),
+    labelLarge: label(11, LissomColors.bodySecondary),
     labelMedium: label(11, LissomColors.roseDeepHover),
-    labelSmall: label(10.5, LissomColors.labelMuted),
+    labelSmall: label(10.5, LissomColors.bodySecondary),
   );
 
   final ColorScheme scheme = ColorScheme.fromSeed(
@@ -237,6 +259,6 @@ class LissomEyebrow extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .labelLarge
-            ?.copyWith(color: color ?? LissomColors.labelMuted),
+            ?.copyWith(color: color ?? LissomColors.bodySecondary),
       );
 }

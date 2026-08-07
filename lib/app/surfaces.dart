@@ -69,14 +69,14 @@ class NamedGapCard extends StatelessWidget {
         children: <Widget>[
           Text(title,
               style: t.textTheme.labelLarge
-                  ?.copyWith(color: LissomColors.labelMuted)),
+                  ?.copyWith(color: LissomColors.bodySecondary)),
           const SizedBox(height: 8),
           Text(reason, style: t.textTheme.bodyMedium),
           if (detail != null) ...<Widget>[
             const SizedBox(height: 6),
             Text(detail!,
                 style: t.textTheme.bodySmall
-                    ?.copyWith(color: LissomColors.metaMono)),
+                    ?.copyWith(color: LissomColors.bodySecondary)),
           ],
         ],
       ),
@@ -151,7 +151,7 @@ class HonestyBoxCard extends StatelessWidget {
           LissomEyebrow('What it does not measure'),
           const SizedBox(height: 10),
           _list(t, notMeasuredKey, box.notMeasured, Icons.remove_circle_outline,
-              LissomColors.labelMuted),
+              LissomColors.bodySecondary),
         ],
       ),
     );
@@ -173,7 +173,7 @@ class HonestyBoxCard extends StatelessWidget {
             child: Icon(
               live ? Icons.videocam_outlined : Icons.videocam_off_outlined,
               size: 15,
-              color: live ? t.colorScheme.primary : LissomColors.labelMuted,
+              color: live ? t.colorScheme.primary : LissomColors.bodySecondary,
             ),
           ),
           const SizedBox(width: 10),
@@ -185,12 +185,12 @@ class HonestyBoxCard extends StatelessWidget {
                     style: live
                         ? t.textTheme.bodyMedium
                         : t.textTheme.bodyMedium
-                            ?.copyWith(color: LissomColors.labelMuted)),
+                            ?.copyWith(color: LissomColors.bodySecondary)),
                 if (live && verdict != null) ...<Widget>[
                   const SizedBox(height: 3),
                   Text(verdict,
                       style: t.textTheme.bodySmall
-                          ?.copyWith(color: LissomColors.metaMono)),
+                          ?.copyWith(color: LissomColors.bodySecondary)),
                 ],
                 if (!live) ...<Widget>[
                   const SizedBox(height: 3),
@@ -201,7 +201,7 @@ class HonestyBoxCard extends StatelessWidget {
                   // Simülatör ekranı yakaladı, test değil.
                   Text('Not in this build · $blocker',
                       style: t.textTheme.bodySmall
-                          ?.copyWith(color: LissomColors.metaMono)),
+                          ?.copyWith(color: LissomColors.bodySecondary)),
                 ],
               ],
             ),
@@ -266,7 +266,12 @@ class DeclarationBanner extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          LissomEyebrow(eyebrow, color: LissomColors.roseDeepHover),
+          // ⚠️ Bu kartın zemini cream→peach gradyanı ve PEACH ucu koyu:
+          // orada `roseDeepHover` 3,67:1 veriyor. Eyebrow'un fiilen cream
+          // ucunda durduğunu varsayıp geçmek, KONUMA dayalı bir iddia olurdu
+          // — kart yeniden düzenlenince sessizce yanlışlaşır. `ink` bu kartın
+          // her noktasında geçiyor (7,89:1).
+          LissomEyebrow(eyebrow, color: LissomColors.ink),
           const SizedBox(height: 8),
           Text(body,
               style: t.textTheme.bodyMedium?.copyWith(color: LissomColors.ink)),
@@ -320,7 +325,7 @@ class MeasurementLimitsFootnote extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     final TextStyle? small =
-        t.textTheme.bodySmall?.copyWith(color: LissomColors.metaMono);
+        t.textTheme.bodySmall?.copyWith(color: LissomColors.bodySecondary);
     return Padding(
       key: key_,
       padding: const EdgeInsets.only(top: 18),
