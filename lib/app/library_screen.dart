@@ -206,7 +206,8 @@ class FamilyPage extends StatelessWidget {
             Padding(
               key: honestyKey,
               padding: const EdgeInsets.only(top: 8),
-              child: HonestyBoxCard(family.honestyBox),
+              child: HonestyBoxCard(family.honestyBox,
+                  liveness: facts.blockerForClaim),
             ),
             const MeasurementLimitsFootnote(),
           ],

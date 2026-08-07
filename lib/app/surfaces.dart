@@ -91,13 +91,24 @@ class NamedGapCard extends StatelessWidget {
 /// biçimde dizilirse kutu bir özellik listesine benzer ve ikinci yarısı
 /// okunmaz. Ayrımı taşıyan şey ikon ve zemin — renk kodlaması (yeşil/kırmızı)
 /// KULLANILMIYOR: "ölçülmüyor" bir başarısızlık değil, bir sınırdır.
+/// Bir iddianın dayandığı metrikler bugün gerçekten ölçülebiliyor mu?
+///
+/// Dönüş `null` = canlı. Dolu = İSİMLİ gerekçe — ve gerekçe **köprünün kendi
+/// metnidir**, burada ikinci kez yazılmaz (iki metin ayrışır, biri bayatlar).
+typedef ClaimLiveness = String? Function(HonestyClaim claim);
+
 class HonestyBoxCard extends StatelessWidget {
-  const HonestyBoxCard(this.box, {super.key});
+  const HonestyBoxCard(this.box, {required this.liveness, super.key});
 
   static const Key measuredKey = Key('honesty.measured');
   static const Key notMeasuredKey = Key('honesty.notMeasured');
 
   final HonestyBox box;
+
+  /// **Kutunun kendisini denetleyen fonksiyon.** L-230'un yüzey tarafı:
+  /// iddia canlı değilse SİLİNMEZ (kapsamı saklamak olurdu) — sönük gösterilir
+  /// ve nedeni yanına yazılır, tıpkı engelli testler gibi.
+  final ClaimLiveness liveness;
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +121,14 @@ class HonestyBoxCard extends StatelessWidget {
           LissomEyebrow('What this measures',
               color: LissomColors.roseDeepHover),
           const SizedBox(height: 10),
-          _list(t, measuredKey, box.measured, Icons.videocam_outlined,
-              t.colorScheme.primary),
+          Column(
+            key: measuredKey,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (final HonestyClaim c in box.measured)
+                _claimRow(t, c, liveness(c)),
+            ],
+          ),
           const SizedBox(height: 18),
           const Divider(),
           const SizedBox(height: 14),
@@ -119,6 +136,48 @@ class HonestyBoxCard extends StatelessWidget {
           const SizedBox(height: 10),
           _list(t, notMeasuredKey, box.notMeasured, Icons.remove_circle_outline,
               LissomColors.labelMuted),
+        ],
+      ),
+    );
+  }
+
+  /// Canlı iddia: kamera ikonu, normal metin. Canlı OLMAYAN: sönük ikon,
+  /// sönük metin **ve altında gerekçe.** Görsel ayrım kasıtlı — ikisi aynı
+  /// görünseydi kutu yine "hepsini ölçüyoruz" der gibi okunurdu.
+  static Widget _claimRow(ThemeData t, HonestyClaim c, String? blocker) {
+    final bool live = blocker == null;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Icon(
+              live ? Icons.videocam_outlined : Icons.videocam_off_outlined,
+              size: 15,
+              color: live ? t.colorScheme.primary : LissomColors.labelMuted,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(c.claim,
+                    style: live
+                        ? t.textTheme.bodyMedium
+                        : t.textTheme.bodyMedium
+                            ?.copyWith(color: LissomColors.labelMuted)),
+                if (!live) ...<Widget>[
+                  const SizedBox(height: 3),
+                  Text('Not in this build — $blocker',
+                      style: t.textTheme.bodySmall
+                          ?.copyWith(color: LissomColors.metaMono)),
+                ],
+              ],
+            ),
+          ),
         ],
       ),
     );

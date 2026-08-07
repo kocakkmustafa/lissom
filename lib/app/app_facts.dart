@@ -54,6 +54,32 @@ final class AppFacts {
     return side == null ? name : '$name · $side';
   }
 
+  /// **Dürüstlük kutusunun denetçisi (L-230).** Bir iddianın dayandığı
+  /// metriklerin HEPSİ köprülü mü?
+  ///
+  /// Gerekçe köprünün KENDİ metninden gelir ([blockerTextFor]) — burada
+  /// yeniden yazılmaz. İki metin olsaydı biri bayatlardı ve bayatlayan taraf
+  /// büyük ihtimalle yüzeydeki olurdu.
+  ///
+  /// Dayanaksız iddia (`requires` boş) **canlı sayılmaz ve canlı-değil de
+  /// sayılmaz** — hiç denetlenemez, o yüzden `null` döner: yalnız inşa
+  /// EDİLMEMİŞ ailede meşru, ve orada aile durumu zaten hiçbir şeyin canlı
+  /// olmadığını söylüyor.
+  String? blockerForClaim(HonestyClaim claim) {
+    if (!claim.isCheckable) return null;
+    final Set<String> bridged =
+        kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+    final List<String> missing = claim.requires
+        .where((String m) => !bridged.contains(m))
+        .toList(growable: false);
+    if (missing.isEmpty) return null;
+    final Set<String> phase = battery.derivedMeasures.entries
+        .where((MapEntry<String, DerivedMeasure> e) => e.value.isPhaseDerived)
+        .map((MapEntry<String, DerivedMeasure> e) => e.key)
+        .toSet();
+    return blockerTextFor(missing, phaseDerived: phase);
+  }
+
   static Future<AppFacts> load() async {
     final String batteryRaw =
         await rootBundle.loadString('config/tests/lissom-assessment.v1.json');

@@ -13,6 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/ia.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
+import 'package:lissom/app/app_facts.dart';
+
 import 'support/facts_from_disk.dart';
 
 Map<String, dynamic> _raw() => jsonDecode(
@@ -27,6 +29,84 @@ void main() {
       expect(f.honestyBox.measured, isNotEmpty, reason: f.id);
       expect(f.honestyBox.notMeasured, isNotEmpty, reason: f.id);
     }
+  });
+
+  group('L-230 — dürüstlük kutusu KENDİNİ doğrular', () {
+    test('inşa edilmiş ailenin HER iddiası dayanak taşır', () {
+      final LibraryFamily b = iaFromDisk()
+          .built
+          .singleWhere((LibraryFamily f) => f.id == 'assessment_battery');
+      expect(b.honestyBox.measured, hasLength(4), reason: 'pozitif kontrol');
+      for (final HonestyClaim c in b.honestyBox.measured) {
+        expect(c.requires, isNotEmpty,
+            reason: 'dayanaksız iddia: «${c.claim}»');
+      }
+    });
+
+    test('DAYANAKSIZ iddia inşa edilmiş ailede REDDEDİLİR', () {
+      final Map<String, dynamic> raw = _raw();
+      final Map<String, dynamic> fam =
+          (raw['families'] as List<dynamic>)[0] as Map<String, dynamic>;
+      // Düz metne geri dönmek = kanıtı düşürmek.
+      (fam['honestyBox'] as Map<String, dynamic>)['measured'] =
+          <String>['We measure everything'];
+      expect(() => LibraryIa.parseJson(jsonEncode(raw)),
+          throwsA(isA<IaError>()));
+    });
+
+    test('her `requires` jetonu GERÇEK bir metrik/büyüklük olmalı', () {
+      // Yazım hatası bir jetonu sessizce "canlı değil" yapardı ve iddia
+      // gerekçesiz sönerdi — sahte bir alçakgönüllülük.
+      final Battery b = batteryFromDisk();
+      final Set<String> known = <String>{
+        ...kMetricBindings.map((MetricBinding x) => x.lissomMetric),
+        ...kUnbridgedMetrics.keys,
+        ...b.derivedMeasures.keys,
+      };
+      for (final LibraryFamily f in iaFromDisk().families) {
+        for (final HonestyClaim c in f.honestyBox.measured) {
+          for (final String tok in c.requires) {
+            expect(known, contains(tok),
+                reason: '${f.id}: «$tok» hiçbir metrik/büyüklük değil');
+          }
+        }
+      }
+    });
+
+    test('İDDİA ↔ YETENEK: canlı olmayan iddialar İSİMLİ (bugün 2/4)', () {
+      final AppFacts f = factsFromDisk();
+      final LibraryFamily b = f.ia.built
+          .singleWhere((LibraryFamily x) => x.id == 'assessment_battery');
+      final List<HonestyClaim> dead = b.honestyBox.measured
+          .where((HonestyClaim c) => f.blockerForClaim(c) != null)
+          .toList();
+      final List<HonestyClaim> live = b.honestyBox.measured
+          .where((HonestyClaim c) => f.blockerForClaim(c) == null)
+          .toList();
+
+      // İKİ YÖN de sınanıyor: hepsi canlı gösteren de, hepsi ölü gösteren de
+      // geçmesin (L-183).
+      expect(live, hasLength(2), reason: 'eklem açıları + sol/sağ canlı');
+      expect(dead, hasLength(2), reason: 'gövde/kaval + tutuş süresi canlı DEĞİL');
+      for (final HonestyClaim c in dead) {
+        expect(f.blockerForClaim(c)!.trim(), isNotEmpty,
+            reason: 'gerekçesiz sönük iddia = sahte alçakgönüllülük');
+      }
+    });
+
+    test('"frontal plane" iddiası ARTIK YOK — hiçbir metrik için doğru değildi',
+        () {
+      final LibraryFamily b = iaFromDisk()
+          .built
+          .singleWhere((LibraryFamily f) => f.id == 'assessment_battery');
+      for (final HonestyClaim c in b.honestyBox.measured) {
+        expect(c.claim.toLowerCase(), isNot(contains('frontal plane')),
+            reason: 'köprü uzayı isotropic; düzlem ayrımı çekirdekte YOK');
+      }
+      // ...ve yokluğu bir SESSİZLİK değil: notMeasured tarafında İSİMLİ.
+      expect(b.honestyBox.notMeasured.join(' ').toLowerCase(),
+          contains('frontal plane'));
+    });
   });
 
   test('KUTUSUZ aile REDDEDİLİR', () {

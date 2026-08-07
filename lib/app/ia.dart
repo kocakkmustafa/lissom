@@ -54,10 +54,52 @@ enum FamilyStatus {
       };
 }
 
+/// Dürüstlük kutusundaki TEK bir "şunu ölçüyoruz" iddiası — **ve dayanağı.**
+///
+/// **Neden düz metin DEĞİL (L-230, Ostinato O-040 aktarımı):** iddialar
+/// prozayken kimse onları yetenekle karşılaştırmıyordu, ve ölçüldüğünde üç
+/// iddianın **ikisi kabukta canlı değildi**:
+///
+///   - *"…sagittal and frontal planes (… trunk, shank)"* — `trunk_lean` ve
+///     `tibia_inclination` köprülü DEĞİL; üstelik köprü uzayı `isotropic`
+///     (görüntü düzlemi) olduğu için **"frontal plane" hiçbir metrik için
+///     doğru değildi.**
+///   - *"Hold duration and gross balance"* — `hold_duration` faz-türevi ve
+///     köprü kapsamı dışında (L-220).
+///
+/// Yani **dürüstlük kutusu, uygulamanın en az dürüst yüzeyiydi.** Bir iddia
+/// listesi, kendisini doğrulayan bir mekanizma olmadan bir pazarlama
+/// listesinden ayırt edilemez.
+///
+/// Artık her iddia dayandığı metrikleri BEYAN eder ([requires]) ve kabuk onu
+/// köprüye karşı doğrular: canlı olmayan iddia SİLİNMEZ (kapsamı saklamak
+/// olurdu) — **isimli gerekçeyle sönük gösterilir**, tıpkı engelli testler
+/// gibi. Gerekçe de köprünün KENDİ metninden gelir, ikinci kez yazılmaz.
+final class HonestyClaim {
+  const HonestyClaim({required this.claim, required this.requires});
+
+  /// Kullanıcının okuduğu cümle.
+  final String claim;
+
+  /// İddianın dayandığı metrik id'leri. **İnşa edilmiş ailede boş olamaz** —
+  /// dayanaksız bir "şunu ölçüyoruz" cümlesi, doğrulanamaz bir iddiadır.
+  /// İnşa edilmemiş ailede boştur: orada zaten hiçbir şey canlı değil ve
+  /// bunu aile düzeyindeki durum satırı söylüyor.
+  final List<String> requires;
+
+  bool get isCheckable => requires.isNotEmpty;
+}
+
 /// Ne ölçülür / ne ölçülmez. **İkisi de zorunlu ve ikisi de boş olamaz.**
 final class HonestyBox {
   const HonestyBox({required this.measured, required this.notMeasured});
-  final List<String> measured;
+
+  /// Kanıt taşıyan iddialar.
+  final List<HonestyClaim> measured;
+
+  /// Sınırlar — düz metin. Burada kanıt İSTENMEZ: bir şeyi ölçmediğimizi
+  /// söylemek, ölçtüğümüzü söylemekle aynı ispat yükünü taşımaz. Fazla iddia
+  /// eden taraf ispatlar.
   final List<String> notMeasured;
 }
 
@@ -269,7 +311,10 @@ final class LibraryIa {
       status: FamilyStatus.parse('$path.status', _str(raw['status'], '$path.status')),
       intro: _str(raw['intro'], '$path.intro'),
       children: children,
-      honestyBox: _honesty(raw['honestyBox'], '$path.honestyBox'),
+      honestyBox: _honesty(raw['honestyBox'], '$path.honestyBox',
+          requireEvidence:
+              FamilyStatus.parse('$path.status', _str(raw['status'], '$path.status')) ==
+                  FamilyStatus.inProgress),
       itemsSource: raw['itemsSource'] as String?,
     );
   }
@@ -279,13 +324,19 @@ final class LibraryIa {
   /// Bu, config notunun ("opsiyonel değil") tek uygulanabilir hâli. Bir NOT
   /// hiçbir şeyi engellemez; bir `throw` engeller. Dürüstlük kutusu olmayan
   /// bir aile, tanımı gereği ekrana çıkamaz.
-  static HonestyBox _honesty(Object? raw, String path) {
+  /// [requireEvidence] — inşa edilmiş ailede her iddia `requires` TAŞIMAK
+  /// ZORUNDA. Bu, L-230'un yapısal panzehiri: kanıtsız bir "şunu ölçüyoruz"
+  /// cümlesi config'e giremez, dolayısıyla doğrulanamayan bir iddia yüzeye
+  /// ÇIKAMAZ.
+  static HonestyBox _honesty(Object? raw, String path,
+      {required bool requireEvidence}) {
     if (raw is! Map<String, dynamic>) {
       throw IaError(path,
           'ZORUNLU — dürüstlük kutusu olmayan aile yüzeye çıkamaz (IA config '
           'notu: "Bu kutu opsiyonel değil")');
     }
-    final List<String> measured = _strList(raw['measured'], '$path.measured');
+    final List<HonestyClaim> measured =
+        _claims(raw['measured'], '$path.measured', requireEvidence);
     final List<String> notMeasured =
         _strList(raw['notMeasured'], '$path.notMeasured');
     if (notMeasured.isEmpty) {
@@ -297,6 +348,42 @@ final class LibraryIa {
       throw IaError('$path.measured', 'boş olamaz');
     }
     return HonestyBox(measured: measured, notMeasured: notMeasured);
+  }
+
+  /// İki biçimi de okur ve KATI davranır:
+  ///   - düz dize (yalnız inşa EDİLMEMİŞ ailede meşru — orada hiçbir şey
+  ///     canlı değil ve bunu aile durumu söylüyor)
+  ///   - `{claim, requires}` nesnesi (inşa edilmiş ailede ZORUNLU)
+  static List<HonestyClaim> _claims(
+      Object? raw, String path, bool requireEvidence) {
+    if (raw is! List) throw IaError(path, 'liste olmalı');
+    if (raw.isEmpty) throw IaError(path, 'boş olamaz');
+    final List<HonestyClaim> out = <HonestyClaim>[];
+    for (int i = 0; i < raw.length; i++) {
+      final Object? e = raw[i];
+      if (e is String) {
+        if (requireEvidence) {
+          throw IaError('$path[$i]',
+              'inşa edilmiş ailede düz metin iddia YASAK — her iddia '
+              '`requires` ile dayanağını beyan etmeli (L-230: kanıtsız iddia '
+              'doğrulanamaz, doğrulanamayan iddia pazarlamadır)');
+        }
+        out.add(HonestyClaim(claim: e, requires: const <String>[]));
+        continue;
+      }
+      if (e is! Map<String, dynamic>) {
+        throw IaError('$path[$i]', 'dize ya da nesne olmalı');
+      }
+      final List<String> requires =
+          _strList(e['requires'], '$path[$i].requires');
+      if (requireEvidence && requires.isEmpty) {
+        throw IaError('$path[$i].requires',
+            'boş olamaz — dayanaksız iddia yüzeye çıkamaz');
+      }
+      out.add(HonestyClaim(
+          claim: _str(e['claim'], '$path[$i].claim'), requires: requires));
+    }
+    return out;
   }
 
   static List<String> _strList(Object? raw, String path) {

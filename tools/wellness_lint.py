@@ -116,6 +116,10 @@ USER_FACING_KEYS = {
     # kuracağını anlatıyor. Listede olmayan alan "temiz" değil, BAKILMAMIŞTIR
     # — dosyanın kendisi tarandığı için sayaç da uyarmıyordu.
     "userText", "setupNote", "framingRule",
+    # `claim` — honestyBox.measured artık nesne (L-230). Eklenmezse iddia
+    # metinleri sessizce denetim DIŞINDA kalırdı: şemayı değiştirip bu listeyi
+    # güncellememek, dosyanın kendi uyarısının canlı örneği.
+    "claim",
 }
 
 #: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
