@@ -123,6 +123,52 @@ EXPECTED_INVARIANT: dict[str, str] = {
 }
 
 
+def audit_exemptions(
+    seen: set[str],
+    unverified: list[str],
+    declared: dict[str, str] | None = None,
+) -> tuple[list[str], int]:
+    """Muafiyetin VARSAYDIĞI şey gerçekten var mı? (L-232)
+
+    `stale_exemptions` "gerekçe ESKİDİ"yi ölçer; bu iki denetim FARKLI bir
+    soruyu ölçer — *"gerekçenin işaret ettiği ölçüm hiç oldu mu?"*
+
+    Saf fonksiyon olmasının sebebi ölçülmüş: bu araç fixture kütüphanesi ve
+    taze bir rig olmadan HİÇ koşamıyor (ikisi de her makinede yok). Hükmü
+    `main()` içinde bırakmak, kapının kendisinin sınanamaz kalması demekti —
+    ve sınanamayan bir kapı, koruma sanılan bir boşluktur. `two_mode_selftest`
+    bu fonksiyonu fixture'sız koşturur.
+    """
+    dec = EXPECTED_INVARIANT if declared is None else declared
+    out: list[str] = []
+    verdict = 0
+
+    if unverified:
+        out.append(
+            f"⚠️ DOĞRULANAMAYAN MUAFİYET: bu metrikler HİÇ geçerli ölçüm "
+            f"üretmedi, dolayısıyla 'bit-aynı' bir ONAY DEĞİL — iki modun da "
+            f"boş olması ({len(unverified)} çift):")
+        out += [f"    {x}" for x in unverified[:10]]
+        out.append("    Muafiyet bir İDDİADIR; ölçülmemiş bir iddia "
+                   "doğrulanmamıştır.")
+        verdict = 1
+
+    orphan = set(dec) - seen
+    if orphan:
+        out.append(
+            f"❌ YETİM MUAFİYET: `EXPECTED_INVARIANT` bu adları muaf tutuyor "
+            f"ama metrik tanımlarında BÖYLE BİR AD YOK — gerekçe bir hayalete "
+            f"işaret ediyor ({len(orphan)}):")
+        out += [f"    {x}" for x in sorted(orphan)]
+        out.append("    Yeniden adlandırılmış ya da silinmiş bir metriğin "
+                   "muafiyeti sessizce yaşamaya devam eder ve kimse bakmaz.")
+        verdict = 1
+    elif dec:
+        out.append(f"✅ YETİM MUAFİYET YOK: {len(dec)} anahtarın hepsi gerçek "
+                   f"bir metrik tanımına denk geliyor.")
+    return out, verdict
+
+
 def load_defs() -> list[mz.MetricDef]:
     raw = json.loads((REPO / "config/metrics/lissom-metrics.v1.json").read_text())
     out: list[mz.MetricDef] = []
@@ -237,6 +283,21 @@ def main(argv: list[str]) -> int:
     touched_total = 0
     ignored_changed: list[str] = []
     stale_exemptions: list[str] = []
+    #: Muafiyet ONAYLANAMADI — metrik iki modda da HİÇ geçerli ölçüm üretmedi.
+    #:
+    #: ⚠️ **BU LİSTE BİR KÖR NOKTADAN DOĞDU (L-232, JabLab aktarımı).**
+    #: `stale_exemptions` "gerekçe ESKİDİ"yi izliyordu; izlemediği şey
+    #: "gerekçenin VARSAYDIĞI ölçüm hiç olmamış"tı. Mekanik: bir metrik hiç
+    #: geçerli değer üretmezse `values_all` iki modda da tamamen NaN olur ve
+    #: `np.array_equal(..., equal_nan=True)` **True** döner → muafiyet
+    #: "bit-aynı, doğrulandı" diye işaretlenir. Yani **hiçbir şey ölçmeyen
+    #: bir metrik kendi muafiyetini ONAYLAR.**
+    #:
+    #: Veriyi zaten hesaplıyorduk (`valid`/`vmr`) — yalnız hükme sokmuyorduk.
+    unverified_exemptions: list[str] = []
+    #: Bu koşuda GERÇEKTEN ziyaret edilen muafiyet anahtarları. Sözlükte olup
+    #: buraya girmeyen anahtar = gerekçesi bir HAYALETE işaret eden muafiyet.
+    seen_exemptions: set[str] = set()
     rows: list[tuple] = []
 
     for path in paths:
@@ -260,8 +321,18 @@ def main(argv: list[str]) -> int:
             flag = ""
             exempt = EXPECTED_INVARIANT.get(md.id)
             if exempt is not None:
-                # Muafiyet bir İDDİADIR ve sınanır: değişirse gerekçe çürük.
-                if same:
+                seen_exemptions.add(md.id)
+                # Muafiyet bir İDDİADIR ve İKİ yönden sınanır:
+                #   (a) değişti mi → gerekçe çürük (stale)
+                #   (b) HİÇ ölçüldü mü → ölçülmediyse "bit-aynı" bir ONAY
+                #       DEĞİL, bir BOŞLUKTUR (L-232). İkisini ayırmamak,
+                #       ölçülmeyen bir metriği doğrulanmış saymaktı.
+                if anat["valid"] == 0 or cam["valid"] == 0:
+                    unverified_exemptions.append(
+                        f"{md.id}@{path.name} "
+                        f"(geçerli: anat={anat['valid']} cam={cam['valid']})")
+                    flag = "  ← MUAF ama HİÇ ÖLÇÜLMEDİ → onay DEĞİL, boşluk"
+                elif same:
                     flag = f"  ← bit-aynı ({exempt.split(']')[0].lstrip('[')})"
                 else:
                     stale_exemptions.append(f"{md.id}@{path.name}")
@@ -311,8 +382,14 @@ def main(argv: list[str]) -> int:
             print(f"    {x}")
         verdict = 1
     else:
-        print(f"✅ MUAFİYETLER TUTARLI: {len(EXPECTED_INVARIANT)} kayıtlı "
-              f"muafiyetin hiçbiri çürümemiş.")
+        print(f"✅ ÇÜRÜK MUAFİYET YOK: {len(EXPECTED_INVARIANT)} kayıtlı "
+              f"muafiyetin hiçbiri DEĞİŞMEMİŞ.")
+
+    # ---- L-232: muafiyetin VARSAYDIĞI şey gerçekten var mı? --------------
+    lines, ex_verdict = audit_exemptions(seen_exemptions, unverified_exemptions)
+    for ln in lines:
+        print(("\n" if ln.startswith(("⚠️", "❌")) else "") + ln)
+    verdict = verdict or ex_verdict
     if ignored_changed:
         print(f"\n⚠️ NEGATİF KONTROL KIRMIZI: `camera` çerçeveli metrikler "
               f"bayraktan etkilenmemeli ama {len(ignored_changed)} çift "
