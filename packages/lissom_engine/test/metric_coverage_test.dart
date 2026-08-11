@@ -156,6 +156,36 @@ void main() {
       }
     });
 
+    test('her köprülenemez metrik BEYAN ettiği ölçü tipini config\'le TAŞIR', () {
+      // ⚠️ BU KONTROL EKSİKTİ (M-F-462, koordinatör hükmü — hemen, tasarım
+      // turu yok). `metric_bridge.dart`ın KENDİ doc yorumu (satır 166)
+      // "[measureKind] config ile kapıda karşılaştırılıyor" diyordu —
+      // ama kod tabanında bu karşılaştırmayı yapan TEK satır YOKTU
+      // (ölçüldü: `tools/mutation_metric_coverage.py` sahne C). Doc bir
+      // İDDİAYDI, uygulama değil. Seçim: karşılaştırmayı BURADA uygulamak
+      // — doc'u "ölçülmedi" diye zayıflatmak yerine, çünkü alan zaten var,
+      // config zaten `kind` taşıyor ve L-154'ün sınıfı (iki hat aynı
+      // metriği farklı çerçevede/tipte ölçüyor, kimse fark etmiyor) tam
+      // burada tekrarlanabilirdi.
+      final Map<String, String> kindOf = <String, String>{
+        for (final Object? raw in metrics['metrics'] as List<dynamic>)
+          ...<String, String>{
+            (raw as Map<String, dynamic>)['id'] as String:
+                raw['kind'] as String,
+            if (raw['mirror'] == true)
+              _mirror(raw['id'] as String): raw['kind'] as String,
+          },
+      };
+      for (final MapEntry<String, UnbridgedMetric> e
+          in kUnbridgedMetrics.entries) {
+        expect(e.value.measureKind, kindOf[e.key],
+            reason: '${e.key}: köprülenemez metriğin beyan ettiği ölçü '
+                'tipi ("${e.value.measureKind}") config ile uyuşmuyor '
+                '("${kindOf[e.key]}") — measureKind bir BEYAN, config\'e '
+                'karşı doğrulanmazsa sessizce yanlışlaşabilir (L-154 sınıfı)');
+      }
+    });
+
     test('her köprülü metrik gerçekten OKUNABİLİYOR (bağlandı ≠ canlı)', () {
       final CoreMetricReader reader =
           CoreMetricReader(frameSize: const FrameSize(1920, 1080));
@@ -256,6 +286,17 @@ void main() {
           invert: false,
           configFrameRef: 'gravityYaw'); // config: 'none'
       expect(wrong.configFrameRef, isNot('none'),
+          reason: 'sabotaj vakası kurulamadı');
+    });
+
+    test('sabotaj: measureKind beyanı config ile çelişirse yakalanır '
+        '(M-F-462 — bu kontrol EKSİKTİ, `tools/mutation_metric_coverage.py` '
+        'sahne C ile ölçüldü, ölçümden SONRA eklendi)', () {
+      const UnbridgedMetric wrong = UnbridgedMetric(
+          blocker: BridgeBlocker.corePlaneSeparationMissing,
+          subject: 'Forward trunk lean',
+          measureKind: 'distance_norm'); // config `trunk_lean`.kind: 'angle_vertical'
+      expect(wrong.measureKind, isNot('angle_vertical'),
           reason: 'sabotaj vakası kurulamadı');
     });
   });
