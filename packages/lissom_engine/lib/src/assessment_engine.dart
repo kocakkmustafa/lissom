@@ -134,21 +134,33 @@ final class AssessmentEngine {
     }
     _lostSinceUs = null;
 
-    // ⛔ `invalidation` BİLEREK burada değerlendirilmiyor (A4, 2026-08-11).
-    //
-    // Denendi ve GERİ ALINDI: "herhangi bir karede ihlal → tüm deneme iptal"
-    // tetiklemesi gerçek `X2u_vGL0qJU` fixture replay'inde (önceden geçerliliği
-    // kanıtlanmış, temiz bir baş-üstü uzanma — L-141/L-162) yanlış-pozitif
-    // üretti: `elbow_extension_right` 5899 karenin BİRİNDE 150°'nin altına
-    // düştü (muhtemelen izleme gürültüsü) ve bu tek kare TÜM ölçümü
-    // `aborted/BENT_ELBOW` yaptı — `real_replay_test.dart` bunu yakaladı.
-    //
-    // Doğru tetikleme politikası (tepe-karesinde mi, sürdürülmüş ihlalde mi,
-    // ne kadar sürede) ÖLÇÜLMEDİ ve config'te bir `minViolationHoldS` gibi
-    // beyan edilmiş bir eşik YOK — icat etmek burada eşik icadı olurdu.
-    // `TestSpec.invalidation` (battery.dart) artık config'i doğru okuyor;
-    // motor bağlantısı bu politika kararı netleşene kadar KASITLI eksik.
-    // Bkz. A1-A5 raporu + koordinatöre 2. sevk cevabı.
+    // `invalidation` — koordinatör hükmü (2026-08-11, 3. sevk): "herhangi
+    // bir karede ihlal → iptal" gerçek `X2u_vGL0qJU` fixture replay'inde
+    // (önceden geçerliliği kanıtlanmış, temiz bir baş-üstü uzanma —
+    // L-141/L-162) yanlış-pozitif üretti — `elbow_extension_right` 5899
+    // karenin BİRİNDE (muhtemelen izleme gürültüsüyle) 150°'nin altına
+    // düştü ve TÜM ölçümü `aborted/BENT_ELBOW` yaptı (`real_replay_test
+    // .dart` yakaladı). Doğru tetikleme politikası ÖLÇÜLMEDİ, koordinatör
+    // de icat ETMEDİ: mekanizma (`trigger`, ZORUNLU alan — `battery.dart`)
+    // kuruldu, politika bir sonraki ölçüm turunun (kurucu kuyruğu: cihaz
+    // turu) sonucu. Her tür burada GÖRÜNÜR biçimde ele alınır — sessiz
+    // atlama yok; `unmeasured` dışındaki üçü bugün HİÇBİR kuralda
+    // kullanılmıyor (ölçüldü, `real_config_test.dart`), göründükleri gün
+    // burada bir `UnimplementedError` onları isimle durdurur.
+    for (final InvalidationRule rule in test.invalidation) {
+      switch (rule.trigger.type) {
+        case InvalidationTriggerType.unmeasured:
+          break; // politika ölçülmedi — GÖRÜNÜR atlama, bu case'in kendisi
+        case InvalidationTriggerType.peakFrame:
+        case InvalidationTriggerType.sustained:
+        case InvalidationTriggerType.ratio:
+          throw UnimplementedError(
+              '${rule.code}: trigger.type=${rule.trigger.type.name} config\'te '
+              'beyan edilmiş ama motor bu türü henüz UYGULAMIYOR — sessizce '
+              'yoksaymak yerine isimle durduruluyor (koordinatör hükmü, '
+              '2026-08-11)');
+      }
+    }
 
     final double? v = r.value;
     if (v == null) return false;

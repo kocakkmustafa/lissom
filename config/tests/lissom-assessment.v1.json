@@ -59,15 +59,24 @@
         {
           "rule": "elbow_extension_{side} < 150",
           "code": "BENT_ELBOW",
-          "message": "Keep your elbow straight — a bent elbow makes the reach look bigger than it is."
+          "message": "Keep your elbow straight — a bent elbow makes the reach look bigger than it is.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "yawDeg > 10",
-          "code": "CAMERA_ANGLE"
+          "code": "CAMERA_ANGLE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -144,11 +153,17 @@
         {
           "rule": "heelRiseDelta > 0.05",
           "code": "HEEL_LIFT",
-          "message": "Your heels came off the floor — go only as low as you can with heels down."
+          "message": "Your heels came off the floor — go only as low as you can with heels down.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -235,11 +250,17 @@
         {
           "rule": "shoulder_flexion_right < 140",
           "code": "ARMS_DROPPED",
-          "message": "Your arms came forward — the test measures how well you keep them overhead."
+          "message": "Your arms came forward — the test measures how well you keep them overhead.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -285,11 +306,17 @@
         {
           "rule": "heelRiseDelta > 0.04",
           "code": "HEEL_LIFT",
-          "message": "Keep the heel down — lifting it makes the range look larger."
+          "message": "Keep the heel down — lifting it makes the range look larger.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -330,11 +357,17 @@
         {
           "rule": "knee_flexion_{side} < 165",
           "code": "BENT_KNEE",
-          "message": "Keep your knees straight — bending them turns this into a different movement."
+          "message": "Keep your knees straight — bending them turns this into a different movement.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -380,7 +413,10 @@
       "invalidation": [
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -418,12 +454,18 @@
       "invalidation": [
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "yawDeg > 10",
           "code": "CAMERA_ANGLE",
-          "message": "Turn to face the camera squarely — this test is sensitive to camera angle."
+          "message": "Turn to face the camera squarely — this test is sensitive to camera angle.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -478,15 +520,24 @@
         {
           "rule": "supportContact",
           "code": "USED_SUPPORT",
-          "message": "Holding onto something ends the test — try again without support."
+          "message": "Holding onto something ends the test — try again without support.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "footTouchdown",
-          "code": "FOOT_DOWN"
+          "code": "FOOT_DOWN",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -532,7 +583,10 @@
       "invalidation": [
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -562,7 +616,10 @@
       "invalidation": [
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -597,16 +654,25 @@
         {
           "rule": "knee_flexion_{side} < 165",
           "code": "BENT_KNEE",
-          "message": "Keep the raised leg straight — bending the knee makes the range look larger."
+          "message": "Keep the raised leg straight — bending the knee makes the range look larger.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "hip_flexion_{opposite} < 170",
           "code": "OPPOSITE_LEG_LIFTED",
-          "message": "Keep your other leg flat on the floor."
+          "message": "Keep your other leg flat on the floor.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {
@@ -655,11 +721,17 @@
         {
           "rule": "plank_hip_deviation > 0.22",
           "code": "FORM_BREAK",
-          "message": "Your hips dropped or lifted out of line — the hold is timed only while the line holds."
+          "message": "Your hips dropped or lifted out of line — the hold is timed only while the line holds.",
+          "trigger": {
+            "type": "unmeasured"
+          }
         },
         {
           "rule": "confidence < 0.6",
-          "code": "LOW_CONFIDENCE"
+          "code": "LOW_CONFIDENCE",
+          "trigger": {
+            "type": "unmeasured"
+          }
         }
       ],
       "scoring": {

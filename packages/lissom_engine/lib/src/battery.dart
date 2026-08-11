@@ -159,6 +159,40 @@ String resolveSideToken(String metric, String side) => metric
     .replaceAll('{side}', side)
     .replaceAll('{opposite}', side == 'right' ? 'left' : 'right');
 
+/// `invalidation.trigger.type`in İZİNLİ değerleri — koordinatör hükmüyle
+/// SAYILI (icat edilmedi, üçü henüz UYGULANMADI). Yeni bir tür eklemek bir
+/// isimlendirme kararı değil, bir ÖLÇÜM kararıdır — bkz. `InvalidationRule`.
+enum InvalidationTriggerType {
+  /// Yalnız TEPE değerin okunduğu karede ihlal varsa ateşler. Henüz
+  /// UYGULANMADI.
+  peakFrame,
+
+  /// İhlal `ms` boyunca KESİNTİSİZ sürerse ateşler (girişim kapısının
+  /// `requiredHoldS` deseniyle aynı aile). Henüz UYGULANMADI.
+  sustained,
+
+  /// İhlalli karelerin ORANI bir eşiği aşarsa ateşler (`lowConfidence`in
+  /// `_lowConfidenceFrames * 2 > _totalFrames` deseniyle aynı aile). Henüz
+  /// UYGULANMADI.
+  ratio,
+
+  /// Politika henüz ÖLÇÜLMEDİ. Motor bu kuralı GÖRÜNÜR biçimde atlar —
+  /// sessizce değil (bkz. AssessmentEngine.process).
+  unmeasured,
+}
+
+/// `trigger` alanının ayrıştırılmış hâli. `sustained`/`ratio` parametre
+/// taşıyabilir (`ms`/`ratio`) — bugün hiçbir kural bu türleri kullanmadığı
+/// için parametreler opsiyonel kaldı; ilk gerçek kullanım onları zorunlu
+/// kılacak bir sonraki ölçüm turudur.
+final class InvalidationTrigger {
+  const InvalidationTrigger({required this.type, this.ms, this.ratio});
+
+  final InvalidationTriggerType type;
+  final double? ms;
+  final double? ratio;
+}
+
 /// Bir ölçümü GEÇERSİZ kılan koşul (`invalidation`, A4 2026-08-11).
 ///
 /// **Bu alanın iki gün okuyucusu yoktu.** `config/tests/lissom-assessment.v1
@@ -184,12 +218,24 @@ String resolveSideToken(String metric, String side) => metric
 /// olarak sayısal-karşılaştırma OLMAYAN bir kuralı işaretler ([isEvaluable]
 /// false döner) — ayrıştırma onu ATMAZ, sadece motora taşınamayacağını
 /// beyan eder.
+///
+/// ## `trigger` — koordinatör hükmü (2026-08-11, 3. sevk)
+///
+/// "Herhangi bir karede ihlal → iptal" gerçek fixture'da yanlış-pozitif
+/// üretti (bkz. AssessmentEngine yorumu). Doğru tetikleme politikası
+/// (tepe-karesi mi, sürdürülmüş ihlal mi, hangi süre) ÖLÇÜLMEDİ ve
+/// koordinatör KENDİSİ de icat etmedi: *"karar bende, ve kararım DEĞER
+/// KOYMAMAK — mekanizmayı kuruyorum, sayıyı ölçüm verecek (kurucu kuyruğu:
+/// cihaz turu)."* Bu yüzden `trigger` ZORUNLU alan — beyansız kural
+/// KIRMIZI yanar (`_parseInvalidation`). Bugün her kural `unmeasured`
+/// taşır; motor bunu GÖRÜNÜR biçimde atlar (bkz. AssessmentEngine).
 final class InvalidationRule {
   const InvalidationRule({
     required this.metric,
     required this.op,
     required this.value,
     required this.code,
+    required this.trigger,
     this.message,
   });
 
@@ -205,6 +251,12 @@ final class InvalidationRule {
 
   /// Makine-okur kod (`BENT_KNEE` …) — [AssessmentResult.abortCode]'a gider.
   final String code;
+
+  /// Bu kuralın NE ZAMAN ateşleyeceği — ZORUNLU, icat edilmedi (yukarıdaki
+  /// not). `unmeasured` dışındaki üç tür bugün motor tarafından
+  /// UYGULANMIYOR (henüz hiçbir kuralda kullanılmıyor); göründüklerinde
+  /// `AssessmentEngine`e eklenecekler.
+  final InvalidationTrigger trigger;
 
   /// Kullanıcı diliyle gerekçe. Opsiyonel — `LOW_CONFIDENCE` taşımıyor
   /// (config'te böyle yazılmış, burada UYDURULMADI).
@@ -640,8 +692,13 @@ final class Battery {
   }
 
   /// `invalidation` YOKSA boş liste meşrudur. VARSA katı okunur: `rule` +
-  /// `code` zorunlu, `message` opsiyonel (config'te `LOW_CONFIDENCE`
-  /// mesajsız — burada UYDURULMUYOR, `null` kalıyor).
+  /// `code` + `trigger` zorunlu, `message` opsiyonel (config'te
+  /// `LOW_CONFIDENCE` mesajsız — burada UYDURULMUYOR, `null` kalıyor).
+  ///
+  /// `trigger` zorunluluğu koordinatör hükmü (2026-08-11, 3. sevk):
+  /// tetikleme politikası HENÜZ ölçülmedi, ama "beyan edilmedi" diye
+  /// sessizce geçmek de olmaz — her kural NE ZAMAN ateşleyeceğini adıyla
+  /// söylemek ZORUNDA, cevap `unmeasured` olsa bile.
   static List<InvalidationRule> _parseInvalidation(Object? raw, String path) {
     if (raw == null) return const <InvalidationRule>[];
     if (raw is! List) throw BatteryError('$path.invalidation', 'liste olmalı');
@@ -660,9 +717,42 @@ final class Battery {
         throw BatteryError('$path.invalidation[$i].code', 'zorunlu — kodsuz '
             'bir geçersiz kılma, kullanıcıya İSİMLİ bir sebep veremez');
       }
-      out.add(_parseRule(rule, code, e['message'] as String?, '$path.invalidation[$i]'));
+      final InvalidationTrigger trigger =
+          _parseTrigger(e['trigger'], '$path.invalidation[$i]');
+      out.add(_parseRule(
+          rule, code, e['message'] as String?, trigger, '$path.invalidation[$i]'));
     }
     return out;
+  }
+
+  static InvalidationTrigger _parseTrigger(Object? raw, String path) {
+    if (raw is! Map<String, dynamic>) {
+      throw BatteryError('$path.trigger',
+          'ZORUNLU — tetikleme politikası ölçülmemişse bile `{"type": '
+          '"unmeasured"}` yazılmalı; beyansız bir kural sessizce '
+          'geçemez (koordinatör hükmü, 2026-08-11)');
+    }
+    final Object? type = raw['type'];
+    if (type is! String) {
+      throw BatteryError('$path.trigger.type', 'zorunlu');
+    }
+    InvalidationTriggerType? parsed;
+    for (final InvalidationTriggerType t in InvalidationTriggerType.values) {
+      if (t.name == type) {
+        parsed = t;
+        break;
+      }
+    }
+    if (parsed == null) {
+      throw BatteryError('$path.trigger.type',
+          'bilinmeyen tür: "$type" — izinli: '
+          '${InvalidationTriggerType.values.map((InvalidationTriggerType t) => t.name).join(", ")}');
+    }
+    return InvalidationTrigger(
+      type: parsed,
+      ms: (raw['ms'] as num?)?.toDouble(),
+      ratio: (raw['ratio'] as num?)?.toDouble(),
+    );
   }
 
   /// `"knee_flexion_{side} < 165"` biçimini ayrıştırır. Tam ifade
@@ -680,8 +770,8 @@ final class Battery {
   /// yine de kabul eder — `InvalidationRule.isNumericComparison == false`.
   static final RegExp _flagPattern = RegExp(r'^[A-Za-z_][A-Za-z0-9_]*$');
 
-  static InvalidationRule _parseRule(
-      String rule, String code, String? message, String path) {
+  static InvalidationRule _parseRule(String rule, String code, String? message,
+      InvalidationTrigger trigger, String path) {
     final String trimmed = rule.trim();
     final RegExpMatch? m = _rulePattern.firstMatch(trimmed);
     if (m != null) {
@@ -690,12 +780,18 @@ final class Battery {
         op: m.group(2)!,
         value: double.parse(m.group(3)!),
         code: code,
+        trigger: trigger,
         message: message,
       );
     }
     if (_flagPattern.hasMatch(trimmed)) {
       return InvalidationRule(
-          metric: trimmed, op: null, value: null, code: code, message: message);
+          metric: trimmed,
+          op: null,
+          value: null,
+          code: code,
+          trigger: trigger,
+          message: message);
     }
     throw BatteryError('$path.rule',
         'ayrıştırılamadı: "$rule" — beklenen "metrik OP sayı" (OP: <, >, '
