@@ -1,5 +1,5 @@
 /// **HÜKÜM L-187'nin ŞARTI, ÇİVİLENMİŞ (L-254) — VE KANIT ZİNCİRİNE
-/// BAĞLANMIŞ (L-262, M-F-462/474, koordinatör onayı 2026-08-12).**
+/// BAĞLANMIŞ (L-277, M-F-462/474, koordinatör onayı 2026-08-12).**
 ///
 /// Koordinatörün hükmü göçü onayladı — **ama bir şartla, ve şart hükmün
 /// ayrılmaz parçası:**
@@ -125,7 +125,7 @@ void main() {
 
     // 2) GÜNCELLİK — her girdi AYRI hash'lenir (BİRLEŞİK hash değil):
     // hangi dosyanın bayatladığı İSİMLE görünsün, ürünün hatası kapının
-    // hatasından ayrılabilsin (koordinatör hükmü, L-262 revizyonu #1).
+    // hatasından ayrılabilsin (koordinatör hükmü, L-277 revizyonu #1).
     //
     // Üçüncü hâl (M-F-444 deseni): kanıt bir dosya listeliyor ama o dosya
     // bu ağaçta YOK (yeniden adlandırma/silme) — sessiz geçme, opak kırmızı
@@ -168,7 +168,7 @@ void main() {
     if (passes != true) {
       // Bu İKİ ayrı arıza: "kanıt yok" (yukarıda ele alındı) ile "kanıt VAR
       // ve GEÇMEDİĞİNİ söylüyor" AYNI kırmızıya çökerse bir sonraki oturum
-      // yanlış yeri arar (koordinatör hükmü, L-262 revizyonu #2).
+      // yanlış yeri arar (koordinatör hükmü, L-277 revizyonu #2).
       fail('Kanıt VAR ve GÜNCEL ama üretici kendi kabul ölçütünü '
           'GEÇMEDİĞİNİ söylüyor (`passesOwnCriterion`: $passes). Bu "kanıt '
           'yok" arızası DEĞİL — "kanıt var ve hayır diyor" arızası. Bayrak '

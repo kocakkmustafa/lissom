@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """MUT-A: `reference_equivalence_test.dart` — kanıt-zinciri koruması
-(L-262, M-F-462/474, koordinatör onayı 2026-08-12).
+(L-277, M-F-462/474, koordinatör onayı 2026-08-12).
 
 ## Önceki hâl — ölçüldü, YALANLANDI, DEĞİŞTİRİLDİ
 
