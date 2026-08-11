@@ -14,12 +14,17 @@
 /// karşılıksızdı; bu tur o boşluğu kapattı. Her sekmenin dürüst hâli
 /// birinci-sınıf ekrandır: ölçülemeyen şey İSİMLİ gerekçeyle görünür,
 /// vaat diliyle değil (M-F-186).
+///
+/// **Onboarding (2026-08-12, SIRA①):** `lib/`de onboarding SIFIR dosyaydı —
+/// beş hattan dördünde en az bir ekran varken Lissom'da hiç yoktu (kod işi,
+/// kurucu-manuel değil, koordinatör ölçümü). Giriş artık [OnboardingGate]:
+/// tamamlanmamışsa [OnboardingFlow], tamamlanmışsa doğrudan [LissomShell].
 library;
 
 import 'package:flutter/material.dart';
 
 import 'app/lissom_theme.dart';
-import 'app/shell.dart';
+import 'app/onboarding_gate.dart';
 
 void main() => runApp(const LissomApp());
 
@@ -30,6 +35,6 @@ class LissomApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         title: 'Lissom',
         theme: buildLissomTheme(),
-        home: const LissomShell(),
+        home: const OnboardingGate(),
       );
 }
