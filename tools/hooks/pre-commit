@@ -1,0 +1,45 @@
+#!/bin/bash
+# COMMIT KAPISI (L-275) — JabLab aktarımı.
+#
+# 🪤 JabLab'ın kusuru: `flutter test 2>&1 | tail -1 && git commit …`
+#    Boru hattının çıkış kodu SON komutunki; `tail` HER ZAMAN 0 döner ve
+#    başarısızlığı YUTAR. Kapı vakum-doğruydu.
+#
+# 🪤 BENİM kusurum farklıydı ve ölçtüm: **hiç kapı yoktu.** Kapıları ayrı bir
+#    komutta koşturup sonra commit ediyordum — yanlış-güven değil,
+#    KAPISIZLIK. Gece boyunca elle koştum ve her seferinde yeşildi, ama
+#    "her seferinde" bir güvence değil bir alışkanlıktır.
+#
+# ⛔ BORU HATTI YOK. Çıkış kodu doğrudan taşınır.
+# ⚠️ `dirname $0` KULLANILMAZ: hook olarak koşarken `$0` `.git/hooks/...`
+# olur ve `cd ../..` depo köküne DEĞİL `.git/`e gider. İlk denemede tam bu
+# oldu — commit DURDU ama YANLIŞ GEREKÇEYLE (betik bulunamadı). Doğru sonuç,
+# yanlış sebep: pozitif kontrol olmasa "kapı çalışıyor" diye kaydedecektim.
+# ⛔ SIFIRINCI ŞART: KAPININ VAR OLMASI (M-F-399, Choreia). Zincirin üç şartı
+#    — kurulmuş · düşebilir · okunur — üçü de kapının VARLIĞINI varsayıyordu.
+#    Choreia'da kapı `&&` bile değil İKİ AYRI SATIRDI: commit test sonucundan
+#    tamamen bağımsız koşuyordu.
+#
+# ⛔ BORU HATTI YASAK, ve sebebi ölçüldü: `false | tail -1` çıkış kodu **0**.
+#    Bu dosyada yorumlar hariç boru sayısı: 0 (ölçüldü).
+#
+# ✅ DÜŞEBİLDİĞİ ÖLÇÜLDÜ — ve sabotajın İNDİĞİ ayrıca doğrulandı:
+#    Choreia'nın kazası: sabotaj dizgisi dosyada YOKTU, düzenleme sessizce
+#    hiçbir şey yapmamıştı, kapı yeşil döndü ve "kapı bozuk" yazılacaktı.
+#    ⭐ *Bir pozitif kontrol, KENDİSİNİN indiği doğrulanmadan kanıt değildir.*
+#    Burada: python `assert n != s` ile iniş zorlandı + `grep -c` ile sayıldı
+#    + testin gerçekten kırmızı olduğu ölçüldü → SONRA commit denendi → DURDU.
+#
+# 🪤 A5 (2026-08-11, aile geneli, koordinatör): bu dosya SEKİZ GÜN
+#    `.git/hooks/pre-commit`DE yaşadı — yani git tarafından İZLENMİYORDU.
+#    Kapının kendisi doğrulandı ama NAKLEDİLEBİLİRLİĞİ hiç sınanmadı: taze
+#    bir `git clone` (başka bir worktree, CI, disk değişimi) SIFIR korumayla
+#    başlıyordu ve repo içinde bunu söyleyen hiçbir şey yoktu. Artık burada,
+#    izleniyor. KURULUM (`core.hooksPath` git tarafından İZLENMEZ — bu adım
+#    HER taze klonda BİR KEZ elle koşulmalı):
+#
+#      git config core.hooksPath tools/hooks
+#
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+python3 tools/all_gates.py
