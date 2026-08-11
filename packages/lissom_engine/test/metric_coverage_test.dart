@@ -88,6 +88,41 @@ Set<String> requiredGeometricMetrics(
   return need.where(known.contains).toSet();
 }
 
+/// ⛔ MÜHÜRLÜ — `kMetricBindings`'ten TÜRETİLMEZ (türetilse tautoloji
+/// olurdu: kod kendi kendini onaylardı — `pin_equality_test.dart`'ın
+/// `kSealedRef`i AYNI gerekçeyle kilitten türetilmiyor).
+///
+/// **NEDEN GEREKLİ (M-F-462 A+B, 2026-08-12):** `metric_coverage_test.dart`
+/// zaten iki kontrol taşıyordu — BÖLME (bir metrik köprülü ya da beyanlı
+/// mı, sayar) ve "gerçekten OKUNABİLİYOR" (bir köprü fırlatmıyor mu, sayar).
+/// İkisi de yalnız VARLIĞA bakar, DEĞERE değil. Ölçüldü
+/// (`tools/mutation_metric_coverage.py`): **(A)** çalışan bir binding
+/// kaldırılıp aynı metrik "engellendi" diye beyan edilirse BÖLME bunu
+/// GÖREMEZ — metrik hâlâ kapsanıyor, yalnız YER DEĞİŞTİRDİ. **(B)**
+/// "imkânsız" denen bir metrik YANLIŞ bir `coreJointId`yle köprülü sayılırsa
+/// "OKUNABİLİYOR" testi bunu GÖREMEZ — yanlış eklem de normal döner, yalnız
+/// YANLIŞ sayı üretir. Bu mühür DEĞERE bakan üçüncü kontrol.
+///
+/// **KAPSAMI — DAR, isimle:** Bu mühür YALNIZ `metric → coreJointId`
+/// eşlemesini korur. Bir binding'in DİĞER alanları (`invert`,
+/// `configFrameRef`) bu mührün KAPSAMI DIŞINDA — `configFrameRef` zaten
+/// ayrı bir kontrolle korunuyor ("her köprü kaydı config çerçevesini BEYAN
+/// ediyor"), `invert` hiçbir kontrolle korunmuyor (AÇIK boşluk, bu tur
+/// kapatılmıyor). `measureKind` (köprülenemez metrikler için) AYRI bir
+/// kontrolle korunuyor (M-F-462 C, yukarıda). "Mühürlü" okuyan bir sonraki
+/// oturum TAM kapsam varsaymasın diye bu liste isimle burada (M-F-439:
+/// bir kapının beşinci şartı kapsamının YAZILMASI).
+const Map<String, String> kSealedBridgedJoints = <String, String>{
+  'shoulder_flexion_right': 'right_shoulder',
+  'shoulder_flexion_left': 'left_shoulder',
+  'knee_flexion_right': 'right_knee',
+  'knee_flexion_left': 'left_knee',
+  'hip_flexion_right': 'right_hip',
+  'hip_flexion_left': 'left_hip',
+  'elbow_extension_right': 'right_elbow',
+  'elbow_extension_left': 'left_elbow',
+};
+
 void main() {
   final Map<String, dynamic> battery =
       jsonDecode(_batteryFile.readAsStringSync()) as Map<String, dynamic>;
@@ -98,6 +133,9 @@ void main() {
   final Set<String> bridged =
       kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
   final Set<String> declared = kUnbridgedMetrics.keys.toSet();
+  final Map<String, String> bridgedJoints = <String, String>{
+    for (final MetricBinding b in kMetricBindings) b.lissomMetric: b.coreJointId,
+  };
 
   group('metrik kapsamı — sayılar TÜRETİLDİ', () {
     test('config gerçekten metrik taşıyor (pozitif kontrol)', () {
@@ -184,6 +222,23 @@ void main() {
                 '("${kindOf[e.key]}") — measureKind bir BEYAN, config\'e '
                 'karşı doğrulanmazsa sessizce yanlışlaşabilir (L-154 sınıfı)');
       }
+    });
+
+    test('MÜHÜR: köprülü küme VE eklem eşlemesi bilinenle AYNI (M-F-462 A+B)',
+        () {
+      // BÖLME (varlık) ve "OKUNABİLİYOR" (fırlatmıyor mu) testleri bu iki
+      // sahneyi GÖREMEZ — ölçüldü, ikisi de yalnız VARLIĞA bakar:
+      //   (A) bridged→declared: metrik hâlâ kapsanıyor, BÖLME sessiz kalır.
+      //   (B) declared→bridged yanlış eklem: fırlatmıyor, OKUNABİLİYOR
+      //       sessiz kalır.
+      // Mühür DEĞERE bakan üçüncü kontrol — `kSealedBridgedJoints`in doc
+      // yorumundaki KAPSAM sınırı geçerli (yalnız metric→joint).
+      expect(bridgedJoints, kSealedBridgedJoints,
+          reason: 'köprülü küme/eklem eşlemesi mühürden SAPTI. Bilinçli bir '
+              'değişiklik mi (yeni doğru binding, ya da gerçekten '
+              'köprülenemez hâle gelen bir metrik)? Öyleyse '
+              '`kSealedBridgedJoints`i AYNI commit\'te, ölçümle birlikte '
+              'güncelle — sessizce kaymasına izin verme.');
     });
 
     test('her köprülü metrik gerçekten OKUNABİLİYOR (bağlandı ≠ canlı)', () {
@@ -298,6 +353,28 @@ void main() {
           measureKind: 'distance_norm'); // config `trunk_lean`.kind: 'angle_vertical'
       expect(wrong.measureKind, isNot('angle_vertical'),
           reason: 'sabotaj vakası kurulamadı');
+    });
+
+    test('sabotaj: bridged→declared (metrik mühürden kaybolur) yakalanır '
+        '(M-F-462 A)', () {
+      final Map<String, String> sabotaged = Map<String, String>.of(bridgedJoints)
+        ..remove('knee_flexion_right');
+      expect(sabotaged, isNot(kSealedBridgedJoints),
+          reason: 'kapı bridged→declared yer değişimini yakalamıyor');
+    });
+
+    test('sabotaj: declared→bridged YANLIŞ eklem yakalanır (M-F-462 B)', () {
+      final Map<String, String> sabotaged = Map<String, String>.of(bridgedJoints)
+        ..['knee_flexion_right'] = 'right_elbow'; // mühür: 'right_knee'
+      expect(sabotaged, isNot(kSealedBridgedJoints),
+          reason: 'kapı yanlış eklem terfisini yakalamıyor');
+    });
+
+    test('sabotaj: mühürsüz yeni binding eklenirse yakalanır', () {
+      final Map<String, String> sabotaged = Map<String, String>.of(bridgedJoints)
+        ..['reach_depth'] = 'right_elbow'; // mühürde HİÇ yok
+      expect(sabotaged, isNot(kSealedBridgedJoints),
+          reason: 'kapı mühürsüz yeni binding\'i yakalamıyor');
     });
   });
 }
