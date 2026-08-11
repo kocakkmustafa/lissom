@@ -52,6 +52,19 @@ NETWORK_DEPS_RECORDED = {
                      "gizlilik iddialarını yalanlamaz, ama L-222 açık "
                      "(çevrimdışı açılışta tipografi kaybı + üçüncü sunucu "
                      "bağlantısı — lisans/bağımlılık kararı koordinatörde)",
+    # Aile bulgusu (Gravita, 2026-08-12): beş hattın da pubspec.lock'unda
+    # http vardı, hiçbirinin yaml'ında yok — Ostinato'nun kapısı (ve bu
+    # kapının ilk sürümü) yalnız yaml taradığı için görmüyordu. Ölçüldü:
+    # `http` TRANSITIVE (`google_fonts`'un kendi runtime-fetch yolunun
+    # istemcisi) — L-222 ile AYNI kök, yeni bir kanal değil.
+    "http": "TRANSITIVE (google_fonts'un runtime yazı tipi GET'i için "
+            "istemci) — pubspec.yaml'da doğrudan YOK, yalnız .lock'ta. "
+            "L-222 ile aynı kök: kullanıcı verisi taşımaz.",
+    "http_parser": "TRANSITIVE, `http` paketinin kendi bağımlılığı — "
+                    "yalnız HTTP mesaj biçimini PARSE eder (pub.dev "
+                    "açıklaması: \"parsing and serializing HTTP formats\"), "
+                    "kendi başına ağa ÇIKMAZ. Kayıt ADIYLA, riski YOK "
+                    "diye SESSİZCE elenmedi.",
 }
 
 NETWORK_DEP_HINTS = re.compile(
@@ -118,11 +131,17 @@ def _uploader_sites(lib_root: Path) -> list[tuple[Path, int, str]]:
 
 def main() -> int:
     pubspec = ROOT / "pubspec.yaml"
+    lock = ROOT / "pubspec.lock"
     lib_root = ROOT / "lib"
     problems: list[str] = []
 
-    # ② bağımlılık kaydı
+    # ② bağımlılık kaydı — YALNIZ yaml TARAMAK YETMEZ (Gravita bulgusu,
+    # 2026-08-12): transitive bağımlılıklar (`http`) yaml'da hiç görünmez,
+    # yalnız .lock'ta yaşar. İkisi de taranır — biri diğerini İKAME ETMEZ.
     problems += _pubspec_problems(pubspec.read_text())
+    if lock.exists():
+        problems += _pubspec_problems(lock.read_text())
+    problems = sorted(set(problems))  # yaml+lock aynı paketi iki kez bulabilir
 
     # ① kod izi — iddia VARKEN yükleyici izi de varsa çelişki
     claims = _claim_sites(lib_root)
@@ -143,11 +162,24 @@ def main() -> int:
             "Sessiz 'geçti' burada YANLIŞ olurdu."
         )
 
-    # Öz-testler — kapı KIRMIZI yanabiliyor (sabotaj), üçü de ayrı ayrı.
+    # Öz-testler — kapı KIRMIZI yanabiliyor (sabotaj), dördü de ayrı ayrı.
     if _pubspec_problems(pubspec.read_text() + "\n  posthog_flutter: ^1.0.0\n") \
             <= _pubspec_problems(pubspec.read_text()):
         print("❌ ÖZ-TEST BAŞARISIZ (②): kayıtsız `posthog_flutter` "
               "eklenince kapı ötmedi")
+        return 2
+    # Gravita bulgusunun kendisi: yalnız .lock'ta yaşayan (yaml'da HİÇ
+    # olmayan) transitive bir bağımlılık — bu SATIR olmasaydı Ostinato'nun
+    # kapısı sende de aynı delikle geçerdi.
+    if not _pubspec_problems(
+        "dependencies:\n"
+        "  flutter:\n"
+        "    sdk: flutter\n"
+        "  dio:\n"
+        "    dependency: transitive\n"
+    ):
+        print("❌ ÖZ-TEST BAŞARISIZ (② — Gravita sınıfı): yalnız .lock'ta "
+              "yaşayan transitive bağımlılık kaçırıldı")
         return 2
     if not UPLOADER_TRACES.search("await Dio().post(url, data: payload);"):
         print("❌ ÖZ-TEST BAŞARISIZ (①): bilinen bir yükleyici izi "
@@ -163,8 +195,8 @@ def main() -> int:
         return 2
 
     print(f"Cihazda-kalır iddiası — {len(claims)} yüzey, {len(uploaders)} "
-          f"yükleyici izi, {len(NETWORK_DEPS_RECORDED)} kayıtlı bağımlılık, "
-          f"4 öz-test geçti.")
+          f"yükleyici izi, {len(NETWORK_DEPS_RECORDED)} kayıtlı bağımlılık "
+          f"(yaml+lock taranmış), 5 öz-test geçti.")
     if problems:
         print(f"\n❌ {len(problems)} sorun:")
         for p in problems:
