@@ -165,8 +165,13 @@ class _LiveView extends StatelessWidget {
           title: 'Not verified on a real device',
           reason: 'This connects the camera, the measurement engine, and '
               'the live display for the first time. It has not been tried '
-              'on a real phone: permission dialogs, real frame quality, '
-              'and calibration still need a device pass.',
+              'on a real phone.',
+          // Koordinatör şartı (2026-08-12): "tek tek say" — dört kalem
+          // BİRLEŞTİRİLMEDEN, isimle. Kamera simülatörde donanımı olmadığı
+          // için hiçbiri bu makinede sınanamadı.
+          detail: 'Still needs a device pass: the permission dialog · the '
+              'camera frame stream · landmark quality in real light · the '
+              'calibration threshold (yaw ≤10°).',
         ),
         const SizedBox(height: 18),
         Text(s.userText, style: t.textTheme.titleMedium),
