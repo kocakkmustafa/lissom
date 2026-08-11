@@ -49,6 +49,9 @@ NOT_GATES = {
     # eden bir regresyon kapısı değil: "üçüncü çapa var mı" sorusuna bir
     # kez cevap verir, cevap değişmez (kod değişmediği sürece).
     "mutation_reference_equivalence.py",
+    # Aynı gerekçe (TANI aracı, per-commit kapı değil): `flutter test`
+    # (TAM CÜMLE, `packages/lissom_engine`) × taban + 3 sahne = 4 koşum.
+    "mutation_metric_coverage.py",
 }
 KNOWN_RED = {
     "fixture_check.py": "paylaşımlı rig anatomical_mode() taşımıyor (M-F-280)",
