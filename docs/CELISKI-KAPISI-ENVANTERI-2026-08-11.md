@@ -79,8 +79,11 @@ TAŞIMIYORLAR, o yüzden JSON-mutasyonlu bir MUT-A turu buraya harcanmamalı.
 · `visual_ban_test` · `live_evaluator_test` · `live_session_state_test` ·
 `mf71_test` · `real_config_test` · `real_replay_test` ·
 `reference_status_test` · `session_test` · `invalidation_test` ·
-`network_dependency_check.py` (A3 — kendi üç kanalıyla zaten ayrı bir
-öz-test taşıyor, tekrar sayılmadı).
+`network_dependency_check.py` (A3 — kendi DÖRT kanalıyla zaten ayrı bir
+öz-test taşıyor, tekrar sayılmadı; ④ değişim-dedektörü 2026-08-12'de
+eklendi — `NETWORK_DEP_HINTS` ret-listesinin M-F-455 deliği, `pubspec.lock`
+BÖLMESİYLE kapatıldı: her paket `NETWORK_DEPS_RECORDED` ⊎
+`NETWORK_DEPS_KNOWN_SAFE`, üçüncü hâl yok).
 
 ---
 
