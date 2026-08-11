@@ -1,31 +1,41 @@
 #!/usr/bin/env python3
-"""MUT-A: `reference_equivalence_test.dart` — GERÇEK iki-bağımsız-kaynak
-çelişki kapısı (`docs/CELISKI-KAPISI-ENVANTERI-2026-08-11.md`, öncelik #1,
-koordinatör seçimi — "en net vaka").
+"""MUT-A: `reference_equivalence_test.dart` — kanıt-zinciri koruması
+(L-262, M-F-462/474, koordinatör onayı 2026-08-12).
 
-Kaynak 1: `kBridgeIsReferenceEquivalent` (+ `kBridgeSpace`) —
-`metric_bridge.dart`'ta mühendisin elle değiştirdiği KOD sabitleri.
-Kaynak 2: `docs/L-031-UZAY-SAPMASI-OLCUMU.md` — ayrı bir ölçüm turunun
-yazdığı ARTEFAKT. İkisi AYRI dosyalar, AYRI insanlar/turlar tarafından
-düzenlenebilir — Ostinato'nun ruleset↔reference-artefakt deseninin
-BİREBİR karşılığı (JSON değil ama aynı risk şekli: iki bağımsız dosya).
+## Önceki hâl — ölçüldü, YALANLANDI, DEĞİŞTİRİLDİ
 
-## Mutasyon NEDEN üç parçalı (iki değil)
+Bu dosyanın İLK sürümü (2026-08-11) `docs/L-031-UZAY-SAPMASI-OLCUMU.md`'nin
+NESRİNİ regex'le tarayan bir kapıyı sınıyordu. 2. mutasyon turu (500+
+karakterlik gerçekçi ama tamamen UYDURMA bir paragraf, hiçbir gerçek ölçüm
+olmadan) o kapıyı geçti — regex nesri doğruluyordu, ispatı değil.
 
-İlk tasarım yalnız bayrağı `true` yapıp artefaktı sahtelemeyi planlıyordu.
-Ölçtüm: `metric_coverage_test.dart`da ZATEN bir üçüncü çapa VAR —
-`expect(kBridgeIsReferenceEquivalent, kBridgeSpace == MeasurementSpace
-.world)` — yani bayrağı `kBridgeSpace`i DEĞİŞTİRMEDEN `true` yapmak zaten
-BAŞKA bir kapıda yakalanır. Bu, sınanması gereken GERÇEK riski gizlerdi:
-*mühendis L-187 göçünü YAPARSA (kBridgeSpace'i de world'e çevirirse) ama
-GERÇEK ölçümü ATLARSA* — üç parçalı mutasyon bu gerçekçi senaryoyu kurar:
-kod bayrağı + kod uzayı + artefakt, ÜÇÜ BİRDEN tutarlı.
+Kapı o zaman (`test/reference_equivalence_test.dart`) yeniden yazıldı:
+artefaktı `docs/L-031-ESDEGERLIK-KANITI.json` KANIT ZİNCİRİNE bağlıyor —
+YALNIZ `tools/l031_space_divergence.py --claim-equivalence` tarafından
+yazılabilen bir dosya (içerik-hash haritası + üretici git-izlenebilirliği +
+üreticinin KENDİ kabul-hükmü, yeniden hesaplanmadan OKUNUR).
+
+## Bu dosya YENİ kapıyı koordinatörün istediği ÜÇ sahneyle sınar
+
+  1. **asıl delik**   — bayrak+uzay elle değişir, JSON'a DOKUNULMAZ.
+  2. **bayatlık**      — JSON yazılır ama `inputsSha256` ESKİ koda ait
+                         (ölçüm YAPILMIŞ OLABİLİR ama bugünkü kod durumunu
+                         KANITLAMIYOR).
+  3. **pozitif çapa**  — GERÇEK bir `--claim-equivalence` koşumu (tek
+                         fixture, kasten gevşek bar — bkz. altta).
+
+(3) olmadan bu harness yalnız "her zaman kırmızı" bir kapıyı da
+GEÇİRİRDİ — mekanizmanın GERÇEKTEN çalıştığını, yalnız her şeyi
+körlemesine reddetmediğini kanıtlamak ÇAPANIN kendisidir (L-183 dersi,
+Ostinato'nun taklit-kontrolü ilkesiyle aynı).
 """
 from __future__ import annotations
 
-import re
+import hashlib
+import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -33,11 +43,21 @@ from mutation_lock import LockHeld, MutationRun, RestoreFailed  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 METRIC_BRIDGE = ROOT / "packages/lissom_engine/lib/src/metric_bridge.dart"
-L031 = ROOT / "docs/L-031-UZAY-SAPMASI-OLCUMU.md"
-TOUCHED = [METRIC_BRIDGE, L031]
+WITNESS = ROOT / "docs/L-031-ESDEGERLIK-KANITI.json"
 
-#: İki gate BİRDEN koşulur — yalnız hedef kapıyı değil, ÖLÇÜLMÜŞ üçüncü
-#: çapa adayını da (metric_coverage_test.dart) içeren TAM CÜMLE.
+#: Yalnız `metric_bridge.dart` MutationRun'a EMANET — `docs/L-031-UZAY-
+#: SAPMASI-OLCUMU.md` bu turda hiç mutasyona uğramıyor (artık o değil,
+#: JSON kanıtı hedef) ve `WITNESS` MutationRun'ın kapsamı DIŞINDA: dosya
+#: temiz tabanda hiç YOK, `MutationRun.__enter__` var-olmayan bir dosyayı
+#: yedekleyemez. Yaşam döngüsü elle yönetiliyor (`_clear_witness`).
+TOUCHED = [METRIC_BRIDGE]
+
+INPUT_PATHS = [
+    "packages/lissom_engine/lib/src/metric_bridge.dart",
+    "config/tests/lissom-assessment.v1.json",
+    "config/metrics/lissom-metrics.v1.json",
+]
+
 GATES = {
     "reference_equivalence (app)": [
         "flutter", "test", "test/reference_equivalence_test.dart"],
@@ -58,12 +78,16 @@ def run_gates() -> dict[str, bool]:
     return results
 
 
-def mutate_all_three_consistently() -> None:
-    """Kod bayrağı + kod uzayı + docs artefaktı — ÜÇÜ BİRDEN, tutarlı.
+def _clear_witness() -> None:
+    WITNESS.unlink(missing_ok=True)
 
-    Gerçekçi senaryo: L-187 göçü YAPILDI (kBridgeSpace world'e çevrildi,
-    bu YAPISAL olarak doğru bir adım) ama GERÇEK yeniden-ölçüm ATLANDI —
-    artefakt eski sayılarla ya da uydurma sayılarla "geçer" hâle getirildi.
+
+def _flip_flag_and_space() -> None:
+    """L-187 göçünün YAPISAL kısmı — bayrak+uzay TUTARLI çevrilir.
+
+    Gerçekçi senaryo hep bu: mühendis göçü yapar (bu adım kendi başına
+    DOĞRUDUR, `metric_coverage_test.dart`'ı da yeşil tutar), soru ondan
+    SONRA gerçek yeniden-ölçümün yapılıp yapılmadığıdır.
     """
     src = METRIC_BRIDGE.read_text()
     mutated = src.replace(
@@ -79,41 +103,116 @@ def mutate_all_three_consistently() -> None:
         "uzay satırı bulunamadı — mutasyon UYGULANAMADI"
     METRIC_BRIDGE.write_text(mutated)
 
-    # reference_equivalence_test.dart'ın dört ZORUNLU alanını da taşıyan,
-    # GERÇEKÇİ UZUNLUKTA (>500 karakter — gerçek artefakt 10 KB, bir
-    # sahtekârın "inandırıcı" bir metin yazması ucuzdur), ama HİÇBİR GERÇEK
-    # ölçüme dayanmayan sahte artefakt. İLK SÜRÜM 256 karakterdi ve kapı
-    # onu YALNIZ `doc.length > 500` kontrolüyle yakaladı — bu, "sahteliği
-    # ANLADI" değil "kısaydı" demekti (ölçüldü, öz-eleştiri aşağıda).
-    L031.write_text(
-        "# L-031 Uzay Sapması Ölçümü — göç-sonrası yeniden ölçüm "
-        "(SABOTAJ: GERÇEK ölçüm DEĞİL, inandırıcı uzunlukta uydurma)\n\n"
-        "## Yöntem\n\n"
-        "L-187 göçü sonrası `metric_bridge.dart` dünya-uzayına geçti. "
-        "Bu ölçüm, göç sonrası Dart↔Python sapmasını yeniden karakterize "
-        "etmek için `l031_space_divergence.py ile üretildi` komutu "
-        "koşularak yapıldı. Örneklem: 12 testin tamamı, gerçek fixture "
-        "hasadından türetilen açı çiftleri.\n\n"
-        "## Sonuç\n\n"
-        "Göç sonrası yeniden ölçüldü: medyan sapma 2,1°, p95 sapma 5,0°. "
-        "Bu, göç öncesi 11,29°/37,47° sapmasına göre büyük bir iyileşme "
-        "gösteriyor ve dünya-uzayı geçişinin beklenen etkisiyle tutarlı.\n\n"
-        "## Kabul ölçütü\n\n"
-        "kabul ölçütü: medyan < 5° (bu sabotajın kendi uydurduğu eşik, "
-        "GERÇEK bir kabul kararına dayanmıyor).\n"
-    )
+
+def scenario_1_flag_flipped_no_witness() -> dict[str, bool]:
+    """ASIL DELİK: elle bayrak+uzay değiştir, JSON'a DOKUNMA.
+
+    L-254'ün ilk hâlinin tam sahtekârlığı — artık kanıt dosyası YOK
+    olduğu için ek bir sahte-nesir yazmaya bile gerek kalmıyor.
+    """
+    _flip_flag_and_space()
+    return run_gates()
+
+
+def scenario_2_witness_present_but_stale() -> dict[str, bool]:
+    """BAYATLIK: JSON yazılır, `passesOwnCriterion=true` bile der, ama
+    `inputsSha256` mutasyon ÖNCESİ koda ait — yani "ölçüm yapıldıysa BİLE
+    bugünkü kod durumunu KANITLAMIYOR" senaryosu.
+    """
+    stale_sha = {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest()
+                 for p in INPUT_PATHS}
+    _flip_flag_and_space()  # ŞİMDİ kod değişti — yukarıdaki hash artık BAYAT.
+    WITNESS.write_text(json.dumps({
+        "measuredAt": "2026-01-01T00:00:00+00:00",
+        "producedBy": {"script": "tools/l031_space_divergence.py",
+                        "tracked": True},
+        "inputsSha256": stale_sha,
+        "motionCorePin": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+        "dartAnglesSha256": "0" * 64,
+        "measured": {"cells": [], "overallMedianAbsDeg": 1.0,
+                     "overallP95AbsDeg": 2.0},
+        "acceptanceCriterion": {"statement": "SABOTAJ — bayat kanıt",
+                                 "medianBarDeg": 999.0, "p95BarDeg": 999.0},
+        "passesOwnCriterion": True,
+    }, indent=2, ensure_ascii=False))
+    return run_gates()
+
+
+def scenario_3_real_run() -> dict[str, bool]:
+    """POZİTİF ÇAPA: GERÇEK bir `--claim-equivalence` koşumu.
+
+    Tek fixture (`X2u_vGL0qJU`, harvest'te mevcut) — TAM 3-fixture/8-metrik
+    L-031 turunu tekrarlamıyor (pahalı, ayrı bir karar), yalnız mekanizmanın
+    UÇTAN UCA (gerçek `dump_angles.dart` + gerçek `l031_space_divergence.py`
+    + gerçek dosya hash'leri) GEÇİRDİĞİNİ kanıtlıyor. Kabul barı KASTEN
+    gevşek (1000°) — bu bir ürün kararı DEĞİL, yalnız "mekanizma her şeyi
+    reddetmiyor" çapası. Gerçek bir L-187 kabul kararı, gerçek bir
+    movement-science-advisor barıyla ayrıca koşulmalı.
+    """
+    _flip_flag_and_space()
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            dart_json = Path(td) / "dart_selftest.json"
+            dump = subprocess.run(
+                ["dart", "run", "tool/dump_angles.dart", str(dart_json),
+                 "X2u_vGL0qJU"],
+                cwd=ROOT / "packages/lissom_engine",
+                capture_output=True, text=True, timeout=300)
+            if dump.returncode != 0:
+                print(f"⛔ dump_angles.dart BAŞARISIZ (pozitif çapa "
+                      f"koşulamadı):\n{dump.stdout[-2000:]}\n{dump.stderr[-2000:]}")
+                return {g: False for g in GATES}
+            claim = subprocess.run(
+                [sys.executable, "tools/l031_space_divergence.py",
+                 str(dart_json), "--claim-equivalence",
+                 "--acceptance-statement",
+                 "MUTASYON ÖZ-TESTİ — GERÇEK bir kabul kararı DEĞİL, "
+                 "yalnız mekanizmanın gerçek kanıtı GEÇİRDİĞİNİ doğrulamak "
+                 "için kasten gevşek bir bar (tek fixture X2u_vGL0qJU, "
+                 "İZO↔REF).",
+                 "--acceptance-median-bar-deg", "1000",
+                 "--acceptance-p95-bar-deg", "1000"],
+                cwd=ROOT, capture_output=True, text=True, timeout=120)
+            if claim.returncode != 0:
+                print(f"⛔ --claim-equivalence BAŞARISIZ (pozitif çapa "
+                      f"koşulamadı):\n{claim.stdout[-2000:]}\n{claim.stderr[-2000:]}")
+                return {g: False for g in GATES}
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(f"⛔ pozitif çapa koşum HATASI: {e!r}")
+        return {g: False for g in GATES}
+    return run_gates()
+
+
+SCENARIOS = [
+    ("1_asil_delik", scenario_1_flag_flipped_no_witness,
+     {"reference_equivalence (app)": False}),
+    ("2_bayatlik", scenario_2_witness_present_but_stale,
+     {"reference_equivalence (app)": False}),
+    ("3_pozitif_capa", scenario_3_real_run,
+     {"reference_equivalence (app)": True, "metric_coverage (engine)": True}),
+]
 
 
 def main() -> int:
     try:
-        with MutationRun(TOUCHED):
+        with MutationRun(TOUCHED) as run:
+            _clear_witness()
             baseline = run_gates()
             if not all(baseline.values()):
                 print(f"⛔ TABAN KIRMIZI ({baseline}) — mutasyon ölçümü anlamsız")
                 return 1
+            print(f"taban: {baseline}\n")
 
-            mutate_all_three_consistently()
-            mutated = run_gates()
+            outcomes: dict[str, dict[str, bool]] = {}
+            try:
+                for name, fn, _expect in SCENARIOS:
+                    print(f"--- sahne: {name} ---")
+                    outcomes[name] = fn()
+                    print(f"  sonuç: {outcomes[name]}\n")
+                    run.restore_for_next()
+                    _clear_witness()
+            finally:
+                _clear_witness()
     except LockHeld as e:
         print(f"⛔ {e}")
         return 1
@@ -121,18 +220,25 @@ def main() -> int:
         print(f"⛔ GERİ-YÜKLEME BAŞARISIZ — repo BOZUK olabilir, elle bakın: {e}")
         return 3
 
-    print(f"taban: {baseline}")
-    print(f"mutasyonlu (bayrak+uzay+artefakt TUTARLI sahte): {mutated}")
+    ok = True
+    for name, _fn, expect in SCENARIOS:
+        got = outcomes.get(name, {})
+        for gate, want_green in expect.items():
+            green = got.get(gate, False)
+            match = green == want_green
+            ok = ok and match
+            beklenen = "YEŞİL" if want_green else "KIRMIZI"
+            gercek = "yeşil" if green else "kırmızı"
+            print(f"{'✅' if match else '❌'} {name} / {gate}: beklenen "
+                  f"{beklenen}, gerçek {gercek}")
 
-    caught_by = [name for name, green in mutated.items() if not green]
-    if caught_by:
-        print(f"\n✅ ÜÇÜNCÜ ÇAPA VAR: {caught_by} kırmızı yandı — üç kaynağı "
-              f"birden tutarlı sahtelemek bugün YAKALANIYOR.")
+    if ok:
+        print("\n✅ ÜÇ SAHNE DE BEKLENEN: asıl delik kırmızı, bayatlık "
+              "kırmızı, pozitif çapa yeşil — kanıt zinciri hem KAÇAK "
+              "SIZDIRMIYOR hem GERÇEK ölçümü REDDETMİYOR.")
         return 0
-    print("\n🔴 ÜÇÜNCÜ ÇAPA YOK: bayrak+uzay+artefakt BİRLİKTE tutarlı "
-          "sahtelenince İKİ kapı da (reference_equivalence + metric_coverage) "
-          "YEŞİL KALDI. 'L-187 göçünü yaptık ama gerçek ölçümü atladık' "
-          "senaryosu bugün hiçbir kapıya bağlı DEĞİL.")
+    print("\n🔴 EN AZ BİR SAHNE BEKLENMEDİK — kapı ya kaçak sızdırıyor ya "
+          "da gerçek kanıtı da reddediyor.")
     return 1
 
 

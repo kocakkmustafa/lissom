@@ -17,11 +17,29 @@ yapmamak için.
 Kullanım (iki adım):
   cd packages/lissom_engine && dart run tool/dump_angles.dart /tmp/dart.json
   python3 tools/l031_space_divergence.py /tmp/dart.json
+
+## Kanıt zinciri (`--claim-equivalence`, M-F-462/474 — koordinatör onayı 2026-08-12)
+
+Varsayılan koşum yalnız RAPOR basar (yukarıdaki gibi) — hiçbir dosya
+YAZMAZ. `--claim-equivalence` AÇIKÇA istenirse (üç zorunlu argümanla
+birlikte) `docs/L-031-ESDEGERLIK-KANITI.json` yazılır: `test/
+reference_equivalence_test.dart`in `kBridgeIsReferenceEquivalent=true`
+iddiasını bağladığı kanıt. Bu bayrak, `reference_equivalence_test.dart`ın
+KENDİSİNİN de bir gün taşıyabileceği regex-tabanlı sahte-nesir zaafına
+(`mutation_reference_equivalence.py`, 2026-08-11, KANITLANDI) karşı: nesir
+yerine İÇERİK-HASH bağı + üreticinin git-izlenebilirliği + üreticinin
+KENDİ kabul-hükmü (yeniden hesaplanmaz, yalnız OKUNUR — kapı kendi kendini
+ölçen taraf olamaz, Choreia `readers_of()` ilkesi).
 """
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
+import re
+import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +47,17 @@ import numpy as np
 REPO = Path(__file__).resolve().parent.parent
 PIPE = (REPO / "../../motion-core/lib/tools/fixture_pipeline").resolve()
 HARVEST = Path.home() / "motion-harvest/lissom/landmarks"
+WITNESS = REPO / "docs/L-031-ESDEGERLIK-KANITI.json"
+
+#: Ölçülen KOD DURUMUNU bağlayan girdiler — `test/reference_equivalence_
+#: test.dart`in `_inputPaths`iyle AYNI liste, elle senkron tutulur (iki
+#: dilde paylaşılan tek kaynak yok — ayrışırsa harita anahtarları
+#: uyuşmaz ve İKİ TARAF da testte YAKALANIR, sessizce kaçmaz).
+INPUT_PATHS = [
+    "packages/lissom_engine/lib/src/metric_bridge.dart",
+    "config/tests/lissom-assessment.v1.json",
+    "config/metrics/lissom-metrics.v1.json",
+]
 
 if not PIPE.exists():  # pragma: no cover
     sys.exit(f"normatif yorumlayıcı bulunamadı: {PIPE}")
@@ -69,10 +98,107 @@ def fmt(s: dict | None) -> str:
             f"max={s['mx']:7.2f}° bias={s['bias']:+6.2f}° n={s['n']}")
 
 
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _inputs_sha256() -> dict[str, str]:
+    return {p: _sha256_file(REPO / p) for p in INPUT_PATHS}
+
+
+def _motion_core_pin() -> str | None:
+    """`pubspec.lock`taki `motion_core` pin'i — L-031'in ölçtüğü sapmanın
+    Dart tarafı bu SHA'nın geometrisine bağlı; sessizce değişmemeli."""
+    lock = REPO / "pubspec.lock"
+    if not lock.exists():
+        return None
+    m = re.search(r"motion_core:\n(?:.*\n)*?\s*resolved-ref:\s*(\S+)",
+                  lock.read_text())
+    return m.group(1) if m else None
+
+
+def _script_tracked() -> bool:
+    """Bu script'in KENDİSİ bu ağaçta git-takipli mi (`rig_version()`'ın
+    1. kademesinin dar hâli, M-F-135 — çok-repo kimlik denetimi Lissom
+    tek-repo olduğu için gereksiz, yalnız 'elle kopya mı' sorusu kalır)."""
+    here = Path(__file__).resolve()
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(here.parent), "ls-files", "--error-unmatch",
+             str(here)],
+            capture_output=True, text=True, timeout=15)
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return out.returncode == 0
+
+
+def _parse_args(argv: list[str]) -> argparse.Namespace:
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("dart_json", help="dump_angles.dart çıktısı")
+    p.add_argument(
+        "--claim-equivalence", action="store_true",
+        help=f"{WITNESS.relative_to(REPO)} yaz — GERÇEK bir kabul iddiası")
+    p.add_argument("--acceptance-statement",
+                    help="kabul ölçütünün gerekçesi (ölçenin KENDİ beyanı)")
+    p.add_argument("--acceptance-median-bar-deg", type=float,
+                    help="kabul edilir medyan |sapma| üst sınırı, derece")
+    p.add_argument("--acceptance-p95-bar-deg", type=float,
+                    help="kabul edilir p95 |sapma| üst sınırı, derece")
+    args = p.parse_args(argv)
+    if args.claim_equivalence:
+        missing = [name for name, val in (
+            ("--acceptance-statement", args.acceptance_statement),
+            ("--acceptance-median-bar-deg", args.acceptance_median_bar_deg),
+            ("--acceptance-p95-bar-deg", args.acceptance_p95_bar_deg),
+        ) if val is None]
+        if missing:
+            p.error("--claim-equivalence şunları ZORUNLU kılar (eşik burada "
+                     "İCAT EDİLMEZ — ölçenin KENDİ beyanı olmalı): "
+                     + ", ".join(missing))
+    return args
+
+
+def _write_witness(dart_json_path: Path, rows: list[tuple], args: argparse.Namespace) -> None:
+    cells = [
+        {"fixture": fid, "metric": m, "medianAbsDeg": mi, "p95AbsDeg": pi}
+        for fid, m, _mr, mi, _pr, pi in rows
+    ]
+    overall_median = float(np.mean([r[3] for r in rows]))
+    overall_p95 = float(np.mean([r[5] for r in rows]))
+    passes = bool(overall_median <= args.acceptance_median_bar_deg
+                  and overall_p95 <= args.acceptance_p95_bar_deg)
+    witness = {
+        "measuredAt": datetime.now(timezone.utc).isoformat(),
+        "producedBy": {
+            "script": "tools/l031_space_divergence.py",
+            "tracked": _script_tracked(),
+        },
+        "inputsSha256": _inputs_sha256(),
+        "motionCorePin": _motion_core_pin(),
+        "dartAnglesSha256": _sha256_file(dart_json_path),
+        "measured": {
+            "cells": cells,
+            "overallMedianAbsDeg": overall_median,
+            "overallP95AbsDeg": overall_p95,
+        },
+        "acceptanceCriterion": {
+            "statement": args.acceptance_statement,
+            "medianBarDeg": args.acceptance_median_bar_deg,
+            "p95BarDeg": args.acceptance_p95_bar_deg,
+        },
+        "passesOwnCriterion": passes,
+    }
+    WITNESS.write_text(json.dumps(witness, indent=2, ensure_ascii=False) + "\n")
+    print(f"\n{'✅' if passes else '❌'} kanıt yazıldı: "
+          f"{WITNESS.relative_to(REPO)} (passesOwnCriterion={passes})")
+
+
 def main(argv: list[str]) -> int:
-    if len(argv) != 2:
-        sys.exit(__doc__)
-    dart = json.loads(Path(argv[1]).read_text())
+    args = _parse_args(argv)
+    dart_json_path = Path(args.dart_json)
+    dart = json.loads(dart_json_path.read_text())
+    skipped: list[str] = []
     defs = load_defs()
     rows: list[tuple] = []
 
@@ -80,6 +206,7 @@ def main(argv: list[str]) -> int:
         path = HARVEST / f"{fid}.full.json"
         if not path.exists():
             print(f"ATLANDI (fixture yok): {fid}")
+            skipped.append(fid)
             continue
         recs = [r for r in json.loads(path.read_text())["frames"]
                 if r.get("detected")]
@@ -88,6 +215,7 @@ def main(argv: list[str]) -> int:
         if len(recs) != n_dart:
             print(f"⚠️ {fid}: kare sayısı uyuşmuyor "
                   f"(Dart {n_dart} / Python {len(recs)}) — ATLANDI")
+            skipped.append(fid)
             continue
         frames = [
             geo.Frame(
@@ -146,8 +274,16 @@ def main(argv: list[str]) -> int:
     print(f"p95   : {pr:.2f}° → {pi:.2f}°  ({(pi - pr) / pr * 100:+.1f}%)")
     print(f"\nKALAN sapma (İZO↔REF) L-031'in gerçek kapsamıdır: "
           f"medyan {mi:.2f}°, p95 {pi:.2f}°.")
+
+    if args.claim_equivalence:
+        if skipped:
+            print(f"\n⛔ KANIT YAZILMADI: {len(skipped)} fixture ATLANDI "
+                  f"({', '.join(skipped)}) — eksik kapsamdan 'referans-"
+                  f"eşdeğer' iddia edilemez, kanıt EKSİKSİZ koşumu gerektirir.")
+            return 1
+        _write_witness(dart_json_path, rows, args)
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv))
+    raise SystemExit(main(sys.argv[1:]))

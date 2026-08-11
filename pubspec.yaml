@@ -67,6 +67,13 @@ dev_dependencies:
     sdk: flutter
   lints: ^5.0.0
 
+  # `reference_equivalence_test.dart`in kanıt-zinciri doğrulaması: kod
+  # durumunu bağlayan içerik-hash'i `tools/l031_space_divergence.py`nin
+  # ürettiğiyle AYNI algoritmayla (SHA-256, ham baytlar) yeniden hesaplar
+  # (2026-08-12, M-F-462/474 — zaten `crypto: 3.0.7` transitive çözülüyordu,
+  # doğrudan bağımlılık olarak açık yazıldı).
+  crypto: ^3.0.6
+
 flutter:
   uses-material-design: true
   assets:

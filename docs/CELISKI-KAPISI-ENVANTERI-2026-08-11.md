@@ -39,12 +39,10 @@ olmaz.*
 |---|---|---|
 | `pin_equality_test.dart` | `pubspec.lock` (git tarafından yönetilir) ↔ test dosyasındaki MÜHÜRLÜ sabit (elle yazılır) ↔ sürüm çifti | ✅ ZATEN 3-çapalı, "ikisi de aynı YANLIŞ commit'te" sınıfına karşı ÇAPA 2 kurulu (Ostinato deseninin aynısı) — **en iyi örnek** |
 | `metric_coverage_test.dart` | `config/tests/lissom-assessment.v1.json` (JSON, tasarımcı düzenler) ↔ `kMetricBindings`/`kUnbridgedMetrics` (`metric_bridge.dart`'ta HARDCODED Dart sabitleri, mühendis düzenler) | ⚠️ 3 öz-test var — hepsi TEK kaynağı bozuyor, "ikisi BİRDEN tutarlı sürüklenirse" hiç sınanmamış |
-| `reference_equivalence_test.dart` | `kBridgeIsReferenceEquivalent` (kod bayrağı, mühendis düzenler) ↔ `docs/L-031-*.md` (ölçüm artefaktı, ayrı bir ölçüm turu yazar) | 🔴 **SABOTAJLA KANITLANDI, KORUMASIZ** (`tools/mutation_reference_equivalence.py`, 2026-08-12) — bayrak+uzay+artefakt ÜÇÜ BİRDEN inandırıcı uzunlukta tutarlı sahtelenince İKİ kapı da (bu + `metric_coverage_test`) yeşil kaldı. **KOORDİNATÖR HÜKMÜ: açık — L-187 göçünün ÖN KOŞULU, göç SEVK EDİLMEDEN ÖNCE kapatılır** (bugün LATENT: kimse henüz uydurmadı, göç henüz yapılmadı; risk göç commit'iyle doğar). Şimdi inşa EDİLMİYOR — kamera-kabuğu öncelikli, ve tarih keyfi değil: göç L-187 çekirdek turunda açıldığında bu kalem ön koşul olarak açılır. |
+| `reference_equivalence_test.dart` | `kBridgeIsReferenceEquivalent`+`docs/L-031-ESDEGERLIK-KANITI.json` (kanıt zinciri, YALNIZ `tools/l031_space_divergence.py --claim-equivalence` yazar) ↔ `metric_bridge.dart`daki gerçek kod durumu (kapı bağımsızca yeniden hash'ler) | ✅ **KAPATILDI (2026-08-12, L-262, M-F-462/474 — koordinatör onaylı tasarım).** Choreia `harvest_rig/manifest.py`'nin `rig_version()`'ından (içerik-hash kimlik+güncellik, dosya-başına harita) ve `validate_metric_vocabulary.py`'nin `readers_of()`'ından (doğrulayıcı üreticiyle aynı yol OLAMAZ) aktarılan desen — `rig_staleness_warning()`'in "uyar/reddetme" tutumu BİLEREK aktarılmadı (buradaki risk tam tersi, fail-CLOSED). `tools/mutation_reference_equivalence.py` üç sahneyle sınadı: ① bayrak+uzay elle çevrilip JSON'a dokunulmazsa → 🔴 ② JSON yazılır ama `inputsSha256` bayat kalırsa → 🔴 ③ GERÇEK `--claim-equivalence` koşumu (tek fixture, gevşek öz-test barı) → 🟢. Üçü de beklenen çıktıyı verdi — kapı hem kaçak sızdırmıyor hem gerçek kanıtı reddetmiyor. Dürüst sınır: hash bağı sahteleme MALİYETİNİ yükseltir, NİYETİ kanıtlamaz (rig_version()'ın kendisi de aynı sınırı taşır). |
 
-**Sıradaki iş — `reference_equivalence_test.dart` ile başlanıyor** (koordinatör
-seçimi, en net vaka). Kalan iki: `metric_coverage_test.dart` bu turdan
-SONRA (kısmi altyapı var, genişletmek ucuz); `pin_equality_test.dart`
-zaten iyi savunulmuş, düşük öncelik.
+**Sıradaki iş — `metric_coverage_test.dart` mutasyon seti** (koordinatör
+sırası, ②). `pin_equality_test.dart` zaten iyi savunulmuş, düşük öncelik.
 
 ---
 
