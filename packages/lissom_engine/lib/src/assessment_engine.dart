@@ -134,6 +134,22 @@ final class AssessmentEngine {
     }
     _lostSinceUs = null;
 
+    // ⛔ `invalidation` BİLEREK burada değerlendirilmiyor (A4, 2026-08-11).
+    //
+    // Denendi ve GERİ ALINDI: "herhangi bir karede ihlal → tüm deneme iptal"
+    // tetiklemesi gerçek `X2u_vGL0qJU` fixture replay'inde (önceden geçerliliği
+    // kanıtlanmış, temiz bir baş-üstü uzanma — L-141/L-162) yanlış-pozitif
+    // üretti: `elbow_extension_right` 5899 karenin BİRİNDE 150°'nin altına
+    // düştü (muhtemelen izleme gürültüsü) ve bu tek kare TÜM ölçümü
+    // `aborted/BENT_ELBOW` yaptı — `real_replay_test.dart` bunu yakaladı.
+    //
+    // Doğru tetikleme politikası (tepe-karesinde mi, sürdürülmüş ihlalde mi,
+    // ne kadar sürede) ÖLÇÜLMEDİ ve config'te bir `minViolationHoldS` gibi
+    // beyan edilmiş bir eşik YOK — icat etmek burada eşik icadı olurdu.
+    // `TestSpec.invalidation` (battery.dart) artık config'i doğru okuyor;
+    // motor bağlantısı bu politika kararı netleşene kadar KASITLI eksik.
+    // Bkz. A1-A5 raporu + koordinatöre 2. sevk cevabı.
+
     final double? v = r.value;
     if (v == null) return false;
 

@@ -152,6 +152,84 @@ final class PresenceGate {
   bool holds(double v) => op == 'gte' ? v >= value : v <= value;
 }
 
+/// `{side}`/`{opposite}` yer tutucularını çözer — [TestSpec.primaryMetricFor]
+/// ve [InvalidationRule] AYNI kaynağı kullanır (iki yerde iki farklı kural
+/// riski, `requiredHoldS` dersiyle aynı sınıf).
+String resolveSideToken(String metric, String side) => metric
+    .replaceAll('{side}', side)
+    .replaceAll('{opposite}', side == 'right' ? 'left' : 'right');
+
+/// Bir ölçümü GEÇERSİZ kılan koşul (`invalidation`, A4 2026-08-11).
+///
+/// **Bu alanın iki gün okuyucusu yoktu.** `config/tests/lissom-assessment.v1
+/// .json`'daki her testin `invalidation` dizisi (BENT_KNEE/OPPOSITE_LEG_
+/// LIFTED mesajları dahil) `TestSpec`te alan olarak YOKTU — yazılmış içerik,
+/// okuyan kod yoktu. Kamera kabuğu henüz bağlı olmadığı için (yayın engeli
+/// #1) bu bugünkü SEVK EDİLEN hiçbir yüzeyi etkilemiyordu (latent, canlı
+/// değil — ölçüldü, `docs/A1-A5-AILE-DENETIMI-2026-08-11.md`); kamera
+/// bağlandığı gün ölçüm anında CANLI olurdu.
+///
+/// `confidence` metriği KASITLI OLARAK bağlanmadı: `motion_core`'un
+/// `ConfidenceGate.landmarkThreshold` (0,5, [FrameQuality.meanVisibility])
+/// zaten AYRI bir eşikle aynı işi yapıyor gibi görünüyor ama aynı büyüklük
+/// olduğu ÖLÇÜLMEDİ — iki eşiği sessizce birleştirmek bir eşik icadı
+/// olurdu. Bu yüzden `confidence` kuralları isimli boş bırakıldı (yokluk
+/// kendi anlatısını taşır, sessizce puanlamaz) — bkz. `AssessmentEngine`.
+///
+/// ⚠️ **12 testin TAMAMI tarandıktan sonra ölçüldü, tek testten
+/// genellenmedi (ilk sürümün hatası buydu):** kurallar İKİ AYRI biçimde —
+/// `"metrik OP sayı"` (ör. `knee_flexion_{side} < 165`) VE çıplak bayrak
+/// (`supportContact`, `footTouchdown` — `unit: bool`, `source: phase`,
+/// operatörsüz). `op`/`value` bu yüzden OPSİYONEL: `op == null` yapısal
+/// olarak sayısal-karşılaştırma OLMAYAN bir kuralı işaretler ([isEvaluable]
+/// false döner) — ayrıştırma onu ATMAZ, sadece motora taşınamayacağını
+/// beyan eder.
+final class InvalidationRule {
+  const InvalidationRule({
+    required this.metric,
+    required this.op,
+    required this.value,
+    required this.code,
+    this.message,
+  });
+
+  /// `{side}`/`{opposite}` taşıyabilir. Özel değer `confidence` — bugün
+  /// KASITLI olarak motor tarafından değerlendirilmiyor (yukarıdaki not).
+  /// Sayısal-olmayan kurallarda bu, çıplak bayrak adının kendisidir
+  /// (`supportContact`).
+  final String metric;
+
+  /// `<` | `>` | `<=` | `>=` — yapısal olarak ayrıştırılamadıysa `null`.
+  final String? op;
+  final double? value;
+
+  /// Makine-okur kod (`BENT_KNEE` …) — [AssessmentResult.abortCode]'a gider.
+  final String code;
+
+  /// Kullanıcı diliyle gerekçe. Opsiyonel — `LOW_CONFIDENCE` taşımıyor
+  /// (config'te böyle yazılmış, burada UYDURULMADI).
+  final String? message;
+
+  bool get isConfidenceRule => metric == 'confidence';
+
+  /// `op`/`value` ayrıştırılabildiyse true. Bayrak-biçimli kurallar
+  /// (`supportContact`) ve `confidence` — false; motor bunları İSİMLE atlar.
+  bool get isNumericComparison => op != null && value != null;
+
+  bool violatedBy(double v) {
+    assert(isNumericComparison,
+        'yalnız sayısal karşılaştırma kuralları değerlendirilebilir — '
+        'çağıran taraf isNumericComparison\'ı önce kontrol etmeli');
+    return switch (op) {
+      '<' => v < value!,
+      '>' => v > value!,
+      '<=' => v <= value!,
+      '>=' => v >= value!,
+      _ => throw StateError('bilinmeyen invalidation operatörü: $op'),
+    };
+  }
+}
+
 final class TestSpec {
   const TestSpec({
     required this.id,
@@ -164,6 +242,7 @@ final class TestSpec {
     required this.holdSeconds,
     required this.confidenceClass,
     this.referenceStatus,
+    this.invalidation = const <InvalidationRule>[],
   });
 
   final String id;
@@ -187,6 +266,10 @@ final class TestSpec {
   /// null = normal (referanslı/bantlı) test. Dolu = "ölçüm var, hüküm yok".
   final ReferenceStatus? referenceStatus;
 
+  /// Bir ölçümü GEÇERSİZ kılan koşullar (A4 2026-08-11). Boş liste meşrudur
+  /// — her testin form-hatası taşıması gerekmez.
+  final List<InvalidationRule> invalidation;
+
   /// Girişim kapısı için gereken minimum tutuş (sn).
   ///
   /// `minHoldS` beyan edilmişse o; değilse testin kendi `holdSeconds`'inin
@@ -201,9 +284,7 @@ final class TestSpec {
   }
 
   /// `{side}` çözülmüş birincil metrik adı.
-  String primaryMetricFor(String side) =>
-      primaryMetric.replaceAll('{side}', side).replaceAll(
-          '{opposite}', side == 'right' ? 'left' : 'right');
+  String primaryMetricFor(String side) => resolveSideToken(primaryMetric, side);
 }
 
 /// Bataryaya KASITLI olarak alınmamış bir test — ve gerekçesi.
@@ -485,6 +566,7 @@ final class Battery {
       perSide: raw['perSide'] as bool? ?? false,
       primaryMetric: raw['primaryMetric'] as String? ??
           (throw BatteryError('$path.primaryMetric', 'zorunlu')),
+      invalidation: _parseInvalidation(raw['invalidation'], path),
       scoring: ScoringSpec(
         type: type,
         unit: rawScoring['unit'] as String?,
@@ -555,6 +637,69 @@ final class Battery {
       criterion: promo['criterion'] as String,
       measuredGap: promo['measuredGap'] as String,
     );
+  }
+
+  /// `invalidation` YOKSA boş liste meşrudur. VARSA katı okunur: `rule` +
+  /// `code` zorunlu, `message` opsiyonel (config'te `LOW_CONFIDENCE`
+  /// mesajsız — burada UYDURULMUYOR, `null` kalıyor).
+  static List<InvalidationRule> _parseInvalidation(Object? raw, String path) {
+    if (raw == null) return const <InvalidationRule>[];
+    if (raw is! List) throw BatteryError('$path.invalidation', 'liste olmalı');
+    final List<InvalidationRule> out = <InvalidationRule>[];
+    for (int i = 0; i < raw.length; i++) {
+      final Object? e = raw[i];
+      if (e is! Map<String, dynamic>) {
+        throw BatteryError('$path.invalidation[$i]', 'nesne olmalı');
+      }
+      final Object? rule = e['rule'];
+      final Object? code = e['code'];
+      if (rule is! String || rule.trim().isEmpty) {
+        throw BatteryError('$path.invalidation[$i].rule', 'zorunlu');
+      }
+      if (code is! String || code.trim().isEmpty) {
+        throw BatteryError('$path.invalidation[$i].code', 'zorunlu — kodsuz '
+            'bir geçersiz kılma, kullanıcıya İSİMLİ bir sebep veremez');
+      }
+      out.add(_parseRule(rule, code, e['message'] as String?, '$path.invalidation[$i]'));
+    }
+    return out;
+  }
+
+  /// `"knee_flexion_{side} < 165"` biçimini ayrıştırır. Tam ifade
+  /// değerlendiricisi YAZILMADI — 12 testin tamamı tarandı ve iki biçim
+  /// çıktı: `metrik OP sayı` VE çıplak bayrak (`supportContact`). Üçüncü
+  /// bir biçim ÖLÇÜLMEDİ; genişletilmiş bir grameri şimdiden inşa etmek
+  /// `PresenceGate`'in kaçındığı aynı riski taşırdı (kullanılmayan
+  /// esneklik, sınanmamış dal).
+  static final RegExp _rulePattern =
+      RegExp(r'^(\S+)\s*(<=|>=|<|>)\s*(-?[\d.]+)$');
+
+  /// Çıplak tanımlayıcı (`supportContact`, `footTouchdown`) — `unit: bool`,
+  /// `source: phase` metriklerin config'teki hâli. Motor bunları bugün
+  /// DEĞERLENDİREMEZ (faz-makinesi durumu, kare-geometrisi değil); ayrıştırma
+  /// yine de kabul eder — `InvalidationRule.isNumericComparison == false`.
+  static final RegExp _flagPattern = RegExp(r'^[A-Za-z_][A-Za-z0-9_]*$');
+
+  static InvalidationRule _parseRule(
+      String rule, String code, String? message, String path) {
+    final String trimmed = rule.trim();
+    final RegExpMatch? m = _rulePattern.firstMatch(trimmed);
+    if (m != null) {
+      return InvalidationRule(
+        metric: m.group(1)!,
+        op: m.group(2)!,
+        value: double.parse(m.group(3)!),
+        code: code,
+        message: message,
+      );
+    }
+    if (_flagPattern.hasMatch(trimmed)) {
+      return InvalidationRule(
+          metric: trimmed, op: null, value: null, code: code, message: message);
+    }
+    throw BatteryError('$path.rule',
+        'ayrıştırılamadı: "$rule" — beklenen "metrik OP sayı" (OP: <, >, '
+        '<=, >=) ya da çıplak bayrak adı');
   }
 
   static double _derivedHold(num? holdSeconds) {
