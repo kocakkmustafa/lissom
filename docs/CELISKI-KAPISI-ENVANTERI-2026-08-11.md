@@ -39,7 +39,7 @@ olmaz.*
 |---|---|---|
 | `pin_equality_test.dart` | `pubspec.lock` (git tarafından yönetilir) ↔ test dosyasındaki MÜHÜRLÜ sabit (elle yazılır) ↔ sürüm çifti | ✅ ZATEN 3-çapalı, "ikisi de aynı YANLIŞ commit'te" sınıfına karşı ÇAPA 2 kurulu (Ostinato deseninin aynısı) — **en iyi örnek** |
 | `metric_coverage_test.dart` | `config/tests/lissom-assessment.v1.json` (JSON, tasarımcı düzenler) ↔ `kMetricBindings`/`kUnbridgedMetrics` (`metric_bridge.dart`'ta HARDCODED Dart sabitleri, mühendis düzenler) | ⚠️ 3 öz-test var — hepsi TEK kaynağı bozuyor, "ikisi BİRDEN tutarlı sürüklenirse" hiç sınanmamış |
-| `reference_equivalence_test.dart` | `kBridgeIsReferenceEquivalent` (kod bayrağı, mühendis düzenler) ↔ `docs/L-031-*.md` (ölçüm artefaktı, ayrı bir ölçüm turu yazar) | ⛔ sabotaj YOK — L-187 göçü tam bu ikisini birden değiştirecek bir değişiklik, **en net vaka** |
+| `reference_equivalence_test.dart` | `kBridgeIsReferenceEquivalent` (kod bayrağı, mühendis düzenler) ↔ `docs/L-031-*.md` (ölçüm artefaktı, ayrı bir ölçüm turu yazar) | 🔴 **SABOTAJLA KANITLANDI, KORUMASIZ** (`tools/mutation_reference_equivalence.py`, 2026-08-12) — bayrak+uzay+artefakt ÜÇÜ BİRDEN inandırıcı uzunlukta tutarlı sahtelenince İKİ kapı da (bu + `metric_coverage_test`) yeşil kaldı. **KOORDİNATÖR HÜKMÜ: açık — L-187 göçünün ÖN KOŞULU, göç SEVK EDİLMEDEN ÖNCE kapatılır** (bugün LATENT: kimse henüz uydurmadı, göç henüz yapılmadı; risk göç commit'iyle doğar). Şimdi inşa EDİLMİYOR — kamera-kabuğu öncelikli, ve tarih keyfi değil: göç L-187 çekirdek turunda açıldığında bu kalem ön koşul olarak açılır. |
 
 **Sıradaki iş — `reference_equivalence_test.dart` ile başlanıyor** (koordinatör
 seçimi, en net vaka). Kalan iki: `metric_coverage_test.dart` bu turdan
