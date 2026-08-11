@@ -48,12 +48,28 @@ import json
 import os
 import shutil
 import sys
+import time
 from pathlib import Path
-from typing import Callable, Sequence
+from typing import Sequence
 
 ROOT = Path(__file__).resolve().parent.parent
 BACKUP_DIR = ROOT / ".mutation-lock-backup"
 SENTINEL = BACKUP_DIR / "IN-FLIGHT"
+
+#: 4. unsur — LOG (koordinatörün 2. sevki, A2). Kilit/köken/doğrulama
+#: varken KAYIT yoktu: kaçan bir mutasyonun ne zaman/hangi koşumda
+#: kaçtığı sonradan ölçülemiyordu. `*.log` zaten gitignore'da — bu
+#: makinede kalıcı, depoyu ŞİŞİRMEZ. Ek-yalnız (append-only): bir önceki
+#: satır SİLİNMEZ, üzerine yazılmaz — geçmiş koşum kaydı kendi başına bir
+#: kanıt.
+LOG_FILE = ROOT / ".mutation-lock.log"
+
+
+def _log(event: str, **fields: object) -> None:
+    entry = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "pid": os.getpid(),
+              "event": event, **fields}
+    with LOG_FILE.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 def _alive(pid: int) -> bool:
@@ -108,6 +124,7 @@ class MutationRun:
         (BACKUP_DIR / "DIGESTS.json").write_text(
             json.dumps(self._before), encoding="utf-8")
         SENTINEL.write_text(f"mutations in flight {os.getpid()}\n", encoding="utf-8")
+        _log("start", touched=self.touched)
         return self
 
     def restore_for_next(self) -> None:
@@ -122,11 +139,14 @@ class MutationRun:
         after = digests(self.touched)
         if after != self._before:
             SENTINEL.unlink(missing_ok=True)
+            _log("exit_restore_failed", touched=self.touched)
             raise RestoreFailed(
                 "geri-yükleme TUTMADI (özetler uyuşmuyor) — repo BOZUK, "
                 f"elle bakın: {BACKUP_DIR}")
         SENTINEL.unlink(missing_ok=True)
         shutil.rmtree(BACKUP_DIR, ignore_errors=True)
+        _log("exit_ok", touched=self.touched,
+             raised=None if exc is None else f"{exc_type.__name__}: {exc}")
 
     @staticmethod
     def _heal_if_needed() -> None:
@@ -135,13 +155,16 @@ class MutationRun:
         raw = SENTINEL.read_text(encoding="utf-8").strip().split()
         pid = int(raw[-1]) if raw and raw[-1].isdigit() else -1
         if pid > 0 and pid != os.getpid() and _alive(pid):
+            _log("lock_held", holder_pid=pid)
             raise LockHeld(
                 f"MUTASYON KOŞUMU ZATEN SÜRÜYOR (pid {pid}) — ikinci koşum "
                 f"BAŞLAMAZ. Eşzamanlı iki koşum birbirinin yedeğini bozar ve "
                 f"mutasyon KALICI kalır (Ostinato O-079 dersi).")
         # Önceki koşum ortada ölmüş — yedekten onar, hash ile doğrula.
+        _log("heal_detected", dead_pid=pid)
         dig = BACKUP_DIR / "DIGESTS.json"
         if not dig.exists():
+            _log("heal_failed", reason="digests_missing")
             raise RestoreFailed(
                 "önceki koşum ortada ölmüş ve yedek DIGESTS.json yok — "
                 "onarım imkânsız, elle bakın")
@@ -149,9 +172,11 @@ class MutationRun:
         for f in want:
             shutil.copy(BACKUP_DIR / Path(f).name, f)
         if digests(want.keys()) != want:
+            _log("heal_failed", reason="digest_mismatch")
             raise RestoreFailed(
                 "önceki koşumdan onarım DENENDİ ama hash UYUŞMADI — repo "
                 "BOZUK, elle bakın")
+        _log("heal_ok", restored=list(want.keys()))
         SENTINEL.unlink(missing_ok=True)
 
 
@@ -159,6 +184,8 @@ def _selftest() -> int:
     """Öz-test — kilit ve doğrulama gerçekten ötüyor mu (sabotajla)."""
     probe = ROOT / ".mutation-lock-selftest-probe.txt"
     probe.write_text("orijinal\n", encoding="utf-8")
+    log_before = LOG_FILE.read_text(encoding="utf-8").splitlines() \
+        if LOG_FILE.exists() else []
     try:
         # 1) Normal döngü: mutasyon uygulanır, geri-yükleme TUTAR.
         with MutationRun([probe]):
@@ -206,7 +233,19 @@ def _selftest() -> int:
     finally:
         probe.unlink(missing_ok=True)
 
-    print("✅ kilit + köken + doğrulama üçü de sabotajla kanıtlandı.")
+    # 4) LOG — üstteki üç senaryo gerçekten KAYDEDİLDİ mi? (koordinatörün
+    #    2. sevkindeki 4. unsur: kaydı olmayan bir harness'ta kaçan
+    #    mutasyonun sebebi sonradan ölçülemez.)
+    log_after = LOG_FILE.read_text(encoding="utf-8").splitlines()
+    new_events = [json.loads(l)["event"] for l in log_after[len(log_before):]]
+    expected = {"start", "exit_ok", "lock_held", "exit_restore_failed"}
+    missing = expected - set(new_events)
+    if missing:
+        print(f"❌ ÖZ-TEST BAŞARISIZ (LOG): beklenen olaylar kaydedilmedi: "
+              f"{missing} — üstteki senaryolar kaydı BIRAKMADI")
+        return 2
+
+    print("✅ kilit + köken + doğrulama + LOG dördü de sabotajla kanıtlandı.")
     return 0
 
 

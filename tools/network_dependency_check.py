@@ -1,26 +1,42 @@
 #!/usr/bin/env python3
-"""AĞA-ÇIKABİLEN BAĞIMLILIK KAYDI — Ostinato O-080 aktarımı (A3, 2026-08-11).
+""""CİHAZDA KALIR / YÜKLENMEZ" İDDİA KAPISI — Ostinato O-080 aktarımı (A3).
 
-    Ağa çıkabilen HER bağımlılık KAYITLI olmak zorunda. Kayıtsız bir tanesi
-    belirdiğinde bu kapı öter — kayıt bir MUAFİYET değil, bir KARAR NOKTASIDIR.
+    Doğru bir iddianın korunmaması, gelecekteki bir yalandır.
 
-Ölçüm (`docs/A1-A5-AILE-DENETIMI-2026-08-11.md`, A3): `lib/app/profile_
-screen.dart`, `progress_screen.dart`, `home_screen.dart` en az 6 yüzeyde
-"on this phone"/"on this device" diyor; `pubspec.yaml` `google_fonts`
-taşıyor (açılışta Google'ın font CDN'ine gidiyor, L-222); bu iddiaları
-koruyan HİÇBİR kapı yoktu.
+Ölçüm (`docs/A1-A5-AILE-DENETIMI-2026-08-11.md`, A3 + koordinatörün 2.
+sevkindeki O-080 reçetesi): `lib/app/profile_screen.dart`/`progress_screen
+.dart`/`home_screen.dart` en az 6 yüzeyde "stay on this phone"/"on this
+device"/"no account and no server" diyor; `pubspec.yaml` `google_fonts`
+taşıyor (L-222); bu iddiaları koruyan HİÇBİR kapı yoktu.
 
-## Bu kapının ÖLÇMEDİĞİ — isimle (Ostinato'dan aktarılmayan kısım)
+## Üç kanal (koordinatörün reçetesi, ①②③)
 
-Ostinato'nun O-080'i İKİ parçalıydı: ① bu kayıt (pubspec taraması) ②
-sevk edilen yüzeydeki "hiç yüklenmiyor" CÜMLESİNİ kaynak koddaki gerçek
-yükleyici izleriyle (`http.post`, `Dio(`…) çapraz doğrulayan ikinci bir
-kural. İkincisi buraya TAŞINMADI: Ostinato'nun `UPLOAD_CLAIM` regex'i
-Lissom'un GERÇEK cümle biçimini ("stay on this phone", "on this device")
-YAKALAMAZ (Ostinato'nunki "never leaves"/"nothing is uploaded" arıyor) —
-regex'i körlemesine kopyalamak, aynen koordinatörün uyardığı "içindeki
-sabit YEREL çıktı" tuzağının ta kendisi olurdu. Bu yarım bırakıldı, icat
-edilmedi — isimli.
+① **kod izi** — sevk edilen `lib/` kaynağı bir yükleyici çağrısı
+   (`http.post`, `Dio(`, `WebSocket`, `.upload(`…) taşıyor mu? İddia da
+   varsa bu bir ÇELİŞKİ — kapı öter.
+② **bağımlılık kaydı** — pubspec'teki ağa-çıkabilen HER bağımlılık
+   `NETWORK_DEPS_RECORDED`da adıyla VE gerekçesiyle. Kayıt bir MUAFİYET
+   DEĞİL, bir KARAR NOKTASIdır — "ağa çıkan = kötü" YANLIŞ kural olurdu
+   (O-057: gürültüye boğulur, susturulur); `google_fonts` bir GET yapar,
+   kullanıcı verisi taşımaz, iddiayı YALANLAMAZ.
+③ **vakum koruması** — iddia HİÇBİR yüzeyde bulunamıyorsa bu da KIRMIZI:
+   ya bilerek kaldırıldı (kapı da emekli edilmeli) ya tarama kırık.
+   Sessiz "geçti" hiçbir zaman doğru değildir.
+
+## Ostinato'dan AYNEN alınan vs. Lissom için TÜRETİLEN (koordinatörün ②
+şartı: "biçimi al, sabitleri kopyalama")
+
+- `NETWORK_DEP_HINTS` (paket-ailesi izleri) — AYNEN, projeye özgü değil.
+- `UPLOADER_TRACES` (yükleyici API izleri) — AYNEN, Dart/Flutter'ın kendi
+  stack'i, projeye özgü değil.
+- `NETWORK_DEPS_RECORDED` — Ostinato'nunki KOPYALANMADI, Lissom'un kendi
+  `google_fonts` gerekçesiyle SIFIRDAN yazıldı.
+- `UPLOAD_CLAIM` — **kopyalanmadı, TÜRETİLDİ.** Ostinato'nunki "never
+  leaves"/"nothing is uploaded" arar; Lissom'un GERÇEK sevk edilen metni
+  bunların HİÇBİRİNİ kullanmıyor ("stay on this phone", "no account and
+  no server", "nowhere for your data to go") — Ostinato'nun regex'i
+  körlemesine kopyalansaydı Lissom'da SIFIR eşleşme verir, kapı VAKUM-
+  DOĞRU olurdu (③'ün tam yakalaması gereken hâl).
 """
 from __future__ import annotations
 
@@ -30,9 +46,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-#: Ağa çıkabilen ama kullanıcı verisi TAŞIMAYAN, KAYITLI bağımlılıklar.
-#: Yeni bir tanesi eklendiğinde kapı öter — kayıt bir MUAFİYET değil, bir
-#: KARAR NOKTASIDIR (Ostinato O-080'in birebir dili).
+# ── ② bağımlılık kaydı ──────────────────────────────────────────────────
 NETWORK_DEPS_RECORDED = {
     "google_fonts": "yazı tipi indirir (GET); kullanıcı verisi TAŞIMAZ — "
                      "gizlilik iddialarını yalanlamaz, ama L-222 açık "
@@ -40,22 +54,33 @@ NETWORK_DEPS_RECORDED = {
                      "bağlantısı — lisans/bağımlılık kararı koordinatörde)",
 }
 
-#: Ağa çıkabilen bağımlılık ailelerinin izleri (pubspec adlarında aranır).
-#: Ostinato'dan alındı, BİR DÜZELTMEYLE: gerçek pub.dev paket adları çoğu
-#: analitik SDK'sında `_flutter`/`_sdk` sonekiyle gelir (`posthog_flutter`,
-#: `amplitude_flutter`, `mixpanel_flutter`, `appsflyer_sdk`, `adjust_sdk`) —
-#: kaynak desende bu köklerin bir kısmı `\w*`siz, kaydı SESSİZCE atlardı. Bu
-#: kapının kendi öz-testi bunu yakaladı (`dio` ile değil `posthog_flutter`
-#: ile sabote edilince); genişletmek yalnız YAKALAMA alanını büyütür,
-#: daraltmaz — güvenli yön.
 NETWORK_DEP_HINTS = re.compile(
     r"^\s+(http\w*|dio\w*|firebase\w*|sentry\w*|posthog\w*|amplitude\w*|"
     r"mixpanel\w*|segment\w*|appsflyer\w*|adjust\w*|google_fonts|"
     r"supabase\w*|graphql\w*|web_socket\w*):",
     re.MULTILINE)
 
+# ── ① kod izi ────────────────────────────────────────────────────────────
+#: Kullanıcı verisini DIŞARI taşıyan kod yolları. Ostinato'dan AYNEN —
+#: Dart/Flutter'ın kendi ağ API'leri, projeye özgü değil.
+UPLOADER_TRACES = re.compile(
+    r"\bhttp\.post\b|\bhttp\.put\b|\bDio\(|\bHttpClient\(|\bWebSocket\b|"
+    r"MultipartRequest|\.upload\(")
 
-def _check(pubspec_text: str) -> list[str]:
+# ── ③ vakum koruması ─────────────────────────────────────────────────────
+#: Lissom'un GERÇEK sevk edilen cümlelerinden TÜRETİLDİ (grep, kopya değil):
+#: "stay on this phone" (profile_screen.dart ×2) · "no account and no
+#: server ... nowhere for your data to go" (profile_screen.dart) · "on
+#: this device" (home_screen.dart ×4, progress_screen.dart ×1).
+UPLOAD_CLAIM = re.compile(
+    r"stays?\s+on\s+this\s+(?:phone|device)|"
+    r"no\s+account\s+and\s+no\s+server|"
+    r"nowhere\s+for\s+your\s+data\s+to\s+go|"
+    r"on\s+this\s+(?:phone|device)",
+    re.IGNORECASE)
+
+
+def _pubspec_problems(pubspec_text: str) -> list[str]:
     problems: list[str] = []
     for m in NETWORK_DEP_HINTS.finditer(pubspec_text):
         dep = m.group(1)
@@ -70,28 +95,83 @@ def _check(pubspec_text: str) -> list[str]:
     return problems
 
 
+def _claim_sites(lib_root: Path) -> list[tuple[Path, int, str]]:
+    """`UPLOAD_CLAIM` eşleşen her (dosya, satır, metin) — TÜRETİLİR."""
+    sites: list[tuple[Path, int, str]] = []
+    for f in sorted(lib_root.rglob("*.dart")):
+        text = f.read_text(encoding="utf-8")
+        for i, line in enumerate(text.splitlines(), start=1):
+            if UPLOAD_CLAIM.search(line):
+                sites.append((f, i, line.strip()))
+    return sites
+
+
+def _uploader_sites(lib_root: Path) -> list[tuple[Path, int, str]]:
+    sites: list[tuple[Path, int, str]] = []
+    for f in sorted(lib_root.rglob("*.dart")):
+        text = f.read_text(encoding="utf-8")
+        for i, line in enumerate(text.splitlines(), start=1):
+            if UPLOADER_TRACES.search(line):
+                sites.append((f, i, line.strip()))
+    return sites
+
+
 def main() -> int:
     pubspec = ROOT / "pubspec.yaml"
-    problems = _check(pubspec.read_text())
+    lib_root = ROOT / "lib"
+    problems: list[str] = []
 
-    # Öz-test — kapı KIRMIZI yanabiliyor (sabotaj): uydurma bir ağ paketi
-    # kayıtsız bırakılırsa yakalanmalı. Gerçek dosyaya dokunmadan, aynı
-    # regex'i sentetik girdi üzerinde koşturuyoruz.
-    sabotaged = pubspec.read_text() + "\n  posthog_flutter: ^1.0.0\n"
-    sabotage_problems = _check(sabotaged)
-    if len(sabotage_problems) <= len(problems):
-        print("❌ ÖZ-TEST BAŞARISIZ: kayıtsız `posthog_flutter` eklenince "
-              "kapı ötmedi — regex ya da mantık bozuk")
+    # ② bağımlılık kaydı
+    problems += _pubspec_problems(pubspec.read_text())
+
+    # ① kod izi — iddia VARKEN yükleyici izi de varsa çelişki
+    claims = _claim_sites(lib_root)
+    uploaders = _uploader_sites(lib_root)
+    if claims and uploaders:
+        problems.append(
+            f"ÇELİŞKİ: {len(claims)} yüzey cihazda-kalır iddiası taşıyor "
+            f"AMA kaynakta {len(uploaders)} yükleyici izi bulundu: " +
+            "; ".join(f"{f.relative_to(ROOT)}:{i}" for f, i, _ in uploaders[:3])
+        )
+
+    # ③ vakum koruması — iddia HİÇ bulunamıyorsa bu da kırmızı
+    if not claims:
+        problems.append(
+            "VAKUM: `UPLOAD_CLAIM` `lib/`de SIFIR eşleşme buldu. Ya iddia "
+            "bilerek kaldırıldı (bu kapı da emekli edilmeli) ya tarama "
+            "kırık (regex Lissom'un güncel cümlesini kaçırıyor olabilir). "
+            "Sessiz 'geçti' burada YANLIŞ olurdu."
+        )
+
+    # Öz-testler — kapı KIRMIZI yanabiliyor (sabotaj), üçü de ayrı ayrı.
+    if _pubspec_problems(pubspec.read_text() + "\n  posthog_flutter: ^1.0.0\n") \
+            <= _pubspec_problems(pubspec.read_text()):
+        print("❌ ÖZ-TEST BAŞARISIZ (②): kayıtsız `posthog_flutter` "
+              "eklenince kapı ötmedi")
+        return 2
+    if not UPLOADER_TRACES.search("await Dio().post(url, data: payload);"):
+        print("❌ ÖZ-TEST BAŞARISIZ (①): bilinen bir yükleyici izi "
+              "(`Dio(`) yakalanmadı")
+        return 2
+    if UPLOAD_CLAIM.search("This screen shows your workout history."):
+        print("❌ ÖZ-TEST BAŞARISIZ (③ ikizi — YANLIŞ-POZİTİF): iddia "
+              "taşımayan sıradan bir cümle yanlışlıkla eşleşti")
+        return 2
+    if not UPLOAD_CLAIM.search("Everything stays on this phone."):
+        print("❌ ÖZ-TEST BAŞARISIZ (③): bilinen bir iddia cümlesi "
+              "TÜRETİLEN regex'le eşleşmedi")
         return 2
 
-    print(f"Ağ-bağımlılığı kaydı — {len(NETWORK_DEPS_RECORDED)} kayıtlı, "
-          f"öz-test geçti (sabotaj yakalandı)")
+    print(f"Cihazda-kalır iddiası — {len(claims)} yüzey, {len(uploaders)} "
+          f"yükleyici izi, {len(NETWORK_DEPS_RECORDED)} kayıtlı bağımlılık, "
+          f"4 öz-test geçti.")
     if problems:
         print(f"\n❌ {len(problems)} sorun:")
         for p in problems:
             print(f"  {p}")
         return 1
-    print("✅ pubspec.yaml'daki her ağ-yeteneği bağımlılık kayıtlı.")
+    print("✅ İddia korunuyor: yükleyici izi yok, bağımlılıklar kayıtlı, "
+          "vakum değil.")
     return 0
 
 
