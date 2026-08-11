@@ -66,8 +66,9 @@ void main() {
             'buton sınıfı burada TERSİNE de geçerli');
   });
 
-  testWidgets('O3 — kamera BU BUILD\'de yok metni, dürüst (uydurma izin akışı değil)',
-      (WidgetTester tester) async {
+  testWidgets(
+      'O3 — gerçek izin metni ("video never leaves this device"), '
+      'düğme dokunulmadan Continue AKTİF kalır', (WidgetTester tester) async {
     final _FakeStore store = _FakeStore();
     await _pump(tester, store, () {});
     await _continue(tester); // O1 → O2
@@ -75,10 +76,20 @@ void main() {
     await tester.pumpAndSettle();
     await _continue(tester); // O2 → O3
 
-    expect(find.textContaining('No session can be captured in this build'),
+    expect(find.textContaining('never leaves this device'), findsOneWidget,
+        reason: 'CameraPoseSource bağlandı — O3 artık GERÇEK bir izin '
+            'adımı, "bu build\'de yakalanamaz" DEĞİL (koordinatör şartı, '
+            '2026-08-12)');
+    expect(find.byKey(const Key('onboarding.camera.requestPermission')),
         findsOneWidget,
-        reason: 'CaptureUnavailableNote.text AYNEN kullanılmalı — yeni bir '
-            'kamera-izni cümlesi İCAT EDİLMEMELİ');
+        reason: 'gerçek bir "izin iste" düğmesi olmalı — ölü buton değil');
+    // İzin düğmesine BİLEREK dokunulmuyor: platform kanalı bu testte
+    // mocklanmıyor (`Permission.camera.request()` gerçek bir OS çağrısı).
+    // O4 kamera durumundan BAĞIMSIZ olduğu için (koordinatör onaylı),
+    // Continue düğmeye dokunulmadan da aktif kalmalı.
+    final FilledButton btn = tester
+        .widget<FilledButton>(find.byKey(const Key('onboarding.continue')));
+    expect(btn.onPressed, isNotNull);
   });
 
   testWidgets('O4 — yaş bandı seçilmeden Continue DEVRE DIŞI, seçilince aktif',

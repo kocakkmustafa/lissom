@@ -84,9 +84,12 @@ UPLOADER_TRACES = re.compile(
 #: Lissom'un GERÇEK sevk edilen cümlelerinden TÜRETİLDİ (grep, kopya değil):
 #: "stay on this phone" (profile_screen.dart ×2) · "no account and no
 #: server ... nowhere for your data to go" (profile_screen.dart) · "on
-#: this device" (home_screen.dart ×4, progress_screen.dart ×1).
+#: this device" (home_screen.dart ×4, progress_screen.dart ×1) · "never
+#: leaves this device" (onboarding_flow.dart, kamera-kabuğu sevki
+#: 2026-08-12 — O3'ün gerçek izin metni).
 UPLOAD_CLAIM = re.compile(
     r"stays?\s+on\s+this\s+(?:phone|device)|"
+    r"never\s+leaves\s+this\s+(?:phone|device)|"
     r"no\s+account\s+and\s+no\s+server|"
     r"nowhere\s+for\s+your\s+data\s+to\s+go|"
     r"on\s+this\s+(?:phone|device)",

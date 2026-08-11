@@ -54,6 +54,14 @@ dependencies:
   # paket Choreia ve Ostinato'da da kullanılıyor (aile emsali).
   google_fonts: ^6.2.1
 
+  # Kamera izni isteği (CameraPoseSource, 2026-08-12) — Ostinato'nun
+  # camera_session.dart deseninin aynısı. İzin API'sidir, ağa ÇIKMAZ —
+  # tools/network_dependency_check.py'nin NETWORK_DEP_HINTS'i bu paket
+  # ailesini taramıyor (koordinatörün öngörüsü test edildi: kapı ATEŞLENMEDİ,
+  # çünkü `permission_handler` hiçbir ağ-paketi-ailesi önekiyle eşleşmiyor —
+  # tahmin değil, ölçüldü).
+  permission_handler: ^11.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

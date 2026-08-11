@@ -1,14 +1,15 @@
-/// Onboarding akışı — O1 Welcome → O2 Disclaimer → O3 Camera-info →
+/// Onboarding akışı — O1 Welcome → O2 Disclaimer → O3 Camera permission →
 /// O4 Profile → O5 Measurement limits (`docs/design/UI-BRIEF.md` §2.1).
 ///
-/// ⛔ **O3 ve O6 tasarım brief'inden BİLEREK farklı.** Brief O3'ü "Camera
-/// permission" (gerçek bir izin isteği) olarak tarif ediyor ve O6'yı
-/// ("canlı iskelet önizlemeli kamera kurulumu") ayrı bir adım sayıyor.
-/// Kamera kabuğu `lib/`e hiç bağlı değil (ship-blocker #1, ölçüldü) — yani
-/// bugün istenecek gerçek bir izin yok. O3 burada [CaptureUnavailableNote]
-/// ile DEĞİŞTİRİLDİ (var olan dürüst metin, uydurulmadı); O6 tamamen
-/// ATLANDI — kamera kabuğu bağlandığı gün eklenecek, o güne kadar İSİMLİ
-/// yokluk.
+/// **O3 (2026-08-12 GÜNCELLENDİ):** `CameraPoseSource` bağlandığı GÜN,
+/// AYNI commit'te O3 brief'in aslına döndü — gerçek bir izin isteği
+/// (`test/onboarding_camera_gate_test.dart` bunu zorluyor, koordinatör
+/// şartı: "bugün doğru olan bir dürüstlük metni, bir sonraki commit'le
+/// yalana dönebilir"). İzin isteği kullanıcı dokunuşuyla tetiklenir,
+/// ekran açılır açılmaz otomatik DEĞİL.
+///
+/// ⛔ **O6 hâlâ BİLEREK atlandı** — "canlı iskelet önizlemeli kamera
+/// kurulumu" ayrı, daha büyük bir iş (canlı-ölçüm ekranı), isimli açık.
 ///
 /// O4 (profil) brief'te "izin verildi" dalına bağlıydı; burada KOŞULSUZ
 /// gösteriliyor — yaş bandı toplamak kamera durumundan bağımsız bir iştir
@@ -16,6 +17,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'lissom_theme.dart';
 import 'onboarding_store.dart';
@@ -213,8 +215,52 @@ class _DisclaimerStep extends StatelessWidget {
   }
 }
 
-class _CameraInfoStep extends StatelessWidget {
+/// O3 — Camera permission (UI-BRIEF §2.1 aslına dönüldü, 2026-08-12).
+///
+/// Önceki hâli "bu build'de yakalanamaz" diyordu (bkz. `surfaces.dart`
+/// içindeki dürüst-yokluk widget'ı) — DOĞRUYDU o gün, kamera kabuğu bağlı
+/// değildi. `CameraPoseSource`
+/// bağlandığı bu commit'te bu ekran da güncellendi (AYNI commit — koordinatör
+/// şartı, `test/onboarding_camera_gate_test.dart` bunu zorluyor).
+///
+/// İzin isteği KULLANICI DOKUNUŞUYLA tetiklenir, ekran açılır açılmaz
+/// OTOMATİK değil — hem daha iyi UX hem de widget testinde platform kanalı
+/// olmadan bu adımdan (`onboarding.continue`ya dokunarak) geçilebilmesi
+/// için (bkz. `onboarding_flow_test.dart`, düğmeye hiç dokunmuyor).
+class _CameraInfoStep extends StatefulWidget {
   const _CameraInfoStep();
+
+  @override
+  State<_CameraInfoStep> createState() => _CameraInfoStepState();
+}
+
+class _CameraInfoStepState extends State<_CameraInfoStep> {
+  PermissionStatus? _status;
+  bool _requesting = false;
+
+  Future<void> _requestPermission() async {
+    setState(() => _requesting = true);
+    final PermissionStatus status = await Permission.camera.request();
+    if (!mounted) return;
+    setState(() {
+      _status = status;
+      _requesting = false;
+    });
+  }
+
+  String get _statusText {
+    final PermissionStatus? s = _status;
+    if (s == null) return '';
+    if (s.isGranted) {
+      return 'Camera access granted.';
+    }
+    if (s.isPermanentlyDenied || s.isRestricted) {
+      return 'Camera access is off. You can turn it on later in Settings — '
+          'the rest of Lissom still works without it.';
+    }
+    return 'Camera access was not granted. You can try again later — the '
+        'rest of Lissom still works without it.';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +272,8 @@ class _CameraInfoStep extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           'When you take a measurement, Lissom reads your movement through '
-          'the camera in real time. ${CaptureUnavailableNote.text}',
+          'the camera in real time. The video never leaves this device — '
+          'nothing is recorded, saved, or sent anywhere.',
           style: t.textTheme.bodyMedium,
         ),
         const SizedBox(height: 8),
@@ -236,6 +283,19 @@ class _CameraInfoStep extends StatelessWidget {
           style: t.textTheme.bodySmall
               ?.copyWith(color: LissomColors.bodySecondary),
         ),
+        const SizedBox(height: 18),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: OutlinedButton(
+            key: const Key('onboarding.camera.requestPermission'),
+            onPressed: _requesting ? null : _requestPermission,
+            child: Text(_status == null ? 'Allow camera access' : 'Check again'),
+          ),
+        ),
+        if (_status != null) ...<Widget>[
+          const SizedBox(height: 10),
+          Text(_statusText, style: t.textTheme.bodySmall),
+        ],
       ],
     );
   }
