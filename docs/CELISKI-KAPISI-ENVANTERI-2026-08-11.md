@@ -11,42 +11,66 @@ grep değil — her dosyanın "ne ölçtüğünü" anlatan kendi cümlesi). Sın
 iki eksende: **kaç bağımsız kaynak karşılaştırıyor** (1 = VARLIK, ≥2 = ÇELİŞKİ)
 ve **MUT-A'nın "iki kaynağı birden" sınavını daha önce geçmiş mi**.
 
+## ⭐ DÜZELTME (2026-08-12, koordinatör onaylı) — 13 değil 3
+
+İlk sürüm 13 kapıyı "ÇELİŞKİ" saydı. Yeniden ölçüldü: çoğu **config
+(VERİ) ↔ render edilen widget (AYNI veriden TÜREYEN kod)** biçiminde —
+Ostinato'nun MUT-A'sı ise **iki BAĞIMSIZ veri dosyasını** (ruleset JSON ↔
+reference-artefakt JSON) mutasyona uğratıyor. Bunlar FARKLI risk sınıfları:
+
+- **Tek kaynak → kod dönüşümü riski.** Veri BİR yerde yaşar, widget ondan
+  TÜRER. Risk: *rendering kodu veriyi yanlış/eksik yansıtır mı* — bu VARLIK
+  kapısının işi (aşağıdaki tabloda ayrı sınıflandırıldı, silinmedi).
+- **İki bağımsız kaynak → sürüklenme riski.** İki dosya AYRI AYRI elle
+  düzenlenebilir. Risk: *ikisi birbirinden bağımsız yanlış yönde
+  sürüklenir, ya da BİRLİKTE tutarlı-yanlış hâle getirilirse kapı bunu
+  YAKALAMAZ* — MUT-A'nın asıl hedefi bu, ve yalnız üç kapıda gerçekten var.
+
+Aile dersi: *bir çelişki kapısı iki BAĞIMSIZ kaynağı karşılaştırmalıdır;
+aynı kökten türeyen iki temsil, ne kadar farklı GÖRÜNÜRSE görünsün,
+birlikte sürüklenir ve mutasyon onları birlikte bozar — yani sınav yapmış
+olmaz.*
+
 ---
 
-## ÇELİŞKİ kapıları — MUT-A'nın asıl hedefi (13)
+## ÇELİŞKİ kapıları — MUT-A'nın GERÇEK hedefi (3)
 
-| Dosya | İki kaynak | MUT-A geçmişi |
+| Dosya | İki BAĞIMSIZ kaynak | MUT-A geçmişi |
 |---|---|---|
-| `pin_equality_test.dart` | `pubspec.lock` ref/resolved-ref ↔ mühürlü sabit ↔ sürüm çifti | ✅ ZATEN 3-çapalı, "ikisi de aynı YANLIŞ commit'te" sınıfına karşı ÇAPA 2 kurulu (Ostinato deseninin aynısı) — **en iyi örnek** |
-| `honesty_presence_test.dart` | kaynak (config sınır/muafiyet listesi) ↔ yüzey (render edilen metin) | ⚠️ İKİ TEKİL sabotaj koşuldu (kaba+sinsi silme), ama **KOORDİNELİ** "kaynak VE yüzey birlikte tutarlı bozulursa" hiç sınanmadı |
-| `metric_coverage_test.dart` | batarya-istediği metrikler ↔ köprü kapsamı ↔ ölçüm uzayı | ⚠️ 3 öz-test var (beyansız metrik, çelişkili beyan) — hepsi TEK kaynak sabotajı, "her iki taraf da" sınanmamış |
-| `os_layer_test.dart` | `Info.plist` izin metni ↔ `lib/` capture-yolu varlığı | ⛔ sabotaj YOK — simetri iddiası var ama hiç sınanmamış |
-| `shell_test.dart` | config `tabs` listesi ↔ `LissomShell` render edilen sekmeler | ⛔ sabotaj YOK |
-| `family_page_test.dart` | config'in canlı/engelli kural sayısı ↔ sayfada görünen sayı | ⛔ sabotaj YOK |
-| `library_screen_test.dart` | veri (inşa edilmiş aile sayısı) ↔ render (kart sayısı) | ⛔ sabotaj YOK |
-| `ship_blocker_test.dart` | `pubspec` `assets:` beyanı ↔ disk yolları ↔ test-okuma yöntemi (disk) vs cihaz-okuma yöntemi (bundle) | ⛔ sabotaj YOK — kendi docstring'i tam bu asimetriyi TANIMLIYOR ama sınamıyor |
-| `reference_equivalence_test.dart` | kod bayrağı (`kBridgeIsReferenceEquivalent`) ↔ docs artefaktı (medyan/p95/kabul-ölçütü) | ⛔ sabotaj YOK — L-187 göçü tam bu ikisini birden değiştirecek bir değişiklik |
-| `subject_test.dart` | config başlığı ↔ hardcoded gövde metni | ⛔ sabotaj YOK — J-154'ün bulduğu kusur sınıfının kendisi |
-| `capability_claim_test.dart` | yetenek iddiası (metin) ↔ gerçek kod/pubspec yeteneği | ⛔ sabotaj YOK |
-| `summary_test.dart` | hesaplanan statü (`tier`/`lessonClass`) ↔ render edilen bölüm | ⛔ sabotaj YOK |
-| `battery_summary_view_test.dart` | hesaplanan bant ↔ hangi BÖLÜMDE render edildiği | ⛔ sabotaj YOK — kendi docstring'i "iki bölüm birleştirilse geçerdi" riskini zaten adlandırmış |
+| `pin_equality_test.dart` | `pubspec.lock` (git tarafından yönetilir) ↔ test dosyasındaki MÜHÜRLÜ sabit (elle yazılır) ↔ sürüm çifti | ✅ ZATEN 3-çapalı, "ikisi de aynı YANLIŞ commit'te" sınıfına karşı ÇAPA 2 kurulu (Ostinato deseninin aynısı) — **en iyi örnek** |
+| `metric_coverage_test.dart` | `config/tests/lissom-assessment.v1.json` (JSON, tasarımcı düzenler) ↔ `kMetricBindings`/`kUnbridgedMetrics` (`metric_bridge.dart`'ta HARDCODED Dart sabitleri, mühendis düzenler) | ⚠️ 3 öz-test var — hepsi TEK kaynağı bozuyor, "ikisi BİRDEN tutarlı sürüklenirse" hiç sınanmamış |
+| `reference_equivalence_test.dart` | `kBridgeIsReferenceEquivalent` (kod bayrağı, mühendis düzenler) ↔ `docs/L-031-*.md` (ölçüm artefaktı, ayrı bir ölçüm turu yazar) | ⛔ sabotaj YOK — L-187 göçü tam bu ikisini birden değiştirecek bir değişiklik, **en net vaka** |
 
-**Öncelik sırası (ölçülmüş gerekçeyle):** `honesty_presence_test.dart` ve
-`metric_coverage_test.dart` ZATEN kısmi sabotaj taşıyor — ilk MUT-A turu
-bunları "tek kaynak → koordineli iki kaynak"a GENİŞLETMEK olmalı, çünkü
-altyapı (sabotaj fonksiyonu, kapı listesi) zaten orada. `ship_blocker_test
-.dart` ve `reference_equivalence_test.dart` en YÜKSEK risk taşıyor —
-ikisi de kendi docstring'inde tam bu asimetriyi anlatıyor ama hiç
-sabotajla kanıtlanmamış.
+**Sıradaki iş — `reference_equivalence_test.dart` ile başlanıyor** (koordinatör
+seçimi, en net vaka). Kalan iki: `metric_coverage_test.dart` bu turdan
+SONRA (kısmi altyapı var, genişletmek ucuz); `pin_equality_test.dart`
+zaten iyi savunulmuş, düşük öncelik.
 
 ---
 
-## VARLIK kapıları — tek kaynak, MUT-A'nın hedefi DEĞİL (25)
+## VARLIK-yakını kapılar — tek kaynak → kod-dönüşümü sınar, MUT-A'nın hedefi DEĞİL (10)
 
-Tek bir kaynağı (render edilen ağaç, kod deseni, config'in kendi iç
-tutarlılığı) sınıyor — "iki kaynağı birden tutarlı boz" sınıfının riski
-yapısal olarak yok. Listelendi ki bir sonraki tur bunlara MUT-A YAZMAYA
-çalışıp zaman kaybetmesin:
+Yeniden etiketlendi (silinmedi): her biri config/veri ↔ AYNI veriden
+türeyen render/hesap arasındaki DÖNÜŞÜMÜ sınıyor. Değerli kapılar —
+yalnız Ostinato'nun "iki bağımsız dosya sürüklenmesi" sınıfının riskini
+TAŞIMIYORLAR, o yüzden JSON-mutasyonlu bir MUT-A turu buraya harcanmamalı.
+
+| Dosya | Tek kaynak → türeyen |
+|---|---|
+| `honesty_presence_test.dart` | config sınır/muafiyet listesi → render edilen metin |
+| `os_layer_test.dart` | `lib/` capture-yolu varlığı → `Info.plist` izin metni gereksinimi |
+| `shell_test.dart` | config `tabs` listesi → `LissomShell` render edilen sekmeler |
+| `family_page_test.dart` | config'in canlı/engelli kural sayısı → sayfada görünen sayı |
+| `library_screen_test.dart` | inşa edilmiş aile sayısı (veri) → kart sayısı (render) |
+| `ship_blocker_test.dart` | `pubspec` `assets:` beyanı → disk-okuma (test) vs bundle-okuma (cihaz) yöntemi |
+| `subject_test.dart` | config başlığı → hardcoded gövde metni (ikisi de AYNI ekranın parçası, ayrı dosyalar değil) |
+| `capability_claim_test.dart` | yetenek iddiası (metin) → gerçek kod/pubspec taraması |
+| `summary_test.dart` | hesaplanan statü (`tier`/`lessonClass`) → render edilen bölüm |
+| `battery_summary_view_test.dart` | hesaplanan bant → hangi BÖLÜMDE render edildiği |
+
+---
+
+## VARLIK kapıları — tek kaynak, dönüşüm bile yok (25)
 
 `contrast_test` · `rendered_contrast_test` · `defensive_default_test` ·
 `home_screen_test` · `ia_test` · `measurement_limit_test` ·

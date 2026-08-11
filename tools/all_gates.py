@@ -42,6 +42,13 @@ NOT_GATES = {
     "harvest_prescreen.py", "landmark_quality.py", "reclassify_pool.py",
     "targeted_search.py", "cut_presence_window.py", "identity_review.py",
     "l031_space_divergence.py", "two_mode_report.py", "vmr_baseline.py",
+    # `mutation_reference_equivalence.py`: argümansız KOŞAR ama BİLEREK
+    # buraya alınmadı — gerçek kaynak dosyaları GEÇİCİ mutasyona uğratıp
+    # geri yükler (MutationRun ile güvenli, ama her commit'te koşmak hem
+    # yavaş — 4 `flutter test` çağrısı — hem de bir TANI aracı, tekrar
+    # eden bir regresyon kapısı değil: "üçüncü çapa var mı" sorusuna bir
+    # kez cevap verir, cevap değişmez (kod değişmediği sürece).
+    "mutation_reference_equivalence.py",
 }
 KNOWN_RED = {
     "fixture_check.py": "paylaşımlı rig anatomical_mode() taşımıyor (M-F-280)",
