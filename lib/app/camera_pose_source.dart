@@ -42,7 +42,17 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'pose_model.dart';
 
-final class CameraPoseSource implements PoseSource {
+/// `PoseSource.events()`/`.dispose()` yeterli DEĞİL bir GERÇEK kaynak için:
+/// bir izin isteği + native oturum açılışı gerektiği için AYRI bir
+/// `start()` adımı şart — `FakePoseSource` bunu istemez (`events()`
+/// çağrılınca script'i hemen yayar). `LiveCaptureScreen` kaynağın
+/// `StartablePoseSource` olup olmadığını KONTROL EDER (bkz. o dosya) —
+/// `PoseSource`'un kendisi (motorda yaşıyor) değiştirilmedi.
+abstract interface class StartablePoseSource implements PoseSource {
+  Future<void> start();
+}
+
+final class CameraPoseSource implements StartablePoseSource {
   CameraPoseSource({MotionCameraController? controller})
       : _camera = controller ?? MotionCameraController();
 
@@ -65,6 +75,7 @@ final class CameraPoseSource implements PoseSource {
   @override
   Stream<PoseSourceEvent> events() => _events.stream;
 
+  @override
   Future<void> start() => _enqueue(_start);
 
   Future<void> _start() async {
