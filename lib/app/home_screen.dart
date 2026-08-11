@@ -33,6 +33,7 @@ import 'package:motion_core/motion_core.dart';
 import 'app_facts.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'live_capture_screen.dart';
 import 'session_history_view.dart';
 import 'surfaces.dart';
 
@@ -43,6 +44,7 @@ class HomeScreen extends StatelessWidget {
   static const Key retestKey = Key('home.retest_countdown');
   static const Key continueKey = Key('home.continue');
   static const Key quickStartKey = Key('home.quick_start');
+  static const Key startMeasurementKey = Key('home.startMeasurement');
 
   /// Bölüm id'si → o bölümün gövdesi. Config'te TANIMSIZ bir bölüm gelirse
   /// sessizce atlanmaz: [_unknownSection] onu ADIYLA gösterir. Sessiz atlama,
@@ -67,10 +69,12 @@ class HomeScreen extends StatelessWidget {
         children: <Widget>[
           const DeclarationBanner(
             eyebrow: 'Where Lissom is today',
-            body: 'The measurement engine and the twelve-test battery are '
-                'live. The camera run is not wired to a screen in this build, '
-                'so no session can be captured here — what you can do today '
-                'is read exactly what each test measures, and what it cannot.',
+            body: 'The measurement engine, the twelve-test battery, and a '
+                'live capture screen are connected. This has not been tried '
+                'on a real phone: camera permission, frame quality, and '
+                'calibration still need a device pass — what you can do '
+                'today is start a measurement, or read exactly what each '
+                'test measures and what it cannot.',
           ),
           const SizedBox(height: 24),
           for (final HomeSection s in facts.ia.homeSections) ...<Widget>[
@@ -163,8 +167,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             last == null
-                ? 'Nothing has been measured on this device — and nothing can '
-                    'be, until the camera run is wired to a screen.'
+                ? 'Nothing has been measured on this device.'
                 : 'Last measurement on this device: '
                     '${_formatDate(last.completedAt)}.',
             style: t.textTheme.bodyMedium,
@@ -202,8 +205,7 @@ class HomeScreen extends StatelessWidget {
     if (last == null) {
       return const NamedGapCard(
         title: 'Nothing in progress',
-        reason: 'Nothing has been measured on this device, and no session '
-            'can be started here.',
+        reason: 'Nothing has been measured on this device.',
       );
     }
     return LissomCard(
@@ -246,15 +248,32 @@ class HomeScreen extends StatelessWidget {
               child: Text('· ${x.name}', style: t.textTheme.bodyMedium),
             ),
           const SizedBox(height: 12),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: FilledButton(
-              // Bu düğme GERÇEKTEN bir yere gidiyor. Ölçüm başlatan bir düğme
-              // KOYULMADI: canlı-tur ekranı yok, ve hiçbir şey yapmayan bir
-              // "Start" düğmesi ölü-buton sınıfının ta kendisi olurdu.
-              onPressed: onOpenLibrary,
-              child: const Text('See what each test measures'),
-            ),
+          Wrap(
+            spacing: 12,
+            runSpacing: 8,
+            children: <Widget>[
+              if (live.isNotEmpty)
+                FilledButton(
+                  key: startMeasurementKey,
+                  // Bu düğme GERÇEKTEN bir yere gidiyor (2026-08-12, kamera-
+                  // kabuğu sevki): `LiveCaptureScreen` bağlandı, `facts.live`
+                  // TÜRETİLMİŞ ilk canlı testi açar — uydurma bir seçim
+                  // değil, motorun GERÇEKTEN okuyabildiği testlerin ilki.
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => LiveCaptureScreen(
+                        test: facts.battery.tests[live.first.testId]!,
+                        batteryVersion: facts.battery.version,
+                      ),
+                    ),
+                  ),
+                  child: const Text('Start a measurement'),
+                ),
+              OutlinedButton(
+                onPressed: onOpenLibrary,
+                child: const Text('See what each test measures'),
+              ),
+            ],
           ),
         ],
       ),

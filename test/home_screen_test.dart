@@ -12,6 +12,7 @@ import 'package:lissom/app/app_facts.dart';
 import 'package:lissom/app/home_screen.dart';
 import 'package:lissom/app/ia.dart';
 import 'package:lissom/app/lissom_theme.dart';
+import 'package:lissom/app/live_capture_screen.dart';
 import 'package:lissom/app/session_history_view.dart';
 import 'package:motion_core/motion_core.dart';
 
@@ -135,32 +136,41 @@ void main() {
     expect(find.textContaining('floor, not a total'), findsOneWidget);
   });
 
-  testWidgets('quick start ÖLÜ BUTON içermez — düğme gerçek bir yere gider', (
+  testWidgets(
+      'quick start ÖLÜ BUTON içermez — "Start a measurement" GERÇEKTEN '
+      'LiveCaptureScreen\'e gider (2026-08-12, kamera-kabuğu sevki)', (
     WidgetTester tester,
   ) async {
     pinNarrowSurface(tester);
+    final AppFacts facts = factsFromDisk();
     bool opened = false;
     await tester.pumpWidget(MaterialApp(
       theme: buildLissomTheme(),
       home: Scaffold(
-        body: HomeScreen(
-            facts: factsFromDisk(), onOpenLibrary: () => opened = true),
+        body: HomeScreen(facts: facts, onOpenLibrary: () => opened = true),
       ),
     ));
     await tester.pumpAndSettle();
     await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
 
-    // Ölçüm BAŞLATAN bir düğme YOK (canlı-tur ekranı yok — olsaydı ölü buton
-    // olurdu); olan düğme gerçekten çalışıyor.
-    //
-    // ⚠️ Bu bir YOKLUK iddiası: `FilledButton` yanlış/soyut bir tip olsaydı
-    // her zaman sıfır dönerdi ve iddia sonsuza kadar yeşil kalırdı (L-255).
-    // POZİTİF İKİZ aşağıda: aynı bulucu, GERÇEK bir düğmeyi buluyor.
-    expect(find.widgetWithText(FilledButton, 'Start'), findsNothing);
-    expect(find.widgetWithText(FilledButton, 'See what each test measures'),
-        findsOneWidget,
-        reason: 'BULUCU BOZUK: ekrandaki gerçek FilledButton bile '
-            'bulunamıyorsa, "Start yok" iddiası hiçbir şey kanıtlamaz');
+    // ⚠️ Bu testin ÖNCEKİ hâli tam tersini iddia ediyordu: "Start" düğmesi
+    // YOK, çünkü canlı-tur ekranı yoktu. `LiveCaptureScreen` bağlanınca o
+    // iddia YALANA döndü — koordinatörün "bugün doğru olan bir dürüstlük
+    // metni bir sonraki commit'le yalana dönebilir" dediği sınıfın testler
+    // içindeki hâli. Bu satır o dönüşün kaydı.
+    expect(facts.live, isNotEmpty,
+        reason: 'gerçek config canlı test taşımıyorsa bu test hiçbir şey '
+            'kanıtlamaz — POZİTİF ÇAPA');
+    expect(find.byKey(HomeScreen.startMeasurementKey), findsOneWidget);
+
+    await tester.tap(find.byKey(HomeScreen.startMeasurementKey));
+    await tester.pumpAndSettle();
+    expect(find.byType(LiveCaptureScreen), findsOneWidget,
+        reason: 'düğme GERÇEKTEN canlı ölçüm ekranına gitmeli — ölü buton '
+            'sınıfının tam tersi');
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
     await tester.tap(find.text('See what each test measures'));
     await tester.pumpAndSettle();
     expect(opened, isTrue);

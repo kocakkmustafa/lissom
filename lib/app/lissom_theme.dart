@@ -204,6 +204,23 @@ ThemeData buildLissomTheme() {
         textStyle: textTheme.titleSmall?.copyWith(color: Colors.white),
       ),
     ),
+    // 2026-08-12 EKLENDİ (kamera-kabuğu sevki): `OutlinedButton` üç yeni
+    // ekranda belirdi (onboarding kamera adımı · canlı ölçüm "Try again" ·
+    // home "See what each test measures") ve varsayılan Material3 rengi
+    // BU zeminde kontrast BATIRIYORDU (`rendered_contrast_test.dart` ölçtü:
+    // 2,81:1, eşik 4.5) — `roseDeepHover` [LissomColors] ZATEN bu zemin
+    // için doğrulanmış vurgu-metni tonu (L-234, 4,565:1 marjlı), ikinci bir
+    // renk İCAT EDİLMEDİ.
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: LissomColors.roseDeepHover,
+        side: const BorderSide(color: LissomColors.roseDeepHover),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 14),
+        shape: const StadiumBorder(),
+        textStyle: textTheme.titleSmall
+            ?.copyWith(color: LissomColors.roseDeepHover),
+      ),
+    ),
     dividerTheme: const DividerThemeData(
       color: LissomColors.hairline,
       thickness: 1,

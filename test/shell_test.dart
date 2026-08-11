@@ -133,9 +133,14 @@ void main() {
               'taşımıyor — kullanıcı buradan başlarsa yanlış bilgilenir');
     }
     // Home kendi beyanını taşıyor (aynı olguyu iki kez basmaz).
+    //
+    // ⚠️ Metin 2026-08-12'de değişti (kamera-kabuğu sevki): "camera run is
+    // not wired" artık YANLIŞ — `LiveCaptureScreen` bağlandı. Yeni iddia
+    // "connected, cihazda doğrulanmadı" sınıfında; bu satır o dönüşü kaydediyor.
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('camera run is not wired'), findsOneWidget);
+    expect(find.textContaining('has not been tried on a real phone'),
+        findsOneWidget);
   });
 
   testWidgets('dört sekmenin HİÇBİRİNDE yasaklı yüzey kopyası yok', (

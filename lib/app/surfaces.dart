@@ -301,10 +301,17 @@ class CaptureUnavailableNote extends StatelessWidget {
 
   static const Key key_ = Key('note.captureUnavailable');
 
+  /// **2026-08-12 GÜNCELLENDİ — kamera-kabuğu sevki.** Eskiden "camera run
+  /// is not wired to any screen" diyordu; `LiveCaptureScreen` bağlandığı
+  /// AYNI turda bu metin de güncellendi (Home'daki O3/DeclarationBanner'la
+  /// AYNI disiplin: bugün doğru olan bir dürüstlük metni bir sonraki
+  /// commit'le yalana dönebilir — yalanı yapacak olan bu metni değiştirmeyen
+  /// olurdu). `key_`/widget adı KORUNDU: yalnız içeriği değişti, üç ekranın
+  /// (Home, Library, Progress) hepsinde TEK yerden düzeltildi.
   static const String text =
-      'No session can be captured in this build: the camera run is not wired '
-      'to any screen. Everything below describes what the measurement engine '
-      'can and cannot read — not something you can start today.';
+      'Lissom can start a live measurement from Home. This has not been '
+      'tried on a real phone: camera permission, frame quality, and '
+      'calibration still need a device pass.';
 
   @override
   Widget build(BuildContext context) {
