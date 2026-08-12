@@ -100,10 +100,75 @@ def gap() -> tuple[list[str], int, int, int]:
     return missing, scanned, len(set(ids)), len(recorded)
 
 
+#: Kapalılığı SAYAN jetonlar — `defter_status_check` bunlara bakar.
+_KAPALI = re.compile(r"kapal[ıi]|kapand[ıi]|çözüldü|düzeltildi", re.IGNORECASE)
+
+
+def reddedildi_capasi() -> list[str]:
+    """**ÇAPA (L-305): ayırt edici kelime, SAYAN kelimeyi silmemeli.**
+
+    2026-08-12'de `Durum` sütununu `REDDEDİLDİ — …` yaptım ve `kapalı`
+    jetonunu **yerinden ettim**: kapalı sayısı **178 → 173** düştü, beş
+    kayıt kümeden **sessizce** çıktı, ve ***hiçbir kapı ötmedi.***
+
+    > ***BİR KUSUR, İYİLEŞTİRME KILIĞINDA GELDİĞİNDE HİÇBİR KAPI ÖTMEZ —
+    > çünkü kapılar KÖTÜLEŞMEYİ arar, DEĞİŞİMİ değil.***
+
+    Bu çapa o yolu kapatıyor: `REDDEDİLDİ` içeren her `Durum` hücresi,
+    kapalılığı sayan jetonlardan **en az birini** de taşımalı.
+    """
+    bad: list[str] = []
+    for ln in defter_text().splitlines():
+        m = re.match(r"^\| (L-\d+) \|", ln)
+        if not m:
+            continue
+        cols = [c.strip() for c in ln.split("|")[1:-1]]
+        if len(cols) < 6:
+            continue
+        durum = cols[-2] if len(cols) > 6 else cols[4]
+        if "REDDEDİLDİ" in durum and not _KAPALI.search(durum):
+            bad.append(m.group(1))
+    return bad
+
+
+#: ⚠️ BİLİNEN ÇAKIŞMA — SAYILI ve GEREKÇELİ muafiyet (L-305).
+#: Bu üç numara defterde İKİŞER kez geçiyor. ⛔ **Yeniden numaralandırma
+#: YOK**: ***bir numarayı değiştirmek, ona işaret eden HER atfı sessizce
+#: yanlış yapar*** — ve atıf, iddiadan daha sessiz bozulur (M-F-529).
+#: Çözülemeyen bir çakışma, ***çözülemez olduğu BİLİNEREK*** taşınır.
+BILINEN_CAKISMA = {"L-089", "L-090", "L-187"}
+
+
+def id_cakismasi() -> list[str]:
+    """**YENİ** çakışma imkânsız: `satır sayısı == benzersiz ID`.
+
+    Bilinen üç çakışma muaf — ama **sayılı**: muafiyet büyürse kapı öter,
+    yani *muafiyet bir kapı değil, bir SAYIDIR.*
+    """
+    ids = re.findall(r"^\| (L-\d+) \|", defter_text(), re.M)
+    seen, dup = set(), set()
+    for i in ids:
+        (dup if i in seen else seen).add(i)
+    return sorted(dup - BILINEN_CAKISMA)
+
+
 def run() -> int:
     missing, scanned, claimed, recorded = gap()
     print(f"   taranan commit {scanned} · commit'in İDDİA ettiği kayıt "
           f"{claimed} · defterde {recorded}")
+    yeni_cakisma = id_cakismasi()
+    if yeni_cakisma:
+        print(f"⛔ YENİ ID ÇAKIŞMASI: {', '.join(yeni_cakisma)} — bir atıf "
+              f"iki kayda çözülür. (Bilinen 3 muaf, SAYILI.)")
+        return 1
+
+    reddet = reddedildi_capasi()
+    if reddet:
+        print(f"⛔ ÇAPA — `REDDEDİLDİ` yazan ama SAYAN jetonu taşımayan "
+              f"{len(reddet)} kayıt: {', '.join(reddet)}")
+        print("   Ayırt edici kelime, sayan kelimeyi SİLMEMELİ (L-305).")
+        return 1
+
     if missing:
         print(f"⛔ DEFTER GEDİĞİ — {len(missing)} kayıt commit'te VAR, "
               f"defterde YOK: {', '.join(missing)}")
