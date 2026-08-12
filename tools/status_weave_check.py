@@ -41,6 +41,27 @@ FORBIDDEN_TEST_KEYS = {"comingSoon", "coming_soon", "beta", "unavailable"}
 #: YÜZEY sabitlerinde görülmesi yasak sözcükler. `SummaryStrings.
 #: forbiddenSurfaceWords` ile AYNI küme; ikisinin ayrışmaması `--self-test`
 #: içinde iddia ediliyor (iki liste tutmak, birinin bayatlaması demektir).
+#: ⚠️ TÜRKÇE JETON TAŞIYOR (`yakında` — `ı`, U+0131) ve bu yüzden
+#: karşılaştırma `.lower()` ile YAPILAMAZ (L-296).
+#:
+#: Ölçüldü: `"YAKINDA".lower()` → `"yakinda"` (NOKTALI i), jeton ise
+#: `"yakında"` (NOKTASIZ ı) → **eşleşmez.** Yani `YAKINDA` yazan bir yüzey
+#: bu kapıdan SESSİZCE geçiyordu — ve bu kapının BÜTÜN varlık sebebi
+#: *"coming soon"* sınıfını yakalamaktı. Sabotajla kanıtlandı: düzeltmeden
+#: önce EXIT 0, sonra kırmızı.
+#:
+#: **Türkçenin İKİ `i`si var ve İKİSİ DE katlamayı kırar, ters yönlerden:**
+#:   · jetonda `ı`, yüzeyde `I` → `'I'.lower()` = `'i'` ≠ `'ı'`
+#:   · jetonda `i`, yüzeyde `İ` → `'İ'.lower()` = `'i̇'` (İKİ kod noktası)
+#:   · `ş ğ ç ö ü` sağlam — kıran yalnız iki `i`.
+#:
+#: Panzehir DİLE BAĞLI: Python'da `re.IGNORECASE` altı çiftin altısını da
+#: kurtarıyor (ölçüldü). ⛔ Dart'ta TERS — orada `RegExp(caseSensitive:
+#: false)` kırık, `.toLowerCase()` doğru (JabLab ölçtü). Bu reçeteyi Dart
+#: tarafına TAŞIMA.
+#:
+#: 📌 Jeton eklerken: Türkçe bir sözcük ekliyorsan `ı`/`i` taşıyıp
+#: taşımadığına bak — taşıyorsa bu liste `re.IGNORECASE` ile aranmalı.
 FORBIDDEN_SURFACE_WORDS = {
     "coming soon", "yakında", "beta", "unavailable", "not available",
     "work in progress",
@@ -75,9 +96,10 @@ def check_surface(strings_src: str) -> list[str]:
             "tarama büyük olasılıkla dosyayı okuyamadı (sessiz yeşil riski)"
         )
     for name, raw in consts:
-        text = " ".join(re.findall(r"'([^']*)'", raw)).lower()
+        # `.lower()` YOK — Türkçe jeton (`yakında`) için kırık (L-296).
+        text = " ".join(re.findall(r"'([^']*)'", raw))
         for word in FORBIDDEN_SURFACE_WORDS:
-            if word in text:
+            if re.search(re.escape(word), text, re.IGNORECASE):
                 problems.append(
                     f"SummaryStrings.{name}: '{word}' geçiyor — çalışan bir "
                     "ölçümün yanında bu sözcük, kullanıcının yaptığı işi "
