@@ -13,6 +13,8 @@ import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/onboarding_flow.dart';
 import 'package:lissom/app/onboarding_store.dart';
 
+import 'support/narrow_surface.dart';
+
 /// Bellek-içi sahte depo — gerçek dosya sistemine dokunmadan `write`
 /// çağrısını GÖZLEMLENEBİLİR kılar.
 final class _FakeStore implements OnboardingStore {
@@ -131,7 +133,6 @@ void main() {
     await _continue(tester); // O3 → O4
     await tester.tap(find.byKey(const Key('onboarding.ageBand.60plus')));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byKey(const Key('onboarding.painNotes')), 'knee, mild');
     await _continue(tester); // O4 → O5
 
     expect(find.textContaining('approximate picture of how you move'), findsOneWidget,
@@ -145,8 +146,36 @@ void main() {
     expect(store.written, isNotNull);
     expect(store.written!.completed, isTrue);
     expect(store.written!.ageBand, '60plus');
-    expect(store.written!.painNotes, 'knee, mild');
-    expect(store.written!.gender, isNull,
-        reason: 'boş bırakılan opsiyonel alan null KALMALI, boş string DEĞİL');
+
+    // L-281: onboarding artık YALNIZ yaş bandı topluyor. `gender`/`painNotes`
+    // girdileri KALDIRILDI — okuyucusu olmayan alan, okunuyormuş gibi
+    // konuşamaz (`painNotes` ipucu bir VAATTİ). Şema alanları eski
+    // profiller ayrıştırılabilsin diye duruyor; bu akış onlara DEĞER KOYMAZ.
+    expect(store.written!.gender, isNull);
+    expect(store.written!.painNotes, isNull);
+  });
+
+  testWidgets(
+      'O4 artık gender/pain GİRDİSİ ÇİZMİYOR — kaldırılan yüzey geri '
+      'sızarsa kırmızı (L-281)', (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    final _FakeStore store = _FakeStore();
+    await _pump(tester, store, () {});
+
+    await _continue(tester); // O1 → O2
+    await tester.tap(find.byKey(const Key('onboarding.disclaimer.ack')));
+    await tester.pumpAndSettle();
+    await _continue(tester); // O2 → O3
+    await _continue(tester); // O3 → O4
+
+    // POZİTİF ÇAPA: gerçekten O4'teyiz — yoksa "girdi yok" vakum-doğru olur.
+    expect(find.byKey(const Key('onboarding.ageBand.60plus')), findsOneWidget,
+        reason: 'yaş bandı çipleri görünmüyorsa bu test O4\'ü ölçmüyor');
+
+    expect(find.byKey(const Key('onboarding.gender')), findsNothing);
+    expect(find.byKey(const Key('onboarding.painNotes')), findsNothing);
+    expect(find.textContaining('Anything Lissom should know about'),
+        findsNothing,
+        reason: 'VAAT taşıyan ipucu — okuyucusu yokken sorulmamalı');
   });
 }

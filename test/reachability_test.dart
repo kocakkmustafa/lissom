@@ -2,7 +2,20 @@
 ///
 /// Koordinatörün sorusu tek cümle:
 ///
-/// > ***Bugün, uygulamayı açan bir kullanıcı kaç ayrı ekrana GİDEBİLİYOR?***
+/// > ***Bugün, KABUĞA girmiş bir kullanıcı kaç ayrı ekrana GİDEBİLİYOR?***
+///
+/// ⚠️ **CÜMLE 2026-08-12'de DARALTILDI (L-281) — sayı DEĞİŞMEDİ.**
+/// Eskiden *"uygulamayı AÇAN bir kullanıcı"* diyordu. Bu, onboarding
+/// eklendiğinden beri (aynı gün, `OnboardingGate` artık uygulamanın girişi)
+/// kapının ÖLÇTÜĞÜNDEN GENİŞ bir cümleydi: kapı `LissomShell`i sürüyor,
+/// açılışı DEĞİL. Sayı kabuk için doğruydu, **iddiası kapsamını aşıyordu.**
+///
+/// **Gravita aynı şerhi bağımsız düştü → 2/5, aile ölçü-tanımı sorunu.**
+/// Koordinatör hükmü: ***şimdi cümleyi daralt, ölçüyü değiştirme*** —
+/// kapsamı büyütmek SAYIYI değiştirir, ve o sayı panoya + aile
+/// karşılaştırmasına giriyor; vardiya ortasında birimi değiştirmek
+/// kıyaslanabilirliği sessizce bozar (*bir eşik, doğrulandığı ÖLÇÜM
+/// BİRİMİYLE geçerlidir*). Onboarding-dahil tanım **çekirdek turunda.**
 ///
 /// Kurucu sabah **inşa turu sırasına** karar verecek ve elindeki sayı
 /// **02:00'de** ölçülmüş; arada 200+ commit geçti. **Bayat öncülle verilen
@@ -11,8 +24,9 @@
 ///
 /// ## Sayma kuralı (beş hatta ORTAK, karşılaştırılabilir olsun diye)
 ///
-/// **Sayılır:** açılıştan başlayarak, **yalnız ekranda görünen kontrollere
-/// basarak** ulaşılan her ayrı ekran.
+/// **Sayılır:** **kabuktan** başlayarak, **yalnız ekranda görünen kontrollere
+/// basarak** ulaşılan her ayrı ekran. (Onboarding akışı bu sayıya DAHİL
+/// DEĞİL — kapı onu sürmüyor; tanım genişletilirse sayı da değişir.)
 /// **Sayılmaz:** kodda tanımlı ama hiçbir yerden ulaşılamayan · yalnız
 /// derin-bağlantı/test kancasıyla açılan · ayrı ekran olmayan modal/sheet.
 ///
@@ -156,7 +170,7 @@ void main() {
             'sayı vakum-doğru');
 
     // ignore: avoid_print
-    print('\n═══ GEZİLEBİLİR EKRAN — İKİ OKUMA ═══');
+    print('\n═══ GEZİLEBİLİR EKRAN (KABUK-İÇİ) — İKİ OKUMA ═══');
     // ignore: avoid_print
     print('  KATI  (yalnız ayrı ROTA, push/go)        : ${pushedRoutes.length}');
     // ignore: avoid_print

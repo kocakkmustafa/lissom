@@ -46,15 +46,17 @@ final class OnboardingProfile {
   /// isterse gerçek bandını beyan edebiliyor).
   final String? ageBand;
 
-  /// OPSİYONEL — bugün hiçbir metrik/skorlama bunu okumuyor (ölçüldü:
-  /// `grep -rn gender packages/lissom_engine` sıfır sonuç). Yalnız kayıtta
-  /// tutulur; okuyucusu olmayan bir alan eklemek L-181 sınıfı bir kusur
-  /// üretirdi, o yüzden bu alan bir GELECEK vaadi TAŞIMIYOR — yalnız
-  /// kullanıcının beyan ettiğini saklıyor.
+  /// ⛔ **ONBOARDING BUNU ARTIK TOPLAMIYOR** (L-281, 2026-08-12) — girdi
+  /// ekrandan KALDIRILDI, bu akış alana asla değer koymaz.
+  ///
+  /// Alan şemada duruyor ki **daha eski bir build'in yazdığı profil hâlâ
+  /// ayrıştırılabilsin** (`fromJson` toleransı); yeni yazma yolu yok.
+  /// Geri gelme koşulu ZAMAN değil: bunu **OKUYAN** üretim kodu doğduğunda.
   final String? gender;
 
-  /// OPSİYONEL, serbest metin. Bugün hiçbir kural/guard bunu okumuyor —
-  /// aynı gerekçe.
+  /// ⛔ Aynı hüküm — ve burada zarar daha keskindi: *"Anything Lissom should
+  /// know about"* ipucu, kullanıcının sakatlığını yazıp **ölçümde dikkate
+  /// alınacağını ummasına** yol açardı; hiçbir kural/guard onu okumuyordu.
   final String? painNotes;
 
   factory OnboardingProfile.fromJson(Map<String, dynamic> j) =>

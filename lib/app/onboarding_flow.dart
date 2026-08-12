@@ -57,8 +57,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   _Step _step = _Step.welcome;
   bool _disclaimerAcked = false;
   String? _ageBand;
-  String _gender = '';
-  String _painNotes = '';
   bool _saving = false;
 
   static const List<_Step> _order = _Step.values;
@@ -85,12 +83,11 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   Future<void> _finish() async {
     setState(() => _saving = true);
-    final OnboardingProfile profile = OnboardingProfile(
-      completed: true,
-      ageBand: _ageBand,
-      gender: _gender.trim().isEmpty ? null : _gender.trim(),
-      painNotes: _painNotes.trim().isEmpty ? null : _painNotes.trim(),
-    );
+    // `gender`/`painNotes` YAZILMIYOR — onboarding onları artık TOPLAMIYOR
+    // (L-281). Şema alanları duruyor ki daha eski bir build'in yazdığı
+    // profil hâlâ ayrıştırılabilsin; bu akış onlara asla değer koymaz.
+    final OnboardingProfile profile =
+        OnboardingProfile(completed: true, ageBand: _ageBand);
     await widget.store.write(profile);
     if (!mounted) return;
     // Diske YAZILAN nesnenin AYNISI geçiyor — ikinci bir kopya kurulsaydı
@@ -152,8 +149,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         _Step.profile => _ProfileStep(
             ageBand: _ageBand,
             onAgeBand: (String v) => setState(() => _ageBand = v),
-            onGender: (String v) => _gender = v,
-            onPainNotes: (String v) => _painNotes = v,
           ),
         _Step.limits => const _LimitsStep(),
       };
@@ -319,24 +314,29 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   }
 }
 
-class _ProfileStep extends StatefulWidget {
-  const _ProfileStep({
-    required this.ageBand,
-    required this.onAgeBand,
-    required this.onGender,
-    required this.onPainNotes,
-  });
+/// O4 — profil. **Yalnız yaş bandı toplanır** (L-281).
+///
+/// `gender` ve `pain/injury` alanları 2026-08-12'de KALDIRILDI. Koordinatör
+/// hükmü: ***okuyucusu olmayan alan, okunuyormuş gibi konuşamaz.***
+/// `painNotes`un ipucu (*"Anything Lissom should know about"*) bir VAATTİ:
+/// kullanıcı sakatlığını yazıp ölçümde dikkate alınacağını umardı — oysa
+/// hiçbir kural/guard/metrik onu okumuyordu (ölçüldü).
+///
+/// **Neden düşürüldü, "ipucunu düzelt" yerine:** ikisinin de tek seferlik
+/// maliyeti aynı çıktı (ölçüldü — depo testleri MODEL düzeyinde, ikisinde de
+/// ayakta kalıyor). Farkı SÜREKLİ maliyet yaptı: *"buraya yaz, okumuyoruz"*
+/// diyen bir alan her metin turunda ve her mağaza gizlilik-beyanında yeniden
+/// savunulmak zorundadır — ve **serbest metinli sakatlık geçmişi, okunmasa
+/// bile beyan edilmesi gereken bir sağlık verisi toplama noktasıdır.**
+/// Girdiyi kaldırmak o noktayı da kaldırır.
+///
+/// 📌 Geri gelme koşulu ZAMAN DEĞİL: bu alanlar *"sonra"* değil, **onları
+/// OKUYAN üretim kodu var olduğunda** geri gelir.
+class _ProfileStep extends StatelessWidget {
+  const _ProfileStep({required this.ageBand, required this.onAgeBand});
 
   final String? ageBand;
   final ValueChanged<String> onAgeBand;
-  final ValueChanged<String> onGender;
-  final ValueChanged<String> onPainNotes;
-
-  @override
-  State<_ProfileStep> createState() => _ProfileStepState();
-}
-
-class _ProfileStepState extends State<_ProfileStep> {
 
   @override
   Widget build(BuildContext context) {
@@ -365,33 +365,10 @@ class _ProfileStepState extends State<_ProfileStep> {
               ChoiceChip(
                 key: Key('onboarding.ageBand.$band'),
                 label: Text(kAgeBandLabels[band] ?? band),
-                selected: widget.ageBand == band,
-                onSelected: (_) => widget.onAgeBand(band),
+                selected: ageBand == band,
+                onSelected: (_) => onAgeBand(band),
               ),
           ],
-        ),
-        const SizedBox(height: 20),
-        Text('Gender (optional)', style: t.textTheme.titleSmall),
-        const SizedBox(height: 8),
-        TextField(
-          key: const Key('onboarding.gender'),
-          onChanged: widget.onGender,
-          decoration: const InputDecoration(
-            hintText: 'Prefer not to say by default',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Text('Pain or injury history (optional)', style: t.textTheme.titleSmall),
-        const SizedBox(height: 8),
-        TextField(
-          key: const Key('onboarding.painNotes'),
-          onChanged: widget.onPainNotes,
-          maxLines: 3,
-          decoration: const InputDecoration(
-            hintText: 'Anything Lissom should know about',
-            border: OutlineInputBorder(),
-          ),
         ),
       ],
     );
