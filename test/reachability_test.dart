@@ -111,8 +111,33 @@ import 'package:lissom/app/what_lissom_doesnt_do.dart';
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
 
-/// Ekran sayılan tipler — **tek adres**. Kabuk kromu (NavigationBar) ve
-/// yükleme/hata hâlleri ekran değildir.
+/// ⚠️ **RÜTBESİ DÜŞÜRÜLDÜ — artık KAYNAK değil, POZİTİF KONTROL (L-300).**
+///
+/// Bu liste eskiden *"tek adres"*ti ve ben onu öyle savundum. **Yanlıştı:**
+/// tek adres olması onu **tazeleyen** bir şey değil, yalnız **tek yerde
+/// tutan** şey. Kanıtı en temiz hâliyle şu:
+///
+/// > ***`LiveCaptureScreen` bu listede YOKTU — ve onu bağlayan commit'i
+/// > AYNI GÜN ben yazmıştım (L-285).*** Bir elle liste, kendi yazarının
+/// > aynı gün eklediği şeyi bile kaçırabilir; çünkü liste **kodun yanında
+/// > değil, HAFIZANIN yanında** durur.
+///
+/// **Yeni görevi** (aile sözleşmesi §e, JabLab'ın düzeltmesi): kaynak
+/// `tools/reachability_candidates.py`in **desenden türettiği** kümedir;
+/// bu liste o türetimin **pozitif kontrolü** olarak kalır — *türetim
+/// bozulursa (JabLab'ın vakası: hatalı eleme her StatefulWidget ekranını
+/// yok etti) yakalayan şey elle beklenen kümesidir.*
+///
+/// > ***Bir elle liste, KAYNAK olarak yanlıştır ama KONTROL olarak
+/// > doğrudur — silinmez, RÜTBESİ DÜŞÜRÜLÜR.***
+///
+/// ⛔ **VE KENDİ EKSİKLİĞİ ŞERHLİ: bu küme bir ALT SINIRDIR, tam envanter
+/// DEĞİLDİR.** Türetim onu **kapsamalı**, ama ona **eşit olmak zorunda
+/// değil** — fazlası beklenir (ve vardır: `LiveCaptureScreen`). Buraya
+/// ekleme yapmak bir envanter güncellemesi DEĞİL, **kontrolün tabanını
+/// yükseltmektir.**
+///
+/// Kabuk kromu (NavigationBar) ve yükleme/hata hâlleri ekran değildir.
 const List<Type> kCountableScreens = <Type>[
   HomeScreen,
   LibraryScreen,

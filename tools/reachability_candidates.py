@@ -86,6 +86,32 @@ def tab_bodies() -> set[str]:
     return set(re.findall(r"=>\s*([A-Z]\w*)\(", blk)) - EXCLUDED
 
 
+def legacy_hand_list() -> set[str]:
+    """**(e) — elle listenin YENİ RÜTBESİ: pozitif kontrol.**
+
+    JabLab sözleşmeyi düzeltti: onun türetimi ilk hâlinde **bozuktu**
+    (`_XState` elemesi her StatefulWidget ekranını yok etti) ve
+    ***yakalayan şey elle beklenen kümesiydi.***
+
+    > ***Bir elle liste, KAYNAK olarak yanlıştır ama KONTROL olarak
+    > doğrudur — silinmez, RÜTBESİ DÜŞÜRÜLÜR.***
+
+    ⚠️ **VE BU HATTA ÖZEL BİR ŞERH VAR:** bu liste `LiveCaptureScreen`i
+    **taşımıyordu** (KATI 2 yerine 3'tü, L-298). Yani kontrol olarak da
+    **kendisi eksik.** ⇒ ***Bu küme bir ALT SINIRDIR, tam envanter
+    DEĞİLDİR:*** türetim onu KAPSAMALI, ama ona EŞİT olmak zorunda değil —
+    fazlası **beklenen** (ve gerçekten fazlası var).
+    """
+    src = (ROOT / "test" / "reachability_test.dart").read_text(encoding="utf-8")
+    m = re.search(r"kCountableScreens\s*=\s*<Type>\[(.*?)\];", src, re.S)
+    if not m:
+        raise SystemExit(
+            "⛔ kCountableScreens bulunamadı — (e) gereği bu liste POZİTİF "
+            "KONTROL olarak DURMALI; silinmişse türetim kontrolsüz kalır")
+    body = re.sub(r"//[^\n]*", " ", m.group(1))
+    return {t.strip() for t in body.split(",") if t.strip()}
+
+
 def declared() -> set[str]:
     """Sözleşme testinin beyan ettiği aday küme."""
     src = CONTRACT.read_text(encoding="utf-8")
@@ -102,6 +128,21 @@ def main() -> int:
     print(f"   desenden aday {len(derived)} · beyan edilen {len(decl)} · "
           f"dışlanan {len(EXCLUDED)}")
     print(f"   dışlananlar (ADIYLA): {', '.join(sorted(EXCLUDED))}")
+
+    # (e) POZİTİF KONTROL — türetim, elle listeyi KAPSAMALI.
+    # Bu, türetimin KENDİSİNİN bozulduğu günü tutar (JabLab'ın vakası:
+    # bozuk eleme her StatefulWidget ekranını yok etti ve yakalayan şey
+    # elle beklenen kümesiydi).
+    hand = legacy_hand_list()
+    uncovered = hand - derived
+    print(f"   (e) pozitif kontrol: elle liste {len(hand)} üye · "
+          f"türetim kapsıyor mu: {'EVET' if not uncovered else 'HAYIR'}")
+    if uncovered:
+        print(f"⛔ TÜRETİM BOZUK — elle listedeki şu üyeleri KAPSAMIYOR: "
+              f"{sorted(uncovered)}")
+        print("   Elle liste bir ALT SINIRDIR; türetim onu kapsamıyorsa "
+              "hata türetimdedir, listede değil.")
+        return 1
 
     missing = derived - decl          # kod var, sözleşme yok → SESSİZ KAYIP
     extra = decl - derived            # sözleşme var, kod yok → HAYALET
