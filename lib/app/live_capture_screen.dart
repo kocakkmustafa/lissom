@@ -347,7 +347,7 @@ class _LiveView extends StatelessWidget {
               'calibration threshold (yaw ≤10°).',
         ),
         const SizedBox(height: 12),
-        // PLACEHOLDER(asset): kamera akışının canlı görüntüsü (Texture tabanlı önizleme) — unblocked by: motion_camera'nın önizleme texture'ı sunması (registrar.textures); pinli f13bdc9'da YOK (ölçüldü 0 dosya, poz. kontrol PoseSource 3), çekirdek turu kalem #5
+        // PLACEHOLDER(asset): kamera akışının canlı görüntüsü (Texture tabanlı önizleme) — unblocked by: motion_camera'nın önizleme texture'ı sunması (registrar.textures); pinli f13bdc9'da YOK, çekirdek turu kalem #5 — user-surface: liveCapture.noPreview
         //
         // **SINIFIN ADI: ERTELENMİŞ** (M-F-287 üçlüsü: imkânsız /
         // ertelenmiş / ölçülmemiş). *İmkânsız* olsaydı "bir kamera bunu
@@ -364,6 +364,7 @@ class _LiveView extends StatelessWidget {
         // açıyor, kamera görüntüsü görmüyor, ve hiçbir şey neden olduğunu
         // söylemiyordu. Aynı yokluk, iki hatta İKİ AYRI SINIF.
         const NamedGapCard(
+          key: Key('liveCapture.noPreview'),
           title: 'No camera image on this screen',
           reason: 'Lissom reads your movement from the camera, but it does '
               'not show you the picture here. That view is left out on '

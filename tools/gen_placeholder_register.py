@@ -32,9 +32,16 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "design" / "PLACEHOLDER-REGISTER.md"
 
 LOOSE = re.compile(r"PLACEHOLDER\(")
+#: ⚠️ `binding` AYRI bir grup — ve bu, ölçülmüş bir tuzağın panzehiri.
+#: Ostinato'nun aynı kapısı ilk hâlinde KÖRDÜ: deseninin `(.+?)`si
+#: işaretçinin geri kalanını YUTUYORDU, yani *"anahtar sevk edilen kodda
+#: var mı"* sorusu HİÇ SORULMUYORDU — kapı koşuyor, soru sorulmuyor.
+#: Burada `unblocked` non-greedy ve bağ **son segment** olarak ayrı
+#: yakalanıyor; `validate_placeholder_surface.py` bunu ADIYLA sınıyor.
 STRICT = re.compile(
     r"PLACEHOLDER\((?P<category>asset|copy|data|flow)\):\s*"
-    r"(?P<what>[^—]+?)\s*—\s*unblocked by:\s*(?P<unblocked>.+?)\s*$"
+    r"(?P<what>[^—]+?)\s*—\s*unblocked by:\s*(?P<unblocked>.+?)"
+    r"(?:\s*—\s*(?P<binding>(?:user-surface|source-only):\s*.+?))?\s*$"
 )
 
 SCAN_DIRS = ("lib", "packages")
@@ -65,13 +72,14 @@ def find_markers() -> tuple[list[tuple[str, int, str, str, str]], list[tuple[str
                         m.group("category"),
                         m.group("what").strip(),
                         m.group("unblocked").strip(),
+                        (m.group("binding") or "").strip(),
                     ))
                 else:
                     malformed.append((rel, i, line.strip()))
     return valid, malformed
 
 
-def render(markers: list[tuple[str, int, str, str, str]]) -> str:
+def render(markers: list[tuple[str, int, str, str, str, str]]) -> str:
     lines = [
         "# Placeholder Register",
         "",
@@ -90,9 +98,10 @@ def render(markers: list[tuple[str, int, str, str, str]]) -> str:
         ]
         return "\n".join(lines) + "\n"
 
-    by_category: dict[str, list[tuple[str, int, str, str]]] = {}
-    for rel, ln, cat, what, unblocked in markers:
-        by_category.setdefault(cat, []).append((rel, ln, what, unblocked))
+    by_category: dict[str, list[tuple[str, int, str, str, str]]] = {}
+    for rel, ln, cat, what, unblocked, binding in markers:
+        by_category.setdefault(cat, []).append(
+            (rel, ln, what, unblocked, binding))
 
     for cat in ("asset", "copy", "data", "flow"):
         items = by_category.get(cat, [])
@@ -100,9 +109,10 @@ def render(markers: list[tuple[str, int, str, str, str]]) -> str:
             continue
         lines.append(f"## {cat} ({len(items)})")
         lines.append("")
-        for rel, ln, what, unblocked in items:
+        for rel, ln, what, unblocked, binding in items:
             lines.append(f"- `{rel}:{ln}` — {what}")
             lines.append(f"  - unblocked by: {unblocked}")
+            lines.append(f"  - {binding or '⛔ BAĞ YOK'}")
         lines.append("")
     return "\n".join(lines) + "\n"
 
