@@ -87,6 +87,34 @@ Type? _visible(WidgetTester tester) {
   return null;
 }
 
+/// **(d)'nin gözü — aday listesinden BAĞIMSIZ.**
+///
+/// 🪤 İlk yazımımda (d) *"yürüyüş aday olmayan bir yere vardı mı"* diye
+/// soruyordu ama gözlemi [_visible]den alıyordu — o da **yalnız adaylara
+/// bakıyor.** Yani `reached` tanım gereği aday-dışı bir şey içeremezdi:
+/// kontrol **VAKUM-DOĞRUydu** ve sabotaj (aday kümesinden `FamilyPage`
+/// düşürüldü) **ötmedi.**
+///
+/// > ***Bir bölme denetimi, iki tarafı AYNI kaynaktan okuyorsa denetim
+/// > değil TANIMDIR.***
+///
+/// Bu yüzden burası ağacı **ada göre** tarıyor (`…Screen`/`…Page`), aday
+/// listesine hiç bakmadan — böylece *"desen bir ekranı kaçırdı"* hâli
+/// GERÇEKTEN görülebiliyor.
+Set<Type> _observedScreenLike(WidgetTester tester) {
+  final Set<Type> out = <Type>{};
+  for (final Element e in find
+      .byWidgetPredicate((Widget w) {
+        final String n = w.runtimeType.toString();
+        return (n.endsWith('Screen') || n.endsWith('Page')) &&
+            !n.startsWith('_');
+      })
+      .evaluate()) {
+    out.add(e.widget.runtimeType);
+  }
+  return out;
+}
+
 void main() {
   testWidgets('SÖZLEŞME — uygulama kökünden, desen adayı, yürüyerek üyelik',
       (WidgetTester tester) async {
@@ -136,9 +164,12 @@ void main() {
     // (b) ÜYELİK YÜRÜYEREK — sekmeler + boyanmış kontroller.
     final Set<Type> reached = <Type>{};
     final Set<Type> viaRoute = <Type>{};
+    // (d) BAĞIMSIZ gözlem — aday listesine bakmadan.
+    final Set<Type> observed = <Type>{};
 
     for (final String tab in facts.ia.tabs) {
       await _openTab(tester, tab);
+      observed.addAll(_observedScreenLike(tester));
       final Type? s = _visible(tester);
       if (s != null) reached.add(s);
     }
@@ -152,6 +183,7 @@ void main() {
       if (c.evaluate().isEmpty) continue;
       await tester.tap(c.first, warnIfMissed: false);
       await tester.pumpAndSettle();
+      observed.addAll(_observedScreenLike(tester));
       final Type? s = _visible(tester);
       if (s != null && reached.add(s)) viaRoute.add(s);
       await tester.pageBack();
@@ -164,6 +196,7 @@ void main() {
     if (entry.evaluate().isNotEmpty) {
       await tester.tap(entry.first, warnIfMissed: false);
       await tester.pumpAndSettle();
+      observed.addAll(_observedScreenLike(tester));
       final Type? s = _visible(tester);
       if (s != null && reached.add(s)) viaRoute.add(s);
       await tester.pageBack();
@@ -177,6 +210,7 @@ void main() {
     if (start.evaluate().isNotEmpty) {
       await tester.tap(start);
       await tester.pumpAndSettle();
+      observed.addAll(_observedScreenLike(tester));
       final Type? s = _visible(tester);
       if (s != null && reached.add(s)) viaRoute.add(s);
       await tester.pageBack();
@@ -186,6 +220,29 @@ void main() {
     // (c) ADAY OLUP VARILAMAYAN — kaybolmaz.
     final List<Type> unreachable =
         kCandidateScreens.where((Type t) => !reached.contains(t)).toList();
+
+    // ⭐ (d) BÖLME DENETLENİR — ve bu madde bu hattın kendi bulgusundan
+    // doğdu: "varılabilir ama boş" turunda yürüyüşüm kaydırmıyordu, altı
+    // hedeften BİRİNE ulaştı, ve *doğru sonucu YANLIŞ SEBEPLE* basacaktı.
+    //
+    // ⚠️ `unreachable` yukarıda TÜRETİLİYOR, yani `varılan ⊎ varılamayan
+    // = aday` kimliği **inşa gereği** doğru — onu assert etmek bir ÖLÇÜM
+    // DEĞİL, bir ARİTMETİK KİMLİKtir (bugün JabLab'da ölçülen kusur).
+    // Gerçek denetim ters yönde: ***yürüyüş, aday OLMAYAN bir yere
+    // vardıysa aday kümesi EKSİKTİR.***
+    final Set<Type> reachedOutsideCandidates =
+        observed.difference(kCandidateScreens.toSet());
+    expect(reachedOutsideCandidates, isEmpty,
+        reason: 'yürüyüş aday kümesinde OLMAYAN bir yüzeye vardı: '
+            '$reachedOutsideCandidates — desen bu ekranı KAÇIRMIŞ, aday '
+            'kümesi eksik (elle liste hafızadan okur, L-298)');
+
+    // Ve payda: aday sayısı, iki kümenin AYRI sayımıyla tutmalı.
+    expect(reached.intersection(kCandidateScreens.toSet()).length +
+            unreachable.length,
+        kCandidateScreens.length,
+        reason: 'bölme tutmuyor — sayım bir adayı iki kez ya da hiç '
+            'saymış olabilir');
 
     // ignore: avoid_print
     print('\n═══ GEZİLEBİLİRLİK — SÖZLEŞME (L-298) ═══');
@@ -200,7 +257,10 @@ void main() {
     // ignore: avoid_print
     print('  VARILAMAYAN    : ${unreachable.length}  $unreachable');
     // ignore: avoid_print
-    print('  rota tanıklığı : ${witness.pushed.length} push');
+    // Başlangıç rotası (`/`) sayılmaz — gezinme DEĞİL, açılışın kendisi.
+    print('  rota tanıklığı : '
+        '${witness.pushed.where((String r) => r != '/').length} push '
+        '(başlangıç rotası hariç)');
     // ignore: avoid_print
     print('════════════════════════════════════════\n');
 
@@ -210,6 +270,43 @@ void main() {
     expect(witness.pushed, isNotEmpty,
         reason: 'NavigatorObserver hiç push görmedi — yürüyüş rota '
             'açmıyorsa KATI sayısı tanıksızdır');
+  });
+
+  testWidgets(
+      '③ ÖLÇÜM — kabuktan başlayan bir tur onboarding\'i GÖRMEZ '
+      '(başlangıç noktası evreni tanımlar)', (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    // Eski kapımın başlangıcı: doğrudan `LissomShell`. Bu turun tek amacı
+    // *"kabuktan başlamak neyi kaybediyor"* sorusunu İDDİA değil ÖLÇÜM
+    // hâline getirmek — koordinatör hükmü: *bir ölçümün başlangıç noktası
+    // onun EVRENİNİ tanımlar; kabuktan başlamak, kullanıcının hiç
+    // görmediği bir uygulamayı ölçmektir.*
+    final _RouteWitness witness = _RouteWitness();
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      navigatorObservers: <NavigatorObserver>[witness],
+      home: LissomShell(loader: () async => factsFromDisk()),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('onboarding.continue')), findsNothing,
+        reason: 'kabuktan başlayan tur onboarding\'i GÖRMEMELİ — görüyorsa '
+            'bu ölçümün öncülü yanlış');
+    expect(find.byType(LissomShell), findsOneWidget,
+        reason: 'POZİTİF ÇAPA — kabuk gerçekten açıldı, yani "onboarding '
+            'yok" bulgusu boş ekranın değil KABUĞUN ölçümü');
+
+    // ⚖️ ÖLÇÜLEN SONUÇ: onboarding kabuk turunda GÖRÜNMEZ. Ama KATI'ya
+    // etkisi SIFIR — çünkü onboarding bir ROTA AÇMIYOR (tek `Scaffold`,
+    // `switch`le adım değiştiriyor), yani sözleşmenin KATI birimine hiç
+    // girmiyordu. *Değişmemek de bir ölçümdür* (koordinatör kısıtı).
+    // 🪤 İlk iddiam `pushed` BOŞ olmalı diyordu ve YANLIŞTI: `MaterialApp`in
+    // başlangıç rotası (`/`) da bir push. Ürün kusuru değil, CÜMLEM fazla
+    // genişti — ölçülen şey *"başlangıç ROTASININ ÖTESİNDE gezinme"*.
+    expect(witness.pushed.where((String r) => r != '/'), isEmpty,
+        reason: 'kabuk açılışında başlangıç rotasının ÖTESİNDE push olmamalı '
+            '— olsaydı KATI sayısı başlangıç noktasına göre değişirdi ve '
+            'iki ölçüm kıyaslanamazdı');
   });
 }
 
