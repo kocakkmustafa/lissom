@@ -63,11 +63,33 @@
        Uygulama dosya YAZIP OKUYOR ama zaman damgası OKUMUYOR; okuma/yazma
        tek başına gerekçeli API DEĞİLDİR.
 
-       Eklentiler KENDİ manifestlerini taşıyor (ölçüldü):
-         · permission_handler_apple    ✅
-         · path_provider_foundation    ✅
-       O yüzden onların API'leri buraya YAZILMAZ — çift beyan, sahipliği
-       bulanıklaştırırdı.
+       Eklenti manifestleri — ÇÖZÜLMÜŞ sürümde ölçüldü (L-291 düzeltmesi):
+         · permission_handler_apple 9.6.1  ✅ kendi manifesti VAR
+         · path_provider_foundation 2.6.0  ⛔ manifest YOK — ve bunun
+           SONUCU YOK (aşağıda), ama iddia düzeltilmelidir.
+
+       🪤 İLK KAYDIM YANLIŞTI ve sebebi öğretici: pub-cache'te İKİ sürüm
+       duruyor (2.5.1 + 2.6.0); taramam `head -1` ile **2.5.1**i seçti ve
+       "✅ manifest var" dedi. ÇÖZÜLMÜŞ sürüm (pubspec.lock + package_
+       config.json, iki bağımsız kaynak) **2.6.0** ve onda manifest YOK.
+       → *Bir bağımlılığın "kendi manifestini taşıdığı" iddiası, O SÜRÜMDE
+         ölçülmeden yazılamaz — SÜRÜM, İDDİANIN PARÇASIDIR.*
+       (Aynı tuzağa bugün `motion_camera`da da düştüm: pin `f13bdc9` yerine
+       başka bir checkout okumuştum. Pub-cache çoklu-sürüm tutar.)
+
+       ⭐ VE SONUCU SIFIR — ölçüldü, devralınmadı:
+       2.6.0 artık Swift eklenti DEĞİL, **FFI** (`ffi_bindings.g.dart`).
+       İlk taramam yalnız `*.swift` uzantısına bakıyordu ve o da yalnız
+       ÖRNEK kodu görüyordu; kapsam düzeltilip GERÇEK uygulama tarandı:
+         · `creationDate`/`modificationDate`/`attributesOfItem`/
+           `getattrlist`/`systemUptime`/`freeSize` → **0**
+         · yaptığı tek şey DİZİN ÇÖZÜMLEME (`NSFileManager` +
+           `NS…Directory` sabitleri) — gerekçeli-API listesinde DEĞİL
+         · pozitif kontrol AYNI dosyalarda: `FileManager` 15 · `Directory`
+           66 isabet → "0" aracın körlüğü değil
+       → Manifestin kaldırılması bir beyanın kaybı DEĞİL, **boş bir
+         beyanın** kaldırılmasıdır (2.5.1'inki de her listeyi boş
+         bildiriyordu). Aşağıdaki boş `NSPrivacyAccessedAPITypes` DOĞRU.
   -->
   <key>NSPrivacyAccessedAPITypes</key>
   <array/>
