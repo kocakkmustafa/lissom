@@ -29,6 +29,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
+import 'package:permission_handler/permission_handler.dart'
+    show openAppSettings;
 
 import 'camera_pose_source.dart';
 import 'lissom_theme.dart';
@@ -42,8 +44,15 @@ class LiveCaptureScreen extends StatefulWidget {
     this.side = 'right',
     this.ageBand,
     this.sourceOverride,
+    this.onOpenSettings,
     super.key,
   });
+
+  /// OS ayarlarını açar. Testte enjekte edilir (`sourceOverride`la AYNI
+  /// sözleşme) — `openAppSettings` bir platform kanalı çağırır ve widget
+  /// testinde doğrulanamaz; enjeksiyon olmadan "düğme GERÇEKTEN bir şey
+  /// yapıyor mu" sorusu ölçülemezdi, yalnız düğmenin VARLIĞI ölçülebilirdi.
+  final Future<bool> Function()? onOpenSettings;
 
   final TestSpec test;
   final String batteryVersion;
@@ -211,7 +220,11 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
             padding: const EdgeInsets.all(22),
             child: _result != null
                 ? _ResultView(result: _result!, onTryAgain: _tryAgain)
-                : _LiveView(state: _state, onFinish: _finish),
+                : _LiveView(
+                    state: _state,
+                    onFinish: _finish,
+                    onOpenSettings: widget.onOpenSettings ?? openAppSettings,
+                  ),
           ),
         ),
       ),
@@ -220,10 +233,15 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
 }
 
 class _LiveView extends StatelessWidget {
-  const _LiveView({required this.state, required this.onFinish});
+  const _LiveView({
+    required this.state,
+    required this.onFinish,
+    required this.onOpenSettings,
+  });
 
   final LiveSessionState state;
   final VoidCallback onFinish;
+  final Future<bool> Function() onOpenSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +264,7 @@ class _LiveView extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         Text(s.userText, style: t.textTheme.titleMedium),
-        if (s case PermissionDenied(:final bool retryMakesSense))
+        if (s case PermissionDenied(:final bool retryMakesSense)) ...<Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
@@ -257,6 +275,25 @@ class _LiveView extends StatelessWidget {
                   ?.copyWith(color: LissomColors.bodySecondary),
             ),
           ),
+          // ⛔ ÇIKMAZ SOKAK (L-283): kalıcı rette metin *"Open Settings"*
+          // DİYORDU ama hiçbir kontrol yoktu ve `canMeasure` false olduğu
+          // için ekranda BAŞKA düğme de kalmıyordu — kullanıcıya bir
+          // TALİMAT verilip onu uygulayacak YOL verilmiyordu.
+          // `retryMakesSense` true iken bu düğme YOK: sistem hâlâ soracak,
+          // oraya göndermek gereksiz bir yolculuk olur.
+          if (!retryMakesSense)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: OutlinedButton(
+                  key: const Key('liveCapture.openSettings'),
+                  onPressed: () => unawaited(onOpenSettings()),
+                  child: const Text('Open Settings'),
+                ),
+              ),
+            ),
+        ],
         const Spacer(),
         if (s.canMeasure)
           Align(

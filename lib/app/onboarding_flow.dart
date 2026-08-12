@@ -16,6 +16,8 @@
 /// ve kamera bağlandığı gün kullanıcı ikinci bir onboarding turu görmemeli.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -24,9 +26,18 @@ import 'onboarding_store.dart';
 import 'surfaces.dart';
 
 class OnboardingFlow extends StatefulWidget {
-  const OnboardingFlow({required this.store, required this.onDone, super.key});
+  const OnboardingFlow({
+    required this.store,
+    required this.onDone,
+    this.onOpenSettings,
+    super.key,
+  });
 
   final OnboardingStore store;
+
+  /// OS ayarlarını açar; testte enjekte edilir (platform kanalı widget
+  /// testinde doğrulanamaz). Bkz. O3 — [_CameraInfoStep].
+  final Future<bool> Function()? onOpenSettings;
 
   /// Akış TAMAMLANDIĞINDA, **az önce YAZILAN profille** çağrılır — kabuğa
   /// geçiş çağıranın sorumluluğu (bu widget navigasyon kararı VERMEZ).
@@ -145,7 +156,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
             acked: _disclaimerAcked,
             onChanged: (bool v) => setState(() => _disclaimerAcked = v),
           ),
-        _Step.camera => const _CameraInfoStep(),
+        _Step.camera =>
+          _CameraInfoStep(onOpenSettings: widget.onOpenSettings ?? openAppSettings),
         _Step.profile => _ProfileStep(
             ageBand: _ageBand,
             onAgeBand: (String v) => setState(() => _ageBand = v),
@@ -241,7 +253,9 @@ class _DisclaimerStep extends StatelessWidget {
 /// olmadan bu adımdan (`onboarding.continue`ya dokunarak) geçilebilmesi
 /// için (bkz. `onboarding_flow_test.dart`, düğmeye hiç dokunmuyor).
 class _CameraInfoStep extends StatefulWidget {
-  const _CameraInfoStep();
+  const _CameraInfoStep({required this.onOpenSettings});
+
+  final Future<bool> Function() onOpenSettings;
 
   @override
   State<_CameraInfoStep> createState() => _CameraInfoStepState();
@@ -261,15 +275,24 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
     });
   }
 
+  /// Sistem bir daha SORMAYACAK — tek yol OS ayarları.
+  /// `_statusText`'in kalıcı-ret dalıyla AYNI koşul; ikisi ayrışırsa metin
+  /// *"Settings"* der ama düğme çıkmaz (ya da tersi), o yüzden tek ifade.
+  bool get _isPermanentlyDenied {
+    final PermissionStatus? s = _status;
+    return s != null && (s.isPermanentlyDenied || s.isRestricted);
+  }
+
   String get _statusText {
     final PermissionStatus? s = _status;
     if (s == null) return '';
     if (s.isGranted) {
       return 'Camera access granted.';
     }
-    if (s.isPermanentlyDenied || s.isRestricted) {
-      return 'Camera access is off. You can turn it on later in Settings — '
-          'the rest of Lissom still works without it.';
+    if (_isPermanentlyDenied) {
+      return 'Camera access is off, and the system will not ask again. '
+          'You can turn it on in Settings — the rest of Lissom still '
+          'works without it.';
     }
     return 'Camera access was not granted. You can try again later — the '
         'rest of Lissom still works without it.';
@@ -308,6 +331,26 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
         if (_status != null) ...<Widget>[
           const SizedBox(height: 10),
           Text(_statusText, style: t.textTheme.bodySmall),
+        ],
+        // ⛔ ÇIKMAZ SOKAK (L-283): kalıcı rette metin *"You can turn it on
+        // later in Settings"* diyor, ama oraya GİDEN yol yoktu. Kalan tek
+        // kontrol ("Check again") kullanıcı ayarları AÇIP izni değiştirene
+        // kadar hiçbir gözle görülür şey yapmaz — ve uygulama ona ayarları
+        // açmanın bir yolunu VERMİYORDU. Yani düğme, kullanıcının fiilen
+        // izleyebildiği yol boyunca ATIL kalıyordu.
+        //
+        // "Check again" KALDI: kullanıcı ayarlardan dönünce durumu
+        // yeniden okumanın tek yolu o (ve o an GERÇEKTEN çalışır).
+        if (_isPermanentlyDenied) ...<Widget>[
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FilledButton(
+              key: const Key('onboarding.camera.openSettings'),
+              onPressed: () => unawaited(widget.onOpenSettings()),
+              child: const Text('Open Settings'),
+            ),
+          ),
         ],
       ],
     );
