@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- LISSOM GİZLİLİK MANİFESTİ (L-288, 2026-08-12).
+
+       2024'ten beri App Store zorunlu tutuyor; yokluğu bir RET sebebi.
+       JabLab'ın manifesti EMSAL alındı ama SONUCU kopyalanmadı — her
+       satır Lissom'un kendi ağacında yeniden ölçüldü, çünkü iki uygulama
+       farklı dosyalar yazıyor ve farklı eklentiler taşıyor.
+
+       ⚠️ BEYAN, TÜKETİLEN ÇEKİRDEĞİN davranışını da taahhüt eder
+       (JabLab'ın ölçtüğü katman): aşağıdaki boş listeler yalnız `lib/`
+       için değil, PİNLİ `motion_core`+`motion_camera` (f13bdc9) için de
+       ölçüldü. Pin önemli — pub-cache'te başka checkout'lar da duruyor ve
+       yanlışını okumak ölçümü sessizce geçersiz kılar (L-284'ün tuzağı).
+  -->
+
+  <!-- İZLEME: yok. Reklam/analitik SDK'sı YOK, izleme alanı YOK.
+
+       ⚠️ AMA "hiçbir şey cihazdan ÇIKMIYOR" DEMİYORUZ — ölçüldü ve
+       YANLIŞ olurdu (JabLab J-217'nin Lissom'daki aynısı):
+       `google_fonts` DOĞRUDAN bağımlılık ve ÜRETİMDE kullanılıyor
+       (`lib/app/lissom_theme.dart` → `GoogleFonts.nunitoSansTextTheme()`
+       + `newsreaderTextTheme()`), `allowRuntimeFetching` HİÇ
+       kapatılmamış (varsayılan AÇIK) ve `pubspec`te paketlenmiş font
+       bloğu YOK → uygulama yazı tipi yüzlerini ÇALIŞMA ANINDA Google'ın
+       sunucularından İNDİRİYOR.
+       → *Kendi kodunda ağ olmaması, ÜRÜNÜNDE ağ olmaması demek değildir.*
+         (Üretim Dart'ında `HttpClient`/`package:http` = 0, ölçüldü.)
+
+       DOĞRU BEYAN: giden tek istek bir FONT dosyası içindir ve KULLANICI
+       VERİSİ TAŞIMAZ. Kameradan gelen hiçbir şey — ne video ne vücut
+       noktası — cihazdan ÇIKMAZ ve diske YAZILMAZ.
+
+       Diske yazılan TEK şeyler: seans geçmişi (`lissom/sessions.jsonl`),
+       onboarding profili (`lissom/onboarding.json`) ve paketten
+       çıkarılan poz modeli (`.task`, asset). Üçü de yalnız cihazda.
+  -->
+  <key>NSPrivacyTracking</key>
+  <false/>
+  <key>NSPrivacyTrackingDomains</key>
+  <array/>
+
+  <!-- TOPLANAN VERİ: yok. Hesap yok, sunucu yok, gönderim yok.
+       Onboarding'de beyan edilen yaş bandı yalnız CİHAZDA saklanır ve
+       yalnız skorlama bandını seçmek için okunur (L-280). -->
+  <key>NSPrivacyCollectedDataTypes</key>
+  <array/>
+
+  <!-- GEREKÇELİ API'LER: liste BOŞ, ve bu ÖLÇÜLMÜŞ bir boşluk.
+
+       Taranan (app `lib/` + `packages/lissom_engine` + PİNLİ çekirdek):
+         · dosya ZAMAN DAMGASI  (`lastModified`/`stat`/`FileStat`) → 0
+         · disk ALANI            (`freeSpace`/`totalSpace`)         → 0
+         · sistem AÇILIŞ zamanı  (`systemUptime`/`bootTime`)        → 0
+         · aktif KLAVYELER       (`activeInputModes`)               → 0
+         · UserDefaults          (`shared_preferences`/NSUserDefaults) → 0
+       Pozitif kontrol: aynı tarama aynı ağaçlarda `readAsString`/
+       `readAsLines`/`File(` isabetleri BULUYOR — yani "0" aracın
+       körlüğü değil, ölçülmüş bir yokluk.
+
+       Uygulama dosya YAZIP OKUYOR ama zaman damgası OKUMUYOR; okuma/yazma
+       tek başına gerekçeli API DEĞİLDİR.
+
+       Eklentiler KENDİ manifestlerini taşıyor (ölçüldü):
+         · permission_handler_apple    ✅
+         · path_provider_foundation    ✅
+       O yüzden onların API'leri buraya YAZILMAZ — çift beyan, sahipliği
+       bulanıklaştırırdı.
+  -->
+  <key>NSPrivacyAccessedAPITypes</key>
+  <array/>
+</dict>
+</plist>
