@@ -107,4 +107,28 @@ void main() {
     expect(find.byKey(const Key('liveCapture.finish')), findsNothing,
         reason: 'kare yokken Measuring doğuyorsa ekran uyduruyor');
   });
+
+  testWidgets(
+      'önizleme yokluğu KULLANICIYA beyanlı — kaynak işaretçisi yetmez '
+      '(L-293)', (WidgetTester tester) async {
+    // 🪤 Bu test bir SABOTAJ sonucunda doğdu: `PLACEHOLDER(asset)`
+    // işaretçisini `gen_placeholder_register.py` koruyor, ama kullanıcıya
+    // görünen kartı SİLDİĞİMDE kapı YEŞİL KALDI — yani yokluk kullanıcı
+    // için yeniden SESSİZLEŞEBİLİRDİ, kayıt onu hâlâ listelerken.
+    //
+    // → *Kaynakta beyanlı olmak, KULLANICIYA beyanlı olmak değildir.*
+    //   İki ayrı yüzey, iki ayrı kapı.
+    await _pump(tester, FakePoseSource(_fullAttemptScript()));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text('No camera image on this screen'), findsOneWidget,
+        reason: 'ekranda kamera görüntüsü YOK ve bunu söyleyen bir yüzey '
+            'olmalı — yokluk sessiz kalamaz');
+    expect(find.textContaining('left out on purpose'), findsOneWidget,
+        reason: 'sınıf ERTELENMİŞ: sorumluluk ÜSTLENİLİR');
+    expect(find.textContaining('yet'), findsNothing,
+        reason: '"yet" bir TARİH TAAHHÜDÜdür ve ertelenmiş sınıfında '
+            'yasaktır (M-F-186)');
+  });
 }

@@ -315,9 +315,25 @@ class _LiveView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     final LiveSessionState s = state;
+    // ⚠️ İÇERİK KAYDIRILABİLİR, düğme SABİT (L-293).
+    //
+    // Önizleme beyanı eklenince bu ekran **375pt'te 118 piksel TAŞTI** —
+    // dar-yüzey kapısı (`pinNarrowSurface`) yakaladı, 800pt varsayılanında
+    // hiçbir işaret yoktu (Ostinato'nun ölçtüğü sınıf).
+    //
+    // Metni KISALTMADIM: bir dürüstlük beyanının boyunu YERLEŞİMİN
+    // belirlemesi, tam da kaçındığımız şey olurdu. Bunun yerine dürüst
+    // hâller büyüyebilsin diye içerik kaydırılabilir yapıldı; *"I'm done"*
+    // düğmesi **altta sabit** kalıyor (erişimi kaydırmaya bağlamak, ölçümü
+    // bitirmeyi zorlaştırırdı).
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
         const NamedGapCard(
           title: 'Not verified on a real device',
           reason: 'This connects the camera, the measurement engine, and '
@@ -329,6 +345,32 @@ class _LiveView extends StatelessWidget {
           detail: 'Still needs a device pass: the permission dialog · the '
               'camera frame stream · landmark quality in real light · the '
               'calibration threshold (yaw ≤10°).',
+        ),
+        const SizedBox(height: 12),
+        // PLACEHOLDER(asset): kamera akışının canlı görüntüsü (Texture tabanlı önizleme) — unblocked by: motion_camera'nın önizleme texture'ı sunması (registrar.textures); pinli f13bdc9'da YOK (ölçüldü 0 dosya, poz. kontrol PoseSource 3), çekirdek turu kalem #5
+        //
+        // **SINIFIN ADI: ERTELENMİŞ** (M-F-287 üçlüsü: imkânsız /
+        // ertelenmiş / ölçülmemiş). *İmkânsız* olsaydı "bir kamera bunu
+        // göremez" derdik; *ölçülmemiş* olsaydı "bilmiyoruz" derdik.
+        // Ertelenmiş = YAPILABİLİR, biz yapmadık → cümle sorumluluğu
+        // ÜSTLENİR ve TARİH VERMEZ ("yet" yasak, M-F-186).
+        //
+        // JabLab ve Gravita aynı çekirdek kısıtını aynı sınıfa koydu (aynı
+        // pin, aynı `registrar.textures` yolu) — farklı sınıflandırmak,
+        // TEK bir kısıtı üç ayrı şeymiş gibi okuturdu.
+        //
+        // 🔴 L-292 ölçümü: bu yokluk 2026-08-12'ye kadar BENDE SESSİZDİ.
+        // JabLab'ınki beyanlıydı, benimki değildi — kullanıcı ekranı
+        // açıyor, kamera görüntüsü görmüyor, ve hiçbir şey neden olduğunu
+        // söylemiyordu. Aynı yokluk, iki hatta İKİ AYRI SINIF.
+        const NamedGapCard(
+          title: 'No camera image on this screen',
+          reason: 'Lissom reads your movement from the camera, but it does '
+              'not show you the picture here. That view is left out on '
+              'purpose — we have not built it.',
+          detail: 'Nothing is hidden by this: the measurement below runs '
+              'on the live camera either way, and the video never leaves '
+              'this device.',
         ),
         const SizedBox(height: 18),
         Text(s.userText, style: t.textTheme.titleMedium),
@@ -347,29 +389,49 @@ class _LiveView extends StatelessWidget {
           // DİYORDU ama hiçbir kontrol yoktu ve `canMeasure` false olduğu
           // için ekranda BAŞKA düğme de kalmıyordu — kullanıcıya bir
           // TALİMAT verilip onu uygulayacak YOL verilmiyordu.
-          // `retryMakesSense` true iken bu düğme YOK: sistem hâlâ soracak,
-          // oraya göndermek gereksiz bir yolculuk olur.
-          if (!retryMakesSense)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: OutlinedButton(
-                  key: const Key('liveCapture.openSettings'),
-                  onPressed: () => unawaited(onOpenSettings()),
-                  child: const Text('Open Settings'),
-                ),
+          // ⚠️ Düğmenin KENDİSİ burada DEĞİL, altta SABİT alanda (L-293) —
+          // gerekçesi aşağıda.
+        ],
+              ],
+            ),
+          ),
+        ),
+        // ⛔ HÂLİN BİRİNCİL EYLEMİ SABİT ALANDA — kaydırmanın ARKASINDA DEĞİL.
+        //
+        // 🪤 İlk denememde *"Open Settings"*i kaydırılabilir içeriğin içinde
+        // bıraktım ve **375pt'te y=986'ya**, yani katlamanın ALTINA düştü:
+        // kalıcı retten çıkışın TEK yolu, kullanıcının kaydırmayı akıl
+        // etmesine bağlı hâle geldi. Bu, L-283'te kapattığım kusurun
+        // (*yol var ama kullanıcı oraya varamıyor*) zayıflatılmış hâliydi
+        // ve testin `tap()` uyarısı yakaladı — *"widget is actually
+        // off-screen"*.
+        //
+        // → Kural: bu ekranda hâlin **birincil eylemi** (ölçümü bitir ·
+        // ayarlara git) daima ALTTA ve DAİMA görünür; açıklayıcı metin
+        // kaydırılabilir, EYLEM değil. İkisi aynı anda doğmaz
+        // (`canMeasure` kalıcı rette false).
+        if (s.canMeasure)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FilledButton(
+                key: const Key('liveCapture.finish'),
+                onPressed: onFinish,
+                child: const Text("I'm done"),
               ),
             ),
-        ],
-        const Spacer(),
-        if (s.canMeasure)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: FilledButton(
-              key: const Key('liveCapture.finish'),
-              onPressed: onFinish,
-              child: const Text("I'm done"),
+          )
+        else if (s case PermissionDenied(retryMakesSense: false))
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: OutlinedButton(
+                key: const Key('liveCapture.openSettings'),
+                onPressed: () => unawaited(onOpenSettings()),
+                child: const Text('Open Settings'),
+              ),
             ),
           ),
       ],

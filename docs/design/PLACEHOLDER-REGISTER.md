@@ -2,6 +2,10 @@
 
 **ÜRETİLİR — elle düzenlenmez.** Kaynak: `tools/gen_placeholder_register.py`, koddaki `// PLACEHOLDER(kategori): ... — unblocked by: ...` işaretlerinden.
 
-Toplam: **0**
+Toplam: **1**
 
-Şu an kayıtlı placeholder yok. Bu üretecin boş dönmesi bir arıza değil — bu turda giydirilen ekranların hepsi gerçek veri/kopya kullandı; icat edilen görsel/metin yok.
+## asset (1)
+
+- `lib/app/live_capture_screen.dart:350` — kamera akışının canlı görüntüsü (Texture tabanlı önizleme)
+  - unblocked by: motion_camera'nın önizleme texture'ı sunması (registrar.textures); pinli f13bdc9'da YOK (ölçüldü 0 dosya, poz. kontrol PoseSource 3), çekirdek turu kalem #5
+
