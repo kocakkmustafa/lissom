@@ -32,6 +32,7 @@ import 'package:motion_core/motion_core.dart';
 import 'package:permission_handler/permission_handler.dart'
     show openAppSettings;
 
+import 'assessment_history.dart';
 import 'camera_pose_source.dart';
 import 'lissom_theme.dart';
 import 'pose_model.dart';
@@ -45,8 +46,20 @@ class LiveCaptureScreen extends StatefulWidget {
     this.ageBand,
     this.sourceOverride,
     this.onOpenSettings,
+    this.storeLoader,
+    this.clock,
     super.key,
   });
+
+  /// Geçmiş deposu. Testte enjekte edilir — `openSessionStore` altında
+  /// `path_provider` var ve widget testinde kilitleniyor (aile gotcha'sı,
+  /// `LissomShell.loader` ile AYNI sözleşme).
+  final Future<SessionStore> Function()? storeLoader;
+
+  /// Kayıt zamanı ÇAĞIRANDAN gelir — `recordFor`un kendi sözleşmesi
+  /// (`DateTime.now()` içeride üretilseydi zaman-sıralı senaryolar
+  /// sınanamazdı).
+  final DateTime Function()? clock;
 
   /// OS ayarlarını açar. Testte enjekte edilir (`sourceOverride`la AYNI
   /// sözleşme) — `openAppSettings` bir platform kanalı çağırır ve widget
@@ -186,13 +199,63 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
     }
   }
 
-  void _finish() {
-    setState(() => _result = _engine.finish());
+  /// Sonucun geçmişe YAZILDIĞI mı yoksa YAZILAMADIĞI mı — üçüncü hâl
+  /// (`null`) *"henüz denenmedi"*. Sonuç ekranındaki takip CÜMLESİ buna
+  /// bakar: yazılmadıysa *"we'll track it from here"* **yalan olur.**
+  bool? _saved;
+  String? _saveError;
+
+  Future<void> _finish() async {
+    final AssessmentResult r = _engine.finish();
+    setState(() => _result = r);
+    await _persist(r);
+  }
+
+  /// ⑬ (L-285) — ÖLÇÜMÜ KAYDET.
+  ///
+  /// Bu yol bugüne kadar **hiç yoktu**: `recordFor` ve `appendPreserved`
+  /// yazılmış, belgelenmiş ve **sıfır çağıranı** olan bir çeviri katmanıydı.
+  /// Kullanıcı ölçüm yapıyor, sayıyı görüyor, ekranı kapatıyordu — **sayı
+  /// yok.** Progress ve geçmiş kalıcı boştu.
+  ///
+  /// `appendPreserved` DEĞİL `recordFor` kullanılıyor: o fonksiyon
+  /// `AssessmentSession`ın çok-bloklu orkestrası içindir (yarım blok
+  /// girmesin diye), bu ekran ise TEK bir `AssessmentEngine` koşturuyor.
+  ///
+  /// **Ölçülemeyen deneme de YAZILIR** — `recordFor`un kendi hükmü:
+  /// *"kaydetmemek, yarın yüzeyin '1 deneme' demesine yol açardı;
+  /// sessizlik yalan söyler."*
+  Future<void> _persist(AssessmentResult r) async {
+    try {
+      final SessionStore store =
+          await (widget.storeLoader ?? openSessionStore)();
+      await store.append(recordFor(
+        test: widget.test,
+        result: r,
+        completedAt: (widget.clock ?? DateTime.now)(),
+      ));
+      if (mounted) setState(() => _saved = true);
+    } on Object catch (e) {
+      // ÇIKMAZ SOKAK YASAĞI (M-F-267): yazma patlarsa ekran ÇÖKMEZ — ama
+      // SUSMAZ da. Sessizce yutmak, kullanıcıya tutulmayan bir takip sözü
+      // vermenin ta kendisi olurdu.
+      if (mounted) {
+        setState(() {
+          _saved = false;
+          _saveError = '$e';
+        });
+      }
+    }
   }
 
   void _tryAgain() {
     setState(() {
       _result = null;
+      // Kayıt hâli DENEME BAŞINADIR — sıfırlanmazsa yeni denemenin ekranı
+      // ÖNCEKİ denemenin "kaydedildi"sini gösterir (kayıt bir OLAY, durum
+      // değil; depo ek-yalnız).
+      _saved = null;
+      _saveError = null;
       _engine = _newEngine();
     });
     final PoseSource s = _source;
@@ -219,7 +282,12 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
           child: Padding(
             padding: const EdgeInsets.all(22),
             child: _result != null
-                ? _ResultView(result: _result!, onTryAgain: _tryAgain)
+                ? _ResultView(
+                    result: _result!,
+                    onTryAgain: _tryAgain,
+                    saved: _saved,
+                    saveError: _saveError,
+                  )
                 : _LiveView(
                     state: _state,
                     onFinish: _finish,
@@ -310,10 +378,19 @@ class _LiveView extends StatelessWidget {
 }
 
 class _ResultView extends StatelessWidget {
-  const _ResultView({required this.result, required this.onTryAgain});
+  const _ResultView({
+    required this.result,
+    required this.onTryAgain,
+    required this.saved,
+    required this.saveError,
+  });
 
   final AssessmentResult result;
   final VoidCallback onTryAgain;
+
+  /// `null` = yazma henüz bitmedi · `true` = geçmişe girdi · `false` = giremedi.
+  final bool? saved;
+  final String? saveError;
 
   @override
   Widget build(BuildContext context) {
@@ -322,15 +399,35 @@ class _ResultView extends StatelessWidget {
     final String headline = r.isMeasured
         ? '${r.value!.toStringAsFixed(0)}${r.unit ?? ''}'
         : 'Not measured';
-    final String detail = r.isMeasured
-        ? 'This is your starting point — we\'ll track it from here.'
-        : 'Reason: ${r.code.name}.';
+    // ⚠️ TAKİP SÖZÜ, YAZMA BAŞARILIYSA VERİLİR (L-285).
+    //
+    // Bu cümle ("we'll track it from here") 08-07'den beri ekrandaydı ve
+    // **hiçbir yazma yolu yoktu** — yani bugüne kadar TUTULAMAYAN bir
+    // vaatti. Yazma bağlandı; ama yazma BAŞARISIZ olabilir, ve o hâlde
+    // aynı cümle yine yalan olurdu. Söz artık OLGUYA bağlı.
+    final String detail = switch ((r.isMeasured, saved)) {
+      (false, _) => 'Reason: ${r.code.name}.',
+      (true, true) => 'This is your starting point — we\'ll track it from here.',
+      (true, false) => 'Measured, but this could not be saved to your history, '
+          'so it will not appear in Progress.',
+      (true, null) => 'Saving this measurement…',
+    };
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(headline, style: t.textTheme.headlineMedium),
         const SizedBox(height: 8),
-        Text(detail, style: t.textTheme.bodyMedium),
+        Text(detail,
+            key: const Key('liveCapture.resultDetail'),
+            style: t.textTheme.bodyMedium),
+        if (saved == false && saveError != null) ...<Widget>[
+          const SizedBox(height: 6),
+          // Ham hata KULLANICI CÜMLESİ DEĞİL (doc-75/5) — ama sebebi hiç
+          // söylememek de teşhisi imkânsız kılar; ikincil tonda, isimli.
+          Text('Reason: $saveError',
+              style: t.textTheme.bodySmall
+                  ?.copyWith(color: LissomColors.bodySecondary)),
+        ],
         const Spacer(),
         Align(
           alignment: Alignment.centerLeft,
