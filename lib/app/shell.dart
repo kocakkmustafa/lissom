@@ -56,8 +56,32 @@ class LissomShell extends StatefulWidget {
 }
 
 class _LissomShellState extends State<LissomShell> {
-  late final Future<AppFacts> _facts = (widget.loader ?? AppFacts.load)();
+  /// ⚠️ `late final` DEĞİL — bilerek (L-287).
+  ///
+  /// `AppFacts` GEÇMİŞİ de taşıyor (`SessionHistoryView.read`). Bir kez
+  /// okunup dondurulduğunda, kullanıcı ölçüm yapıp döndüğünde Home ve
+  /// Progress **hâlâ ölçümden ÖNCEKİ dünyayı** gösteriyordu: kayıt diskte
+  /// DOĞRU, yüzey onu göstermiyor. Ölçümü kaydetmek (L-285) tek başına
+  /// yetmedi — *bir verinin YAZILMASI, GÖRÜNMESİ değildir.*
+  late Future<AppFacts> _facts = (widget.loader ?? AppFacts.load)();
   int _index = 0;
+
+  /// Ölçümden dönüşte geçmişi YENİDEN okur.
+  ///
+  /// Config değil GEÇMİŞ değiştiği için tümünü yeniden okumak fazladan iş
+  /// gibi görünür — ama `AppFacts` tek parça bir olgu kümesi ve yarısını
+  /// tazelemek iki kaynak tek olgu üretirdi (L-272). Ölçüm sonrası TEK bir
+  /// dönüşte oluyor, sıcak yol değil.
+  ///
+  /// ⚠️ Gövde BLOK, ok-fonksiyonu DEĞİL: `setState(() => _facts = …)` atamanın
+  /// DEĞERİNİ (bir `Future`) döndürür ve Flutter bunu *"setState callback
+  /// argument returned a Future"* diye reddeder. Framework bu kusuru ilk
+  /// koşumda yakaladı.
+  void _reloadFacts() {
+    setState(() {
+      _facts = (widget.loader ?? AppFacts.load)();
+    });
+  }
 
   @override
   Widget build(BuildContext context) => FutureBuilder<AppFacts>(
@@ -109,6 +133,7 @@ class _LissomShellState extends State<LissomShell> {
             ageBand: widget.ageBand,
             onOpenLibrary: () => setState(
                 () => _index = facts.ia.tabs.indexOf('library')),
+            onMeasurementDone: _reloadFacts,
           ),
         'library' => LibraryScreen(facts: facts),
         'progress' => ProgressScreen(facts: facts),

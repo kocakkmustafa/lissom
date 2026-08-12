@@ -42,8 +42,14 @@ class HomeScreen extends StatelessWidget {
     required this.facts,
     required this.onOpenLibrary,
     this.ageBand,
+    this.onMeasurementDone,
     super.key,
   });
+
+  /// Ölçüm ekranından DÖNÜLDÜĞÜNDE çağrılır — kabuk geçmişi yeniden okur.
+  /// Olmazsa kullanıcı ölçüm yapar, kayıt diske girer, ve Home hâlâ
+  /// *"Nothing recorded on this device"* der (L-287).
+  final VoidCallback? onMeasurementDone;
 
   /// Onboarding'de beyan edilen yaş bandı — ölçüm başlatılırken motora
   /// GEÇİRİLİR. Burada yorumlanmaz (G-100).
@@ -268,15 +274,21 @@ class HomeScreen extends StatelessWidget {
                   // kabuğu sevki): `LiveCaptureScreen` bağlandı, `facts.live`
                   // TÜRETİLMİŞ ilk canlı testi açar — uydurma bir seçim
                   // değil, motorun GERÇEKTEN okuyabildiği testlerin ilki.
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => LiveCaptureScreen(
-                        test: facts.battery.tests[live.first.testId]!,
-                        batteryVersion: facts.battery.version,
-                        ageBand: ageBand,
+                  // Rota BEKLENİYOR (`await`): dönüşte geçmiş yeniden okunur.
+                  // `push`u beklemeden bırakmak, ölçüm kaydını diskte doğru
+                  // ama yüzeyde GÖRÜNMEZ bırakırdı (L-287).
+                  onPressed: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => LiveCaptureScreen(
+                          test: facts.battery.tests[live.first.testId]!,
+                          batteryVersion: facts.battery.version,
+                          ageBand: ageBand,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                    onMeasurementDone?.call();
+                  },
                   child: const Text('Start a measurement'),
                 ),
               OutlinedButton(
