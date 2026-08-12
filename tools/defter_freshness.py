@@ -82,8 +82,9 @@ _SUBJECT = re.compile(r"^[a-z]+\((L-\d+)")
 
 #: **GENİŞ OKUYUCU (L-311).** `_SUBJECT` bu deponun TEK yazım biçimi değil:
 #: erken commit'ler numarayı **konuya değil kuyruğa** yazmış
-#: (`feat(live): … — L-208`). Ölçüldü: 186 commit'te kapsamda **47**,
-#: başlıkta herhangi bir yerde **102**, başlık+gövdede **194** numara.
+#: (`feat(live): … — L-208`). Ölçüldü (187 commit): kapsamda **47** ·
+#: **başlıkta herhangi bir yerde 109** (= YÖN-1 okuyucusu) ·
+#: başlık+gövdede **195** (= YÖN-2 okuyucusu, `commit_trace`).
 #:
 #: > ***BİR SAYACIN GÖRDÜĞÜ ŞEY, BAKTIĞI DİZGE KADARDIR*** (M-F-588) — ve
 #: > bu kapı 139 numarayı görmediği için **gerçek bir gediği kaçırmıştı**
@@ -109,17 +110,45 @@ def commit_ids(limit: int = 400) -> tuple[list[str], int]:
     `_SUBJECT` (conventional kapsam) tek başına bırakıldı mı 139 numara
     görünmez oluyor; ölçümü modül başındaki `_WIDE` notunda.
     """
-    out = subprocess.run(
-        ["git", "-C", str(ROOT), "log", f"-{limit}", "--format=%s%n%b%n%x00"],
-        capture_output=True, text=True, check=True).stdout
     subjects = subprocess.run(
         ["git", "-C", str(ROOT), "log", f"-{limit}", "--format=%s"],
-        capture_output=True, text=True, check=True).stdout.splitlines()
-    ids = list(_WIDE.findall(out))
-    for lo, hi in _RANGE.findall(out):
+        capture_output=True, text=True, check=True).stdout
+    ids = list(_WIDE.findall(subjects))
+    for lo, hi in _RANGE.findall(subjects):
         w = len(lo)
         ids += [f"L-{n:0{w}d}" for n in range(int(lo), int(hi) + 1)]
-    return ids, len(subjects)
+    return ids, len(subjects.splitlines())
+
+
+def commit_trace(limit: int = 400) -> set[str]:
+    """**YÖN-2'nin okuyucusu — BAŞLIK + GÖVDE, ve ayrım GEREKÇELİ.**
+
+    İki yön aynı dizgeye bakmaz, çünkü **iki farklı soru soruyorlar:**
+
+    · **YÖN-1 = İDDİA.** *"Bu commit hangi kaydı yaptığını söylüyor?"*
+      Cevabı yalnız **başlıktır**; gövde anlatıdır ve bir numaradan söz
+      etmek onu yapmak değildir. (Defter tarafındaki `Kapanış kanıtı` ↔
+      gövde ayrımının **birebir aynası**.)
+    · **YÖN-2 = İZ.** *"Bu kaydın git'te herhangi bir izi var mı?"*
+      Burada gövdedeki bir anma da **izdir** — soru sahiplik değil varlık.
+
+    🪤 **Ve bu ayrım ÖDENEREK öğrenildi:** tek okuyucu (başlık+gövde) iki
+    yönde birden kullanılınca, `L-311`in commit **gövdesinde** geçen
+    sentetik `L-000` YÖN-1'de bir **iddia** sayıldı ve kapı, hiç var
+    olmayan bir kaydı arayarak kırmızı yandı — *kendi commit mesajının
+    ürettiği gedik*.
+
+    > ***SÖZÜNÜ ETMEK ≠ İDDİA ETMEK — VE BU KURAL, KAPIYI GENİŞLETİRKEN
+    > EN KOLAY UNUTULAN YERDE, GÖVDEDE ÇİĞNENİR.***
+    """
+    out = subprocess.run(
+        ["git", "-C", str(ROOT), "log", f"-{limit}", "--format=%s%n%b"],
+        capture_output=True, text=True, check=True).stdout
+    ids = set(_WIDE.findall(out))
+    for lo, hi in _RANGE.findall(out):
+        w = len(lo)
+        ids |= {f"L-{n:0{w}d}" for n in range(int(lo), int(hi) + 1)}
+    return ids
 
 
 #: Kod dosyası — **`.md` KASITLA DIŞARIDA.** Bir ölçüm kaydı kanıtını
@@ -216,8 +245,7 @@ def ters_yon(text: str) -> tuple[list[str], int, int]:
     """
     tracked = _tracked()
     claims = kod_iddia_eden(text, tracked)
-    ids, _ = commit_ids()
-    trace = set(ids)
+    trace = commit_trace()
     tavan = max((_num(i) for i in trace), default=0)
     izsiz = {c for c in claims - trace if _num(c) <= tavan}
     ucusta = sorted(claims - trace - izsiz, key=_num)
@@ -423,7 +451,7 @@ def _self_test() -> int:
     #   ⛔ Bir öz-test *"bugün 0"* demekle yetinirse, kapının ötme YETENEĞİ
     #   hiç sınanmamış olur (M-F-58 dördüncü canlılık sorusu).
     sahte = ("| L-903 | çözüm | P1 | x | kapalı | `lib/app/home_screen.dart` |")
-    izsiz = kod_iddia_eden(sahte, tr) - set(commit_ids()[0])
+    izsiz = kod_iddia_eden(sahte, tr) - commit_trace()
     fires = izsiz == {"L-903"} and "L-903" not in IZSIZ_KOD_KAYITLARI
     print(f"   {'✅' if fires else '⛔'} ters yön sentetik izsiz kaydı "
           f"{'YAKALIYOR' if fires else 'YAKALAMIYOR — SAHTE KAPI'}")
@@ -434,13 +462,24 @@ def _self_test() -> int:
     #   İki senaryo AYNI fonksiyonla sınanır: tavanın ÜSTÜ (uçuşta, sessiz)
     #   ↔ tavanın ALTI (gedik, ötüyor). Yalnız birincisini sınamak, kapının
     #   affı öğrenip yakalamayı unuttuğu hâli göremezdi.
-    ids, _ = commit_ids()
-    tavan = max((_num(i) for i in set(ids)), default=0)
-    # 🪤 İlk yazımda "tavan altı" için `L-{tavan-5}` kullandım ve o numara
-    #   GERÇEKTEN commit'liydi ⇒ `claims - trace` boş çıktı, sınav
-    #   **vakum-doğru** oldu ve kapı "sessiz" diye kendini suçladı. Sentetik
-    #   girdi, gerçek kümeyle ÇAKIŞMAYAN bir numara olmak zorunda.
-    ust, alt = f"L-{tavan + 5}", "L-000"
+    ids = commit_trace()
+    tavan = max((_num(i) for i in ids), default=0)
+    # 🪤 **İKİ KEZ ÖDENDİ, ve ikincisi birincinin çaresini çürüttü.**
+    #   ① "tavan altı" için `L-{tavan-5}` yazdım — o numara GERÇEKTEN
+    #      commit'liydi ⇒ küme boş, sınav **vakum-doğru**, kapı kendini
+    #      "sahte" sandı.
+    #   ② Çare diye `L-000` sabitledim — sonra o numarayı bir **commit
+    #      mesajında** andım ve YÖN-2 okuyucusu (gövdeyi de tarar) onu
+    #      **ize** çevirdi. Sabit sentetik girdi, ölçtüğü dünyaya sızdı.
+    #
+    #   > ***BİR ÖZ-TESTİN SENTETİK GİRDİSİ ELLE SEÇİLEMEZ: ÖLÇTÜĞÜ
+    #   > KÜMEDEN TÜRETİLMEZSE, ER GEÇ O KÜMENİN ÜYESİ OLUR.***
+    kullanilmis = {_num(i) for i in ids}
+    bos = [k for k in range(1, tavan + 1) if k not in kullanilmis]
+    if not bos:
+        print("   ⛔ uçuş kuralı sınanamadı — tavan altında BOŞ numara yok")
+        return 1
+    ust, alt = f"L-{tavan + 5}", f"L-{max(bos):03d}"
     tr2 = {"lib/app/home_screen.dart"}
     row = "| {} | çözüm | P1 | x | kapalı | `lib/app/home_screen.dart` |"
     ucus_ok = kod_iddia_eden(row.format(ust), tr2) - set(ids) == {ust}
