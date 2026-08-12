@@ -15,6 +15,17 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+/// Onboarding'in KULLANICIYA SUNDUĞU yaş bantları — **tek adres**
+/// (`kImplementedTabs` / `kCountableScreens` deseni).
+///
+/// Bu liste config'in `ageBands`ıyla ve HER testin `scoring.bands`
+/// anahtarlarıyla `test/age_band_wiring_test.dart` tarafından mühürlenir.
+/// Mühür bir YAZIM karşılaştırması değil, DAVRANIŞ kapısıdır: her bant için
+/// gerçek config üstünde `ScoringSpec.floorsFor(bant)` çağrılır ve
+/// FIRLATMAMASI gerekir — çünkü `floorsFor` bilinmeyen bantta
+/// `BatteryError` fırlatır ve bu, ölçüm ekranında bir çıkmaz sokak olurdu.
+const List<String> kOfferedAgeBands = <String>['u40', '40-59', '60plus'];
+
 /// Toplanan profil — `completed == false` iken diğer alanlar anlamsızdır
 /// (akış yarım kaldı demektir, kayıtlı olsalar bile TAMAMLANMIŞ sayılmaz).
 final class OnboardingProfile {

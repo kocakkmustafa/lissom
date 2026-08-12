@@ -40,11 +40,16 @@ const List<String> kImplementedTabs = <String>[
 ];
 
 class LissomShell extends StatefulWidget {
-  const LissomShell({super.key, this.loader});
+  const LissomShell({super.key, this.loader, this.ageBand});
 
   /// Testte enjekte edilebilir: `rootBundle` widget testinde kilitlenebiliyor
   /// (aile gotcha'sı), o yüzden yükleyici ÇAĞIRANA ait.
   final Future<AppFacts> Function()? loader;
+
+  /// Onboarding'de beyan edilen yaş bandı (`u40` · `40-59` · `60plus`) —
+  /// kabuk bunu YORUMLAMAZ, yalnız TAŞIR (G-100: kabuk yalnız kablolama).
+  /// `null` → beyan yok; motor en muhafazakâr bandı kullanır.
+  final String? ageBand;
 
   @override
   State<LissomShell> createState() => _LissomShellState();
@@ -101,6 +106,7 @@ class _LissomShellState extends State<LissomShell> {
   Widget _page(AppFacts facts) => switch (facts.ia.tabs[_index]) {
         'home' => HomeScreen(
             facts: facts,
+            ageBand: widget.ageBand,
             onOpenLibrary: () => setState(
                 () => _index = facts.ia.tabs.indexOf('library')),
           ),

@@ -38,6 +38,11 @@ class _OnboardingGateState extends State<OnboardingGate> {
   /// oldu; tekrar okumak gereksiz bir I/O turu olurdu).
   bool _completed = false;
 
+  /// Akış AZ ÖNCE tamamlandıysa bandı buradan alırız — `_loaded`'daki profil
+  /// AÇILIŞTA okundu ve o profilde bant HENÜZ YOK. Bu alan olmasaydı bandın
+  /// ilk etkisi bir sonraki açılışta görülürdü (ilk ölçüm yanlış bantla).
+  OnboardingProfile? _justCompleted;
+
   Future<_Loaded> _load() async {
     final OnboardingStore store =
         await (widget.storeLoader ?? openOnboardingStore)();
@@ -53,11 +58,23 @@ class _OnboardingGateState extends State<OnboardingGate> {
           if (!s.hasData) return const _GateLoadingScreen();
 
           if (_completed || s.data!.profile.completed) {
-            return LissomShell(loader: widget.shellLoader);
+            // Onboarding'de BEYAN EDİLEN yaş bandı buradan aşağı akar
+            // (kabuk → home → canlı ölçüm → motor). Akmazsa kullanıcı
+            // ZORUNLU bir seçim yapar ve seçim HİÇBİR ŞEYİ değiştirmez —
+            // L-262 sınıfı: olmayan bir yeteneği kullanıcıya anlatmak.
+            //
+            // Sıra önemli: AZ ÖNCE tamamlanan profil, açılışta okunanı EZER.
+            return LissomShell(
+              loader: widget.shellLoader,
+              ageBand: (_justCompleted ?? s.data!.profile).ageBand,
+            );
           }
           return OnboardingFlow(
             store: s.data!.store,
-            onDone: () => setState(() => _completed = true),
+            onDone: (OnboardingProfile p) => setState(() {
+              _completed = true;
+              _justCompleted = p;
+            }),
           );
         },
       );

@@ -38,7 +38,16 @@ import 'session_history_view.dart';
 import 'surfaces.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({required this.facts, required this.onOpenLibrary, super.key});
+  const HomeScreen({
+    required this.facts,
+    required this.onOpenLibrary,
+    this.ageBand,
+    super.key,
+  });
+
+  /// Onboarding'de beyan edilen yaş bandı — ölçüm başlatılırken motora
+  /// GEÇİRİLİR. Burada yorumlanmaz (G-100).
+  final String? ageBand;
 
   static const Key todayKey = Key('home.today');
   static const Key retestKey = Key('home.retest_countdown');
@@ -264,6 +273,7 @@ class HomeScreen extends StatelessWidget {
                       builder: (_) => LiveCaptureScreen(
                         test: facts.battery.tests[live.first.testId]!,
                         batteryVersion: facts.battery.version,
+                        ageBand: ageBand,
                       ),
                     ),
                   ),

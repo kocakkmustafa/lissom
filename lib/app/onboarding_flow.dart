@@ -28,15 +28,30 @@ class OnboardingFlow extends StatefulWidget {
 
   final OnboardingStore store;
 
-  /// Akış TAMAMLANDIĞINDA çağrılır — kabuğa geçiş çağıranın sorumluluğu
-  /// (bu widget navigasyon kararı VERMEZ, yalnız tamamlandığını bildirir).
-  final VoidCallback onDone;
+  /// Akış TAMAMLANDIĞINDA, **az önce YAZILAN profille** çağrılır — kabuğa
+  /// geçiş çağıranın sorumluluğu (bu widget navigasyon kararı VERMEZ).
+  ///
+  /// ⚠️ Profil parametresi şart: geçit `_loaded`'ı diskten YENİDEN OKUMUYOR
+  /// (bilerek — yazma aynı çağrı zincirinde oldu). Bu yüzden onboarding'i
+  /// AZ ÖNCE bitiren kullanıcının bandı buradan geçmezse, kabuk açılışta
+  /// okunmuş BOŞ profili görür ve bant ancak **bir sonraki açılışta**
+  /// etki ederdi — yani ilk ölçüm sessizce yanlış bantla koşardı.
+  final ValueChanged<OnboardingProfile> onDone;
 
   @override
   State<OnboardingFlow> createState() => _OnboardingFlowState();
 }
 
 enum _Step { welcome, disclaimer, camera, profile, limits }
+
+/// Kullanıcıya görünen ETİKET — anahtar DEĞİL. Anahtarların tek adresi
+/// [kOfferedAgeBands]; buradan bir bant EKSİKSE ekranda ham config değeri
+/// («60plus») görünür, o yüzden `age_band_wiring_test.dart` kapsamı sınar.
+const Map<String, String> kAgeBandLabels = <String, String>{
+  'u40': 'Under 40',
+  '40-59': '40–59',
+  '60plus': '60 or over',
+};
 
 class _OnboardingFlowState extends State<OnboardingFlow> {
   _Step _step = _Step.welcome;
@@ -70,14 +85,17 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   Future<void> _finish() async {
     setState(() => _saving = true);
-    await widget.store.write(OnboardingProfile(
+    final OnboardingProfile profile = OnboardingProfile(
       completed: true,
       ageBand: _ageBand,
       gender: _gender.trim().isEmpty ? null : _gender.trim(),
       painNotes: _painNotes.trim().isEmpty ? null : _painNotes.trim(),
-    ));
+    );
+    await widget.store.write(profile);
     if (!mounted) return;
-    widget.onDone();
+    // Diske YAZILAN nesnenin AYNISI geçiyor — ikinci bir kopya kurulsaydı
+    // iki kaynak tek olgu olurdu (L-272) ve sessizce ayrışabilirdi.
+    widget.onDone(profile);
   }
 
   @override
@@ -319,13 +337,6 @@ class _ProfileStep extends StatefulWidget {
 }
 
 class _ProfileStepState extends State<_ProfileStep> {
-  /// `u40` · `40-59` · `60plus` — `ScoringSpec.bandFloorsByAge` anahtarları,
-  /// bkz. `onboarding_store.dart` sınıf dokümanı.
-  static const Map<String, String> _bandLabels = <String, String>{
-    'u40': 'Under 40',
-    '40-59': '40–59',
-    '60plus': '60 or over',
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -347,12 +358,15 @@ class _ProfileStepState extends State<_ProfileStep> {
         Wrap(
           spacing: 8,
           children: <Widget>[
-            for (final MapEntry<String, String> e in _bandLabels.entries)
+            // Gösterilen bantlar [kOfferedAgeBands]'ten TÜRETİLİR — etiket
+            // haritasından DEĞİL. Tek adres motorun tanıdığı bantlar;
+            // etiket yalnız o bantların kullanıcı yüzü.
+            for (final String band in kOfferedAgeBands)
               ChoiceChip(
-                key: Key('onboarding.ageBand.${e.key}'),
-                label: Text(e.value),
-                selected: widget.ageBand == e.key,
-                onSelected: (_) => widget.onAgeBand(e.key),
+                key: Key('onboarding.ageBand.$band'),
+                label: Text(kAgeBandLabels[band] ?? band),
+                selected: widget.ageBand == band,
+                onSelected: (_) => widget.onAgeBand(band),
               ),
           ],
         ),

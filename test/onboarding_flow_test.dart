@@ -26,7 +26,12 @@ final class _FakeStore implements OnboardingStore {
 Future<void> _pump(WidgetTester tester, OnboardingStore store, VoidCallback onDone) async {
   await tester.pumpWidget(MaterialApp(
     theme: buildLissomTheme(),
-    home: OnboardingFlow(store: store, onDone: onDone),
+    home: OnboardingFlow(
+      store: store,
+      // `onDone` artık YAZILAN profili taşıyor (yaş bandı zinciri, L-280);
+      // bu dosyanın iddiaları profile bakmıyor, o yüzden yutuluyor.
+      onDone: (OnboardingProfile _) => onDone(),
+    ),
   ));
   await tester.pumpAndSettle();
 }

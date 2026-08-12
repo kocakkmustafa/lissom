@@ -40,6 +40,7 @@ class LiveCaptureScreen extends StatefulWidget {
     required this.test,
     required this.batteryVersion,
     this.side = 'right',
+    this.ageBand,
     this.sourceOverride,
     super.key,
   });
@@ -48,12 +49,84 @@ class LiveCaptureScreen extends StatefulWidget {
   final String batteryVersion;
   final String side;
 
+  /// Onboarding'de BEYAN EDİLEN yaş bandı — zincirin son halkası
+  /// (onboarding → geçit → kabuk → home → BURASI → motor).
+  ///
+  /// `null` → beyan yok; `ScoringSpec.floorsFor(null)` en muhafazakâr bandı
+  /// seçer. Doğrulama [_effectiveAgeBand]'de, çünkü bir bandın GEÇERLİLİĞİ
+  /// teste özgüdür (nitel testlerin bandı hiç yoktur).
+  final String? ageBand;
+
   /// Testte enjekte edilebilir (`FakePoseSource`) — `LissomShell`in
   /// `loader` deseniyle AYNI sözleşme. `null` iken gerçek `CameraPoseSource`.
   final PoseSource? sourceOverride;
 
   @override
   State<LiveCaptureScreen> createState() => _LiveCaptureScreenState();
+}
+
+/// Motora GERÇEKTEN geçen bant — beyan edilen bandın BU test için geçerli
+/// olanı, yoksa `null`.
+///
+/// **Neden süzgeç var:** `ScoringSpec.floorsFor` tanımadığı bir bantta
+/// `BatteryError` **FIRLATIR**. Beyan edilen bant bu testin config'inde yoksa
+/// (config sürümü değişti, bant yeniden adlandırıldı) motora geçirmek ölçüm
+/// ekranını bir **çıkmaz sokağa** çevirirdi — M-F-267 ÇIKMAZ-SOKAK YASAĞI.
+/// Düşürülür ve en muhafazakâr banda dönülür: kullanıcı hak etmediği bir
+/// "yetersiz" hükmüne SOKULMAZ (`floorsFor`un kendi gerekçesi).
+///
+/// ⚠️ Bu bir **emniyet kemeri**, koruma DEĞİL. Sapmayı asıl engelleyen
+/// `test/age_band_wiring_test.dart` kapısıdır (her bant × her test için
+/// `floorsFor` FIRLATMAMALI). Kemer sessiz de değildir: düşen beyan
+/// provenance'a `ageBandDeclaredButUnknown` olarak İSİMLE yazılır.
+@visibleForTesting
+String? effectiveAgeBand(TestSpec test, String? declared) {
+  if (declared == null) return null;
+  final Map<String, Map<String, double>> bands = test.scoring.bandFloorsByAge;
+  // Nitel test — bandı hiç yok, `floorsFor` zaten null döner.
+  if (bands.isEmpty) return null;
+  return bands.containsKey(declared) ? declared : null;
+}
+
+/// Ekranın motoru kurduğu TEK yol — ekran bunun dışında `AssessmentEngine`
+/// kurmaz. Testin bandın motora GERÇEKTEN ulaştığını ölçebildiği yer burası:
+/// `_LiveCaptureScreenState` özel bir sınıf, dışarıdan okunamaz.
+@visibleForTesting
+AssessmentEngine buildLiveEngine({
+  required TestSpec test,
+  required String side,
+  required String? declaredAgeBand,
+  required String batteryVersion,
+  required double? Function(PoseFrame frame, String metricName) metricReader,
+}) {
+  final String? effective = effectiveAgeBand(test, declaredAgeBand);
+
+  // İKİ AYRI OLGU, tek koşulda birleştirilemez (bu dosyanın kapısı ilk
+  // yazılışımda tam bunu yakaladı):
+  //   ① beyan VAR, test BANTLI, ama bandı tanımıyor  → SAPMA, kaydedilir
+  //   ② beyan VAR, test BANTSIZ (nitel)              → NORMAL, damgalanmaz
+  // İkisini "effective == null" diye birleştirmek, geçerli bir beyanı
+  // "bilinmeyen" diye damgalayıp kaydı YANLIŞ hâle getiriyordu.
+  final Map<String, Map<String, double>> bands = test.scoring.bandFloorsByAge;
+  final bool unknownForThisTest = declaredAgeBand != null &&
+      bands.isNotEmpty &&
+      !bands.containsKey(declaredAgeBand);
+
+  return AssessmentEngine(
+    test: test,
+    side: side,
+    ageBand: effective,
+    metricReader: metricReader,
+    provenance: <String, String>{
+      'modelId': kPoseModelId,
+      'batteryVersion': batteryVersion,
+      // Ölçümü HANGİ bandın skorladığı kaydın parçasıdır (M-F-07 sınıfı).
+      // Boş dize = hiçbiri: ya beyan yok, ya test bantsız.
+      'ageBand': effective ?? '',
+      // Sessiz düşürme YOK — yalnız ① hâlinde.
+      if (unknownForThisTest) 'ageBandDeclaredButUnknown': declaredAgeBand,
+    },
+  );
 }
 
 class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
@@ -69,14 +142,12 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   LiveSessionState _state = const LiveIdle();
   AssessmentResult? _result;
 
-  AssessmentEngine _newEngine() => AssessmentEngine(
+  AssessmentEngine _newEngine() => buildLiveEngine(
         test: widget.test,
         side: widget.side,
+        declaredAgeBand: widget.ageBand,
+        batteryVersion: widget.batteryVersion,
         metricReader: _readMetric,
-        provenance: <String, String>{
-          'modelId': kPoseModelId,
-          'batteryVersion': widget.batteryVersion,
-        },
       );
 
   double? _readMetric(PoseFrame frame, String metricName) {
