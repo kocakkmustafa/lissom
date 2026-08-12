@@ -134,11 +134,11 @@ void main() {
     // ignore: avoid_print
     print('  varılabilir aile hedefi : $reachable / ${facts.ia.families.length}');
     // ignore: avoid_print
-    print('  içeriği VAR             : ${withContent.length}  ${withContent}');
+    print('  içeriği VAR             : ${withContent.length}  $withContent');
     // ignore: avoid_print
-    print('  BOŞ-BEYANLI (dürüst hâl): ${emptyDeclared.length}  ${emptyDeclared}');
+    print('  BOŞ-BEYANLI (dürüst hâl): ${emptyDeclared.length}  $emptyDeclared');
     // ignore: avoid_print
-    print('  BOŞ-SESSİZ  (KUSUR)     : ${emptySilent.length}  ${emptySilent}');
+    print('  BOŞ-SESSİZ  (KUSUR)     : ${emptySilent.length}  $emptySilent');
     // ignore: avoid_print
     print('═══════════════════════════════════════════════\n');
 
