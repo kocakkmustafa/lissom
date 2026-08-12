@@ -43,6 +43,8 @@ class HomeScreen extends StatelessWidget {
     required this.onOpenLibrary,
     this.ageBand,
     this.onMeasurementDone,
+    this.poseSourceLoader,
+    this.sessionStoreLoader,
     super.key,
   });
 
@@ -50,6 +52,31 @@ class HomeScreen extends StatelessWidget {
   /// Olmazsa kullanıcı ölçüm yapar, kayıt diske girer, ve Home hâlâ
   /// *"Nothing recorded on this device"* der (L-287).
   final VoidCallback? onMeasurementDone;
+
+  /// **A1 DİKİŞİ (L-309) — kamera kaynağı ÇAĞIRANA ait.**
+  ///
+  /// `LiveCaptureScreen.sourceOverride` bu ağaçta zaten vardı, ama YALNIZ
+  /// ekranı doğrudan `pumpWidget`leyen testler ona ulaşabiliyordu. Home onu
+  /// enjekte edemediği için ***taze kurulumdan sonuca kadar TEK bir yürüyüş
+  /// yazılamıyordu***: zincir iki yarıma bölünmüştü ve `grep -rl
+  /// "onboarding.continue"` ∩ `grep -rl "liveCapture.finish"` **BOŞTU.**
+  ///
+  /// ⚠️ **FABRİKA, örnek DEĞİL** — ve sebebi ölçülmüş: `FakePoseSource` bir
+  /// akışı TÜKETİR; tek bir örnek paylaşılsaydı ikinci ölçüm sessizce
+  /// olaysız açılır, yürüyüş *"kaynak kuru"* hâlini ürün kusuru sanardı.
+  /// Ad da bu yüzden `…Loader`: bu ağaçta `…Loader` = fabrika
+  /// (`LissomShell.loader` · `OnboardingGate.storeLoader`), `…Override` =
+  /// örnek (`LiveCaptureScreen.sourceOverride`). **Yeni sözleşme değil,
+  /// var olanın bir katman yukarısı.**
+  final PoseSource Function()? poseSourceLoader;
+
+  /// Ölçüm kaydının deposu — `LiveCaptureScreen.storeLoader`a AYNEN geçer.
+  ///
+  /// ⚠️ Ad `storeLoader` DEĞİL: bu ağaçta o ad **`OnboardingStore`** için
+  /// kullanılıyor (`OnboardingGate.storeLoader`) ve iki ayrı depo aynı adı
+  /// taşısaydı, bir katman yukarıda hangisinin geçtiği **okunarak
+  /// ayırt edilemezdi.** İki depo, iki ad.
+  final Future<SessionStore> Function()? sessionStoreLoader;
 
   /// Onboarding'de beyan edilen yaş bandı — ölçüm başlatılırken motora
   /// GEÇİRİLİR. Burada yorumlanmaz (G-100).
@@ -284,6 +311,12 @@ class HomeScreen extends StatelessWidget {
                           test: facts.battery.tests[live.first.testId]!,
                           batteryVersion: facts.battery.version,
                           ageBand: ageBand,
+                          // A1 dikişi: üretimde İKİSİ DE `null` ⇒ ekran
+                          // kendi varsayılanlarını kurar (`CameraPoseSource`
+                          // / `openSessionStore`). Enjeksiyon yalnız
+                          // yürüyüşü mümkün kılar, davranışı değiştirmez.
+                          sourceOverride: poseSourceLoader?.call(),
+                          storeLoader: sessionStoreLoader,
                         ),
                       ),
                     );

@@ -23,6 +23,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
 import 'home_screen.dart';
@@ -40,11 +42,23 @@ const List<String> kImplementedTabs = <String>[
 ];
 
 class LissomShell extends StatefulWidget {
-  const LissomShell({super.key, this.loader, this.ageBand});
+  const LissomShell({
+    super.key,
+    this.loader,
+    this.ageBand,
+    this.poseSourceLoader,
+    this.sessionStoreLoader,
+  });
 
   /// Testte enjekte edilebilir: `rootBundle` widget testinde kilitlenebiliyor
   /// (aile gotcha'sı), o yüzden yükleyici ÇAĞIRANA ait.
   final Future<AppFacts> Function()? loader;
+
+  /// **A1 DİKİŞİ (L-309)** — `HomeScreen`e AYNEN taşınır, burada
+  /// YORUMLANMAZ. Kabuk yalnız kablolamadır (G-100): bu iki alan da
+  /// `ageBand`la aynı sözleşmede — taşınır, okunmaz.
+  final PoseSource Function()? poseSourceLoader;
+  final Future<SessionStore> Function()? sessionStoreLoader;
 
   /// Onboarding'de beyan edilen yaş bandı (`u40` · `40-59` · `60plus`) —
   /// kabuk bunu YORUMLAMAZ, yalnız TAŞIR (G-100: kabuk yalnız kablolama).
@@ -134,6 +148,8 @@ class _LissomShellState extends State<LissomShell> {
             onOpenLibrary: () => setState(
                 () => _index = facts.ia.tabs.indexOf('library')),
             onMeasurementDone: _reloadFacts,
+            poseSourceLoader: widget.poseSourceLoader,
+            sessionStoreLoader: widget.sessionStoreLoader,
           ),
         'library' => LibraryScreen(facts: facts),
         'progress' => ProgressScreen(facts: facts),

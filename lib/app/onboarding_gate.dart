@@ -6,6 +6,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
 import 'lissom_theme.dart';
@@ -14,7 +16,13 @@ import 'onboarding_store.dart';
 import 'shell.dart';
 
 class OnboardingGate extends StatefulWidget {
-  const OnboardingGate({super.key, this.storeLoader, this.shellLoader});
+  const OnboardingGate({
+    super.key,
+    this.storeLoader,
+    this.shellLoader,
+    this.poseSourceLoader,
+    this.sessionStoreLoader,
+  });
 
   /// Testte enjekte edilebilir: `rootBundle`/`path_provider` widget testinde
   /// kilitlenebiliyor (aile gotcha'sı), o yüzden yükleyici ÇAĞIRANA ait —
@@ -25,6 +33,14 @@ class OnboardingGate extends StatefulWidget {
   /// enjekte edilmezse `LissomShell`in varsayılanı (`AppFacts.load`,
   /// `rootBundle` ister) çalışır, widget testinde SONSUZ ASILI kalır.
   final Future<AppFacts> Function()? shellLoader;
+
+  /// **A1 DİKİŞİNİN SON HALKASI (L-309).** Kök geçit ⇒ kabuk ⇒ home ⇒ canlı
+  /// ölçüm. `ageBand`ın izlediği yolun AYNISI — ve o yol zaten şu cümleyle
+  /// gerekçelendirilmişti: *"akmazsa kullanıcı ZORUNLU bir seçim yapar ve
+  /// seçim HİÇBİR ŞEYİ değiştirmez"*. Burada akmayan şey **ölçümün
+  /// kendisiydi**: yürüyüş taze kurulumdan başlayamıyordu.
+  final PoseSource Function()? poseSourceLoader;
+  final Future<SessionStore> Function()? sessionStoreLoader;
 
   @override
   State<OnboardingGate> createState() => _OnboardingGateState();
@@ -67,6 +83,8 @@ class _OnboardingGateState extends State<OnboardingGate> {
             return LissomShell(
               loader: widget.shellLoader,
               ageBand: (_justCompleted ?? s.data!.profile).ageBand,
+              poseSourceLoader: widget.poseSourceLoader,
+              sessionStoreLoader: widget.sessionStoreLoader,
             );
           }
           return OnboardingFlow(
