@@ -39,13 +39,91 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "test" / "reachability_contract_test.dart"
 
-#: §5 gereği sayılmayanlar — ADIYLA, sessizce değil.
+#: §5 gereği sayılmayanlar. ⛔ **GEREKÇE BURADA YAZILMAZ, TÜRETİLİR** —
+#: `exclusion_facts()` her kalemin gerekçesini KODDAN ölçer.
+#:
+#: 🔴 Sözleşme (c): *"sebepsiz dışlama yasak"* **ve** *"sebep de ölçülür"*.
+#: Önceki hâli **grup yorumuydu** (*"geçit hâlleri"*, *"kabuk hâlleri"*) —
+#: yani **7 kalem için 4 anlatı**, hiçbiri ölçülmemiş. Ostinato'nun vakası
+#: bunun bedelini gösterdi: *"üçü de kamera arkasında"* dedi, **yanlış
+#: çıktı.**
+#:
+#: > ***YANLIŞ BİR SEBEP, SEBEPSİZLİKTEN DAHA KÖTÜDÜR: DENETİMİ
+#: > DOĞRULANMIŞ GÖSTERİR.***
+#:
+#: ⚠️ Ve adlandırma Ostinato'nun dersini taşıyor (`unreachable_reason` →
+#: `camera_dependency`): kategoriler bir **OLGU** adı taşır (`hal_kosullu` ·
+#: `akis_adimi` · `kap`), bir **İDDİA** adı değil — *bir olguyu iddia diye
+#: adlandırmak, kapsamı sessizce genişletir.*
 EXCLUDED = {
-    "_GateLoadingScreen", "_GateFailureScreen",   # geçit hâlleri
-    "_LoadingScreen", "_LoadFailureScreen", "_TabMismatchScreen",  # kabuk hâlleri
-    "OnboardingFlow",   # akış adımları (tek Scaffold, adım = ekran DEĞİL)
-    "LissomShell",      # kabuğun kendisi ekran değil, KAP
+    "_GateLoadingScreen", "_GateFailureScreen",
+    "_LoadingScreen", "_LoadFailureScreen", "_TabMismatchScreen",
+    "OnboardingFlow",
+    "LissomShell",
 }
+
+#: Kurulum yeri KOŞUL altında mı — ve hangi koşul? (olgu, iddia değil)
+_GUARD = re.compile(r"if \(([^)]{1,60})\)\s*return (\w+)\(|"
+                    r"if \(([^)]{1,60})\)\s*\{?\s*return (\w+)\(")
+
+
+def exclusion_facts() -> dict[str, str]:
+    """Her dışlananın gerekçesini **KODDAN ÖLÇER** (sözleşme §c).
+
+    Üç olgu sınıfı, üçü de kaynaktan türetilir:
+      · `hal_kosullu:<koşul>` — kurulum yeri bir hâl koşulunun altında
+        (yükleme/hata/uyuşmazlık); boyanmış bir kontrol oraya götürmez
+      · `akis_adimi:<n>` — tek `Scaffold`, içeride `n` adımlı `enum`
+      · `kap:<n>` — kendisi aday DEĞİL, `n` adayı ÇİZEN kap
+
+    ⛔ Gerekçesi ölçülemeyen bir dışlama **kırmızıdır** — sessizce
+    dışlanmaz.
+    """
+    src = {p.name: re.sub(r"//[^\n]*", " ", p.read_text(encoding="utf-8"))
+           for p in (ROOT / "lib").rglob("*.dart")}
+    blob = "\n".join(src.values())
+    facts: dict[str, str] = {}
+
+    for cls in EXCLUDED:
+        # 🪤 3. DENEME: `body` TÜM DOSYAYI alıyordu (sınıf gövdesini değil)
+        # → `shell.dart`taki üç hâl ekranı da "kap" göründü, çünkü dosya
+        # `=> HomeScreen(` içeriyor. ***Bir sınıfın gövdesi, onu İÇEREN
+        # dosya değildir.*** Gövde artık gerçekten kesiliyor.
+        body = ""
+        for v in src.values():
+            mm = re.search(rf"class {cls}\b", v)
+            if not mm:
+                continue
+            nxt = v.find("\nclass ", mm.end())
+            body = v[mm.start(): nxt if nxt > 0 else len(v)]
+            st = re.search(rf"class _{cls}State\b", v)
+            if st:
+                n2 = v.find("\nclass ", st.end())
+                body += v[st.start(): n2 if n2 > 0 else len(v)]
+            break
+        # ⚠️ SIRA ÖNEMLİ ve iki kez yanlış kurdum:
+        #   1. deneme — koşul deseni bitişik varsayıyordu → `_TabMismatchScreen`
+        #      kaçtı ve **`kap:4`** dedi (makul görünen YANLIŞ gerekçe)
+        #   2. deneme — koşul önce bakıyordu → `LissomShell` *hâl ekranı*
+        #      sanıldı, çünkü o da bir koşulun altında kuruluyor
+        # ⇒ Ayırt edici olan KURULUM KOŞULU değil, sınıfın KENDİ YAPISI.
+        #   Önce YAPI sorulur (kap? akış?), koşul EN SONA kalır.
+        drawn = {c for c in re.findall(r"=>\s*([A-Z]\w*)\(", body)
+                 if c not in EXCLUDED and c[0].isupper()}
+        if drawn:
+            facts[cls] = f"kap:{len(drawn)}"
+            continue
+        steps = re.search(r"enum _Step \{([^}]*)\}", body)
+        if steps and body.count("Scaffold(") == 1:
+            n = len([x for x in steps.group(1).split(",") if x.strip()])
+            facts[cls] = f"akis_adimi:{n}"
+            continue
+        # Koşul: iç parantez OLABİLİR (`!_tabsMatch(facts)`) → non-greedy.
+        m = re.search(
+            rf"if \((.{{1,70}}?)\)\s*\{{?\s*return (?:const )?{cls}\(",
+            blob, re.S)
+        facts[cls] = f"hal_kosullu:{m.group(1).strip()}" if m else "ÖLÇÜLEMEDİ"
+    return facts
 
 
 def scaffold_owners() -> set[str]:
@@ -112,6 +190,27 @@ def legacy_hand_list() -> set[str]:
     return {t.strip() for t in body.split(",") if t.strip()}
 
 
+def name_derived() -> set[str]:
+    """**(a) İKİNCİ türetim — AD tabanlı, YAPIDAN bağımsız.**
+
+    Sözleşme (a) iki bağımsız türetimin **UZLAŞMASINI** istiyor (Ostinato
+    deseni: AD ↔ YAPI); ***ayrışırlarsa kapı öter.*** Bende iki kanal
+    vardı ama **tamamlayıcıydı** (birleşim), **karşılaştırılmıyordu** —
+    yani *hayalet üye* sınıfı (`SettingsScreenRoute` ≠ `SettingsScreen`)
+    bende **görünmezdi.**
+
+    > ***BİR SAYININ DOĞRU OLMASI, ÜYELERİNİN DOĞRU OLMASI DEĞİLDİR.***
+    """
+    out: set[str] = set()
+    for pth in (ROOT / "lib").rglob("*.dart"):
+        src = re.sub(r"//[^\n]*", " ", pth.read_text(encoding="utf-8"))
+        for m in re.finditer(
+                r"class\s+(\w*(?:Screen|Page))\s+extends\s+"
+                r"(?:Stateless|Stateful)Widget\b", src):
+            out.add(m.group(1))
+    return out - EXCLUDED
+
+
 def declared() -> set[str]:
     """Sözleşme testinin beyan ettiği aday küme."""
     src = CONTRACT.read_text(encoding="utf-8")
@@ -127,12 +226,46 @@ def main() -> int:
     decl = declared()
     print(f"   desenden aday {len(derived)} · beyan edilen {len(decl)} · "
           f"dışlanan {len(EXCLUDED)}")
-    print(f"   dışlananlar (ADIYLA): {', '.join(sorted(EXCLUDED))}")
+    # (c) — her dışlanan KENDİ ÖLÇÜLMÜŞ gerekçesiyle. Grup anlatısı DEĞİL.
+    facts = exclusion_facts()
+    print("   dışlananlar (her biri ÖLÇÜLMÜŞ gerekçesiyle):")
+    for k in sorted(EXCLUDED):
+        print(f"     · {k:24} {facts[k]}")
+    olcelemeyen = [k for k, v in facts.items() if v == "ÖLÇÜLEMEDİ"]
+    if olcelemeyen:
+        print(f"⛔ GEREKÇESİ ÖLÇÜLEMEYEN dışlama: {sorted(olcelemeyen)}")
+        print("   Sebepsiz bir dışlama, denetimi yeniden TANIMA çevirir.")
+        return 1
 
     # (e) POZİTİF KONTROL — türetim, elle listeyi KAPSAMALI.
     # Bu, türetimin KENDİSİNİN bozulduğu günü tutar (JabLab'ın vakası:
     # bozuk eleme her StatefulWidget ekranını yok etti ve yakalayan şey
     # elle beklenen kümesiydi).
+    # (d) VAKUM KORUMASI — AÇIK, dolaylı değil.
+    # Önceki hâlde koruma (e)'nin kapsama kontrolü ÜZERİNDEN çalışıyordu:
+    # *bugün korunuyor, YAPISAL olarak değil.* Elle liste boşaltılsa
+    # koruma da kaybolurdu.
+    if not derived:
+        print("⛔ VAKUM — kaynak taraması HİÇ aday bulamadı; bir kapının "
+              "hiçbir şey bulmaması, ölçtüğü şeyin yokluğu değildir")
+        return 1
+
+    # (a) İKİ BAĞIMSIZ TÜRETİMİN UZLAŞMASI — ayrışma KIRMIZI.
+    byname = name_derived()
+    only_struct = derived - byname
+    only_name = byname - derived
+    print(f"   (a) uzlaşma: YAPI {len(derived)} · AD {len(byname)} · "
+          f"ayrışma {len(only_struct) + len(only_name)}")
+    if only_struct or only_name:
+        if only_struct:
+            print(f"⛔ YAPIDA var, ADDA yok: {sorted(only_struct)}")
+        if only_name:
+            print(f"⛔ ADDA var, YAPIDA yok: {sorted(only_name)} "
+                  f"— HAYALET ÜYE adayı")
+        print("   İki bağımsız türetim ayrıştı; biri eksik ya da biri "
+              "hayalet üye taşıyor.")
+        return 1
+
     hand = legacy_hand_list()
     uncovered = hand - derived
     print(f"   (e) pozitif kontrol: elle liste {len(hand)} üye · "
