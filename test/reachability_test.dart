@@ -27,6 +27,44 @@
 /// **Sayılır:** **kabuktan** başlayarak, **yalnız ekranda görünen kontrollere
 /// basarak** ulaşılan her ayrı ekran. (Onboarding akışı bu sayıya DAHİL
 /// DEĞİL — kapı onu sürmüyor; tanım genişletilirse sayı da değişir.)
+///
+/// ## 📏 LISSOM'UN SAYMA KURALI — açıkça (koordinatör talebi, 2026-08-12)
+///
+/// Gravita uyardı: *"senin 6/2'n, Choreia'nın 5/3'ü ve Gravita'nın 7/4'ü
+/// aynı şeyi ölçmüyor olabilir — fark İÇERİK değil SAYMA KURALI olabilir."*
+/// Haklı. Bu sayılar panoya ve aile karşılaştırmasına giriyor; **kural
+/// yazılmadan karşılaştırmak, birim hatasının aile ölçeğindeki hâli olur.**
+/// Aşağısı Lissom'un kuralıdır — **ölçü DEĞİŞMEDİ, yalnız YAZILDI.**
+///
+/// 1. **Başlangıç noktası: KABUK** (`LissomShell`), uygulama kökü DEĞİL.
+///    `OnboardingGate` sürülmüyor → **onboarding akışı DIŞARIDA** (ne KATI
+///    ne GENİŞ). Onboarding-dahil tanım çekirdek turunda karara bağlanacak.
+/// 2. **Sekme gövdesi GENİŞ'te 1 yüzey SAYILIR, KATI'da SAYILMAZ.**
+///    Lissom'un kabuğu tek `Scaffold` içinde `switch`le gövde değiştiriyor
+///    ve `NavigationBar` hep görünür — yani dört sekme "ayrı rota" değil.
+///    → **GENİŞ = 4 sekme + rotalar · KATI = yalnız rotalar.**
+///    *(Gravita'nın GEVŞEK'i dört gövdeyi 4 sayıp KATI'da 1 rota sayıyor —
+///    aynı mimari, aynı okuma; sayılar bu yüzden kıyaslanabilir.)*
+/// 3. **KATI'ya girmenin ölçütü `Navigator.push`tur** — kod okunarak değil,
+///    turda gerçekten yeni bir rota açılarak (`pushedRoutes`).
+/// 4. **Aday envanteri ELLE yazılır** (`kCountableScreens`), desenle
+///    TÜRETİLMEZ. **İsimli sınır:** listeye eklenmemiş yeni bir ekran bu
+///    kapıya GÖRÜNMEZ. Desenle türetme denendi ve YANLIŞ saydı (L-270:
+///    `*screen*.dart` deseni `FamilyPage`i kaçırıyordu) — elle liste, dar
+///    ama DÜRÜST; genişlemeyi kapı değil insan fark eder.
+/// 5. **Modal/sheet/dialog sayılmaz** · kabuk kroması (NavigationBar)
+///    sayılmaz · yükleme ve hata hâlleri sayılmaz.
+/// 6. **"Var ama ulaşılamıyor" AYRI raporlanır** ve sayıya girmez;
+///    kabuğa hiç bağlanmamış tipler (`BatterySummaryView`) **sayım dışı**
+///    diye ADIYLA basılır — sıfır olması bir başarı değil bir ÖLÇÜMDÜR.
+/// 7. **Kapı ALT SINIR tutar (6), üst sınır YOK** — büyümeyi yasaklamaz,
+///    küçülmeyi yakalar.
+///
+/// 🪤 **Kuralın gizli bir dayanağı var, adıyla:** tur bir rota açtığında
+/// alttaki sekme gövdesi widget ağacında KALIR; sayının doğru çıkmasının
+/// sebebi `find.byType`ın varsayılan **`skipOffstage: true`** davranışı +
+/// her adımda `pumpAndSettle`. Biri değişirse (ör. saydam rota) sayım
+/// SESSİZCE bozulur — bu satır o günü tutmak için burada.
 /// **Sayılmaz:** kodda tanımlı ama hiçbir yerden ulaşılamayan · yalnız
 /// derin-bağlantı/test kancasıyla açılan · ayrı ekran olmayan modal/sheet.
 ///

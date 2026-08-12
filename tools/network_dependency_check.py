@@ -57,7 +57,17 @@ NETWORK_DEPS_RECORDED = {
     "google_fonts": "yazı tipi indirir (GET); kullanıcı verisi TAŞIMAZ — "
                      "gizlilik iddialarını yalanlamaz, ama L-222 açık "
                      "(çevrimdışı açılışta tipografi kaybı + üçüncü sunucu "
-                     "bağlantısı — lisans/bağımlılık kararı koordinatörde)",
+                     "bağlantısı — lisans/bağımlılık kararı koordinatörde). "
+                     "⚠️ L-288 (2026-08-12) İNDİRMEYİ OLASI'DAN KESİN'E "
+                     "çevirdi: üretimde KULLANILIYOR (lissom_theme.dart → "
+                     "nunitoSansTextTheme + newsreaderTextTheme), "
+                     "`allowRuntimeFetching` HİÇ kapatılmamış (varsayılan "
+                     "AÇIK) ve pubspec'te `fonts:` bloğu YOK → paketlenmiş "
+                     "yedek olmadığı için ilk açılışta font GERÇEKTEN "
+                     "indirilir. Aile taraması 5/5 yapısal (duruş kararı "
+                     "kurucuda). Kendi üretim kodunda ağ çağrısı 0 — "
+                     "*kendi kodunda ağ olmaması, ÜRÜNÜNDE ağ olmaması "
+                     "demek değildir*.",
     # Aile bulgusu (Gravita, 2026-08-12): beş hattın da pubspec.lock'unda
     # http vardı, hiçbirinin yaml'ında yok — Ostinato'nun kapısı (ve bu
     # kapının ilk sürümü) yalnız yaml taradığı için görmüyordu. Ölçüldü:
