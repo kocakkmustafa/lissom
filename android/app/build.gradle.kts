@@ -1,3 +1,9 @@
+// ⚠️ `java.util.Properties`i NİTELİKLİ adla yazmak Gradle Kotlin DSL'inde
+// DERLENMEZ: `java` burada `JavaPluginExtension`a çözümleniyor ve paket adını
+// GÖLGELİYOR (`Unresolved reference: util`). İçe aktarma ZORUNLU — ve bunu
+// metin kapısı göremezdi, ancak GERÇEK derleme gösterdi (L-286 EK).
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -44,8 +50,9 @@ android {
     // Debug anahtarına düşmek artık bir VARSAYILAN değil, açıkça istenen
     // bir KARAR: `-PallowDebugSigning=true`.
     val keyPropsFile = rootProject.file("key.properties")
-    val keyProps = java.util.Properties().apply {
-        if (keyPropsFile.exists()) keyPropsFile.inputStream().use { load(it) }
+    val keyProps = Properties()
+    if (keyPropsFile.exists()) {
+        keyPropsFile.inputStream().use { keyProps.load(it) }
     }
     val hasRealSigning = keyProps.getProperty("storeFile") != null
 
