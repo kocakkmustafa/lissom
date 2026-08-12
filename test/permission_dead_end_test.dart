@@ -57,6 +57,13 @@ const MethodChannel _permChannel =
 const int _kPermanentlyDenied = 4;
 const int _kGranted = 1;
 
+/// ⚠️ **`restricted` AYRI sürülür, `permanentlyDenied`in kopyası değil**
+/// (koordinatör şerhi): MDM/ebeveyn denetimli cihazda izin diyaloğu **HİÇ
+/// çıkmaz**, yani *"ikinci ret = kalıcı"* sezgisi bu vakayı **ilkece**
+/// göremez. Kodda `||` ile kapsandığını GÖRMEK yetmez — o "varlık"
+/// ölçümüdür; bu sabit, hâli DAVRANIŞLA sürmek için var.
+const int _kRestricted = 2;
+
 void _stubPermissions(WidgetTester tester, {required int status}) {
   tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
     _permChannel,
@@ -202,6 +209,49 @@ void main() {
       final Finder btn =
           find.byKey(const Key('onboarding.camera.openSettings'));
       expect(btn, findsOneWidget);
+      await tester.tap(btn);
+      await tester.pump();
+      expect(opened, <String>['yes']);
+    });
+
+    testWidgets(
+        'RESTRICTED (MDM/ebeveyn denetimi) → düğme VAR — diyalog HİÇ '
+        'çıkmadığı için bu hâl "ikinci ret" sezgisiyle bulunamaz',
+        (WidgetTester tester) async {
+      pinNarrowSurface(tester);
+      _stubPermissions(tester, status: _kRestricted);
+      final List<String> opened = <String>[];
+
+      await tester.pumpWidget(MaterialApp(
+        theme: buildLissomTheme(),
+        home: OnboardingFlow(
+          store: _NullStore(),
+          onDone: (OnboardingProfile _) {},
+          onOpenSettings: () async {
+            opened.add('yes');
+            return true;
+          },
+        ),
+      ));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('onboarding.continue')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('onboarding.disclaimer.ack')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('onboarding.continue')));
+      await tester.pumpAndSettle();
+      await tester
+          .tap(find.byKey(const Key('onboarding.camera.requestPermission')));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('the system will not ask again'),
+          findsOneWidget,
+          reason: 'POZİTİF ÇAPA — restricted da KALICI dalına düşmeli');
+
+      final Finder btn =
+          find.byKey(const Key('onboarding.camera.openSettings'));
+      expect(btn, findsOneWidget,
+          reason: 'kısıtlanmış cihazda kullanıcının TEK yolu ayarlardır');
       await tester.tap(btn);
       await tester.pump();
       expect(opened, <String>['yes']);
