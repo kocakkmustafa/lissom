@@ -1,3 +1,19 @@
+/// ⚠️⚠️ **KANONİK SAYI ARTIK BURADA DEĞİL (L-298).**
+///
+/// Aile gezilebilirlik sözleşmesi geldi ve bu dosya **iki parçasını
+/// karşılamıyor**: envanteri **elle** tutuyor (§a *desenden türetilir*
+/// der) ve **kabuktan** başlıyor (§③ *uygulama kökü* der).
+///
+/// **Kanonik ölçüm: `test/reachability_contract_test.dart`** — ve sayı
+/// DEĞİŞTİ: **KATI 2 → 3**, çünkü elle liste `LiveCaptureScreen`i
+/// unutmuştu (Home'daki *"Start a measurement"* onu gerçek bir rotayla
+/// açıyor). *Elle liste hafızadan okur; ne unuttuğunu bilemezsin.*
+///
+/// Bu dosya **kabuk-içi GENİŞ okumanın ALT SINIRINI** (≥6) tutmak için
+/// duruyor; **KATI sayısı için buraya bakılmaz.**
+///
+/// ---
+///
 /// **GEZİLEBİLİR EKRAN SAYISI — KAPIDAN ÖLÇÜLÜR (L-270).**
 ///
 /// Koordinatörün sorusu tek cümle:
