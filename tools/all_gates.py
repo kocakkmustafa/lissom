@@ -59,9 +59,31 @@ KNOWN_RED = {
 
 
 def _run(cmd: list[str], cwd: Path) -> tuple[bool, str]:
+    """HÜKÜM çıkış kodundan; GÖSTERİLEN satır anlamlı olandan.
+
+    🪤 L-290: eskiden gösterilen satır `(stdout + stderr)`in SONUYDU ve
+    `flutter`ın *"Waiting for another flutter command to release the startup
+    lock…"* uyarısı **stderr'e** gidiyor → rapor `✅ dart:lissom_engine
+    Waiting for another flutter command…` diye basıldı. **Hüküm doğruydu**
+    (109/109, çıkış 0) ama satır okuyanı *"süit hiç koştu mu?"* diye
+    şüpheye düşürdü ve bir tur yeniden doğrulamaya mal oldu.
+
+    → *Bir kapının HÜKMÜ doğru olabilir ve RAPORU yine de yanıltabilir;
+    rapor da ölçümün parçasıdır.* (L-288'in kendi sayı hatasıyla aynı sınıf.)
+    """
     p = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
-    tail = (p.stdout + p.stderr).strip().splitlines()
-    return p.returncode == 0, tail[-1][:90] if tail else ""
+    out = p.stdout.strip().splitlines()
+    err = p.stderr.strip().splitlines()
+    # Testin KENDİ sonuç satırı stdout'tadır; stderr yalnız stdout boşsa
+    # ya da koşum düştüyse anlamlıdır.
+    line = ""
+    if p.returncode == 0 and out:
+        line = out[-1]
+    elif err:
+        line = err[-1]
+    elif out:
+        line = out[-1]
+    return p.returncode == 0, line[:90]
 
 
 def main() -> int:
