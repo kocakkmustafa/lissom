@@ -36,6 +36,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lissom/app/camera_pose_source.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/live_capture_screen.dart';
 import 'package:lissom/app/onboarding_flow.dart';
@@ -123,6 +125,8 @@ Future<void> _pumpLive(
 }
 
 void main() {
+  _duplicationGate();
+
   group('Canlı ölçüm ekranı', () {
     testWidgets('KALICI ret → "Open Settings" VAR ve GERÇEKTEN çağırıyor',
         (WidgetTester tester) async {
@@ -294,4 +298,43 @@ class _NullStore implements OnboardingStore {
       const OnboardingProfile.notStarted();
   @override
   Future<void> write(OnboardingProfile profile) async {}
+}
+
+/// **TEKRAR YASAĞI — cihazda yürürken görüldü (L-320).**
+///
+/// Kalıcı-ret ekranı kullanıcıya aynı talimatı **iki kez** veriyordu:
+///   *"Camera access is off for Lissom. **Open Settings to turn it on.**"*
+///   *"**Open Settings to turn camera access on for Lissom.**"*
+/// Geçici dalda da aynısı (*"… Try again."* + *"You can try again."*).
+///
+/// Sebebi bir katman karışıklığıydı: `camera_pose_source` OLGUYU bildirirken
+/// TALİMAT da veriyordu, ekran ise `kind`den türettiği yönergeyi zaten
+/// basıyordu. Roller ayrıldı; bu kapı ayrılmanın geri çözülmesini engelliyor.
+/// > ***AYNI CÜMLEYİ İKİ KATMAN BİRDEN SÖYLÜYORSA, BİRİ ONU SÖYLEMEMELİDİR.***
+///
+/// ⛔ Genel bir *"tekrar var mı"* kapısı DEĞİL: yalnız **kaynak katmanının
+/// talimat taşımasını** yasaklıyor — ölçülmüş ve adı konmuş tek kusur.
+void _duplicationGate() {
+  test('poz kaynağı TALİMAT taşımaz — eylem ekranın işi', () {
+    // Üretimin GERÇEK metinleri, fixture değil.
+    final List<String> texts = <String>[
+      (permissionState(PermissionStatus.permanentlyDenied) as PermissionDenied)
+          .userText,
+      (permissionState(PermissionStatus.denied) as PermissionDenied).userText,
+    ];
+
+    // POZİTİF ÇAPA: gerçekten metin ürettik mi?
+    expect(texts.every((String s) => s.length > 10), isTrue,
+        reason: 'kaynak metin üretmiyor — kapı VAKUM-DOĞRU olurdu');
+
+    for (final String s in texts) {
+      final String low = s.toLowerCase();
+      expect(low.contains('open settings'), isFalse,
+          reason: 'kaynak katmanı "Open Settings" TALİMATI taşıyor; ekran '
+              'aynı yönergeyi zaten basıyor ⇒ kullanıcı iki kez okur: «$s»');
+      expect(low.contains('try again'), isFalse,
+          reason: 'kaynak katmanı "Try again" TALİMATI taşıyor; ekran aynı '
+              'yönergeyi zaten basıyor ⇒ kullanıcı iki kez okur: «$s»');
+    }
+  });
 }

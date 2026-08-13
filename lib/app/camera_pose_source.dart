@@ -152,9 +152,23 @@ LiveSessionState permissionState(PermissionStatus perm) {
     kind: permanent
         ? PermissionDenialKind.permanent
         : PermissionDenialKind.transient,
+    // 🔴 **TALİMAT BURADAN ÇIKARILDI — cihazda yürürken görüldü (L-320).**
+    // Ekran bu metni bir ÜST satır olarak basıyor, altına da `kind`den
+    // TÜRETİLEN bir yönerge ekliyor. İkisi de talimat taşıyınca kullanıcı
+    // aynı cümleyi iki kez okuyordu:
+    //   *"Camera access is off for Lissom. **Open Settings to turn it on.**"*
+    //   *"**Open Settings to turn camera access on for Lissom.**"*
+    // (Geçici dalda da aynısı: *"… Try again."* + *"You can try again."*)
+    //
+    // ⇒ Roller ayrıldı: **kaynak OLGUYU bildirir, ekran EYLEMİ sunar.**
+    // Bu yalnız tekrarı silmiyor, katman sınırını da düzeltiyor — bir poz
+    // kaynağının kullanıcıya *ne yapması gerektiğini* söylemesi zaten onun
+    // işi değildi.
+    // > ***AYNI CÜMLEYİ İKİ KATMAN BİRDEN SÖYLÜYORSA, BİRİ ONU
+    // > SÖYLEMEMELİDİR — VE HANGİSİ OLDUĞU KATMAN SINIRINDAN OKUNUR.***
     userText: permanent
-        ? 'Camera access is off for Lissom. Open Settings to turn it on.'
-        : 'Lissom needs camera access to measure. Try again.',
+        ? 'Camera access is off for Lissom.'
+        : 'Lissom needs camera access to measure.',
   );
 }
 
@@ -164,7 +178,8 @@ LiveSessionState failureState(Object err) {
     if (err.failure == CameraFailure.permissionDenied) {
       return const PermissionDenied(
         kind: PermissionDenialKind.transient,
-        userText: 'Lissom needs camera access to measure. Try again.',
+        // Talimat yok — eylem ekranın işi (yukarıdaki gerekçe, L-320).
+        userText: 'Lissom needs camera access to measure.',
       );
     }
     return SetupFailed(
