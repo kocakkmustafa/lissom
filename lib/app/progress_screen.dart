@@ -38,6 +38,18 @@ class ProgressScreen extends StatelessWidget {
   const ProgressScreen({required this.facts, super.key});
 
   static const Key comparisonNoticeKey = Key('progress.comparisonOff');
+
+  /// **ÖLÇÜLEN SAYI SAKLANMIYOR — ve bu söyleniyor (L-316).**
+  ///
+  /// Ölçüldü: `AssessmentResult` `value`·`unit`·`bandLabel`·`provenance`
+  /// taşıyor; çekirdeğin `SessionRecord`unda dördünün de karşılığı YOK, yani
+  /// çeviri sırasında **düşüyorlar**. Kullanıcı 147,5° ölçüyor, sonucu bir kez
+  /// görüyor, ve o sayı bir daha hiçbir yerde yok.
+  ///
+  /// Bu ekranın altyazısı *"what was measured, when, and under what
+  /// conditions"* diyordu — **üç vaatten yalnız biri karşılanıyordu.**
+  /// Sessizce bırakmak, kullanıcının sakladığını sandığı şeyi yok saymaktı.
+  static const Key readingNotKeptKey = Key('progress.readingNotKept');
   static const Key ledgerKey = Key('progress.ledger');
   static const Key emptyKey = Key('progress.empty');
   static const Key unavailableKey = Key('progress.unavailable');
@@ -55,11 +67,50 @@ class ProgressScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
           const CaptureUnavailableNote(),
+          // ⛔ Altyazı ÜÇ vaat ediyordu — *"what was measured, when, and under
+          // what conditions"* — ve depo yalnız **birini** karşılıyordu:
+          // koşullar hiç saklanmıyor, ölçülen sayı da saklanmıyor. Vaadi
+          // kısaltmak, karşılığı olmayan yarısını kesmek demek; kesilen yarı
+          // aşağıdaki kartta ADIYLA anlatılıyor, sessizce düşürülmüyor.
           const SectionHeading(
             'Your record',
-            subtitle: 'What was measured, when, and under what conditions.',
+            subtitle: 'Which test you measured, and when.',
           ),
           const SizedBox(height: 18),
+
+          // ⭐ A3'ün ikinci kolu, geçmiş katmanında: iş sunamıyorsan NEDEN
+          // sunmadığını söyle. Kıyas kartıyla aynı yerde ve aynı tonda —
+          // envanter, özür değil.
+          Padding(
+            key: readingNotKeptKey,
+            padding: const EdgeInsets.only(bottom: 20),
+            child: LissomCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  LissomEyebrow('The reading itself is not kept',
+                      color: LissomColors.roseDeepHover),
+                  const SizedBox(height: 8),
+                  Text(
+                    'When you measure, Lissom shows you the number once. It '
+                    'is not written down, so this list can tell you that a '
+                    'test was measured — not what it came to.',
+                    style: t.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'What a session stores is shared with the other apps '
+                    'built on the same measurement core, and that shared '
+                    'record has no place for a value or for the conditions a '
+                    'reading was taken under. We would rather tell you the '
+                    'number is gone than let this page look like a history of '
+                    'your numbers.',
+                    style: t.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          ),
 
           // KIYAS KAPALI — ve sebebi ekranın TEPESİNDE, aşağıda değil.
           // Aşağıda olsaydı, kaydırmayan kullanıcı listeyi bir ilerleme
