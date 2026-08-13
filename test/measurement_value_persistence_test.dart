@@ -178,4 +178,78 @@ void main() {
     expect(find.byKey(ProgressScreen.readingNotKeptKey), findsOneWidget,
         reason: 'ölçülen değerin saklanmadığı kullanıcıya SÖYLENMİYOR');
   });
+
+  testWidgets('ÇELİŞKİ: aynı ekran okumayı hem reddedip hem VAAT EDEMEZ',
+      (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    final AppFacts f = factsFromDisk();
+
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: Scaffold(body: ProgressScreen(facts: f)),
+    ));
+    await tester.pumpAndSettle();
+
+    // 🔴 **CİHAZDA YÜRÜYEREK BULUNDU (L-317).** Boş-hâl kartı
+    // *"every reading it produced appears here with its date and conditions"*
+    // diyordu — üç kart yukarısı *"the reading itself is not kept"* derken.
+    // Aynı ekran aynı şeyi hem vaat edip hem reddediyordu, ve **her iki
+    // metnin testi de yeşildi**: hiçbir kapı bir ekrandaki iki cümleyi
+    // birbirine karşı okumaz.
+    //
+    // ⭐ Bu kapı bir A kalemini doğruluyor: *"ölçülen okuma saklanmıyor"*
+    // beyanı ekranın HİÇBİR yerinde çürütülmemeli. Metin-anlam denetimi
+    // DEĞİL — tek ve kesin bir çelişki deseni.
+    // 🪤 **BU KAPI İLK YAZIMINDA KÖRDÜ ve sabotaj onu YAKALADI.** Eski metni
+    // geri koydum (`grep -q` ile indiği doğrulandı) ve kapı **ötmedi.**
+    // Sebep: yalnız `pumpAndSettle` anında ÇİZİLMİŞ `Text`leri tarıyordu;
+    // suçlu kart (`emptyKey`) katlamanın ALTINDA ve `ListView` onu HİÇ
+    // KURMAMIŞTI. `skipOffstage: false` da kurtarmaz — ağaçta yok.
+    // ⇒ Ekranın TAMAMI kaydırılarak toplanıyor.
+    // > ***AYNI TUZAĞA BİR SAAT ARAYLA İKİ KEZ DÜŞTÜM*** (önce kayıt satırı
+    // > çapası, sonra bu kapı) — *bir dersi bir testte uygulamak, onu SONRAKİ
+    // > testte uygulamış olmaz; ders kişisel değil KONTROL LİSTESİ olmalı.*
+    final Set<String> onScreen = <String>{};
+    void collect() => onScreen.addAll(tester
+        .widgetList<Text>(find.byType(Text))
+        .map((Text w) => w.data ?? '')
+        .where((String s) => s.isNotEmpty));
+
+    collect();
+    for (int i = 0; i < 12; i++) {
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
+      await tester.pumpAndSettle();
+      collect();
+    }
+
+    // POZİTİF ÇAPA: ekran gerçekten metin taşıyor mu? **VE suçlu kart
+    // gerçekten tarandı mı?** Yalnız "metin var" demek yetmez — kapının kör
+    // kaldığı tur da metin vardı.
+    expect(onScreen.length, greaterThan(5),
+        reason: 'ekranda metin yok — çelişki denetimi hiçbir şey ölçmez');
+    expect(
+      onScreen.any((String s) => s.contains('this list')),
+      isTrue,
+      reason: 'boş-hâl kartının metni taramaya HİÇ girmedi — kapı onu '
+          'göremiyorsa çelişkiyi de göremez (kör kapı, VAKUM-DOĞRU sonuç)',
+    );
+
+    for (final String s in onScreen) {
+      final String low = s.toLowerCase();
+      // "reading … appears here" ailesinden her vaat, üstteki beyanı çürütür.
+      final bool promisesReadings =
+          (low.contains('reading') || low.contains('every reading')) &&
+              (low.contains('appears here') || low.contains('appear in this'));
+      expect(promisesReadings, isFalse,
+          reason: 'Bu cümle okumaların burada görüneceğini VAAT EDİYOR, oysa '
+              'aynı ekran okumanın saklanmadığını söylüyor: «$s»');
+
+      // Kamera köprüsü A1 ile kapandı (L-309) — "bu derlemede oturum
+      // yakalanamaz" artık BAYAT bir cümle.
+      final bool claimsNoCapture =
+          low.contains('no session can be captured');
+      expect(claimsNoCapture, isFalse,
+          reason: 'BAYAT: A1 kapandı, oturum yakalanabiliyor — «$s»');
+    }
+  });
 }

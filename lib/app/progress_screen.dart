@@ -161,13 +161,42 @@ class ProgressScreen extends StatelessWidget {
                   'not know that.',
               detail: h.failure,
             )
+          // 🔴 **BU METİN İKİ KEZ YALAN SÖYLÜYORDU — cihazda yürüyerek bulundu
+          // (L-317), hiçbir test göremezdi.** Eski hâli:
+          //   *"No session can be captured in this build, so there is nothing
+          //    to list. When one can, every reading it produced appears here
+          //    with its date and conditions."*
+          //
+          // ① *"No session can be captured in this build"* — **BAYAT.** A1
+          //    kapandı (L-309): ölçüm uçtan uca koşuyor ve depoya YAZIYOR.
+          //    Cümle kamera köprüsünden ÖNCE yazılmıştı ve köprü gelince
+          //    kimse geri dönüp onu okumadı.
+          // ② *"every reading … appears here with its date and conditions"* —
+          //    bu ekranın ÜÇ KART YUKARISI *"the reading itself is not kept …
+          //    no place for a value or for the conditions"* diyor.
+          //    **Aynı ekran aynı şeyi hem vaat edip hem reddediyordu.**
+          //
+          // ⛔ İkisini de hiçbir kapı yakalayamazdı: her iki metin de ÇİZİLİYOR,
+          // her iki testi de YEŞİL, ve hiçbir kapı bir ekrandaki İKİ CÜMLEYİ
+          // birbirine karşı okumaz.
+          // > ***BİR EKRANIN İÇ TUTARLILIĞI, PARÇALARININ TEK TEK
+          // > DOĞRULUĞUNDAN ÇIKMAZ — ve onu ancak EKRANI YÜRÜYEN görür.***
           else if (!h.hasRecords)
             const NamedGapCard(
               key: emptyKey,
               title: 'Nothing recorded on this device',
-              reason: 'No session can be captured in this build, so there is '
-                  'nothing to list. When one can, every reading it produced '
-                  'appears here with its date and conditions.',
+              // ⛔ *"…anything here **yet**"* diye yazmıştım ve `wellness_lint`
+              // reddetti: **`yet` bir VAATTİR** (M-F-186) — bilmediğimiz bir
+              // tarihi ima eder. Kural zaten `library_screen.dart`ta yazılıydı
+              // ve ben tam onu ihlal ederek DÜRÜSTLÜK metni yazdım.
+              // > *Bir kuralı bilmek, onu yazarken uygulamak değildir —
+              // > uygulayan şey KAPIDIR.*
+              // Başlık zaten *"Nothing recorded on this device"* diyor;
+              // gerekçe onu TEKRARLAMAZ, devam eder (cihazda görüldü: iki
+              // cümle üst üste aynı şeyi söylüyordu).
+              reason: 'When you measure, the test and the date it was taken '
+                  'appear in this list.',
+              detail: 'The reading itself will not — see above for why.',
             )
           else ...<Widget>[
             if (h.countsAreFloor) ...<Widget>[
