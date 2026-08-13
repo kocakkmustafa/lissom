@@ -30,6 +30,10 @@ class LibraryScreen extends StatelessWidget {
   static const Key builtSectionKey = Key('library.built');
   static const Key notBuiltSectionKey = Key('library.notBuilt');
 
+  /// Yol haritası bittiğinde çizilen satır — A3'ün başlıklı-boşluk yasağı
+  /// (L-315). Anahtarsız bir dal testten görünmez.
+  static const Key nothingPendingKey = Key('library.nothingPending');
+
   final AppFacts facts;
 
   @override
@@ -72,22 +76,40 @@ class LibraryScreen extends StatelessWidget {
             key: notBuiltSectionKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Bölüm başlığı SAYIYI taşır: genişlik saklanmıyor, ama
-              // birinci-sınıf yerleşim de verilmiyor.
-              LissomEyebrow('Planned, not in this build (${pending.length})'),
-              const SizedBox(height: 6),
-              Text(
-                'These are named so you can see the whole shape of Lissom. '
-                'None of them has content in the app you are holding, and we '
-                'are not going to guess when they will.',
-                style: t.textTheme.bodySmall,
-              ),
-              const SizedBox(height: 12),
-              for (final LibraryFamily f in pending)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: _PendingFamilyRow(family: f, facts: facts),
+              // ⓑ **BAŞLIKLI BOŞLUK YOK (A3, L-315).** `pending` boşalırsa
+              // eski kod *"Planned, not in this build (0)"* başlığını ve
+              // altındaki *"These are named so you can see…"* paragrafını
+              // çiziyordu — **hiçbir ad olmadan.** Paragraf var olmayan bir
+              // listeyi tarif ediyordu; sessiz değil, YANLIŞ.
+              //
+              // ⚠️ Ve bu, arızada değil **hedefte** olan bir hâl: yol
+              // haritası bittiğinde `pending` boşalır. `blocked` boşluğuyla
+              // AYNI biçimde kapatıldı — iki özdeş durum iki farklı tonla
+              // yazılsaydı ürünün sesi çatallanırdı.
+              if (pending.isEmpty)
+                Text(
+                  'Everything named in the plan is built and in this app.',
+                  key: nothingPendingKey,
+                  style: t.textTheme.bodyMedium,
+                )
+              else ...<Widget>[
+                // Bölüm başlığı SAYIYI taşır: genişlik saklanmıyor, ama
+                // birinci-sınıf yerleşim de verilmiyor.
+                LissomEyebrow('Planned, not in this build (${pending.length})'),
+                const SizedBox(height: 6),
+                Text(
+                  'These are named so you can see the whole shape of Lissom. '
+                  'None of them has content in the app you are holding, and we '
+                  'are not going to guess when they will.',
+                  style: t.textTheme.bodySmall,
                 ),
+                const SizedBox(height: 12),
+                for (final LibraryFamily f in pending)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: _PendingFamilyRow(family: f, facts: facts),
+                  ),
+              ],
             ],
           ),
         ],
@@ -190,6 +212,12 @@ class FamilyPage extends StatelessWidget {
   static const Key honestyKey = Key('family.honestyBox');
   static const Key liveListKey = Key('family.liveTests');
   static const Key blockedListKey = Key('family.blockedTests');
+
+  /// İki listenin BOŞ hâlleri — A3'ün başlıklı-boşluk yasağı (L-315).
+  /// Anahtarlı, çünkü *anahtarsız bir dal testten görünmez* ve görünmeyen
+  /// bir dalın çizildiği kanıtlanamaz.
+  static const Key noLiveTestsKey = Key('family.noLiveTests');
+  static const Key noBlockedTestsKey = Key('family.noBlockedTests');
   static const Key namedChildrenKey = Key('family.namedChildren');
 
   final LibraryFamily family;
@@ -231,51 +259,81 @@ class FamilyPage extends StatelessWidget {
     final List<TestLiveness> live = facts.live;
     final List<TestLiveness> blocked = facts.blocked;
     return <Widget>[
-      LissomEyebrow('Measured by camera in this build (${live.length})'),
-      const SizedBox(height: 10),
-      Column(
-        key: liveListKey,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          for (final TestLiveness x in live)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _TestRow(
-                icon: Icons.videocam_outlined,
-                iconColor: t.colorScheme.primary,
-                title: x.name,
+      // ⓑ **BAŞLIKLI BOŞLUK YOK (A3, L-315).** `live` boşalırsa eski kod
+      // *"Measured by camera in this build (0)"* başlığını çizip altına
+      // HİÇBİR ŞEY koymuyordu: kullanıcı sıfır ilan eden bir vaat görüp
+      // karşılığını bulamıyordu. Sayı sıfırsa başlık değil GEREKÇE çizilir.
+      if (live.isEmpty)
+        const NamedGapCard(
+          key: noLiveTestsKey,
+          title: 'No test in this battery can be read by the camera',
+          reason: 'Every test here needs a measurement the engine cannot '
+              'produce in this build. Nothing is hidden from you — there is '
+              'simply nothing this camera can score right now.',
+        )
+      else ...<Widget>[
+        LissomEyebrow('Measured by camera in this build (${live.length})'),
+        const SizedBox(height: 10),
+        Column(
+          key: liveListKey,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            for (final TestLiveness x in live)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _TestRow(
+                  icon: Icons.videocam_outlined,
+                  iconColor: t.colorScheme.primary,
+                  title: x.name,
+                ),
               ),
-            ),
-        ],
-      ),
+          ],
+        ),
+      ],
       const SizedBox(height: 22),
       // ⛔ "Not measurable YET" DEĞİL — `yet` bir vaattir (M-F-186) ve
       // engelin kalkacağı bir tarih ima eder. Başlık artık yalnız OLGUYU
       // söylüyor; gerekçe her satırın kendisinde.
-      LissomEyebrow('Not measured by camera (${blocked.length})'),
-      const SizedBox(height: 4),
-      Text(
-        'Each one below names the reason it cannot be read, and the reason is '
-        'what would have to change.',
-        style: t.textTheme.bodySmall,
-      ),
-      const SizedBox(height: 10),
-      Column(
-        key: blockedListKey,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          for (final TestLiveness x in blocked)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _TestRow(
-                icon: Icons.block_outlined,
-                iconColor: LissomColors.bodySecondary,
-                title: x.name,
-                subtitle: x.blocker!,
+      //
+      // 🔴 **ASİMETRİ KASITLI (A3, L-315).** Üstteki boş hâl bir GEREKÇE
+      // çizer, buradaki bir OLGU — çünkü iki boşluk aynı şey değil:
+      // *"hiçbir şey ölçülemiyor"* kullanıcının BİLMESİ GEREKEN bir eksiklik,
+      // *"hiçbir şey engelli değil"* ise bir eksikliğin YOKLUĞU. İkincisini
+      // "(0)" başlığıyla ilan etmek, üstelik altında *"her biri sebebini
+      // söylüyor"* diyen bir cümleyle, olmayan bir listeyi VAAT ederdi.
+      // ⇒ Cümle TÜRETİLİR (`blocked` boşsa her test canlıdır), uydurulmaz.
+      if (blocked.isEmpty)
+        Text(
+          'Every test in this battery can be read by the camera.',
+          key: noBlockedTestsKey,
+          style: t.textTheme.bodyMedium,
+        )
+      else ...<Widget>[
+        LissomEyebrow('Not measured by camera (${blocked.length})'),
+        const SizedBox(height: 4),
+        Text(
+          'Each one below names the reason it cannot be read, and the reason '
+          'is what would have to change.',
+          style: t.textTheme.bodySmall,
+        ),
+        const SizedBox(height: 10),
+        Column(
+          key: blockedListKey,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            for (final TestLiveness x in blocked)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _TestRow(
+                  icon: Icons.block_outlined,
+                  iconColor: LissomColors.bodySecondary,
+                  title: x.name,
+                  subtitle: x.blocker!,
+                ),
               ),
-            ),
-        ],
-      ),
+          ],
+        ),
+      ],
     ];
   }
 

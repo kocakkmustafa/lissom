@@ -1,0 +1,28 @@
+{
+  "olcut": "A3 — sessiz oran (payda GENİŞLETİLMİŞ)",
+  "tanim": "docs/A3-SESSIZ-ORAN-TANIMI.md (ÖNCEKİ commit)",
+  "pencere": "BUGÜN — sevk edilen config, taze kurulum",
+  "yuzey_sayisi": 12,
+  "yuzeyler": [
+    "Home",
+    "Library",
+    "Progress",
+    "Profile",
+    "WhatLissomDoesntDo",
+    "LiveCapture",
+    "FamilyPage «Assessment Battery»",
+    "FamilyPage «Yoga Styles»",
+    "FamilyPage «Flexibility Goals»",
+    "FamilyPage «For Your Day»",
+    "FamilyPage «Warm-ups for Other Sports»",
+    "FamilyPage «Breath & Wind-down»"
+  ],
+  "kovalar": {
+    "a_sunan": 2,
+    "b_soyleyen": 5,
+    "c_sessiz": 0
+  },
+  "payda": 7,
+  "sessiz_oran_yuzde": 0.0,
+  "kor_nokta": "sayı taşımayan VE liste döndüren kurucudaki başlık — bugün 0, sayılarak doğrulanıyor"
+}
