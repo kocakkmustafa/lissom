@@ -9,8 +9,16 @@
 ///
 /// Beş canlılık sorusuna cevap: bu kapıyı bataryaya yeni metrik ekleyen
 /// KİŞİ soruyor (kapsam sessizce eksik kalamaz), ve kapı KIRMIZI YANABİLİYOR —
-/// aşağıdaki `öz-test` grubu üç sabotaj vakasını gerçekten kırmızı yaptırıyor.
+/// aşağıdaki `öz-test` grubu **her mühür ve her bölme iddiası için en az bir
+/// sabotaj vakasını** gerçekten kırmızı yaptırıyor.
 /// Öz-testi olmayan bir kapı hiçbir şey kanıtlamaz.
+///
+/// 🪤 **Bu cümle bir kez BAYATLAMIŞTI ve kimse fark etmemişti (L-314):**
+/// *"üç sabotaj vakası"* yazıyordu; ölçüm **11** dedi — yani sayı zaten
+/// L-314'ten ÖNCE **8**'di. Bir SAYI çapası, denetlediği şey büyüdükçe
+/// sessizce yanlışlaşır (kural 4.5), ve *bir yorum yanlışsa hiçbir kapı
+/// ötmez.* O yüzden cümle artık **sayı değil YAPI** iddia ediyor.
+/// > ***BİR BELGENİN SAYISINI YAZMAK, ONU DENETLEMEK DEĞİLDİR.***
 library;
 
 import 'dart:convert';
@@ -104,14 +112,15 @@ Set<String> requiredGeometricMetrics(
 /// YANLIŞ sayı üretir. Bu mühür DEĞERE bakan üçüncü kontrol.
 ///
 /// **KAPSAMI — DAR, isimle:** Bu mühür YALNIZ `metric → coreJointId`
-/// eşlemesini korur. Bir binding'in DİĞER alanları (`invert`,
-/// `configFrameRef`) bu mührün KAPSAMI DIŞINDA — `configFrameRef` zaten
-/// ayrı bir kontrolle korunuyor ("her köprü kaydı config çerçevesini BEYAN
-/// ediyor"), `invert` hiçbir kontrolle korunmuyor (AÇIK boşluk, bu tur
-/// kapatılmıyor). `measureKind` (köprülenemez metrikler için) AYRI bir
-/// kontrolle korunuyor (M-F-462 C, yukarıda). "Mühürlü" okuyan bir sonraki
-/// oturum TAM kapsam varsaymasın diye bu liste isimle burada (M-F-439:
-/// bir kapının beşinci şartı kapsamının YAZILMASI).
+/// eşlemesini korur. Bir binding'in DİĞER alanları bu mührün KAPSAMI
+/// DIŞINDA: `configFrameRef` ayrı bir kontrolle korunuyor ("her köprü
+/// kaydı config çerçevesini BEYAN ediyor"), `invert` **L-314'e kadar
+/// hiçbir kontrolle korunmuyordu** — artık [kSealedBindingInvert]
+/// koruyor (aşağıda, kendi kapsam şerhiyle). `measureKind` (köprülenemez
+/// metrikler için) AYRI bir kontrolle korunuyor (M-F-462 C, yukarıda).
+/// "Mühürlü" okuyan bir sonraki oturum TAM kapsam varsaymasın diye bu
+/// liste isimle burada (M-F-439: bir kapının beşinci şartı kapsamının
+/// YAZILMASI).
 const Map<String, String> kSealedBridgedJoints = <String, String>{
   'shoulder_flexion_right': 'right_shoulder',
   'shoulder_flexion_left': 'left_shoulder',
@@ -121,6 +130,42 @@ const Map<String, String> kSealedBridgedJoints = <String, String>{
   'hip_flexion_left': 'left_hip',
   'elbow_extension_right': 'right_elbow',
   'elbow_extension_left': 'left_elbow',
+};
+
+/// ⛔ MÜHÜRLÜ — binding'lerin `invert` İŞARETİ (L-314).
+///
+/// **NEDEN GEREKLİ:** [kSealedBridgedJoints] yalnız `metric → coreJointId`
+/// koruyor; `invert` **hiçbir kontrolle korunmuyordu**. Sekiz binding'in
+/// hepsi `invert: false` ⇒ ***yanlış bir `true` SESSİZCE geçerdi.*** Ve
+/// zehrin biçimi tam olarak bu dosyanın en pahalı dersi: `metric_bridge.dart`
+/// başlığında yazılı olduğu gibi, ters bir işaret **makul GÖRÜNEN** bir sayı
+/// üretir (aşağı=180°, yukarı=0°) ve *testsiz fark edilmez.* Kusur bir
+/// fırlatma değil, **sessiz bir yanlış sayıdır** — kullanıcıya gösterilen.
+///
+/// ⚠️ **KAPSAMI — DAR, ve ölçüldü (fazlasını İDDİA ETME):** ROM konvansiyonu
+/// **davranışsal olarak yalnız `shoulder_flexion_right` için çivili**
+/// (`real_replay_test.dart` L33-64: kol aşağı ~0°, baş üstü ~180°, ve
+/// monotonluk). Kalan **7** binding aynı çekirdek konvansiyonunu YAPICA
+/// miras alıyor ama **tek tek ölçülmedi** (payda: 8 · davranışsal çapa: 1).
+/// ⇒ Bu mühür o 7'yi **DOĞRULAMAZ**; yaptığı şey, birinin sessizce
+/// **DEĞİŞMESİNİ** yakalamaktır. İkisi farklı iddialardır.
+///
+/// > ***BİR MÜHÜR, DEĞERİN DOĞRU OLDUĞUNU DEĞİL, SESSİZCE DEĞİŞMEDİĞİNİ
+/// > KANITLAR — VE İKİSİNİ AYNI CÜMLEDE YAZMAK, OLMAYAN BİR ÖLÇÜMÜ
+/// > VAR GÖSTERİR.***
+///
+/// [kSealedBridgedJoints] gibi, bu da `kMetricBindings`'ten **TÜRETİLMEZ**
+/// (türetilse tautoloji olurdu). Anahtar kümesi ikisinde de aynı olmalı;
+/// aşağıdaki kayma denetimi bunu ayrıca sınıyor.
+const Map<String, bool> kSealedBindingInvert = <String, bool>{
+  'shoulder_flexion_right': false,
+  'shoulder_flexion_left': false,
+  'knee_flexion_right': false,
+  'knee_flexion_left': false,
+  'hip_flexion_right': false,
+  'hip_flexion_left': false,
+  'elbow_extension_right': false,
+  'elbow_extension_left': false,
 };
 
 void main() {
@@ -135,6 +180,9 @@ void main() {
   final Set<String> declared = kUnbridgedMetrics.keys.toSet();
   final Map<String, String> bridgedJoints = <String, String>{
     for (final MetricBinding b in kMetricBindings) b.lissomMetric: b.coreJointId,
+  };
+  final Map<String, bool> bindingInvert = <String, bool>{
+    for (final MetricBinding b in kMetricBindings) b.lissomMetric: b.invert,
   };
 
   group('metrik kapsamı — sayılar TÜRETİLDİ', () {
@@ -375,6 +423,53 @@ void main() {
         ..['reach_depth'] = 'right_elbow'; // mühürde HİÇ yok
       expect(sabotaged, isNot(kSealedBridgedJoints),
           reason: 'kapı mühürsüz yeni binding\'i yakalamıyor');
+    });
+
+    // ═════════════════════════════════════════════════════════════════
+    // `invert` MÜHRÜ (L-314) — kapatılan SESSİZ GEÇİŞ
+    // ═════════════════════════════════════════════════════════════════
+
+    test('binding `invert` işaretleri mühürden SAPMADI', () {
+      expect(bindingInvert, kSealedBindingInvert,
+          reason: 'bir binding\'in `invert` işareti mühürden saptı. Ters bir '
+              'işaret FIRLATMAZ — yalnız makul GÖRÜNEN yanlış bir açı '
+              'üretir (aşağı=180°, yukarı=0°) ve kullanıcıya öyle gösterilir. '
+              'Bilinçli bir değişiklikse `kSealedBindingInvert`i AYNI '
+              'commit\'te, ÖLÇÜMLE birlikte güncelle.');
+    });
+
+    test('iki mühür AYNI binding kümesini anlatıyor (kayma denetimi)', () {
+      // İki ayrı mühür iki ayrı dizge; biri güncellenip öteki unutulursa
+      // "mühürlü" kelimesi sessizce yarım kalır. Bu, kapının kapısı DEĞİL:
+      // aynı kümeyi anlatan iki beyanın tutarlılığı, mühürlerin KENDİ
+      // iddiasının parçası.
+      expect(kSealedBindingInvert.keys.toSet(),
+          kSealedBridgedJoints.keys.toSet(),
+          reason: 'iki mühürün anahtar kümesi ayrıştı — biri güncellendi, '
+              'öteki unutuldu');
+    });
+
+    test('sabotaj: bir `invert` YANLIŞ `true` olursa yakalanır', () {
+      final Map<String, bool> sabotaged = Map<String, bool>.of(bindingInvert)
+        ..['knee_flexion_right'] = true; // mühür: false
+      expect(sabotaged, isNot(kSealedBindingInvert),
+          reason: 'kapı sessiz `invert` terfisini yakalamıyor — L-314\'ün '
+              'kapatmak için var olduğu delik tam olarak budur');
+    });
+
+    test('sabotaj: bir binding `invert` mührümden kaybolursa yakalanır', () {
+      final Map<String, bool> sabotaged = Map<String, bool>.of(bindingInvert)
+        ..remove('hip_flexion_left');
+      expect(sabotaged, isNot(kSealedBindingInvert),
+          reason: 'kapı eksilen binding\'i yakalamıyor');
+    });
+
+    test('sabotaj: mühürsüz yeni binding `invert` tarafında da yakalanır', () {
+      final Map<String, bool> sabotaged = Map<String, bool>.of(bindingInvert)
+        ..['reach_depth'] = false; // mühürde HİÇ yok
+      expect(sabotaged, isNot(kSealedBindingInvert),
+          reason: 'yeni bir binding eklendiğinde `invert` mührü sessiz kaldı — '
+              'eklem mührü ötse bile işaret beyansız girmiş olurdu');
     });
   });
 }
