@@ -98,13 +98,25 @@ class ProgressScreen extends StatelessWidget {
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
+                  // 🪤 **KENDİ EKLEDİĞİM TEKRARI KENDİM KALDIRDIM (L-322).**
+                  // İlk yazımım *"…no place for a value **or for the
+                  // conditions** a reading was taken under"* diyordu. Ama
+                  // koşulları ALTTAKİ kıyas kartı zaten anlatıyor — üstelik
+                  // **daha kesin**, üçünü adıyla sayarak (*"the same model, a
+                  // compatible configuration and a similar camera setup"*).
+                  // İki kart aynı eksikliği söylüyordu; bu, `L-320`'de
+                  // düzelttiğim tekrar sınıfının **aynısı** ve yarısını bu
+                  // gece BEN ürettim.
+                  // > ***BİR TEKRARI DÜZELTİRKEN YENİSİNİ ÜRETMEK, KURALI
+                  // > ÖĞRENMEDEN VAKAYI KAPATMAKTIR.***
+                  // ⇒ Sınır: bu kart **DEĞERİ**, alttaki kart **KOŞULLARI**
+                  // anlatır. Her eksikliğin tek sahibi var.
                   Text(
                     'What a session stores is shared with the other apps '
                     'built on the same measurement core, and that shared '
-                    'record has no place for a value or for the conditions a '
-                    'reading was taken under. We would rather tell you the '
-                    'number is gone than let this page look like a history of '
-                    'your numbers.',
+                    'record has no place for the number itself. We would '
+                    'rather tell you it is gone than let this page look like '
+                    'a history of your numbers.',
                     style: t.textTheme.bodySmall,
                   ),
                 ],
