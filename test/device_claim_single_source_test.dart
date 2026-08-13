@@ -54,20 +54,31 @@ void main() {
       if (e is! File || !e.path.endsWith('.dart')) continue;
       if (e.path == _owner) continue;
 
-      final List<String> lines = e.readAsLinesSync();
-      for (int i = 0; i < lines.length; i++) {
-        final String ln = lines[i];
-        final String trimmed = ln.trimLeft();
-        // 🪤 YORUM SAYILMAZ. Bu gece kendi sabotaj-doğrulamam bir YORUMLA
-        // eşleşti ve bir an "geri alma tutmadı" sandım (L-317). Bu dosyanın
-        // KENDİ başlığı da iddiayı alıntılıyor — dışlanmasaydı kapı kendi
-        // belgesini ihlal sayardı.
-        if (trimmed.startsWith('//')) continue;
-        scanned++;
-        for (final String pat in _handWritten) {
-          if (ln.contains(pat)) {
-            (offenders[e.path] ??= <String>[]).add('${i + 1}: ${ln.trim()}');
-          }
+      // 🪤 YORUM SAYILMAZ. Bu gece kendi sabotaj-doğrulamam bir YORUMLA
+      // eşleşti ve bir an "geri alma tutmadı" sandım (L-317). Bu dosyanın
+      // KENDİ başlığı da iddiayı alıntılıyor — dışlanmasaydı kapı kendi
+      // belgesini ihlal sayardı.
+      final List<String> code = e
+          .readAsLinesSync()
+          .where((String l) => !l.trimLeft().startsWith('//'))
+          .toList();
+      scanned += code.length;
+
+      // 🔴 **BU KAPI TESADÜFEN ÇALIŞIYORDU — L-319'da fark edildi, burada
+      // kapatıldı.** Aradığı ifadeler (*"on a real phone"*) KISA olduğu için
+      // tek satıra sığıyordu; Dart uzun dizeleri satırlara böldüğü için
+      // biraz daha uzun bir ifade eklense kapı **sessizce körleşirdi.**
+      // > ***TESADÜFEN ÇALIŞAN BİR KAPI, ÇALIŞTIĞI SÜRECE TASARLANMIŞ
+      // > GÖRÜNÜR — VE İLK UZUN GİRDİDE SUSAR.***
+      // ⇒ Bitişik dize parçaları burada da BİRLEŞTİRİLİYOR (L-319 ile aynı
+      // düzeltme; *bir dersi bir testte uygulamak sonrakinde uygulamış
+      // olmaz* kuralının bu kez ÖNDEN uygulanması).
+      final String joined =
+          code.join('\n').replaceAll(RegExp(r"'\s*\n\s*'"), '');
+
+      for (final String pat in _handWritten) {
+        if (joined.contains(pat)) {
+          (offenders[e.path] ??= <String>[]).add('«$pat» elle yazılmış');
         }
       }
     }
