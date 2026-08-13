@@ -296,6 +296,52 @@ class DeclarationBanner extends StatelessWidget {
 ///
 /// Boşluğu yedi yerde yeniden anlatmak, aynı hatayı yeni bir ikizle kapatmak
 /// olurdu — metin bir kez yazılır, gerektiği her yerde GÖSTERİLİR.
+/// **CİHAZ GEÇİŞİ (A12) — TEK GERÇEK KAYNAĞI (L-318).**
+///
+/// 🔴 **Neden var:** *"gerçek telefonda denenmedi"* iddiası bu ağaçta **ÜÇ ayrı
+/// yerde elle yazılmıştı** — [CaptureUnavailableNote] (Home·Library·Progress),
+/// `home_screen.dart`ın `DeclarationBanner`ı ve `live_capture_screen.dart`ın
+/// `NamedGapCard`ı. Üçü de aynı olguyu, üç ayrı cümleyle.
+///
+/// Ve bu dosyanın KENDİ başlığı kuralı zaten yazıyordu:
+///   > *"aynı beyanı üç ekranda üç farklı tonda yazmak, üçünden ikisinin
+///   > sessizce yumuşamasına yol açar. **Beyan bir kez yazılır, üç yerde
+///   > GÖSTERİLİR.**"*
+/// Kural yazılıydı, bir yerde uygulanmıştı, ve **aynı iddia için iki kez
+/// çiğnenmişti.**
+///
+/// ⚠️ **Bu, bu gece İKİ KEZ ödediğim kusurun ÖNCEDEN GÖRÜLEBİLİR üçüncüsü.**
+/// A12 kapandığında (preflight hazır — `docs/A12-KOSUM-HATTI.md`) biri bu
+/// cümlelerden birini ya da ikisini güncelleyip üçüncüsünü unutacaktı, ve
+/// uygulama aynı anda *"cihazda doğrulandı"* ve *"gerçek telefonda denenmedi"*
+/// diyecekti — `L-317`'nin birebir aynısı.
+/// > ***AYNI OLGUYU İKİ YERE YAZMAK, ONLARI AYIRMANIN BİR YOLUNU AÇIK
+/// > BIRAKMAKTIR — ve o yol er ya da geç kullanılır.***
+///
+/// ⇒ Olgu ([verified]) tek yerde; üç yüzey ondan TÜRETİR. A12 kapandığında
+/// **tek bir sabit** değişir. `device_claim_single_source_test.dart` üçüncü bir
+/// elle-yazımı yasaklıyor.
+abstract final class DevicePassClaim {
+  /// Cihazda gerçek bir koşum yapıldı mı? **A12'nin makine karşılığı.**
+  /// ⛔ `true` yapmadan önce cihaz koşusu KANITLANMALI (ekran kaydı/cihaz logu).
+  static const bool verified = false;
+
+  /// Olgunun ÇEKİRDEĞİ — geri kalan her cümle bunlardan kurulur.
+  static const String _pass = 'a device pass';
+
+  static const String notTried = 'This has not been tried on a real phone';
+
+  /// Geniş çerçeve (Home · paylaşılan not).
+  static const String stillNeeds =
+      'camera permission, frame quality, and calibration still need $_pass';
+
+  /// Dar çerçeve (`LiveCaptureScreen`) — ardından dört kalem TEK TEK sayılır
+  /// (koordinatör şartı, 2026-08-12). **Kapı dördüncü bir elle-yazımı
+  /// yakaladığı için eklendi:** `detail` alanı hâlâ olguyu elle taşıyordu.
+  /// *Bir kapının ilk koşumunda öttüğü şey, sayılmamış bir kopyadır.*
+  static const String stillNeedsLead = 'Still needs $_pass';
+}
+
 class CaptureUnavailableNote extends StatelessWidget {
   const CaptureUnavailableNote({super.key});
 
@@ -308,10 +354,9 @@ class CaptureUnavailableNote extends StatelessWidget {
   /// commit'le yalana dönebilir — yalanı yapacak olan bu metni değiştirmeyen
   /// olurdu). `key_`/widget adı KORUNDU: yalnız içeriği değişti, üç ekranın
   /// (Home, Library, Progress) hepsinde TEK yerden düzeltildi.
-  static const String text =
-      'Lissom can start a live measurement from Home. This has not been '
-      'tried on a real phone: camera permission, frame quality, and '
-      'calibration still need a device pass.';
+  /// ⇒ Artık [DevicePassClaim]'den TÜRETİLİYOR — elle yazılmıyor (L-318).
+  static const String text = 'Lissom can start a live measurement from Home. '
+      '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.';
 
   @override
   Widget build(BuildContext context) {

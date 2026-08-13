@@ -334,16 +334,20 @@ class _LiveView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-        const NamedGapCard(
+        // Olgu [DevicePassClaim]'den TÜRETİLİR (L-318). Bu ekranın ÇERÇEVESİ
+        // ötekilerden farklı (burada dört kalem tek tek sayılıyor —
+        // koordinatör şartı, 2026-08-12) ama OLGU aynı ve tek kaynaktan gelir.
+        // ⇒ Farklı sunum meşru, farklı OLGU değil.
+        NamedGapCard(
           title: 'Not verified on a real device',
           reason: 'This connects the camera, the measurement engine, and '
-              'the live display for the first time. It has not been tried '
-              'on a real phone.',
+              'the live display for the first time. '
+              '${DevicePassClaim.notTried}.',
           // Koordinatör şartı (2026-08-12): "tek tek say" — dört kalem
           // BİRLEŞTİRİLMEDEN, isimle. Kamera simülatörde donanımı olmadığı
           // için hiçbiri bu makinede sınanamadı.
-          detail: 'Still needs a device pass: the permission dialog · the '
-              'camera frame stream · landmark quality in real light · the '
+          detail: '${DevicePassClaim.stillNeedsLead}: the permission dialog · '
+              'the camera frame stream · landmark quality in real light · the '
               'calibration threshold (yaw ≤10°).',
         ),
         const SizedBox(height: 12),

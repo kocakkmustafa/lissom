@@ -109,14 +109,16 @@ class HomeScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
+          // Cihaz-geçişi olgusu [DevicePassClaim]'den TÜRETİLİR (L-318) —
+          // burada elle yazılsaydı A12 kapandığında güncellenmeyen üçüncü
+          // kopya BU olurdu.
           const DeclarationBanner(
             eyebrow: 'Where Lissom is today',
             body: 'The measurement engine, the twelve-test battery, and a '
-                'live capture screen are connected. This has not been tried '
-                'on a real phone: camera permission, frame quality, and '
-                'calibration still need a device pass — what you can do '
-                'today is start a measurement, or read exactly what each '
-                'test measures and what it cannot.',
+                'live capture screen are connected. '
+                '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds} '
+                '— what you can do today is start a measurement, or read '
+                'exactly what each test measures and what it cannot.',
           ),
           const SizedBox(height: 24),
           for (final HomeSection s in facts.ia.homeSections) ...<Widget>[
