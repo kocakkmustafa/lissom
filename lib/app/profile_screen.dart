@@ -98,11 +98,25 @@ class ProfileScreen extends StatelessWidget {
                     // yakalanan hatadır: kimse sonucu sorgulamaz. Ve gerekçe
                     // bir gün gerçekleştiğinde cümle aynen kalır, yalnız
                     // artık denetlenmemiş olur.
+                    // 🔴 **BAYAT YOKLUK CÜMLESİ — H-10 sınıfı (L-319).**
+                    // Eski hâli: *"Nothing is captured by the camera in this
+                    // build either — when it is, it will stay on this phone."*
+                    // A1 `L-309`'da kapandı: kamera YAKALIYOR, ölçüm koşuyor,
+                    // kayıt `sessions.jsonl`e yazılıyor. Cümle **yazıldığında
+                    // doğruydu** ve yokluk bittiği gün bayatladı.
+                    //
+                    // ⚠️ **VE ÜSTÜNDEKİ YORUM BUNU ÖNCEDEN SÖYLEMİŞTİ:**
+                    // *"gerekçe bir gün gerçekleştiğinde cümle aynen kalır,
+                    // yalnız artık denetlenmemiş olur."* Kod kendi
+                    // bayatlamasını **tahmin etti**, sonra bayatladı.
+                    // > ***BİR RİSKİ YORUMA YAZMAK, ONU ÖNLEMEZ — ÖNLEYEN
+                    // > ŞEY KAPIDIR*** (`stale_absence_claim_test.dart`).
                     Text(
                       'Lissom has no account and no server of its own, so '
-                      'there is nowhere for your data to go. Nothing is '
-                      'captured by the camera in this build either — when it '
-                      'is, it will stay on this phone for the same reason.',
+                      'there is nowhere for your data to go. The camera reads '
+                      'your movement while you measure and the video is not '
+                      'kept; what is written down — which test, and when — '
+                      'stays on this phone for the same reason.',
                       style: t.textTheme.bodyMedium,
                     ),
                   ],

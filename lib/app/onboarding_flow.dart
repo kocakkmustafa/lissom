@@ -306,10 +306,27 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
       children: <Widget>[
         const LissomEyebrow('About the camera'),
         const SizedBox(height: 10),
+        // 🔴 **ÖZNE BELİRSİZLİĞİ = BAYAT YOKLUK CÜMLESİ (H-10 sınıfı, L-319).**
+        // Eski hâli: *"The video never leaves this device — nothing is
+        // recorded, saved, or sent anywhere."* Cümlenin öznesi VİDEOYDU ama
+        // *"nothing is … saved"* **her şey** diye okunur — ve Lissom artık
+        // ölçüm kaydını (`sessions.jsonl`) diske YAZIYOR (A1, `L-309`).
+        // ⇒ Bu ekran, Progress'in *"the test and the date … appear in this
+        // list"* cümlesiyle **çelişiyordu**; kullanıcı ilk açılışta
+        // *"hiçbir şey saklanmıyor"* öğrenip sonra listesini buluyordu.
+        // > ***BİR YOKLUK CÜMLESİNİN ÖZNESİ BELİRSİZSE, YOKLUK BÜYÜR:***
+        // > *okuyucu onu en geniş haliyle anlar, ve en geniş hâli yalandır.*
+        // ⇒ Özne artık AÇIK, ve saklananın ne olduğu ADIYLA söyleniyor.
         Text(
           'When you take a measurement, Lissom reads your movement through '
-          'the camera in real time. The video never leaves this device — '
-          'nothing is recorded, saved, or sent anywhere.',
+          'the camera in real time. The video is never recorded and never '
+          'leaves this device.',
+          style: t.textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'What is written down is which test you measured and when. That '
+          'file stays on this phone and is not sent anywhere.',
           style: t.textTheme.bodyMedium,
         ),
         const SizedBox(height: 8),
