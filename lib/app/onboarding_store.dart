@@ -59,13 +59,30 @@ final class OnboardingProfile {
   /// alınacağını ummasına** yol açardı; hiçbir kural/guard onu okumuyordu.
   final String? painNotes;
 
+  /// 🔴 **ALAN BAŞINA TOLERANSLI — eskiden `as` CAST'leriydi (L-326).**
+  ///
+  /// Ölçüldü: `{"completed": "true"}` **geçerli JSON**, ama `as bool?` bir
+  /// `TypeError` fırlatıyordu — ve `read()` yalnız `FormatException`
+  /// yakaladığı için hata **kaçıyor**, profil okuma **çöküyordu.** Bu, bir
+  /// şema değişikliğinin (alan tipi değişmesi / yeniden adlandırma) üreteceği
+  /// birebir bozulma biçimi — `L-325`'in `v` alanı vakasının kardeşi.
+  /// > ***BİR "BOZUK DOSYA" KORUMASI, YALNIZ KENDİ HAYAL ETTİĞİ BOZULMA
+  /// > BİÇİMİNİ YAKALAR — VE DOSYALAR HAYAL EDİLMEMİŞ BİÇİMLERDE BOZULUR.***
+  ///
+  /// ⭐ Ve tolerans **alan başına**, dosya başına DEĞİL: bozuk bir `gender`,
+  /// okunabilir bir `ageBand`ı düşürmez. `L-325`'in dersinin bu katmandaki
+  /// karşılığı — *okunamayan, okunabileni geçersiz kılmaz.*
   factory OnboardingProfile.fromJson(Map<String, dynamic> j) =>
       OnboardingProfile(
-        completed: j['completed'] as bool? ?? false,
-        ageBand: j['ageBand'] as String?,
-        gender: j['gender'] as String?,
-        painNotes: j['painNotes'] as String?,
+        completed: j['completed'] is bool ? j['completed'] as bool : false,
+        ageBand: _str(j['ageBand']),
+        gender: _str(j['gender']),
+        painNotes: _str(j['painNotes']),
       );
+
+  /// Yalnız GERÇEKTEN dize olanı alır. ⛔ `toString()` ÇAĞIRMAZ: `42`yi
+  /// `"42"`ye çevirmek, kullanıcının vermediği bir beyanı **uydurmak** olurdu.
+  static String? _str(Object? v) => v is String ? v : null;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'completed': completed,
@@ -108,10 +125,17 @@ final class JsonOnboardingStore implements OnboardingStore {
     try {
       return OnboardingProfile.fromJson(
           jsonDecode(raw) as Map<String, dynamic>);
-    } on FormatException {
+    } on Object {
       // Bozuk dosya — çökme yerine "başlanmamış" say: en kötü sonuç
       // kullanıcının onboarding'i BİR KEZ daha görmesi, veri kaybı değil
       // (henüz hiçbir ölçüm profile bağlı DEĞİL — bkz. sınıf dokümanı).
+      //
+      // 🔴 **EskiDEN yalnız `FormatException` yakalıyordu (L-326)** ve
+      // `fromJson`ın `as` cast'leri `TypeError` fırlatıyordu ⇒ geçerli-JSON
+      // ama yanlış-tipli bir dosya **açılışta çökertiyordu.**
+      // ⇒ Asıl çözüm `fromJson`ın alan-başına toleransı; bu geniş yakalama
+      // **arkalık**, tek savunma değil. *Bir tolerans yalnız ayrıştırıcıda
+      // olursa, ayrıştırıcının görmediği hata yine dışarı çıkar.*
       return const OnboardingProfile.notStarted();
     }
   }
