@@ -103,9 +103,20 @@ void main() {
         findsOneWidget);
 
     // YÖN 2 — engelli testler de yüzeyde, GEREKÇELİ.
-    expect(
-        find.textContaining('NOT MEASURED BY CAMERA (${f.blocked.length})'),
-        findsOneWidget);
+    // 🪤 **KAYDIRMA L-328'de GEREKLİ OLDU:** canlı satırlara talimat alt-satırı
+    // eklenince sayfa uzadı ve bu başlık katlamanın ALTINA düştü; `ListView`
+    // onu kurmadığı için arama "bulunamadı" dedi — iddia yanlışlanmadı,
+    // ERİŞİLEMEDİ. (Aynı sınıf `L-316`'da da ısırmıştı.)
+    // > ***BİR YÜZEYE İÇERİK EKLEMEK, O YÜZEYDEKİ HER ARAMA TESTİNİN ERİŞİM
+    // > VARSAYIMINI DEĞİŞTİRİR — VE KIRILAN TEST, KIRILAN İDDİA DEĞİLDİR.***
+    // ⚠️ Hedef LİSTE değil BAŞLIK: listeye kaydırmak, onun ÜSTÜNDEKİ başlığı
+    // ekranın dışına iter ve `ListView` onu bırakır ⇒ arama yine bulamaz.
+    // (İlk düzeltmem `blockedListKey`e kaydırıyordu ve tam bu yüzden hâlâ
+    // kırmızıydı — *doğru sınıf, yanlış hedef.*)
+    final Finder blockedHeader =
+        find.textContaining('NOT MEASURED BY CAMERA (${f.blocked.length})');
+    await scrollTo(tester, blockedHeader);
+    expect(blockedHeader, findsOneWidget);
     expect(
         find.textContaining('measurement engine', skipOffstage: false),
         findsWidgets,

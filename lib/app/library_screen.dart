@@ -278,6 +278,22 @@ class FamilyPage extends StatelessWidget {
           key: liveListKey,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // 🔴 **YAPABİLDİĞİN TEST SANA EN AZ ŞEYİ SÖYLÜYORDU (L-328).**
+            // Engelli 9 test kendi gerekçesini taşıyordu; **canlı** 3 test
+            // yalnız ad + ikon. Oysa ailenin tanıtımı *"each one measures a
+            // specific area and tells you what it could and could not see"*
+            // diyor ⇒ vaat **yapamadığın** testler için tutuluyor,
+            // **yapabildiklerin** için hiç.
+            // > ***DÜRÜSTLÜK MAKİNESİ YALNIZ BAŞARISIZLIKTA ATEŞLENİYORSA,
+            // > KULLANICI ÜRÜNÜ EN ÇOK KULLANDIĞI YERDE EN AZ ŞEY ÖĞRENİR.***
+            //
+            // ⭐ İçerik UYDURULMADI: `TestSpec.instruction` config'te zaten
+            // yazılı ve `battery.dart` onu ayrıştırıyordu — ama `lib/` altında
+            // **hiçbir okuyucusu yoktu** (`L-178` sınıfı: okuyucusu olmayan
+            // config alanı). *Yazılmış içeriği göstermek, yeni içerik yazmak
+            // değildir.*
+            // ⛔ Boş talimat `null`a düşer: boş bir alt satır çizmek, bu
+            // gecenin başlıklı-boşluk sınıfını (A3) geri getirirdi.
             for (final TestLiveness x in live)
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -285,6 +301,7 @@ class FamilyPage extends StatelessWidget {
                   icon: Icons.videocam_outlined,
                   iconColor: t.colorScheme.primary,
                   title: x.name,
+                  subtitle: _instructionFor(x.testId),
                 ),
               ),
           ],
@@ -335,6 +352,16 @@ class FamilyPage extends StatelessWidget {
         ),
       ],
     ];
+  }
+
+  /// Testin talimatı — YOKSA `null`, boş dize DEĞİL.
+  ///
+  /// `battery.dart` eksik alanı `''`e düşürüyor (`?? ''`); boş dizeyi alt
+  /// satır olarak çizmek, bu gecenin **başlıklı boşluk** sınıfını (A3) geri
+  /// getirirdi: ad altında karşılıksız bir boşluk.
+  String? _instructionFor(String testId) {
+    final String? s = facts.battery.tests[testId]?.instruction;
+    return (s == null || s.trim().isEmpty) ? null : s;
   }
 
   /// İnşa edilmemiş aile: **kurs listesi GÖSTERİLMEZ** (IA config notu). Ne
