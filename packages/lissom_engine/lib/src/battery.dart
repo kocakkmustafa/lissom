@@ -417,11 +417,24 @@ final class Battery {
     required this.tests,
     required this.excluded,
     required this.derivedMeasures,
+    this.cameraSetup,
   });
 
   final String id;
   final String version;
   final Map<String, TestSpec> tests;
+
+  /// **KAMERA KURULUMU — config'te vardı, HİÇ ayrıştırılmıyordu (L-330).**
+  ///
+  /// `globalCameraSetup` bloğu mesafe/yükseklik aralığını, kadraj kuralını ve
+  /// yaw toleransını taşıyor — yani *"telefonu nereye koyayım"* sorusunun
+  /// cevabı **yazılıydı** ve ne ayrıştırıcısı ne okuyucusu vardı.
+  /// `H-24`'ün ikinci sorusunun bu hattaki cevabı: *eksik olan içerik değil,
+  /// KÖPRÜYDÜ* — ve bu kez köprünün **ayrıştırıcı yarısı da** yoktu.
+  ///
+  /// ⛔ Yokluğu HATA değil: eski config'ler bloğu taşımayabilir ⇒ `null`.
+  /// Yüzey `null`da hiçbir şey çizmez (uydurma kurulum tarifi vermez).
+  final CameraSetup? cameraSetup;
 
   /// Bataryaya alınmamış testler — İSİMLİ gerekçeleriyle.
   final List<ExcludedTest> excluded;
@@ -457,6 +470,7 @@ final class Battery {
       tests: tests,
       excluded: _parseExcluded(root['excluded']),
       derivedMeasures: _parseDerived(root['derivedMeasures']),
+      cameraSetup: CameraSetup.parse(root['globalCameraSetup']),
     );
   }
 
@@ -801,5 +815,64 @@ final class Battery {
   static double _derivedHold(num? holdSeconds) {
     final double half = (holdSeconds?.toDouble() ?? 2) / 2;
     return half < 1.0 ? 1.0 : half;
+  }
+}
+
+/// Kameranın nereye konacağı — **config'ten, uydurulmadan** (L-330).
+///
+/// Bu blok `config/tests/lissom-assessment.v1.json` içinde duruyordu ve
+/// **hiçbir ayrıştırıcısı yoktu**; yani kullanıcı ölçüme başlarken telefonu
+/// nereye koyacağını bilmiyordu, ama ölçüm sonradan *"kadraj yüzünden
+/// okunamadı"* diyebiliyordu.
+/// > ***BİR ÜRÜN, BAŞARISIZLIĞIN SEBEBİNİ SONRADAN SÖYLEYEBİLİYORSA, ONU
+/// > ÖNCEDEN DE SÖYLEYEBİLİR.***
+final class CameraSetup {
+  const CameraSetup({
+    required this.distanceCm,
+    required this.heightCm,
+    required this.framingRule,
+    required this.yawToleranceDeg,
+  });
+
+  /// `[min, max]` — santimetre. Boşsa `null`.
+  final List<int>? distanceCm;
+  final List<int>? heightCm;
+  final String? framingRule;
+  final num? yawToleranceDeg;
+
+  /// Hiçbir alan yoksa `null` döner — **boş bir kurulum kartı çizmemek için.**
+  /// (Bu gecenin A3 dersi: karşılıksız başlık, yokluktan kötüdür.)
+  static CameraSetup? parse(Object? raw) {
+    if (raw is! Map<String, dynamic>) return null;
+    final List<int>? d = _ints(raw['distanceCm']);
+    final List<int>? h = _ints(raw['heightCm']);
+    final Object? fr = raw['framingRule'];
+    final Object? yaw = raw['yawToleranceDeg'];
+    final CameraSetup s = CameraSetup(
+      distanceCm: d,
+      heightCm: h,
+      framingRule: fr is String && fr.trim().isNotEmpty ? fr : null,
+      yawToleranceDeg: yaw is num ? yaw : null,
+    );
+    return s.isEmpty ? null : s;
+  }
+
+  bool get isEmpty =>
+      distanceCm == null &&
+      heightCm == null &&
+      framingRule == null &&
+      yawToleranceDeg == null;
+
+  /// ⛔ Tek elemanlı ya da bozuk aralık KABUL EDİLMEZ: *"180 cm ile 180 cm
+  /// arası"* diye bir tarif yoktur, ve eksik bir aralığı tamamlamak
+  /// uydurmaktır.
+  static List<int>? _ints(Object? v) {
+    if (v is! List || v.length != 2) return null;
+    final List<int> out = <int>[];
+    for (final Object? x in v) {
+      if (x is! num) return null;
+      out.add(x.toInt());
+    }
+    return out[0] <= out[1] ? out : null;
   }
 }

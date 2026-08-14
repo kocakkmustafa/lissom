@@ -312,6 +312,9 @@ class HomeScreen extends StatelessWidget {
                         builder: (_) => LiveCaptureScreen(
                           test: facts.battery.tests[live.first.testId]!,
                           batteryVersion: facts.battery.version,
+                          // L-330: kurulum tarifi config'te vardı, hiçbir
+                          // yüzeye ulaşmıyordu — köprü burada kuruluyor.
+                          cameraSetup: facts.battery.cameraSetup,
                           ageBand: ageBand,
                           // A1 dikişi: üretimde İKİSİ DE `null` ⇒ ekran
                           // kendi varsayılanlarını kurar (`CameraPoseSource`

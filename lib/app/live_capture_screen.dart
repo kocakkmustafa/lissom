@@ -42,6 +42,7 @@ class LiveCaptureScreen extends StatefulWidget {
   const LiveCaptureScreen({
     required this.test,
     required this.batteryVersion,
+    this.cameraSetup,
     this.side = 'right',
     this.ageBand,
     this.sourceOverride,
@@ -69,6 +70,11 @@ class LiveCaptureScreen extends StatefulWidget {
 
   final TestSpec test;
   final String batteryVersion;
+
+  /// Kameranın nereye konacağı — config'ten (`L-330`). ⛔ `null` ise kart
+  /// **hiç çizilmez**: uydurulmuş bir kurulum tarifi, hiç tarif olmamasından
+  /// kötüdür.
+  final CameraSetup? cameraSetup;
   final String side;
 
   /// Onboarding'de BEYAN EDİLEN yaş bandı — zincirin son halkası
@@ -292,6 +298,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
                     state: _state,
                     onFinish: _finish,
                     onOpenSettings: widget.onOpenSettings ?? openAppSettings,
+                    cameraSetup: widget.cameraSetup,
                   ),
           ),
         ),
@@ -305,8 +312,11 @@ class _LiveView extends StatelessWidget {
     required this.state,
     required this.onFinish,
     required this.onOpenSettings,
+    this.cameraSetup,
   });
 
+  /// Kurulum tarifi — `null` ise kart çizilmez (L-330).
+  final CameraSetup? cameraSetup;
   final LiveSessionState state;
   final VoidCallback onFinish;
   final Future<bool> Function() onOpenSettings;
@@ -338,6 +348,19 @@ class _LiveView extends StatelessWidget {
         // ötekilerden farklı (burada dört kalem tek tek sayılıyor —
         // koordinatör şartı, 2026-08-12) ama OLGU aynı ve tek kaynaktan gelir.
         // ⇒ Farklı sunum meşru, farklı OLGU değil.
+        // 🔴 **KURULUM TARİFİ config'te VARDI, hiçbir yüzeye ULAŞMIYORDU
+        // (L-330, H-24 ②).** `globalCameraSetup` mesafe/yükseklik aralığını,
+        // kadraj kuralını ve yaw toleransını taşıyor — ve **ayrıştırıcısı bile
+        // yoktu.** Yani kullanıcı telefonu nereye koyacağını bilmiyordu, ama
+        // ölçüm sonradan *"kadraj yüzünden okunamadı"* diyebiliyordu.
+        // > ***BİR ÜRÜN, BAŞARISIZLIĞIN SEBEBİNİ SONRADAN SÖYLEYEBİLİYORSA,
+        // > ONU ÖNCEDEN DE SÖYLEYEBİLİR.***
+        // ⛔ `null` ise kart HİÇ çizilmez — uydurulmuş bir kurulum tarifi,
+        // hiç tarif olmamasından kötüdür (ve boş kart A3 ihlali olurdu).
+        if (cameraSetup != null) ...<Widget>[
+          _CameraSetupCard(setup: cameraSetup!),
+          const SizedBox(height: 12),
+        ],
         NamedGapCard(
           title: 'Not verified on a real device',
           reason: 'This connects the camera, the measurement engine, and '
@@ -505,6 +528,50 @@ class _ResultView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// **Ölçümden ÖNCE: telefonu nereye koyacaksın (L-330).**
+///
+/// Her satır config'ten TÜRETİLİR; eksik alan **satırı düşürür**, uydurma
+/// değer üretmez. Kart yalnız en az bir satır varsa çizilir (çağıran
+/// `cameraSetup != null` kontrolünü yapıyor, ve `CameraSetup.parse` boş bloğu
+/// zaten `null`a düşürüyor — *iki katman, tek karar*).
+class _CameraSetupCard extends StatelessWidget {
+  const _CameraSetupCard({required this.setup});
+  static const Key key_ = Key('liveCapture.cameraSetup');
+  final CameraSetup setup;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData t = Theme.of(context);
+    final List<String> lines = <String>[
+      if (setup.distanceCm != null)
+        'Stand about ${setup.distanceCm![0]}–${setup.distanceCm![1]} cm from '
+            'the camera.',
+      if (setup.heightCm != null)
+        'Put the phone ${setup.heightCm![0]}–${setup.heightCm![1]} cm off the '
+            'floor.',
+      if (setup.framingRule != null) setup.framingRule!,
+      if (setup.yawToleranceDeg != null)
+        'Face the camera square-on — more than ${setup.yawToleranceDeg}° of '
+            'turn and the reading is not used.',
+    ];
+    return LissomCard(
+      key: key_,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          LissomEyebrow('Before you start'),
+          const SizedBox(height: 8),
+          for (final String l in lines)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text('· $l', style: t.textTheme.bodyMedium),
+            ),
+        ],
+      ),
     );
   }
 }
