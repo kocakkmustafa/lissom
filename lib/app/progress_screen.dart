@@ -51,6 +51,15 @@ class ProgressScreen extends StatelessWidget {
   /// Sessizce bırakmak, kullanıcının sakladığını sandığı şeyi yok saymaktı.
   static const Key readingNotKeptKey = Key('progress.readingNotKept');
   static const Key ledgerKey = Key('progress.ledger');
+
+  /// Bir OTURUM başlığının anahtar ÖN EKİ (L-324). Her başlık kendi zaman
+  /// damgasıyla anahtarlanır — **aynı `Key` iki widget'ta kullanılamaz**, ve
+  /// testin "kaç oturum çizildi" sorusu ancak sayılabilir anahtarlarla
+  /// cevaplanır.
+  static const String sittingKeyPrefix = 'progress.sitting.';
+
+  static Key sittingKeyFor(DateTime at) =>
+      Key('$sittingKeyPrefix${at.toIso8601String()}');
   static const Key emptyKey = Key('progress.empty');
   static const Key unavailableKey = Key('progress.unavailable');
 
@@ -217,16 +226,22 @@ class ProgressScreen extends StatelessWidget {
             ],
             LissomEyebrow('Recorded readings (${h.records.length})'),
             const SizedBox(height: 10),
+            // 🔴 **KAYIT BİRİMİ ≠ GÖSTERİM BİRİMİ (L-324).**
+            // `appendPreserved()` **test başına** bir kayıt yazar ve bu doğru
+            // (bir bloğun testleri sınıf bakımından KARIŞIK —
+            // `assessment_history.dart` §1). Ama liste DÜZ çizilince, tek
+            // oturumda 12 test ölçen kullanıcı **aynı tarihi taşıyan 12
+            // satır** görüyordu: hiçbir şey bunların **tek bir oturum**
+            // olduğunu söylemiyordu, ve tarih 12 kez tekrarlandığı için
+            // ekran *"on iki ayrı kez ölçtün"* diye okunuyordu.
+            // > ***KAYIT BİRİMİ İLE GÖSTERİM BİRİMİ AYNI OLMAK ZORUNDA
+            // > DEĞİLDİR — VE İKİSİNİ AYNI VARSAYMAK, DOĞRU KAYDEDİLMİŞ BİR
+            // > ŞEYİ YANLIŞ GÖSTERİR.***
+            // ⛔ Şemaya dokunulmadı: bu tamamen SUNUM katmanı.
             Column(
               key: ledgerKey,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                for (final SessionRecord r in h.records)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: _LedgerRow(record: r, facts: facts),
-                  ),
-              ],
+              children: _ledgerChildren(h.records),
             ),
           ],
 
@@ -234,6 +249,48 @@ class ProgressScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Kayıtları OTURUMA göre böler — sıra KORUNUR (depo zaten en yeniden
+  /// eskiye veriyor; burada yeniden sıralamak, deponun sırasını sessizce
+  /// ezmek olurdu).
+  ///
+  /// Birim `completedAt`in KENDİSİ: `appendPreserved()` tek bir oturumun tüm
+  /// ölçümlerini **aynı** damgayla yazar. ⛔ Güne göre gruplamak YANLIŞ olurdu
+  /// — aynı gün iki kez ölçen kullanıcının iki oturumu tek yığına düşerdi.
+  List<MapEntry<DateTime, List<SessionRecord>>> _bySitting(
+      List<SessionRecord> records) {
+    final List<MapEntry<DateTime, List<SessionRecord>>> out =
+        <MapEntry<DateTime, List<SessionRecord>>>[];
+    for (final SessionRecord r in records) {
+      if (out.isNotEmpty && out.last.key == r.completedAt) {
+        out.last.value.add(r);
+      } else {
+        out.add(MapEntry<DateTime, List<SessionRecord>>(
+            r.completedAt, <SessionRecord>[r]));
+      }
+    }
+    return out;
+  }
+
+  List<Widget> _ledgerChildren(List<SessionRecord> records) {
+    final List<Widget> out = <Widget>[];
+    for (final MapEntry<DateTime, List<SessionRecord>> s
+        in _bySitting(records)) {
+      out.add(Padding(
+        key: sittingKeyFor(s.key),
+        padding: const EdgeInsets.only(bottom: 8, top: 4),
+        child: _SittingHeader(at: s.key, count: s.value.length),
+      ));
+      for (final SessionRecord r in s.value) {
+        out.add(Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: _LedgerRow(record: r, facts: facts),
+        ));
+      }
+      out.add(const SizedBox(height: 14));
+    }
+    return out;
   }
 
   /// Kayıp kayıt varsa sayı bir ALT SINIRDIR ve bu SÖYLENİR (M-F-228: 40/50
@@ -259,6 +316,27 @@ class ProgressScreen extends StatelessWidget {
 /// Ölçülemeyen denemeler DÜŞÜRÜLMEZ: kullanıcı o işi gerçekten yaptı ve
 /// sebebi isimli. Kaydetmemek, yarın yüzeyin "1 deneme" demesine yol açardı —
 /// kullanıcı 1 yapmış ve o ölçülememişken. Sessizlik yalan söyler.
+/// Bir OTURUMUN başlığı — tarih **bir kez**, ve kaç ölçüm içerdiği.
+///
+/// ⛔ Sayı `count`tan gelir, `plannedUnits` toplamından DEĞİL: kullanıcının
+/// gerçekten aldığı ölçüm sayısı, uygulamanın planladığı sayı değil.
+/// ⛔ Ve *"session"* kelimesi yüzeye çıkmıyor — dahili sözlük. Kullanıcı için
+/// bu bir TARİH ve o tarihte kaç okuma alındığı.
+class _SittingHeader extends StatelessWidget {
+  const _SittingHeader({required this.at, required this.count, super.key});
+  final DateTime at;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData t = Theme.of(context);
+    return Text(
+      '${_LedgerRow._dateOf(at)} · $count reading${count == 1 ? '' : 's'}',
+      style: t.textTheme.titleSmall?.copyWith(color: LissomColors.bodySecondary),
+    );
+  }
+}
+
 class _LedgerRow extends StatelessWidget {
   const _LedgerRow({required this.record, required this.facts});
   final SessionRecord record;
@@ -274,8 +352,9 @@ class _LedgerRow extends StatelessWidget {
         children: <Widget>[
           Text(facts.testNameFor(record.lessonId),
               style: t.textTheme.titleMedium),
-          const SizedBox(height: 5),
-          Text(_dateOf(record.completedAt), style: t.textTheme.bodySmall),
+          // ⛔ Tarih SATIRDAN kaldırıldı (L-324): oturum başlığı onu bir kez
+          // söylüyor. Satırda tekrarlanınca tek oturum, tarihi 12 kez basan
+          // 12 ayrı oturum gibi okunuyordu.
           const SizedBox(height: 8),
           Text(_regime(record), style: t.textTheme.bodyMedium),
           if (record.unmeasuredUnits > 0) ...<Widget>[
