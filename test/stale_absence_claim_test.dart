@@ -73,6 +73,8 @@ const Map<String, String> _staleClaims = <String, String>{
 };
 
 void main() {
+  _capabilityClaimGate();
+
   test('sevk edilen kodda BAYAT yokluk cümlesi YOK', () {
     final Map<String, List<String>> found = <String, List<String>>{};
     int scanned = 0;
@@ -176,5 +178,69 @@ void main() {
         findsOneWidget,
         reason: 'onboarding neyin saklandığını SÖYLEMİYOR — kullanıcı '
             '"hiçbir şey saklanmıyor" diye anlar ve Progress onu yalanlar');
+  });
+}
+
+/// **H-13'ÜN İKİNCİ YÖNÜ — *"yapmadığımızı yapıyoruz dedik"* (L-327).**
+///
+/// `H-10`/bu dosyanın üst yarısı *"yokta olmayanı yok dedik"* yönünü kapatıyor.
+/// `H-13` ikinci yönü aileye bağladı ve Gravita'nın `G-213`/`G-214`'ünde en
+/// pahalı hâlini gösterdi: **ürünün dürüstlük kartının kendisi** yalan
+/// söylüyordu.
+///
+/// Bu hatta bulunan vaka (`config/ia/library.v1.json`):
+///   > *"Twelve camera-based movement tests … and **feeds your daily plan**."*
+/// Oysa Home aynı derlemede diyor ki: *"A daily routine is meant to be built
+/// from your own measurements. **The part of Lissom that builds it is not in
+/// this build.**"* ⇒ **İki yüzey, bir derleme, zıt iddia.**
+///
+/// ⚠️ Ve bu **`lib/`de değil `config/`de** duruyordu — `H-13`'ün uyarısı
+/// birebir: *"`lib/` yetmez: `content/`, onboarding, yardım, dürüstlük kartı
+/// dahil."* Yalnız Dart tarayan bir kapı bunu **hiç göremezdi.**
+///
+/// > ***BİR YETENEK VAADİ, ONU YALANLAYAN CÜMLEYLE AYNI DERLEMEDE
+/// > YAŞAYABİLİR — VE İKİSİ FARKLI DOSYA TÜRLERİNDEYSE HİÇBİR KAPI İKİSİNİ
+/// > BİRDEN OKUMAZ.***
+void _capabilityClaimGate() {
+  test('config: karşılığı OLMAYAN yetenek vaadi YOK', () {
+    // Yasak vaat → onu YALANLAYAN ölçüm. Liste kısa ve ÖLÇÜLMÜŞ; üslup
+    // kapısı değil.
+    const Map<String, String> unbacked = <String, String>{
+      'feeds your daily plan':
+          'günlük plan üreteci bu derlemede YOK — Home bunu kendisi söylüyor '
+              '("The part of Lissom that builds it is not in this build")',
+      'we tell you what to change':
+          'Gravita G-213 vakası — bu hatta koçluk katmanı yok',
+      'adapts to you':
+          'uyarlama yapan hiçbir kod yok',
+    };
+
+    final List<String> found = <String>[];
+    int scanned = 0;
+    for (final FileSystemEntity e
+        in Directory('config').listSync(recursive: true)) {
+      if (e is! File || !e.path.endsWith('.json')) continue;
+      final String raw = e.readAsStringSync().toLowerCase();
+      scanned += raw.length;
+      for (final MapEntry<String, String> c in unbacked.entries) {
+        if (raw.contains(c.key)) {
+          found.add('${e.path}: «${c.key}» — ÇÜRÜTEN: ${c.value}');
+        }
+      }
+    }
+
+    // POZİTİF ÇAPA: config gerçekten okundu mu?
+    expect(scanned, greaterThan(5000),
+        reason: 'config taranamadı — "0 vaat" VAKUM-DOĞRU olurdu');
+
+    expect(found, isEmpty,
+        reason: 'KARŞILIKSIZ YETENEK VAADİ (H-13): $found');
+  });
+
+  test('POZİTİF KONTROL: desen karşılıksız vaadi YAKALAR', () {
+    const String fake = 'each one measures a specific area and feeds your '
+        'daily plan.';
+    expect(fake.contains('feeds your daily plan'), isTrue,
+        reason: 'desen vaadi yakalamıyor — kapı kör');
   });
 }

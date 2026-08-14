@@ -48,7 +48,7 @@
       "title": "Assessment Battery",
       "status": "in_progress",
       "wave": 0,
-      "intro": "Twelve camera-based movement tests. Each one measures a specific area, tells you what it could and could not see, and feeds your daily plan.",
+      "intro": "Twelve camera-based movement tests. Each one measures a specific area and tells you what it could and could not see.",
       "itemsSource": "config/tests/lissom-assessment.v1.json",
       "hasTrendChart": true,
       "honestyBox": {
