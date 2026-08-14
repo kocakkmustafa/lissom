@@ -1022,3 +1022,40 @@ hemen altında gerekçe paragrafı VAR ⇒ **boş-BEYANLI**, kusur değil.
 **TAŞINAN:** köprülenemeyen 11 `measureKind` · A5 şerhi (5 kapı öz-testi
 yalnız `--self-test`) · ID çakışması **3** (SAYILI muafiyet) ·
 `A12` üç onay kapısı (kurucuda).
+
+---
+
+# 🌙 GECE VARDİYASI — 2026-08-14→15
+
+## MÜHÜR (kapanışta ölçüldü)
+
+Giriş **`42296bc`** → çıkış **`47e138b`** (hattın son commit'i) · **16 commit**
+· `main` push'lu · ahead **0** · kirli **0**.
+⚠️ Depo `HEAD`i **`aa2075c`** — *"DEFTER + workspace versiyon kontrolüne alındı"*
+(kayıt zinciri göçü, **başka bir el**). Yani `workspace/` artık
+`ventures/lissom/app/workspace/` altında ve **git izliyor**; eski yol YOK.
+
+Kapılar: app **236/236** (taban 205, **+31**) · engine **114/114** ·
+python **20/21** (`fixture_check.py` = M-F-280 **BİLİNEN**) · `all_gates.py` exit **0**.
+DEFTER: bu oturumdan **16 kayıt** (`L-315`…`L-330`).
+
+## A TABLOSU — tek açık kalem A12, ve engeli FİZİKSEL
+
+`A12` **fiilen denendi**: `-allowProvisioningUpdates` app'e özel profil ÜRETTİ
+ve cihazı **içeriyor** (ölçüldü). Kurulum `0xe8008012` → sonra **`error 1011`**
+⇒ telefon **`unavailable`**. **Teknik engel YOK.**
+
+## ÖNCEKİ TURUN "SIRADAKİ"si — KAPANDI
+
+A3 paydası **6 → 12 yüzey** genişletildi (`L-315`). Tanım ölçümden ÖNCE, **ayrı
+commit'te** (`a7fc901`) — Goodhart kanıtı beyan değil **git sırası**.
+BUGÜN penceresi: `ⓐ2 · ⓑ5 · ⓒ0` ⇒ payda **7**, sessiz oran **%0,0**.
+YARIN penceresi **3 başlıklı boşluk** buldu, üçü kapandı.
+
+## TAŞINAN
+
+⛔ **Deneme-düzeyi kayıt** — koordinatör hükmü bekliyor (a) çekirdek şeması /
+(b) Lissom yan defteri. Hazırlık: `docs/M-TALEBI-deneme-duzeyi-kayit.md`.
+⛔ `A12` cihaz koşusu — telefon uyanınca **tek komut**.
+⛔ H-15 tam uygulanamadı: `lissom-hatti` sim'i var ama **MCP gezinme erişimi
+kurucu onayı** istiyor.
