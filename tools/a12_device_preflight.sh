@@ -94,12 +94,28 @@ device_check() {
     DEVICE_UDID=""
     return
   fi
-  echo "$out" | grep -q 'available'
-  if [ $? -eq 0 ]; then
+  # 🔴 **ALT-DİZE KÖRLÜĞÜ — bu betiğin KENDİ kusuruydu (L-323).**
+  # Eski satır `grep -q 'available'` idi ve **`unavailable` de eşleşiyordu.**
+  # Ölçüldü: cihaz `unavailable` iken betik *"✅ erişilebilir cihaz VAR"*
+  # diyordu — yani A12 kapısı, telefona ULAŞILAMAZKEN "yol açık" diyordu.
+  # Yanlış yönde yanılan bir kapı, kapı değildir.
+  # > ***BİR DURUM SÖZCÜĞÜ BAŞKA BİR DURUM SÖZCÜĞÜNÜN İÇİNDE GEÇEBİLİR —
+  # > VE O ZAMAN ARAMA, ARADIĞININ TERSİNİ DE BULUR.***
+  # ⇒ `unavailable`ın `un`u ayırt ediliyor: satır başı ya da boşluk şart.
+  if echo "$out" | grep -qE '(^|[[:space:]])available'; then
     ok "eşleşmiş ve erişilebilir cihaz VAR"
-    info "$(echo "$out" | grep 'available' | head -2)"
+    info "$(echo "$out" | grep -E '(^|[[:space:]])available' | head -2)"
   else
     bad "eşleşmiş/erişilebilir cihaz YOK — telefon kilidi açık ve bağlı olmalı"
+    if echo "$out" | grep -q 'unavailable'; then
+      info "cihaz EŞLEŞMİŞ ama şu an ULAŞILAMIYOR (uyku/kilit/ağ dışı)"
+    fi
+    # ⛔ `devicectl device info details` bu noktada **YİNE DE VERİ DÖNER**
+    # (önbellek). 2026-08-14'te ölçüldü: `list` *unavailable* derken
+    # `info details` tam donanım bilgisi döndürdü ve kurulum `error 1011`
+    # ile düştü.
+    # > ***BİLGİ KOMUTUNUN VERİ DÖNDÜRMESİ, CİHAZIN ERİŞİLEBİLİR OLDUĞUNU
+    # > KANITLAMAZ — ERİŞİLEBİLİRLİĞİ ANCAK BİR İŞLEM KANITLAR.***
   fi
 
   DEVICE_UDID=$(flutter devices --machine 2>/dev/null \
@@ -171,17 +187,36 @@ profile_match_check() {
     bad "bundle'ı kapsayan profil YOK"
   fi
 
-  if [ "$registered" -gt 0 ]; then
+  # 🔴 **"ÖLÇEMEDİM" İLE "YOK" AYRILDI (L-323).**
+  # Cihaz ulaşılamaz olduğunda `DEVICE_UDID` BOŞ kalıyor ve bu iki kontrol
+  # eskiden **kesin olumsuz** basıyordu: *"cihaz hiçbir profilde yok —
+  # portal kaydı gerekir (KURUCU)"*. Oysa ölçüldü (2026-08-14): profil
+  # `…com.yulalab.lissom` bu cihazı **İÇERİYOR**. Yani betik, yapamadığı
+  # bir ölçümün sonucunu **kurucuya iş** olarak yazıyordu.
+  # ⇒ Ölçütün kendi kuralı: *ölçülemeyen kalem `⛔ ÖLÇÜLEMEDİ` yazılır,
+  # `❌` değil.*
+  # > ***BİR KONTROL, GİRDİSİ YOKKEN "YOK" DEMEZ — "BAKAMADIM" DER;
+  # > İKİSİNİ KARIŞTIRAN BİR RAPOR, OLMAYAN BİR İŞİ İCAT EDER.***
+  if [ -z "${DEVICE_UDID:-}" ]; then
+    info "⛔ ÖLÇÜLEMEDİ: cihaz UDID'si okunamadı (telefon ulaşılamıyor) ⇒"
+    info "   profil↔cihaz eşleşmesi hakkında bu koşumda HÜKÜM YOK"
+  elif [ "$registered" -gt 0 ]; then
     ok "cihaz bu takıma KAYITLI ($registered profilde görünüyor) — portal kaydı GEREKMİYOR"
   else
     bad "cihaz hiçbir profilde yok — portal cihaz kaydı gerekir (KURUCU)"
   fi
 
-  if [ -n "$device_ok" ]; then
+  if [ -z "${DEVICE_UDID:-}" ]; then
+    : # yukarıda söylendi; ikinci kez "bilmiyorum" basmaya gerek yok
+  elif [ -n "$device_ok" ]; then
     ok "kapsayan profil bu cihazı da İÇERİYOR ($device_ok) — kurulum imzası HAZIR"
   else
-    consent "kapsayan profil bu cihazı İÇERMİYOR ⇒ profil TAZELENMELİ"
-    info "çare: xcodebuild … -allowProvisioningUpdates  (Apple Developer hesabına YAZAR — kurucu onayı)"
+    bad "kapsayan profil bu cihazı İÇERMİYOR ⇒ profil TAZELENMELİ"
+    # H-9/H-17 ile açıldı: bu artık kurucu onayı DEĞİL, hattın işi.
+    info "çare: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner \\"
+    info "      -destination \"id=<UDID>\" -allowProvisioningUpdates build"
+    info "⚠️ İLK koşum profili ÜRETİR ama derlemeye JOKERİ gömebilir —"
+    info "   gömülü profili DOĞRULA, gerekirse ikinci kez koş (L-323)"
   fi
 }
 
@@ -206,9 +241,42 @@ build_check() {
 
 # ── ⑦  ONAY KAPILARI — hattın DOKUNMADIĞI iki adım ───────────────────
 consent_gates() {
-  echo "⑦ ONAY KAPILARI (hat kapatamaz — M-F-77)"
-  consent "profil tazeleme: Apple Developer hesabına yazar"
-  consent "kurulum: kurucunun KİŞİSEL telefonuna uygulama yükler"
+  echo "⑦ ONAY KAPILARI"
+  # 🔴 **BU BÖLÜM BAYATLAMIŞTI — H-9/H-17 ile açıldı (L-323).**
+  # Betik yazıldığında ikisi de kurucu onayı bekliyordu. Koordinatör
+  # hükmü değiştirdi: profil tazeleme **rutin geliştirme altyapısı**
+  # (H-9), cihaz koşusu ise H-17'de Lissom'a **doğrudan görev** olarak
+  # verildi. İkisi de M-F-77'nin beş kurucu-kaleminde (harcama · store ·
+  # fiyat · lisans · tasarım) DEĞİL.
+  # ⇒ Kapılar SİLİNMEDİ, **kim açtığı yazılarak** açıldı: yetki geri
+  # alınırsa kapı yerinde durur.
+  # > ***BİR ONAY KAPISINI SİLMEK İLE AÇILDIĞINI KAYDETMEK AYNI ŞEY
+  # > DEĞİLDİR — SİLİNEN KAPI, YETKİ DEĞİŞİNCE GERİ GELMEZ.***
+  ok "profil tazeleme: AÇIK — H-9 (rutin geliştirme altyapısı)"
+  ok "cihaz kurulumu: AÇIK — H-17 (Lissom'a doğrudan görev)"
+  consent "store gönderimi / fiyat / lisans / tasarım yönü: hâlâ KURUCUDA"
+}
+
+# ── ⑧  ZEHİR UYARISI — cihaz derlemesi simülatörü bozar ──────────────
+poison_warning() {
+  echo "⑧ CİHAZ DERLEMESİNİN YAN ETKİSİ (H-12/H-14 · L-323'te ölçüldü)"
+  info "cihaz derlemesi paylaşılan native-asset'i EZER:"
+  info "  önce 527696B x86_64+arm64 IOSSIMULATOR → sonra 284480B arm64 IOS"
+  info "panzehir: 'flutter clean' YETMEZ (build bir SYMLINK; clean yalnız"
+  info "  bağlantıyı siler) ⇒ symlink HEDEFİNDEKİ native_assets/ios/ silinir"
+  # 🪤 VE ÜÇÜNCÜ HALKA — bu turda ölçüldü ve hiçbir hükümde yoktu:
+  # `flutter clean` **build symlink'inin KENDİSİNİ de siler**; Flutter onu
+  # gerçek dizin olarak ~/Documents (iCloud) içinde yeniden kurar ve
+  # **codesign patlar**. Yani iCloud panzehiri, zehir panzehiri tarafından
+  # yok ediliyor.
+  # > ***BİR PANZEHİR BAŞKA BİR PANZEHİRİN ETKİ YOLUNU KESEBİLİR (H-14) —
+  # > VE ÜÇÜNCÜSÜ, İKİNCİSİNİ UYGULARKEN BİRİNCİYİ SİLEBİLİR.***
+  info "⚠️ clean sonrası: 'build' symlink'ini GERİ KUR, yoksa codesign düşer"
+  if [ -e build ] && [ ! -L build ]; then
+    bad "build GERÇEK DİZİN (iCloud içinde) — symlink geri kurulmalı"
+  else
+    ok "build symlink yerinde"
+  fi
 }
 
 self_test() {
@@ -256,6 +324,7 @@ identity_check
 profile_match_check
 build_check
 consent_gates
+poison_warning
 echo "══════════════════════════════════════════════════════"
 echo " geçen: $PASS · düşen: $FAIL · onay bekleyen: $CONSENT"
 if [ "$FAIL" -eq 0 ] && [ "$CONSENT" -eq 0 ]; then
