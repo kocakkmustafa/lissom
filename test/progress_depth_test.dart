@@ -47,6 +47,7 @@ int _sittingHeaders(WidgetTester tester) => find
 
 void main() {
   _unreadableGate();
+  _floorGate();
 
   testWidgets('BİR oturumun kayıtları TEK başlık altında toplanır',
       (WidgetTester tester) async {
@@ -171,5 +172,45 @@ void _unreadableGate() {
     expect(find.byKey(ProgressScreen.unreadableAllKey), findsOneWidget,
         reason: 'hepsi okunamadığında bunu SÖYLEYEN bir yüzey yok; ekran '
             '"hiç kayıt yok" diyor ve bu YANLIŞ (C-280 / H-13)');
+  });
+}
+
+/// **DOLU listede de kayıp SÖYLENİYOR (L-329).**
+///
+/// `L-325` **hepsi okunamayan** hâli kapattı. Bu, öteki yarı: kayıtların bir
+/// kısmı okunabildiğinde taban uyarısı gerçekten çiziliyor mu, ve **sayıyı**
+/// taşıyor mu? İki dal ayrı kod yollarında ⇒ biri düzeldi diye öteki
+/// doğrulanmış olmaz.
+/// > *Bir kusuru bir dalda kapatmak, kardeş dalı ölçmüş olmaz.*
+void _floorGate() {
+  testWidgets('KISMİ okuma: dolu listede kayıp sayısıyla söyleniyor',
+      (WidgetTester tester) async {
+    pinTallSurface(tester, height: 4000);
+    final Battery b = batteryFromDisk();
+    final AppFacts f = factsFromDisk(
+      history: SessionHistoryView.partial(
+        _oneSitting(b, DateTime.utc(2026, 8, 10, 9, 30)).take(2).toList(),
+        3,
+      ),
+    );
+
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: Scaffold(body: ProgressScreen(facts: f)),
+    ));
+    await tester.pumpAndSettle();
+
+    // POZİTİF ÇAPA: gerçekten DOLU daldayız (defter çizildi).
+    expect(find.byKey(ProgressScreen.ledgerKey), findsOneWidget,
+        reason: 'defter yok — bu test dolu dalı ölçmüyor');
+
+    // ⇒ Okunamayan 3 kayıt SAYISIYLA söylenmeli; yoksa kullanıcı listesini
+    // TAM sanır ve eksik olduğunu hiç öğrenmez.
+    final bool saysThree = tester
+        .widgetList<Text>(find.byType(Text))
+        .any((Text w) => (w.data ?? '').contains('3'));
+    expect(saysThree, isTrue,
+        reason: 'okunamayan 3 kayıt hiçbir yerde söylenmiyor — kullanıcı '
+            'listesini TAM sanır (sessiz eksiklik)');
   });
 }
