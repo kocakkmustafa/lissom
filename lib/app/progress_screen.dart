@@ -61,6 +61,12 @@ class ProgressScreen extends StatelessWidget {
   static Key sittingKeyFor(DateTime at) =>
       Key('$sittingKeyPrefix${at.toIso8601String()}');
   static const Key emptyKey = Key('progress.empty');
+
+  /// **HEPSİ okunamadı** hâli (L-325). `emptyKey`den AYRI, çünkü ikisi
+  /// **farklı olgular**: biri *"ölçmedin"*, öteki *"ölçtün ama okuyamıyoruz"*.
+  /// Aynı kartı paylaşsalardı ayrım yüzeyde kaybolurdu — ve kaybolan tam
+  /// olarak kullanıcının işiydi.
+  static const Key unreadableAllKey = Key('progress.unreadableAll');
   static const Key unavailableKey = Key('progress.unavailable');
 
   final AppFacts facts;
@@ -202,6 +208,28 @@ class ProgressScreen extends StatelessWidget {
           // birbirine karşı okumaz.
           // > ***BİR EKRANIN İÇ TUTARLILIĞI, PARÇALARININ TEK TEK
           // > DOĞRULUĞUNDAN ÇIKMAZ — ve onu ancak EKRANI YÜRÜYEN görür.***
+          // 🔴 **OKUNAMAYAN GEÇMİŞ, BOŞ GEÇMİŞ DEĞİLDİR (C-280 / H-13, L-325).**
+          // Bu kusuru KAZARA yaşadım: cihaza 6 kayıt enjekte ettim, hepsi şema
+          // sürümü yüzünden okunamadı, ve ekran *"Nothing recorded on this
+          // device"* dedi. Kullanıcının **6 kaydı vardı.**
+          //
+          // Yapısal sebep: `records=[] ∧ unreadable>0` ⇒ `partial` ⇒
+          // `countsAreTrustworthy=true` ∧ `hasRecords=false` ⇒ boş-hâl dalı
+          // kazanıyordu; taban uyarısı ise yalnız **kayıt VARKEN** çizilen
+          // dalda duruyordu.
+          // > ***BİR KAYBI YALNIZ "BİR ŞEY KALDIYSA" GÖSTEREN YÜZEY, HER ŞEYİ
+          // > KAYBEDEN KULLANICIYA HİÇBİR ŞEY SÖYLEMEZ.***
+          else if (!h.hasRecords && h.unreadable > 0)
+            NamedGapCard(
+              key: unreadableAllKey,
+              title: 'Your readings are here, but we cannot read them',
+              reason: '${h.unreadable} recorded reading'
+                  '${h.unreadable == 1 ? '' : 's'} could not be read by this '
+                  'version of Lissom. They are still on this phone — we are '
+                  'not going to tell you the list is empty when it is not.',
+              detail: 'This usually means the file was written by a different '
+                  'version. Nothing was deleted.',
+            )
           else if (!h.hasRecords)
             const NamedGapCard(
               key: emptyKey,

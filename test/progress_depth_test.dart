@@ -46,6 +46,8 @@ int _sittingHeaders(WidgetTester tester) => find
     .length;
 
 void main() {
+  _unreadableGate();
+
   testWidgets('BİR oturumun kayıtları TEK başlık altında toplanır',
       (WidgetTester tester) async {
     pinTallSurface(tester, height: 4000);
@@ -125,5 +127,49 @@ void main() {
     expect(_sittingHeaders(tester), 2,
         reason: 'iki ayrı oturum tek başlık altında toplanmış ya da hiç '
             'gruplanmamış — ikisi de yanlış birim');
+  });
+}
+
+/// **OKUNAMAYAN GEÇMİŞ, BOŞ GEÇMİŞ DEĞİLDİR — aile sınıfı C-280 / H-13 (L-325).**
+///
+/// Bu kusuru **kazara yaşadım**: cihaza 6 kayıt enjekte ettim, hepsi şema
+/// sürümü yüzünden okunamadı, ve uygulama *"Nothing recorded on this device"*
+/// dedi. Kullanıcının **6 kaydı vardı**; uygulama okuyamadı ve **"hiç yok"**
+/// diye rapor etti.
+///
+/// Yapısal sebep: `records=[] ∧ unreadable=6` ⇒ `partial` ⇒
+/// `countsAreTrustworthy=true` (unavailable değil) ∧ `hasRecords=false` ⇒
+/// **boş-hâl dalı kazanıyor**, ve taban uyarısı yalnız *kayıt VARKEN* çizilen
+/// dalda duruyor. Yani kayıp, tam da **tek kanıtı kayıp olan durumda**
+/// görünmez oluyordu.
+///
+/// > ***BİR KAYBI YALNIZ "BİR ŞEY KALDIYSA" GÖSTEREN YÜZEY, HER ŞEYİ
+/// > KAYBEDEN KULLANICIYA HİÇBİR ŞEY SÖYLEMEZ.***
+void _unreadableGate() {
+  testWidgets('HEPSİ okunamayan geçmiş "hiç kayıt yok" DİYE GÖSTERİLMEZ',
+      (WidgetTester tester) async {
+    pinTallSurface(tester, height: 3000);
+    final AppFacts f = factsFromDisk(
+      // 0 okunabilir, 6 okunamaz — bu gece cihazda birebir yaşandı.
+      history: const SessionHistoryView.partial(<SessionRecord>[], 6),
+    );
+
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: Scaffold(body: ProgressScreen(facts: f)),
+    ));
+    await tester.pumpAndSettle();
+
+    // POZİTİF ÇAPA: gerçekten boş-hâl dalındayız (kayıt listesi yok).
+    expect(find.byKey(ProgressScreen.ledgerKey), findsNothing,
+        reason: 'defter çizilmiş — bu test okunamayan-hepsi dalını ölçmüyor');
+
+    // ⇒ Kayıp SÖYLENMELİ, ve SAYISIYLA.
+    expect(find.textContaining('6'), findsWidgets,
+        reason: 'okunamayan 6 kaydın sayısı hiçbir yerde yok — kullanıcı '
+            'kaydı olduğunu bilmiyor');
+    expect(find.byKey(ProgressScreen.unreadableAllKey), findsOneWidget,
+        reason: 'hepsi okunamadığında bunu SÖYLEYEN bir yüzey yok; ekran '
+            '"hiç kayıt yok" diyor ve bu YANLIŞ (C-280 / H-13)');
   });
 }
