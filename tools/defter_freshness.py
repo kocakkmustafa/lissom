@@ -63,9 +63,10 @@ testi *"depodaki `G-999` sentinel'i girdiye karışmıyor"* diyor. Bu hatta
 var olmayan bir şeyi kontrol eden vakum-doğru bir test** olurdu. Yerine bu
 hattın GERÇEK kirlenme riski sınanıyor: **düzyazı atıfları**.
 
-⚠️ DEFTER depo DIŞINDA (`../workspace/DEFTER.md`). Bulunamazsa bu kapı
-**gürültüyle düşer** — bulunamayan bir dosya üzerinden *"gedik yok"*
-raporlamak ölçüm değil körlüktür.
+✅ DEFTER 2026-08-15'ten beri depo İÇİNDE (`workspace/DEFTER.md`, M-F-633 —
+kurucu kararı). Bulunamazsa bu kapı **gürültüyle düşer** — bulunamayan bir
+dosya üzerinden *"gedik yok"* raporlamak ölçüm değil körlüktür. Ve artık
+yokluğu ortam eksikliği değil, **gerçek bir kayıp** demektir.
 """
 from __future__ import annotations
 
@@ -75,7 +76,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFTER = ROOT.parent / "workspace" / "DEFTER.md"
+DEFTER = ROOT / "workspace" / "DEFTER.md"
 
 #: Commit'in KENDİ iddiası: conventional-commit KAPSAMI (`fix(L-280): …`).
 _SUBJECT = re.compile(r"^[a-z]+\((L-\d+)")
