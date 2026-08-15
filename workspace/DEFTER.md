@@ -4381,3 +4381,24 @@ F1'in geri kalanına devam ediyorum.
 **Kapılar:** app **236/236** · engine **114/114** · python **20/21**
 (M-F-280) · `all_gates.py` TÜMÜ YEŞİL (kod değişikliği yok, yalnız tarama).
 **C sayacı:** değişmedi — kullanıcı yüzeyi değil, H-27 alet denetimi.
+
+## L-333 — D4 + D10: sürüm `1.0.0+1`, `TARGETED_DEVICE_FAMILY=1` (iPhone-only)
+
+**D4:** `pubspec.yaml` sürümü `0.1.0+1` → **`1.0.0+1`**. Build numarası `1`de
+kaldı (ilk yayın adayı) — yalnız MARKA (major.minor.patch) 1.0'a geçti.
+
+**D10:** `ios/Runner.xcodeproj/project.pbxproj`'daki üç build config'in
+(Debug/Release/Profile) hepsinde `TARGETED_DEVICE_FAMILY = "1,2"` (iPhone+iPad)
+idi → **`1`** (yalnız iPhone) — plan kararıyla eşleşti (D10, iPad V1 kapsamı
+DIŞINDA).
+
+**Doğrulama:** `plutil -lint` → **OK** (pbxproj bozulmadı) ·
+`xcodebuild -showBuildSettings` → `TARGETED_DEVICE_FAMILY = 1` **gerçekten
+ÇÖZÜLÜYOR** (yalnız dosyada yazılı olması yetmez — Xcode'un okuduğunu
+ölçtüm). ⛔ `flutter build ios` KOŞULMADI (H-4 kendi tuzağım: depoyu
+kirletir) — build-settings sorgusu artefakt üretmeden aynı doğrulamayı verdi.
+
+**Kapılar:** app **236/236** · engine **114/114** · python **20/21**
+(M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** kullanıcı yüzeyi değişmedi (mağaza metadatası); F4'ün ön-koşulu
+kapandı.
