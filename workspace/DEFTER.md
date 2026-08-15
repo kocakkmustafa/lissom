@@ -4471,6 +4471,51 @@ değiştirmek ona işaret eden her atfı sessizce bozar).
 
 ---
 
+## L-336 — H-35 (Gravita kalıcı hasarı): `tavan` yanlış okuyucudan türüyordu, ACİL düzeltildi
+
+**Bulan orkestratör, kanıtlayan Gravita'nın kendi kazası.** Gravita bir
+sabotaj denemesini (yürütmedi, geri aldı) commit GÖVDESİNDE anlattı; YÖN-2
+okuyucusu (başlık+gövde geniş) o numarayı gerçek sandı ve `ters_yon()`ün
+`tavan`ını **kalıcı** şişirdi (git geçmişi geri alınmaz) — sonraki HER
+gerçek kayıt artık erişilemez bir tavanın altında kalıp izsiz görünüyor ve
+pre-commit kapısında reddediliyor.
+
+### Kendi dosyamda AYNI yapı vardı — okudum, doğruladım
+
+`tools/defter_freshness.py:250` (düzeltmeden önce): `tavan = max((_num(i)
+for i in trace), default=0)` — `trace = commit_trace()`, YÖN-2'nin geniş
+(BAŞLIK+GÖVDE) okuyucusu. Bu benim `L-311` docstring'imin kendi yazdığı
+kuralı 100+ satır aşağıda çiğniyordu: *"SÖZÜNÜ ETMEK ≠ İDDİA ETMEK — ve bu
+kural, kapıyı genişletirken en kolay unutulan yerde, GÖVDEDE çiğnenir."*
+Kendi dersimi yazmış, uygulamamıştım (`H-24`nin en keskin hâli).
+
+### Yapılan
+
+`tavan` artık `commit_ids()`ten (YÖN-1, BAŞLIK-yalnız geniş) türüyor —
+*"en yüksek İDDİA EDİLMİŞ kayıt hangisi"* bir YÖN-1 sorusu, YÖN-2'nin değil.
+**Üyelik testi (`izsiz`/`ucusta` ayrımı) GENİŞ KALDI** — `trace` hâlâ
+`commit_trace()`ten geliyor, çünkü o gerçekten bir VARLIK sorusu ("bu
+kaydın izi var mı, nerede olursa olsun"), sahiplik değil. Yalnız EŞİK
+kaynağı değişti. Öz-test ⑧ (uçuş kuralı) da AYNI kaynağa geçirildi —
+`ids_iddia = commit_ids()` — yoksa test kendi REFERANS tavanını implementasyonla
+UYUŞMAYAN bir kaynaktan hesaplardı ve ikisi ayrışabilirdi.
+
+⛔ **Gerçek bir git commit'iyle repro DENEMEDİM** — orkestratörün kendi
+uyarısı (prob numarasını yüksekten seçmek zehri KALICI yapar) tam bu riski
+anlatıyor. Kanıt onun yerine: (a) `ters_yon()`ün docstring'i mekanizmayı
+adıyla yazıyor, (b) öz-test ⑧ artık `tavan`ı **implementasyonla AYNI
+kaynaktan** türetip üstü/altı davranışını hâlâ doğru sınıyor (10/10),
+(c) `commit_ids()`/`commit_trace()` ikisi de değişmedi — yalnız hangi
+FONKSİYONUN çağrıldığı değişti, yani mevcut 400 commit'lik pencerede
+regresyon riski yok.
+
+**Kapılar:** app **236/236** · engine **114/114** · python **20/21**
+(M-F-280) · öz-test **10/10** · `all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** değişmedi — kullanıcı yüzeyi değil, alet-bütünlüğü acil
+düzeltmesi.
+
+---
+
 ## F1 KAPANDI — dört kalem, dördü de kapalı (biri zaten kapalıydı)
 
 `L-331` (H-26 sabotajı) · `L-332` (H-27 taraması) · `L-333` (D4+D10) ·

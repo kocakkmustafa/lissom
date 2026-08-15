@@ -243,11 +243,28 @@ def ters_yon(text: str) -> tuple[list[str], int, int]:
     commit'lersen taban yükselir ve **hepsi birden gedik olur** — yani
     biriktirme davranışı tam olarak yakalanır, yalnız **anlık** olan
     affedilir.
+
+    🔴 **H-35 (Gravita, kalıcı hasar) — TAVAN yanlış okuyucudan türüyordu.**
+    İlk yazım `tavan`ı `trace`ten (YÖN-2, `commit_trace()`, BAŞLIK+GÖVDE
+    geniş) alıyordu. Ama *"tavan"* bir YÖN-2 sorusu değil — **"en yüksek
+    İDDİA EDİLMİŞ kayıt hangisi"**, yani bir YÖN-1 sorusu. Gövdede anlatılan
+    (**yürütülmemiş/geri alınmış**) bir sabotaj numarası YÖN-2'ye sızar ve
+    tavanı **kalıcı** şişirir (git geçmişi geri alınmaz) — sonraki HER
+    gerçek kayıt, artık asla erişemeyeceği bir tavanın altında kalıp
+    **izsiz** görünür ve pre-commit kapısında reddedilir.
+    > ***BİR OKUYUCUYU İKİYE AYIRMAK, ONDAN TÜREYEN HER SAYIYI DA
+    > AYIRMAZ — VE TAVAN, AYRILMAYI EN ÇOK HAK EDEN AMA EN KOLAY UNUTULAN
+    > TÜREVDİR.***
+    Düzeltme: tavan artık `commit_ids()`ten (YÖN-1, BAŞLIK-yalnız geniş)
+    türüyor. **Üyelik testi (`izsiz`/`ucusta` ayrımı) GENİŞ KALIYOR** — o
+    gerçekten bir varlık sorusu (*"bu kaydın izi var mı, nerede olursa
+    olsun"*), sahiplik değil; yalnız EŞİK dar okuyucudan geliyor.
     """
     tracked = _tracked()
     claims = kod_iddia_eden(text, tracked)
     trace = commit_trace()
-    tavan = max((_num(i) for i in trace), default=0)
+    ids_iddia, _ = commit_ids()
+    tavan = max((_num(i) for i in ids_iddia), default=0)
     izsiz = {c for c in claims - trace if _num(c) <= tavan}
     ucusta = sorted(claims - trace - izsiz, key=_num)
     if ucusta:
@@ -464,7 +481,12 @@ def _self_test() -> int:
     #   ↔ tavanın ALTI (gedik, ötüyor). Yalnız birincisini sınamak, kapının
     #   affı öğrenip yakalamayı unuttuğu hâli göremezdi.
     ids = commit_trace()
-    tavan = max((_num(i) for i in ids), default=0)
+    # H-35: tavan `ters_yon()`ün KENDİSİYLE aynı kaynaktan (YÖN-1, başlık-
+    # yalnız) türemeli — `ids`/`commit_trace()` yalnız "kullanılmış" kümesi
+    # için kalıyor (kullanılmışlığı GENİŞ ölçmek güvenli, tavanı GENİŞ
+    # ölçmek değil).
+    ids_iddia, _ = commit_ids()
+    tavan = max((_num(i) for i in ids_iddia), default=0)
     # 🪤 **İKİ KEZ ÖDENDİ, ve ikincisi birincinin çaresini çürüttü.**
     #   ① "tavan altı" için `L-{tavan-5}` yazdım — o numara GERÇEKTEN
     #      commit'liydi ⇒ küme boş, sınav **vakum-doğru**, kapı kendini
