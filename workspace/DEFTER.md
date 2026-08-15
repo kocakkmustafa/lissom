@@ -4402,3 +4402,46 @@ kirletir) — build-settings sorgusu artefakt üretmeden aynı doğrulamayı ver
 (M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** kullanıcı yüzeyi değişmedi (mağaza metadatası); F4'ün ön-koşulu
 kapandı.
+
+## L-334 — F1'in son kalemi zaten KAPALIYDI: skipped-sayısı boş-hâl kartında (L-325'in ürünü)
+
+### Ölçüm
+
+YAYIN-YOLU-LISSOM.md'nin F1 listesi *"Skipped-kayıt sayısını boş-hâl kartına
+düşür (L-324 📌 — kendi kalemin)"* diyor. Kodu okudum: `progress_screen.dart:222-232`
+zaten `!h.hasRecords && h.unreadable > 0` dalında *"Your readings are here,
+but we cannot read them"* kartını sayıyla birlikte çiziyor (`${h.unreadable}
+recorded reading(s) could not be read...`); `h.countsAreFloor` dalı
+(251-252) kısmi durumda `_floorBanner`i sayıyla çiziyor. `home_screen.dart`
+aynı deseni `_floorNote` ile tekrarlıyor (343). `library_screen.dart`
+kontrol edildi — session-history DEĞİL, statik içerik kataloğu gösteriyor,
+bu kalemin kapsamı dışında.
+
+### Neden zaten kapalı
+
+`L-324`'ün 📌'si *"ayrı bir kalem"* olarak not düşülmüştü — ve **aynı gece,
+hemen ardından `L-325` onu kapatmıştı** (*"OKUNAMAYAN GEÇMİŞ, BOŞ GEÇMİŞ
+DEĞİLDİ"*, `C-280`/`H-13`), `L-329` kardeş dalını (kısmi okunan liste)
+ayrıca doğrulamıştı. Üçü de **sabotajla kanıtlı** — öz-testler
+`test/home_screen_test.dart` + `test/progress_depth_test.dart`ta yaşıyor
+(grep doğruladı, `unreadableAllKey`/`countsAreFloor`/`SessionHistoryView.partial`
+anahtarlarıyla).
+
+⇒ Bu kalem YAYIN-YOLU dosyasına yazılırken **L-325/L-329 hesaba
+katılmamış** — kendi `H-26` hükmümün anlattığı sınıfa yakın bir hata, ama bu
+kez orkestratörün defter-özetinde: kapanmış bir 📌, açık kalem gibi
+taşınmış. **Kod DEĞİŞMEDİ** — bu turun kanıtı, bulgunun kendisi.
+Orkestratöre raporda düzeltiyorum.
+
+**Kapılar:** app **236/236** · engine **114/114** · python **20/21**
+(M-F-280) · `all_gates.py` TÜMÜ YEŞİL (kod değişikliği yok, yalnız ölçüm).
+**C sayacı:** değişmedi — bu tur bir ÖLÇÜM, kod kalemi değil.
+
+---
+
+## F1 KAPANDI — dört kalem, dördü de kapalı (biri zaten kapalıydı)
+
+`L-331` (H-26 sabotajı) · `L-332` (H-27 taraması) · `L-333` (D4+D10) ·
+`L-334` (L-324 kalemi zaten kapalıydı, düzeltme). Kapılar boyunca **TÜMÜ
+YEŞİL**, taban büyümedi (app 236, engine 114 — F1 davranış değiştirmedi,
+alet+metadata sağlamlaştırdı). Sıradaki: F2 — deneme değeri saklama (D13).
