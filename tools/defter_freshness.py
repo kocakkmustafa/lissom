@@ -220,6 +220,23 @@ def kod_iddia_eden(text: str, tracked: set[str]) -> set[str]:
 #: *Muafiyet bir kapı değil, bir SAYIDIR* (`BILINEN_CAKISMA` ile aynı idiom).
 IZSIZ_KOD_KAYITLARI = {"L-053", "L-159", "L-213", "L-215", "L-216", "L-218"}
 
+#: 🔴 SENTİNEL ARALIĞI — H-35'in ikinci yarısı (Ostinato `O-111`/Gravita
+#: `G-223`/`G-224` emsali, orkestratör 2026-08-16): tavanı yapısal olarak
+#: bağışık kılmak (`commit_ids()`ten türetmek) TEK BAŞINA yetmez — bir prob
+#: numarası hem YÖN-1'i (başlık-anma) hem YÖN-2'yi (gövde-anma) BİRDEN
+#: bozabilir. `L-\d+` hiçbir zaman gerçek kayıt OLMAYAN bir bant: yeni bir
+#: sabotaj/örnek numarası gerektiğinde BURADAN seçilir. **Liste değil
+#: ARALIK** — yeni bir sentinel eklendiğinde bakım istemez.
+SENTINEL_RANGE = range(900, 1000)
+
+#: 🔴 SABOTAJ PROB NUMARALARI — `9xx` bandının DIŞINDA seçilmiş ve git
+#: geçmişinde GERÇEKTEN anılmış (henüz YOK — bu hat hiçbir zaman gerçek bir
+#: commit'le canlı sabotaj denemedi, H-35 kapanışının kendi kaydı, `L-336`).
+#: Boş küme BİLİNÇLİ: gidişat kuralı yazılı, bundan sonra bir prob
+#: numarası gerekirse ya `9xx`ten seçilir ya da BURAYA ADIYLA girer —
+#: muafiyet bir kapı değil bir SAYIDIR (`IZSIZ_KOD_KAYITLARI` ile aynı idiom).
+PROBE_IDS: set[int] = set()
+
 
 def _num(eid: str) -> int:
     return int(eid.split("-")[1])
@@ -265,7 +282,17 @@ def ters_yon(text: str) -> tuple[list[str], int, int]:
     trace = commit_trace()
     ids_iddia, _ = commit_ids()
     tavan = max((_num(i) for i in ids_iddia), default=0)
-    izsiz = {c for c in claims - trace if _num(c) <= tavan}
+    # Sentinel/prob numaraları hiçbir zaman GERÇEK bir gedik değildir — bu
+    # ikinci filtre, tavanın bağışıklığı (H-35 yapısal panzehiri) tek başına
+    # yetmediği için var: bir prob YÖN-2'ye (geniş `trace`) sızıp `claims`te
+    # de tesadüfen aynı numara olsaydı, tavan-bağışıklığı bunu yakalamazdı.
+    izsiz = {
+        c
+        for c in claims - trace
+        if _num(c) <= tavan
+        and _num(c) not in SENTINEL_RANGE
+        and _num(c) not in PROBE_IDS
+    }
     ucusta = sorted(claims - trace - izsiz, key=_num)
     if ucusta:
         print(f"   [YÖN-2] uçuşta {len(ucusta)}: {', '.join(ucusta)} "

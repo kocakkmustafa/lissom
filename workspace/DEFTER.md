@@ -4571,6 +4571,39 @@ hâlâ eski kartı gösteriyor); sayaç F2'nin okuma+kart turunda hareket eder.
 
 ---
 
+## L-338 — H-35'in ikinci yarısı: `SENTINEL_RANGE`/`PROBE_IDS` (Ostinato/Gravita emsali)
+
+Orkestratör uyardı: yapısal panzehir (tavan `commit_ids()`ten türer, `L-336`)
+**tek başına yetmez** — Gravita `G-223`/`G-224` ölçtü, bir prob numarası
+YÖN-1 VE YÖN-2'yi BİRDEN bozabilir. Panzehrin İKİ yarısı TAMAMLAYICI, biri
+ötekinin yerine geçmez.
+
+`SENTINEL_RANGE = range(900, 1000)` (gelecekte bir prob numarası gerekirse
+BURADAN seçilir) + `PROBE_IDS: set[int] = set()` (BİLİNÇLİ boş — bu hat
+hiçbir zaman gerçek bir commit'le canlı sabotaj denemedi; `L-336`'nın kendi
+kaydı) eklendi, `ters_yon()`ün `izsiz` hesabına ikinci bir filtre olarak
+girdi. Sibling'lerden KOPYALANMADI — Gravita'nın `linked`/`_TYPED` yapısı
+benim `kod_iddia_eden`/`commit_trace` yapımla birebir örtüşmüyor, desen
+çevrildi.
+
+### ⚠️ Dürüst sınır — bu turda ÖLÇMEDİĞİM şey
+
+`izsiz` süzgeci `_num(c) <= tavan` şartına BAĞIMLI; `SENTINEL_RANGE`
+(900-999) bugünkü tavanın (337) ÇOK üstünde, yani bugün `izsiz`e hiç
+ULAŞAMAZ — bu filtre şu an **ölü kod gibi davranıyor**, aktif değil.
+Asıl koruyan şey Gravita'nın gerçek vakasındaki gibi `PROBE_IDS`e (tavanın
+ALTINDA bir numara) bir gün bir şey eklenirse devreye girecek olması.
+Sentetik bir ⑩ öz-testiyle "gerçekten ateşliyor mu" SINAMADIM — mevcut
+⑦/⑧ (sentetik numaralarla çalışıyor) hâlâ geçiyor, yani filtre var olan
+DAVRANIŞI bozmuyor, ama YENİ davranışı POZİTİF kanıtlamadım. Kayıt bunun
+için: bir sonraki tur bunu "kanıtlanmış" sanmasın.
+
+**Kapılar:** öz-test **10/10** (değişmedi) · app **245/245** ·
+engine **114/114** · python **20/21** · `all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** değişmedi — alet-sağlamlaştırma, kullanıcı yüzeyi değil.
+
+---
+
 ## F1 KAPANDI — dört kalem, dördü de kapalı (biri zaten kapalıydı)
 
 `L-331` (H-26 sabotajı) · `L-332` (H-27 taraması) · `L-333` (D4+D10) ·
