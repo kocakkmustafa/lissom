@@ -33,6 +33,7 @@ import 'package:permission_handler/permission_handler.dart'
     show openAppSettings;
 
 import 'assessment_history.dart';
+import 'attempt_values.dart';
 import 'camera_pose_source.dart';
 import 'lissom_theme.dart';
 import 'pose_model.dart';
@@ -48,6 +49,7 @@ class LiveCaptureScreen extends StatefulWidget {
     this.sourceOverride,
     this.onOpenSettings,
     this.storeLoader,
+    this.attemptValueStoreLoader,
     this.clock,
     super.key,
   });
@@ -56,6 +58,11 @@ class LiveCaptureScreen extends StatefulWidget {
   /// `path_provider` var ve widget testinde kilitleniyor (aile gotcha'sı,
   /// `LissomShell.loader` ile AYNI sözleşme).
   final Future<SessionStore> Function()? storeLoader;
+
+  /// Deneme-değeri deposu — `storeLoader`la AYNI enjeksiyon sözleşmesi
+  /// (D13, `attempt_values.dart`). Çekirdek deponun YANINDA, ondan BAĞIMSIZ
+  /// bir dosya; ikisi ayrı sebeplerle ayrı ayrı başarısız olabilir.
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
 
   /// Kayıt zamanı ÇAĞIRANDAN gelir — `recordFor`un kendi sözleşmesi
   /// (`DateTime.now()` içeride üretilseydi zaman-sıralı senaryolar
@@ -232,19 +239,45 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   /// *"kaydetmemek, yarın yüzeyin '1 deneme' demesine yol açardı;
   /// sessizlik yalan söyler."*
   Future<void> _persist(AssessmentResult r) async {
+    final DateTime completedAt = (widget.clock ?? DateTime.now)();
     try {
       final SessionStore store =
           await (widget.storeLoader ?? openSessionStore)();
       await store.append(recordFor(
         test: widget.test,
         result: r,
-        completedAt: (widget.clock ?? DateTime.now)(),
+        completedAt: completedAt,
       ));
+      // D13/F2 — ölçülen DEĞER çekirdek kaydına hiç girmiyor (KASITLI, aile
+      // şeması: `session_store.dart` "attempt-level provenance... is
+      // attempt-level data, this is a session-level record" diyor).
+      // Lissom-sahipli yan defter tam bunu taşır (`attempt_values.dart`,
+      // L-316'nın çözümü). Yalnız GERÇEKTEN ölçülmüş bir denemede yazılır —
+      // `notMeasured`ın zaten değeri yok.
+      if (r.value != null) {
+        final AttemptValueStore valueStore = await (widget
+                .attemptValueStoreLoader ??
+            openAttemptValueStore)();
+        await valueStore.append(AttemptValue(
+          lessonId: historyKeyFor(widget.test, r.side),
+          completedAt: completedAt,
+          value: r.value!,
+          unit: r.unit!,
+          tier: r.tier.name,
+          bandLabel: r.bandLabel,
+          lowestBandFloor: r.lowestBandFloor,
+          provenance: r.provenance,
+        ));
+      }
       if (mounted) setState(() => _saved = true);
     } on Object catch (e) {
       // ÇIKMAZ SOKAK YASAĞI (M-F-267): yazma patlarsa ekran ÇÖKMEZ — ama
       // SUSMAZ da. Sessizce yutmak, kullanıcıya tutulmayan bir takip sözü
       // vermenin ta kendisi olurdu.
+      //
+      // İKİ YAZMA TEK SÖZ TAŞIR (D13): `_saved` yalnız İKİSİ DE başarılıysa
+      // true olur. Oturum yazılıp değer düşerse "kaydedildi" demek, sayının
+      // kaybolduğunu gizlemek olurdu — L-316'nın kendisi, bir katman derinde.
       if (mounted) {
         setState(() {
           _saved = false;

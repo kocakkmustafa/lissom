@@ -43,6 +43,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/assessment_history.dart';
+import 'package:lissom/app/attempt_values.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/live_capture_screen.dart';
 import 'package:lissom_engine/lissom_engine.dart';
@@ -117,9 +118,25 @@ final class _RecordingStore implements SessionStore {
   Future<int> unreadableRecords() async => 0;
 }
 
+/// D13 — `_persist()`in İKİNCİ yazması. Varsayılan olarak KABUL EDER: bu
+/// dosyanın testleri "oturum kaydı" davranışını sınıyor, deneme-değerini
+/// DEĞİL (o `attempt_values_test.dart`ta) — burada sessizce reddeden bir
+/// varsayılan, ilgisiz testleri yanlış sebeple kırardı.
+final class _RecordingAttemptValueStore implements AttemptValueStore {
+  final List<AttemptValue> written = <AttemptValue>[];
+  @override
+  Future<void> append(AttemptValue value) async => written.add(value);
+  @override
+  Future<List<AttemptValue>> forLesson(String lessonId) async =>
+      written.where((AttemptValue v) => v.lessonId == lessonId).toList();
+  @override
+  Future<int> unreadableRecords() async => 0;
+}
+
 Future<void> _run(
   WidgetTester tester, {
   required Future<SessionStore> Function() loader,
+  Future<AttemptValueStore> Function()? attemptLoader,
 }) async {
   await tester.pumpWidget(MaterialApp(
     theme: buildLissomTheme(),
@@ -128,6 +145,8 @@ Future<void> _run(
       batteryVersion: 'test',
       ageBand: 'u40',
       storeLoader: loader,
+      attemptValueStoreLoader:
+          attemptLoader ?? (() async => _RecordingAttemptValueStore()),
       clock: () => DateTime.utc(2026, 8, 12, 9, 30),
       sourceOverride: FakePoseSource(_fullAttempt()),
     ),
@@ -185,8 +204,10 @@ void main() {
       (WidgetTester tester) async {
     pinNarrowSurface(tester);
     final _RecordingStore store = _RecordingStore();
+    final _RecordingAttemptValueStore values = _RecordingAttemptValueStore();
 
-    await _run(tester, loader: () async => store);
+    await _run(tester,
+        loader: () async => store, attemptLoader: () async => values);
 
     expect(store.written, hasLength(1),
         reason: 'kullanıcı bir ölçüm yaptı — ekran `append`i ÇAĞIRMALI. '
@@ -194,6 +215,26 @@ void main() {
             'ama SIFIR çağıranı olan bir yoldu.');
     expect(store.written.single.lessonId, 'overhead_reach:right');
     expect(store.written.single.completedAt, DateTime.utc(2026, 8, 12, 9, 30));
+
+    // D13 — İKİNCİ yazma da GERÇEKTEN çağrılıyor mu, yoksa yalnız birinci mi
+    // çalışıyor? Bu satır olmadan bir regresyon (attempt-value yazması
+    // sessizce atlanır) bu testte GÖRÜNMEZ kalırdı.
+    expect(values.written, hasLength(1),
+        reason: 'ölçülen DEĞER de yazılmalı (D13) — yalnız oturum kaydı '
+            'değil');
+    expect(values.written.single.lessonId, 'overhead_reach:right');
+    expect(values.written.single.value, greaterThan(0),
+        reason: 'gerçek motor bir açı üretti — sıfır/negatif sahte bir '
+            'değer olurdu');
+    // Sabit bir sayı VARSAYMAK yerine EKRANLA çapraz doğrula: depoya
+    // yazılan ve kullanıcının gördüğü sayı AYNI olmalı — ayrışırlarsa
+    // kullanıcı gördüğü sayıyı bir daha hiç göremez (L-316'nın tam
+    // kendisi, yalnız yazma katmanında).
+    expect(
+      find.textContaining(values.written.single.value.toStringAsFixed(0)),
+      findsWidgets,
+      reason: 'depoya yazılan sayı ekranda gösterilenle UYUŞMUYOR',
+    );
 
     expect(find.text('This is your starting point — we\'ll track it from here.'),
         findsOneWidget,

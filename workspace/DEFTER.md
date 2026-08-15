@@ -4516,6 +4516,61 @@ düzeltmesi.
 
 ---
 
+## L-337 — F2/D13 yazma yolu: `attempt_values.jsonl` yaşıyor, LiveCaptureScreen ona da yazıyor
+
+### Keşif — değer TAM OLARAK nerede düşüyordu
+
+`AssessmentResult.value` (ölçülen açı) `assessment_history.dart:recordFor()`de
+çekirdeğin `SessionRecord`una çevrilirken düşüyordu — **çekirdeğin kendi
+KASITLI kararı**, kendi başlığında yazılı: *"attempt-level provenance...
+is attempt-level data, this is a session-level record."* Çekirdek bunu APP
+katmanının taşımasını BEKLİYORDU; hiç kurulmamıştı. `measurement_value_
+persistence_test.dart` (L-316) bu kaybı zaten kilitlemiş, sabotajla
+kanıtlamıştı — o dosyaya DOKUNMADIM, çünkü hâlâ DOĞRU: `ProgressScreen`
+henüz yeni depoyu okumuyor (bu turun kapsamı yalnız YAZMA).
+
+### Yapılan
+
+`lib/app/attempt_values.dart` — `AttemptValue` + `JsonlAttemptValueStore`,
+`motion_core`un `JsonlSessionStore`ıyla AYNI güvenlik özellikleri (pinli
+`f13bdc9`'dan okundu, KOPYALANMADI çünkü çekirdeğin private yardımcılarına
+erişim yok — desen bilinçli tekrar): atomik tmp+rename yazım, `v` şema
+alanı (H-21), dizin/dosya ayrımı (M-F-251), bozuk-satır sayılı toleransı
+(M-F-228). `lessonId`+`completedAt` çekirdek kaydıyla AYNI anahtarla
+kurulur — ayrı bir yabancı-anahtar şeması icat edilmedi.
+
+`LiveCaptureScreen._persist()` artık İKİ yazıyor (yalnız ölçülmüş
+denemede — `notMeasured`ın değeri yok): oturum kaydı (değişmedi) + deneme
+değeri (yeni). **`_saved` yalnız İKİSİ DE başarılıysa `true`** — biri
+düşüp diğeri geçerse "kaydedildi" demek, sayının kaybını gizlemek olurdu
+(L-316'nın kendisi, bir katman derinde).
+
+### Sabotaj — üçlü (task #9'un ilk yarısı)
+
+`test/attempt_values_test.dart` (9 test): gerçek yazıp-okuma turu + bozuk
+satır + yanlış-tip değer + bilinmeyen şema + eksik `v` alanı + atomik
+yazımın `.tmp` kalıntısı bırakmadığı. Hepsi `unreadableRecords()`e SAYILI
+taşınıyor mu diye sınandı, hiçbiri sessizce yutulmuyor.
+
+`test/measurement_persistence_test.dart` güncellendi: `_RecordingAttemptValueStore`
+eklendi, ekranın İKİNCİ yazmayı GERÇEKTEN çağırdığını + depoya giren sayı
+ile ekranda GÖSTERİLEN sayının AYNI olduğunu doğruluyor (sabit bir değer
+VARSAYMADIM — ilk denemem `168` yazdı ve YANLIŞTI, gerçek motor `180.0`
+üretti; düzeltme ekranla çapraz-doğrulamaya geçti, bir dahaki fixture
+değişikliğinde de kırılmaz).
+
+⛔ **BİTMEDİ:** `ProgressScreen` henüz `attempt_values.jsonl`ı okumuyor —
+SON DEĞER/trend çizimi ve L-321'in "not kept" kartı güncellemesi SIRADA,
+AYNI round'da kapanacak (koordinatör hükmü bağlayıcı).
+
+**Kapılar:** app **245/245** (taban 236, +9 — yalnız yeni test dosyası,
+mevcut testler DEĞİŞMEDİ sayıca) · engine **114/114** · python **20/21**
+(M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** henüz **0** — yazma yolu kullanıcı yüzeyine ULAŞMADI (Progress
+hâlâ eski kartı gösteriyor); sayaç F2'nin okuma+kart turunda hareket eder.
+
+---
+
 ## F1 KAPANDI — dört kalem, dördü de kapalı (biri zaten kapalıydı)
 
 `L-331` (H-26 sabotajı) · `L-332` (H-27 taraması) · `L-333` (D4+D10) ·
