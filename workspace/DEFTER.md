@@ -4338,3 +4338,46 @@ kaydı yok — bu bir test-only ekleme, `kod_iddia_eden` onu KOD saymaz (doğru:
 `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** değişmedi — bu iş kullanıcı yüzeyi değil, H-26 alet
 sağlamlaştırması; sayaç yalnız kullanıcı-görünür değişiklik sayar.
+
+## L-332 — H-27 taraması: **iki iş de temiz çıktı**, ama korumanın şekli farklı
+
+**H-27 işlendi.**
+
+### İş 1 — `tools/` içinde depo-dışına çıkan yol var mı
+
+`grep -rn 'parent /' tools/` → **0 isabet**. `grep -rn 'parents\[' tools/` →
+**5 isabet**, hepsi `parents[1]` (= `tools/`'dan bir üst = repo kökü, doğru).
+`grep -rn '\.parent\.parent'` → **20 isabet**, hepsi aynı derinlik (repo
+kökü) — `parents[1]`in eşdeğeri, farklı yazım. Kalan iki `.parent` kullanımı
+(`l031_space_divergence.py:127`, `all_gates.py:95`) `__file__`den değil,
+**taranan bir dosyanın** kendi klasörünü buluyor — ikisi de repo İÇİNDE
+kalıyor. ⇒ **Lissom'un H-27 bulduğu `ROOT.parent / "workspace"` sınıfından
+hiçbir kalıntı yok** — beklenen: bu hat kendi kapısını (`defter_freshness.py`)
+zaten `H-27`nin KENDİSİNDE düzeltmişti (mühür `aa2075c`), tarama bunu
+DOĞRULUYOR, yeni bir şey bulmuyor.
+
+### İş 2 — `⚪ ORTAM YOK` ile geçen kapı sayısı
+
+`grep -rln "ORTAM YOK\|⚪\|ortam eksik" tools/` → **1 isabet**, ve o da
+`defter_freshness.py`'nin DOCSTRING'inde H-27'nin kendi hükmünü anan bir
+CÜMLE (*"...yokluğu ortam eksikliği değil, gerçek bir kayıp demektir"*) —
+kod dalı DEĞİL. Gerçek kod tarafında: `defter_text()` defter yoksa artık
+`SystemExit` **fırlatıyor** (H-27'nin kendi düzeltmesi). ⇒ **canlı `⚪ ORTAM
+YOK` bypass'ı sıfır.**
+
+### Kapsam boşluğu — H-25'in sorusunu sordum
+
+*"Kusur yok" demek durmak değil* (`L-329`/`H-25`): bu doğru duruşu kim
+KORUYOR? Cevap **kısmi**: `all_gates.py` her aracı GERÇEKTEN çalıştırıyor,
+yani yanlış bir `parents[N]` derinliği (elle yazılmış bir gelecek commit'te)
+bir sonraki koşuda **hemen** patlar (`FileNotFoundError`/`SystemExit`) —
+bu YÜRÜTME-zamanlı bir koruma, ölçüldü, gerçek. Ama STATİK bir kapı
+(commit ÖNCESİ, `.py` dosyasını hiç çalıştırmadan "yanlış derinlik" desenini
+yakalayan) **yok**. Bunu yeni bir alet olarak ŞİMDİ kurmadım — 20 dosyayı
+tarayan bir statik-lint, bu turun tek-kalem disiplinini aşardı ve H-27'nin
+kendi fiili ("bakın", "sayın") bunu istemiyor. **Orkestratöre not düşüyorum**,
+F1'in geri kalanına devam ediyorum.
+
+**Kapılar:** app **236/236** · engine **114/114** · python **20/21**
+(M-F-280) · `all_gates.py` TÜMÜ YEŞİL (kod değişikliği yok, yalnız tarama).
+**C sayacı:** değişmedi — kullanıcı yüzeyi değil, H-27 alet denetimi.
