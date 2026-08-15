@@ -4439,6 +4439,38 @@ Orkestratöre raporda düzeltiyorum.
 
 ---
 
+## L-335 — H-31: `CLAUDE.md`'nin bayat KOD BAŞLATMA KİLİDİ düzeltildi
+
+Koordinatör ölçtü: `CLAUDE.md` satır 4 hâlâ *"kurucu 'Lissom'a başlayalım'
+demeden üretim kodu YAZILMAZ"* diyordu — **210+ commit'lik, 330+ kayıtlı bir
+depoda**, ve bu dosya **her yeni oturumun ilk okuduğu dosya** (kendi açılış
+protokolümün de ilk adımı). Bir kilit, kilitlediği şey çoktan açılmışken
+duruyorsa artık kilit değil, **yanlış bilgidir**.
+
+### Yapılan
+
+`## 🔒 KOD BAŞLATMA KİLİDİ` başlığı `## 🚀 GÜNCEL REJİM — YAYIN YOLU (H-28)`
+oldu: güncel yetki (`YAYIN-YOLU-LISSOM.md` + posta kutusu yolu, kalıcı
+commit/push/merge izni, BEŞ ŞEY kurucuya/tasarım orkestratöre) baş satıra
+çıktı. Eski V0-öncesi sıra **silinmedi** — *"ARTIK BAĞLAYICI DEĞİL — tarihsel"*
+etiketiyle altına taşındı, çünkü tarihi silmek "neden V0 diye bir kapı
+vardı"yı okunamaz yapardı (`H-27`nin kendi dersi: *"bir bağımlılık sabit
+yazılmadıysa yok demek değildir"* — burada tersi: **eski bir gerçeği silmek**
+onu hiç var olmamış gösterir).
+
+⚠️ **Fark ettim, dokunmadım:** eski kilidin `V0 kapısı` maddesindeki `D4`
+(*"yoga içerik katmanının D4"*) ile bu turun kendi `D4`ü (pubspec sürümü,
+`L-333`) **AYNI HARF, FARKLI KARAR** — iki ayrı plan neslinin numaralandırması
+çakışıyor. Notunu düştüm (*"eski plandaki D4, YAYIN-YOLU'nun D4'ünden
+FARKLI"*), yeniden numaralandırma YAPMADIM (`L-305`nin dersi: numarayı
+değiştirmek ona işaret eden her atfı sessizce bozar).
+
+**Kapılar:** app **236/236** · engine **114/114** · python **20/21**
+(M-F-280) · `all_gates.py` TÜMÜ YEŞİL (yalnız `CLAUDE.md`, kod değişikliği yok).
+**C sayacı:** değişmedi — kullanıcı yüzeyi değil, H-31 doküman düzeltmesi.
+
+---
+
 ## F1 KAPANDI — dört kalem, dördü de kapalı (biri zaten kapalıydı)
 
 `L-331` (H-26 sabotajı) · `L-332` (H-27 taraması) · `L-333` (D4+D10) ·
