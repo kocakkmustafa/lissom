@@ -4586,20 +4586,19 @@ girdi. Sibling'lerden KOPYALANMADI — Gravita'nın `linked`/`_TYPED` yapısı
 benim `kod_iddia_eden`/`commit_trace` yapımla birebir örtüşmüyor, desen
 çevrildi.
 
-### ⚠️ Dürüst sınır — bu turda ÖLÇMEDİĞİM şey
+### ✅ GÜNCELLEME — pozitif ateşleme SONRADAN kanıtlandı (aynı gün)
 
-`izsiz` süzgeci `_num(c) <= tavan` şartına BAĞIMLI; `SENTINEL_RANGE`
-(900-999) bugünkü tavanın (337) ÇOK üstünde, yani bugün `izsiz`e hiç
-ULAŞAMAZ — bu filtre şu an **ölü kod gibi davranıyor**, aktif değil.
-Asıl koruyan şey Gravita'nın gerçek vakasındaki gibi `PROBE_IDS`e (tavanın
-ALTINDA bir numara) bir gün bir şey eklenirse devreye girecek olması.
-Sentetik bir ⑩ öz-testiyle "gerçekten ateşliyor mu" SINAMADIM — mevcut
-⑦/⑧ (sentetik numaralarla çalışıyor) hâlâ geçiyor, yani filtre var olan
-DAVRANIŞI bozmuyor, ama YENİ davranışı POZİTİF kanıtlamadım. Kayıt bunun
-için: bir sonraki tur bunu "kanıtlanmış" sanmasın.
+Yukarıdaki "ölçmedim" doğruydu ve orkestratör bunu yakaladı: *"kurulmuş
+ama hiç ateşlenmemiş bir filtre, var olan bir kapı değil, var olduğu
+SANILAN bir kapıdır"* (Gravita `G-224` emsali). ⑩ öz-testi eklendi:
+`SENTINEL_RANGE`/`PROBE_IDS` testin ömrü boyunca GEÇİCİ yamalanıp
+(`try/finally` ile geri alınarak) üç ÖLÇÜLEN boş-slot numarasıyla iki yön
+birden kanıtlandı — sentinel **ELENDİ**, prob **ELENDİ**, kontrol öksüz
+(ne sentinel ne prob) **YAKALANDI**. Gerçek commit ya da gerçek prob
+numarası GEREKMEDİ. 11/11.
 
-**Kapılar:** öz-test **10/10** (değişmedi) · app **245/245** ·
-engine **114/114** · python **20/21** · `all_gates.py` TÜMÜ YEŞİL.
+**Kapılar:** öz-test **11/11** (+1) · app **245/245** · engine **114/114**
+· python **20/21** · `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** değişmedi — alet-sağlamlaştırma, kullanıcı yüzeyi değil.
 
 ---

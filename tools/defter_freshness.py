@@ -572,6 +572,47 @@ def _self_test() -> int:
     ok = ok and sabotaj
     fired += 1
 
+    # ⑩ H-35 İKİNCİ YARISI (L-338) — SENTINEL_RANGE/PROBE_IDS GERÇEKTEN
+    #   ateşliyor mu? Orkestratörün uyarısı (Gravita `G-224` emsali):
+    #   *"kurulmuş ama hiç ateşlenmemiş bir filtre, var olan bir kapı
+    #   değil, var olduğu SANILAN bir kapıdır."* Gerçek commit ya da
+    #   gerçek prob numarası GEREKMİYOR: modülün kendi sabitlerini bu
+    #   testin ömrü boyunca GEÇİCİ yamalayıp (try/finally ile GERİ
+    #   ALARAK) sentetik bir korpusla iki yönü birden kanıtlıyoruz —
+    #   sentinel/prob ELENİYOR mu, kontrol öksüz hâlâ YAKALANIYOR mu.
+    #   Üç numara da ÖLÇÜLEN boş-slot kümesinden türer (⑧'in dersi:
+    #   elle seçilen sentetik girdi, ölçtüğü kümeden türetilmezse er geç
+    #   o kümenin üyesi olur).
+    ids_iddia10, _ = commit_ids()
+    trace10 = commit_trace()
+    tavan10 = max((_num(i) for i in ids_iddia10), default=0)
+    kullanilmis10 = {_num(i) for i in trace10}
+    bos10 = [k for k in range(1, tavan10 + 1) if k not in kullanilmis10]
+    if len(bos10) < 3:
+        print("   ⛔ sentinel/prob öz-testi sınanamadı — tavan altında "
+              "3 boş numara yok")
+        return 1
+    sent_num, prob_num, kontrol_num = bos10[-1], bos10[-2], bos10[-3]
+    row10 = "| L-{:03d} | çözüm | P1 | x | kapalı | `lib/app/home_screen.dart` |"
+    global SENTINEL_RANGE, PROBE_IDS
+    orig_sentinel, orig_probe = SENTINEL_RANGE, PROBE_IDS
+    try:
+        SENTINEL_RANGE = range(sent_num, sent_num + 1)
+        PROBE_IDS = {prob_num}
+        yeni_sent, _, _ = ters_yon(row10.format(sent_num))
+        yeni_prob, _, _ = ters_yon(row10.format(prob_num))
+        yeni_kontrol, _, _ = ters_yon(row10.format(kontrol_num))
+    finally:
+        SENTINEL_RANGE, PROBE_IDS = orig_sentinel, orig_probe
+    iki_yon = (yeni_sent == [] and yeni_prob == []
+               and yeni_kontrol == [f"L-{kontrol_num:03d}"])
+    print(f"   {'✅' if iki_yon else '⛔'} sentinel/prob filtresi: "
+          f"SENTINEL_RANGE {'ELEDİ' if yeni_sent == [] else 'ATEŞLEMEDİ'} · "
+          f"PROBE_IDS {'ELEDİ' if yeni_prob == [] else 'ATEŞLEMEDİ'} · "
+          f"kontrol öksüz {'YAKALANDI' if yeni_kontrol else 'KAÇTI — AŞIRI GENİŞ'}")
+    ok = ok and iki_yon
+    fired += 1
+
     print(f"✅ {fired}/{fired} kapı ateşlendi" if ok
           else "⛔ defter tazeliği öz-testi DÜŞTÜ")
     return 0 if ok else 1
