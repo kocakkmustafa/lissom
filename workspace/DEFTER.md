@@ -4294,3 +4294,47 @@ düşürür**, uydurma değer üretmez.
 **Kapılar:** app **236/236** (taban 233, +3) · engine **114/114** ·
 python **20/21** (M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** kullanıcı artık telefonu nereye koyacağını biliyor ⇒ **0**.
+
+## L-331 — H-26 sabotajı: gerçek son kayıt biçim değiştirince araç KAYBETMİYOR — naif okuyucu KAYBEDİYOR
+
+**H-26 işlendi.** YAYIN YOLU rejimi (H-28) başladı; F1'in ilk kalemi bu.
+
+### Ölçüm — defter gerçekten karma mı
+
+`grep -cE "^\| L-[0-9]+"` → **257** · `grep -cE "^#+ L-[0-9]+"` → **80**.
+İkisi de sıfırdan büyük ⇒ H-26'nın tarifiyle bu defter **karma biçimde**
+(postmortem'deki iki hattın kendisi gibi — Lissom da o sınıfta).
+
+### Sabotaj — H-26'nın tarif ettiği tam senaryo, önceki testten FARKLI
+
+`_self_test()`in eski ① testi ELDEKİ bir örneği **ID'sini bozarak** gizliyordu
+(`L-255` → `xx-000`); biçim hiç DEĞİŞMİYORDU. H-26'nın postmortemi başka bir
+şey anlatıyor: *biçimin kendisi* ortada değişti. İkisi farklı sabotaj, farklı
+kanıt — biri "bozuk ID kaybolur mu", öbürü "biçim değişince kaybolur mu".
+
+Gerçek son kaydı (`L-330`, başlık biçimi) aldım, satırının **yalnız başlık
+jetonunu** (`## ` → `| `) çevirdim, gövdeye dokunmadım — tıpkı postmortem'in
+anlattığı "bir hat ortada biçim değiştirdi" durumu. İki okuyucuyla okudum:
+- `_ENTRY` (bu aracın geniş okuyucusu, `#+ ` ve `\| ` ikisini de tanır) →
+  **hâlâ görüyor**.
+- Yalnız eski biçimi arayan NAİF okuyucu (`^#+ (L-\d+)`) → **körleşti**,
+  tam H-26'nın *"satır başında boru arayan her sayaç"* dediği gibi.
+
+İki sonuç ZIT çıkmalı, çıktı — `_self_test()`e ⑨ olarak eklendi (10/10).
+
+> ***BU ARAÇ POSTMORTEM'İN TARİF ETTİĞİ KÖRLÜĞE ZATEN BAĞIŞIKTI — AMA BU
+> BAĞIŞIKLIK HİÇ GERÇEK SON KAYITLA SINANMAMIŞTI.***
+
+### Yapılan
+
+`tools/defter_freshness.py` `_self_test()`e ⑨. numaralı kontrol eklendi:
+son kaydı bulur (`_ENTRY.finditer(text)[-1]`), başlık jetonunu öbür biçime
+çevirir, geniş+naif okuyucuyla karşılaştırır. Kod değişikliği yok, DEFTER
+kaydı yok — bu bir test-only ekleme, `kod_iddia_eden` onu KOD saymaz (doğru:
+`.py` değişikliği var ama `Kapanış kanıtı` alanı bunu anlatıyor).
+
+**Kapılar:** app **236/236** · engine **114/114** · python **20/21**
+(M-F-280) · öz-test **10/10** (+1, `tools/defter_freshness.py`) ·
+`all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** değişmedi — bu iş kullanıcı yüzeyi değil, H-26 alet
+sağlamlaştırması; sayaç yalnız kullanıcı-görünür değişiklik sayar.

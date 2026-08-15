@@ -493,6 +493,36 @@ def _self_test() -> int:
     ok = ok and sira
     fired += 1
 
+    # ⑨ H-26 SABOTAJI — GERÇEK SON KAYIT öbür biçime çevrilirse KAYBOLMAMALI.
+    #   Postmortem (H-26): iki hat defterin ORTASINDA kayıt biçimini
+    #   tablo→başlığa çevirdi; satır başında yalnız TEK biçim arayan her
+    #   sayaç o andan sonra HİÇBİR yeni kaydı görmedi (görünmeyen: 182).
+    #   `_ENTRY` bu hattın başından beri iki biçimi birden tanıyor — ama bu
+    #   iddia hiç GERÇEK son kayıtla sınanmamıştı (önceki ①, ELDEKİ bir
+    #   örneği ID'sini bozarak gizliyordu; biçim DEĞİŞTİRMİYORDU).
+    #
+    #   Sabotaj: defterin GERÇEK son kaydını al (bugün `L-330`, başlık),
+    #   satırının yalnızca BAŞLIK JETONUNU öbür biçime çevir, iki ayrı
+    #   okuyucuyla oku — kendi geniş `_ENTRY`'miz ile ve H-26'nın tarif
+    #   ettiği NAİF (tek biçimli, tıpkı postmortem'deki sayaçlar gibi)
+    #   okuyucuyla. İkisi ZIT sonuç vermeli: geniş okuyucu görmeli, naif
+    #   okuyucu H-26'nın anlattığı gibi KÖRLEŞMELİ.
+    last_m = list(_ENTRY.finditer(text))[-1]
+    last_id = last_m.group(1)
+    was_header = last_m.group(0)[0] == "#"
+    flipped_head = "| " if was_header else "## "
+    mutated = text[:last_m.start()] + flipped_head + last_id + text[last_m.end():]
+    survives = last_id in set(_ENTRY.findall(mutated))
+    naive = re.compile(r"^#+ (L-\d+)\b" if was_header else r"^\| (L-\d+)\b", re.M)
+    naive_blind = last_id not in set(naive.findall(mutated))
+    sabotaj = survives and naive_blind
+    print(f"   {'✅' if sabotaj else '⛔'} H-26 biçim-flip ({last_id} "
+          f"{'başlık→tablo' if was_header else 'tablo→başlık'}): geniş "
+          f"okuyucu {'HÂLÂ GÖRÜYOR' if survives else 'KAYBETTİ — SAHTE KAPI'}, "
+          f"naif tek-biçim okuyucu {'KÖRLEŞTİ (beklenen)' if naive_blind else 'YİNE GÖRDÜ — kontrast geçersiz'}")
+    ok = ok and sabotaj
+    fired += 1
+
     print(f"✅ {fired}/{fired} kapı ateşlendi" if ok
           else "⛔ defter tazeliği öz-testi DÜŞTÜ")
     return 0 if ok else 1
