@@ -4731,3 +4731,62 @@ kondu, kapı tekrar geçti. **Mekanizma gerçekten ateşliyor, süs değil.**
 (M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** değişmedi — bu tur bir gizlilik-kararı kilidi, kullanıcı
 yüzeyi değil.
+
+---
+
+## L-341 — YAYIN-YOLU-LISSOM.md §3.1+3.2: gerçek AppIcon + LaunchImage — SIFIR stok kaldı
+
+Tur-2 açılış: HEAD `c8ae017` (L-340) doğrulandı, `YAYIN-YOLU-LISSOM.md` +
+71 hükümlük indeks okundu. Kuyruğun ilk iki kalemi (launch image, ikon)
+AYNI oturumda kapandı — ikisi tek glifi paylaşıyor, ayrı ayrı üretmek
+tutarsızlık riski taşırdı.
+
+### Ölçülen başlangıç durumu
+`sips`: `LaunchImage*.png` üçü de **1×1 px, 68 bayt** (Flutter şablonu) ·
+storyboard zemini varsayılan beyaz (`1,1,1`) · `AppIcon` 1024 Flutter
+stoğuyla **MD5-birebir** (`ikon_ayirt_kapisi.py` canlı tarama: `📦 lissom:
+HENÜZ İKON YAPMAMIŞ`).
+
+### Glif kararı — kardeşten KOPYA değil, kardeşin GEREKÇESİ taşındı
+Gravita + Ostinato ikonlarını okudum (H-67 sonrası ikisi de gerçek):
+ikisi de aynı dilbilgisini paylaşıyor — düğüm(eklem)+kapsül(kemik), marka
+renginde dolgu üstünde beyaz. **Kalıbı DEĞİL, gerekçesini** taşıdım:
+Lissom'un ürünü tam olarak **bir eklem açısını** ölçüyor (`attempt_values.
+jsonl`, `TestDetailScreen`, L-337/L-339) — glif bunu DOĞRUDAN temsil
+ediyor: apex'te (eklem) birleşen iki asimetrik kemik segmenti, açık bir
+AÇI oluşturuyor. Poz/simetri kardeşlerden ayrı (Gravita'nın zigzag'ı,
+Ostinato'nun T-çaprazı DEĞİL) — `tools/uret_ikon_launch.py` üst-yorumunda
+gerekçe yazılı kaldı.
+
+### Renk — zaten aile kapısından GEÇMİŞ bir marka rengi
+`LissomColors.roseDeep` (#B0748F) icat edilmedi — temanın MEVCUT seed
+rengi. `ikon_ayirt_kapisi.py '#B0748F' lissom` dört kardeşe karşı canlı
+sınandı: **4/4 GEÇTİ** (Choreia ΔL 0.173 · Gravita ΔC 0.084 · JabLab ΔL
+0.320 · Ostinato ΔH 78°). İkon: roseDeep dolgu + beyaz glif (kardeş
+emsali). Launch image: TERSİ yön — Lissom'un teması AÇIK (Gravita'nın
+light-cream emsaliyle AYNI mantık, kendi renkleriyle): canvas (#F3EDE9)
+storyboard zemini + roseDeep glif (şeffaf PNG üstünde), ikonla AYNI poz —
+kimlik tutarlılığı.
+
+### Üretim — 4× supersample + LANCZOS (PIL ham çizim anti-alias'sız)
+`tools/uret_ikon_launch.py` (yeni): `AppIcon` 15 boyut (1024 dahil, App
+Store kanalı **alpha YOK** — `sips -g hasAlpha` ile doğrulandı: `no`) +
+`LaunchImage` 150/300/450 (Gravita'nın boyut sınıfıyla AYNI — bu bir
+format kuralı, tasarım kopyası değil). Storyboard zemini `1,1,1`den
+canvas'a (`0.9529,0.9294,0.9137`) çevrildi; `resources` bloğundaki eski
+Flutter-şablon boyutu (168×185) 150×150'e düzeltildi.
+
+### Kapanış kanıtı — sips, storyboard'un KENDİ rengi DEĞİL
+`sips -g pixelWidth -g pixelHeight -g hasAlpha`: `LaunchImage.png` 150×150
+· `@2x` 300×300 · `@3x` 450×450, üçü de `hasAlpha: yes`, artık 68 bayt
+DEĞİL (4,8–15,7 KB). `AppIcon` 1024: `hasAlpha: no` (Apple ios-marketing
+şartı). Aile kapısı canlı yeniden tarandı: **Lissom artık `ikon` (gerçek),
+`stok` DEĞİL** — `toplam çarpışma: 0 · kör: 0 · stok: 0` (Choreia dahil
+beşi de artık gerçek ikon taşıyor, aile genelinde stok kalmadı).
+
+**Kapılar:** app **255/255** (değişmedi — yalnız görsel varlık) · engine
+**114/114** · python **20/21** (M-F-280, bilinen) · `all_gates.py` TÜMÜ
+YEŞİL.
+**C sayacı: kullanıcı yüzeyinde GERÇEK değişiklik ⇒ 1** — App Store artık
+1×1 boş kare değil gerçek marka kimliği görecek; ikon mağaza ızgarasında
+STOK Flutter simgesi değil.
