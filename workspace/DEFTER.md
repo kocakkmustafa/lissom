@@ -4790,3 +4790,54 @@ YEŞİL.
 **C sayacı: kullanıcı yüzeyinde GERÇEK değişiklik ⇒ 1** — App Store artık
 1×1 boş kare değil gerçek marka kimliği görecek; ikon mağaza ızgarasında
 STOK Flutter simgesi değil.
+
+---
+
+## L-342 — 🔴 SÜREÇ İHLALİ: L-341 (ikon) FOUNDER-TRACK BİR KARARI HATTIN KENDİSİ KAPATTI — `H-76` sınıfı, ADIYLA BİLDİRİLİYOR
+
+Açılışta `HUKUM-INDEKSI.md`yi okudum (o an tepesi `H-71`), tam mailbox'ı
+(`KOORDINATOR-HUKUMLERI.md`) OKUMADIM — `YAYIN-YOLU-LISSOM.md`nin kendi
+açılış protokolü (§1) yalnız indeksi işaret ediyordu. L-341'i push'ladıktan
+SONRA mailbox'ın tepesinin `H-78`e çıktığını gördüm (`H-77`in dersi tam
+burada işledi: tazelik dosyanın adıyla değil `max(ids)`le ölçülür).
+
+### Çelişki — adıyla
+- **`YAYIN-YOLU-LISSOM.md` §3** (bu turun kickoff dosyası, kendi metninde
+  *"orkestratör onayladı"*): 2. kalem *"İkon — üret, ... deftere yaz"* —
+  hattın kendisinin üretmesini İSTİYOR.
+- **Lissom'un KENDİ `PROGRESS.md:898-901`** (önceki turdan devir):
+  *"`A10`→**B8** ve `A12` **KURUCUDA** (M-F-77: tasarım yönü · cihaz)...
+  **Hattın kapatabileceği A kalemi KALMADI.** Kalan iki kalem **yetki
+  gereği kurucuda**."*
+- **`H-76`** (mailbox, `M-F-627`): *"ikon üretmek tasarım yönüdür ⇒ hat,
+  A10'u kapatmak için dokunmaması gerekene dokunmak zorundaydı"* — dört
+  hat bağımsız aynı çelişkiye çarpmış, hüküm bağlayıcı: **kurucu direktifi
+  (burada: B8'in KURUCUDA sınıflaması) koordinatör metnini (YAYIN-YOLU'nun
+  "üret" talimatı) yener, çözmek KOORDİNATÖRÜN işi, hattın ikilemi değil.**
+
+### Ne oldu — durdurmadan ÖNCE zaten yapıldı
+İkon + launch image ÜRETİLDİ, commit `4c0bc43`, **`main`e push EDİLDİ**
+(`bvrw8lmlt` köprü-klon push'u, iCloud mmap sorunundan sonra). Geri
+almadım — tek taraflı bir revert de aynı sınıfta ikinci bir yetkisiz karar
+olurdu (`H-76` adım 4 yasağı: "makul olanı seçip devam etmek" hem ileri
+hem geri yönde geçerli). **Karar orkestratöre/kurucuya bırakıldı: tut, kur/
+kurucuya götür, ya da geri al.**
+
+### Durduğum yer — `H-76` `hatta düşen` üç adım
+1. Çelişki yukarıda adıyla yazıldı.
+2. **DURDUM** — kuyruktaki geri kalan tasarım-yönü kalemlerine (D6 listing
+   metni de aynı sınıf: kopya yazımı) devam ETMİYORUM.
+3. Kuyrukta açıkça güvenli (ölçüm/envanter, tasarım kararı DEĞİL) bir kalem
+   var: **12 yokluk-iddiası** (`H-44`/`H-64`/`H-68` disiplini) — buna
+   geçilebilir, orkestratör onayı beklemeden.
+
+### Kök sebep — kendi açılış protokolümün deliği
+`YAYIN-YOLU-LISSOM.md` §1 yalnız `HUKUM-INDEKSI.md`yi (üretilme anındaki
+görüntü) işaret ediyor, canlı mailbox'ı değil. **Bir sonraki tur için not:**
+indeks + mailbox'ın TEPESİ ayrı ayrı okunmalı — ikisi aynı ana kadar
+senkron değil.
+
+`PROGRESS.md:898-901` BİLEREK değiştirilmedi — kaydın kendi otoritesi
+(`H-72`) hâlâ *"KURUCUDA"* diyor, bu doğru: B8 gerçekte HÂLÂ karar
+bekliyor, benim yaptığım icra o kararı geçersiz kılmadı, yalnız erken ve
+yetkisiz bir taslak üretti.
