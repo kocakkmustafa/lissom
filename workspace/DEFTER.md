@@ -4697,3 +4697,37 @@ test.dart`) · engine **114/114** · python **20/21** (M-F-280) ·
 `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı: kullanıcı yüzeyinde GERÇEK değişiklik ⇒ 1** — F2/D13 kapandı:
 ölçülen sayı artık kayıp değil, testin kendi sayfasında görülebiliyor.
+
+---
+
+## L-340 — D14'ün koddaki kilidi: `attempt_values` yolu SIFIR HttpClient — SABOTAJLA kanıtlandı
+
+Orkestratör bağımsız doğruladı ve **karar** verdi: `attempt_values.jsonl`
+hiçbir zaman ağa çıkmıyor ⇒ Apple'ın "collect" tanımıyla (cihazdan DIŞARI
+aktarım) toplanmış SAYILMIYOR, bugün ASC App Privacy anketinde beyan
+gerekmiyor. **İstek:** bu kararı BELGEYE değil KODA bağla — Gravita'nın
+`D1`/`G-227` deseninin aynı fikri, ama kapsam dar (Lissom'un kendi `D1`i
+henüz inmedi, uygulama geneli için sıfır iddia etmek bugün YANLIŞ olurdu).
+
+### Yapılan
+
+`test/attempt_values_network_gate_test.dart` (yeni): `HttpOverrides.
+runZoned` ile (global mutasyon YOK, zon kapanınca kendiliğinden temiz)
+`JsonlAttemptValueStore`ın TAM arayüzünü (append+forLesson+
+unreadableRecords, hem yazılmış hem hiç-yazılmamış dosya yolu) sayaçlı bir
+`HttpClient` fabrikasıyla çalıştırıp **0** HttpClient üretimini doğruluyor.
+Kapının **gerekçesi** yorum olarak yazılı (`H-39`un muafiyet-belgeleme
+dersi): *"bu sayaç öterse D14 kararı yeniden değerlendirilmeli, bu test
+DEĞİL."*
+
+### Sabotaj — mekanizmanın kendisi ateşliyor mu
+
+Geçici olarak akışın ortasına GERÇEK bir `HttpClient()` çağrısı eklendi
+(dosyanın kendisine, dışarıdan bir kopya üzerinden — hiçbir commit bunu
+görmedi). Kapı **düştü** (sayaç >0, test kırmızı). Orijinal dosya geri
+kondu, kapı tekrar geçti. **Mekanizma gerçekten ateşliyor, süs değil.**
+
+**Kapılar:** app **255/255** (+1) · engine **114/114** · python **20/21**
+(M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** değişmedi — bu tur bir gizlilik-kararı kilidi, kullanıcı
+yüzeyi değil.
