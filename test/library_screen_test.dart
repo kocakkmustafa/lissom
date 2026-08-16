@@ -15,14 +15,29 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/app_facts.dart';
+import 'package:lissom/app/attempt_values.dart';
 import 'package:lissom/app/ia.dart';
 import 'package:lissom/app/library_screen.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/shell.dart';
+import 'package:lissom/app/test_detail_screen.dart';
 
 import 'support/copy_gate.dart';
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
+
+/// D13 reachability testinin enjekte ettiği depo — gerçek `path_provider`
+/// widget testinde kilitleniyor (aile gotcha'sı, `_RecordingStore` ile aynı
+/// sınıf). Diskle ilişki `attempt_values_test.dart`ta ayrıca sınanıyor.
+final class _EmptyStore implements AttemptValueStore {
+  @override
+  Future<void> append(AttemptValue value) async {}
+  @override
+  Future<List<AttemptValue>> forLesson(String lessonId) async =>
+      const <AttemptValue>[];
+  @override
+  Future<int> unreadableRecords() async => 0;
+}
 
 Future<void> pump(WidgetTester tester, AppFacts f) async {
   await tester.pumpWidget(MaterialApp(
@@ -150,6 +165,40 @@ void main() {
     await tester.tap(find.text('Assessment Battery'));
     await tester.pumpAndSettle();
     expect(find.byType(FamilyPage), findsOneWidget);
+  });
+
+  testWidgets('D13: CANLI test satırından geçmişine gidilir — ULAŞILABİLİR, '
+      'uydurma değil', (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    final AppFacts f = factsFromDisk();
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: Scaffold(
+        body: LibraryScreen(
+          facts: f,
+          attemptValueStoreLoader: () async => _EmptyStore(),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Assessment Battery'));
+    await tester.pumpAndSettle();
+    // POZİTİF ÇAPA: gerçek config'te CANLI olan bir test — uydurma bir ad
+    // değil (`overhead_reach`, aile boyunca kanonik canlı örnek).
+    // 🪤 KAYDIRMA ŞART (L-297 sınıfı): satır `ListView`in ikinci ekranında,
+    // `pumpAndSettle` tek başına onu görünür kılmaz — `find` bulur ama
+    // `tap` katlamanın altındaki bir noktaya iner ve isabet etmez.
+    final Finder row = find.text('Overhead Reach');
+    await scrollTo(tester, row);
+    expect(row, findsOneWidget,
+        reason: 'satır çizilmediyse aşağıdaki dokunma hiçbir şey ölçmez');
+    await tester.tap(row);
+    await tester.pumpAndSettle();
+    expect(find.byType(TestDetailScreen), findsOneWidget,
+        reason: 'canlı test satırı artık ÖLÜ UÇ değil — kendi geçmişine '
+            'gider (reachability sınıfı, deadend_taxonomy_test.dart ile aynı '
+            'ölçüt)');
   });
 
   testWidgets('GEZİNME KURALI: beyan edilen dokunuş sınırı ÖLÇÜLÜR (L-240)',

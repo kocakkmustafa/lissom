@@ -58,8 +58,21 @@ void main() {
 
     // Sebep GERÇEKTEN yazılı: hangi üç koşulun doğrulanamadığı.
     expect(find.textContaining('same model'), findsOneWidget);
-    expect(find.textContaining('does not record any of those three'),
-        findsOneWidget);
+    // D13/F2 — eski cümle ("does not record any of those three") artık
+    // YANLIŞ (model+config kaydediliyor); güncel cümle bunu adıyla söylüyor
+    // ve KURULMADIĞINI da söylüyor — ikisi AYRI iddia, ikisi de sınanmalı.
+    expect(
+      find.textContaining('recorded next to it now'),
+      findsOneWidget,
+      reason: 'model+config artık kaydediliyor — bu ARTIK doğru ve yazılı '
+          'olmalı',
+    );
+    expect(
+      find.textContaining('compares any of that for you'),
+      findsOneWidget,
+      reason: 'kayıt VARLIĞI kıyas KURULDUĞU anlamına gelmiyor — ikisi ayrı '
+          'iddia, ekran ikincisini de açıkça reddetmeli',
+    );
   });
 
   testWidgets('improved/worsened dili YOK — ve trend widget\'ı da yok', (

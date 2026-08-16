@@ -57,14 +57,30 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/app_facts.dart';
+import 'package:lissom/app/attempt_values.dart';
 import 'package:lissom/app/ia.dart';
 import 'package:lissom/app/library_screen.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/shell.dart';
+import 'package:lissom/app/test_detail_screen.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
+
+/// D13 — `path_provider` widget testinde kilitleniyor (aile gotcha'sı,
+/// `library_screen_test.dart`taki `_EmptyStore` ile AYNI sınıf, ayrı dosya
+/// olduğu için ayrı tanım — aile kuralı: iki test dosyası birbirinin
+/// private sınıfını import ETMEZ).
+final class _EmptyAttemptValueStore implements AttemptValueStore {
+  @override
+  Future<void> append(AttemptValue value) async {}
+  @override
+  Future<List<AttemptValue>> forLesson(String lessonId) async =>
+      const <AttemptValue>[];
+  @override
+  Future<int> unreadableRecords() async => 0;
+}
 
 /// Çıkmaz sokağın İSİMLİ sınıfı. Harf adları (`A`/`A′`/…) enum'a girmez —
 /// `aPrime` gibi bir ad taşındığı anlamı taşımaz ve okuyan kişi tabloya
@@ -208,7 +224,15 @@ void main() {
 
     await tester.pumpWidget(MaterialApp(
       theme: buildLissomTheme(),
-      home: LissomShell(loader: () async => facts),
+      home: LissomShell(
+        loader: () async => facts,
+        // D13/F2 — CANLI satır artık GERÇEKTEN bir hedefe gidiyor
+        // (`TestDetailScreen`). Enjekte EDİLMEZSE üretim yolu
+        // `openAttemptValueStore`a düşer, `path_provider` widget testinde
+        // KİLİTLENİR (aile gotcha'sı) ve `pumpAndSettle` SONSUZA dek bekler
+        // — bu turda tam bunu ölçtüm (test önce "timed out" diye düştü).
+        attemptValueStoreLoader: () async => _EmptyAttemptValueStore(),
+      ),
     ));
     await tester.pumpAndSettle();
 
@@ -221,24 +245,47 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(FamilyPage), findsOneWidget);
 
-    // ⚠️ ÖLÇÜLÜYOR, VARSAYILMIYOR: devir notu 9 engelli testin *"dokunulamaz
-    // satır"* olduğunu yazdı. Dokunulamazlık bir İDDİA; satıra BASIP rota
-    // itilip itilmediğine bakmak ÖLÇÜM. Ve canlı satır da sınanır — çünkü
-    // bir satırın hedefe dönüşmesi sınıflandırmayı DEĞİŞTİRİR (hedef
-    // olsaydı, içeriksiz bir hedef çıkmaz sokak olurdu).
+    // 🔴 **D13 TAKSONOMİ DEĞİŞİKLİĞİ (bu turda ölçüldü) — `docs/A4-CIKMAZ-
+    // SOKAK-SAYIMI.md` §5'in KENDİ ÖN-GÖRDÜĞÜ senaryo:** *"bir test satırı
+    // HEDEFE dönüşürse → payda birimi değişir, test.cikmaz YANLIŞLANIR."*
+    // Artık öyle: CANLI satırlar (3) kendi geçmişine gider, ENGELLİ satırlar
+    // (9) hâlâ dokunulamaz. İkisi AYRI ölçülür — eskiden TEK döngüde
+    // "hiçbiri hedef değil" diye BİRLEŞTİRİLİYORLARDI, bu artık YANLIŞ.
+    //
+    // ⚠️ Yeni hedef İÇERİKSİZ DEĞİL (`TestDetailScreen` her zaman gerçek
+    // değer YA DA adıyla-boş/okunamayan bir kart taşır) — dokümanın kendi
+    // ölçütüyle (*"içeriksiz bir HEDEF çıkmaz sokaktır"*) bu bir çıkmaz
+    // sokak SAYILMAZ. Ama bu bir taksonomi-YORUMU ve doküman §3 emsali
+    // (*"terminal beyan ekranı çıkmaz sokak mıdır" → koordinatöre*) aynı
+    // sınıfın bir örneği — orkestratöre bildirdim, kayıt defterde.
+    // Sıra ÖNEMLİ — sabit bir kural değil, ekranın kendi yerleşimi: canlı
+    // bölüm listede ENGELLİ bölümün ÜSTÜNDE (`_batteryBody`). Ters sırayla
+    // kaydırmak `scrollTo`nun tek-yönlü `dragUntilVisible`ıyla ikinci satırı
+    // hiç bulamazdı — bu turda ölçüldü (`No element`), varsayılmadı.
     final int before = _routeDepth(tester);
-    for (final TestLiveness x in <TestLiveness>[
-      facts.live.first,
-      facts.blocked.first,
-    ]) {
-      final Finder row = find.text(x.name);
-      await scrollTo(tester, row);
-      await tester.tap(row.first, warnIfMissed: false);
-      await tester.pumpAndSettle();
-    }
+    final Finder liveRow = find.text(facts.live.first.name);
+    await scrollTo(tester, liveRow);
+    await tester.tap(liveRow.first, warnIfMissed: false);
+    await tester.pumpAndSettle();
+    expect(find.byType(TestDetailScreen), findsOneWidget,
+        reason: 'CANLI bir test satırı artık GERÇEK bir hedef (D13) — '
+            'basmak hiçbir yere gitmiyorsa bu bir REGRESYONDUR');
+    // Hedefin İÇERİKSİZ olmadığının pozitif kanıtı — boş depoda bile
+    // adıyla-beyanlı bir kart çiziliyor, sessiz boşluk değil.
+    expect(find.byKey(TestDetailScreen.emptyKey), findsOneWidget,
+        reason: 'yeni hedef içeriksiz görünüyor — bu gerçekten çıkmaz sokak '
+            'olurdu');
+
+    // Geri dön, ENGELLİ satırın hâlâ dokunulamaz olduğunu ölç.
+    Navigator.of(tester.element(find.byType(TestDetailScreen))).pop();
+    await tester.pumpAndSettle();
+    final Finder blockedRow = find.text(facts.blocked.first.name);
+    await scrollTo(tester, blockedRow);
+    await tester.tap(blockedRow.first, warnIfMissed: false);
+    await tester.pumpAndSettle();
     expect(_routeDepth(tester), before,
-        reason: 'bir test satırına basmak rota itti — satırlar HEDEF olmuş '
-            'demektir ve A4 sayımının paydası (aile hedefi) yanlış birimdir');
+        reason: 'ENGELLİ bir test satırına basmak rota itti — 9\'un sınıfı '
+            'hâlâ E (awaiting-capability), hâlâ dokunulamaz olmalı');
 
     // Engelli testlerin sınıfı: her eksik metrik `BridgeBlocker` taşıyorsa
     // engel YETENEKtir (E). Beyansız bir metrik varsa o AYRI bir hâldir ve

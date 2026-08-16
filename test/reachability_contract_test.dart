@@ -33,6 +33,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/app_facts.dart';
+import 'package:lissom/app/attempt_values.dart';
 import 'package:lissom/app/home_screen.dart';
 import 'package:lissom/app/library_screen.dart';
 import 'package:lissom/app/lissom_theme.dart';
@@ -42,6 +43,7 @@ import 'package:lissom/app/onboarding_store.dart';
 import 'package:lissom/app/profile_screen.dart';
 import 'package:lissom/app/progress_screen.dart';
 import 'package:lissom/app/shell.dart';
+import 'package:lissom/app/test_detail_screen.dart';
 import 'package:lissom/app/what_lissom_doesnt_do.dart';
 
 import 'support/facts_from_disk.dart';
@@ -59,7 +61,22 @@ const List<Type> kCandidateScreens = <Type>[
   HomeScreen, LibraryScreen, ProgressScreen, ProfileScreen,
   // ayrı rotalar (push)
   FamilyPage, WhatLissomDoesntDoScreen, LiveCaptureScreen,
+  // D13/F2 — Library → canlı bir test satırı → kendi geçmişi.
+  TestDetailScreen,
 ];
+
+/// D13 — `path_provider` widget testinde kilitleniyor (aile gotcha'sı, her
+/// test dosyası kendi kopyasını tutar — `deadend_taxonomy_test.dart`taki
+/// `_EmptyAttemptValueStore` ile AYNI sınıf, ayrı dosya).
+final class _EmptyAttemptValueStore implements AttemptValueStore {
+  @override
+  Future<void> append(AttemptValue value) async {}
+  @override
+  Future<List<AttemptValue>> forLesson(String lessonId) async =>
+      const <AttemptValue>[];
+  @override
+  Future<int> unreadableRecords() async => 0;
+}
 
 /// Rotaları YÜRÜYEREK tanıklayan gözlemci — (b).
 class _RouteWitness extends NavigatorObserver {
@@ -130,6 +147,11 @@ void main() {
       home: OnboardingGate(
         storeLoader: () async => store,
         shellLoader: () async => facts,
+        // D13/F2 — enjekte EDİLMEZSE `TestDetailScreen`e varan yürüyüş
+        // `openAttemptValueStore`a düşer ve `path_provider` widget
+        // testinde SONSUZ ASILI kalır (`deadend_taxonomy_test.dart`ta
+        // ölçüldü).
+        attemptValueStoreLoader: () async => _EmptyAttemptValueStore(),
       ),
     ));
     await tester.pumpAndSettle();
@@ -176,6 +198,14 @@ void main() {
 
     // Library → aile kartları (rota)
     await _openTab(tester, 'library');
+    // İNŞA EDİLMİŞ ailenin adı — TEK aile bu (`_batteryBody`), diğer beşi
+    // `_namedBody` çizer ve "Overhead Reach" gibi bir satır TAŞIMAZ.
+    // `FamilyPage` TÜM ailelerde aynı tip olduğu için `s == FamilyPage`
+    // TEK BAŞINA bunu ayırt edemezdi — bu turda ölçüldü (`No element`,
+    // inşa-edilmemiş bir ailede canlı test adı aranmıştı).
+    final String builtTitle = facts.ia.families
+        .firstWhere((dynamic f) => f.isBuilt as bool)
+        .title as String;
     for (final String title
         in facts.ia.families.map((dynamic f) => f.title as String)) {
       final Finder c = find.text(title);
@@ -186,6 +216,24 @@ void main() {
       observed.addAll(_observedScreenLike(tester));
       final Type? s = _visible(tester);
       if (s != null && reached.add(s)) viaRoute.add(s);
+
+      // D13/F2 — FamilyPage → canlı bir test satırı → TestDetailScreen
+      // (rota). Yalnız İNŞA EDİLMİŞ ailede: diğerleri canlı test satırı
+      // taşımaz.
+      if (s == FamilyPage && title == builtTitle && facts.live.isNotEmpty) {
+        final Finder liveRow = find.text(facts.live.first.name);
+        await scrollTo(tester, liveRow);
+        if (liveRow.evaluate().isNotEmpty) {
+          await tester.tap(liveRow.first, warnIfMissed: false);
+          await tester.pumpAndSettle();
+          observed.addAll(_observedScreenLike(tester));
+          final Type? detail = _visible(tester);
+          if (detail != null && reached.add(detail)) viaRoute.add(detail);
+          await tester.pageBack();
+          await tester.pumpAndSettle();
+        }
+      }
+
       await tester.pageBack();
       await tester.pumpAndSettle();
     }

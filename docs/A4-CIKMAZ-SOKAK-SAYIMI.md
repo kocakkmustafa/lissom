@@ -1,7 +1,7 @@
 # 🚧 A4 — ÇIKMAZ SOKAK SAYIMI (Lissom)
 
 > **Evergreen.** Tarih başlıkta değil, `guncelleme` satırında ve satır içlerinde.
-> **guncelleme:** 2026-08-13 · **kanıt:** `test/deadend_taxonomy_test.dart`
+> **guncelleme:** 2026-08-16 (test düzeyi §2, D13) · **kanıt:** `test/deadend_taxonomy_test.dart`
 > **doğrular:** `YAYIN-HAZIRLIK-OLCUTU.md` **A4** — *"çıkmaz sokak sayısı ölçülmüş ve ADIYLA yazılmış"*
 
 ⚠️ **Bu doküman ANKRAJDIR, özet değil.** Aşağıdaki makine-okur blok testin
@@ -86,11 +86,37 @@ sayısıyla söylüyor (*"Planned, not in this build (5)"*). Kaza değil, karar.
 | engelli → **E** | **9** | `ankle_dorsiflexion` · `forward_lunge` · `hamstring_reach` · `hip_hinge` · `lateral_bend` · `overhead_squat` · `plank_hold` · `single_leg_balance` · `thoracic_rotation` |
 | beyansız (sınıflandırılamaz) | **0** | — |
 
+### 🔴 GÜNCELLEME (2026-08-16, D13/F2) — §5'in ÖN-GÖRDÜĞÜ senaryo GERÇEKLEŞTİ
+
+Bu bölüm YAZILDIĞINDA (2026-08-13) hiçbir test satırı hedef DEĞİLDİ — "çıkmaz
+sokak 0" ölçütü bu YÜZDEN basitti, çünkü hedef/çıkmaz ayrımı 12 testin
+HİÇBİRİNE uygulanmıyordu. `D13` (deneme-değeri saklama) **3 canlı satırı
+GERÇEK hedefe çevirdi**: artık kendi geçmiş sayfasına (`TestDetailScreen`)
+gidiyorlar. §5'in kendi kaydı bunu ADIYLA önceden yazmıştı: *"bir test satırı
+HEDEFE dönüşürse → payda birimi değişir, test.cikmaz YANLIŞLANIR."` Şimdi o
+tur.
+
+**Ölçülen (`deadend_taxonomy_test.dart`, aynı gün):** 9 engelli satır HÂLÂ
+dokunulamaz (rota derinliği değişmiyor, sınıf E'de sabit). 3 canlı satır artık
+`TestDetailScreen`e gidiyor — ve o hedef **hiçbir zaman içeriksiz değil**:
+gerçek okuma varsa gösterir, yoksa `NamedGapCard`la adıyla söyler (aynı A3
+standardı, `emptyKey`). Dokümanın kendi ölçütüyle (*"içeriksiz bir HEDEF
+çıkmaz sokaktır"*) bu bir çıkmaz sokak SAYILMAZ ⇒ **`test.cikmaz` SAYISAL
+olarak hâlâ 0** — ama artık İKİ AYRI olgudan (9 dokunulamaz + 3 her-zaman-
+içerikli-hedef) türüyor, tek bir "hiçbiri hedef değil" olgusundan değil.
+
+⚠️ **Bu bir SAYIM değil bir TAKSONOMİ-YORUMU** — §3'ün kendi emsaliyle aynı
+sınıf (*"terminal beyan ekranı çıkmaz sokak mıdır" → koordinatöre*). Lissom
+hattı kendi ölçümüyle bu yorumu UYGULADI (kod + test bunu YANSITIYOR) ama
+kararı orkestratöre bildirdi; bu satır onun teyidini BEKLİYOR olarak okunmalı.
+
 ### Çıkmaz sokak **0** — ve bu ÖLÇÜLDÜ, varsayılmadı
 
 Devir notu *"9'u çıkmaz sokak DEĞİL, dokunulamaz `_TestRow`"* diyordu. Bu bir
-**iddiaydı**; test artık hem **canlı** hem **engelli** bir satıra **basıyor** ve
-rota derinliğinin değişmediğini ölçüyor.
+**iddiaydı**; test artık **canlı** ve **engelli** satırları AYRI AYRI ölçüyor:
+engelli satıra basmak rota derinliğini DEĞİŞTİRMEZ (hâlâ dokunulamaz); canlı
+satıra basmak `TestDetailScreen`i açar VE o ekranın içeriksiz olmadığını
+(boş depoda bile adıyla-kart) ayrıca kanıtlar.
 
 > ***Bir satırın hedefe dönüşmesi sınıflandırmayı değiştirir: içeriksiz bir
 > HEDEF çıkmaz sokaktır, içeriksiz bir SATIR değildir.***
@@ -155,5 +181,5 @@ test.cikmaz = 0
 
 - bir aileye `itemsSource` eklenirse (→ `A` düşer, `A′` ya da `B` doğar)
 - bir metrik köprüye girerse (→ `E` düşer, canlı sayısı artar)
-- bir test satırı **hedefe** dönüşürse (→ payda birimi değişir, `test.cikmaz` yanlışlanır)
+- ✅ **GERÇEKLEŞTİ (2026-08-16, D13) — bkz §2'nin güncellemesi.** bir test satırı **hedefe** dönüşürse (→ payda birimi değişir, `test.cikmaz` yanlışlanır)
 - bir engelli testin metriği **beyansız** kalırsa (→ sınıflandırılamaz, kapı öter)

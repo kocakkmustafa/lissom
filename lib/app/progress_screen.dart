@@ -1,29 +1,38 @@
 /// **progress** sekmesi — **karşılaştırma KAPALI hâliyle.**
 ///
 /// Bu ekran "eksik" değil; **tasarlanmış bir hâl.** Nedeni ölçüldü, üç
-/// katmanı var ve üçü de yapısaldır:
+/// katmanı var:
 ///
-/// **1. Geçmiş kaydında ÖLÇÜM DEĞERİ YOK — ve bu kasıtlı.** `SessionRecord`
-/// şeması (çekirdek, M-F-193) bilerek hiçbir skor/değer alanı taşımıyor;
-/// çekirdeğin kendi gerekçesi: *"recording zeros before the camera bridge
-/// would draw zeros on tomorrow's progress chart."* Yani bir açı trendi
-/// çizmek bugün **veri yokluğundan değil, ŞEMA KARARINDAN** imkânsız. Bir
-/// trend çizgisi çizmek için önce uydurulmuş bir değer gerekirdi.
+/// **1. Bu EKRANIN kaydında ÖLÇÜM DEĞERİ YOK — ve bu hâlâ kasıtlı.**
+/// `SessionRecord` şeması (çekirdek, M-F-193) bilerek hiçbir skor/değer
+/// alanı taşımıyor; çekirdeğin kendi gerekçesi: *"recording zeros before
+/// the camera bridge would draw zeros on tomorrow's progress chart."*
+/// ⚠️ **GÜNCELLEME (D13/F2, 2026-08-16): değer artık TAMAMEN kayıp değil —**
+/// Lissom-sahipli bir yan defter (`attempt_values.jsonl`) onu ayrıca
+/// tutuyor ve her testin KENDİ sayfasında (Library → bir test) HAM olarak
+/// gösteriliyor. Bu ekranın DEFTERİ hâlâ değeri taşımıyor (çekirdek şeması
+/// değişmedi, D13'ün kendi sınırı) — ama *"bir açı trendi çizmek imkânsız"*
+/// artık YANLIŞ: çiziliyor, yalnız BURADA değil. Kart bunu adıyla söylüyor
+/// (`readingKeptElsewhereKey`).
 ///
-/// **2. Kıyas ön-koşulları DOĞRULANAMIYOR.** PRD §267 iki ölçümün ancak aynı
-/// `modelVariant`, uyumlu config sürümü ve benzer `calibrationProfile`
-/// altında kıyaslanabileceğini söylüyor. `SessionRecord` bu üç alanın
-/// HİÇBİRİNİ taşımıyor (çekirdeğin notu: attempt-düzeyi köken bilgisi
-/// ADR-005 gereği bilerek dışarıda). Yani kıyasın yapılabilir olduğunu
-/// **kontrol edemiyoruz** — ve kontrol edemediğimiz bir koşulu varsaymak,
-/// kıyası sessizce yapmak olurdu.
+/// **2. Kıyas ön-koşulları KISMEN doğrulanabilir hâle geldi.** PRD §267 iki
+/// ölçümün ancak aynı `modelVariant`, uyumlu config sürümü ve benzer
+/// `calibrationProfile` altında kıyaslanabileceğini söylüyor.
+/// `AttemptValue.provenance` artık `modelId`+`batteryVersion`i taşıyor
+/// (`calibrationProfile` hâlâ boş, M-F-07 alanı) — ama bu ekran ve test
+/// detay sayfası bu bilgiyi KIYAS için KULLANMIYOR, yalnız TAŞIYOR: bir
+/// gün kıyas kurulursa dayanağı hazır, bugün kurulu değil.
 ///
-/// **3. MDC eşiği YOK.** Bir değişimin ölçüm gürültüsünden büyük olup
-/// olmadığını söyleyemediğimiz sürece `improved`/`worsened` dili YASAK. Bu
-/// ekranda o iki kelime GEÇMEZ (`progress_screen_test.dart` tarar).
+/// **3. MDC eşiği YOK — değişmedi.** Bir değişimin ölçüm gürültüsünden
+/// büyük olup olmadığını söyleyemediğimiz sürece `improved`/`worsened`
+/// dili YASAK, hem burada hem test detay sayfasında. Bu iki ekranda o
+/// kelimeler GEÇMEZ (`progress_screen_test.dart` + `test_detail_screen_
+/// test.dart` tarar; `test/support/copy_gate.dart`'a `better than`/
+/// `worse than` da eklendi, doküman iddia ediyordu liste karşılamıyordu).
 ///
-/// Geriye kalan ve **gerçek** olan şey: neyin, ne zaman, hangi rejimde
-/// kaydedildiği. Bu bir trend değil, bir DEFTER — ve defter dürüsttür.
+/// Geriye kalan ve bu ekran için **gerçek** olan şey: neyin, ne zaman,
+/// hangi rejimde kaydedildiği. Bu bir trend değil, bir DEFTER — ve defter
+/// dürüsttür, artık *"değer başka yerde yaşıyor"* diyerek dürüst.
 library;
 
 import 'package:flutter/material.dart';
@@ -39,17 +48,20 @@ class ProgressScreen extends StatelessWidget {
 
   static const Key comparisonNoticeKey = Key('progress.comparisonOff');
 
-  /// **ÖLÇÜLEN SAYI SAKLANMIYOR — ve bu söyleniyor (L-316).**
+  /// **ÖLÇÜLEN SAYI ARTIK SAKLANIYOR — ama BU EKRANDA DEĞİL (D13/F2).**
   ///
-  /// Ölçüldü: `AssessmentResult` `value`·`unit`·`bandLabel`·`provenance`
-  /// taşıyor; çekirdeğin `SessionRecord`unda dördünün de karşılığı YOK, yani
-  /// çeviri sırasında **düşüyorlar**. Kullanıcı 147,5° ölçüyor, sonucu bir kez
-  /// görüyor, ve o sayı bir daha hiçbir yerde yok.
+  /// Eski ad `readingNotKeptKey`di ve L-316'nın bulduğu kaybı anlatıyordu:
+  /// `AssessmentResult` `value`·`unit`·`bandLabel`·`provenance` taşıyordu,
+  /// çekirdeğin `SessionRecord`unda dördünün de karşılığı yoktu, sayı bir
+  /// daha hiçbir yerde yoktu. **Artık öyle değil** — `attempt_values.jsonl`
+  /// onu tutuyor. Anahtarı yeniden adlandırdım: bir kart artık TERSİNİ
+  /// söylerken eski adını taşımak, H-31'in kendi dersini (bayat isim =
+  /// yanlış bilgi) bu dosyada tekrarlamak olurdu.
   ///
   /// Bu ekranın altyazısı *"what was measured, when, and under what
-  /// conditions"* diyordu — **üç vaatten yalnız biri karşılanıyordu.**
-  /// Sessizce bırakmak, kullanıcının sakladığını sandığı şeyi yok saymaktı.
-  static const Key readingNotKeptKey = Key('progress.readingNotKept');
+  /// conditions"* diyordu — hâlâ üçün ikisini karşılıyor (koşullar hâlâ
+  /// saklanmıyor). Üçüncüsü (değer) artık kayıp değil, YÖNLENDİRİLİYOR.
+  static const Key readingKeptElsewhereKey = Key('progress.readingKeptElsewhere');
   static const Key ledgerKey = Key('progress.ledger');
 
   /// Bir OTURUM başlığının anahtar ÖN EKİ (L-324). Her başlık kendi zaman
@@ -97,19 +109,19 @@ class ProgressScreen extends StatelessWidget {
           // sunmadığını söyle. Kıyas kartıyla aynı yerde ve aynı tonda —
           // envanter, özür değil.
           Padding(
-            key: readingNotKeptKey,
+            key: readingKeptElsewhereKey,
             padding: const EdgeInsets.only(bottom: 20),
             child: LissomCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  LissomEyebrow('The reading itself is not kept',
-                      color: LissomColors.roseDeepHover),
+                  LissomEyebrow('The number lives on each test\'s own page'),
                   const SizedBox(height: 8),
                   Text(
-                    'When you measure, Lissom shows you the number once. It '
-                    'is not written down, so this list can tell you that a '
-                    'test was measured — not what it came to.',
+                    'This list is shared with the other apps built on the '
+                    'same measurement core, and that shared record still '
+                    'has no place for the number itself — it can only tell '
+                    'you that a test was measured, not what it came to.',
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
@@ -126,12 +138,18 @@ class ProgressScreen extends StatelessWidget {
                   // > ÖĞRENMEDEN VAKAYI KAPATMAKTIR.***
                   // ⇒ Sınır: bu kart **DEĞERİ**, alttaki kart **KOŞULLARI**
                   // anlatır. Her eksikliğin tek sahibi var.
+                  //
+                  // D13/F2 — VAAT ARTIK TUTULABİLİR (L-316'nın kapanışı):
+                  // sayı kayıp değil, Lissom-sahipli bir yan deftere yazılıp
+                  // testin KENDİ sayfasında ham olarak gösteriliyor. Bu kart
+                  // hâlâ dürüst: BU EKRANIN kendisi değeri taşımıyor
+                  // (paylaşılan çekirdek şeması değişmedi) — ama artık
+                  // "kayıp" demiyor, "başka yerde" diyor.
                   Text(
-                    'What a session stores is shared with the other apps '
-                    'built on the same measurement core, and that shared '
-                    'record has no place for the number itself. We would '
-                    'rather tell you it is gone than let this page look like '
-                    'a history of your numbers.',
+                    'The number is not lost, though: Lissom keeps it '
+                    'separately, next to the test it belongs to. Open a '
+                    'test from Library to see your last reading and '
+                    'everything measured before it.',
                     style: t.textTheme.bodySmall,
                   ),
                 ],
@@ -158,13 +176,19 @@ class ProgressScreen extends StatelessWidget {
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
+                  // D13/F2 — ÜÇÜN İKİSİ ARTIK KAYDEDİLİYOR (bkz. üstteki
+                  // kart), ama bu KIYASI KURMUYOR: `AttemptValue.provenance`
+                  // taşıyor, hiçbir yüzey onu KARŞILAŞTIRMAK için OKUMUYOR.
+                  // Eski cümle ("does not record any of those three") artık
+                  // yanlış — düzeltmemek H-31'in ders verdiği türden bir
+                  // bayat iddia bırakırdı.
                   Text(
                     'Two measurements can only be set against each other when '
                     'they were taken with the same model, a compatible '
-                    'configuration and a similar camera setup. What we store '
-                    'about a past session does not record any of those three, '
-                    'so we cannot check that they hold — and we are not going '
-                    'to compare on the assumption that they did.',
+                    'configuration and a similar camera setup. Each reading\'s '
+                    'model and configuration are recorded next to it now — '
+                    'camera setup still is not — but nothing on this screen '
+                    'or a test\'s own page compares any of that for you.',
                     style: t.textTheme.bodySmall,
                   ),
                   const SizedBox(height: 8),

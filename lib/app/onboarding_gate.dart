@@ -10,6 +10,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
+import 'attempt_values.dart';
 import 'lissom_theme.dart';
 import 'onboarding_flow.dart';
 import 'onboarding_store.dart';
@@ -22,6 +23,7 @@ class OnboardingGate extends StatefulWidget {
     this.shellLoader,
     this.poseSourceLoader,
     this.sessionStoreLoader,
+    this.attemptValueStoreLoader,
   });
 
   /// Testte enjekte edilebilir: `rootBundle`/`path_provider` widget testinde
@@ -41,6 +43,10 @@ class OnboardingGate extends StatefulWidget {
   /// kendisiydi**: yürüyüş taze kurulumdan başlayamıyordu.
   final PoseSource Function()? poseSourceLoader;
   final Future<SessionStore> Function()? sessionStoreLoader;
+
+  /// D13/F2 — `LissomShell`e AYNEN geçirilir, `sessionStoreLoader`la AYNI
+  /// sözleşme.
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
 
   @override
   State<OnboardingGate> createState() => _OnboardingGateState();
@@ -85,6 +91,7 @@ class _OnboardingGateState extends State<OnboardingGate> {
               ageBand: (_justCompleted ?? s.data!.profile).ageBand,
               poseSourceLoader: widget.poseSourceLoader,
               sessionStoreLoader: widget.sessionStoreLoader,
+              attemptValueStoreLoader: widget.attemptValueStoreLoader,
             );
           }
           return OnboardingFlow(

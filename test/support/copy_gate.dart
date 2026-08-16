@@ -29,6 +29,13 @@ const List<(Pattern, String)> kBannedSurfaceCopy = <(Pattern, String)>[
   (r'\bsoon\b', 'M-F-186 vaat dili'),
   (r'\bimproved\b', 'MDC eşiği yok — değişim iddiası edilemez'),
   (r'\bworsened\b', 'MDC eşiği yok — değişim iddiası edilemez'),
+  // ⚠️ D13/F2 sırasında ölçüldü: modül dokümanı bu ikisini de "banned" diye
+  // ANIYORDU ama `kBannedSurfaceCopy`de HİÇ YOKTU — doküman iddia ediyor,
+  // liste karşılamıyordu (`H-24`nin belge/kod ikizi). Test detay sayfası
+  // (`test_detail_screen.dart`) tam bu iki kalıbın riskli olduğu yerde
+  // yazıldığı için şimdi kapandı.
+  (r'\bbetter than\b', 'MDC eşiği yok — değişim iddiası edilemez'),
+  (r'\bworse than\b', 'MDC eşiği yok — değişim iddiası edilemez'),
   (r'!', 'tezahürat/ünlem yasağı — ton sakin ve yetişkin'),
   (r'keep going', 'tezahürat yasağı'),
   (r'well done', 'tezahürat yasağı'),

@@ -20,12 +20,19 @@ import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
 import 'app_facts.dart';
+import 'attempt_values.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
 import 'surfaces.dart';
+import 'test_detail_screen.dart';
 
 class LibraryScreen extends StatelessWidget {
-  const LibraryScreen({required this.facts, super.key});
+  const LibraryScreen({required this.facts, this.attemptValueStoreLoader, super.key});
+
+  /// `LiveCaptureScreen.attemptValueStoreLoader`la AYNI enjeksiyon
+  /// sözleşmesi (D13) — testte enjekte edilir, üretimde `null` ⇒
+  /// `openAttemptValueStore`.
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
 
   static const Key builtSectionKey = Key('library.built');
   static const Key notBuiltSectionKey = Key('library.notBuilt');
@@ -67,7 +74,11 @@ class LibraryScreen extends StatelessWidget {
               for (final LibraryFamily f in built)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: _BuiltFamilyCard(family: f, facts: facts),
+                  child: _BuiltFamilyCard(
+                    family: f,
+                    facts: facts,
+                    attemptValueStoreLoader: attemptValueStoreLoader,
+                  ),
                 ),
             ],
           ),
@@ -120,9 +131,14 @@ class LibraryScreen extends StatelessWidget {
 
 /// Birinci-sınıf yerleşim: tam kart, gerçek sayı, gerçek giriş.
 class _BuiltFamilyCard extends StatelessWidget {
-  const _BuiltFamilyCard({required this.family, required this.facts});
+  const _BuiltFamilyCard({
+    required this.family,
+    required this.facts,
+    this.attemptValueStoreLoader,
+  });
   final LibraryFamily family;
   final AppFacts facts;
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +149,11 @@ class _BuiltFamilyCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(LissomRadii.card),
       onTap: () => Navigator.of(context).push<void>(
         MaterialPageRoute<void>(
-          builder: (_) => FamilyPage(family: family, facts: facts),
+          builder: (_) => FamilyPage(
+            family: family,
+            facts: facts,
+            attemptValueStoreLoader: attemptValueStoreLoader,
+          ),
         ),
       ),
       child: LissomCard(
@@ -207,7 +227,12 @@ class _PendingFamilyRow extends StatelessWidget {
 
 /// Bir ailenin sayfası — **dürüstlük kutusu ZORUNLU** (opsiyonel değil).
 class FamilyPage extends StatelessWidget {
-  const FamilyPage({required this.family, required this.facts, super.key});
+  const FamilyPage({
+    required this.family,
+    required this.facts,
+    this.attemptValueStoreLoader,
+    super.key,
+  });
 
   static const Key honestyKey = Key('family.honestyBox');
   static const Key liveListKey = Key('family.liveTests');
@@ -222,6 +247,7 @@ class FamilyPage extends StatelessWidget {
 
   final LibraryFamily family;
   final AppFacts facts;
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
 
   @override
   Widget build(BuildContext context) {
@@ -302,6 +328,18 @@ class FamilyPage extends StatelessWidget {
                   iconColor: t.colorScheme.primary,
                   title: x.name,
                   subtitle: _instructionFor(x.testId),
+                  // D13/F2 — bu testin GEÇMİŞİNE gider (SON DEĞER + trend).
+                  // `facts.battery.tests[x.testId]` her zaman VAR: `live`
+                  // zaten bataryadan türetilir (`facts.live`), yabancı bir
+                  // testId üretemez.
+                  onTap: () => Navigator.of(context).push<void>(
+                    MaterialPageRoute<void>(
+                      builder: (_) => TestDetailScreen(
+                        test: facts.battery.tests[x.testId]!,
+                        attemptValueStoreLoader: attemptValueStoreLoader,
+                      ),
+                    ),
+                  ),
                 ),
               ),
           ],
@@ -414,43 +452,67 @@ class FamilyPage extends StatelessWidget {
 
 /// Test satırı — canlı satırda altyazı YOK (ham metrik-id dahili sözlüktür ve
 /// bir kez yüzeye sızmıştı), engelli satırda gerekçe VAR.
+///
+/// [onTap] yalnız CANLI testlerde dolu (D13/F2) — engelli bir teste dokunmak
+/// "geçmişini gör" diye bir yere GÖTÜRMEZ, çünkü hiç ölçülememiş bir testin
+/// geçmişi yoktur; boş bir sayfaya yönlendirmek A3'ün başlıklı-boşluk
+/// yasağını sayfa düzeyinde çiğnerdi.
 class _TestRow extends StatelessWidget {
   const _TestRow({
     required this.icon,
     required this.iconColor,
     required this.title,
     this.subtitle,
+    this.onTap,
   });
 
   final IconData icon;
   final Color iconColor;
   final String title;
   final String? subtitle;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    return LissomCard(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Icon(icon, color: iconColor, size: 22),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(title, style: t.textTheme.titleMedium),
-                if (subtitle != null) ...<Widget>[
-                  const SizedBox(height: 3),
-                  Text(subtitle!, style: t.textTheme.bodySmall),
-                ],
+    final Widget row = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Icon(icon, color: iconColor, size: 22),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(title, style: t.textTheme.titleMedium),
+              if (subtitle != null) ...<Widget>[
+                const SizedBox(height: 3),
+                Text(subtitle!, style: t.textTheme.bodySmall),
               ],
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        if (onTap != null)
+          const Padding(
+            padding: EdgeInsets.only(top: 2, left: 6),
+            child: Icon(Icons.chevron_right,
+                size: 18, color: LissomColors.bodySecondary),
+          ),
+      ],
     );
+    return onTap == null
+        ? LissomCard(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+            child: row,
+          )
+        : InkWell(
+            borderRadius: BorderRadius.circular(LissomRadii.card),
+            onTap: onTap,
+            child: LissomCard(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+              child: row,
+            ),
+          );
   }
 }

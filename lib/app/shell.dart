@@ -27,6 +27,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
+import 'attempt_values.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
 import 'lissom_theme.dart';
@@ -48,6 +49,7 @@ class LissomShell extends StatefulWidget {
     this.ageBand,
     this.poseSourceLoader,
     this.sessionStoreLoader,
+    this.attemptValueStoreLoader,
   });
 
   /// Testte enjekte edilebilir: `rootBundle` widget testinde kilitlenebiliyor
@@ -59,6 +61,10 @@ class LissomShell extends StatefulWidget {
   /// `ageBand`la aynı sözleşmede — taşınır, okunmaz.
   final PoseSource Function()? poseSourceLoader;
   final Future<SessionStore> Function()? sessionStoreLoader;
+
+  /// D13/F2 — `LibraryScreen` → `TestDetailScreen` yoluna taşınır. AYNI
+  /// sözleşme: kabuk yorumlamaz, yalnız kablolar.
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
 
   /// Onboarding'de beyan edilen yaş bandı (`u40` · `40-59` · `60plus`) —
   /// kabuk bunu YORUMLAMAZ, yalnız TAŞIR (G-100: kabuk yalnız kablolama).
@@ -151,7 +157,10 @@ class _LissomShellState extends State<LissomShell> {
             poseSourceLoader: widget.poseSourceLoader,
             sessionStoreLoader: widget.sessionStoreLoader,
           ),
-        'library' => LibraryScreen(facts: facts),
+        'library' => LibraryScreen(
+            facts: facts,
+            attemptValueStoreLoader: widget.attemptValueStoreLoader,
+          ),
         'progress' => ProgressScreen(facts: facts),
         'profile' => ProfileScreen(facts: facts),
         // Erişilemez: `_tabsMatch` yukarıda kapıyı tutuyor. Yine de sessiz

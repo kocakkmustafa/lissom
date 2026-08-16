@@ -1,5 +1,15 @@
 /// **ÖLÇÜLEN DEĞER KALICI DEĞİL — ve yüzey bunu SÖYLEMİYOR (L-316).**
 ///
+/// ✅ **KISMEN ÇÖZÜLDÜ (D13/F2, 2026-08-16, `L-337`).** Aşağıdaki bulgu
+/// YAZILDIĞI GÜN doğruydu ve hâlâ KISMEN doğru: `SessionRecord` (çekirdek
+/// şema) değeri hâlâ taşımıyor, `⛔ Çözüm bu turda YAPILMADI` satırı hâlâ
+/// geçerli — o KARAR değişmedi. Ama Lissom kendi yan defterini kurdu
+/// (`attempt_values.jsonl`, `lib/app/attempt_values.dart`): değer artık
+/// KAYIP değil, testin KENDİ sayfasında (`TestDetailScreen`) HAM olarak
+/// görünüyor. Bu dosyanın testleri güncellendi: `recordFor`in değeri
+/// düşürdüğü iddiası hâlâ SINANIYOR (hâlâ doğru, aşağıda değişmedi) —
+/// yalnız "yüzey bunu söylemiyor" kısmı YANLIŞA döndü, kart artık söylüyor.
+///
 /// ═══════════════════════════════════════════════════════════════════
 /// ## BULGU — iddia değil, bu dosyanın ÖLÇTÜĞÜ şey
 /// ═══════════════════════════════════════════════════════════════════
@@ -161,8 +171,9 @@ void main() {
     );
   });
 
-  testWidgets('YÜZEY: kaybın kendisi kullanıcıya SÖYLENİYOR',
-      (WidgetTester tester) async {
+  testWidgets(
+      'YÜZEY (D13/F2 GÜNCELLEMESİ): değerin BAŞKA YERDE olduğu SÖYLENİYOR, '
+      '"kayıp" DENMİYOR', (WidgetTester tester) async {
     pinNarrowSurface(tester);
     final AppFacts f = factsFromDisk();
 
@@ -172,11 +183,19 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    // ⭐ A3'ün ikinci kolu: *"ya iş sunar ya NEDEN sunmadığını söyler."*
-    // Ölçülen sayı saklanmıyorsa, bunu kullanıcıya söylemek zorundayız —
-    // sessizce kaybetmek, ölçtüğünü sandığı şeyi yok saymaktır.
-    expect(find.byKey(ProgressScreen.readingNotKeptKey), findsOneWidget,
-        reason: 'ölçülen değerin saklanmadığı kullanıcıya SÖYLENMİYOR');
+    // ⭐ A3'ün ikinci kolu hâlâ geçerli — *"ya iş sunar ya NEDEN sunmadığını
+    // söyler"* — ama olgu değişti: bu ekran değeri sunmuyor, AMA artık
+    // NEREDE olduğunu söylüyor (D13: `attempt_values.jsonl` + test detay
+    // sayfası). Eski anahtar `readingNotKeptKey`di; kart artık TERSİNİ
+    // söylüyor, anahtar da `readingKeptElsewhereKey` oldu.
+    expect(find.byKey(ProgressScreen.readingKeptElsewhereKey), findsOneWidget,
+        reason: 'değerin nerede olduğu kullanıcıya SÖYLENMİYOR');
+    // POZİTİF: kart GERÇEKTEN "kayıp" demiyor, "başka sayfada" diyor —
+    // yalnız kartın VARLIĞI değil İÇERİĞİ de ölçülmeli, aksi hâlde eski
+    // "not kept" metni sessizce kalmış olabilirdi.
+    expect(find.textContaining('Open a test from Library'), findsOneWidget,
+        reason: 'kart NEREYE bakılacağını söylemiyor — "başka yerde" demek '
+            'yeterli değil, YÖNLENDİRMELİ');
   });
 
   testWidgets('ÇELİŞKİ: aynı ekran okumayı hem reddedip hem VAAT EDEMEZ',
