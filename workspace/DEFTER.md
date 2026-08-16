@@ -4841,3 +4841,36 @@ senkron değil.
 (`H-72`) hâlâ *"KURUCUDA"* diyor, bu doğru: B8 gerçekte HÂLÂ karar
 bekliyor, benim yaptığım icra o kararı geçersiz kılmadı, yalnız erken ve
 yetkisiz bir taslak üretti.
+
+---
+
+## L-343 — 12 yokluk-iddiası (`H-44`) canlı yeniden ölçüldü: 11 bulundu, HİÇBİRİ bayat değil
+
+L-342'de durduktan sonra kuyruğun **açıkça güvenli** kalemine geçtim
+(`H-76` adım 3: tasarım-yönü DEĞİL, ölçüm/envanter). `H-23` gereği kapsam
+`lib/` ötesine (`config/**/*.json`) genişletildi; Türkçe-güvenli katlama
+(`H-64`) elle uygulandı (shell `grep -i` Ç/Ğ/İ/I/Ö/Ş/Ü'yü katlamaz).
+
+### Bulgu
+9 canlı kullanıcı-yüzeyi iddiası + 2 kod-belgesi = **11** (orkestratörün
+2026-08-16 sayımı **12**'ydi — fark adıyla yazıldı, sessizce düzeltilmedi).
+Her biri kendi çürüten ölçümüyle `docs/YOKLUK-IDDIALARI-ENVANTERI-2026-08-17.
+md`de. **Hiçbiri bayat değil** — beşi zaten kod-türetilmiş (statik yalan
+söyleyemez), altısı statik-ama-hâlâ-doğru (`notTried` en kırılganı: A12
+hâlâ kurucuda, L-339'daki build+launch SİMÜLATÖRDEYDİ, gerçek telefonda
+değil — cümle bunu doğru ayırt ediyor).
+
+### Mevcut kapının kapsamı doğrulandı — yeni kapı KURULMADI
+`test/stale_absence_claim_test.dart`nin kendi belgesi: *"her yokluk cümlesi
+hâlâ doğru mu" bir kapı değil, HÜKÜM ister* — yalnız BİLİNEN/ÖLÇÜLMÜŞ
+yalanların geri gelmesini engelliyor (`_staleClaims` haritası). Bu turun
+envanteri o haritanın **aday havuzu**: altı statik iddiadan biri
+gerçekleştiğinde (hatırlatıcı · kamera önizlemesi · A12 · aralık mantığı ·
+validasyon çalışması) o satır **AYNI TURDA** haritaya taşınmalı (`H-73`
+bağlayıcı kancası — sonradan değil).
+
+**Kapılar:** app **255/255** (değişmedi — yalnız `docs/` eklendi, kod
+dokunulmadı) · engine **114/114** · python **20/21** (M-F-280) ·
+`all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** değişmedi — bu tur bir envanter/doğrulama, kullanıcı yüzeyi
+değil.
