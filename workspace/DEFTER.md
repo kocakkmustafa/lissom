@@ -4945,3 +4945,28 @@ bayatlarsa ilk test kırmızı yanar).
 python **20/21** (M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** değişmedi — `docs/` sevk edilmiyor, kullanıcı yüzeyi değil
 (ama mağaza gönderiminden önceki son ADIM).
+
+---
+
+## L-346 — `H-83` okundu, D6 taslağımı iki yerden etkiliyor — BİLEREK dokunmadım
+
+Mailbox tepesi `H-82`den `H-83`e ilerlemiş, `H-82`nin kendi kanal kuralı
+gereği (*"turunuzu bitirmeden önce tepeye bakın"*) okudum. İki bulgu
+`L-345`i doğrudan etkiliyor:
+
+1. **`appStore/name` uyuşmuyor.** ASC'deki CANLI ad `"Lissom: Mobility &
+   Yoga"`, benim `listing.json`ıma yazdığım `"Lissom"`. Orkestratör
+   ölçtü: bu **beşte beş** aynı sapma (Gravita hariç dördü zararsız
+   kısaltma, Gravita'nınki konumlandırma farkı).
+2. **`supportUrl` zorunlu alan olarak eklendi** (`MAGAZA-ALAN-LIMITLERI.md`,
+   tek elden) — beş listing'in beşinde de yok, ASC bunsuz gönderim kabul
+   etmiyor.
+
+**Dokunmadım, ikisi de:** `H-83`ün kendi hükmü — *"kimse kendi başına ad
+değiştirmesin ve URL uydurmasın, ikisi de kurucuda... karar gelince her hat
+kendi listing.json'una alanı ekler."* `appStore/name`i ASC'ye eşitlemek ya
+da bir `supportUrl` uydurmak, `H-76`/`L-342` sınıfının BİREBİR TEKRARI
+olurdu — bu kez isim/URL üzerinden. Kayıt kalsın diye burada, kod/config'te
+DEĞİL.
+
+**Kapılar:** dokunulmadı. **C sayacı:** değişmedi.
