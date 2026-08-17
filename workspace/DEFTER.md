@@ -4970,3 +4970,46 @@ olurdu — bu kez isim/URL üzerinden. Kayıt kalsın diye burada, kod/config'te
 DEĞİL.
 
 **Kapılar:** dokunulmadı. **C sayacı:** değişmedi.
+
+---
+
+## L-347 — Cihaz günü paketi: `docs/device-day/RECIPE.md` yazıldı (aile 5/5 tamamlandı)
+
+`H-85`in doğrudan görevi: *"Lissom: cihaz günü paketi (aile 4/5, eksik tek
+sen)."* Önce yanlış anladım — A12'nin provizyon/imza ön-uçuşuyla (zaten
+`L-313`'te `tools/a12_device_preflight.sh` + `docs/A12-KOSUM-HATTI.md` var)
+AYNI şey sandım. `motion-core/workspace/CIHAZ-GUNU-AILE-RECETESI.md`yi
+okuyunca netleşti: eksik olan Lissom'un **provizyonu** değil (aile
+reçetesinin `§0b` tablosu Lissom'u zaten *"4/5 hazır"* diye ölçmüş,
+14 Ağustos profili, 4 kayıtlı cihaz) — eksik olan ailenin beklediği
+**`docs/device-day/RECIPE.md` KONUMU** (dört kardeşte var, Lissom'da yok).
+
+### Yapılan
+`docs/device-day/RECIPE.md` yazıldı: aile şemasını taşıyor (§0-§3 aile
+reçetesine İŞARET eder, İÇERİK KOPYALANMADI), §4 Lissom'un KENDİ 10
+maddelik yürüyüş tablosu (onboarding → kamera izni → kütüphane → test
+koşumu → sonuç okuma → test detay → progress → profile → soğuk başlatma).
+
+### Yan bulgu — Lissom'un betiği ailenin İKİ bilinen tuzağına ZATEN bağışık
+Aile reçetesi `§0c` iki hatta (Ostinato, Gravita) bir kusur buldu:
+`find_<app>_profile()` birden fazla profil varken "en yeni `CreationDate`"
+kuralıyla YANLIŞ profili seçip sahte-kırmızı üretiyordu. Lissom'un
+`profile_match_check()`ini okudum — **farklı bir desen kullanıyor**: tek
+profil SEÇMİYOR, bundle'ı kapsayan TÜM profilleri tarıyor, cihazı İÇEREN
+herhangi biri varsa yeşil yakıyor (union, "en iyi tekil" değil) ⇒ yapısal
+olarak bu tuzağa **bağışık**. `§0b` (iki profil dizini) zaten `L-313`ten
+beri kapalıydı. Bu iki bulgu aile reçetesine EKLENMEDİ (paylaşılan dosya,
+tek elden orkestratörde) — burada adıyla kayıtlı, rapor yoluyla iletilecek.
+
+### Doğrulama — iki iddia elle çapraz kontrol edildi (yazmadan önce)
+1. **LaunchImage/ikon** (§3): storyboard `backgroundColor` RGB(0.953,
+   0.929, 0.914) — Flutter varsayılanı DEĞİL; `LaunchImage*.png` 150/300/
+   450px — 1×1 şablon DEĞİL. İkisi de `L-341`den, burada tekrar ölçüldü.
+2. **Kütüphane satırı sayısı:** ilk taslağım *"12 canlı, 0 not-in-this-
+   build"* diyordu — `library_screen.dart:167-168`in kendi yorumu bunu
+   YALANLADI (*"12'sinden 3'ü ölçülebiliyor"*, ESKİ bir sayı, köprüden
+   TÜRETİLİYOR, elle sabit değil). Kendi iddiamı **kendim yakaladım**,
+   yazmadan düzelttim: tabloyu ekrandan OKUNACAK bir talimata çevirdim
+   (`$total`/`$live` metnini oku), sayı UYDURMADIM.
+
+**Kapılar:** dokunulmadı (`docs/`, sevk edilmiyor). **C sayacı:** değişmedi.
