@@ -4874,3 +4874,74 @@ dokunulmadı) · engine **114/114** · python **20/21** (M-F-280) ·
 `all_gates.py` TÜMÜ YEŞİL.
 **C sayacı:** değişmedi — bu tur bir envanter/doğrulama, kullanıcı yüzeyi
 değil.
+
+---
+
+## L-344 — Kuyruk kalemi 4 ("ölçüm değeri saklama") ZATEN KAPALI — L-337/L-339/L-340'ta, yeniden açılmadı
+
+Kurucu "devam et" dedi (`H-76`in kendisinin öngördüğü çözüm yolu: kurucu
+direktifi mailbox metnini yener). Kuyruğa dönmeden önce 4. kalemi
+(`YAYIN-YOLU-LISSOM.md §3.4`: *"value·unit·bandLabel·provenance zinciri,
+büyük iş"*) doğruladım — kickoff dosyası L-337'DEN ÖNCE yazılmış gibi
+okunuyor, DURUM bölümü hâlâ *"🔴 SAKLANMIYOR"* diyordu.
+
+**Ölçüm:** `lib/app/attempt_values.dart`daki `AttemptValue` modeli DÖRT
+alanı da taşıyor (`value` · `unit` · `bandLabel` · `provenance`), `append`/
+`fromJson` ikisi de eksiksiz round-trip ediyor (L-337). `TestDetailScreen`
+(L-339) `value`+`unit`i gösteriyor ama `bandLabel`ı BİLEREK göstermiyor —
+DEFTER'in kendi kaydı bunun **orkestratör hükmüyle bağlayıcı** bir tasarım
+kararı olduğunu söylüyor (*"gerçek MDC verisi yok ⇒ 'improved/worsened'
+dili YOK... yalnız değer + tarih"*, satır 4628-4629). ⇒ **`bandLabel`ı
+ekrana eklemek bu kalemi TAMAMLAMAZ, tam da kaçınılanı geri getirir.**
+
+**Hüküm:** kalem 4 KAPALI sayılır — depo ZİNCİRİ eksiksiz, ekran YÜZEYİ
+kasıtlı-minimal. `YAYIN-YOLU-LISSOM.md`nin DURUM bölümü bayat (orkestratöre
+bildirilecek, dosya motion-core'da/aile-ortak, bu depodan düzenlenmedi).
+
+**Kapılar:** dokunulmadı, hepsi yeşil (bkz. L-343). **C sayacı:** değişmedi.
+
+---
+
+## L-345 — D6: `docs/store/listing.json` TASLAĞI yazıldı + kapı kuruldu (Kapı önce doğdu, listing altında değil — `H-78`④'ün öngördüğü çare)
+
+`H-78`④ Choreia+Lissom'u adıyla uyarmıştı: *"listing'inizi henüz yazmadınız...
+kapı şimdi kurulursa listing'iniz onun altında doğar."* `H-78`'in kendi
+`$doc`u ve JabLab'ın `docs/store/listing.json`u okununca netleşti: listing
+YAZMAK normal hat işi (`M-F-77`nin BEŞ kalemi arasında YOK), yalnız
+**GÖNDERİM** (`store gönderimi`) kurucuda — JabLab'ın kendi dosyası da
+*"bu dosya yalnız TASLAK, onay bekliyor"* diyor. İkon'la (`L-342`, tasarım
+yönü) KARIŞTIRILMADI — ayrı `M-F-77` kalemleri.
+
+### Olgu kaynağı — kardeşin metni DEĞİL, Lissom'un kendi verisi (`H-74` disiplini)
+`config/tests/lissom-assessment.v1.json`: **12** test, **2** hariç
+(`hip_internal_external_rotation` · `cervical_rotation`, ikisi de metne
+GİRMEDİ — ölçülemeyen kapasiteyi ima etmesin). `home_screen.dart:169`
+kod-yorumu: *"program_engine — kodda YOK"* ⇒ "günlük plan" iddiası
+YAZILMADI. `live_capture_screen.dart:432-433`: video cihazdan çıkmıyor.
+Kapanış cümlesi `config/copy/disclaimers.en.json`nin ONAYLI `storeListing`
+varyantından türetildi (kelimesi kelimesine kopya değil, aynı üç iddia).
+
+### Kapı — `test/store_listing_test.dart` (yeni, 10 test)
+`workspace/MAGAZA-ALAN-LIMITLERI.md`nin üç ölçümü (uzunluk · varlık ·
+`$` sözleşmesi) + üç öz-test (pozitif ikiz · sabotaj · vakum) + JabLab
+emsalinden iki regex (vaat dili · cihaz-kanıtı iddiası) + karşılıksız-vaat
+taraması (`stale_absence_claim_test.dart`nin `_capabilityClaimGate`
+listesiyle AYNI üç kalem — kaynağı işaretlendi, KOPYALANMADI). Limitler
+kontrat dosyasından ÇALIŞMA-ANINDA doğrulanıyor (`_fieldLimits` sabiti
+bayatlarsa ilk test kırmızı yanar).
+
+### Kapı KENDİ turunda kör doğdu, kendi turunda düzeldi — iki bulgu
+1. **Yasak-vaat listem "trend line"/"better than"/"worse than" içeriyordu
+   ve kendi description'ımı ısırdı:** cümle *"does not draw a trend line
+   or say a result is better or worse than a past one"* — yokluğu ADIYLA
+   anlatıyor, alt-dize yasağı bağlamı ayırt edemedi. `L-246`nın *"will not"*
+   muafiyetiyle AYNI sınıf: **doğru davranışı cezalandıran kapı yanlıştır.**
+   Üçü listeden ÇIKARILDI, gerekçe testin içine yorum olarak yazıldı.
+2. **`description`de bir `yet` vardı** (*"no validated threshold exists
+   yet"*) — `M-F-186` sert yasağına takıldı, `yet` kaldırıldı, anlam
+   değişmedi.
+
+**Kapılar:** app **265/265** (+10, yalnız bu dosya) · engine **114/114** ·
+python **20/21** (M-F-280) · `all_gates.py` TÜMÜ YEŞİL.
+**C sayacı:** değişmedi — `docs/` sevk edilmiyor, kullanıcı yüzeyi değil
+(ama mağaza gönderiminden önceki son ADIM).
