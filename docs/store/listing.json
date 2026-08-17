@@ -1,7 +1,7 @@
 {
   "$doc": "Mağaza liste metni TASLAĞI — makine-okur kaynak. Bu dosya test/store_listing_test.dart tarafından taranır (uzunluk · varlık · $ sözleşmesi · karşılıksız-vaat taraması, workspace/MAGAZA-ALAN-LIMITLERI.md kontratı). Gönderim KURUCU kalemi (M-F-77: store gönderimi) — bu dosya yalnız TASLAK, onay bekliyor.",
   "appStore": {
-    "name": "Lissom",
+    "name": "Lissom: Mobility & Yoga",
     "subtitle": "Camera-based mobility tests",
     "promotionalText": "Twelve camera-based mobility tests you run at home. Lissom measures what it can see and says what it can't — no coaching, no plan, just your own numbers over time.",
     "keywords": "mobility,flexibility,movement screen,pose estimation,wellness,stretching,range of motion,squat"
@@ -24,5 +24,8 @@
       "Unrestricted web access: NONE — uygulama içi tarayıcı yok",
       "User-generated content / sosyal paylaşım: NONE — kamera görüntüsü cihazdan hiç çıkmıyor, yükleme/paylaşım özelliği yok"
     ]
-  }
+  },
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
+  "$urlWhy": "Kurucu karari 2026-08-17 (H-85): supportUrl+privacyPolicyUrl Apple'in ZORUNLU alanlari, bes app ORTAK sayfa kullanir. Sayfalar yulalab.com'da yazildi (/privacy/motion bes app icin ortak politika; /support Motion'i kapsayacak sekilde guncellendi). Deger hat tarafindan SECILMEDI, kurucu karari olarak yazildi."
 }
