@@ -5251,3 +5251,65 @@ assessment production wiring) ya da orkestratörden gelecek GOREV/KARAR.
 artık ilk açılışta ağa çıkmıyor (font fetch kapalı); font dosyaları
 gelene kadar sistem-varsayılan yazı tipiyle render eder (görsel fark,
 crash değil).
+
+---
+
+## L-350 — L-349'un "TÜMÜ YEŞİL" iddiası yalnız LOKAL ölçümdü: gerçek CI KIRMIZI çıktı — `tool/fetch_pose_model.sh` fresh checkout'ta `mkdir` etmiyordu
+
+Yeni oturum kickoff'u (SOLO v3) `python3 tools/all_gates.py` varlığını "doğrulanmamış"
+işaretlemişti — dosya zaten VARDI (L-260'tan beri), ama bu şüphe beni gerçek
+GitHub Actions durumunu (`gh run list`) da ölçmeye itti, DEFTER'in kendi
+iddiasına güvenmek yerine. **İyi ki ölçtüm:** HEAD (`fdd4ac4`, L-349 ek)
+CI koşusu **FAILURE**, hem `flutter-checks` hem `ios-build` işi AYNI adımda
+düşüyor: `tool/fetch_pose_model.sh`.
+
+### Kök neden
+
+`git ls-files assets/models/` **boş** — bu dizinde hiçbir dosya (MODELS.md
+dahil, betiğin kendi yorumunun iddia ettiğinin AKSİNE) git'e commit edilmemiş.
+Fresh checkout'ta dizin fiilen YOK. Betik `curl -fsSL "$URL" -o "$DEST"`i
+hiç `mkdir` etmeden çağırıyordu ⇒ `curl: (23) Failure writing output to
+destination` (Android işi) / `curl: (56) ... passed 1369 returned
+4294967295` (iOS işi, aynı kök neden farklı curl sürümü/varyantı).
+
+Bu `flutter-checks`/`ios-build` işleri **2026-08-18'e kadar hiç yoktu**
+(L-349) — yani bu betik bugüne dek yalnız YEREL makinede, `assets/models/`
+zaten elle doldurulmuş haldeyken çalıştı. CI'da **ilk kez bugün** koştu ve
+ilk koşumda düştü. Kardeş betik `tool/fetch_fonts.sh` (aynı gün, aynı
+görev L-348/LIS-P0-002 içinde yazıldı) bu hatayı YAPMAMIŞ: `mkdir -p
+"$DEST_DIR"` satırı var. **İki betik aynı desenden, biri eksik.**
+
+### Düzeltme
+
+`tool/fetch_pose_model.sh`e tek satır: `cd`den hemen sonra
+`mkdir -p "$(dirname "$DEST")"` — `fetch_fonts.sh`ın deseniyle birebir.
+
+### Doğrulama — İKİ yol da ayrı ayrı sınandı, ölçülerek
+
+1. `assets/models/` **dizinini** sildim (yalnız dosyayı değil — fresh
+   checkout'un TAM koşulu), betiği koşturdum: aile önbelleğinden
+   (`~/Documents/YULAlab-AI/ventures/motion-core/lib/tools/fixture_pipeline/
+   models/`) kopyalama koluna düştü, SHA doğrulandı, `exit 0`.
+2. Aile önbelleğini `/tmp`e GEÇİCİ taşıyıp (motion-core READ-ONLY kuralı
+   gereği taşıma değil — dosya SİLİNMEDİ, adı değişmeden geri KONULDU,
+   hash sonradan doğrulandı) betiği tekrar koşturdum: bu kez CI'daki
+   GERÇEK yolu aldı (`curl -fsSL ... -o "$DEST"`), indirme başarılı, SHA
+   doğrulandı, `exit 0`. Aile önbelleği geri taşındı, boyutu/hash'i
+   değişmeden (`9398198` bayt, aynı SHA-256) — motion-core ağacına KALICI
+   dokunuş SIFIR.
+
+### Kapılar (bu turda ölçüldü)
+
+`python3 tools/all_gates.py` → app **280/286** (6 atlanan) · engine
+**114/114** · python **21/22** (M-F-280 BİLİNEN) · **TÜMÜ YEŞİL** —
+değişen tek dosya `tool/fetch_pose_model.sh` olduğu için bu koşum L-349'un
+lokal kanıtını YENİDEN doğruladı, yeni bir regresyon eklemedi.
+
+📌 **Aile adayı:** ***Lokal "tümü yeşil", CI'ın kendisi hiç koşmadıysa bir
+iddiadır, kanıt değil — yeni bir CI işi eklerken onun GERÇEK bir push'ta
+GERÇEKTEN geçtiğini `gh run list`/`gh run watch` ile ölç, log dosyasına
+güvenme.*** L-349 bu adımı atladı çünkü push SONRASI CI'ı hiç kontrol
+etmedi; yalnız yerel `all_gates.py`ye güvendi.
+
+**Sıradaki:** push + `gh run watch` ile GERÇEK yeşili doğrula (bu kayıt o
+doğrulamadan ÖNCE yazıldı — kapanış eki aşağıda gelecek).
