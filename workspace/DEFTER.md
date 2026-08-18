@@ -5389,3 +5389,253 @@ işe (LIS-P0-003) geçiliyor.
 **Kapılar (bu ek turda ölçüldü, DEĞİŞMEDİ):** lokal `all_gates.py`
 TÜMÜ YEŞİL (L-350'den beri aynı) — bu ek yalnız GERÇEK CI'ın hangi
 noktada durduğunu ölçtü, kod tarafında yeni değişiklik YOK.
+
+### EK — kurucu kararı geldi (§1.4 penceresi): salt-okunur PAT/deploy-key, workflow ÖNCEDEN bağlandı
+
+`AskUserQuestion` ile soruldu, kurucu **"Salt-okunur PAT/deploy-key ekle"**
+seçti (public yapma/atlama DEĞİL). Kurucunun kendi yapması gereken adım
+(kimlik-bilgisi oluşturma/girme PROHIBITED, §1.4) hâlâ AÇIK — ama CI
+workflow'u kurucu adımını BEKLEMEDEN, şimdiden bağlandı:
+
+`.github/workflows/checks.yml`, `flutter-checks`+`ios-build` ikisine de
+`flutter pub get`den ÖNCE yeni bir adım: secret `MOTION_CORE_RO_TOKEN`
+**VARSA** `git config --global url.insteadOf` ile yalnız
+`https://github.com/kocakkmustafa/motion-core.git` URL'sini token'lı
+forma çevirir (dar kapsam — blanket `github.com/` rewrite DEĞİL, yalnızca
+tam bu URL). Secret **YOKSA** adım `if: env.MOTION_CORE_RO_TOKEN != ''`
+ile SESSİZCE atlanır — bugünkü davranış (pub get aynı yerde kırmızı)
+DEĞİŞMEDİ, yeni bir bozulma YOK. `python3 -c "import yaml; ..."` ile
+sözdizimi doğrulandı.
+
+**Kurucudan istenen (bu oturumda yapılamaz, kurucu kendi yapmalı):**
+motion-core reposunda salt-okunur bir deploy-key/fine-grained PAT üret,
+Lissom reposuna `MOTION_CORE_RO_TOKEN` adıyla Actions secret olarak ekle.
+Yapılınca **ekstra kod değişikliği GEREKMEZ** — bir sonraki push otomatik
+yeşile döner (ya da kurucu manuel `gh workflow run`/re-run tetikleyebilir).
+
+**Dokunulmayan risk:** token değerini ben hiç görmedim/girmedim — yalnız
+`${{ secrets.MOTION_CORE_RO_TOKEN }}` adını YAML'a yazdım, GitHub'ın kendi
+secret mekanizması değeri log'da otomatik maskeler.
+
+---
+
+## L-351 — LIS-P0-003 kapsam ölçümü: "12 test wiring" göründüğünden FARKLI iki parçaya ayrılıyor — biri güvenle yazılabilir, öteki cihaz-bağımlı (LIS-P0-004 ile AYNI kökten EXTERNAL_GATE)
+
+DEFTER'in kendi L-349 eki "Sıradaki: LIS-P0-003" diyordu. Koda başlamadan
+önce roadmap'in tam istediğini (Step 1: 12 testin HER biri için valid/
+low-confidence/structural-failure test case'i · Step 3: kamera→gate→
+evaluator→kayıt→sonuç zincirini TÜMÜNE bağla) mevcut kodla karşılaştırdım
+— **kod yazmadan önce ölçmek**, bu turun en pahalı dersini (aşağıda)
+ÖNLEDİ.
+
+### Ölçüm 1 — 12 testin Dart-kapsamı eşit DEĞİL (grep, dosya-sayısı)
+
+```
+overhead_reach 24 · deep_squat 11 · lateral_bend 8 · ankle_dorsiflexion 6 ·
+active_straight_leg_raise 5 · hamstring_reach 3 · thoracic_rotation 3 ·
+plank_hold 3 · overhead_squat 1(*) · single_leg_balance 1(*) ·
+hip_hinge 0 · forward_lunge 0
+```
+(*) tek dosya DAVRANIŞSAL değil: `overhead_squat` yalnız
+`band_lineage_test.dart`da (LIS-P0-001'in claim-testi) · `single_leg_
+balance` yalnız `family_page_test.dart`da (kütüphane listesinde göründüğü
+testi) geçiyor — ikisi de gerçek bir poz-karesi/motor testi DEĞİL.
+
+### Ölçüm 2 — config'te kimin "yapısal-hata" guard'ı VAR, kimin YOK
+
+`invalidation[].code` alanları (LOW_CONFIDENCE hariç, o evrensel):
+
+```
+overhead_reach: BENT_ELBOW, CAMERA_ANGLE     deep_squat: HEEL_LIFT
+overhead_squat: ARMS_DROPPED                 ankle_dorsiflexion: HEEL_LIFT
+hamstring_reach: BENT_KNEE                   hip_hinge: (YOK)
+lateral_bend: CAMERA_ANGLE                   single_leg_balance: USED_SUPPORT, FOOT_DOWN
+forward_lunge: (YOK)                         thoracic_rotation: (YOK)
+active_straight_leg_raise: BENT_KNEE, OPPOSITE_LEG_LIFTED
+plank_hold: FORM_BREAK
+```
+
+`hip_hinge`/`forward_lunge` `guardMetrics` BEYAN EDİYOR (hip_hinge:
+`hip_flexion_right`+`knee_flexion_right`; forward_lunge:
+`trunk_lateral_tilt`) ama bunlara bağlı bir `invalidation` KURALI yok —
+yani guard için METRİK var, KURAL yok. Bu ikisi için "structural-failure
+test case'i yaz" talebi bugün **icat etmeden karşılanamaz** — güvenle
+ertelendi, aşağıda.
+
+### Ölçüm 3 — asıl bulgu: guard KODLARI olan 10 testte bile guard'lar PRODUCTION'DA HİÇ TETİKLENMİYOR
+
+`assessment_engine.dart:150-163`: `invalidation` döngüsü her kural için
+`trigger.type`e bakıyor — bataryadaki **TÜM** kurallar (LOW_CONFIDENCE
+dahil, 12 testin 12'si) `trigger.type: "unmeasured"`, ve bu tür için motor
+KENDİ YORUMUYLA "politika ölçülmedi — GÖRÜNÜR atlama" diyip **hiçbir şey
+yapmıyor**. Guard'ı gerçekten ateşleyen tek yol `engine.reportAbort(code)`
+metodu (satır 121) — ve:
+
+```
+grep -rn "reportAbort" lib/ packages/lissom_engine/{lib,test}/
+→ TEK çağıran: packages/lissom_engine/test/mf71_test.dart:126 (sentetik
+  unit test, elle çağırıyor)
+→ lib/ İÇİNDE SIFIR çağıran.
+```
+
+**Yani bugün production'da (ve `full_flow_walk_test.dart`nin yürüyüşünde)
+`aborted/BENT_KNEE` gibi bir sonucu üretecek kod YOKTUR** — guard kodları
+config'te BEYAN edilmiş, `InvalidationRule` olarak PARSE edilmiş
+(`battery.dart:716-802`), motor bunu TAŞIYACAK yeteneğe sahip
+(`reportAbort`), ama parse edilen kuralı canlı kareye karşı
+DEĞERLENDİRECEK ve `reportAbort`u ÇAĞIRACAK bir sınıf hiçbir yerde YOK.
+Üç parça (beyan · taşıma · değerlendirme) var, ortadaki (değerlendirme)
+EKSİK.
+
+### Bu boşluk YENİ değil, KASITLI ve KAYITLI — 2026-08-11 kararı hâlâ geçerli
+
+`assessment_engine.dart:137-149` kendi tarihini veriyor: naif bir politika
+("herhangi bir karede ihlal → iptal") gerçek cihaz replay'inde
+(`X2u_vGL0qJU` fixture, önceden geçerliliği kanıtlanmış temiz bir
+baş-üstü-uzanma) YANLIŞ-POZİTİF üretti — `elbow_extension_right` **5899
+karenin BİRİNDE** (muhtemelen izleme gürültüsü) 150°'nin altına düştü ve
+TÜM ölçüm `aborted/BENT_ELBOW` oldu. Doğru politika (kaç kare? ne kadar
+süre? hangi tolerans?) o zaman ÖLÇÜLEMEDİ ve motor bilerek
+`UnimplementedError`e bağlandı (`peakFrame`/`sustained`/`ratio` trigger
+türleri için) — icat etmek yerine.
+
+**Sonuç: "yapısal-hata" tetikleme politikası LIS-P0-004 (fiziksel cihaz)
+ile TAM AYNI kökten engelli.** Politikayı BEN bu turda yazarsam (ör.
+"3 ardışık kare" ya da "300ms sürekli") bu SAYIYI uydurmak olur — tam da
+motorun 2026-08-11'de KAÇINDIĞI hata. **EXTERNAL_GATE** (§1.6):
+gerçek cihaz kare-akışı ölçülmeden güvenle yazılamaz.
+
+### Ayrım — SIRADAKİ turun neyi güvenle yapabileceği
+
+✅ **Cihazsız, güvenle yazılabilir (SIRADAKİ, öncelik sırasıyla):**
+1. `hip_hinge`+`forward_lunge`: **valid-path** testi (movementPresence/
+   scoring eşiklerini config'ten türeterek, `full_flow_walk_test.dart`nin
+   `_supineRaiseFrame` desenini izleyerek) + **low-confidence** testi
+   (`_lowConfidenceFrames * 2 > _totalFrames` — hareketten BAĞIMSIZ, saf
+   kare-kalitesi kapısı, `mf71_test.dart`ta zaten sentetik spec'le
+   sınanmış desen, gerçek config'e taşınmamış).
+2. `overhead_squat`/`single_leg_balance`: aynı ikili (valid+low-confidence)
+   — guard'ları VAR ama davranışsal kapsamı YOK; guard testleri madde 3
+   çözülene kadar aynı sebeple ERTELENİR.
+3. Kalan 8 test için de aynı iki-kategori (valid+low-confidence) —
+   yoğunluk sırası kapsama göre TERS (`hamstring_reach`/`thoracic_rotation`/
+   `plank_hold` en ince, 3'er dosya).
+
+⛔ **Cihaz-bağımlı, ERTELENDİ (EXTERNAL_GATE, LIS-P0-004 ile birleşik):**
+- Guard-tetikleme politikasının kendisi (`peakFrame`/`sustained`/`ratio`
+  trigger implementasyonu) — 10 testin `structural-failure` test case'i
+  bu olmadan YAZILAMAZ (yazılırsa ya sahte-yeşil ya da uydurma sayı olur).
+- `hip_hinge`/`forward_lunge`nin guard KURALLARININ KENDİSİ (metrik VAR,
+  eşik YOK) — movement-science-advisor girdisi ister, kod işi değil.
+
+### Bu turda YAZILMADI — bilerek
+
+Yukarıdaki 1-3 maddelerinin KODU bu turda yazılmadı (yalnız ölçüldü).
+Sebep: metrik türleri (`trunk_lean`, `knee_height_{side}`) bu oturumda
+İLK kez görülüyor — `metric_bridge.dart`/`CoreMetricReader`in bunları
+NASIL hesapladığı henüz okunmadı. Uydurulmuş bir landmark fixture'ı
+(gerçek geometriden türetilmeden) yazmak bu deponun EN sık tekrarlanan
+kendi-kusur dersiyle (*"sayı uydurulmadı, KAYNAKTAN türetildi"*)
+ÇELİŞİRdi. Sıradaki tur `metric_bridge.dart` okumakla başlamalı.
+
+**Kapılar:** dokunulmadı (yalnız okuma), `all_gates.py` L-350'den beri
+DEĞİŞMEDİ. **C sayacı:** değişmedi.
+
+---
+
+## L-352 — `metric_bridge.dart` okundu: L-351'in kapsam tahmini DÜZELTİLİYOR — 12 testin yalnız 3'ünün birincil metriği bugün GERÇEK geometriyle ölçülebiliyor
+
+L-351 "cihazsız güvenle yazılabilir" diye 4 testi (hip_hinge/forward_lunge/
+overhead_squat/single_leg_balance) sıraladı ve "sıradaki tur `metric_
+bridge.dart` okumakla başlamalı" dedi. O okuma BU turda yapıldı ve tahmin
+YANLIŞ çıktı — düzeltiliyor, sessizce bırakılmadı.
+
+### Kesin tablo — 12 testin `primaryMetric`i köprü listesine karşı ölçüldü
+
+`kMetricBindings` (gerçekten çekirdek geometrisine bağlı) yalnız **8**
+metrik taşıyor: `shoulder_flexion`/`knee_flexion`/`hip_flexion`/
+`elbow_extension`, ikisi de ×2 taraf. Config'in 12 `primaryMetric`ini bu
+kümeye karşı programatik karşılaştırdım (elle değil — `python3 -c` ile,
+`config/tests/lissom-assessment.v1.json`den okuyarak):
+
+```
+overhead_reach              shoulder_flexion_{side}        BRIDGED
+deep_squat                  knee_flexion_right              BRIDGED
+active_straight_leg_raise   hip_flexion_{side}              BRIDGED
+overhead_squat               trunk_lean                      UNBRIDGED (corePlaneSeparationMissing)
+ankle_dorsiflexion           tibia_inclination_{side}        UNBRIDGED (coreLacksVerticalReference)
+hamstring_reach              reach_depth                     UNBRIDGED (coreLacksMeasureKind)
+hip_hinge                    trunk_lean                      UNBRIDGED (corePlaneSeparationMissing)
+lateral_bend                 trunk_lateral_tilt              UNBRIDGED (corePlaneSeparationMissing)
+forward_lunge                knee_height_{side}               UNBRIDGED (coreLacksMeasureKind)
+thoracic_rotation            shoulder_line_foreshortening    UNBRIDGED (coreLacksMeasureKind)
+single_leg_balance           hold_duration                   UNBRIDGED (measureIsPhaseDerived — FARKLI sınıf, aşağıda)
+plank_hold                   hold_duration                   UNBRIDGED (measureIsPhaseDerived — FARKLI sınıf, aşağıda)
+```
+
+**Yalnız 3/12 test** (`overhead_reach`, `deep_squat`,
+`active_straight_leg_raise`) bugün GERÇEK açı geometrisiyle ölçülebiliyor
+— bu üçünün Dart-dosya sayısı da (24/11/5) diğerlerinden yüksek olmasının
+sebebi tam bu: kalan 9 test için "davranışsal test yaz" talebi bugün
+**kod işi değil**, çünkü ölçülecek gerçek bir sayı üretilemiyor.
+
+### Bu, kod-kusuru DEĞİL — deponun kendi isimli-engel mekanizması ZATEN doğru çalışıyor
+
+`kUnbridgedMetrics` + `BridgeBlocker` enum'u + `deriveLiveness()` tam bu
+9 test için VAR: her biri isimli bir engel taşıyor, kullanıcıya "yakında"
+DEMEDEN (M-F-186, `yet`/`soon`/`coming` yasak) NEDEN göstererek. Yani
+`hip_hinge`in bugün test-kapsamı SIFIR olması bir ihmal değil, **doğru bir
+sonuç**: köprü onu üretemiyor, üretemediğini de dürüstçe söylüyor. Bunu
+BEN "eksik test" diye görüp kod yazsaydım (L-351'in ilk turu tam bunu
+öneriyordu), ya sahte bir geometri icat ederdim (L-154/L-031'in tam
+kaçındığı hata sınıfı — motor açı matematiğini KOPYALAMA, "üçüncü paralel
+implementasyon farklı-sonuç riskinin ta kendisidir") ya da köprüyü
+BEKLEMEDEN bir "structural-failure" testi yazıp ölçmediğim bir şeyi
+sınamış olurdum.
+
+### Gerçek engel iki AYRI sınıf — ikisi de app-scope DIŞINDA
+
+1. **Geometri eksik (7 test: overhead_squat/ankle_dorsiflexion/
+   hamstring_reach/hip_hinge/lateral_bend/forward_lunge/
+   thoracic_rotation):** `motion_core`nun Dart hattı `distance_norm`/
+   `height_diff_norm`/`line_deviation_norm` ölçü tiplerini VE düzlem-
+   ayrışmış gövde eğimini VE uzuv-dikey referansını taşımıyor. **motion-
+   core READ-ONLY kuralı** (bu oturumun sert kısıtı) gereği BU depodan
+   çözülemez — MOTION-CORE oturumunun kapsamı (`02-MOTION-AILESI-
+   ORKESTRASYON.md` §6/§7, MOTION-CORE-001/002 task'ları).
+2. **Faz-türetilmiş süre (2 test: single_leg_balance/plank_hold,
+   `hold_duration`):** Bu FARKLI bir engel — geometri değil, *"faz
+   makinesi bu süreyi GERÇEKTEN üretiyor mu"* sorusu, ve
+   `metric_bridge.dart`nin kendi yorumu bunun **ÖLÇÜLMEDİĞİNİ** söylüyor
+   (satır 140-143). `PhaseStateMachine` çekirdekten geliyor ama zaten
+   PİN'de (yeni core işi GEREKMİYOR) — bu iki test için sıradaki iş
+   `assessment_session.dart`ın (şu an `live_capture_screen.dart`a
+   BAĞLANMAMIŞ — kendi başlığı: *"AssessmentSession'ın çok-bloklu
+   orkestrası BAĞLANMADI"*) gerçekten `hold_duration` üretip
+   üretmediğini ölçmek — bu App-scope'ta, cihazsız yapılabilir bir
+   SONRAKİ iş, ama bu turda başlanmadı (kapsamı ayrı, `assessment_
+   session.dart` bu turda hiç okunmadı).
+
+### LIS-P0-003'ün gerçekçi SIRADAKİ kapsamı — düzeltilmiş öncelik sırası
+
+✅ **Şimdi güvenle yapılabilir (öncelik sırasıyla):**
+1. `overhead_reach`/`deep_squat`/`active_straight_leg_raise`nin
+   valid+low-confidence kapsamını DOĞRULA (24/11/5 dosya var ama davranışsal
+   mı yoksa isimli-kapı/claim testi mi KARIŞIK — `full_flow_walk_test.
+   dart` yalnız ASLR'yi kanıtlıyor, öteki ikisi AYRICA yürüyüş-testi
+   İSTER Mİ ölçülmedi).
+2. `assessment_session.dart`ı oku — `hold_duration`in (single_leg_balance/
+   plank_hold) GERÇEKTEN üretilip üretilmediğini ölç; üretiliyorsa bu iki
+   test de "güvenle yazılabilir" kümesine TERFİ eder.
+
+⛔ **App-scope dışı, ERTELENDİ:**
+- 7 testin geometri-köprüsü — MOTION-CORE oturumu kapsamı.
+- Guard/yapısal-hata tetikleme politikası (L-351'de zaten EXTERNAL_GATE) —
+  fiziksel cihaz.
+
+**Bu bulgu kurucuya bilgi-amaçlı bildirilecek (onay gerektirmiyor, ama
+proje zaman ufkunu etkiliyor):** "12 assessment production" bugün fiilen
+"3 assessment production + 9 isimli-dürüst-engelli" demek; kalan 9'un 7'si
+ayrı bir MOTION-CORE çalışması gerektiriyor.
+
+**Kapılar:** dokunulmadı. **C sayacı:** değişmedi.

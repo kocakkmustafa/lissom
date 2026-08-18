@@ -74,6 +74,22 @@ jobs:
         # flutter test/build native metin render edemez.
         run: tool/fetch_fonts.sh
 
+      - name: motion-core erişimi (private repo, salt-okunur — L-351)
+        # `pubspec.yaml` motion_core/motion_camera'yı private bir git
+        # deposundan çekiyor; actions/checkout@v4'ün verdiği GITHUB_TOKEN
+        # yalnız BU depoya scope'lu, motion-core'u klonlayamaz (ölçüldü:
+        # `flutter pub get` "could not read Username", exit 69/128, L-350
+        # eki). Secret YOKSA bu adım SESSİZCE atlanır — davranış bugünküyle
+        # AYNI kalır (pub get aynı yerde kırmızı), YENİ bir bozulma yok.
+        # Secret kurucu tarafından GitHub arayüzünden eklenince (salt-okunur
+        # deploy-key/PAT) bu adım devreye girer, ekstra kod değişikliği
+        # GEREKMEZ.
+        if: ${{ env.MOTION_CORE_RO_TOKEN != '' }}
+        env:
+          MOTION_CORE_RO_TOKEN: ${{ secrets.MOTION_CORE_RO_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
+
       - run: flutter pub get
 
       - name: flutter analyze
@@ -108,6 +124,14 @@ jobs:
 
       - name: Yazı tipleri (pinli SHA-256 doğrulamalı, L-348)
         run: tool/fetch_fonts.sh
+
+      - name: motion-core erişimi (private repo, salt-okunur — L-351)
+        # flutter-checks işindeki AYNI adım — gerekçe orada.
+        if: ${{ env.MOTION_CORE_RO_TOKEN != '' }}
+        env:
+          MOTION_CORE_RO_TOKEN: ${{ secrets.MOTION_CORE_RO_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
 
       - run: flutter pub get
 
