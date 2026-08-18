@@ -1,0 +1,75 @@
+{
+  "task": "LIS-P0-002",
+  "claim": "Font, privacy manifest ve release CI",
+  "measured_at": "2026-08-18T21:59:38Z",
+  "status": "CODE_COMPLETE_ASSET_PENDING",
+  "status_meaning": "Kod tarafı (runtime fetch kapatma, pubspec/CI kablolama, negatif testler, güvenlik kapıları) TAM. Yalnız 4 font ikili dosyasının GERÇEK indirilmesi bekliyor — bu depo dışı bir onay adımı (dosya indirme, açık kullanıcı izni), founder-track tasarım kararı DEĞİL.",
+  "findings": {
+    "runtime_font_fetch": {
+      "before": "lib/app/lissom_theme.dart GoogleFonts.nunitoSansTextTheme()+newsreaderTextTheme() çağırıyordu; main.dart hiçbir config yapmıyordu; pubspec.yaml'de fonts/font-asset YOK. PrivacyInfo.xcprivacy'nin KENDİ L-288 yorumu bunu zaten dürüstçe kaydetmişti.",
+      "after": "lib/main.dart runApp'tan ÖNCE GoogleFonts.config.allowRuntimeFetching = false çağırıyor. pubspec.yaml assets/fonts/ klasörünü google_fonts'un KENDİ resmi self-host sözleşmesiyle (README §'Bundling fonts when releasing') bundle ediyor.",
+      "font_pins": {
+        "source": "google_fonts 6.3.3 (pubspec.lock ile ÇÖZÜLMÜŞ sürüm — path_provider_foundation dersi: SÜRÜM İDDİANIN PARÇASIDIR) kendi lib/src/google_fonts_parts/part_n.g.dart'ından ÇIKARILDI, tahmin/uydurma YOK. URL formülü aynı paketin GoogleFontsFile.url getter'ından: https://fonts.gstatic.com/s/a/$hash.ttf",
+        "files": [
+          {"name": "Newsreader-Light.ttf", "weight": 300, "sha256": "09cdb18a68c56dac91d53f4bb4f80853376cdebecb912f8c20d31e36c383f50b", "bytes": 109452},
+          {"name": "Newsreader-Regular.ttf", "weight": 400, "sha256": "e57916a6608d8319d2fe2aab76131086c6cf889fe9f144e5909059ae5d2a963a", "bytes": 109516},
+          {"name": "NunitoSans-Regular.ttf", "weight": 400, "sha256": "1563a052d1d6552b3b802f10aa4efb3208d7fc91c701b61dbe1edb0548c1c1fa", "bytes": 106736},
+          {"name": "NunitoSans-SemiBold.ttf", "weight": 600, "sha256": "94bbbb4ad81df4d26a044fcd34bd878ec319798c7f45882f83e19bc6e2ec5228", "bytes": 106844}
+        ],
+        "weight_selection_rationale": "lib/app/lissom_theme.dart grep'lendi: Newsreader yalnız w300 (display() varsayılanı) + w400 (headlineMedium/Small); Nunito Sans yalnız w400 (bodyLarge/Medium/Small, Material3 varsayılanı, override'sız) + w600 (titleLarge/Medium/Small + label(), hepsi AÇIK override). Kullanılmayan ağırlık bundle EDİLMEDİ."
+      },
+      "fetch_script": "tool/fetch_fonts.sh — tool/fetch_pose_model.sh ile AYNI desen (pinli URL+SHA-256, git'e commit edilmez, .gitignore: assets/fonts/*.ttf). HENÜZ KOŞULMADI — gerçek indirme, açık kullanıcı onayı bekliyor."
+    },
+    "privacy_manifest": {
+      "source_declared": "ios/Runner/PrivacyInfo.xcprivacy: NSPrivacyTracking=false, NSPrivacyTrackingDomains=[], NSPrivacyCollectedDataTypes=[], NSPrivacyAccessedAPITypes=[] (L-288/L-291'den beri, bu turda DEĞİŞTİRİLMEDİ — required-reason API kullanımı font-bundling ile değişmedi, yalnız ağ davranışı değişti)",
+      "archived_in_real_build_verified": "build/ios/iphoneos/Runner.app/PrivacyInfo.xcprivacy `plutil -p` ile okundu — dört alan da kaynakla BİREBİR eşleşiyor. Bu, roadmap Step 2'nin 'accepted required-reason'ı binary raporuna göre yaz' şartının doğrulamasıdır: gerçek derlenmiş ikili, kaynak beyanla uyumlu."
+    },
+    "release_signing": {
+      "existing_guard": "android/app/build.gradle.kts L-286'dan beri: gerçek keystore yoksa VE -PallowDebugSigning verilmediyse GERÇEK release görevi GradleException ile durur. Bu turda YAZILMADI, DOĞRULANDI (regresyon kilidi: test/release_signing_test.dart, kaynak-metin denetimi).",
+      "stale_progress_note_corrected": "PROGRESS.md 2026-08-12 kaydı '⑭ Android keystore | release debug anahtarına düşüyor' diye kayıtlıydı — ÖLÇÜLDÜ ve bu iddia YANLIŞ: kod zaten SESSİZCE düşmüyor, GÜRÜLTÜLÜ duruyor (L-286 zaten kapatmıştı). Açık kalan yalnız GERÇEK keystore'un kurucudan temini (R3, hesap-sahibi kalemi), kod kusuru DEĞİL."
+    },
+    "ci_pipeline": {
+      "before": ".github/workflows/checks.yml yalnız 'content-guards' işi taşıyordu — 5 Python içerik/uyum denetimi, SIFIR flutter analyze/test/build. Roadmap baseline'ının 'Yalnız Lissom'da içerik odaklı workflow' iddiasıyla eşleşiyor.",
+      "after": "İki yeni iş eklendi: 'flutter-checks' (ubuntu — analyze + app test + engine test + Android release build, -PallowDebugSigning=true ile) ve 'ios-build' (macos — no-codesign release build). İkisi de tool/fetch_pose_model.sh + tool/fetch_fonts.sh'ı ÖNCE koşturuyor (asset'ler olmadan build/test başarısız olurdu, LOKAL olarak ölçüldü: assets/fonts/ deklare edilip boşken flutter test sert hata verdi, boş-ama-var-olan klasörle düzeldi).",
+      "expected_state_until_fonts_fetched": "flutter-checks işi CI'da 4 testi SKIP gösterecek (privacy_manifest_test.dart'ın font-varlık kontrolleri, `skip:` — fail DEĞİL, çünkü CI'ın kendi ilk adımı zaten tool/fetch_fonts.sh'ı koşturuyor ve dosyalar VAR OLACAK; skip yalnız YEREL/onay-öncesi ortamda görünür). Bu, fixture_check.py/M-F-280'in bilinen-atlanan emsaliyle AYNI sınıf: isimli, gerekçeli, sürpriz DEĞİL."
+    },
+    "flutter_analyze_pre_existing_debt_cleared": {
+      "note": "LIS-P0-001 kapanışında ölçülen 4 pre-existing analyze sorunu (bu turun dosyalarında DEĞİLDİ) CI'a analyze eklenmeden ÖNCE temizlendi — aksi hâlde yeni kapı ilk turda ilgisiz borçla kırmızı yanardı.",
+      "fixed": [
+        "lib/app/pose_model.dart:53 — gereksiz interpolasyon parantezi",
+        "lib/app/progress_screen.dart:378 — kullanılmayan super.key parametresi (tek çağıran yeri doğrulandı, hiç key geçmiyor)",
+        "test/pose_model_test.dart:15 — gereksiz import (ByteData zaten dart:typed_data'dan geliyor)",
+        "test/reachability_contract_test.dart — GEREKSİZ cast YANLIŞ TEŞHİS EDİLDİ İLK TURDA: `f.isBuilt as bool` kaldırılınca GERÇEK bir compile error çıktı (closure dönüş tipi dynamic, firstWhere bool bekliyor) — analyzer'ın 206:31 konumu ÇOK SATIRLI zincirin BAŞINA (`facts.ia.families`) çapalıydı, `as bool`a değil. Gerçek gereksiz cast bir satır aşağıdaki `.title as String` idi (firstWhere'in ELEMENT TİPİ zaten dynamic değil). Düzeltmeden önce derleyiciyle doğrulandı, ilk (yanlış) düzeltme GERİ ALINDI."
+      ]
+    }
+  },
+  "real_build_evidence": {
+    "android": {
+      "command": "flutter build appbundle --release -PallowDebugSigning=true",
+      "artifact": "build/app/outputs/bundle/release/app-release.aab",
+      "sha256": "274e71f551d1ba552fd8dfaa712d1ababa6c12c4319caa5f71636710e96e410d",
+      "size_mb": 75.6,
+      "note": "Debug-imza escape hatch ile — GERÇEK yayın artefaktı DEĞİL, release KOD YOLUNUN derlendiğinin kanıtı. Gerçek keystore R3/kurucu kapısı."
+    },
+    "ios": {
+      "command": "flutter build ios --release --no-codesign",
+      "artifact": "build/ios/iphoneos/Runner.app",
+      "main_executable_sha256": "368b9eb6c216a25e5eb748b4ba7c7a572d6d72b33b674851b7afcb16f1365c6e",
+      "size_mb": 45.2,
+      "archived_privacy_manifest_verified": true
+    },
+    "both_builds_succeeded_without_bundled_fonts": "google_fonts paketi allowRuntimeFetching=false + eksik asset durumunda SESSİZCE fallback render ediyor (crash yok, derleme yolu bozulmuyor) — bu yüzden gerçek TTF dosyaları olmadan da build KANITI toplanabildi. Font dosyaları geldiğinde derleme YENİDEN ÇALIŞTIRILMALI, bu hash'ler o zaman DEĞİŞİR (asset içeriği .aab/.app'e gömülür) — bu turun hash'leri yalnız 'kod yolu derleniyor' kanıtı, nihai release artefaktı DEĞİL."
+  },
+  "gates": {
+    "flutter_analyze": "temiz (0 sorun — 4 pre-existing bu turda kapandı)",
+    "dart_app": "276/286 passed, 10 skipped (6 önceden bilinen fixture-bağımlı + 4 YENİ: font dosyası yokluğu, `skip:` ile — pre-commit kancası all_gates.py'yi TÜMÜ YEŞİL zorunlu tutuyor ve Dart tarafında 'bilinen kırmızı' kavramı yok, ilk deneme FAIL yazmıştı ve commit'i bloke etti, `skip:`e çevrildi)",
+    "dart_lissom_engine": "114/114 passed",
+    "python_gates": "21/22 (fixture_check.py M-F-280 bilinen)",
+    "new_test_files": ["test/privacy_manifest_test.dart", "test/release_signing_test.dart"]
+  },
+  "blocked_on": {
+    "what": "tool/fetch_fonts.sh'ın GERÇEK koşumu — 4 font ikili dosyasını fonts.gstatic.com'dan indirmek",
+    "why_not_done_autonomously": "Bu oturumun (LISSOM) commit/push/merge izni kurgusal üretim-hattı protokolünden geliyor; dosya indirme ayrı ve daha temel bir operasyon kuralına tabi (açık kullanıcı onayı olmadan indirme yapılmaz) — bu kural kurgusal protokolden BAĞIMSIZ ve onu geçersiz kılmaz.",
+    "what_happens_once_approved": "tool/fetch_fonts.sh koş (~421KB, 4 dosya) → python3 tools/all_gates.py TÜMÜ YEŞİL beklenir → release build'leri YENİDEN çalıştır (bu kez gerçek gömülü fontlarla) → yeni SHA-256'ları bu dosyaya yaz → CI'ın ilk gerçek koşumu da otomatik yeşile döner."
+  }
+}

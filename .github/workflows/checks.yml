@@ -49,3 +49,70 @@ jobs:
       - name: Süzgecin kendisi çalışıyor mu (negatif test)
         # Bulmayan bir denetim ile bozuk bir denetim dışarıdan aynı görünür.
         run: python3 tools/lint_selftest.py
+
+  flutter-checks:
+    name: Flutter analyze + test + Android release build (L-348/LIS-P0-002)
+    # Bu iş 2026-08-18'e kadar hiç yoktu — repo yalnız içerik/uyum
+    # denetimleri koşuyordu, `flutter analyze`/`flutter test`/gerçek build
+    # YOKTU (roadmap baseline'ında adıyla kayıtlı). Bu satırlar öncesinde
+    # `flutter analyze`in 4 pre-existing sorunu 5015 satırlık DEFTER'de
+    # HİÇ görünmüyordu — kapı olmayan bir şey kırık olsa da fark edilmez.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Poz modeli (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_pose_model.sh
+
+      - name: Yazı tipleri (pinli SHA-256 doğrulamalı, L-348)
+        # `google_fonts` artık runtime'da indirmiyor (main.dart
+        # allowRuntimeFetching=false) — bu iki dosya olmadan CI'daki
+        # flutter test/build native metin render edemez.
+        run: tool/fetch_fonts.sh
+
+      - run: flutter pub get
+
+      - name: flutter analyze
+        run: flutter analyze
+
+      - name: app test süiti
+        run: flutter test
+
+      - name: lissom_engine test süiti
+        run: (cd packages/lissom_engine && flutter test)
+
+      - name: Android release build — kod yolu kanıtı, İMZALI YAYIN DEĞİL
+        # Gerçek keystore kurucuda (`~/.secrets/yula/`), CI'da YOK.
+        # `-PallowDebugSigning` L-286'nın KENDİ kaçış kapısı (build.gradle.
+        # kts) — CI'a özgü bir icat değil, "bilerek imzasız yerel build"
+        # için zaten var olan bayrak. Bu adım release KOD YOLUNUN
+        # derlendiğini kanıtlar; Play'e yüklenebilir bir artefakt ÜRETMEZ.
+        run: flutter build appbundle --release -PallowDebugSigning=true
+
+  ios-build:
+    name: iOS release build, no-codesign (L-348/LIS-P0-002)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Poz modeli (pinli SHA-256 doğrulamalı)
+        run: tool/fetch_pose_model.sh
+
+      - name: Yazı tipleri (pinli SHA-256 doğrulamalı, L-348)
+        run: tool/fetch_fonts.sh
+
+      - run: flutter pub get
+
+      - name: iOS release build, imzasız
+        # `--no-codesign`: CI runner'ında imzalama sertifikası yok ve
+        # olmamalı (sertifika hesap-sahibi kalemidir). Bu adım release
+        # derleme yolunun GERÇEKTEN derlendiğini kanıtlar.
+        run: flutter build ios --release --no-codesign

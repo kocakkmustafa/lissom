@@ -50,7 +50,7 @@ Future<String> materializePoseModel({
   AssetLoader? loader,
 }) async {
   final Directory dir = await (supportDir ?? getApplicationSupportDirectory)();
-  final File out = File('${dir.path}/${kPoseModelId}.task');
+  final File out = File('${dir.path}/$kPoseModelId.task');
 
   final ByteData data =
       await (loader ?? rootBundle.load)(kPoseModelAsset);

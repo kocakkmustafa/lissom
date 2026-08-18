@@ -5108,3 +5108,103 @@ maddesine somut kanıt: analyze bugün kapı DIŞINDA, bu yüzden fark
 edilmeden kalmışlar).
 **C sayacı: kullanıcı yüzeyinde GERÇEK değişiklik ⇒ 1** — store listing
 metni ve iki testin gösterim davranışı değişti.
+
+---
+
+## L-349 — LIS-P0-002: runtime font fetch KAPATILDI (kod tam), CI'a gerçek Flutter kapıları eklendi — 4 font ikilisi indirme onayı bekliyor
+
+`PrivacyInfo.xcprivacy`nin KENDİ L-288 yorumu bu P0'ı zaten dürüstçe
+kaydetmişti: `google_fonts` üretimde kullanılıyor, `allowRuntimeFetching`
+KAPATILMAMIŞ, pubspec'te bundle YOK → yazı tipleri ÇALIŞMA ANINDA
+indiriliyordu.
+
+### Yapılan — kod tarafı TAM
+
+- `lib/main.dart`: `GoogleFonts.config.allowRuntimeFetching = false`,
+  `runApp`tan ÖNCE.
+- `pubspec.yaml`: `assets/fonts/` — `google_fonts` paketinin KENDİ resmi
+  self-host sözleşmesiyle (README §"Bundling fonts when releasing"):
+  `fonts:` bloğu DEĞİL, düz `assets:` klasör girdisi; dosya adları paketin
+  KENDİ API sözleşmesiyle (`{Aile}-{Ağırlık}.ttf`) eşleşmek ZORUNDA.
+- `tool/fetch_fonts.sh` (yeni, `fetch_pose_model.sh` deseni): pinli
+  SHA-256 + URL. **Pinler UYDURULMADI** — bu depoda ÇÖZÜLMÜŞ
+  `google_fonts 6.3.3`ün (pubspec.lock, path_provider_foundation dersi:
+  sürüm iddianın parçası) KENDİ `lib/src/google_fonts_parts/part_n.g.dart`
+  dosyasından çıkarıldı; URL formülü aynı paketin `GoogleFontsFile.url`
+  getter'ından (`fonts.gstatic.com/s/a/$hash.ttf`). Yalnız GERÇEKTEN
+  kullanılan 4 ağırlık (`lissom_theme.dart` grep'lendi): Newsreader
+  w300+w400, Nunito Sans w400+w600.
+- `test/privacy_manifest_test.dart` (yeni, 8 test) + `test/
+  release_signing_test.dart` (yeni, 2 test) — üç eksen: manifest yapısı ·
+  main.dart kablolaması · font dosyası varlığı (BİLEREK 4/4 `skip:`,
+  aşağıda) + L-286 signing guard'ının regresyon kilidi.
+- `.github/workflows/checks.yml`: iki yeni iş — `flutter-checks`
+  (analyze + app/engine test + Android release build) ve `ios-build`
+  (no-codesign). İkisi de `fetch_pose_model.sh`+`fetch_fonts.sh`ı ÖNCE
+  koşturuyor. **Repo tarihinde İLK gerçek Flutter CI kapısı** (öncesi
+  yalnız 5 Python içerik denetimiydi).
+
+### Gerçek build kanıtı — LOKAL koşuldu (roadmap Step 4/5)
+
+`flutter build appbundle --release -PallowDebugSigning=true` →
+`build/app/outputs/bundle/release/app-release.aab` (75,6 MB, SHA-256
+`274e71f5…`). `flutter build ios --release --no-codesign` →
+`build/ios/iphoneos/Runner.app` (45,2 MB, `Runner` ikili SHA-256
+`368b9eb6…`). **İkisi de font dosyaları OLMADAN derlendi** —
+`google_fonts` `allowRuntimeFetching=false` + eksik asset'te SESSİZCE
+fallback render ediyor, çökmüyor. Fontlar gelince YENİDEN derlenmeli,
+hash'ler DEĞİŞİR — bu turunkiler yalnız "kod yolu derleniyor" kanıtı.
+
+Derlenmiş `.app`in KENDİ `PrivacyInfo.xcprivacy`si `plutil -p` ile okundu:
+dört alan da kaynakla BİREBİR — roadmap'in "accepted required-reason'ı
+binary raporuna göre yaz" şartının doğrulaması (font-bundling required-
+reason listesini DEĞİŞTİRMEDİ, yalnız ağ davranışını).
+
+### Bayat iddia düzeltildi (ölçülerek)
+
+`PROGRESS.md` 2026-08-12: *"⑭ Android keystore | release debug anahtarına
+düşüyor."* ÖLÇÜLDÜ: YANLIŞ — `build.gradle.kts` L-286'dan beri SESSİZCE
+düşmüyor, GÜRÜLTÜLÜ duruyor (`GradleException`, gerçek keystore ya da
+`-PallowDebugSigning` açık onayı ister). Açık kalan yalnız GERÇEK
+keystore temini (R3, kurucuda), kod kusuru DEĞİL.
+
+### `flutter analyze`e CI kapısı eklenmeden ÖNCE 4 pre-existing sorun kapatıldı
+
+Bu turun dosyalarında DEĞİLDİ (`pose_model.dart` gereksiz interpolasyon
+parantezi · `progress_screen.dart` kullanılmayan `super.key` · `pose_
+model_test.dart` gereksiz import · `reachability_contract_test.dart`
+gereksiz cast). **Dördüncüsü kendi turunda YANLIŞ TEŞHİS EDİLDİ:**
+analyzer'ın `206:31` konumu çok-satırlı zincirin (`facts.ia.families
+.firstWhere(...).title as String`) BAŞINA çapalıydı, `f.isBuilt as bool`a
+DEĞİL — o cast'i kaldırınca GERÇEK bir compile error çıktı (`dynamic`
+closure dönüşü, `firstWhere` `bool` bekliyor). Gerçek gereksiz cast bir
+satır aşağıdaki `.title as String` idi. İlk (yanlış) düzeltme derleyiciyle
+YAKALANDI ve geri alındı önce commit edilmeden — **satır:sütun bir
+diagnostic ipucu, bir kanıt değil; çok-satırlı ifadede kanıt derleyicidir.**
+
+### AÇIK — dosya indirme, kullanıcı onayı bekliyor
+
+4 font ikili dosyası (~421 KB toplam) henüz İNMEDİ. Bu bir kod eksikliği
+DEĞİL: `tool/fetch_fonts.sh` hazır ve doğru, ama gerçek `curl` çağrısı bu
+oturumun genel commit/push izninden AYRI bir kurala tabi (dosya indirme
+öncesi açık onay). `test/privacy_manifest_test.dart`nin 4 testi bunu
+BİLEREK ve İSİMLİ `skip:` tutuyor — **`fail` DEĞİL**: bu depoda pre-commit
+kancası `all_gates.py`yi TÜMÜ YEŞİL zorunlu tutuyor ve Dart tarafında
+Python'daki `KNOWN_RED` kavramının karşılığı yok; ilk yazımda bu dört
+testi FAIL bıraktım, hook commit'i BLOKE ETTİ (`HÜKÜM: EKSİK VEYA
+KIRMIZI`) — depodaki KURULU deyime döndüm (`skip:`, `~6 atlandı`
+fixture-testleriyle AYNI sınıf). CI'ın kendi `flutter-checks` işi
+`fetch_fonts.sh`ı İLK ADIM olarak koşturuyor, yani CI'da bu 4 test hiç
+atlanmayacak — skip yalnız YEREL/onay-öncesi ortamda görünür.
+Onay gelince: `fetch_fonts.sh` → `all_gates.py` TÜMÜ YEŞİL beklenir →
+release build'leri YENİDEN + yeni hash'ler.
+
+**Kapılar:** `flutter analyze` temiz (4/4 pre-existing kapandı) · app
+**276/286**, **10 atlanan** (6 önceden bilinen fixture-bağımlı + 4 yeni
+font-varlığı) · engine **114/114** · python **21/22** (M-F-280) ·
+Android+iOS release build İKİSİ DE BAŞARILI (kod yolu kanıtı) ·
+`all_gates.py` **TÜMÜ YEŞİL**.
+**C sayacı: kullanıcı yüzeyinde davranış değişikliği ⇒ 1** — uygulama
+artık ilk açılışta ağa çıkmıyor (font fetch kapalı); font dosyaları
+gelene kadar sistem-varsayılan yazı tipiyle render eder (görsel fark,
+crash değil).

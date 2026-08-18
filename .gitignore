@@ -15,3 +15,7 @@ ios/Pods/
 ios/.symlinks/
 ios/Flutter/Flutter.framework
 assets/models/*.task
+
+# L-348/LIS-P0-002: aile deseni (assets/models/*.task ile aynı) — pinli
+# SHA-256 + URL `tool/fetch_fonts.sh`de yaşar, ikili commit edilmez.
+assets/fonts/*.ttf

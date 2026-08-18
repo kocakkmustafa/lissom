@@ -375,7 +375,7 @@ class ProgressScreen extends StatelessWidget {
 /// ⛔ Ve *"session"* kelimesi yüzeye çıkmıyor — dahili sözlük. Kullanıcı için
 /// bu bir TARİH ve o tarihte kaç okuma alındığı.
 class _SittingHeader extends StatelessWidget {
-  const _SittingHeader({required this.at, required this.count, super.key});
+  const _SittingHeader({required this.at, required this.count});
   final DateTime at;
   final int count;
 

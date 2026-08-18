@@ -205,7 +205,7 @@ void main() {
     // inşa-edilmemiş bir ailede canlı test adı aranmıştı).
     final String builtTitle = facts.ia.families
         .firstWhere((dynamic f) => f.isBuilt as bool)
-        .title as String;
+        .title;
     for (final String title
         in facts.ia.families.map((dynamic f) => f.title as String)) {
       final Finder c = find.text(title);

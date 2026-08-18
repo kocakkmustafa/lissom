@@ -22,11 +22,20 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app/lissom_theme.dart';
 import 'app/onboarding_gate.dart';
 
-void main() => runApp(const LissomApp());
+/// L-348/LIS-P0-002: `google_fonts`un runtime ağ isteğini KAPATIR — iki
+/// aile artık `assets/fonts/` altında bundle (`pubspec.yaml`, `tool/
+/// fetch_fonts.sh`). Kapatılmadan önce ölçüldü: `PrivacyInfo.xcprivacy`nin
+/// kendi yorumunda adıyla kayıtlı GERÇEK bir ağ davranışıydı (L-288),
+/// icat edilmiş bir kusur değil.
+void main() {
+  GoogleFonts.config.allowRuntimeFetching = false;
+  runApp(const LissomApp());
+}
 
 class LissomApp extends StatelessWidget {
   const LissomApp({super.key});

@@ -97,3 +97,21 @@ flutter:
     # de okunur; koordinatörün andığı "yorum bloğunun listeyi kesme tuzağı"na
     # karşı burada kasten liste SONUNA konmadı.
     - assets/models/
+
+    # L-348/LIS-P0-002: `google_fonts`un RUNTIME'da indirdiği iki aileyi
+    # build-time'a taşır (`lib/main.dart` `GoogleFonts.config.
+    # allowRuntimeFetching = false` ile eşleşir). Paketin KENDİ resmi
+    # self-host sözleşmesi (google_fonts README §"Bundling fonts when
+    # releasing"): dosyalar `fonts:` bloğunda DEĞİL, düz `assets:` klasör
+    # girdisi olarak listelenir — paket kendi iç `FontLoader`ıyla asset
+    # manifestini TARAR, adları Google Fonts API'nin KENDİ dosya-adı
+    # sözleşmesiyle (`{Aile}-{Ağırlık}.ttf`, `FontWeight.w600` → `SemiBold`)
+    # eşleştirir. Yalnız GERÇEKTEN kullanılan ağırlıklar: Newsreader w300
+    # (`display()` varsayılanı) + w400 (`headlineMedium`/`headlineSmall`);
+    # Nunito Sans w400 (`sans.bodyLarge/Medium/Small`, Material3
+    # varsayılanı) + w600 (`titleLarge/Medium/Small`, `label()`, hepsi AÇIK
+    # override — `lib/app/lissom_theme.dart` içinde grep'lenebilir). Dosya
+    # ADLARI YENİDEN ADLANDIRILMAZ (README'nin kendi uyarısı). Dosyalar
+    # `tool/fetch_fonts.sh` ile pinli SHA-256 doğrulamasıyla iner, git'e
+    # commit EDİLMEZ (`assets/models/*.task` ile aynı desen).
+    - assets/fonts/
