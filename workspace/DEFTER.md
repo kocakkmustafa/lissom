@@ -5639,3 +5639,42 @@ proje zaman ufkunu etkiliyor):** "12 assessment production" bugün fiilen
 ayrı bir MOTION-CORE çalışması gerektiriyor.
 
 **Kapılar:** dokunulmadı. **C sayacı:** değişmedi.
+
+### EK — `assessment_session.dart` okundu: L-352'nin "sıradaki iş" önerisi de DÜZELTİLİYOR
+
+L-352 madde 2 *"`assessment_session.dart`ı oku — `hold_duration`in
+GERÇEKTEN üretilip üretilmediğini ölç"* diyordu. Okundu — ve bu dosya
+**yanlış yer** çıktı: `AssessmentSession` yalnız ÇOK-BLOKLU SIRALAMA
+orkestrası (hangi test sırada, kalibrasyon penceresi, tamamlanan blok
+korunumu). `AssessmentResult` NESNELERİNİ kaydeder ama HİÇBİR METRİĞİ
+KENDİSİ ÜRETMEZ — `hold_duration` sorusuyla İLGİSİZ.
+
+Gerçek zincir: `live_capture_screen.dart`nın KENDİ başlığı (satır 17-22)
+zaten cevaplıyordu, önceki turda okunup atlanmıştı — *"Faz-makinesi
+tabanlı otomatik tekrar-algılama (`motion_core`nun `PhaseStateMachine`ı)
+BAĞLANMADI — ayrı, daha büyük bir iş."* Yani `hold_duration` yalnız
+metrik-köprüsü eksik DEĞİL, onu üretecek FAZ MAKİNESİ ENTEGRASYONUNUN
+KENDİSİ canlı ekrana hiç bağlanmamış — `AssessmentEngine`nin tek-deneme/
+manuel-bitiş modeliyle YAPISAL olarak ayrı bir akış ister.
+
+**Düzeltilmiş sonuç:** `single_leg_balance`/`plank_hold` L-352'nin
+"cihazsız güvenle terfi edebilir" umuduyla değil, **LIS-P1-002 kapsamına
+daha yakın** bir büyük-iş olarak kalıyor — LIS-P0-003'ün bugünkü
+sınırları İÇİNDE değil. **Gerçek LIS-P0-003 tavanı 3/12 olarak
+DOĞRULANDI** (düşürülmedi, ilk L-352 tahmini zaten buydu — yalnız "2
+tanesi belki kolayca terfi eder" umudu bu ek turda SÖNDÜ).
+
+**Kapılar:** dokunulmadı. **C sayacı:** değişmedi.
+
+### EK — workflow değişikliği GERÇEK CI'da doğrulandı: secret yokken sessizce atlanıyor, yeni bozulma YOK
+
+`4d6cd61` push edildi, `gh run watch` ile izlendi (run `32198416521`).
+Ölçülen: **"motion-core erişimi" adımı `-` (atlandı)** — `if: env.
+MOTION_CORE_RO_TOKEN != ''` koşulu GERÇEK bir GHA koşusunda ilk kez
+sınandı ve beklendiği gibi çalıştı. `flutter pub get` AYNI noktada
+kırmızı (beklenen — secret hâlâ yok). "Poz modeli"+"Yazı tipleri"
+adımları hâlâ yeşil (L-350 düzeltmesi kalıcı). **Yeni bir regresyon
+yok, tasarım doğrulandı.** Kurucu secret'ı ekleyince ekstra iş
+GEREKMEDEN CI yeşile dönmesi beklenir.
+
+**Kapılar:** dokunulmadı. **C sayacı:** değişmedi.
