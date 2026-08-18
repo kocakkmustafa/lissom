@@ -1,0 +1,133 @@
+{
+  "evidenceId": "LIS-E-001",
+  "claim": "Baseline ve store claim doğru",
+  "bootstrapped_by": "LISSOM session (production-line protocol 2026-08-18)",
+  "measured_at": "2026-08-18T21:23:19Z",
+  "updated_at": "2026-08-18T21:38:08Z",
+  "note": "Protokol §8 ve §13 gereği: baseline satırları tarihseldir, her oturum yeniden mühürler. LIS-P0-001 Step 1'in tam band-lineage envanteri 'band_lineage' alanında; çözüm kaydı 'lis_p0_001_resolution'da (updated_at: 2026-08-18T21:38:08Z).",
+  "repo": {
+    "lissom_app": {
+      "path": "ventures/lissom/app",
+      "head": "eb53dc4fd8b1c4cf57f69f1dc66b35e9b3bcad36",
+      "branch": "main",
+      "dirty_paths": 0,
+      "ahead_of_origin": 0,
+      "behind_origin": 0,
+      "matches_roadmap_baseline_claim": true,
+      "note": "20-LISSOM-MASTER-ROADMAP.md §1 'App HEAD eb53dc4' iddiasıyla birebir eşleşiyor; DEFTER.md son kaydı L-347 de bu HEAD'i üretti."
+    },
+    "motion_core_lib_local_checkout": {
+      "path": "ventures/motion-core/lib",
+      "head": "05aacaf8ffeb5e25aaad381e9eccf5dabd46e4f3",
+      "branch": "feat/lissom-v3-onayi",
+      "behind_origin_main": 122,
+      "matches_roadmap_baseline_claim": true,
+      "note": "Bu paylaşımlı ağaç dalı bu oturumda DEĞİŞTİRİLMEDİ (motion-core sahibi core writer, Lissom oturumu değil)."
+    },
+    "pin": {
+      "expected_sha": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+      "pubspec_lock_motion_core_ref": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+      "pubspec_lock_motion_camera_ref": "f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d",
+      "match": true
+    }
+  },
+  "gates_fresh_measurement": {
+    "command": "python3 tools/all_gates.py",
+    "note": "İki ölçüm: (a) oturum açılışında, LIS-P0-001 öncesi; (b) LIS-P0-001 kapanışında, aşağıda.",
+    "at_session_open": {
+      "dart_app": "265/265 passed (~6 skipped, fixture-dependent)",
+      "dart_lissom_engine": "114/114 passed",
+      "python_gates": "21/22 green",
+      "verdict": "TÜMÜ YEŞİL"
+    },
+    "at_lis_p0_001_close": {
+      "measured_at": "2026-08-18T21:38:08Z",
+      "dart_app": "270/270 passed (~6 skipped, fixture-dependent) — +5 yeni test (band_lineage_test.dart)",
+      "dart_lissom_engine": "114/114 passed (değişmedi)",
+      "python_gates": "21/22 green",
+      "flutter_analyze": "4 pre-existing issue (lib/app/pose_model.dart, lib/app/progress_screen.dart, test/pose_model_test.dart, test/reachability_contract_test.dart) — HİÇBİRİ bu turun dosyalarında değil, bu turda DOKUNULMADI. all_gates.py flutter analyze koşturmuyor (yalnız flutter test ×2 + python gates) — bu, LIS-P0-002 Step 3'ün 'CI'a flutter analyze ekle' maddesini somut kanıtla destekliyor: analyze kapı DIŞINDA olduğu için bu 4 kusur fark edilmeden kalmış.",
+      "verdict": "TÜMÜ YEŞİL (all_gates.py kapsamında); flutter analyze ayrı ölçüldü, LIS-P0-002'ye devredildi"
+    },
+    "python_known_red": {
+      "fixture_check.py": "paylaşımlı rig motion-core/lib tools/fixture_pipeline kanonik anatomical_mode() taşımıyor (M-F-280) — ürün kusuru değil, core ağacının 122 commit geride olmasının sonucu"
+    }
+  },
+  "file_path_existence_audit": {
+    "protocol_ref": "URETIM-HATTI-OTURUM-PROTOKOLU-2026-08-18.md §13 madde 1 — roadmap dosya yolları doğrulanmamış varsayımdır",
+    "LIS-P0-001_files": {
+      "docs/store/listing.json": "EXISTS (L-345'te taslak olarak yazıldı); description'ı bu turda L-348 ile düzeltildi",
+      "lib/app/app_facts.dart": "EXISTS, dokunulmadı — dürüstlük mantığı zaten config-türetimli, band-lineage düzeltmesi config seviyesinde yeterliydi",
+      "config/tests/lissom-assessment.v1.json": "EXISTS; 1.12.0→1.13.0, overhead_squat+hamstring_reach'e referenceStatus eklendi (L-348)",
+      "docs/evidence/production-line/baseline.json": "CREATED bu turda (bu dosya)",
+      "test/band_lineage_test.dart": "CREATED bu turda — 5 test (own-history iddia taraması + UNVALIDATED-tutarlılık kapısı), ikisi de sabotaj-doğrulamalı",
+      "test/store_listing_test.dart": "EXISTS (L-345'te 10 testle yazıldı); bu turda ölçüldü — kapsamı own-history/band-lineage EKSENİNİ İÇERMİYORDU (farklı bir sözlük: length/existence/$-contract/promise-language/device-proof/unbacked-capability). band_lineage_test.dart bu boşluğu kapattı, kopya değil ayrı kapı.",
+      "test/shipped_claim_test.dart": "EXISTS; okundu — kapsamı Progress ekranının İKİ AYRI iddiası (MDC rakamı yokluğu, tek-tilt motor beyanı), listing.json'un band-source iddiasını KAPSAMIYOR. roadmap dosya listesine 'zaten var' diye girmiş olması yanıltıcıydı — dosya var ama SORULAN ŞEYİ test etmiyordu; band_lineage_test.dart gerçek yeni kapı."
+    },
+    "LIS-P0-002_files": {
+      "pubspec.yaml": "EXISTS — google_fonts: ^6.2.1 doğrulandı (runtime fetch bağımlılığı gerçek)",
+      "lib/app/lissom_theme.dart": "EXISTS",
+      "ios/Runner/PrivacyInfo.xcprivacy": "EXISTS",
+      "android/app/build.gradle.kts": "EXISTS",
+      ".github/workflows/checks.yml": "EXISTS",
+      "test/attempt_values_network_gate_test.dart": "EXISTS (L-340'ta yazıldı — ama D14/network-gate kapsamlı, font kapsamlı DEĞİL; LIS-P0-002 Step 1 farklı bir negatif test istiyor)",
+      "test/privacy_manifest_test.dart": "MISSING — bu turun gerçek yeni işi",
+      "tools/all_gates.py": "EXISTS ve bu turda TÜMÜ YEŞİL koştu"
+    }
+  },
+  "lis_p0_001_resolution": {
+    "defter_ref": "L-348",
+    "finding": "docs/store/listing.json description'daki 'When a test shows a band, the band reflects your own past sessions, not a clinical threshold.' cümlesi ÖLÇÜLDÜ VE YANLIŞ ÇIKTI. 0/12 test bandı kullanıcının kendi geçmiş oturumundan hesaplıyor — hepsi statik, yaş-bantlı (u40/40-59/60plus) literatür/kohort ya da beyan edilmiş mühendislik-tahmini kaynaklı. `packages/lissom_engine/lib/src/assessment_result.dart` `AssessmentResult.measured()` bandLabel'ı yalnız config'ten gelen statik `bandFloors`e karşı hesaplıyor (satır ~126-133); geçmiş session'a hiç bakmıyor. Aynı description'ın birkaç cümle sonrasındaki 'It does not draw a trend line or say a result is better or worse than a past one' cümlesiyle İÇ ÇELİŞKİ taşıyordu — ikisi aynı anda doğru olamazdı, ikincisi koda uyan taraftı (TestDetailScreen bandLabel'ı BİLEREK göstermiyor, L-339/L-344).",
+    "second_finding": "overhead_squat ve hamstring_reach testlerinin KENDİ scoring.source metni bandlarının 'UNVALIDATED' olduğunu ve overhead_squat için açıkça 'MUST be recalibrated against real fixtures before any user-facing number is shown' dediğini beyan ediyordu — ama ikisinde de overhead_reach/deep_squat'ın sahip olduğu referenceStatus.measurementOnly bastırması YOKTU, yani kendi kaynaklarının yasakladığı bant bugün gerçek kullanıcıya gösteriliyordu.",
+    "fix": [
+      "config/tests/lissom-assessment.v1.json 1.12.0→1.13.0: overhead_squat + hamstring_reach'e overhead_reach/deep_squat ile AYNI şemada referenceStatus (state=measurementOnly, statusBasis, promotionPath) eklendi — bant kaynak metni SİLİNMEDİ, yalnız kullanıcıya gösterimi bastırıldı (mekanizma zaten var olan lessonClass/isMeasurementOnly veri-akışından TÜRETİLİYOR, yeni UI kodu yazılmadı).",
+      "docs/store/listing.json: yanlış cümle kaldırıldı, yerine 'Where a test shows a band, it comes from published age-banded research where we found it, or is marked as an unvalidated starting point where we didn't — it is never calculated from what you measured last time.' yazıldı; $sourceOfFacts bu düzeltmeyi belgeliyor.",
+      "test/band_lineage_test.dart (yeni, 5 test): own-history iddia taraması (listing.json) + UNVALIDATED-tutarlılık kapısı (battery, her iki test için referenceStatus zorunlu).",
+      "test/support/listing_json.dart (yeni): store_listing_test.dart'ın _readListing/_userStrings'i buraya taşındı (H-58: kopya = güncelleme borcu) — iki kapı artık TEK kaynaktan okuyor."
+    ],
+    "self_correction_during_this_turn": [
+      "İlk yazılan düzeltme cümlesi ('never from your own past results') kendi own-history regex'imi TETİKLEDİ — L-345'in kendi 'trend line' kendi-kendini-ısırma dersiyle AYNI sınıf. Cümle yeniden yazıldı ('never calculated from what you measured last time'), anlam korunarak tetikleyici kalıp kaldırıldı.",
+      "İlk yazılan UNVALIDATED-tutarlılık regex'i ('UNVALIDATED|must be recalibrated|engineering starting point') active_straight_leg_raise'i de yakaladı — o testin kaynağı GERÇEK bir literatür referansına (straight-leg-raise hip-flexion literatürü) dayanıyor ve kendi metninde 'gösterilmeden önce kalibre edilmeli' yasağı TAŞIMIYOR (yalnız yöntemini tarif ediyor, lateral_bend'in 'extrapolated, not measured' itirafıyla aynı sınıf). Bu üçüncü bir gerçek kusur değildi, kapının kendi aşırı-genişliğiydi (L-338 emsali). Desen yalnız `\\bUNVALIDATED\\b`'e daraltıldı — bu kelime depoda kasıtlı bir ALL-CAPS yapısal işaret (SABOTAJ/VAKUM/POZİTİF ÇAPA deseniyle aynı sınıf). active_straight_leg_raise BİLEREK dışarıda bırakıldı, gerekçe test dosyasının kendi doc-comment'inde adıyla yazılı.",
+      "config'e eklenen ilk userText'te 'yet' kelimesi vardı (M-F-186 yasağı — bilinmeyen bir tarihi ima eder); wellness_lint.py bunu YAKALADI (kapı gerçekten ateşliyor), kelime kaldırıldı, anlam değişmedi."
+    ],
+    "verification": "test/store_listing_test.dart + test/shipped_claim_test.dart + test/band_lineage_test.dart üçü birlikte PASS (roadmap Step 2/5'in istediği üç dosya); python3 tools/all_gates.py TÜMÜ YEŞİL (app 270/270, engine 114/114, python 21/22 bilinen-kırmızı hariç)."
+  },
+  "band_lineage": {
+    "$doc": "Roadmap LIS-P0-001 Step 1'in istediği envanter — testId, threshold, source type, source/citation, cohort, age/sex varsayımı, comparison copy (kullanıcıya gösterilen), validation owner/date, expiry. Kaynak: config/tests/lissom-assessment.v1.json scoring/referenceStatus alanları, elle ölçüldü.",
+    "age_bands_used_by_all_banded_tests": ["u40", "40-59", "60plus"],
+    "sex_split": "HİÇBİR testte yok — overhead_reach kaynağı 'age/sex banded' bir dataset kullanıyor ama app sex ile bölmüyor (yalnız yaş); hamstring_reach kaynağı sex-split'i 'deferred pending real data' olarak beyan ediyor. Bu, listing/config'te İDDİA edilmeyen ama fark edilmeye değer bir sadeleştirme.",
+    "validation_owner_date": "Hiçbir testte isimli bir 'validation owner/date' alanı YOK (config şeması bu alanı taşımıyor) — kaynak atıfları (PMC/AAOS/Bohannon/PubMed ID'leri) var, ama 'kim, ne zaman onayladı' beyanı yok. Bu roadmap'in istediği alanlardan biri, config'te YAPISAL OLARAK karşılığı bulunmuyor — sonraki bir P1/config-şema turunda ele alınabilir, bu turun kapsamı DEĞİL (kapsam: yanlış iddiayı düzeltmek, yeni şema alanı eklemek değil).",
+    "expiry": "Hiçbir bantta expiry alanı yok — aynı yapısal boşluk.",
+    "tests": [
+      {"testId": "overhead_reach", "thresholdType": "banded (deg, age-tiered)", "shownToUser": false, "sourceType": "real cohort citation", "sourceCitation": "PMC7549223 (n=2404, age/sex-banded active ROM)", "cohort": "n=2404", "comparisonCopyShown": "none — measurementOnly, raw value only"},
+      {"testId": "deep_squat", "thresholdType": "ordinal (descriptive criteria)", "shownToUser": false, "sourceType": "no numeric norm exists", "sourceCitation": "PubMed 35321135 (between-group differences only)", "cohort": "none", "comparisonCopyShown": "none — measurementOnly, raw value only"},
+      {"testId": "overhead_squat", "thresholdType": "banded (deg, age-tiered)", "shownToUser": false, "sourceType": "UNVALIDATED engineering estimate — NOW SUPPRESSED (L-348 fix)", "sourceCitation": "none found", "cohort": "none", "comparisonCopyShown": "none as of L-348 — was shown pre-fix"},
+      {"testId": "ankle_dorsiflexion", "thresholdType": "qualitative (limited/typical/good)", "shownToUser": true, "sourceType": "literature exists but unit mismatch, source paywalled", "sourceCitation": "unverified (403)", "cohort": "none", "comparisonCopyShown": "qualitative level only, no numeric band"},
+      {"testId": "hamstring_reach", "thresholdType": "banded (ratio, age-tiered)", "shownToUser": false, "sourceType": "UNVALIDATED engineering estimate, different-quantity proxy — NOW SUPPRESSED (L-348 fix)", "sourceCitation": "sit-and-reach literature (unit mismatch)", "cohort": "none", "comparisonCopyShown": "none as of L-348 — was shown pre-fix"},
+      {"testId": "hip_hinge", "thresholdType": "qualitative (limited/typical/good)", "shownToUser": true, "sourceType": "no numeric norm exists", "sourceCitation": "none — trained-observer detection threshold only (~34deg)", "cohort": "none", "comparisonCopyShown": "qualitative level only, no numeric band"},
+      {"testId": "lateral_bend", "thresholdType": "banded (deg, age-tiered)", "shownToUser": true, "sourceType": "real named reference + measured cohort, sub-40 extrapolated", "sourceCitation": "AAOS 35deg / Kendall 40deg", "cohort": "measured cohort means ~32.6-36deg (n unspecified)", "comparisonCopyShown": "numeric band (low/normal/good) by age tier"},
+      {"testId": "single_leg_balance", "thresholdType": "banded (seconds, age-tiered)", "shownToUser": true, "sourceType": "real named reference, age-specific", "sourceCitation": "Bohannon 2006", "cohort": "Bohannon 2006 age-specific cohort (n unspecified here)", "comparisonCopyShown": "numeric band (low/normal/good) by age tier"},
+      {"testId": "forward_lunge", "thresholdType": "qualitative (limited/typical/good)", "shownToUser": true, "sourceType": "no floor reference from pose alone, own proxy", "sourceCitation": "Halo (proxy method reference, not a norm)", "cohort": "none", "comparisonCopyShown": "qualitative level only, no numeric band"},
+      {"testId": "thoracic_rotation", "thresholdType": "qualitative (limited/typical/good)", "shownToUser": true, "sourceType": "indirect proxy, weakest test in battery", "sourceCitation": "PMC10635560 (rotation not recoverable from single camera)", "cohort": "none", "comparisonCopyShown": "qualitative level only, no numeric band"},
+      {"testId": "active_straight_leg_raise", "thresholdType": "banded (deg, age-tiered)", "shownToUser": true, "sourceType": "real literature reference, geometric extrapolation — considered for L-348 suppression, EXCLUDED (see lis_p0_001_resolution.self_correction)", "sourceCitation": "straight-leg-raise hip-flexion literature (~80-85deg)", "cohort": "literature reference, n unspecified", "comparisonCopyShown": "numeric band (low/normal/good) by age tier"},
+      {"testId": "plank_hold", "thresholdType": "qualitative (limited/typical/good)", "shownToUser": true, "sourceType": "form-break threshold measured on synthetic rig, NOT calibrated on people", "sourceCitation": "none (duration norms vary too widely to cite)", "cohort": "none — synthetic rig only", "comparisonCopyShown": "qualitative level only, no numeric band"}
+    ]
+  },
+  "known_deviations_reported_upstream": {
+    "common_motion_core_packages_missing": {
+      "checked_paths": [
+        "ventures/motion-core/lib/packages/motion_feedback",
+        "ventures/motion-core/lib/packages/motion_store",
+        "ventures/motion-core/lib/packages/motion_audio",
+        "ventures/motion-core/lib/packages/motion_entitlements",
+        "ventures/motion-core/lib/packages/motion_telemetry",
+        "ventures/motion-core/lib/tools/consumer_matrix.sh"
+      ],
+      "result": "HEPSİ MISSING — 02-MOTION-AILESI-ORKESTRASYON.md §13 Task MOTION-CORE-001'in 'Create later' listesi henüz hiç başlanmamış",
+      "impact_on_lissom": "LIS-P0-001 ve LIS-P0-002 bu paketlere bağımlı DEĞİL, bloklanmıyor. Ama LIS-P1-002 (motion_feedback cue priority) ve LIS-P1-003 (common motion_store adapter) bu paketler kurulmadan READY olamaz — ileri iş, şimdi değil.",
+      "action": "Motion Orchestration'a raporlandı (bu dosyanın referans verildiği HAZIR mesajıyla); Lissom oturumu bu paketleri kendi başına oluşturmuyor (core sahipliği motion-core oturumunda)."
+    }
+  },
+  "prior_session_context_not_a_cold_start": {
+    "note": "20-LISSOM-MASTER-ROADMAP.md'nin baseline satırı ('12 assessment, plan/reminder/paid entitlement yok') doğru ama eksik bağlam taşıyor: DEFTER.md 5015 satır / 347 L-kayıt, app testleri 22'den 265'e, engine 23'ten 114'e çıkmış durumda. YAYIN-YOLU-LISSOM.md tur-2 (2026-08-16) 6 maddelik kuyruğun 5'i büyük ölçüde işlenmiş: launch image+ikon YAPILDI (L-341, ama H-76 sınıfı founder-track ihlali olarak kendi kendine raporlandı, kurucu 'devam et' dedi — L-344), 12 yokluk-iddiası yeniden ölçüldü (L-343, 11 bulundu), ölçüm-değeri-saklama zaten kapalıydı (L-344), D6 listing taslağı + cihaz günü paketi yazıldı (L-345, L-347). appStore/name (ASC'de 'Lissom: Mobility & Yoga' vs listing.json'da 'Lissom') ve eksik supportUrl (H-83) bilerek dokunulmadı — kurucu kapısı."
+  }
+}

@@ -5013,3 +5013,98 @@ tek elden orkestratörde) — burada adıyla kayıtlı, rapor yoluyla iletilecek
    (`$total`/`$live` metnini oku), sayı UYDURMADIM.
 
 **Kapılar:** dokunulmadı (`docs/`, sevk edilmiyor). **C sayacı:** değişmedi.
+
+---
+
+## L-348 — LIS-P0-001: "band reflects your own past sessions" iddiası ÖLÇÜLDÜ, YANLIŞ ÇIKTI, DÜZELTİLDİ — iki yan-bulgu (kendi-ısırma + aşırı-geniş kapı) kendi turunda kapandı
+
+Üretim hattı protokolü (2026-08-18) + `20-LISSOM-MASTER-ROADMAP.md` yeni
+oturumla geldi, ilk atanan iş LIS-P0-001. Roadmap baseline'ı zaten adıyla
+işaret ediyordu: *"'band reflects your own past sessions' iddiası runtime/
+config ile çelişiyor."* Ölçtüm.
+
+### Bulgu — 0/12 test bandı kullanıcı geçmişinden hesaplıyor
+
+`config/tests/lissom-assessment.v1.json`daki 12 testin `scoring.source`u
+tek tek okundu: hepsi ya gerçek yaş-bantlı literatür/kohort atfı taşıyor
+(`overhead_reach` PMC7549223 n=2404 · `lateral_bend` AAOS/Kendall ·
+`single_leg_balance` Bohannon 2006 · `active_straight_leg_raise` SLR
+literatürü) ya da beyan edilmiş mühendislik-tahmini (`overhead_squat`,
+`hamstring_reach`: kendi metninde **"UNVALIDATED"**) ya da hiç sayısal norm
+yok (`deep_squat`, `hip_hinge`, `forward_lunge`, `thoracic_rotation`,
+`plank_hold`: nitel seviye). **Hiçbiri** kullanıcının kendi geçmiş
+oturumuna bakmıyor. Kod tarafı da aynı: `packages/lissom_engine/lib/src/
+assessment_result.dart` `AssessmentResult.measured()` `bandLabel`i yalnız
+config'ten gelen STATİK `bandFloors`e karşı hesaplıyor (`value >= floor`
+döngüsü) — geçmiş session hiç parametre olarak girmiyor.
+
+Aynı `description`in birkaç cümle sonrası zaten DOĞRU olanı söylüyordu:
+*"does not draw a trend line or say a result is better or worse than a
+past one — no validated threshold exists for that comparison"* (L-339/
+L-344'ün TestDetailScreen kararıyla uyumlu). İki cümle AYNI ANDA doğru
+olamazdı — İÇ ÇELİŞKİ, ikincisi koda uyan taraftı.
+
+### İkinci bulgu — iki test kendi kaynağının yasakladığı bandı gösteriyordu
+
+`overhead_squat` ve `hamstring_reach`'in `scoring.source`u kendi bandının
+**"UNVALIDATED"** olduğunu ve `overhead_squat` için açıkça *"MUST be
+recalibrated against real fixtures before any user-facing number is
+shown"* dediğini beyan ediyordu — ama `overhead_reach`/`deep_squat`'ın
+sahip olduğu `referenceStatus.measurementOnly` bastırması İKİSİNDE de
+YOKTU. Kendi kaynağının "gösterme" dediği bant bugün gerçek kullanıcıya
+gösteriliyordu.
+
+### Düzeltme
+
+- `config/tests/lissom-assessment.v1.json` **1.12.0→1.13.0**: iki teste
+  `overhead_reach`/`deep_squat` ile AYNI şemada `referenceStatus` eklendi
+  (kaynak metni SİLİNMEDİ, yalnız gösterim bastırıldı — mekanizma zaten
+  var olan `lessonClass`/`isMeasurementOnly` veri-akışından TÜRETİLDİ,
+  yeni UI kodu YAZILMADI).
+- `docs/store/listing.json`: yanlış cümle → *"Where a test shows a band,
+  it comes from published age-banded research where we found it, or is
+  marked as an unvalidated starting point where we didn't — it is never
+  calculated from what you measured last time."*
+- `test/band_lineage_test.dart` (yeni, 5 test) + `test/support/
+  listing_json.dart` (yeni — `store_listing_test.dart`nin `_readListing`/
+  `_userStrings`i BURAYA taşındı, `H-58`: kopya = güncelleme borcu, iki
+  kapı artık TEK kaynaktan okuyor).
+
+### Kendi turumun iki kendi-hatası — ikisi de kendi testimle yakalandı
+
+1. **Kendi-ısırma (L-345 emsali):** ilk yazdığım düzeltme cümlesi ("never
+   from your own past results") kendi own-history regex'imi TETİKLEDİ.
+   Cümle anlam korunarak yeniden yazıldı ("never calculated from what you
+   measured last time").
+2. **Kapı aşırı-geniş (L-338 emsali):** ilk `_selfDeclaredUnvalidated`
+   deseni (`UNVALIDATED|must be recalibrated|engineering starting point`)
+   `active_straight_leg_raise`i de yakaladı — o testin kaynağı GERÇEK bir
+   literatür referansına dayanıyor, kendi metninde "göstermeden önce
+   kalibre et" YASAĞI taşımıyor (yalnız yöntemini tarif ediyor, `lateral_
+   bend`in "extrapolated, not measured" itirafıyla aynı sınıf). Üçüncü bir
+   gerçek kusur DEĞİLDİ. Desen `\bUNVALIDATED\b`e daraltıldı (bu kelime
+   depoda kasıtlı ALL-CAPS yapısal işaret — `SABOTAJ`/`VAKUM`/`POZİTİF
+   ÇAPA` sınıfı); `active_straight_leg_raise` BİLEREK dışarıda bırakıldı,
+   gerekçe test dosyasının kendi 🪤 notunda adıyla yazılı.
+
+Ayrıca `wellness_lint.py` yeni eklenen `hamstring_reach` `userText`indeki
+`"yet"` kelimesini YAKALADI (M-F-186 yasağı) — kapı gerçekten ateşliyor,
+kelime kaldırıldı, anlam değişmedi.
+
+### Kapsam dışı bırakılan (roadmap'in istediği ama bu turda YAPILMAYAN)
+
+Roadmap Step 1 her bant için "validation owner/date" ve "expiry" alanı da
+istiyordu — config şeması bu alanları YAPISAL OLARAK taşımıyor (kaynak
+atıfları var, "kim ne zaman onayladı" beyanı yok). Yeni şema alanı eklemek
+bu turun kapsamı DEĞİLDİ (kapsam: yanlış iddiayı düzeltmek); envanterde
+`docs/evidence/production-line/baseline.json`'da adıyla BOŞLUK olarak
+kayıtlı, sessizce doldurulmadı.
+
+**Kapılar:** app **270/270** (265→270, +5 `band_lineage_test.dart`) ·
+engine **114/114** (değişmedi) · python **21/22** (M-F-280 bilinen) ·
+`all_gates.py` TÜMÜ YEŞİL · `flutter analyze` 4 ÖNCEDEN-VAR sorun (bu
+turun dosyalarında DEĞİL, dokunulmadı — LIS-P0-002'nin CI-analyze
+maddesine somut kanıt: analyze bugün kapı DIŞINDA, bu yüzden fark
+edilmeden kalmışlar).
+**C sayacı: kullanıcı yüzeyinde GERÇEK değişiklik ⇒ 1** — store listing
+metni ve iki testin gösterim davranışı değişti.

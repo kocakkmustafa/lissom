@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "lissom.assessment.battery",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "metricSet": "lissom.assessment.metrics@1.0.0",
   "_notes": [
+    "1.13.0 (L-348 / LIS-P0-001): store listing 'the band reflects your own past sessions, not a clinical threshold' iddiası ÖLÇÜLDÜ VE YANLIŞ ÇIKTI — hiçbir testin `scoring.bands`'i kullanıcı geçmişinden değil, yaş-bantlı literatür/kohort değerlerinden (PMC7549223, AAOS/Kendall, Bohannon 2006) ya da beyan edilmiş mühendislik-tahmininden geliyor; `AssessmentResult.measured()` bandLabel'ı yalnız statik `bandFloors`e karşı hesaplıyor, geçmiş oturuma hiç bakmıyor. Aynı zamanda `overhead_squat` ve `hamstring_reach`'in KENDİ `scoring.source` notu 'UNVALIDATED... MUST be recalibrated before any user-facing number is shown' / 'engineering starting point' diyordu ama `referenceStatus` bastırması YOKTU — kendi beyanıyla çelişen, gerçek kullanıcıya gösterilen iki bant. Bu sürümde ikisine de `overhead_reach`/`deep_squat` ile AYNI desende `referenceStatus: measurementOnly` eklendi (ölçüm gösterilir, karşılaştırma verilmez); kaynak metni SİLİNMEDİ, yalnız gösterim bastırıldı. `docs/store/listing.json` cümlesi de bu ölçümle düzeltildi.",
     "1.12.0 (L-219): `excluded` bloğunun İKİ YILDIR OKUYUCUSU YOKTU — Battery.parse onu hiç ayrıştırmıyordu, dolayısıyla iki test (hip_internal_external_rotation, cervical_rotation) ÖLÇÜLMÜŞ gerekçeleriyle dışarıda bırakılmış ama kullanıcı bunu hiçbir yüzeyde ÖĞRENEMEMİŞTİ. L-181'in (okuyucusuz config alanı) yeni örneği. Bu sürümde okuyucu eklendi ve `whyNotTopic` alanı geldi: bir dışlamanın ürün-düzeyi karşılığı (whyNotPage.items[].topic) BEYAN edilir, metin benzerliğinden TAHMİN EDİLMEZ — tahmini eşleşme bir gün sessizce kayar. Alanı olmayan dışlama (cervical_rotation) 'What Lissom doesn't do' sayfasında KENDİ satırını alır.",
     "1.9.0 (M-F-185 (b)-çıkışı MÜHÜRLÜ): overhead_reach ve deep_squat `referenceStatus` taşıyor — state=measurementOnly + ÖLÇÜLMÜŞ statusBasis (kullanıcı diliyle) + İSİMLİ promotionPath. Aile doktrini: 'ölçüm var, hüküm yok' (M-F-71 skorsuz-ama-ölçülü bölge). Motor bunu ResultTier.measuredNoBands ile zaten destekliyordu; bu blok GEREKÇEYİ yüzeye taşır.",
     "1.8.0 (gece paketi madde 3): deep_squat'a presence eklendi (movementPresence'tan devralınan 110° eşik, PROVISIONAL) — presence_isolator penceresi denemesi için.",
@@ -287,6 +288,19 @@
         "source": "UNVALIDATED — no normative forward-lean dataset was found for the overhead squat. Bands are an engineering starting point and MUST be recalibrated against real fixtures before any user-facing number is shown.",
         "region": "thoracic"
       },
+      "referenceStatus": {
+        "state": "measurementOnly",
+        "statusBasis": {
+          "code": "unvalidated-dataset",
+          "measured": "L-348: bu testin kendi `scoring.source`'u 'no normative forward-lean dataset was found... bands MUST be recalibrated against real fixtures before any user-facing number is shown' diyor — hiçbir gerçek kohorda sınanmadı, 0 fixture ile ölçüldü. `referenceStatus` bastırması ÖNCEDEN yoktu; bant kendi kaynağının yasakladığı hâlde gösteriliyordu.",
+          "userText": "We measure how far your trunk leans forward during an overhead squat, and we show you the number. We do not compare it to a reference range — the bands we drafted for this test were never checked against real people, and our own source note says they should not be shown until that happens."
+        },
+        "promotionPath": {
+          "unblockedBy": "real-cohort calibration round",
+          "criterion": "bands recalibrated and validated against a real fixture cohort, per this test's own scoring.source requirement",
+          "measuredGap": "0 real people measured against these bands today; they are an engineering placeholder only"
+        }
+      },
       "passiveExecutionPossible": false,
       "passiveExecutionRationale": "Aynı — ağırlık taşıyan çömelme, üstüne aktif kol pozisyonu."
     },
@@ -393,6 +407,19 @@
         },
         "source": "UNVALIDATED — sit-and-reach norms exist in cm but are floor-referenced and sex-split; our metric is fingertip-to-ankle normalised by torso length, which is a different quantity. Bands are an engineering starting point. Sex split deferred pending real data.",
         "region": "posterior_chain"
+      },
+      "referenceStatus": {
+        "state": "measurementOnly",
+        "statusBasis": {
+          "code": "unvalidated-proxy-metric",
+          "measured": "L-348: bu testin kendi `scoring.source`'u sit-and-reach literatürünün SANTİMETRE ve cinsiyet-ayrımlı olduğunu, bizim metriğimizin (gövde-boyuna normalize edilmiş parmak ucu-ayak bileği oranı) FARKLI bir büyüklük olduğunu söylüyor — doğrudan dönüşüm yok, 'engineering starting point... sex split deferred pending real data.'",
+          "userText": "We measure how far you reach forward, and we show you the number. We do not compare it to a reference range — published flexibility norms use a different measurement (distance to your toes, in centimetres) than the ratio we calculate, so there is nothing validated to compare it against."
+        },
+        "promotionPath": {
+          "unblockedBy": "own-metric calibration round",
+          "criterion": "torso-normalised reach ratio validated against a real, sex-split cohort per this test's own deferred requirement",
+          "measuredGap": "0 real people measured against these bands today; they are extrapolated from a differently-defined literature metric"
+        }
       },
       "passiveExecutionPossible": true,
       "passiveExecutionRationale": "Pasif hamstring germe standart uygulamadır."

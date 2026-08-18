@@ -23,36 +23,13 @@
 /// tamamen kaybolursa kapı SESSİZCE geçmemeli).
 library;
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-const String _listingPath = 'docs/store/listing.json';
+import 'support/listing_json.dart';
 
-Map<String, dynamic> _readListing(String path) =>
-    (jsonDecode(File(path).readAsStringSync()) as Map).cast<String, dynamic>();
-
-/// `$` önekli anahtarlar bu dosyanın KENDİ gerekçe/kaynak notlarıdır —
-/// kullanıcıya gitmez.
-List<String> _userStrings(Object? node) {
-  final List<String> out = <String>[];
-  void walk(Object? n) {
-    if (n is String) {
-      out.add(n);
-    } else if (n is List) {
-      n.forEach(walk);
-    } else if (n is Map) {
-      n.forEach((Object? k, Object? v) {
-        if (k is String && k.startsWith(r'$')) return;
-        walk(v);
-      });
-    }
-  }
-
-  walk(node);
-  return out;
-}
+const String _listingPath = listingPath;
 
 /// `MAGAZA-ALAN-LIMITLERI.md`den ÇEKİLEN limitler — TEK otoriteden okunur,
 /// burada elle sabitlenmez (dosya yolu, sayı değil).
@@ -124,7 +101,7 @@ void main() {
   });
 
   test('UZUNLUK + VARLIK — sevk edilen taslak limitleri aşmıyor', () {
-    final Map<String, dynamic> listing = _readListing(_listingPath);
+    final Map<String, dynamic> listing = readListing(_listingPath);
     final List<String> lengthViolations = <String>[];
     final List<String> missingFields = <String>[];
     _checkListing(listing,
@@ -138,7 +115,7 @@ void main() {
   });
 
   test('\$ SÖZLEŞMESİ — gönderilen alan \$ taşımaz, gerekçe \$ taşır', () {
-    final Map<String, dynamic> listing = _readListing(_listingPath);
+    final Map<String, dynamic> listing = readListing(_listingPath);
     for (final String key in _requiredFields) {
       final String? v = _dig(listing, key);
       expect(v, isNotNull, reason: '$key eksik');
@@ -155,14 +132,14 @@ void main() {
   });
 
   test('VAAT DİLİ YOK — henüz gelmemiş bir şeyi ima eden kelime yok', () {
-    final Map<String, dynamic> listing = _readListing(_listingPath);
+    final Map<String, dynamic> listing = readListing(_listingPath);
     final RegExp promise = RegExp(
       r"\b(yet|soon|coming soon|for now|in a future|will be added|"
       r"we'll add|planned for)\b",
       caseSensitive: false,
     );
     final List<String> hits = <String>[
-      for (final String s in _userStrings(listing))
+      for (final String s in userStrings(listing))
         if (promise.hasMatch(s)) '"$s"',
     ];
     expect(hits, isEmpty,
@@ -170,14 +147,14 @@ void main() {
   });
 
   test('CİHAZ-KANITI İDDİASI YOK — A12 hâlâ açık', () {
-    final Map<String, dynamic> listing = _readListing(_listingPath);
+    final Map<String, dynamic> listing = readListing(_listingPath);
     final RegExp deviceProof = RegExp(
       r'\b(tested on (a )?real device|verified on device|proven on device|'
       r'device[- ]tested|device[- ]verified|clinically)\b',
       caseSensitive: false,
     );
     final List<String> hits = <String>[
-      for (final String s in _userStrings(listing))
+      for (final String s in userStrings(listing))
         if (deviceProof.hasMatch(s)) '"$s"',
     ];
     expect(hits, isEmpty,
@@ -189,7 +166,7 @@ void main() {
     // Aynı yasak-vaat sözlüğü — iki dosyada TUTMAK yerine burada TEKRAR
     // yazmak yerine kaynağı işaretliyoruz: değişirse ikisi AYRI turlarda
     // bayatlayabilir, bu satır o riski adıyla taşıyor.
-    final Map<String, dynamic> listing = _readListing(_listingPath);
+    final Map<String, dynamic> listing = readListing(_listingPath);
     // 🪤 İlk yazım "trend line"/"better than"/"worse than"ı da buraya
     // koymuştu ve KENDİ KENDİNİ ısırdı: description'ın dürüst cümlesi tam
     // olarak "does not draw a trend line or say a result is better or
@@ -206,7 +183,7 @@ void main() {
       'adapts to you': 'uyarlama yapan hiçbir kod yok',
     };
     final List<String> hits = <String>[];
-    for (final String s in _userStrings(listing)) {
+    for (final String s in userStrings(listing)) {
       final String low = s.toLowerCase();
       for (final MapEntry<String, String> c in unbacked.entries) {
         if (low.contains(c.key)) {
@@ -219,7 +196,7 @@ void main() {
 
   group('ÖZ-TESTLER (H-62/M-F-652)', () {
     test('POZİTİF İKİZ — bugünkü gerçek dosya kapıdan geçer', () {
-      final Map<String, dynamic> listing = _readListing(_listingPath);
+      final Map<String, dynamic> listing = readListing(_listingPath);
       final List<String> lengthViolations = <String>[];
       final List<String> missingFields = <String>[];
       _checkListing(listing,
@@ -249,7 +226,7 @@ void main() {
 
     test('VAKUM — dosya bulunamazsa kapı SESSİZCE geçmez, patlar', () {
       expect(
-        () => _readListing('docs/store/YOK-BOYLE-BIR-DOSYA.json'),
+        () => readListing('docs/store/YOK-BOYLE-BIR-DOSYA.json'),
         throwsA(anything),
         reason: 'okuma hatası yutulursa "0 ihlal" VAKUM-DOĞRU olur',
       );
