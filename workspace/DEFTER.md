@@ -5199,11 +5199,54 @@ atlanmayacak — skip yalnız YEREL/onay-öncesi ortamda görünür.
 Onay gelince: `fetch_fonts.sh` → `all_gates.py` TÜMÜ YEŞİL beklenir →
 release build'leri YENİDEN + yeni hash'ler.
 
-**Kapılar:** `flutter analyze` temiz (4/4 pre-existing kapandı) · app
-**276/286**, **10 atlanan** (6 önceden bilinen fixture-bağımlı + 4 yeni
-font-varlığı) · engine **114/114** · python **21/22** (M-F-280) ·
-Android+iOS release build İKİSİ DE BAŞARILI (kod yolu kanıtı) ·
-`all_gates.py` **TÜMÜ YEŞİL**.
+**Kapılar (onay ÖNCESİ mühür):** `flutter analyze` temiz (4/4 pre-existing
+kapandı) · app **276/286**, **10 atlanan** (6 önceden bilinen fixture-
+bağımlı + 4 yeni font-varlığı) · engine **114/114** · python **21/22**
+(M-F-280) · Android+iOS release build İKİSİ DE BAŞARILI (kod yolu kanıtı)
+· `all_gates.py` **TÜMÜ YEŞİL**.
+
+---
+
+### EK — kullanıcı onayı geldi, indirme + gerçek build KAPANDI (aynı oturum, +15 dk)
+
+Kullanıcı `AskUserQuestion` ile onayladı ("Evet, indir ve push et").
+`tool/fetch_fonts.sh` koşuldu: **4/4 dosya indi, SHA-256 sıfır sapmayla
+doğrulandı.** `python3 tools/all_gates.py` → **280/286 · 6 atlanan (yalnız
+eski fixture-bağımlılar) · TÜMÜ YEŞİL** — 4 font-varlık testi `skip:`den
+GERÇEK `PASS`e KENDİLİĞİNDEN döndü, elle test güncellemesi gerekmedi
+(tasarımın amacı buydu).
+
+**🪤 iCloud build-symlink tuzağı CANLI YAKALANDI:** gerçek fontlarla
+yeniden derlemek için koşulan `flutter clean`, `build`i iCloud-senkron
+proje dizini İÇİNDE GERÇEK klasör olarak yeniden yarattı — memory
+`feedback-lissom-icloud-build.md`nin adıyla uyardığı AYNI tuzak
+("sarmalayıcı tek başına YETMİYOR"). İlk iOS build'i *"resource fork,
+Finder information... not allowed"* ile ÇÖKTÜ. Ayrıca font-sonrası İLK
+Android build'i **1 ms**de "bitti" — kontrolsüz bırakılsaydı fark
+edilmeyecek bir Gradle ÖNBELLEK sahte-yeşiliydi (AAB'de font YOKTU, hash
+ÖNCEKİYLE bit-bit AYNIYDI). Düzeltme: `rm -rf build && ln -s
+~/lissom_buildout build`, ikisi de GERÇEKTEN yeniden alındı (13–28 sn'lik
+koşumlar) ve `unzip -l`/`find` ile font dosyalarının PAKETİN İÇİNDE
+olduğu doğrulandı (yalnız hash'e güvenilmedi).
+
+**Gerçek son build kanıtı:**
+- Android: `app-release.aab` (70,2 MB), SHA-256 `cf1e641d…`, 4/4 font
+  pin-boyutlarıyla BİREBİR pakette.
+- iOS: `Runner.app` (45,6 MB). `Runner` ikili hash'i (`368b9eb6…`)
+  FONT-ÖNCESİYLE AYNI — bu DOĞRU: font asset'leri Mach-O ikiliye değil
+  ayrı `flutter_assets`e gömülüyor, ikili hash'i asset içeriğinden
+  etkilenmiyor. Değişimin gerçek kanıtı: paket boyutu (45,2→45,6 MB,
+  ~421 KB'lık fontla uyumlu) + dosyaların doğrudan bulunması.
+- Derlenmiş `.app`in `PrivacyInfo.xcprivacy`si yeniden okundu: dört alan
+  hâlâ boş/false — font bundling required-reason listesini DEĞİŞTİRMEDİ.
+
+**Kapılar (KAPANIŞ mührü):** `flutter analyze` temiz · app **280/286**,
+**6 atlanan** (yalnız eski fixture-bağımlılar) · engine **114/114** ·
+python **21/22** (M-F-280) · Android+iOS release build GERÇEK gömülü
+fontlarla İKİSİ DE doğrulandı · `all_gates.py` **TÜMÜ YEŞİL**.
+
+**LIS-P0-001 ve LIS-P0-002 İKİSİ DE KAPANDI.** Sıradaki: LIS-P0-003 (12
+assessment production wiring) ya da orkestratörden gelecek GOREV/KARAR.
 **C sayacı: kullanıcı yüzeyinde davranış değişikliği ⇒ 1** — uygulama
 artık ilk açılışta ağa çıkmıyor (font fetch kapalı); font dosyaları
 gelene kadar sistem-varsayılan yazı tipiyle render eder (görsel fark,
