@@ -2,9 +2,18 @@
   "task": "LIS-P0-002",
   "claim": "Font, privacy manifest ve release CI",
   "measured_at": "2026-08-18T21:59:38Z",
-  "updated_at": "2026-08-18T22:14:31Z",
-  "status": "DONE",
-  "status_meaning": "Kod tam + 4 font dosyası kullanıcı onayıyla indirildi (tool/fetch_fonts.sh, SHA-256 doğrulandı) + iki release build GERÇEK gömülü fontlarla YENİDEN alındı ve doğrulandı (aşağıda). all_gates.py TÜMÜ YEŞİL, 0 skip-pending kalmadı (yalnız 6 önceden-bilinen fixture-bağımlı skip duruyor).",
+  "updated_at": "2026-08-18T23:05:00Z",
+  "status": "PARTIAL",
+  "status_meaning": "Kod + font + privacy manifest tarafı TAM ve doğrulandı (aşağıda değişmedi). CI matrisi tarafı KISMEN: iki yeni iş (flutter-checks, ios-build) gerçek bir push'ta hâlâ KIRMIZI — motion-core (private repo) git-bağımlılığını CI'ın klonlayamaması (kimlik doğrulama yok), LIS-P0-002'nin dosya kapsamı DIŞINDA, EXTERNAL_GATE. Detay: workspace/DEFTER.md L-350 eki. Önceki 'DONE'/'TÜMÜ YEŞİL' hükmü yalnız LOKAL all_gates.py'ye dayanıyordu; gerçek GitHub Actions o an hiç kontrol edilmemişti — bu güncelleme onu düzeltiyor.",
+  "ci_real_status": {
+    "checked_via": "gh run list / gh run view / gh run watch (GERÇEK GitHub Actions, lokal simülasyon DEĞİL)",
+    "content_guards_job": "YEŞİL — değişmedi, motion-core bağımlılığı yok",
+    "flutter_checks_job": "KIRMIZI — 'Poz modeli'+'Yazı tipleri' adımları artık ✓ (L-350 düzeltmesi doğrulandı), ama sonraki adım 'flutter pub get' KIRMIZI: motion-core private repo, CI'ın GITHUB_TOKEN'ı başka depoyu klonlayamıyor (exit 128, 'could not read Username')",
+    "ios_build_job": "KIRMIZI — aynı kök neden, aynı adım",
+    "root_cause": "pubspec.yaml motion_core+motion_camera'yı git: {url: https://github.com/kocakkmustafa/motion-core.git} ile çekiyor; repo isPrivate=true (ölçüldü); hesap User tipi (Org değil) ⇒ cross-repo Actions erişim ayarı yok; gh secret list boş ⇒ hazır PAT/deploy-key yok.",
+    "why_not_self_fixed": "İki çözüm de (PAT/deploy-key secret'ı OYA repo'yu public yapma) bu oturumun kendi güvenlik sınırları içinde kalmıyor: biri kimlik-bilgisi-girme (PROHIBITED), diğeri ailenin paylaşılan tüm çekirdeğini etkileyen geri-dönüşü-belirsiz bir karar (hesap-sahibi/kurucu sınıfı, §1.4). EXTERNAL_GATE olarak loglandı, kurucuya kapanış paketinde soruluyor.",
+    "family_impact": "jablab/gravita/ostinato/choreia depolarında hiç .github/workflows/ yok (denetlendi, 2026-08-18) — Lissom ailede bu duvara ÇARPAN İLK app; aynı engel her Motion CI'ında tekrarlanacak."
+  },
   "findings": {
     "runtime_font_fetch": {
       "before": "lib/app/lissom_theme.dart GoogleFonts.nunitoSansTextTheme()+newsreaderTextTheme() çağırıyordu; main.dart hiçbir config yapmıyordu; pubspec.yaml'de fonts/font-asset YOK. PrivacyInfo.xcprivacy'nin KENDİ L-288 yorumu bunu zaten dürüstçe kaydetmişti.",
@@ -71,7 +80,7 @@
     "dart_lissom_engine": "114/114 passed",
     "python_gates": "21/22 (fixture_check.py M-F-280 bilinen)",
     "new_test_files": ["test/privacy_manifest_test.dart", "test/release_signing_test.dart"],
-    "verdict": "TÜMÜ YEŞİL"
+    "verdict": "LOKAL tümü yeşil (tools/all_gates.py) — GERÇEK CI ayrı, yukarıdaki ci_real_status alanına bak, KIRMIZI"
   },
   "resolved": {
     "approved_by": "kullanıcı, bu oturumda AskUserQuestion ile ('Evet, indir ve push et')",

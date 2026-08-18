@@ -5313,3 +5313,79 @@ etmedi; yalnız yerel `all_gates.py`ye güvendi.
 
 **Sıradaki:** push + `gh run watch` ile GERÇEK yeşili doğrula (bu kayıt o
 doğrulamadan ÖNCE yazıldı — kapanış eki aşağıda gelecek).
+
+---
+
+### EK — `gh run watch` L-350'yi doğruladı, AMA ikinci ve daha derin bir kırmızı ortaya çıkardı: `flutter pub get` CI'da `motion-core`u klonlayamıyor
+
+Push (`c9c7c3a`) sonrası gerçek koşum izlendi (`gh run watch 32195151858`):
+**"Poz modeli" VE "Yazı tipleri" adımları artık ikisi de ✓** — L-350'nin
+düzeltmesi doğrulandı, iki kırmızı adım da düzeldi. Ama iş bu kez **bir
+adım SONRA**, `flutter pub get`te düşüyor (hem `flutter-checks` hem
+`ios-build`, ikisi de AYNI hata):
+
+```
+Git error. Command: `git clone --mirror https://github.com/kocakkmustafa/motion-core.git ...`
+fatal: could not read Username for 'https://github.com': No such device or address
+exit code: 128 → Failed to update packages. → Process completed with exit code 69.
+```
+
+### Kök neden — ölçüldü, tahmin değil
+
+`pubspec.yaml` `motion_core`+`motion_camera`yı `git: {url: https://github.com/
+kocakkmustafa/motion-core.git, ref: f13bdc9…}` olarak çekiyor.
+`gh repo view kocakkmustafa/motion-core --json isPrivate` → **`true`**.
+`actions/checkout@v4`nin verdiği `GITHUB_TOKEN` yalnız ÇALIŞTIĞI depoya
+(lissom) scope'lu — BAŞKA bir private depoyu (motion-core) klonlayamaz,
+hesap bir **User** (Organization DEĞİL — `gh api user --jq .type`), yani
+Org-seviyeli "bu repo, şu private repoyu Actions'tan görebilsin" ayarı da
+YOK (o özellik yalnız Enterprise/Org hesaplarda var). `gh secret list
+--repo kocakkmustafa/lissom` **boş** — hazır bir PAT/deploy-key de yok.
+
+### Kardeş uygulamalar aynı duvara henüz ÇARPMAMIŞ, ÇARPACAK
+
+`jablab`/`gravita`/`ostinato`/`choreia` depolarında **hiç**
+`.github/workflows/` yok (denetlendi) — yani hiçbiri henüz gerçek Flutter
+CI eklemedi. Lissom bu duvara **ailede ilk çarpan**. Aynı `motion_core`
+git-bağımlılığı deseni (aile-ortak, `02-MOTION-AILESI-ORKESTRASYON.md`
+§7) her yerde aynı — bu, yalnız Lissom'un değil, **ailenin CI'a
+geçeceği her yerde** karşılaşacağı bir engel.
+
+### Neden BEN düzeltmedim — iki seçenek de yasak/sonuç-ağır sınıfta
+
+1. **PAT/deploy-key'i CI secret'ı yap:** çözer, ama bir kimlik bilgisini
+   (token/anahtar) bir sisteme GİRMEK gerektirir — bu oturumun kendi
+   güvenlik sınırının **PROHIBITED** sınıfı ("API keys, tokens" bir
+   alana girilmez), ben oluşturamam/giremem, kurucu kendi GitHub
+   arayüzünden yapmalı.
+2. **`motion-core`u public yap:** kimlik bilgisi gerektirmez AMA
+   **ailenin paylaşılan tüm motorunu** (5 ürünün ortak kod tabanı)
+   geri-dönüşü belirsiz şekilde açığa çıkarır (bir an bile public
+   kalması taramaya/fork'lanmaya yeter) — tek başına Lissom'u
+   ilgilendiren bir karar DEĞİL, tüm aileyi bağlar. `hesap-sahibi
+   işlemi`/`geri dönülmez karar` sınıfına giriyor (§1.4), kurucu sorusu.
+
+**Ben yapmadım, yapmayacağım:** repoyu public'e çevirmek ya da bir
+secret oluşturmak — ikisi de bu turda DENENMEDİ.
+
+### Durum düzeltmesi — L-350'nin "TÜMÜ YEŞİL" iması bu ikinciyi KAPSAMAZ
+
+L-350 kaydı yalnız KENDİ değiştirdiği dosya için (`tool/fetch_pose_model.sh`)
+lokal `all_gates.py`nin TÜMÜ YEŞİL kaldığını doğruluyordu — bu DOĞRU ve
+hâlâ geçerli. Ama LIS-P0-002'nin roadmap Step 3/4'ü ("CI'a ... build
+ekle" + "hepsi PASS") bir BÜTÜN olarak hâlâ KAPANMADI: iki yeni CI işi
+(`flutter-checks`, `ios-build`) gerçek bir push'ta hâlâ KIRMIZI, başka
+bir nedenden. **LIS-P0-002 durumu düzeltiliyor: DONE → PARTIAL** (kod +
+font + privacy manifest tarafı tam ve doğrulandı; CI matrisi tarafı
+motion-core auth engeliyle BLOKE, EXTERNAL_GATE).
+
+**EXTERNAL_GATE (§1.6, timestamp `2026-08-18T23:00Z`):** `flutter-checks`
++ `ios-build` CI işlerinin GERÇEKTEN yeşile dönmesi kurucunun GitHub
+hesap-düzeyi kararına bağlı (PAT/deploy-key OYA motion-core'u public
+yapma). Soru kurucuya bu oturumun kapanış paketinde, diğer birikmiş
+kalemlerle BİRLİKTE sorulacak (§1.6: tek pakette sun). Durma — sıradaki
+işe (LIS-P0-003) geçiliyor.
+
+**Kapılar (bu ek turda ölçüldü, DEĞİŞMEDİ):** lokal `all_gates.py`
+TÜMÜ YEŞİL (L-350'den beri aynı) — bu ek yalnız GERÇEK CI'ın hangi
+noktada durduğunu ölçtü, kod tarafında yeni değişiklik YOK.
