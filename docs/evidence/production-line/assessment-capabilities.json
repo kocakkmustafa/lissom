@@ -1,7 +1,7 @@
 {
   "task": "LIS-P0-003",
   "claim": "12 assessment production wiring",
-  "measured_at": "2026-08-19T01:00:00Z",
+  "measured_at": "2026-08-19T05:50:00Z",
   "status": "PARTIAL",
   "status_meaning": "Roadmap Step 1/3 talep ediyor: 12 testin HER biri için valid/low-confidence/structural-failure test case'i + kamera->gate->evaluator->kayit->sonuc zincirinin TUMUNE baglanmasi. Bu dosya, kod yazmadan once yapilan bir olcumun sonucudur (workspace/DEFTER.md L-351/L-352/L-353): bugun sadece 3/12 testin PRIMARY METRIGI motion-core'a bagli (\"live\"), yani gercek geometriyle olculebiliyor. Kalan 9, kod kusuru DEGIL - `packages/lissom_engine/lib/src/metric_bridge.dart`nin kendi `kUnbridgedMetrics`/`BridgeBlocker` mekanizmasi her birini ISIMLE, dogru anatomiyle ve vaat dili kullanmadan (M-F-186) zaten kullaniciya gosteriyor. \"12/12 capability raporu\" (roadmap Step 5) bu yuzden DURUST bir 3/12 + isimli-9-engel raporu olarak uretildi, sahte bir 12/12 degil.",
   "methodology": {
@@ -22,6 +22,7 @@
       "live": true,
       "screenLevelEvidence": "test/live_capture_screen_test.dart",
       "fullAppWalkEvidence": null,
+      "lowConfidenceEvidence": "test/measurement_persistence_test.dart (L-355, bu oturumda eklendi - ConfidenceGate'in torso-check'i gercek karelerle tetiklendi, ilk kez; deger yazilmadigi + oturum kaydinin yazildigi + sebebin isimli surfacelendigi dogrulandi)",
       "engineLevelEvidence": [
         "packages/lissom_engine/test/mf71_test.dart",
         "packages/lissom_engine/test/real_replay_test.dart (gercek kamera fixture X2u_vGL0qJU)"
@@ -132,6 +133,8 @@
   "sources": [
     "workspace/DEFTER.md L-351 (ilk kapsam olcumu + guard_trigger_policy bulgusu)",
     "workspace/DEFTER.md L-352 (metric_bridge.dart okuma, kesin 3/12 tablosu + assessment_session.dart duzeltmesi)",
-    "workspace/DEFTER.md L-353 (deep_squat ekran-seviyesi test eklendi, app 280->281)"
+    "workspace/DEFTER.md L-353 (deep_squat ekran-seviyesi test eklendi, app 280->281)",
+    "workspace/DEFTER.md L-354 (dusuk-degerli plan iptal edildi, bu dosya roadmap SS16'nin kendi istegiyle dolduruldu)",
+    "workspace/DEFTER.md L-355 (lowConfidence ilk kez gercek karelerle tetiklendi, roadmap Step 4 kapatildi, app 281->282)"
   ]
 }
