@@ -5787,3 +5787,78 @@ koşuldu.
 **Kapılar:** app **281/287** · engine **114/114** · python **21/22**
 (M-F-280) · `all_gates.py` **TÜMÜ YEŞİL** (kod değişmedi, doğrulama
 amaçlı).
+
+---
+
+## L-355 — Kurucu direktifi: bekleme-turu YASAK, JabLab'ın CI "çözümü" AYNI desendi (doğrulandı) — roadmap Step 4'ün gerçek boşluğu kapatıldı: `lowConfidence` HİÇ gerçek karelerle sınanmamıştı
+
+Kurucu bu turda pencere-dışı bir kanaldan (üç mesaj, DEVAM/DEVAM-2/
+DEVAM-3) doğrudan müdahale etti: "üç turdur 'değişiklik yok' diyorsun,
+kabul edilmez" + "JabLab motion-core CI auth'unu ZATEN çözdü, uyarla" +
+"CI/secret'ı EXTERNAL_GATE yaz, kontrol etme — her turda somut iş üret."
+**Kurucu direktifi mailbox/varsayılan davranışı yener** (L-344 emsali).
+
+### Önce iki iddia ÖLÇÜLDÜ — körü körüne uygulanmadı
+
+1. `ventures/jablab/app/.github/workflows/checks.yml` okundu: **BENİM
+   `MOTION_CORE_RO_TOKEN`/`if: env.MOTION_CORE_RO_TOKEN != ''` desenimin
+   BİREBİR kopyası** — kendi yorumu bile *"aile emsali: Lissom L-351"*
+   diyor. Yeni bir çözüm DEĞİL.
+2. `gh secret list --repo kocakkmustafa/jablab` **boş** · JabLab'ın son
+   3 CI koşusu da **hâlâ failure**. "JabLab yeşile aldı" iddiası GERÇEK
+   DEĞİL, doğrudan ölçüldü.
+3. `motion-core` main HEAD **gerçekten** `07af0d0`e ilerlemiş (5 paket,
+   5/5 consumer matrix ACCEPTED) — AMA bu ayrı bir eksen: motion-core'un
+   main'ine merge, GitHub Actions'ın private repo'yu klonlama iznini
+   DEĞİŞTİRMEZ. "Lissom pub_get+analyze exit 0 verdi" iddiası muhtemelen
+   kurucunun LOKAL makinesinde (zaten kimlik doğrulanmış git ile)
+   koşulmuştu, Lissom'un KENDİ GitHub Actions'ında değil.
+
+**Sonuç: motion-core CI auth engeli HÂLÂ AÇIK, gerçek. Ama kurucunun asıl
+talebi (bekleme-turu üretme, sıradaki işe geç) HAKLI** — üç ölçümü de
+tek turda yapıp anında sıradaki işe geçildi, tekrar-doğrulama turu
+harcanmadı.
+
+### Roadmap Step 4'ün gerçek boşluğu — kod yazmadan önce ölçüldü
+
+*"Invalid trial'ın ölçüm yazmadığını ve retry reason taşıdığını
+doğrula."* `grep -rn lowConfidence test/ packages/lissom_engine/test/`
+ölçüldü: **HER** `ResultCode.lowConfidence` testi DOĞRUDAN kurulan bir
+`AssessmentResult(code: lowConfidence, ...)` nesnesiyle yüzey-gösterimini
+sınıyordu (`summary_test.dart`, `battery_summary_view_test.dart`,
+`home_screen_test.dart`, `screen_evidence_test.dart`) — **hiçbiri**
+gerçek/sentetik bozuk KARELERİ motorun/ekranın KENDİSİNDEN geçirip
+`lowConfidence`i GERÇEKTEN TETİKLEMİYORDU. Tetikleme mekanizması hiç
+kanıtlanmamıştı, yalnız SONUCUN gösterimi.
+
+**Kök mekanizma** (`motion_core` pin `f13bdc9`,
+`confidence_gate.dart:143-153`): `ConfidenceGate.evaluate()` `required:
+[]` geçildiğinde bile `LmRegion.torso` [11,12,23,24] denetimini
+KOŞULSUZ yapar — herhangi biri `torsoThreshold`(0,6) altındaysa kare
+anında `torsoUnreliable`/`judgeable:false`. `assessment_engine.dart`
+tarafında: `_totalFrames > 0 && _lowConfidenceFrames*2 > _totalFrames` →
+`ResultCode.lowConfidence`.
+
+### Yapılan
+
+`test/measurement_persistence_test.dart`e (yazma başarılı/başarısız
+eksenini zaten sınayan dosya — ikinci bir dosya İCAT EDİLMEDİ) üçüncü
+eksen eklendi: `_lowConfidenceArmFrame`/`_lowConfidenceAttempt`
+(`_armFrame`yle AYNI kol açısı, yalnız sağ omuz(12) görünürlüğü 0,1 —
+GÜVEN ile HAREKET karışmasın). `_run` yardımcısı `script` parametresi
+aldı (varsayılan `_fullAttempt()`, mevcut 4 test DOKUNULMADAN geçti).
+Yeni test doğruladı: oturum kaydı YAZILIR (L-285: deneme oldu, olgu) ·
+deneme-değeri YAZILMAZ (`r.value == null` ⇒ ikinci depo çağrılmaz) ·
+ekran "Not measured" + "Reason: lowConfidence." gösterir (sahte açı YOK,
+sebep isimli) · takip sözü verilmez · retry açık kalır.
+
+### Doğrulama
+
+`flutter test test/measurement_persistence_test.dart` → yeni test **ilk
+denemede PASS** — hipotez doğru çıktı (`_persist`in `if (r.value !=
+null)` kapısı zaten doğru davranıyordu, kanıtı yoktu). `python3 tools/
+all_gates.py` → app **281→282** (+1) · engine **114/114** · python
+**21/22** (M-F-280) · **TÜMÜ YEŞİL**.
+
+**Kapılar:** app **282/288** (6 atlanan) · engine **114/114** · python
+**21/22** (M-F-280) · `all_gates.py` **TÜMÜ YEŞİL**.

@@ -90,6 +90,37 @@ List<PoseSourceEvent> _fullAttempt() => <PoseSourceEvent>[
         SourceFrameEvent(_armFrame(elbowY: 0.15, tUs: i * 100000), size: _size),
     ];
 
+/// **L-355 — GERÇEKTEN düşük-güven bir kare, `SourceStateEvent` değil.**
+///
+/// `_FailingStore` testi "yazma patlarsa" durumunu sınıyor — bu ONDAN
+/// FARKLI: yazma sorunsuz ama ÖLÇÜMÜN KENDİSİ hiç alınamıyor, çünkü
+/// kamera kaliteyi göremiyor. `motion_core`nun `ConfidenceGate.evaluate()`si
+/// (pin `f13bdc9`, `confidence_gate.dart`) `required: []` geçildiğinde bile
+/// `LmRegion.torso` [11,12,23,24] denetimini KOŞULSUZ yapar — torso
+/// landmark'larından BİRİ `torsoThreshold` (varsayılan 0,6) altındaysa kare
+/// `torsoUnreliable` ile `judgeable: false` döner. Kol açısı `_armFrame`yle
+/// AYNI (elbowY: 0.15, "girişim gerçekleşseydi geçerdi") — yalnız right_
+/// shoulder(12) görünürlüğü 0,1: GÜVEN düşük, HAREKET değil, iki neden
+/// karışmasın diye.
+PoseFrame _lowConfidenceArmFrame({int tUs = 0}) {
+  final List<PoseLandmark> lms = List<PoseLandmark>.generate(33, (int i) {
+    return switch (i) {
+      12 => const PoseLandmark(0.5, 0.35, 0, 0.1), // sağ omuz — DÜŞÜK GÜVEN
+      14 => const PoseLandmark(0.5, 0.15, 0, 1),
+      24 => const PoseLandmark(0.5, 0.60, 0, 1),
+      _ => const PoseLandmark(0.5, 0.5, 0, 1),
+    };
+  });
+  return PoseFrame(tUs: tUs, landmarks: lms);
+}
+
+/// `_fullAttempt()`le AYNI uzunluk/zamanlama — tek fark kare KALİTESİ,
+/// böylece iki senaryo yalnız güven ekseninde ayrışır.
+List<PoseSourceEvent> _lowConfidenceAttempt() => <PoseSourceEvent>[
+      for (int i = 0; i <= 12; i++)
+        SourceFrameEvent(_lowConfidenceArmFrame(tUs: i * 100000), size: _size),
+    ];
+
 /// Yazmayı REDDEDEN depo — çekirdeğin arayüzünü uygular, `append` patlar.
 final class _FailingStore implements SessionStore {
   @override
@@ -137,6 +168,7 @@ Future<void> _run(
   WidgetTester tester, {
   required Future<SessionStore> Function() loader,
   Future<AttemptValueStore> Function()? attemptLoader,
+  List<PoseSourceEvent>? script,
 }) async {
   await tester.pumpWidget(MaterialApp(
     theme: buildLissomTheme(),
@@ -148,7 +180,7 @@ Future<void> _run(
       attemptValueStoreLoader:
           attemptLoader ?? (() async => _RecordingAttemptValueStore()),
       clock: () => DateTime.utc(2026, 8, 12, 9, 30),
-      sourceOverride: FakePoseSource(_fullAttempt()),
+      sourceOverride: FakePoseSource(script ?? _fullAttempt()),
     ),
   ));
   await tester.pump();
@@ -281,5 +313,60 @@ void main() {
     expect(find.textContaining('we\'ll track it from here'), findsNothing,
         reason: 'kayıt bir OLAY, durum değil — depo ek-yalnız; önceki '
             'denemenin hâli yeni denemenin ekranında yaşayamaz');
+  });
+
+  // ══ ③ DÜŞÜK GÜVEN — roadmap LIS-P0-003 Step 4, L-355 ══
+  //
+  // Bu dosyanın var olan üç testi "yazma başarılı/başarısız" eksenini
+  // sınıyordu; HİÇBİRİ kamera KENDİSİ düşük-güvenliyken ne olduğunu
+  // gerçek karelerle sınamıyordu (`ResultCode.lowConfidence` her yerde
+  // yalnız DOĞRUDAN kurulan `AssessmentResult` nesneleriyle test
+  // ediliyordu — bkz. workspace/DEFTER.md L-355, `grep -rn lowConfidence
+  // test/` ölçümü). Bu boşluk roadmap'in kendi Step 4'üydü: "invalid
+  // trial'ın ölçüm yazmadığını ve retry reason taşıdığını doğrula."
+  testWidgets(
+      'düşük güven → DEĞER yazılmaz, oturum kaydı yazılır, sebep İSİMLİ '
+      '(L-355)', (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    final _RecordingStore store = _RecordingStore();
+    final _RecordingAttemptValueStore values = _RecordingAttemptValueStore();
+
+    await _run(tester,
+        loader: () async => store,
+        attemptLoader: () async => values,
+        script: _lowConfidenceAttempt());
+
+    // Oturum kaydı: düşük-güven deneme de bir OLAYDIR, YAZILIR (L-285'in
+    // hükmü — sessizce atlanırsa yarının yüzeyi "0 deneme" der, bu yalandır).
+    expect(store.written, hasLength(1),
+        reason: 'düşük-güven deneme de gerçekten oldu — kaydı düşerse '
+            'geçmiş "hiç denemedin" der, ki denedi');
+
+    // AMA değer YAZILMAZ — `AssessmentResult.notMeasured`in `value`si zaten
+    // null, `_persist`teki `if (r.value != null)` kapısı ikinci yazmayı hiç
+    // ÇAĞIRMAMALI. Bu satır olmadan bir regresyon (sahte bir sayının ikinci
+    // depoya sızması) GÖRÜNMEZ kalırdı.
+    expect(values.written, isEmpty,
+        reason: 'ölçülemeyen bir denemenin DEĞERİ yoktur — yazılırsa '
+            'fabrikasyon bir sayı geçmişe/trend\'e karışır');
+
+    // Ekran sahte bir açı GÖSTERMEZ — başlık literal "Not measured".
+    expect(find.text('Not measured'), findsOneWidget,
+        reason: 'düşük güvenden türetilmiş bir sayı ekranda GÖRÜNMEMELİ');
+
+    // Sebep İSİMLİ gider — roadmap'in "retry reason"ı.
+    expect(find.text('Reason: lowConfidence.'), findsOneWidget,
+        reason: 'kullanıcı NEDEN ölçülemediğini görmeli — isimsiz "tekrar '
+            'dene" yeterli değil (ResultCode.lowConfidence.name)');
+
+    // Takip sözü yalnız GERÇEK ölçüm için — bkz. yukarıdaki "yazma
+    // BAŞARISIZ" testinin AYNI ilkesi, burada NEDENİ farklı (yazma değil
+    // ölçüm başarısız).
+    expect(find.textContaining('we\'ll track it from here'), findsNothing,
+        reason: 'ölçülmedi — "izleyeceğiz" sözü tutulamayan bir vaat olurdu');
+
+    expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,
+        reason: 'retry yolu düşük-güvende de açık olmalı — çıkmaz sokak '
+            'yasağı (M-F-267)');
   });
 }
