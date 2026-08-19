@@ -52,11 +52,76 @@ List<PoseSourceEvent> _fullAttemptScript() => <PoseSourceEvent>[
         SourceFrameEvent(_armFrame(elbowY: 0.15, tUs: i * 100000), size: _size),
     ];
 
-Future<void> _pump(WidgetTester tester, PoseSource source) async {
+/// **L-353 — `deep_squat`, ekran-seviyesinde İLK KEZ gerçek karelerle sınanıyor.**
+///
+/// Ölçülmüş boşluk: `deep_squat` motor-seviyesinde sağlamdı
+/// (`mf71_test.dart` sentetik spec'le M-F-71 politikasını sınıyordu) ama bu
+/// dosyada (kameradan `LiveCaptureScreen`e KADAR uzanan tek nokta) yalnız
+/// `overhead_reach` vardı — `grep -rl deep_squat test/` 8 dosya döndürüyordu,
+/// hiçbiri bu deseni taşımıyordu (workspace/DEFTER.md L-352 eki).
+///
+/// Üçlü RIGHT_HIP(24)–RIGHT_KNEE(26)–RIGHT_ANKLE(28), config'in KENDİ
+/// `presence` alanından (`lissom-assessment.v1.json`, `deep_squat.presence`):
+/// `{"proximal":"RIGHT_HIP","joint":"RIGHT_KNEE","distal":"RIGHT_ANKLE"}`.
+/// Açı yönü de config'ten: `movementPresence.op:"lte", value:110` — ayakta
+/// düz duruşta ~180°, çömelmede eşiğin (110°) altına iner (`metric_bridge.
+/// dart`ın kendi yorumu: "Diz: Lissom da iç açı konuşuyor (180 = düz
+/// bacak) → dönüşüm YOK").
+///
+/// ⚠️ **Aspect-ratio tuzağına düşülmedi (`full_flow_walk_test.dart`nin
+/// dersi):** her iki poz da köşe noktalarını SAF yatay/dikey ışınlarla
+/// kuruyor (diz→ayak bileği hep dikey, diz→kalça ayakta dikey/çömelmede
+/// yatay) — anizotropik `frameSize` düzeltmesi yalnız x/y'yi BAĞIMSIZ
+/// ölçekler, saf eksen-hizalı bir ışını DÖNDÜRMEZ. Açı bu yüzden
+/// `_armFrame`nin 1080×1920'siyle de bozulmadan okunur; kare yüzey
+/// ZORUNLU değildi.
+PoseFrame _squatFrame({required double hipX, required double kneeY, int tUs = 0}) {
+  final List<PoseLandmark> lms = List<PoseLandmark>.generate(33, (int i) {
+    return switch (i) {
+      24 => PoseLandmark(hipX, kneeY, 0, 1), // sağ kalça
+      26 => const PoseLandmark(0.50, 0.75, 0, 1), // sağ diz — SABİT
+      28 => const PoseLandmark(0.50, 0.90, 0, 1), // sağ ayak bileği — SABİT
+      _ => const PoseLandmark(0.5, 0.5, 0, 1),
+    };
+  });
+  return PoseFrame(tUs: tUs, landmarks: lms);
+}
+
+TestSpec _deepSquat() => Battery.parseJson('''
+{
+  "id": "t", "version": "1",
+  "tests": [{
+    "id": "deep_squat", "perSide": false, "holdSeconds": 2,
+    "primaryMetric": "knee_flexion_right",
+    "scoring": {
+      "type": "banded", "unit": "deg", "higherIsBetter": false,
+      "bands": {"x": {"low": 110}},
+      "source": "TEST — kablolama sınaması, bant iddiası değil."
+    },
+    "movementPresence": {
+      "metric": "knee_flexion_right", "op": "lte", "value": 110
+    }
+  }]
+}
+''').tests['deep_squat']!;
+
+/// Çömelip 1,2 sn tutulan bir senaryo — diz açısı knee(26)→hip(24) ışını
+/// SAF YATAY (kalça diz hizasında, 0,20 geride) olacak şekilde kuruldu;
+/// diz(26)→ayak-bileği(28) ışını SAF DİKEY. İki dik ışın arasındaki açı
+/// **90°**, eşiğin (110°) rahatça altında ve fizyolojik olarak makul bir
+/// çömelme-dibi duruşu (uyluk yatay, incik dikey — ders kitabı formu).
+List<PoseSourceEvent> _fullSquatScript() => <PoseSourceEvent>[
+      for (int i = 0; i <= 12; i++)
+        SourceFrameEvent(_squatFrame(hipX: 0.30, kneeY: 0.75, tUs: i * 100000),
+            size: _size),
+    ];
+
+Future<void> _pump(WidgetTester tester, PoseSource source,
+    {TestSpec? test}) async {
   await tester.pumpWidget(MaterialApp(
     theme: buildLissomTheme(),
     home: LiveCaptureScreen(
-      test: _overheadReach(),
+      test: test ?? _overheadReach(),
       batteryVersion: 'test',
       sourceOverride: source,
     ),
@@ -91,6 +156,29 @@ void main() {
         reason: 'kare akışı Measiring hâlini üretmeliydi — üretmediyse '
             'ekran kamerayla motoru BAĞLAMIYOR ("bağlandı ≠ canlı" tam '
             'bu durum, ters yönde)');
+
+    await tester.tap(find.byKey(const Key('liveCapture.finish')));
+    await tester.pump();
+
+    expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,
+        reason: 'bitirince sonuç ekranı (Try again ile) görünmeli');
+  });
+
+  testWidgets(
+      'deep_squat: gerçek kare akışı → Measuring → sonuç görünür (L-353)',
+      (WidgetTester tester) async {
+    // Bu test `overhead_reach`in yukarıdaki ikiziyle AYNI iddiayı, FARKLI
+    // bir köprülenmiş metrikle (knee_flexion_right, düz açı yerine düşük
+    // açı = derin) sınıyor — kameradan ekrana zincirin `deep_squat` için de
+    // GERÇEKTEN bağlı olduğunun ilk ekran-seviyesi kanıtı.
+    await _pump(tester, FakePoseSource(_fullSquatScript()), test: _deepSquat());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.byKey(const Key('liveCapture.finish')), findsOneWidget,
+        reason: 'kare akışı Measuring hâlini üretmeliydi — üretmediyse '
+            'ekran kamerayla motoru deep_squat için BAĞLAMIYOR');
 
     await tester.tap(find.byKey(const Key('liveCapture.finish')));
     await tester.pump();

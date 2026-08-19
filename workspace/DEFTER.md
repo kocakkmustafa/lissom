@@ -5678,3 +5678,69 @@ yok, tasarım doğrulandı.** Kurucu secret'ı ekleyince ekstra iş
 GEREKMEDEN CI yeşile dönmesi beklenir.
 
 **Kapılar:** dokunulmadı. **C sayacı:** değişmedi.
+
+---
+
+## L-353 — `deep_squat`, ekran-seviyesinde İLK KEZ gerçek karelerle sınandı — L-352'nin "sıradaki" bulgusu kapatıldı
+
+L-352 kapanışında bıraktığım tek net-güvenli SIRADAKİ kalem: `overhead_reach`/
+`deep_squat`nin app-seviyesi yürüyüş/ekran kapsamı ölçülmedi. Otonom turda
+ölçüldü — `grep -rl deep_squat test/` 8 dosya döndürüyordu, **hiçbiri**
+`live_capture_screen_test.dart`nin `overhead_reach`i sınayan gerçek-kare
+deseniydi (hepsi statik UI-etiket/geçmiş-görüntüleme testiydi). Yani
+`deep_squat` motor-seviyesinde sağlamdı (`mf71_test.dart`) ama kameradan
+ekrana TEK noktada (`LiveCaptureScreen`) hiç sınanmamıştı.
+
+### Yapılan
+
+`test/live_capture_screen_test.dart`e `_squatFrame`/`_deepSquat`/
+`_fullSquatScript` eklendi — `_armFrame`/`_overheadReach` deseninin
+BİREBİR uzantısı, ikinci bir yaklaşım İCAT EDİLMEDİ. `_pump` yardımcısı
+`test` parametresi aldı (varsayılan `_overheadReach()`, mevcut testler
+DOKUNULMADAN geçti). Yeni `testWidgets`: "deep_squat: gerçek kare akışı →
+Measuring → sonuç görünür".
+
+**Landmark üçlüsü config'in KENDİ `presence` alanından** (icat değil):
+`deep_squat.presence = {proximal: RIGHT_HIP, joint: RIGHT_KNEE, distal:
+RIGHT_ANKLE}`. Açı yönü `movementPresence.op:"lte", value:110`den
+(`metric_bridge.dart`: "180 = düz bacak, dönüşüm YOK"). Poz: diz(26)
+SABİT (0.50,0.75), ayak-bileği(28) SABİT (0.50,0.90) ⇒ diz→bilek ışını
+SAF DİKEY; kalça(24) diz hizasında 0,20 GERİDE (0.30,0.75) ⇒ diz→kalça
+ışını SAF YATAY. İki dik ışın arası **90°** — eşiğin (110°) rahatça
+altında, ders-kitabı çömelme-dibi formu (uyluk yatay/incik dikey).
+
+⚠️ **Aspect-ratio tuzağına düşülMEDİ** (full_flow_walk_test.dart'ın
+KARE-yüzey dersi burada GEREKMEDİ): her iki ışın da SAF eksen-hizalı
+(x=sabit ya da y=sabit) olduğu için anizotropik `frameSize` düzeltmesi
+(x/y'yi BAĞIMSIZ ölçekler) açıyı DEĞİŞTİRMEZ — `_armFrame`nin mevcut
+1080×1920'si aynen kullanıldı, yeni bir kare-yüzey sabiti gerekmedi.
+
+### Doğrulama
+
+`flutter test test/live_capture_screen_test.dart` → yeni test **ilk
+denemede PASS** (hipotez doğru çıktı: jenerik zincir zaten çalışıyordu,
+yalnız kanıtı yoktu — bir "bug fix" değil, eksik bir KANIT eklendi).
+`python3 tools/all_gates.py` → app **280→281** (+1) · engine **114/114**
+(değişmedi) · python **21/22** (M-F-280) · **TÜMÜ YEŞİL**, 28 saniyede
+(sistem yükü düştü: 60→~30 sürece).
+
+### Sınır — bu NE kanıtlamıyor
+
+Yeni test yalnız `overhead_reach`in zaten sahip olduğu KAPSAMLA eşleşiyor
+(tek "valid path" ekran-testi) — o dosyada `overhead_reach`in de
+düşük-güven/guard-tetikleme ekran-testi YOK, yani `deep_squat`e de
+eklenmedi (ölçülü kapsam genişletmesi, aşırı genişletme değil). Guard
+tetikleme (`HEEL_LIFT`) zaten L-351'in bulduğu motor-seviyesi
+`UnimplementedError`e bağlı — bu test onu da değiştirmedi.
+
+**Kalan (cihazsız, güvenle yapılabilir):** `active_straight_leg_raise`
+zaten hem ekran-seviyesi (`live_capture_screen_test.dart`ta YOK ama
+`full_flow_walk_test.dart`ta TAM app-yürüyüşü VAR) hem motor-seviyesi
+kapsamlı — 3/3 bridged test artık en az BİR ekran-ötesi kanıt taşıyor.
+Bir SONRAKİ tur için açık kalan: `overhead_reach`/`deep_squat`nin TAM
+app-yürüyüşü (onboarding→Home→navigate→sonuç→SessionStore, `full_flow_
+walk_test.dart` deseninde) henüz yok — yalnız ASLR'de var. Üçünün de
+ekran-seviyesi VE en az biri tam-yürüyüş kanıtı taşıması hedeflenebilir.
+
+**Kapılar (kapanışta ölçüldü):** app **281/287** (6 atlanan) · engine
+**114/114** · python **21/22** (M-F-280) · `all_gates.py` **TÜMÜ YEŞİL**.
