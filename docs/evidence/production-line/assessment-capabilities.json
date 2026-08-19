@@ -1,0 +1,137 @@
+{
+  "task": "LIS-P0-003",
+  "claim": "12 assessment production wiring",
+  "measured_at": "2026-08-19T01:00:00Z",
+  "status": "PARTIAL",
+  "status_meaning": "Roadmap Step 1/3 talep ediyor: 12 testin HER biri için valid/low-confidence/structural-failure test case'i + kamera->gate->evaluator->kayit->sonuc zincirinin TUMUNE baglanmasi. Bu dosya, kod yazmadan once yapilan bir olcumun sonucudur (workspace/DEFTER.md L-351/L-352/L-353): bugun sadece 3/12 testin PRIMARY METRIGI motion-core'a bagli (\"live\"), yani gercek geometriyle olculebiliyor. Kalan 9, kod kusuru DEGIL - `packages/lissom_engine/lib/src/metric_bridge.dart`nin kendi `kUnbridgedMetrics`/`BridgeBlocker` mekanizmasi her birini ISIMLE, dogru anatomiyle ve vaat dili kullanmadan (M-F-186) zaten kullaniciya gosteriyor. \"12/12 capability raporu\" (roadmap Step 5) bu yuzden DURUST bir 3/12 + isimli-9-engel raporu olarak uretildi, sahte bir 12/12 degil.",
+  "methodology": {
+    "how_measured": "12 testin `primaryMetric` alani (config/tests/lissom-assessment.v1.json) programatik olarak `packages/lissom_engine/lib/src/metric_bridge.dart`nin `kMetricBindings` (bridged) / `kUnbridgedMetrics` (blocked, isimli engelle) listelerine karsi karsilastirildi - elle degil, python3 -c ile.",
+    "not_measured": "Guard/yapisal-hata (structural-failure) tetikleme kapsami bu dosyanin DISINDA - ayri bir bulgu (asagida guard_trigger_policy alani)."
+  },
+  "summary": {
+    "total_tests": 12,
+    "live_today": 3,
+    "blocked": 9,
+    "blocked_by_motion_core_gap": 7,
+    "blocked_by_phase_machine_gap": 2
+  },
+  "tests": [
+    {
+      "testId": "overhead_reach",
+      "primaryMetric": "shoulder_flexion_{side}",
+      "live": true,
+      "screenLevelEvidence": "test/live_capture_screen_test.dart",
+      "fullAppWalkEvidence": null,
+      "engineLevelEvidence": [
+        "packages/lissom_engine/test/mf71_test.dart",
+        "packages/lissom_engine/test/real_replay_test.dart (gercek kamera fixture X2u_vGL0qJU)"
+      ]
+    },
+    {
+      "testId": "deep_squat",
+      "primaryMetric": "knee_flexion_right",
+      "live": true,
+      "screenLevelEvidence": "test/live_capture_screen_test.dart (L-353, bu oturumda eklendi)",
+      "fullAppWalkEvidence": null,
+      "engineLevelEvidence": [
+        "packages/lissom_engine/test/mf71_test.dart"
+      ]
+    },
+    {
+      "testId": "overhead_squat",
+      "primaryMetric": "trunk_lean",
+      "live": false,
+      "blocker": "corePlaneSeparationMissing",
+      "blockerText": "the measurement engine keeps a single tilt figure and cannot tell forward lean apart from sideways lean",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "ankle_dorsiflexion",
+      "primaryMetric": "tibia_inclination_{side}",
+      "live": false,
+      "blocker": "coreLacksVerticalReference",
+      "blockerText": "the measurement engine reads a limb against the line of your torso, not against upright, so it cannot say how far this one is from vertical",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "hamstring_reach",
+      "primaryMetric": "reach_depth",
+      "live": false,
+      "blocker": "coreLacksMeasureKind",
+      "blockerText": "the measurement engine reads angles between body points, and this is a distance rather than an angle",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "hip_hinge",
+      "primaryMetric": "trunk_lean",
+      "live": false,
+      "blocker": "corePlaneSeparationMissing",
+      "blockerText": "the measurement engine keeps a single tilt figure and cannot tell forward lean apart from sideways lean",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "lateral_bend",
+      "primaryMetric": "trunk_lateral_tilt",
+      "live": false,
+      "blocker": "corePlaneSeparationMissing",
+      "blockerText": "the measurement engine keeps a single tilt figure and cannot tell forward lean apart from sideways lean",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "single_leg_balance",
+      "primaryMetric": "hold_duration",
+      "live": false,
+      "blocker": "measureIsPhaseDerived",
+      "blockerText": "this test is timed by the session rather than measured from camera angles, and the camera-measurement bridge does not cover it",
+      "blockerOwner": "Lissom - ama PhaseStateMachine'in live_capture_screen.dart'a baglanmasi ayri ve buyuk bir is (bkz. live_capture_screen.dart basligi: \"ayri, daha buyuk bir is\"), LIS-P1-002 kapsamina yakin, bu turda baslanmadi"
+    },
+    {
+      "testId": "forward_lunge",
+      "primaryMetric": "knee_height_{side}",
+      "live": false,
+      "blocker": "coreLacksMeasureKind",
+      "blockerText": "the measurement engine reads angles between body points, and this is a distance rather than an angle",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "thoracic_rotation",
+      "primaryMetric": "shoulder_line_foreshortening",
+      "live": false,
+      "blocker": "coreLacksMeasureKind",
+      "blockerText": "the measurement engine reads angles between body points, and this is a distance rather than an angle",
+      "blockerOwner": "MOTION-CORE oturumu (bu depodan READ-ONLY kurali geregi cozulemez)"
+    },
+    {
+      "testId": "active_straight_leg_raise",
+      "primaryMetric": "hip_flexion_{side}",
+      "live": true,
+      "screenLevelEvidence": null,
+      "fullAppWalkEvidence": "test/full_flow_walk_test.dart (tek app-genelinde yuruyus kaniti, onboarding->Home->sonuc->SessionStore)",
+      "engineLevelEvidence": [
+        "packages/lissom_engine/test/real_replay_test.dart"
+      ]
+    },
+    {
+      "testId": "plank_hold",
+      "primaryMetric": "hold_duration",
+      "live": false,
+      "blocker": "measureIsPhaseDerived",
+      "blockerText": "this test is timed by the session rather than measured from camera angles, and the camera-measurement bridge does not cover it",
+      "blockerOwner": "Lissom - ama PhaseStateMachine'in live_capture_screen.dart'a baglanmasi ayri ve buyuk bir is, LIS-P1-002 kapsamina yakin, bu turda baslanmadi"
+    }
+  ],
+  "guard_trigger_policy": {
+    "status": "UnimplementedError (bilerek, 2026-08-11'den beri)",
+    "location": "packages/lissom_engine/lib/src/assessment_engine.dart:150-163",
+    "why": "Naif bir politika (\"herhangi bir karede ihlal -> iptal\") gercek cihaz replay'inde (X2u_vGL0qJU fixture) yanlis-pozitif uretti: elbow_extension_right 5899 karenin BIRINDE (izleme gurultusu) esigin altina dustu, TUM olcum aborted/BENT_ELBOW oldu. Dogru politika (kac kare? ne kadar sure? hangi tolerans?) OLCULMEDI.",
+    "affected": "10/12 testin guard kodu var (HEEL_LIFT, BENT_KNEE, CAMERA_ANGLE, ARMS_DROPPED, USED_SUPPORT, FOOT_DOWN, FORM_BREAK, OPPOSITE_LEG_LIFTED, BENT_ELBOW) ama HICBIRI production'da tetiklenmiyor - reportAbort() lib/ icinde SIFIR kez cagriliyor (yalniz packages/lissom_engine/test/mf71_test.dart sentetik olarak cagiriyor).",
+    "external_gate": true,
+    "external_gate_reason": "LIS-P0-004 (fiziksel cihaz + 30-kisi holdout) ile AYNI kokten - gercek cihaz kare-akisi olculmeden guvenle icat edilemez.",
+    "roadmap_reference": "LIS-E-003 (model esikleri) + LIS-E-004 (device/performance) - evidence ledger'da zaten EXTERNAL_GATE"
+  },
+  "sources": [
+    "workspace/DEFTER.md L-351 (ilk kapsam olcumu + guard_trigger_policy bulgusu)",
+    "workspace/DEFTER.md L-352 (metric_bridge.dart okuma, kesin 3/12 tablosu + assessment_session.dart duzeltmesi)",
+    "workspace/DEFTER.md L-353 (deep_squat ekran-seviyesi test eklendi, app 280->281)"
+  ]
+}

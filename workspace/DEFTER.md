@@ -5744,3 +5744,46 @@ ekran-seviyesi VE en az biri tam-yürüyüş kanıtı taşıması hedeflenebilir
 
 **Kapılar (kapanışta ölçüldü):** app **281/287** (6 atlanan) · engine
 **114/114** · python **21/22** (M-F-280) · `all_gates.py` **TÜMÜ YEŞİL**.
+
+---
+
+## L-354 — Sıradaki-plan sorgulandı ve DÜZELTİLDİ: "tam app-yürüyüşü" düşük değerliydi; onun yerine `assessment-capabilities.json` (roadmap'in kendi evidence ledger'ı) dolduruldu
+
+L-353 kuyruğa *"overhead_reach/deep_squat'ın tam app-yürüyüşü (`full_flow_
+walk_test.dart` deseninde)"* yazmıştı. Otonom turda kod yazmadan önce
+sorguladım: **bu düşük değerli çıktı.** `lib/app/home_screen.dart:312-313`
+ölçüldü — Home'un navigasyonu `facts.battery.tests[live.first.testId]!`
+diye JENERİK, test-ID'ye özel HİÇBİR dallanma yok. `full_flow_walk_test.
+dart`nin ASLR'yle kanıtladığı zaten test-AĞNOSTİK bir kod yolu; aynı
+yolu farklı bir test-ID'yle ikinci kez yürümek YENİ bir hata sınıfı
+YAKALAMAZ — `live_capture_screen_test.dart`nin (artık 2/3 bridged testte)
+sınadığı EKRAN-İÇİ katman zaten gerçek belirsizliği kapatıyor.
+**Aile adayı:** ***jenerik olduğu ÖLÇÜLMÜŞ bir kod yolunu farklı bir
+girdiyle ikinci kez yürümek, yeni kanıt değil TEKRARdır.***
+
+### Yapılan — roadmap'in KENDİ istediği kanıt biçimine geçildi
+
+Roadmap §16 evidence ledger `LIS-E-002 | 12 assessment production bağlı |
+assessment-capabilities.json | EVIDENCE_REQUIRED` diyor — dosya hiç
+YOKTU. L-351/L-352/L-353'ün DEFTER-prose bulguları `docs/evidence/
+production-line/assessment-capabilities.json`e TAŞINDI: 12 testin
+`primaryMetric`i `metric_bridge.dart`nin köprü listelerine karşı
+PROGRAMATİK karşılaştırıldı (python3 -c, elle değil), her satır canlı/
+engelli + engel sahibi (MOTION-CORE oturumu / Lissom-ama-ayrı-iş) taşıyor.
+Guard-tetikleme politikası (L-351'in bulgusu) ayrı bir alanda, roadmap'in
+LIS-E-003/E-004 EXTERNAL_GATE kayıtlarına çapraz referansla.
+
+**Durum dürüstçe `PARTIAL`** — sahte bir "12/12" YAZILMADI. `status_
+meaning` alanı roadmap Step 5'in "12/12 capability raporu" talebiyle
+gerçek 3/12 arasındaki farkı VE nedenini taşıyor.
+
+### Doğrulama
+
+`python3 -m json.tool docs/evidence/production-line/assessment-
+capabilities.json` → exit **0**. Kod dosyası DEĞİŞMEDİ (yalnız yeni
+evidence JSON'ı) — `all_gates.py` regresyon kontrolü için yine de
+koşuldu.
+
+**Kapılar:** app **281/287** · engine **114/114** · python **21/22**
+(M-F-280) · `all_gates.py` **TÜMÜ YEŞİL** (kod değişmedi, doğrulama
+amaçlı).
