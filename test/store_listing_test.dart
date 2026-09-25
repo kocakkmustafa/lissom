@@ -30,6 +30,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/listing_json.dart';
 
 const String _listingPath = listingPath;
+const String _trListingPath = 'docs/store/listing.tr-TR.json';
 
 /// `MAGAZA-ALAN-LIMITLERI.md`den ÇEKİLEN limitler — TEK otoriteden okunur,
 /// burada elle sabitlenmez (dosya yolu, sayı değil).
@@ -112,6 +113,39 @@ void main() {
             '(bu bir ön-kontrol, otorite değil): ${lengthViolations.join(" · ")}');
     expect(missingFields, isEmpty,
         reason: 'ZORUNLU ALAN EKSİK: ${missingFields.join(" · ")}');
+  });
+
+  test('tr-TR taslağı alan ve mevcut yetenek sınırını koruyor', () {
+    final Map<String, dynamic> listing = readListing(_trListingPath);
+    final Map<String, dynamic> english = readListing(_listingPath);
+    final List<String> lengthViolations = <String>[];
+    final List<String> missingFields = <String>[];
+    _checkListing(listing,
+        lengthViolations: lengthViolations, missingFields: missingFields);
+    expect(lengthViolations, isEmpty);
+    expect(missingFields, isEmpty);
+
+    expect(_dig(listing, 'appStore.name'), 'Lissom: Hareket Testleri');
+    final String description = _dig(listing, 'description')!;
+    for (final String name in <String>[
+      'Yukarı uzanma',
+      'derin çömelme',
+      'düz bacak kaldırma',
+    ]) {
+      expect(description, contains(name));
+    }
+    expect(description, contains('hesabın olmadan kataloğu gezebilir'));
+    expect(description, contains('Kamera değerlendirmeleri'));
+    expect(description, contains('yoga dersleri ve abonelikler açık değildir'));
+    expect(description, isNot(contains('Üç canlı kamera ölçümü')));
+    expect(
+        RegExp(r'\b(12|on iki)\b', caseSensitive: false)
+            .hasMatch(userStrings(listing).join(' ')),
+        isFalse,
+        reason: 'TR taslak 12 kamera ölçümü izlenimi vermemeli');
+    expect(listing.keys.any((String key) => key.startsWith(r'$')), isTrue);
+    expect(listing['supportUrl'], english['supportUrl']);
+    expect(listing['privacyPolicyUrl'], english['privacyPolicyUrl']);
   });
 
   test('\$ SÖZLEŞMESİ — gönderilen alan \$ taşımaz, gerekçe \$ taşır', () {

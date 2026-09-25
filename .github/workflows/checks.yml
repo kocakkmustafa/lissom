@@ -92,6 +92,9 @@ jobs:
 
       - run: flutter pub get
 
+      - name: lissom_engine test bağımlılıkları
+        run: (cd packages/lissom_engine && dart pub get)
+
       - name: flutter analyze
         run: flutter analyze
 

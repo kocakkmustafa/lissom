@@ -23,6 +23,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 
 class WhatLissomDoesntDoScreen extends StatelessWidget {
   /// Her sınır kartındaki SINIF etiketi — testler yapısal olarak bunu arar
@@ -55,9 +56,9 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
 
   /// Ürün sınırına BAĞLANMIŞ dışlamalar — kalemin altında ölçüm satırı olur.
   Map<String, ExcludedTest> get _linked => <String, ExcludedTest>{
-        for (final ExcludedTest e in excluded)
-          if (e.whyNotTopic != null) e.whyNotTopic!: e,
-      };
+    for (final ExcludedTest e in excluded)
+      if (e.whyNotTopic != null) e.whyNotTopic!: e,
+  };
 
   /// Hiçbir ürün sınırına bağlanmamış dışlamalar — kendi bölümlerini alırlar.
   List<ExcludedTest> get _unlinked => excluded
@@ -76,11 +77,20 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
       // kez söylerdi.
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
           children: <Widget>[
-            Text("What Lissom doesn't do", style: t.textTheme.headlineLarge),
+            Text(
+              localeText(
+                context,
+                "What Lissom doesn't do",
+                'Lissom neleri yapmaz?',
+              ),
+              style: t.textTheme.headlineLarge,
+            ),
             const SizedBox(height: 10),
             Text(
               // ⚠️ Bu cümle ÖNCE şöyleydi: "…every line below is a
@@ -88,10 +98,14 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
               // şeyler (L-265). Yapamamayı ilke gibi göstermek, kendi lehine
               // bir yanlış okuma üretiyordu — ve hiçbir cümle yalan
               // söylemeden.
-              'We would rather be clear about the edges of the product than '
-              'let you find them mid-session. Some of these are choices and '
-              'some are things we cannot do; each line says which, because '
-              'the difference decides whether it could ever change.',
+              localeText(
+                context,
+                'We would rather be clear about the edges of the product than '
+                    'let you find them mid-session. Some of these are choices and '
+                    'some are things we cannot do; each line says which, because '
+                    'the difference decides whether it could ever change.',
+                'Bu sayfa Lissom’un sınırlarını açıklar. Bazıları ürün kararı, bazıları mevcut ölçüm olanağının sınırıdır; her satır bunu belirtir.',
+              ),
               style: t.textTheme.bodyMedium,
             ),
             const SizedBox(height: 20),
@@ -113,11 +127,20 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
             ),
             if (loose.isNotEmpty) ...<Widget>[
               const SizedBox(height: 14),
-              LissomEyebrow('Tests we took out of the battery (${loose.length})'),
+              LissomEyebrow(
+                localeText(
+                  context,
+                  'Tests we took out of the battery (${loose.length})',
+                  'Değerlendirmeden çıkarılan testler (${loose.length})',
+                ),
+              ),
               const SizedBox(height: 4),
               Text(
-                'These were considered for the twelve-test battery and left '
-                'out. The reason is the measurement, not the effort.',
+                localeText(
+                  context,
+                  'These were considered for the twelve-test battery and left out. The reason is the measurement, not the effort.',
+                  'Bu testler değerlendirilmiş, ölçüm sınırları nedeniyle çıkarılmıştır.',
+                ),
                 style: t.textTheme.bodySmall,
               ),
               const SizedBox(height: 12),
@@ -143,11 +166,20 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
             ],
             if (poseTiers.isNotEmpty) ...<Widget>[
               const SizedBox(height: 14),
-              LissomEyebrow('How much of a pose can be scored'),
+              LissomEyebrow(
+                localeText(
+                  context,
+                  'How much of a pose can be scored',
+                  'Bir duruş ne kadar ölçülebilir?',
+                ),
+              ),
               const SizedBox(height: 4),
               Text(
-                'Not every position is equally readable by one camera. These '
-                'are the three levels, and what puts a pose in each.',
+                localeText(
+                  context,
+                  'Not every position is equally readable by one camera. These are the three levels, and what puts a pose in each.',
+                  'Tek kamera her duruşu aynı ölçüde göremez. Üç düzey ve nedenleri aşağıdadır.',
+                ),
                 style: t.textTheme.bodySmall,
               ),
               const SizedBox(height: 12),
@@ -184,13 +216,12 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
   /// Katmanın ne yaptığı — makine değerleri (`full` · `guided` ·
   /// `avatar_demo_only` · `loose`) yüzeye SIZMAZ, cümleye çevrilir.
   static String _tierLine(PoseTier tier) => switch (tier.coaching) {
-        'full' => 'Coached pose by pose, and set against a reference range.',
-        'guided' =>
-          'Guided, but scored loosely — we say less because we can see less.',
-        'avatar_demo_only' =>
-          'Shown by the avatar only. Nothing here is scored.',
-        _ => 'Coaching level not declared.',
-      };
+    'full' => 'Coached pose by pose, and set against a reference range.',
+    'guided' =>
+      'Guided, but scored loosely — we say less because we can see less.',
+    'avatar_demo_only' => 'Shown by the avatar only. Nothing here is scored.',
+    _ => 'Coaching level not declared.',
+  };
 
   /// `cervical_rotation` → `Cervical rotation`. Ham id yüzeye SIZMAZ (bu
   /// ailenin ölçülmüş kusuru: dahili metrik sözlüğü bir kez kullanıcı
@@ -231,15 +262,15 @@ class _BoundaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title, style: t.textTheme.titleMedium),
+          Text(configText(context, title), style: t.textTheme.titleMedium),
           const SizedBox(height: 6),
-          Text(reason, style: t.textTheme.bodyMedium),
+          Text(configText(context, reason), style: t.textTheme.bodyMedium),
           const SizedBox(height: 7),
           // SINIF — sayfa girişi üç sınıfı birden anlatamaz, o yüzden her
           // satır kendi sınıfını söylüyor (L-265). Makine adı SIZMAZ:
           // `LimitKind.userText` cümleye çevirir (G-100).
           Text(
-            kind.userText,
+            configText(context, kind.userText),
             key: WhatLissomDoesntDoScreen.kindKey,
             style: t.textTheme.bodySmall?.copyWith(
               color: LissomColors.bodySecondary,
@@ -248,9 +279,12 @@ class _BoundaryCard extends StatelessWidget {
           ),
           if (measured != null) ...<Widget>[
             const SizedBox(height: 10),
-            Text(measured!,
-                style: t.textTheme.bodySmall
-                    ?.copyWith(color: LissomColors.bodySecondary)),
+            Text(
+              configText(context, measured!),
+              style: t.textTheme.bodySmall?.copyWith(
+                color: LissomColors.bodySecondary,
+              ),
+            ),
           ],
         ],
       ),

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 
 /// Bölüm başlığı — serif başlık + sönük alt satır.
 class SectionHeading extends StatelessWidget {
@@ -27,10 +28,10 @@ class SectionHeading extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(title, style: t.textTheme.headlineSmall),
+        Text(configText(context, title), style: t.textTheme.headlineSmall),
         if (subtitle != null) ...<Widget>[
           const SizedBox(height: 4),
-          Text(subtitle!, style: t.textTheme.bodyMedium),
+          Text(configText(context, subtitle!), style: t.textTheme.bodyMedium),
         ],
       ],
     );
@@ -67,16 +68,22 @@ class NamedGapCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title,
-              style: t.textTheme.labelLarge
-                  ?.copyWith(color: LissomColors.bodySecondary)),
+          Text(
+            configText(context, title),
+            style: t.textTheme.labelLarge?.copyWith(
+              color: LissomColors.bodySecondary,
+            ),
+          ),
           const SizedBox(height: 8),
-          Text(reason, style: t.textTheme.bodyMedium),
+          Text(configText(context, reason), style: t.textTheme.bodyMedium),
           if (detail != null) ...<Widget>[
             const SizedBox(height: 6),
-            Text(detail!,
-                style: t.textTheme.bodySmall
-                    ?.copyWith(color: LissomColors.bodySecondary)),
+            Text(
+              configText(context, detail!),
+              style: t.textTheme.bodySmall?.copyWith(
+                color: LissomColors.bodySecondary,
+              ),
+            ),
           ],
         ],
       ),
@@ -107,8 +114,12 @@ typedef ClaimVerdictNote = String? Function(HonestyClaim claim);
 /// onu köprüye karşı sınar, canlı olmayan iddia silinmez — İSİMLİ gerekçeyle
 /// sönük gösterilir.
 class HonestyBoxCard extends StatelessWidget {
-  const HonestyBoxCard(this.box,
-      {required this.liveness, required this.verdictNote, super.key});
+  const HonestyBoxCard(
+    this.box, {
+    required this.liveness,
+    required this.verdictNote,
+    super.key,
+  });
 
   static const Key measuredKey = Key('honesty.measured');
   static const Key notMeasuredKey = Key('honesty.notMeasured');
@@ -134,26 +145,34 @@ class HonestyBoxCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          LissomEyebrow('What this measures',
-              color: LissomColors.roseDeepHover),
+          LissomEyebrow(
+            localeText(context, 'What this measures', 'Neyi ölçer?'),
+            color: LissomColors.roseDeepHover,
+          ),
           const SizedBox(height: 10),
           Column(
             key: measuredKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               for (final HonestyClaim c in box.measured)
-                _claimRow(t, c, liveness(c), verdictNote(c)),
+                _claimRow(context, t, c, liveness(c), verdictNote(c)),
             ],
           ),
           const SizedBox(height: 18),
           const Divider(),
           const SizedBox(height: 14),
-          LissomEyebrow('What it does not measure'),
+          LissomEyebrow(
+            localeText(context, 'What it does not measure', 'Neyi ölçmez?'),
+          ),
           const SizedBox(height: 10),
-          _list(t, notMeasuredKey,
-              box.notMeasured.map((NotMeasuredLine l) => l.claim).toList(),
-              Icons.remove_circle_outline,
-              LissomColors.bodySecondary),
+          _list(
+            context,
+            t,
+            notMeasuredKey,
+            box.notMeasured.map((NotMeasuredLine l) => l.claim).toList(),
+            Icons.remove_circle_outline,
+            LissomColors.bodySecondary,
+          ),
         ],
       ),
     );
@@ -163,7 +182,12 @@ class HonestyBoxCard extends StatelessWidget {
   /// sönük metin **ve altında gerekçe.** Görsel ayrım kasıtlı — ikisi aynı
   /// görünseydi kutu yine "hepsini ölçüyoruz" der gibi okunurdu.
   static Widget _claimRow(
-      ThemeData t, HonestyClaim c, String? blocker, String? verdict) {
+    BuildContext context,
+    ThemeData t,
+    HonestyClaim c,
+    String? blocker,
+    String? verdict,
+  ) {
     final bool live = blocker == null;
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
@@ -183,16 +207,22 @@ class HonestyBoxCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(c.claim,
-                    style: live
-                        ? t.textTheme.bodyMedium
-                        : t.textTheme.bodyMedium
-                            ?.copyWith(color: LissomColors.bodySecondary)),
+                Text(
+                  configText(context, c.claim),
+                  style: live
+                      ? t.textTheme.bodyMedium
+                      : t.textTheme.bodyMedium?.copyWith(
+                          color: LissomColors.bodySecondary,
+                        ),
+                ),
                 if (live && verdict != null) ...<Widget>[
                   const SizedBox(height: 3),
-                  Text(verdict,
-                      style: t.textTheme.bodySmall
-                          ?.copyWith(color: LissomColors.bodySecondary)),
+                  Text(
+                    configText(context, verdict),
+                    style: t.textTheme.bodySmall?.copyWith(
+                      color: LissomColors.bodySecondary,
+                    ),
+                  ),
                 ],
                 if (!live) ...<Widget>[
                   const SizedBox(height: 3),
@@ -201,9 +231,16 @@ class HonestyBoxCard extends StatelessWidget {
                   // ekranda "Not in this build — Hold time — this test is…"
                   // gibi ÇİFT TİRE üretiyordu ve cümle okunmuyordu.
                   // Simülatör ekranı yakaladı, test değil.
-                  Text('Not in this build · $blocker',
-                      style: t.textTheme.bodySmall
-                          ?.copyWith(color: LissomColors.bodySecondary)),
+                  Text(
+                    localeText(
+                      context,
+                      'Not in this build · $blocker',
+                      'Bu sürümde yok · ${configText(context, blocker)}',
+                    ),
+                    style: t.textTheme.bodySmall?.copyWith(
+                      color: LissomColors.bodySecondary,
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -214,33 +251,38 @@ class HonestyBoxCard extends StatelessWidget {
   }
 
   static Widget _list(
+    BuildContext context,
     ThemeData t,
     Key key,
     List<String> items,
     IconData icon,
     Color color,
-  ) =>
-      Column(
-        key: key,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          for (final String s in items)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 9),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: Icon(icon, size: 15, color: color),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(s, style: t.textTheme.bodyMedium)),
-                ],
+  ) => Column(
+    key: key,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      for (final String s in items)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 9),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 3),
+                child: Icon(icon, size: 15, color: color),
               ),
-            ),
-        ],
-      );
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  configText(context, s),
+                  style: t.textTheme.bodyMedium,
+                ),
+              ),
+            ],
+          ),
+        ),
+    ],
+  );
 }
 
 /// Ekranın tepesinde duran sıcak beyan kartı (mevcut `_HonestyBanner`ın
@@ -275,8 +317,10 @@ class DeclarationBanner extends StatelessWidget {
           // her noktasında geçiyor (7,89:1).
           LissomEyebrow(eyebrow, color: LissomColors.ink),
           const SizedBox(height: 8),
-          Text(body,
-              style: t.textTheme.bodyMedium?.copyWith(color: LissomColors.ink)),
+          Text(
+            body,
+            style: t.textTheme.bodyMedium?.copyWith(color: LissomColors.ink),
+          ),
         ],
       ),
     );
@@ -355,7 +399,8 @@ class CaptureUnavailableNote extends StatelessWidget {
   /// olurdu). `key_`/widget adı KORUNDU: yalnız içeriği değişti, üç ekranın
   /// (Home, Library, Progress) hepsinde TEK yerden düzeltildi.
   /// ⇒ Artık [DevicePassClaim]'den TÜRETİLİYOR — elle yazılmıyor (L-318).
-  static const String text = 'Lissom can start a live measurement from Home. '
+  static const String text =
+      'Lissom can start a live measurement from Home. '
       '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.';
 
   @override
@@ -371,11 +416,25 @@ class CaptureUnavailableNote extends StatelessWidget {
           children: <Widget>[
             const Padding(
               padding: EdgeInsets.only(top: 2),
-              child: Icon(Icons.videocam_off_outlined,
-                  size: 17, color: LissomColors.bodySecondary),
+              child: Icon(
+                Icons.videocam_off_outlined,
+                size: 17,
+                color: LissomColors.bodySecondary,
+              ),
             ),
             const SizedBox(width: 11),
-            Expanded(child: Text(text, style: t.textTheme.bodyMedium)),
+            Expanded(
+              child: Text(
+                localeText(
+                  context,
+                  text,
+                  'Lissom Ana Sayfa’dan canlı ölçüm başlatabilir. Gerçek '
+                  'cihazda izin, kare akışı, ışık ve kalibrasyon henüz '
+                  'doğrulanmadı.',
+                ),
+                style: t.textTheme.bodyMedium,
+              ),
+            ),
           ],
         ),
       ),
@@ -423,11 +482,28 @@ class MeasurementLimitsFootnote extends StatelessWidget {
       'instrument, so we do not print a margin of error. When that study is '
       'run, the number will appear here.';
 
+  static String localizedLimits(BuildContext context) => localeText(
+    context,
+    limitsCopy,
+    'Tek bir telefon kamerası hareketinin yaklaşık bir görünümünü verir. '
+    'Sonuçlar kameranın konumuna, ışığa ve kıyafetine bağlıdır. Bazı '
+    'eklemler daha güvenilir okunabilir; Lissom yeterince güvenilir '
+    'olmayan ölçümleri bildirir.',
+  );
+
+  static String localizedAccuracy(BuildContext context) => localeText(
+    context,
+    accuracyStatement,
+    'Ölçümlerimizin referans bir cihazdan ne kadar saptığını henüz '
+    'ölçmedik. Bu nedenle hata payı yazmıyoruz.',
+  );
+
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    final TextStyle? small =
-        t.textTheme.bodySmall?.copyWith(color: LissomColors.bodySecondary);
+    final TextStyle? small = t.textTheme.bodySmall?.copyWith(
+      color: LissomColors.bodySecondary,
+    );
     return Padding(
       key: key_,
       padding: const EdgeInsets.only(top: 18),
@@ -436,9 +512,9 @@ class MeasurementLimitsFootnote extends StatelessWidget {
         children: <Widget>[
           const Divider(),
           const SizedBox(height: 12),
-          Text(limitsCopy, style: small),
+          Text(localizedLimits(context), style: small),
           const SizedBox(height: 8),
-          Text(accuracyStatement, style: small),
+          Text(localizedAccuracy(context), style: small),
         ],
       ),
     );

@@ -93,10 +93,12 @@ PoseFrame _supineRaiseFrame({required double kneeY, int tUs = 0}) {
 
 /// Bacağın yerden ~dikeye kalktığı, tutulan bir deneme.
 List<PoseSourceEvent> _raiseScript() => <PoseSourceEvent>[
-      for (int i = 0; i <= 14; i++)
-        SourceFrameEvent(_supineRaiseFrame(kneeY: 0.45, tUs: i * 100000),
-            size: _size),
-    ];
+  for (int i = 0; i <= 14; i++)
+    SourceFrameEvent(
+      _supineRaiseFrame(kneeY: 0.45, tUs: i * 100000),
+      size: _size,
+    ),
+];
 
 class _MemOnboardingStore implements OnboardingStore {
   OnboardingProfile p = const OnboardingProfile.notStarted();
@@ -149,13 +151,19 @@ class _RouteWitness extends NavigatorObserver {
 /// Taze kurulumdan onboarding'i **DÜĞMELERE BASARAK** geçer ve kabuğa varır.
 /// Bayrak set EDİLMEZ (③ başlangıç kuralı).
 Future<void> _walkThroughOnboarding(
-    WidgetTester tester, _MemOnboardingStore store) async {
+  WidgetTester tester,
+  _MemOnboardingStore store,
+) async {
   // POZİTİF ÇAPA: soğuk açılış GERÇEKTEN onboarding'e düşmeli. Düşmezse
   // aşağıdaki her şey "kullanıcının hiç görmediği bir uygulamanın" ölçümü
   // olurdu.
-  expect(find.byKey(const Key('onboarding.continue')), findsOneWidget,
-      reason: 'taze kurulumda onboarding görünmedi — başlangıç noktası '
-          'uygulama kökü DEĞİL demektir');
+  expect(
+    find.byKey(const Key('onboarding.continue')),
+    findsOneWidget,
+    reason:
+        'taze kurulumda onboarding görünmedi — başlangıç noktası '
+        'uygulama kökü DEĞİL demektir',
+  );
   expect(store.p.completed, isFalse, reason: 'ilk-koşu bayrağı false olmalı');
 
   await tester.tap(find.byKey(const Key('onboarding.continue')));
@@ -173,139 +181,188 @@ Future<void> _walkThroughOnboarding(
   await tester.tap(find.byKey(const Key('onboarding.continue')));
   await tester.pumpAndSettle();
 
-  expect(store.p.completed, isTrue,
-      reason: 'onboarding DÜĞMELERLE tamamlanmalıydı (bayrak set edilerek '
-          'değil) — A2 tam olarak bunu istiyor');
+  expect(
+    store.p.completed,
+    isTrue,
+    reason:
+        'onboarding DÜĞMELERLE tamamlanmalıydı (bayrak set edilerek '
+        'değil) — A2 tam olarak bunu istiyor',
+  );
   expect(find.byType(LissomShell), findsOneWidget);
 }
 
 void main() {
   testWidgets(
-      'A1 — TEK YÜRÜYÜŞ: taze kurulum → onboarding → Home → ölçüm → SONUÇ',
-      (WidgetTester tester) async {
-    pinNarrowSurface(tester);
-    final AppFacts facts = factsFromDisk();
-    final _RouteWitness witness = _RouteWitness();
-    final _MemOnboardingStore onboarding = _MemOnboardingStore();
-    final _RecordingStore sessions = _RecordingStore();
+    'A1 — TEK YÜRÜYÜŞ: taze kurulum → onboarding → Home → ölçüm → SONUÇ',
+    (WidgetTester tester) async {
+      pinNarrowSurface(tester);
+      final AppFacts facts = factsFromDisk();
+      final _RouteWitness witness = _RouteWitness();
+      final _MemOnboardingStore onboarding = _MemOnboardingStore();
+      final _RecordingStore sessions = _RecordingStore();
 
-    // ③ BAŞLANGIÇ = UYGULAMA KÖKÜ. Kabuktan değil, kökten.
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      navigatorObservers: <NavigatorObserver>[witness],
-      home: OnboardingGate(
-        storeLoader: () async => onboarding,
-        shellLoader: () async => facts,
-        poseSourceLoader: () => FakePoseSource(_raiseScript()),
-        sessionStoreLoader: () async => sessions,
-      ),
-    ));
-    await tester.pumpAndSettle();
+      // ③ BAŞLANGIÇ = UYGULAMA KÖKÜ. Kabuktan değil, kökten.
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          navigatorObservers: <NavigatorObserver>[witness],
+          home: OnboardingGate(
+            measurementAvailable: true,
+            storeLoader: () async => onboarding,
+            shellLoader: () async => facts,
+            poseSourceLoader: () => FakePoseSource(_raiseScript()),
+            sessionStoreLoader: () async => sessions,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    await _walkThroughOnboarding(tester, onboarding);
+      await _walkThroughOnboarding(tester, onboarding);
 
-    // ── SEÇİM: Home'daki BOYANMIŞ düğme ────────────────────────────────
-    // POZİTİF ÇAPA: düğme ancak motorun okuyabildiği EN AZ BİR test varsa
-    // basılır. Yoksa bu yürüyüş vakum-doğru olurdu (*"ölçüm yapamadım ama
-    // hata da yok"*).
-    expect(facts.live, isNotEmpty,
-        reason: 'köprüde hiç canlı test yok — "Start a measurement" düğmesi '
-            'zaten çizilmez ve bu yürüyüş hiçbir şey ölçmez');
+      // ── SEÇİM: Home'daki BOYANMIŞ düğme ────────────────────────────────
+      // POZİTİF ÇAPA: düğme ancak motorun okuyabildiği EN AZ BİR test varsa
+      // basılır. Yoksa bu yürüyüş vakum-doğru olurdu (*"ölçüm yapamadım ama
+      // hata da yok"*).
+      expect(
+        facts.live,
+        isNotEmpty,
+        reason:
+            'köprüde hiç canlı test yok — "Start a measurement" düğmesi '
+            'zaten çizilmez ve bu yürüyüş hiçbir şey ölçmez',
+      );
 
-    await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
-    final Finder start = find.byKey(HomeScreen.startMeasurementKey);
-    expect(start, findsOneWidget,
-        reason: 'Home ölçüme giden boyanmış kontrolü sunmuyor — zincir '
-            'burada kopuk');
+      await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
+      final Finder start = find.byKey(HomeScreen.startMeasurementKey);
+      expect(
+        start,
+        findsOneWidget,
+        reason:
+            'Home ölçüme giden boyanmış kontrolü sunmuyor — zincir '
+            'burada kopuk',
+      );
 
-    final int pushesBefore =
-        witness.pushed.where((String r) => r != '/').length;
-    await tester.tap(start);
-    await tester.pumpAndSettle();
+      final int pushesBefore = witness.pushed
+          .where((String r) => r != '/')
+          .length;
+      await tester.tap(start);
+      await tester.pumpAndSettle();
 
-    // (b) ÜYELİK YÜRÜYEREK: ölçüm ekranına GERÇEK bir rota ile gelindi.
-    expect(witness.pushed.where((String r) => r != '/').length,
+      // (b) ÜYELİK YÜRÜYEREK: ölçüm ekranına GERÇEK bir rota ile gelindi.
+      expect(
+        witness.pushed.where((String r) => r != '/').length,
         greaterThan(pushesBefore),
-        reason: 'ölçüm ekranı bir rota push\'u ile açılmadı — tanıksız bir '
-            'varış, yürüyüş sayılmaz');
+        reason:
+            'ölçüm ekranı bir rota push\'u ile açılmadı — tanıksız bir '
+            'varış, yürüyüş sayılmaz',
+      );
 
-    // ── OTURUM: enjekte kaynaktan gerçek kareler ───────────────────────
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
-    await tester.pump(const Duration(milliseconds: 50));
+      // ── OTURUM: enjekte kaynaktan gerçek kareler ───────────────────────
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump(const Duration(milliseconds: 50));
 
-    final Finder finish = find.byKey(const Key('liveCapture.finish'));
-    expect(finish, findsOneWidget,
-        reason: 'kare akışı `Measuring` hâlini üretmeliydi — üretmediyse '
-            'Home\'dan açılan ekran kaynağı almıyor, yani dikiş kopuk');
+      final Finder finish = find.byKey(const Key('liveCapture.finish'));
+      expect(
+        finish,
+        findsOneWidget,
+        reason:
+            'kare akışı `Measuring` hâlini üretmeliydi — üretmediyse '
+            'Home\'dan açılan ekran kaynağı almıyor, yani dikiş kopuk',
+      );
 
-    await tester.tap(finish);
-    await tester.pumpAndSettle();
+      await tester.tap(finish);
+      await tester.pumpAndSettle();
 
-    // ── SONUÇ ──────────────────────────────────────────────────────────
-    expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,
-        reason: 'bitirince SONUÇ yüzeyi görünmeli — A1\'in son halkası');
+      // ── SONUÇ ──────────────────────────────────────────────────────────
+      expect(
+        find.byKey(const Key('liveCapture.tryAgain')),
+        findsOneWidget,
+        reason: 'bitirince SONUÇ yüzeyi görünmeli — A1\'in son halkası',
+      );
 
-    // Ve sonuç bir OLGUYA bağlandı: kayıt gerçekten deponun içine düştü.
-    // ⚠️ Değer/bant ÇİVİLENMİYOR (L-239: sayıyı değil KURALI ölç) — ölçülen
-    // şey *"bir deneme yazıldı"*, *"şu skor çıktı"* değil.
-    expect(sessions.written, hasLength(1),
-        reason: 'yürüyüş sonuca vardı ama depoya hiçbir şey yazılmadı — '
-            'kullanıcının gördüğü sonuç hiçbir yere bağlanmıyor demektir');
+      // Ve sonuç bir OLGUYA bağlandı: kayıt gerçekten deponun içine düştü.
+      // ⚠️ Değer/bant ÇİVİLENMİYOR (L-239: sayıyı değil KURALI ölç) — ölçülen
+      // şey *"bir deneme yazıldı"*, *"şu skor çıktı"* değil.
+      expect(
+        sessions.written,
+        hasLength(1),
+        reason:
+            'yürüyüş sonuca vardı ama depoya hiçbir şey yazılmadı — '
+            'kullanıcının gördüğü sonuç hiçbir yere bağlanmıyor demektir',
+      );
 
-    // ignore: avoid_print
-    print('\n═══ A1 — TAM AKIŞ (L-309) ═══');
-    // ignore: avoid_print
-    print('  başlangıç      : UYGULAMA KÖKÜ (taze kurulum, bayrak false)');
-    // ignore: avoid_print
-    print('  onboarding     : ${'düğmeyle geçildi'} (7 dokunuş)');
-    // ignore: avoid_print
-    print('  seçilen test   : ${facts.live.first.testId} '
-        '(canlı ${facts.live.length}/${facts.liveness.length})');
-    // ignore: avoid_print
-    print('  rota tanıklığı : '
+      // ignore: avoid_print
+      print('\n═══ A1 — TAM AKIŞ (L-309) ═══');
+      // ignore: avoid_print
+      print('  başlangıç      : UYGULAMA KÖKÜ (taze kurulum, bayrak false)');
+      // ignore: avoid_print
+      print('  onboarding     : ${'düğmeyle geçildi'} (7 dokunuş)');
+      // ignore: avoid_print
+      print(
+        '  seçilen test   : ${facts.live.first.testId} '
+        '(canlı ${facts.live.length}/${facts.liveness.length})',
+      );
+      // ignore: avoid_print
+      print(
+        '  rota tanıklığı : '
         '${witness.pushed.where((String r) => r != '/').length} push '
-        '(başlangıç rotası hariç)');
-    // ignore: avoid_print
-    print('  yazılan kayıt  : ${sessions.written.length} '
-        '(${sessions.written.single.lessonId})');
-    // ignore: avoid_print
-    print('════════════════════════════\n');
-  });
+        '(başlangıç rotası hariç)',
+      );
+      // ignore: avoid_print
+      print(
+        '  yazılan kayıt  : ${sessions.written.length} '
+        '(${sessions.written.single.lessonId})',
+      );
+      // ignore: avoid_print
+      print('════════════════════════════\n');
+    },
+  );
 
   testWidgets(
-      'SABOTAJ — kaynak BOŞken yürüyüş sonuca VARAMAZ (yürüyüşün kendisi '
-      'vakum-doğru değil)', (WidgetTester tester) async {
-    pinNarrowSurface(tester);
-    // 🔒 Bu ikiz olmadan yukarıdaki test *"her koşulda yeşil"* olabilirdi.
-    // > ***Bir yürüyüşün başarısı, ancak BAŞARISIZ OLABİLDİĞİ gösterildiğinde
-    // > ölçümdür.*** Tek fark: kaynak script'i BOŞ. Aynı dikiş, aynı yol.
-    final AppFacts facts = factsFromDisk();
-    final _MemOnboardingStore onboarding = _MemOnboardingStore();
-    final _RecordingStore sessions = _RecordingStore();
+    'SABOTAJ — kaynak BOŞken yürüyüş sonuca VARAMAZ (yürüyüşün kendisi '
+    'vakum-doğru değil)',
+    (WidgetTester tester) async {
+      pinNarrowSurface(tester);
+      // 🔒 Bu ikiz olmadan yukarıdaki test *"her koşulda yeşil"* olabilirdi.
+      // > ***Bir yürüyüşün başarısı, ancak BAŞARISIZ OLABİLDİĞİ gösterildiğinde
+      // > ölçümdür.*** Tek fark: kaynak script'i BOŞ. Aynı dikiş, aynı yol.
+      final AppFacts facts = factsFromDisk();
+      final _MemOnboardingStore onboarding = _MemOnboardingStore();
+      final _RecordingStore sessions = _RecordingStore();
 
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      home: OnboardingGate(
-        storeLoader: () async => onboarding,
-        shellLoader: () async => facts,
-        poseSourceLoader: () =>
-            FakePoseSource(const <PoseSourceEvent>[]), // ⛔ BOŞ
-        sessionStoreLoader: () async => sessions,
-      ),
-    ));
-    await tester.pumpAndSettle();
-    await _walkThroughOnboarding(tester, onboarding);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          home: OnboardingGate(
+            measurementAvailable: true,
+            storeLoader: () async => onboarding,
+            shellLoader: () async => facts,
+            poseSourceLoader: () =>
+                FakePoseSource(const <PoseSourceEvent>[]), // ⛔ BOŞ
+            sessionStoreLoader: () async => sessions,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _walkThroughOnboarding(tester, onboarding);
 
-    await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
-    await tester.tap(find.byKey(HomeScreen.startMeasurementKey));
-    await tester.pumpAndSettle();
-    await tester.pump(const Duration(milliseconds: 50));
+      await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
+      await tester.tap(find.byKey(HomeScreen.startMeasurementKey));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 50));
 
-    expect(find.byKey(const Key('liveCapture.finish')), findsNothing,
-        reason: 'kare yokken "I\'m done" görünüyorsa ekran uyduruyor — ve '
-            'yukarıdaki yürüyüş hiçbir şey kanıtlamıyor demektir');
-    expect(sessions.written, isEmpty,
-        reason: 'ölçüm hiç olmadı; depoya kayıt düşmemeli');
-  });
+      expect(
+        find.byKey(const Key('liveCapture.finish')),
+        findsNothing,
+        reason:
+            'kare yokken "I\'m done" görünüyorsa ekran uyduruyor — ve '
+            'yukarıdaki yürüyüş hiçbir şey kanıtlamıyor demektir',
+      );
+      expect(
+        sessions.written,
+        isEmpty,
+        reason: 'ölçüm hiç olmadı; depoya kayıt düşmemeli',
+      );
+    },
+  );
 }

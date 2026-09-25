@@ -21,6 +21,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'assessment_history.dart';
 import 'attempt_values.dart';
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 import 'surfaces.dart';
 
 class TestDetailScreen extends StatefulWidget {
@@ -50,9 +51,9 @@ class TestDetailScreen extends StatefulWidget {
 final class _History {
   const _History._(this.bySide, this.unreadable, this.failure);
   const _History.ok(Map<String, List<AttemptValue>> bySide, int unreadable)
-      : this._(bySide, unreadable, null);
+    : this._(bySide, unreadable, null);
   const _History.unavailable(String failure)
-      : this._(const <String, List<AttemptValue>>{}, 0, failure);
+    : this._(const <String, List<AttemptValue>>{}, 0, failure);
 
   final Map<String, List<AttemptValue>> bySide;
   final int unreadable;
@@ -61,8 +62,9 @@ final class _History {
 }
 
 class _TestDetailScreenState extends State<TestDetailScreen> {
-  List<String> get _sides =>
-      widget.test.perSide ? const <String>['right', 'left'] : const <String>['bilateral'];
+  List<String> get _sides => widget.test.perSide
+      ? const <String>['right', 'left']
+      : const <String>['bilateral'];
 
   late final Future<_History> _history = _load();
 
@@ -70,10 +72,10 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
     try {
       final AttemptValueStore store =
           await (widget.attemptValueStoreLoader ?? openAttemptValueStore)();
-      final Map<String, List<AttemptValue>> bySide = <String, List<AttemptValue>>{};
+      final Map<String, List<AttemptValue>> bySide =
+          <String, List<AttemptValue>>{};
       for (final String side in _sides) {
-        bySide[side] =
-            await store.forLesson(historyKeyFor(widget.test, side));
+        bySide[side] = await store.forLesson(historyKeyFor(widget.test, side));
       }
       return _History.ok(bySide, await store.unreadableRecords());
     } on Object catch (e) {
@@ -86,9 +88,11 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.test.name)),
+      appBar: AppBar(title: Text(configText(context, widget.test.name))),
       body: DecoratedBox(
-        decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: SafeArea(
           child: FutureBuilder<_History>(
             future: _history,
@@ -97,37 +101,51 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               final _History h = snap.data!;
-              final bool anyData =
-                  h.bySide.values.any((List<AttemptValue> v) => v.isNotEmpty);
+              final bool anyData = h.bySide.values.any(
+                (List<AttemptValue> v) => v.isNotEmpty,
+              );
               return ListView(
                 padding: const EdgeInsets.all(22),
                 children: <Widget>[
                   if (!h.available)
                     NamedGapCard(
                       key: TestDetailScreen.unavailableKey,
-                      title: "This test's history didn't open",
-                      reason: 'We are not going to show you a count, because '
-                          'an empty list here would read as "you never '
-                          'measured this" — and we do not know that.',
-                      detail: h.failure,
+                      title: localeText(
+                        context,
+                        "This test's history didn't open",
+                        'Test geçmişi açılamadı',
+                      ),
+                      reason: localeText(
+                        context,
+                        'We are not going to show you a count, because an empty list here would read as "you never measured this" — and we do not know that.',
+                        'Kayıtlar okunamadığı için sayı göstermiyoruz; boş liste bu testi hiç ölçmediğin anlamına gelmeyebilir.',
+                      ),
+                      detail: localizedHistoryFailureDetail(context, h.failure),
                     )
                   else if (!anyData)
                     NamedGapCard(
                       key: TestDetailScreen.emptyKey,
-                      title: 'No readings recorded for this test',
-                      reason: 'When you measure ${widget.test.name}, the '
-                          'value, date, and any conditions we can name '
-                          'appear here.',
+                      title: localeText(
+                        context,
+                        'No readings recorded for this test',
+                        'Bu test için kayıt yok',
+                      ),
+                      reason: localeText(
+                        context,
+                        'When you measure ${widget.test.name}, the value and date appear here.',
+                        '${configText(context, widget.test.name)} ölçüldüğünde değer ve tarih burada görünür.',
+                      ),
                     )
                   else ...<Widget>[
                     if (h.unreadable > 0)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 14),
                         child: Text(
-                          '${h.unreadable} recorded reading'
-                          '${h.unreadable == 1 ? '' : 's'} on this device '
-                          'could not be read by this version of Lissom. '
-                          'They are still on this phone.',
+                          localeText(
+                            context,
+                            '${h.unreadable} recorded reading${h.unreadable == 1 ? '' : 's'} on this device could not be read by this version of Lissom. They are still on this phone.',
+                            '${h.unreadable} kayıt bu sürümde okunamadı. Kayıtlar hâlâ bu telefonda.',
+                          ),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -176,9 +194,18 @@ class _SideHistory extends StatelessWidget {
         // ⛔ "yet" YASAK (M-F-186) — bilmediğimiz bir tarihi ima eder.
         // `wellness_lint.py` bunu bu satırda GERÇEKTEN yakaladı (ölçüldü,
         // varsayılmadı): ilk yazımım üç yerde "yet" kullanmıştı.
-        title: showSideLabel ? '${_label(side)} — no readings' : 'No readings',
-        reason: 'Nothing measured on this side of this test so far on this '
-            'device.',
+        title: showSideLabel
+            ? localeText(
+                context,
+                '${_label(side)} — no readings',
+                '${_labelTr(side)} — ölçüm yok',
+              )
+            : localeText(context, 'No readings', 'Ölçüm yok'),
+        reason: localeText(
+          context,
+          'Nothing measured on this side of this test so far on this device.',
+          'Bu testin bu tarafında bu cihazda ölçüm kaydı yok.',
+        ),
       );
     }
     final AttemptValue last = values.first;
@@ -187,7 +214,7 @@ class _SideHistory extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (showSideLabel) ...<Widget>[
-            LissomEyebrow(_label(side)),
+            LissomEyebrow(localeText(context, _label(side), _labelTr(side))),
             const SizedBox(height: 8),
           ],
           Text(
@@ -195,8 +222,14 @@ class _SideHistory extends StatelessWidget {
             style: t.textTheme.headlineMedium,
           ),
           const SizedBox(height: 4),
-          Text('Last measured ${_formatDate(last.completedAt)}',
-              style: t.textTheme.bodySmall),
+          Text(
+            localeText(
+              context,
+              'Last measured ${_formatDate(last.completedAt)}',
+              'Son ölçüm ${_formatDate(last.completedAt, turkish: true)}',
+            ),
+            style: t.textTheme.bodySmall,
+          ),
           const SizedBox(height: 10),
           // H-24 ASİMETRİSİ — kendi ölçtüm, VARSAYMADIM (orkestratör
           // hükmü): boş/okunamayan hâller kendini tam açıklıyordu, DOLU
@@ -205,13 +238,24 @@ class _SideHistory extends StatelessWidget {
           // asimetriyi kapatır: ürünün en çok kullanılacağı hâl de kendi
           // sınırını söyler.
           Text(
-            'Shown as measured — not compared or judged against each other.',
-            style: t.textTheme.bodySmall
-                ?.copyWith(color: LissomColors.bodySecondary),
+            localeText(
+              context,
+              'Shown as measured — not compared or judged against each other.',
+              'Ölçüldüğü gibi gösterilir; değerler karşılaştırılmaz veya yorumlanmaz.',
+            ),
+            style: t.textTheme.bodySmall?.copyWith(
+              color: LissomColors.bodySecondary,
+            ),
           ),
           if (values.length > 1) ...<Widget>[
             const SizedBox(height: 16),
-            LissomEyebrow('Every reading (${values.length})'),
+            LissomEyebrow(
+              localeText(
+                context,
+                'Every reading (${values.length})',
+                'Tüm ölçümler (${values.length})',
+              ),
+            ),
             const SizedBox(height: 8),
             // ⛔ HAM DEĞER — art arda iki satır arasında karşılaştırma dili
             // (ok, yüzde, "+N") KASITLI olarak YOK. Gerçek bir MDC verisi
@@ -223,10 +267,19 @@ class _SideHistory extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(_formatDate(v.completedAt),
-                        style: t.textTheme.bodyMedium),
-                    Text('${_fmt(v.value)}${v.unit}',
-                        style: t.textTheme.bodyMedium),
+                    Text(
+                      _formatDate(
+                        v.completedAt,
+                        turkish:
+                            Localizations.localeOf(context).languageCode ==
+                            'tr',
+                      ),
+                      style: t.textTheme.bodyMedium,
+                    ),
+                    Text(
+                      '${_fmt(v.value)}${v.unit}',
+                      style: t.textTheme.bodyMedium,
+                    ),
                   ],
                 ),
               ),
@@ -239,15 +292,47 @@ class _SideHistory extends StatelessWidget {
   static String _fmt(double v) =>
       v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
 
+  static String _labelTr(String side) => switch (side) {
+    'right' => 'Sağ',
+    'left' => 'Sol',
+    'bilateral' => 'İki taraf',
+    _ => side,
+  };
+
   static const List<String> _months = <String>[
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  static const List<String> _monthsTr = <String>[
+    'Oca',
+    'Şub',
+    'Mar',
+    'Nis',
+    'May',
+    'Haz',
+    'Tem',
+    'Ağu',
+    'Eyl',
+    'Eki',
+    'Kas',
+    'Ara',
   ];
 
   /// Mutlak tarih, göreli DEĞİL — `home_screen.dart`/`progress_screen.dart`
   /// ile AYNI biçim (§5.2: göreli süre bir gecikme duygusu üretir).
-  static String _formatDate(DateTime d) {
+  static String _formatDate(DateTime d, {bool turkish = false}) {
     final DateTime l = d.toLocal();
-    return '${l.day} ${_months[l.month - 1]} ${l.year}';
+    return '${l.day} ${(turkish ? _monthsTr : _months)[l.month - 1]} ${l.year}';
   }
 }

@@ -9,6 +9,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # All shared Motion packages use the same reviewed, immutable Git revision.
+  motion_account:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_account
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
   # Motor AYRI bir paket ve Flutter'a HİÇ bağımlı değil (M-F-160, JabLab
   # ayrımının aynısı): ölçüm/skorlama mantığı bir widget ağacı olmadan
@@ -24,7 +33,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
   # Kamera → PoseSource. Motorla AYNI 40-SHA'dan, TEK pin (J-071).
   #
@@ -34,7 +43,7 @@ dependencies:
   # İKİ AYRI KAYNAK gibi görünür ve `motion_core` iki kez çözülmeye çalışılır.
   #
   # Ek olarak ölçüldü: `motion_camera`'nın KENDİ `motion_core` bağımlılığı
-  # `f13bdc9`'te `path: ../motion_core` (tam-SHA DEĞİL). Bu bizim için daha
+  # `path: ../motion_core` (tam-SHA DEĞİL). Bu bizim için daha
   # güçlü — aynı url+ref tek git checkout'una çözüldüğü için kameranın
   # gördüğü çekirdek ile bizim gördüğümüz ÇEKİRDEK AYNI dosyalar oluyor.
   # Pin-eşitliği testi bunu kilitten doğrular (varsayım değil).
@@ -42,7 +51,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_camera
-      ref: f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
   # Yalnız uygulama-özel dizini bulmak için. Depo BİÇİMİ çekirdekte
   # (append-only JSONL); kurucusu `File` alıyor, çünkü path_provider

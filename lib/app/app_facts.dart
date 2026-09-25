@@ -15,6 +15,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 
 import 'assessment_history.dart';
 import 'ia.dart';
+import 'local_account_bridge.dart';
 import 'session_history_view.dart';
 
 final class AppFacts {
@@ -67,8 +68,9 @@ final class AppFacts {
   /// olmadığını söylüyor.
   String? blockerForClaim(HonestyClaim claim) {
     if (!claim.isCheckable) return null;
-    final Set<String> bridged =
-        kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+    final Set<String> bridged = kMetricBindings
+        .map((MetricBinding b) => b.lissomMetric)
+        .toSet();
     final List<String> missing = claim.requires
         .where((String m) => !bridged.contains(m))
         .toList(growable: false);
@@ -109,10 +111,12 @@ final class AppFacts {
     final Set<String> withRef = <String>{};
     final Set<String> withoutRef = <String>{};
     for (final TestSpec t in battery.tests.values) {
-      final List<String> sides =
-          t.perSide ? <String>['right', 'left'] : <String>['right'];
-      final bool touches =
-          sides.any((String s) => needed.contains(t.primaryMetricFor(s)));
+      final List<String> sides = t.perSide
+          ? <String>['right', 'left']
+          : <String>['right'];
+      final bool touches = sides.any(
+        (String s) => needed.contains(t.primaryMetricFor(s)),
+      );
       if (!touches) continue;
       if (t.referenceStatus?.isMeasurementOnly ?? false) {
         withoutRef.add(t.id);
@@ -134,17 +138,23 @@ final class AppFacts {
         'carries no verdict.';
   }
 
-  static Future<AppFacts> load() async {
-    final String batteryRaw =
-        await rootBundle.loadString('config/tests/lissom-assessment.v1.json');
-    final String iaRaw =
-        await rootBundle.loadString('config/ia/library.v1.json');
+  static Future<AppFacts> load({
+    LissomLocalScope scope = LissomLocalScope.guest,
+  }) async {
+    final String batteryRaw = await rootBundle.loadString(
+      'config/tests/lissom-assessment.v1.json',
+    );
+    final String iaRaw = await rootBundle.loadString(
+      'config/ia/library.v1.json',
+    );
     final Battery battery = Battery.parseJson(batteryRaw);
     return AppFacts(
       ia: LibraryIa.parseJson(iaRaw),
       battery: battery,
       liveness: deriveLiveness(battery),
-      history: await SessionHistoryView.read(openSessionStore),
+      history: await SessionHistoryView.read(
+        () => openSessionStore(scope: scope),
+      ),
     );
   }
 }

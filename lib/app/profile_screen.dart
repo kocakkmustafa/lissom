@@ -16,17 +16,25 @@ import 'package:flutter/material.dart';
 
 import 'app_facts.dart';
 import 'lissom_theme.dart';
+import 'local_account_bridge.dart';
+import 'locale_text.dart';
 import 'surfaces.dart';
 import 'what_lissom_doesnt_do.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({required this.facts, super.key});
+  const ProfileScreen({
+    required this.facts,
+    this.accountRouteBuilder,
+    super.key,
+  });
 
   static const Key whyNotEntryKey = Key('profile.whyNotEntry');
   static const Key measurementWorksKey = Key('profile.howMeasurementWorks');
   static const Key noSettingsKey = Key('profile.noSettings');
+  static const Key accountEntryKey = Key('profile.accountEntry');
 
   final AppFacts facts;
+  final LissomAccountRouteBuilder? accountRouteBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +44,52 @@ class ProfileScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
-          const SectionHeading(
-            'Profile',
-            subtitle: 'What Lissom knows, what it measures, and where it stops.',
+          SectionHeading(
+            localeText(context, 'Profile', 'Profil'),
+            subtitle: localeText(
+              context,
+              'What Lissom knows, what it measures, and where it stops.',
+              'Lissom’un ölçtükleri ve ölçümün sınırları.',
+            ),
           ),
           const SizedBox(height: 20),
+
+          if (accountRouteBuilder != null) ...<Widget>[
+            _EntryCard(
+              key: accountEntryKey,
+              title: localeText(context, 'Account', 'Hesap'),
+              subtitle: localeText(
+                context,
+                'Open account options.',
+                'Hesap seçeneklerini aç.',
+              ),
+              onTap: () => Navigator.of(context).push<void>(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext routeContext) =>
+                      accountRouteBuilder!(routeContext, kLissomMotionAppId),
+                ),
+              ),
+            ),
+            const SizedBox(height: 22),
+          ],
 
           // ── Giriş: sınırlar sayfası ────────────────────────────────────
           _EntryCard(
             key: whyNotEntryKey,
-            title: "What Lissom doesn't do",
+            title: localeText(
+              context,
+              "What Lissom doesn't do",
+              'Lissom neleri yapmaz?',
+            ),
             // ⚠️ ÖNCE 'The decisions behind the edges of the product.'
             // diyordu — L-265'te düzelttiğim çerçevenin BAŞKA BİR YÜZEYDEKİ
             // kopyası: beş kalemin üçü karar DEĞİL. Kusuru bulduğun yüzeyde
             // düzeltmek, ürünün geri kalanında düzeltmek değildir (J-151).
-            subtitle: 'What we chose not to do, and what we cannot do.',
+            subtitle: localeText(
+              context,
+              'What we chose not to do, and what we cannot do.',
+              'Mevcut özellikler ve ölçüm sınırları.',
+            ),
             onTap: () => Navigator.of(context).push<void>(
               MaterialPageRoute<void>(
                 builder: (_) => WhatLissomDoesntDoScreen(
@@ -68,19 +107,25 @@ class ProfileScreen extends StatelessWidget {
             key: measurementWorksKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              LissomEyebrow('How measurement works'),
+              LissomEyebrow(
+                localeText(
+                  context,
+                  'How measurement works',
+                  'Ölçüm nasıl çalışır?',
+                ),
+              ),
               const SizedBox(height: 10),
               LissomCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      MeasurementLimitsFootnote.limitsCopy,
+                      MeasurementLimitsFootnote.localizedLimits(context),
                       style: t.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      MeasurementLimitsFootnote.accuracyStatement,
+                      MeasurementLimitsFootnote.localizedAccuracy(context),
                       style: t.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 14),
@@ -112,11 +157,15 @@ class ProfileScreen extends StatelessWidget {
                     // > ***BİR RİSKİ YORUMA YAZMAK, ONU ÖNLEMEZ — ÖNLEYEN
                     // > ŞEY KAPIDIR*** (`stale_absence_claim_test.dart`).
                     Text(
-                      'Lissom has no account and no server of its own, so '
-                      'there is nowhere for your data to go. The camera reads '
-                      'your movement while you measure and the video is not '
-                      'kept; what is written down — which test, and when — '
-                      'stays on this phone for the same reason.',
+                      localeText(
+                        context,
+                        'The camera reads your movement while you measure. '
+                            'Video is not kept or uploaded. Test results and dates '
+                            'are saved in Lissom\'s local app storage.',
+                        'Kamera, ölçüm sırasında hareketini anlık olarak okur. '
+                            'Video saklanmaz veya yüklenmez. Test sonuçları ve '
+                            'tarihleri Lissom\'un yerel uygulama alanına kaydedilir.',
+                      ),
                       style: t.textTheme.bodyMedium,
                     ),
                   ],
@@ -131,7 +180,7 @@ class ProfileScreen extends StatelessWidget {
             key: noSettingsKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              LissomEyebrow('Settings'),
+              LissomEyebrow(localeText(context, 'Settings', 'Ayarlar')),
               const SizedBox(height: 10),
               // ⚠️ Eskiden *"no account, no sync and no reminder **in this
               // build**"* yazıyordu — üçünü de bir DERLEME EKSİĞİ gibi
@@ -141,13 +190,26 @@ class ProfileScreen extends StatelessWidget {
               // "in this build" senkronun geleceğini ima ediyordu.
               //
               // Gerçek sınır olan tek kalem hatırlatıcı; o da isimli kalıyor.
-              const NamedGapCard(
-                title: 'Nothing to set',
-                reason: 'Lissom has no account and nothing to sync — not '
-                    'because they are missing, but because everything stays '
-                    'on this phone. Reminders are not in this build.',
-                detail: 'We would rather leave the section empty than fill it '
-                    'with switches that do nothing.',
+              NamedGapCard(
+                title: localeText(
+                  context,
+                  'No local settings',
+                  'Yerel ayar bulunmuyor',
+                ),
+                reason: localeText(
+                  context,
+                  'Measurement preferences and reminders are not available '
+                      'in this build. Lissom does not sync measurement records '
+                      'to your Motion account.',
+                  'Ölçüm tercihleri ve hatırlatıcılar bu sürümde bulunmuyor. '
+                      'Lissom ölçüm kayıtlarını Motion hesabına eşitlemez.',
+                ),
+                detail: localeText(
+                  context,
+                  'We would rather leave the section empty than fill it '
+                      'with switches that do nothing.',
+                  'Çalışmayan seçenekler göstermiyoruz.',
+                ),
               ),
             ],
           ),

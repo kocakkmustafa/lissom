@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/attempt_values.dart';
 import 'package:lissom/app/lissom_theme.dart';
@@ -63,8 +64,15 @@ TestSpec _overheadReach() =>
     batteryFromDisk().tests['overhead_reach']!;
 
 Future<void> _pump(WidgetTester tester, TestSpec test,
-    Future<AttemptValueStore> Function() loader) async {
+    Future<AttemptValueStore> Function() loader, {Locale? locale}) async {
   await tester.pumpWidget(MaterialApp(
+    locale: locale,
+    supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+    localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
     theme: buildLissomTheme(),
     home: TestDetailScreen(test: test, attemptValueStoreLoader: loader),
   ));
@@ -154,6 +162,19 @@ void main() {
 
     expect(find.byKey(TestDetailScreen.emptyKey), findsOneWidget);
     expect(find.textContaining('No readings recorded'), findsOneWidget);
+    expect(find.textContaining('value and date'), findsOneWidget);
+    expect(find.textContaining('conditions'), findsNothing);
+  });
+
+  testWidgets('Türkçe boş test ayrıntısı yalnız gösterilen alanları söyler',
+      (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    await _pump(tester, _overheadReach(),
+        () async => _FakeStore(<AttemptValue>[]), locale: const Locale('tr'));
+
+    expect(find.byKey(TestDetailScreen.emptyKey), findsOneWidget);
+    expect(find.textContaining('değer ve tarih'), findsOneWidget);
+    expect(find.textContaining('koşullar'), findsNothing);
   });
 
   testWidgets('OKUNAMAYAN: depo patlarsa "hiç yok" DEMEZ, çökmez',
@@ -165,6 +186,18 @@ void main() {
         reason: '"hiç ölçmedin" ile "okuyamıyoruz" karıştırılamaz '
             '(C-280/H-13 sınıfı)');
     expect(find.byKey(TestDetailScreen.emptyKey), findsNothing);
+  });
+
+  testWidgets('Türkçe test geçmişi ham depo hatasını göstermiyor',
+      (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    await _pump(tester, _overheadReach(), () async => _FailingStore(),
+        locale: const Locale('tr'));
+
+    expect(find.byKey(TestDetailScreen.unavailableKey), findsOneWidget);
+    expect(find.textContaining('Uygulamayı yeniden açıp'), findsOneWidget);
+    expect(find.textContaining('FormatException'), findsNothing);
+    expect(find.textContaining('disk hatası (test)'), findsNothing);
   });
 
   testWidgets('PER-SIDE: sağ dolu, sol boş — İKİSİ de AYRI görünür, '

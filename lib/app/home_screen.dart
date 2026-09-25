@@ -29,10 +29,14 @@ library;
 import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
+import 'attempt_values.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 import 'live_capture_screen.dart';
 import 'session_history_view.dart';
 import 'surfaces.dart';
@@ -45,6 +49,9 @@ class HomeScreen extends StatelessWidget {
     this.onMeasurementDone,
     this.poseSourceLoader,
     this.sessionStoreLoader,
+    this.attemptValueStoreLoader,
+    this.beforeMeasurement,
+    this.measurementAvailable = motionPaidFeaturesAvailable,
     super.key,
   });
 
@@ -77,6 +84,9 @@ class HomeScreen extends StatelessWidget {
   /// taşısaydı, bir katman yukarıda hangisinin geçtiği **okunarak
   /// ayırt edilemezdi.** İki depo, iki ad.
   final Future<SessionStore> Function()? sessionStoreLoader;
+  final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<bool> Function(BuildContext)? beforeMeasurement;
+  final bool measurementAvailable;
 
   /// Onboarding'de beyan edilen yaş bandı — ölçüm başlatılırken motora
   /// GEÇİRİLİR. Burada yorumlanmaz (G-100).
@@ -112,13 +122,13 @@ class HomeScreen extends StatelessWidget {
           // Cihaz-geçişi olgusu [DevicePassClaim]'den TÜRETİLİR (L-318) —
           // burada elle yazılsaydı A12 kapandığında güncellenmeyen üçüncü
           // kopya BU olurdu.
-          const DeclarationBanner(
-            eyebrow: 'Where Lissom is today',
-            body: 'The measurement engine, the twelve-test battery, and a '
-                'live capture screen are connected. '
-                '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds} '
-                '— what you can do today is start a measurement, or read '
-                'exactly what each test measures and what it cannot.',
+          DeclarationBanner(
+            eyebrow: localeText(
+              context,
+              'Where Lissom is today',
+              'Lissom’un bugünkü durumu',
+            ),
+            body: _releaseBody(context),
           ),
           const SizedBox(height: 24),
           for (final HomeSection s in facts.ia.homeSections) ...<Widget>[
@@ -130,6 +140,27 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  String _releaseBody(BuildContext context) => measurementAvailable
+      ? localeText(
+          context,
+          'The measurement engine, the twelve-test battery, and a '
+              'live capture screen are connected. '
+              '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds} '
+              '— what you can do today is start a measurement, or read '
+              'exactly what each test measures and what it cannot.',
+          'Ölçüm motoru, test listesi ve canlı kamera akışı bağlı. '
+              'Gerçek cihazda izin, kare akışı, ışık ve kalibrasyon kabulü '
+              'tamamlanmadı. Şimdi ölçümü başlatabilir veya her testin '
+              'neyi ölçebildiğini inceleyebilirsin.',
+        )
+      : localeText(
+          context,
+          'Explore the movement-test catalogue. Camera assessments and '
+              'subscriptions are not open in this release.',
+          'Hareket testi kataloğunu incele. Kamera değerlendirmeleri ve '
+              'abonelikler bu sürümde açık değil.',
+        );
+
   Widget _section(BuildContext context, HomeSection s) {
     final Key? k = _keys[s.id];
     if (k == null) return _unknownSection(context, s);
@@ -137,7 +168,7 @@ class HomeScreen extends StatelessWidget {
       key: k,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        LissomEyebrow(s.title),
+        LissomEyebrow(configText(context, s.title)),
         const SizedBox(height: 10),
         switch (s.id) {
           'today' => _today(context),
@@ -154,28 +185,44 @@ class HomeScreen extends StatelessWidget {
   /// YOK. Kullanıcı "burada bir şey olacaktı" bilgisini görür, biz de
   /// eksikliği yüzeyde yakalarız.
   Widget _unknownSection(BuildContext context, HomeSection s) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          LissomEyebrow(s.title),
-          const SizedBox(height: 10),
-          NamedGapCard(
-            title: s.title,
-            reason: 'This section is declared in the app layout but nothing '
-                'in the app fills it.',
-          ),
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      LissomEyebrow(configText(context, s.title)),
+      const SizedBox(height: 10),
+      NamedGapCard(
+        title: configText(context, s.title),
+        reason: localeText(
+          context,
+          'This section is declared in the app layout but nothing '
+              'in the app fills it.',
+          'Bu bölüm uygulama düzeninde tanımlı, ancak içerik bağlı değil.',
+        ),
+      ),
+    ],
+  );
 
   /// `program_engine` — kodda YOK. Uydurulmuş bir "günün planı" göstermek,
   /// sahte veri yasağının doğrudan ihlali olurdu.
-  Widget _today(BuildContext context) => const NamedGapCard(
-        title: 'No routine is built for you',
-        reason: 'A daily routine is meant to be built from your own '
-            'measurements. The part of Lissom that builds it is not in this '
-            'build, so there is nothing here that would be yours.',
-        detail: 'We would rather show you an empty section than a routine we '
-            'made up.',
-      );
+  Widget _today(BuildContext context) => NamedGapCard(
+    title: localeText(
+      context,
+      'No routine is built for you',
+      'Sana özel bir rutin bulunmuyor',
+    ),
+    reason: localeText(
+      context,
+      'A daily routine is meant to be built from your own '
+          'measurements. The part of Lissom that builds it is not in this '
+          'build, so there is nothing here that would be yours.',
+      'Kişisel günlük rutin oluşturan bölüm bu sürümde bulunmuyor.',
+    ),
+    detail: localeText(
+      context,
+      'We would rather show you an empty section than a routine we '
+          'made up.',
+      'Sana ait olmayan bir program göstermiyoruz.',
+    ),
+  );
 
   /// **DAVET.** Geri sayım estetiği yok, vade yok, suçlama yok.
   Widget _retest(BuildContext context) {
@@ -186,10 +233,19 @@ class HomeScreen extends StatelessWidget {
     // GÖSTERİLMEZ — boş liste burada bir bilgi değil, bir bilgisizliktir.
     if (!h.countsAreTrustworthy) {
       return NamedGapCard(
-        title: "We couldn't open your history",
-        reason: 'Your measurements may be on this device — we just could not '
-            'read the file, so we are not going to tell you a date either way.',
-        detail: h.failure,
+        title: localeText(
+          context,
+          "We couldn't open your history",
+          'Ölçüm geçmişi açılamadı',
+        ),
+        reason: localeText(
+          context,
+          'Your measurements may be on this device — we just could not '
+              'read the file, so we are not going to tell you a date either way.',
+          'Ölçümlerin cihazda olabilir, ancak kayıt okunamadı. Bu yüzden '
+              'tarih gösteremiyoruz.',
+        ),
+        detail: localizedHistoryFailureDetail(context, h.failure),
       );
     }
 
@@ -204,30 +260,53 @@ class HomeScreen extends StatelessWidget {
             // değil" diyor; davetin ön koşulu eylemin MÜMKÜN olması.
             // (L-242, yayın envanteri.)
             last == null
-                ? 'No measurement has been taken here'
-                : 'Your last measurement on this device',
+                ? localeText(
+                    context,
+                    'No measurement has been taken here',
+                    'Bu cihazda ölçüm yapılmamış',
+                  )
+                : localeText(
+                    context,
+                    'Your last measurement on this device',
+                    'Bu cihazdaki son ölçümün',
+                  ),
             style: t.textTheme.headlineSmall,
           ),
           const SizedBox(height: 8),
           Text(
             last == null
-                ? 'Nothing has been measured on this device.'
-                : 'Last measurement on this device: '
-                    '${_formatDate(last.completedAt)}.',
+                ? localeText(
+                    context,
+                    'Nothing has been measured on this device.',
+                    'Bu cihazda kayıtlı ölçüm yok.',
+                  )
+                : localeText(
+                    context,
+                    'Last measurement on this device: '
+                        '${_formatDate(last.completedAt)}.',
+                    'Bu cihazdaki son ölçüm: '
+                        '${_formatDate(last.completedAt, context: context)}.',
+                  ),
             style: t.textTheme.bodyMedium,
           ),
           const SizedBox(height: 10),
           // Vade YOK ve NEDENİ yazılı. Bir gün sayısı uydurmak, ölçmediğimiz
           // bir aralığı ölçmüş gibi göstermek olurdu.
           Text(
-            'Lissom does not set a date for your next measurement. How long '
-            'two measurements need to be apart to mean anything is something '
-            'we have not established, so we are not going to schedule you.',
+            localeText(
+              context,
+              'Lissom does not set a date for your next measurement. How long '
+                  'two measurements need to be apart to mean anything is something '
+                  'we have not established, so we are not going to schedule you.',
+              'Lissom bir sonraki ölçüm için tarih belirlemez. İki ölçüm '
+                  'arasında anlamlı kabul edilecek süre doğrulanmadığı için '
+                  'sana bir takvim sunmaz.',
+            ),
             style: t.textTheme.bodySmall,
           ),
           if (h.countsAreFloor) ...<Widget>[
             const SizedBox(height: 10),
-            _floorNote(t, h.unreadable),
+            _floorNote(context, t, h.unreadable),
           ],
         ],
       ),
@@ -239,28 +318,44 @@ class HomeScreen extends StatelessWidget {
     final SessionHistoryView h = facts.history;
 
     if (!h.countsAreTrustworthy) {
-      return const NamedGapCard(
-        title: 'Unknown',
-        reason: 'Your history did not open, so we cannot say whether anything '
-            'is in progress.',
+      return NamedGapCard(
+        title: localeText(context, 'Unknown', 'Bilinmiyor'),
+        reason: localeText(
+          context,
+          'Your history did not open, so we cannot say whether anything '
+              'is in progress.',
+          'Geçmiş açılmadığı için devam eden bir ölçüm olup olmadığını '
+              'söyleyemiyoruz.',
+        ),
       );
     }
     final SessionRecord? last = h.mostRecent;
     if (last == null) {
-      return const NamedGapCard(
-        title: 'Nothing in progress',
-        reason: 'Nothing has been measured on this device.',
+      return NamedGapCard(
+        title: localeText(
+          context,
+          'Nothing in progress',
+          'Devam eden ölçüm yok',
+        ),
+        reason: localeText(
+          context,
+          'Nothing has been measured on this device.',
+          'Bu cihazda kayıtlı ölçüm yok.',
+        ),
       );
     }
     return LissomCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(facts.testNameFor(last.lessonId), style: t.textTheme.titleMedium),
+          Text(
+            configText(context, facts.testNameFor(last.lessonId)),
+            style: t.textTheme.titleMedium,
+          ),
           const SizedBox(height: 6),
           Text(
-            '${_formatDate(last.completedAt)} · '
-            '${_recordClassText(last)}',
+            '${_formatDate(last.completedAt, context: context)} · '
+            '${configText(context, _recordClassText(last))}',
             style: t.textTheme.bodyMedium,
           ),
         ],
@@ -277,26 +372,36 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            live.isEmpty
-                // Sayı MOTOR yeteneğini anlatıyor, kullanıcının
-                // yapabileceğini DEĞİL — cümle bunu söylemeli (L-242).
-                ? 'The measurement engine can read none of the twelve tests'
-                : 'The measurement engine can read ${live.length} of '
-                    '${facts.liveness.length} tests',
+            localeText(
+              context,
+              live.isEmpty
+                  // Sayı MOTOR yeteneğini anlatıyor, kullanıcının
+                  // yapabileceğini DEĞİL — cümle bunu söylemeli (L-242).
+                  ? 'The measurement engine can read none of the twelve tests'
+                  : 'The measurement engine can read ${live.length} of '
+                        '${facts.liveness.length} tests',
+              live.isEmpty
+                  ? 'Ölçüm motoru listelenen testlerin hiçbirini okuyamıyor'
+                  : 'Ölçüm motoru ${facts.liveness.length} testin '
+                        '${live.length} tanesini okuyabiliyor',
+            ),
             style: t.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           for (final TestLiveness x in live)
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
-              child: Text('· ${x.name}', style: t.textTheme.bodyMedium),
+              child: Text(
+                '· ${configText(context, x.name)}',
+                style: t.textTheme.bodyMedium,
+              ),
             ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 12,
             runSpacing: 8,
             children: <Widget>[
-              if (live.isNotEmpty)
+              if (measurementAvailable && live.isNotEmpty)
                 FilledButton(
                   key: startMeasurementKey,
                   // Bu düğme GERÇEKTEN bir yere gidiyor (2026-08-12, kamera-
@@ -307,6 +412,9 @@ class HomeScreen extends StatelessWidget {
                   // `push`u beklemeden bırakmak, ölçüm kaydını diskte doğru
                   // ama yüzeyde GÖRÜNMEZ bırakırdı (L-287).
                   onPressed: () async {
+                    final guard = beforeMeasurement;
+                    if (guard != null && !await guard(context)) return;
+                    if (!context.mounted) return;
                     await Navigator.of(context).push(
                       MaterialPageRoute<void>(
                         builder: (_) => LiveCaptureScreen(
@@ -322,16 +430,25 @@ class HomeScreen extends StatelessWidget {
                           // yürüyüşü mümkün kılar, davranışı değiştirmez.
                           sourceOverride: poseSourceLoader?.call(),
                           storeLoader: sessionStoreLoader,
+                          attemptValueStoreLoader: attemptValueStoreLoader,
                         ),
                       ),
                     );
                     onMeasurementDone?.call();
                   },
-                  child: const Text('Start a measurement'),
+                  child: Text(
+                    localeText(context, 'Start a measurement', 'Ölçümü başlat'),
+                  ),
                 ),
               OutlinedButton(
                 onPressed: onOpenLibrary,
-                child: const Text('See what each test measures'),
+                child: Text(
+                  localeText(
+                    context,
+                    'See what each test measures',
+                    'Testlerin neyi ölçtüğünü gör',
+                  ),
+                ),
               ),
             ],
           ),
@@ -340,36 +457,72 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  static Widget _floorNote(ThemeData t, int unreadable) => Text(
-        '$unreadable stored record${unreadable == 1 ? '' : 's'} could not be '
-        'read, so anything counted here is a floor, not a total.',
-        style: t.textTheme.bodySmall?.copyWith(color: LissomColors.roseDeepHover),
+  static Widget _floorNote(BuildContext context, ThemeData t, int unreadable) =>
+      Text(
+        localeText(
+          context,
+          '$unreadable stored record${unreadable == 1 ? '' : 's'} could not be '
+              'read, so anything counted here is a floor, not a total.',
+          '$unreadable kayıt okunamadı. Burada gösterilen sayı toplam değil, '
+              'okunabilen en az kayıt sayısıdır.',
+        ),
+        style: t.textTheme.bodySmall?.copyWith(
+          color: LissomColors.roseDeepHover,
+        ),
       );
 
   /// Kaydın SINIFI kullanıcı diliyle. `lessonClass` yazım anında damgalanır —
   /// sonradan TÜRETİLMEZ, çünkü sonradan hesaplanan bir sınıf geçmişi sessizce
   /// yeniden yorumlar (çekirdeğin kendi şartı).
   static String _recordClassText(SessionRecord r) => switch (r.lessonClass) {
-        'scored' => 'measured and compared with a reference range',
-        'coached' => 'measured, below the lowest reference line',
-        'qualitative' => 'measured, this test has no numeric range by design',
-        'measurementOnly' => 'measured, not compared with any reference',
-        'notMeasured' => 'attempted, no reading could be taken',
-        // Bilinmeyen sınıf UYDURULMAZ. Çekirdeğin en-az-yetki kuralı: şüphede
-        // daha AZ iddia et.
-        _ => 'recorded',
-      };
+    'scored' => 'measured and compared with a reference range',
+    'coached' => 'measured, below the lowest reference line',
+    'qualitative' => 'measured, this test has no numeric range by design',
+    'measurementOnly' => 'measured, not compared with any reference',
+    'notMeasured' => 'attempted, no reading could be taken',
+    // Bilinmeyen sınıf UYDURULMAZ. Çekirdeğin en-az-yetki kuralı: şüphede
+    // daha AZ iddia et.
+    _ => 'recorded',
+  };
 
   static const List<String> _months = <String>[
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   /// Mutlak tarih — **göreli süre ("3 gün önce") BİLEREK yok.** Göreli süre,
   /// bir gecikme duygusu üretmenin en sessiz yoludur ve §5.2 gecikmeyi
   /// suçlamayı yasaklıyor. Bir tarih olgudur; "3 gündür" bir ima taşır.
-  static String _formatDate(DateTime d) {
+  static String _formatDate(DateTime d, {BuildContext? context}) {
     final DateTime l = d.toLocal();
+    if (context != null &&
+        Localizations.localeOf(context).languageCode == 'tr') {
+      const List<String> months = <String>[
+        'Oca',
+        'Şub',
+        'Mar',
+        'Nis',
+        'May',
+        'Haz',
+        'Tem',
+        'Ağu',
+        'Eyl',
+        'Eki',
+        'Kas',
+        'Ara',
+      ];
+      return '${l.day} ${months[l.month - 1]} ${l.year}';
+    }
     return '${l.day} ${_months[l.month - 1]} ${l.year}';
   }
 }

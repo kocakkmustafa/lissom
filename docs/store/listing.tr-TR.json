@@ -1,0 +1,19 @@
+{
+  "$doc": "Lissom tr-TR mağaza metni taslağı. Alan sınırları ve dürüstlük kapısı test/store_listing_test.dart tarafından denetlenir. Bu dosya mağazaya gönderilmedi.",
+  "appStore": {
+    "name": "Lissom: Hareket Testleri",
+    "subtitle": "Hareket testlerini keşfet",
+    "promotionalText": "Hareket testi açıklamalarını ve ölçüm sınırlarını incele. Kamera testleri ve abonelikler bu sürümde açık değil.",
+    "keywords": "mobilite,esneklik,hareket,sağlıklı yaşam,germe,çömelme,hareket açıklığı"
+  },
+  "playStore": {
+    "shortDescription": "Hareket testlerini ve sınırlarını incele; kamera ölçümleri açık değil."
+  },
+  "description": "Lissom, genel sağlıklı yaşam için hazırlanmış bir hareket testleri kataloğudur. Yukarı uzanma, derin çömelme, düz bacak kaldırma ve listelenen diğer testleri inceleyebilirsin. Sayfalar ölçüm çalışmalarının kapsamını ve eksiklerini açıklar.\n\nBu ilk sürümde hesabın olmadan kataloğu gezebilir ve isteğe bağlı ortak Motion hesabı açabilirsin. Kamera değerlendirmeleri, tarihli ölçüm sonuçları, yoga dersleri ve abonelikler açık değildir.\n\nMotion hesabı e-posta adresini, hesap kimliğini ve eklersen görünen adını kullanır. Hesabını uygulamadan silme isteğinde bulunabilirsin. Lissom tıbbi cihaz değildir; tanı veya tedavi sunmaz.",
+  "$sourceOfFacts": "EN taslak: docs/store/listing.json. Canlı ölçüm: docs/evidence/production-line/assessment-capabilities.json (3/12). Türkçe test adları: lib/app/locale_text.dart:187-197. Yerel kayıt ve isteğe bağlı ortak hesap: lib/app/local_account_bridge.dart, lib/main.dart. TR/EN politika ve sağlayıcı metadatası yayın öncesi ayrıca doğrulanmalı.",
+  "$notClaimed": "Dokuz ek testte kamera ölçümü, yoga/kurs içeriği, doğrulanmış cihaz performansı, uzaktan geçmiş eşitlemesi veya ücretli üyelik erişimi iddia edilmiyor. Canlı gizlilik politikası ve sağlayıcı kayıtları bu yerel taslakla güncellenmedi.",
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
+  "$urlWhy": "Kurucunun ortak Motion URL kararı EN taslakla aynıdır. Canlı gizlilik içeriği ve mağaza URL alanları gönderimden önce ayrıca doğrulanmalıdır.",
+  "$releasePolicy20260925": "Founder deferred all paid camera sessions and subscription sales in the first release. Provider listings must use only the external fields above; older dollar-prefixed research notes describe deferred capabilities."
+}

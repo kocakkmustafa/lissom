@@ -12,6 +12,8 @@ import 'package:motion_core/motion_core.dart';
 import 'app_facts.dart';
 import 'attempt_values.dart';
 import 'lissom_theme.dart';
+import 'local_account_bridge.dart';
+import 'locale_text.dart';
 import 'onboarding_flow.dart';
 import 'onboarding_store.dart';
 import 'shell.dart';
@@ -24,7 +26,21 @@ class OnboardingGate extends StatefulWidget {
     this.poseSourceLoader,
     this.sessionStoreLoader,
     this.attemptValueStoreLoader,
+    this.localScope = LissomLocalScope.guest,
+    this.accountRouteBuilder,
+    this.beforeMeasurement,
+    this.measurementAvailable,
   });
+
+  /// A signed-in host passes a different scope for each authenticated user.
+  /// The guest scope retains all legacy file paths and is never migrated here.
+  final LissomLocalScope localScope;
+  final LissomAccountRouteBuilder? accountRouteBuilder;
+  final Future<bool> Function(BuildContext)? beforeMeasurement;
+
+  /// Optional test seam for the future camera journey. Production callers
+  /// leave this null so the shared release policy decides availability.
+  final bool? measurementAvailable;
 
   /// Testte enjekte edilebilir: `rootBundle`/`path_provider` widget testinde
   /// kilitlenebiliyor (aile gotcha'sı), o yüzden yükleyici ÇAĞIRANA ait —
@@ -53,7 +69,7 @@ class OnboardingGate extends StatefulWidget {
 }
 
 class _OnboardingGateState extends State<OnboardingGate> {
-  late final Future<_Loaded> _loaded = _load();
+  late Future<_Loaded> _loaded = _load();
 
   /// [OnboardingFlow] tamamlandığında BURADA çevrilir — `_loaded`'ı yeniden
   /// okutup diskten teyit ETMİYORUZ (yazma az önce, aynı çağrı zincirinde
@@ -65,44 +81,70 @@ class _OnboardingGateState extends State<OnboardingGate> {
   /// ilk etkisi bir sonraki açılışta görülürdü (ilk ölçüm yanlış bantla).
   OnboardingProfile? _justCompleted;
 
+  @override
+  void didUpdateWidget(covariant OnboardingGate oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.localScope.ownerKey != widget.localScope.ownerKey) {
+      _completed = false;
+      _justCompleted = null;
+      _loaded = _load();
+    }
+  }
+
   Future<_Loaded> _load() async {
     final OnboardingStore store =
-        await (widget.storeLoader ?? openOnboardingStore)();
+        await (widget.storeLoader ??
+            () => openOnboardingStore(scope: widget.localScope))();
     final OnboardingProfile profile = await store.read();
     return _Loaded(store, profile);
   }
 
+  void _openAccount() {
+    final LissomAccountRouteBuilder? builder = widget.accountRouteBuilder;
+    if (builder == null) return;
+    Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => builder(context, kLissomMotionAppId),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => FutureBuilder<_Loaded>(
-        future: _loaded,
-        builder: (BuildContext c, AsyncSnapshot<_Loaded> s) {
-          if (s.hasError) return _GateFailureScreen(error: '${s.error}');
-          if (!s.hasData) return const _GateLoadingScreen();
+    future: _loaded,
+    builder: (BuildContext c, AsyncSnapshot<_Loaded> s) {
+      if (s.hasError) return _GateFailureScreen(error: '${s.error}');
+      if (!s.hasData) return const _GateLoadingScreen();
 
-          if (_completed || s.data!.profile.completed) {
-            // Onboarding'de BEYAN EDİLEN yaş bandı buradan aşağı akar
-            // (kabuk → home → canlı ölçüm → motor). Akmazsa kullanıcı
-            // ZORUNLU bir seçim yapar ve seçim HİÇBİR ŞEYİ değiştirmez —
-            // L-262 sınıfı: olmayan bir yeteneği kullanıcıya anlatmak.
-            //
-            // Sıra önemli: AZ ÖNCE tamamlanan profil, açılışta okunanı EZER.
-            return LissomShell(
-              loader: widget.shellLoader,
-              ageBand: (_justCompleted ?? s.data!.profile).ageBand,
-              poseSourceLoader: widget.poseSourceLoader,
-              sessionStoreLoader: widget.sessionStoreLoader,
-              attemptValueStoreLoader: widget.attemptValueStoreLoader,
-            );
-          }
-          return OnboardingFlow(
-            store: s.data!.store,
-            onDone: (OnboardingProfile p) => setState(() {
-              _completed = true;
-              _justCompleted = p;
-            }),
-          );
-        },
+      if (_completed || s.data!.profile.completed) {
+        // Onboarding'de BEYAN EDİLEN yaş bandı buradan aşağı akar
+        // (kabuk → home → canlı ölçüm → motor). Akmazsa kullanıcı
+        // ZORUNLU bir seçim yapar ve seçim HİÇBİR ŞEYİ değiştirmez —
+        // L-262 sınıfı: olmayan bir yeteneği kullanıcıya anlatmak.
+        //
+        // Sıra önemli: AZ ÖNCE tamamlanan profil, açılışta okunanı EZER.
+        return LissomShell(
+          loader: widget.shellLoader,
+          localScope: widget.localScope,
+          accountRouteBuilder: widget.accountRouteBuilder,
+          beforeMeasurement: widget.beforeMeasurement,
+          measurementAvailable: widget.measurementAvailable,
+          ageBand: (_justCompleted ?? s.data!.profile).ageBand,
+          poseSourceLoader: widget.poseSourceLoader,
+          sessionStoreLoader: widget.sessionStoreLoader,
+          attemptValueStoreLoader: widget.attemptValueStoreLoader,
+        );
+      }
+      return OnboardingFlow(
+        store: s.data!.store,
+        onOpenAccount: widget.accountRouteBuilder == null ? null : _openAccount,
+        onDone: (OnboardingProfile p) => setState(() {
+          _completed = true;
+          _justCompleted = p;
+        }),
       );
+    },
+  );
 }
 
 final class _Loaded {
@@ -116,11 +158,11 @@ class _GateLoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Scaffold(
-        body: DecoratedBox(
-          decoration: BoxDecoration(gradient: LissomColors.screenBackground),
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      );
+    body: DecoratedBox(
+      decoration: BoxDecoration(gradient: LissomColors.screenBackground),
+      child: Center(child: CircularProgressIndicator()),
+    ),
+  );
 }
 
 class _GateFailureScreen extends StatelessWidget {
@@ -134,12 +176,18 @@ class _GateFailureScreen extends StatelessWidget {
     return Scaffold(
       key: key_,
       body: DecoratedBox(
-        decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Text(
-              "Lissom couldn't check your setup: $error",
+              localeText(
+                context,
+                "Lissom couldn't check your setup: $error",
+                'Lissom kurulumunu denetleyemedi: $error',
+              ),
               style: t.textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),

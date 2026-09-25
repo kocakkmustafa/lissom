@@ -40,6 +40,7 @@ import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 import 'session_history_view.dart';
 import 'surfaces.dart';
 
@@ -61,7 +62,9 @@ class ProgressScreen extends StatelessWidget {
   /// Bu ekranın altyazısı *"what was measured, when, and under what
   /// conditions"* diyordu — hâlâ üçün ikisini karşılıyor (koşullar hâlâ
   /// saklanmıyor). Üçüncüsü (değer) artık kayıp değil, YÖNLENDİRİLİYOR.
-  static const Key readingKeptElsewhereKey = Key('progress.readingKeptElsewhere');
+  static const Key readingKeptElsewhereKey = Key(
+    'progress.readingKeptElsewhere',
+  );
   static const Key ledgerKey = Key('progress.ledger');
 
   /// Bir OTURUM başlığının anahtar ÖN EKİ (L-324). Her başlık kendi zaman
@@ -99,9 +102,13 @@ class ProgressScreen extends StatelessWidget {
           // koşullar hiç saklanmıyor, ölçülen sayı da saklanmıyor. Vaadi
           // kısaltmak, karşılığı olmayan yarısını kesmek demek; kesilen yarı
           // aşağıdaki kartta ADIYLA anlatılıyor, sessizce düşürülmüyor.
-          const SectionHeading(
-            'Your record',
-            subtitle: 'Which test you measured, and when.',
+          SectionHeading(
+            localeText(context, 'Your record', 'Ölçüm kaydın'),
+            subtitle: localeText(
+              context,
+              'Which test you measured, and when.',
+              'Hangi testi ne zaman ölçtüğün.',
+            ),
           ),
           const SizedBox(height: 18),
 
@@ -115,13 +122,25 @@ class ProgressScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  LissomEyebrow('The number lives on each test\'s own page'),
+                  LissomEyebrow(
+                    localeText(
+                      context,
+                      'The number lives on each test\'s own page',
+                      'Ölçülen değer testin kendi sayfasında',
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(
-                    'This list is shared with the other apps built on the '
-                    'same measurement core, and that shared record still '
-                    'has no place for the number itself — it can only tell '
-                    'you that a test was measured, not what it came to.',
+                    localeText(
+                      context,
+                      'This list is shared with the other apps built on the '
+                          'same measurement core, and that shared record still '
+                          'has no place for the number itself — it can only tell '
+                          'you that a test was measured, not what it came to.',
+                      'Bu liste ortak ölçüm altyapısının kaydını gösterir. '
+                          'Testin yapıldığını söyler; sayısal değeri burada '
+                          'tutmaz.',
+                    ),
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
@@ -146,10 +165,16 @@ class ProgressScreen extends StatelessWidget {
                   // (paylaşılan çekirdek şeması değişmedi) — ama artık
                   // "kayıp" demiyor, "başka yerde" diyor.
                   Text(
-                    'The number is not lost, though: Lissom keeps it '
-                    'separately, next to the test it belongs to. Open a '
-                    'test from Library to see your last reading and '
-                    'everything measured before it.',
+                    localeText(
+                      context,
+                      'The number is not lost, though: Lissom keeps it '
+                          'separately, next to the test it belongs to. Open a '
+                          'test from Library to see your last reading and '
+                          'everything measured before it.',
+                      'Değer kaybolmaz: Lissom onu ilgili testin sayfasında '
+                          'ayrı tutar. Son ve önceki ölçümlerini görmek '
+                          'için testi Kütüphane’den aç.',
+                    ),
                     style: t.textTheme.bodySmall,
                   ),
                 ],
@@ -167,12 +192,23 @@ class ProgressScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  LissomEyebrow('No comparison is made here',
-                      color: LissomColors.roseDeepHover),
+                  LissomEyebrow(
+                    localeText(
+                      context,
+                      'No comparison is made here',
+                      'Burada karşılaştırma yapılmaz',
+                    ),
+                    color: LissomColors.roseDeepHover,
+                  ),
                   const SizedBox(height: 8),
                   Text(
-                    'Lissom does not draw a trend line for you, and it does '
-                    'not tell you whether a measurement went up or down.',
+                    localeText(
+                      context,
+                      'Lissom does not draw a trend line for you, and it does '
+                          'not tell you whether a measurement went up or down.',
+                      'Lissom eğilim grafiği çizmez; ölçümün artıp '
+                          'azaldığına dair hüküm vermez.',
+                    ),
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
@@ -183,19 +219,32 @@ class ProgressScreen extends StatelessWidget {
                   // yanlış — düzeltmemek H-31'in ders verdiği türden bir
                   // bayat iddia bırakırdı.
                   Text(
-                    'Two measurements can only be set against each other when '
-                    'they were taken with the same model, a compatible '
-                    'configuration and a similar camera setup. Each reading\'s '
-                    'model and configuration are recorded next to it now — '
-                    'camera setup still is not — but nothing on this screen '
-                    'or a test\'s own page compares any of that for you.',
+                    localeText(
+                      context,
+                      'Two measurements can only be set against each other when '
+                          'they were taken with the same model, a compatible '
+                          'configuration and a similar camera setup. Each reading\'s '
+                          'model and configuration are recorded next to it now — '
+                          'camera setup still is not — but nothing on this screen '
+                          'or a test\'s own page compares any of that for you.',
+                      'İki ölçüm ancak aynı model, uyumlu ayarlar ve benzer '
+                          'kamera kurulumuyla alındığında karşılaştırılabilir. '
+                          'Model ve yapılandırma kaydedilir, ancak kamera '
+                          'kurulumu kaydedilmez. Bu ekran karşılaştırma yapmaz.',
+                    ),
                     style: t.textTheme.bodySmall,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'We also have no figure for how much a reading can move '
-                    'on its own between two sessions. Without it, calling a '
-                    'change real would be a guess.',
+                    localeText(
+                      context,
+                      'We also have no figure for how much a reading can move '
+                          'on its own between two sessions. Without it, calling a '
+                          'change real would be a guess.',
+                      'Ölçümün iki oturum arasında kendiliğinden ne kadar '
+                          'değişebileceği de belirlenmedi. Bu olmadan bir '
+                          'farka gerçek değişim diyemeyiz.',
+                    ),
                     style: t.textTheme.bodySmall,
                   ),
                 ],
@@ -206,11 +255,19 @@ class ProgressScreen extends StatelessWidget {
           if (!h.countsAreTrustworthy)
             NamedGapCard(
               key: unavailableKey,
-              title: "Your history didn't open",
-              reason: 'We are not going to show you a count, because an empty '
-                  'list here would read as "you never measured" — and we do '
-                  'not know that.',
-              detail: h.failure,
+              title: localeText(
+                context,
+                "Your history didn't open",
+                'Geçmişin açılamadı',
+              ),
+              reason: localeText(
+                context,
+                'We are not going to show you a count, because an empty '
+                    'list here would read as "you never measured" — and we do '
+                    'not know that.',
+                'Kayıtları okuyamadığımız için sayı göstermiyoruz. Boş liste hiç ölçüm yapmadığın anlamına gelmeyebilir.',
+              ),
+              detail: localizedHistoryFailureDetail(context, h.failure),
             )
           // 🔴 **BU METİN İKİ KEZ YALAN SÖYLÜYORDU — cihazda yürüyerek bulundu
           // (L-317), hiçbir test göremezdi.** Eski hâli:
@@ -246,18 +303,30 @@ class ProgressScreen extends StatelessWidget {
           else if (!h.hasRecords && h.unreadable > 0)
             NamedGapCard(
               key: unreadableAllKey,
-              title: 'Your readings are here, but we cannot read them',
-              reason: '${h.unreadable} recorded reading'
-                  '${h.unreadable == 1 ? '' : 's'} could not be read by this '
-                  'version of Lissom. They are still on this phone — we are '
-                  'not going to tell you the list is empty when it is not.',
-              detail: 'This usually means the file was written by a different '
-                  'version. Nothing was deleted.',
+              title: localeText(
+                context,
+                'Your readings are here, but we cannot read them',
+                'Ölçümlerin var, ancak okunamıyor',
+              ),
+              reason: localeText(
+                context,
+                '${h.unreadable} recorded reading${h.unreadable == 1 ? '' : 's'} could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
+                '${h.unreadable} kayıt bu Lissom sürümünde okunamadı. Kayıtlar hâlâ bu telefonda; listeyi boş saymıyoruz.',
+              ),
+              detail: localeText(
+                context,
+                'This usually means the file was written by a different version. Nothing was deleted.',
+                'Dosya başka bir sürümde yazılmış olabilir. Hiçbir kayıt silinmedi.',
+              ),
             )
           else if (!h.hasRecords)
-            const NamedGapCard(
+            NamedGapCard(
               key: emptyKey,
-              title: 'Nothing recorded on this device',
+              title: localeText(
+                context,
+                'Nothing recorded on this device',
+                'Bu cihazda kayıt yok',
+              ),
               // ⛔ *"…anything here **yet**"* diye yazmıştım ve `wellness_lint`
               // reddetti: **`yet` bir VAATTİR** (M-F-186) — bilmediğimiz bir
               // tarihi ima eder. Kural zaten `library_screen.dart`ta yazılıydı
@@ -267,16 +336,29 @@ class ProgressScreen extends StatelessWidget {
               // Başlık zaten *"Nothing recorded on this device"* diyor;
               // gerekçe onu TEKRARLAMAZ, devam eder (cihazda görüldü: iki
               // cümle üst üste aynı şeyi söylüyordu).
-              reason: 'When you measure, the test and the date it was taken '
-                  'appear in this list.',
-              detail: 'The reading itself will not — see above for why.',
+              reason: localeText(
+                context,
+                'When you measure, the test and the date it was taken appear in this list.',
+                'Ölçüm yaptığında test adı ve tarihi burada görünür.',
+              ),
+              detail: localeText(
+                context,
+                'The reading itself will not — see above for why.',
+                'Sayısal değer testin kendi sayfasında gösterilir.',
+              ),
             )
           else ...<Widget>[
             if (h.countsAreFloor) ...<Widget>[
-              _floorBanner(t, h.unreadable),
+              _floorBanner(context, t, h.unreadable),
               const SizedBox(height: 14),
             ],
-            LissomEyebrow('Recorded readings (${h.records.length})'),
+            LissomEyebrow(
+              localeText(
+                context,
+                'Recorded readings (${h.records.length})',
+                'Kayıtlı ölçümler (${h.records.length})',
+              ),
+            ),
             const SizedBox(height: 10),
             // 🔴 **KAYIT BİRİMİ ≠ GÖSTERİM BİRİMİ (L-324).**
             // `appendPreserved()` **test başına** bir kayıt yazar ve bu doğru
@@ -311,15 +393,20 @@ class ProgressScreen extends StatelessWidget {
   /// ölçümlerini **aynı** damgayla yazar. ⛔ Güne göre gruplamak YANLIŞ olurdu
   /// — aynı gün iki kez ölçen kullanıcının iki oturumu tek yığına düşerdi.
   List<MapEntry<DateTime, List<SessionRecord>>> _bySitting(
-      List<SessionRecord> records) {
+    List<SessionRecord> records,
+  ) {
     final List<MapEntry<DateTime, List<SessionRecord>>> out =
         <MapEntry<DateTime, List<SessionRecord>>>[];
     for (final SessionRecord r in records) {
       if (out.isNotEmpty && out.last.key == r.completedAt) {
         out.last.value.add(r);
       } else {
-        out.add(MapEntry<DateTime, List<SessionRecord>>(
-            r.completedAt, <SessionRecord>[r]));
+        out.add(
+          MapEntry<DateTime, List<SessionRecord>>(
+            r.completedAt,
+            <SessionRecord>[r],
+          ),
+        );
       }
     }
     return out;
@@ -327,18 +414,23 @@ class ProgressScreen extends StatelessWidget {
 
   List<Widget> _ledgerChildren(List<SessionRecord> records) {
     final List<Widget> out = <Widget>[];
-    for (final MapEntry<DateTime, List<SessionRecord>> s
-        in _bySitting(records)) {
-      out.add(Padding(
-        key: sittingKeyFor(s.key),
-        padding: const EdgeInsets.only(bottom: 8, top: 4),
-        child: _SittingHeader(at: s.key, count: s.value.length),
-      ));
+    for (final MapEntry<DateTime, List<SessionRecord>> s in _bySitting(
+      records,
+    )) {
+      out.add(
+        Padding(
+          key: sittingKeyFor(s.key),
+          padding: const EdgeInsets.only(bottom: 8, top: 4),
+          child: _SittingHeader(at: s.key, count: s.value.length),
+        ),
+      );
       for (final SessionRecord r in s.value) {
-        out.add(Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: _LedgerRow(record: r, facts: facts),
-        ));
+        out.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: _LedgerRow(record: r, facts: facts),
+          ),
+        );
       }
       out.add(const SizedBox(height: 14));
     }
@@ -347,20 +439,29 @@ class ProgressScreen extends StatelessWidget {
 
   /// Kayıp kayıt varsa sayı bir ALT SINIRDIR ve bu SÖYLENİR (M-F-228: 40/50
   /// bozukken "10 oturum" demek, kullanıcının yaptığı işi silmekti).
-  static Widget _floorBanner(ThemeData t, int unreadable) => LissomCard(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-        child: Text(
-          '$unreadable stored record${unreadable == 1 ? '' : 's'} on this '
-          // ⚠️ Burada eskiden "treat it as a floor" yazıyordu ve genişletilmiş
-          // wellness süzgeci ilk koşuşunda yakaladı. Masum anlamda kullanılmış
-          // olsa da `treat` mağaza incelemesinin taradığı kelimelerden biri —
-          // bir wellness ürününde onu hiç kullanmamak en ucuz seçenek.
-          'device could not be read. The list below is what we could read — '
-          'a floor, not a total.',
-          style: t.textTheme.bodyMedium
-              ?.copyWith(color: LissomColors.roseDeepHover),
-        ),
-      );
+  static Widget _floorBanner(
+    BuildContext context,
+    ThemeData t,
+    int unreadable,
+  ) => LissomCard(
+    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+    child: Text(
+      localeText(
+        context,
+        '$unreadable stored record${unreadable == 1 ? '' : 's'} on this '
+            // ⚠️ Burada eskiden "treat it as a floor" yazıyordu ve genişletilmiş
+            // wellness süzgeci ilk koşuşunda yakaladı. Masum anlamda kullanılmış
+            // olsa da `treat` mağaza incelemesinin taradığı kelimelerden biri —
+            // bir wellness ürününde onu hiç kullanmamak en ucuz seçenek.
+            'device could not be read. The list below is what we could read — '
+            'a floor, not a total.',
+        '$unreadable kayıt okunamadı. Aşağıdaki liste toplam değil, okunabilen kayıtlardır.',
+      ),
+      style: t.textTheme.bodyMedium?.copyWith(
+        color: LissomColors.roseDeepHover,
+      ),
+    ),
+  );
 }
 
 /// Defter satırı — bir OLGU, bir hüküm değil.
@@ -383,8 +484,14 @@ class _SittingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     return Text(
-      '${_LedgerRow._dateOf(at)} · $count reading${count == 1 ? '' : 's'}',
-      style: t.textTheme.titleSmall?.copyWith(color: LissomColors.bodySecondary),
+      localeText(
+        context,
+        '${_LedgerRow._dateOf(at)} · $count reading${count == 1 ? '' : 's'}',
+        '${_LedgerRow._dateOf(at, turkish: true)} · $count ölçüm',
+      ),
+      style: t.textTheme.titleSmall?.copyWith(
+        color: LissomColors.bodySecondary,
+      ),
     );
   }
 }
@@ -402,22 +509,32 @@ class _LedgerRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(facts.testNameFor(record.lessonId),
-              style: t.textTheme.titleMedium),
+          Text(
+            configText(context, facts.testNameFor(record.lessonId)),
+            style: t.textTheme.titleMedium,
+          ),
           // ⛔ Tarih SATIRDAN kaldırıldı (L-324): oturum başlığı onu bir kez
           // söylüyor. Satırda tekrarlanınca tek oturum, tarihi 12 kez basan
           // 12 ayrı oturum gibi okunuyordu.
           const SizedBox(height: 8),
-          Text(_regime(record), style: t.textTheme.bodyMedium),
+          Text(
+            localeText(context, _regime(record), _regimeTr(record)),
+            style: t.textTheme.bodyMedium,
+          ),
           if (record.unmeasuredUnits > 0) ...<Widget>[
             const SizedBox(height: 6),
             Text(
-              '${record.unmeasuredUnits} attempt'
-              '${record.unmeasuredUnits == 1 ? '' : 's'} could not be read'
-              '${record.unmeasuredReason == null ? '' : ' · '
-                  '${_reasonText(record.unmeasuredReason!)}'}',
-              style:
-                  t.textTheme.bodySmall?.copyWith(color: LissomColors.bodySecondary),
+              localeText(
+                context,
+                '${record.unmeasuredUnits} attempt'
+                    '${record.unmeasuredUnits == 1 ? '' : 's'} could not be read'
+                    '${record.unmeasuredReason == null ? '' : ' · '
+                              '${_reasonText(record.unmeasuredReason!)}'}',
+                '${record.unmeasuredUnits} deneme okunamadı${record.unmeasuredReason == null ? '' : ' · ${_reasonTextTr(record.unmeasuredReason!)}'}',
+              ),
+              style: t.textTheme.bodySmall?.copyWith(
+                color: LissomColors.bodySecondary,
+              ),
             ),
           ],
         ],
@@ -429,39 +546,86 @@ class _LedgerRow extends StatelessWidget {
   /// bir sınıf, terfi öncesi alınmış ölçümleri geriye dönük "skorlanmış"
   /// gösterirdi.
   static String _regime(SessionRecord r) => switch (r.lessonClass) {
-        'scored' => 'Measured, and set against a reference range.',
-        'coached' =>
-          'Measured, and below the lowest reference line. No band label is '
-              'given to a value under the lowest band.',
-        'qualitative' =>
-          'Measured. This test has no numeric range by design — it uses '
-              'described levels.',
-        'measurementOnly' =>
-          'Measured. No reference range was applied, so this reading carries '
-              'no judgement.',
-        'notMeasured' => 'Attempted. No reading could be taken.',
-        _ => 'Recorded.',
-      };
+    'scored' => 'Measured, and set against a reference range.',
+    'coached' =>
+      'Measured, and below the lowest reference line. No band label is '
+          'given to a value under the lowest band.',
+    'qualitative' =>
+      'Measured. This test has no numeric range by design — it uses '
+          'described levels.',
+    'measurementOnly' =>
+      'Measured. No reference range was applied, so this reading carries '
+          'no judgement.',
+    'notMeasured' => 'Attempted. No reading could be taken.',
+    _ => 'Recorded.',
+  };
+
+  static String _regimeTr(SessionRecord r) => switch (r.lessonClass) {
+    'scored' => 'Ölçüldü ve referans aralığıyla değerlendirildi.',
+    'coached' =>
+      'Ölçüldü; değer en düşük referans çizgisinin altında. Bu değer için aralık etiketi verilmez.',
+    'qualitative' =>
+      'Ölçüldü. Bu test sayısal aralık yerine açıklamalı düzeyler kullanır.',
+    'measurementOnly' =>
+      'Ölçüldü. Referans aralığı uygulanmadı; bu değer yorum içermez.',
+    'notMeasured' => 'Denendi. Ölçüm alınamadı.',
+    _ => 'Kaydedildi.',
+  };
 
   /// Motorun `ResultCode` adları KULLANICI diline çevrilir — ham kod yüzeye
   /// SIZMAZ (çekirdek sözleşmesi: ham `detail`/hata kodu yüzeye çıkmaz).
   static String _reasonText(String code) => switch (code) {
-        'noAttemptDetected' => 'no movement was detected',
-        'setupTimedOut' => 'the setup did not settle in time',
-        'measurementTimedOut' => 'the reading did not settle in time',
-        'aborted' => 'the attempt was stopped by a form check',
-        'trackingLost' => 'the camera lost track of you',
-        'lowConfidence' => 'the reading was not confident enough to keep',
-        _ => 'the reason was not recorded',
-      };
+    'noAttemptDetected' => 'no movement was detected',
+    'setupTimedOut' => 'the setup did not settle in time',
+    'measurementTimedOut' => 'the reading did not settle in time',
+    'aborted' => 'the attempt was stopped by a form check',
+    'trackingLost' => 'the camera lost track of you',
+    'lowConfidence' => 'the reading was not confident enough to keep',
+    _ => 'the reason was not recorded',
+  };
+
+  static String _reasonTextTr(String code) => switch (code) {
+    'noAttemptDetected' => 'hareket algılanmadı',
+    'setupTimedOut' => 'kurulum zamanında tamamlanmadı',
+    'measurementTimedOut' => 'ölçüm zamanında tamamlanmadı',
+    'aborted' => 'duruş denetimi denemeyi durdurdu',
+    'trackingLost' => 'kamera takibi kaybetti',
+    'lowConfidence' => 'ölçüm güvenilir bulunmadı',
+    _ => 'neden kaydedilmedi',
+  };
 
   static const List<String> _months = <String>[
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
-  static String _dateOf(DateTime d) {
+  static const List<String> _monthsTr = <String>[
+    'Oca',
+    'Şub',
+    'Mar',
+    'Nis',
+    'May',
+    'Haz',
+    'Tem',
+    'Ağu',
+    'Eyl',
+    'Eki',
+    'Kas',
+    'Ara',
+  ];
+
+  static String _dateOf(DateTime d, {bool turkish = false}) {
     final DateTime l = d.toLocal();
-    return '${l.day} ${_months[l.month - 1]} ${l.year}';
+    return '${l.day} ${(turkish ? _monthsTr : _months)[l.month - 1]} ${l.year}';
   }
 }

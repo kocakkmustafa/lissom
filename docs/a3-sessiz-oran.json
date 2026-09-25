@@ -18,11 +18,11 @@
     "FamilyPage «Breath & Wind-down»"
   ],
   "kovalar": {
-    "a_sunan": 2,
+    "a_sunan": 1,
     "b_soyleyen": 7,
     "c_sessiz": 0
   },
-  "payda": 9,
+  "payda": 8,
   "sessiz_oran_yuzde": 0.0,
   "kor_nokta": "sayı taşımayan VE liste döndüren kurucudaki başlık — bugün 0, sayılarak doğrulanıyor"
 }

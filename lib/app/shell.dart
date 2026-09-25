@@ -24,6 +24,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
@@ -31,6 +33,9 @@ import 'attempt_values.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
 import 'lissom_theme.dart';
+import 'local_account_bridge.dart';
+import 'locale_text.dart';
+import 'assessment_history.dart';
 import 'profile_screen.dart';
 import 'progress_screen.dart';
 
@@ -50,7 +55,19 @@ class LissomShell extends StatefulWidget {
     this.poseSourceLoader,
     this.sessionStoreLoader,
     this.attemptValueStoreLoader,
+    this.localScope = LissomLocalScope.guest,
+    this.accountRouteBuilder,
+    this.beforeMeasurement,
+    this.measurementAvailable,
   });
+
+  final LissomLocalScope localScope;
+  final LissomAccountRouteBuilder? accountRouteBuilder;
+  final Future<bool> Function(BuildContext)? beforeMeasurement;
+
+  /// Null follows the shared release policy. Tests can exercise the future
+  /// camera journey without changing the production default.
+  final bool? measurementAvailable;
 
   /// Testte enjekte edilebilir: `rootBundle` widget testinde kilitlenebiliyor
   /// (aile gotcha'sı), o yüzden yükleyici ÇAĞIRANA ait.
@@ -83,8 +100,20 @@ class _LissomShellState extends State<LissomShell> {
   /// Progress **hâlâ ölçümden ÖNCEKİ dünyayı** gösteriyordu: kayıt diskte
   /// DOĞRU, yüzey onu göstermiyor. Ölçümü kaydetmek (L-285) tek başına
   /// yetmedi — *bir verinin YAZILMASI, GÖRÜNMESİ değildir.*
-  late Future<AppFacts> _facts = (widget.loader ?? AppFacts.load)();
+  late Future<AppFacts> _facts = _loadFacts();
   int _index = 0;
+
+  Future<AppFacts> _loadFacts() =>
+      (widget.loader ?? () => AppFacts.load(scope: widget.localScope))();
+
+  @override
+  void didUpdateWidget(covariant LissomShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.localScope.ownerKey != widget.localScope.ownerKey) {
+      _index = 0;
+      _facts = _loadFacts();
+    }
+  }
 
   /// Ölçümden dönüşte geçmişi YENİDEN okur.
   ///
@@ -99,44 +128,44 @@ class _LissomShellState extends State<LissomShell> {
   /// koşumda yakaladı.
   void _reloadFacts() {
     setState(() {
-      _facts = (widget.loader ?? AppFacts.load)();
+      _facts = _loadFacts();
     });
   }
 
   @override
   Widget build(BuildContext context) => FutureBuilder<AppFacts>(
-        future: _facts,
-        builder: (BuildContext c, AsyncSnapshot<AppFacts> s) {
-          // ÇIKMAZ-SOKAK YASAĞI (M-F-267): config okunamazsa ekran yine AÇILIR
-          // ve sebebi SÖYLER. Sessiz boş ekran / sonsuz spinner yasak.
-          if (s.hasError) return _LoadFailureScreen(error: '${s.error}');
-          if (!s.hasData) return const _LoadingScreen();
+    future: _facts,
+    builder: (BuildContext c, AsyncSnapshot<AppFacts> s) {
+      // ÇIKMAZ-SOKAK YASAĞI (M-F-267): config okunamazsa ekran yine AÇILIR
+      // ve sebebi SÖYLER. Sessiz boş ekran / sonsuz spinner yasak.
+      if (s.hasError) return _LoadFailureScreen(error: '${s.error}');
+      if (!s.hasData) return const _LoadingScreen();
 
-          final AppFacts facts = s.data!;
-          if (!_tabsMatch(facts)) {
-            return _TabMismatchScreen(declared: facts.ia.tabs);
-          }
-          return Scaffold(
-            body: SafeArea(bottom: false, child: _page(facts)),
-            bottomNavigationBar: NavigationBar(
-              selectedIndex: _index,
-              onDestinationSelected: (int i) => setState(() => _index = i),
-              backgroundColor: LissomColors.card,
-              indicatorColor: LissomColors.cream,
-              surfaceTintColor: Colors.transparent,
-              destinations: <Widget>[
-                for (final String id in facts.ia.tabs)
-                  NavigationDestination(
-                    icon: Icon(_icons[id]),
-                    // Etiket id'den TÜRETİLİR — ikinci bir ad listesi
-                    // tutmuyoruz, çünkü iki liste ayrışır.
-                    label: _label(id),
-                  ),
-              ],
-            ),
-          );
-        },
+      final AppFacts facts = s.data!;
+      if (!_tabsMatch(facts)) {
+        return _TabMismatchScreen(declared: facts.ia.tabs);
+      }
+      return Scaffold(
+        body: SafeArea(bottom: false, child: _page(facts)),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: _index,
+          onDestinationSelected: (int i) => setState(() => _index = i),
+          backgroundColor: LissomColors.card,
+          indicatorColor: LissomColors.cream,
+          surfaceTintColor: Colors.transparent,
+          destinations: <Widget>[
+            for (final String id in facts.ia.tabs)
+              NavigationDestination(
+                icon: Icon(_icons[id]),
+                // Etiket id'den TÜRETİLİR — ikinci bir ad listesi
+                // tutmuyoruz, çünkü iki liste ayrışır.
+                label: _label(context, id),
+              ),
+          ],
+        ),
       );
+    },
+  );
 
   static bool _tabsMatch(AppFacts facts) {
     final List<String> declared = facts.ia.tabs;
@@ -148,25 +177,38 @@ class _LissomShellState extends State<LissomShell> {
   }
 
   Widget _page(AppFacts facts) => switch (facts.ia.tabs[_index]) {
-        'home' => HomeScreen(
-            facts: facts,
-            ageBand: widget.ageBand,
-            onOpenLibrary: () => setState(
-                () => _index = facts.ia.tabs.indexOf('library')),
-            onMeasurementDone: _reloadFacts,
-            poseSourceLoader: widget.poseSourceLoader,
-            sessionStoreLoader: widget.sessionStoreLoader,
-          ),
-        'library' => LibraryScreen(
-            facts: facts,
-            attemptValueStoreLoader: widget.attemptValueStoreLoader,
-          ),
-        'progress' => ProgressScreen(facts: facts),
-        'profile' => ProfileScreen(facts: facts),
-        // Erişilemez: `_tabsMatch` yukarıda kapıyı tutuyor. Yine de sessiz
-        // boş widget DEĞİL — bir gün kapı gevşerse bu görünür olmalı.
-        final String other => _TabMismatchScreen(declared: <String>[other]),
-      };
+    'home' => HomeScreen(
+      facts: facts,
+      beforeMeasurement: widget.beforeMeasurement,
+      measurementAvailable:
+          widget.measurementAvailable ?? motionPaidFeaturesAvailable,
+      ageBand: widget.ageBand,
+      onOpenLibrary: () =>
+          setState(() => _index = facts.ia.tabs.indexOf('library')),
+      onMeasurementDone: _reloadFacts,
+      poseSourceLoader: widget.poseSourceLoader,
+      sessionStoreLoader:
+          widget.sessionStoreLoader ??
+          () => openSessionStore(scope: widget.localScope),
+      attemptValueStoreLoader:
+          widget.attemptValueStoreLoader ??
+          () => openAttemptValueStore(scope: widget.localScope),
+    ),
+    'library' => LibraryScreen(
+      facts: facts,
+      attemptValueStoreLoader:
+          widget.attemptValueStoreLoader ??
+          () => openAttemptValueStore(scope: widget.localScope),
+    ),
+    'progress' => ProgressScreen(facts: facts),
+    'profile' => ProfileScreen(
+      facts: facts,
+      accountRouteBuilder: widget.accountRouteBuilder,
+    ),
+    // Erişilemez: `_tabsMatch` yukarıda kapıyı tutuyor. Yine de sessiz
+    // boş widget DEĞİL — bir gün kapı gevşerse bu görünür olmalı.
+    final String other => _TabMismatchScreen(declared: <String>[other]),
+  };
 
   static const Map<String, IconData> _icons = <String, IconData>{
     'home': Icons.home_outlined,
@@ -175,8 +217,13 @@ class _LissomShellState extends State<LissomShell> {
     'profile': Icons.person_outline,
   };
 
-  static String _label(String id) =>
-      id.isEmpty ? id : '${id[0].toUpperCase()}${id.substring(1)}';
+  static String _label(BuildContext context, String id) => switch (id) {
+    'home' => localeText(context, 'Home', 'Ana Sayfa'),
+    'library' => localeText(context, 'Library', 'Kütüphane'),
+    'progress' => localeText(context, 'Progress', 'İlerleme'),
+    'profile' => localeText(context, 'Profile', 'Profil'),
+    _ => id,
+  };
 }
 
 class _LoadingScreen extends StatelessWidget {
@@ -184,11 +231,11 @@ class _LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Scaffold(
-        body: DecoratedBox(
-          decoration: BoxDecoration(gradient: LissomColors.screenBackground),
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      );
+    body: DecoratedBox(
+      decoration: BoxDecoration(gradient: LissomColors.screenBackground),
+      child: Center(child: CircularProgressIndicator()),
+    ),
+  );
 }
 
 /// Yükleme patladı — sebep YUTULMAZ.
@@ -203,7 +250,9 @@ class _LoadFailureScreen extends StatelessWidget {
     return Scaffold(
       key: key_,
       body: DecoratedBox(
-        decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(26),
@@ -212,12 +261,21 @@ class _LoadFailureScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Lissom couldn't start",
-                      style: t.textTheme.headlineSmall),
+                  Text(
+                    localeText(
+                      context,
+                      "Lissom couldn't start",
+                      'Lissom başlatılamadı',
+                    ),
+                    style: t.textTheme.headlineSmall,
+                  ),
                   const SizedBox(height: 8),
                   Text(
-                    'The files that describe the tests and the app layout '
-                    'could not be read.',
+                    localeText(
+                      context,
+                      'The files that describe the tests and the app layout could not be read.',
+                      'Testleri ve uygulama düzenini tanımlayan dosyalar okunamadı.',
+                    ),
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
@@ -244,7 +302,9 @@ class _TabMismatchScreen extends StatelessWidget {
     return Scaffold(
       key: key_,
       body: DecoratedBox(
-        decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(26),
@@ -253,18 +313,39 @@ class _TabMismatchScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('The app layout and the app do not agree',
-                      style: t.textTheme.headlineSmall),
+                  Text(
+                    localeText(
+                      context,
+                      'The app layout and the app do not agree',
+                      'Uygulama düzeniyle uygulama uyuşmuyor',
+                    ),
+                    style: t.textTheme.headlineSmall,
+                  ),
                   const SizedBox(height: 8),
-                  Text('Layout file declares: ${declared.join(" · ")}',
-                      style: t.textTheme.bodyMedium),
+                  Text(
+                    localeText(
+                      context,
+                      'Layout file declares: ${declared.join(" · ")}',
+                      'Düzen dosyasındaki sekmeler: ${declared.join(" · ")}',
+                    ),
+                    style: t.textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 4),
-                  Text('This build implements: ${kImplementedTabs.join(" · ")}',
-                      style: t.textTheme.bodyMedium),
+                  Text(
+                    localeText(
+                      context,
+                      'This build implements: ${kImplementedTabs.join(" · ")}',
+                      'Bu sürümdeki sekmeler: ${kImplementedTabs.join(" · ")}',
+                    ),
+                    style: t.textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 10),
                   Text(
-                    'Showing only the tabs we recognise would hide the '
-                    'difference, so we are showing you the difference.',
+                    localeText(
+                      context,
+                      'Showing only the tabs we recognise would hide the difference, so we are showing you the difference.',
+                      'Farkı gizlememek için sekme uyuşmazlığını burada gösteriyoruz.',
+                    ),
                     style: t.textTheme.bodySmall,
                   ),
                 ],

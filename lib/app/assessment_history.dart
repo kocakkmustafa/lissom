@@ -41,6 +41,8 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'local_account_bridge.dart';
+
 /// Lissom'un `lessonClass` SÖZLÜĞÜ — yazım anında damgalanır.
 ///
 /// Çekirdeğin en-az-yetki okuması (M-F-193 §3) yalnız `'scored'`ı skorlanmış
@@ -158,7 +160,9 @@ Future<int> appendPreserved({
 
 /// Gerçek cihazdaki depo. `path_provider` YALNIZ burada — çekirdek depo saf
 /// Dart kaldığı için testler geçici bir dosyayla aynı sınıfı koşturabiliyor.
-Future<SessionStore> openSessionStore() async {
+Future<SessionStore> openSessionStore({
+  LissomLocalScope scope = LissomLocalScope.guest,
+}) async {
   final Directory dir = await getApplicationSupportDirectory();
-  return JsonlSessionStore(File('${dir.path}/lissom/sessions.jsonl'));
+  return JsonlSessionStore(scope.file(dir, LissomLocalFile.sessions));
 }

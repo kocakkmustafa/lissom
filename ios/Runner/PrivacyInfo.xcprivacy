@@ -2,95 +2,47 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <!-- LISSOM GİZLİLİK MANİFESTİ (L-288, 2026-08-12).
-
-       2024'ten beri App Store zorunlu tutuyor; yokluğu bir RET sebebi.
-       JabLab'ın manifesti EMSAL alındı ama SONUCU kopyalanmadı — her
-       satır Lissom'un kendi ağacında yeniden ölçüldü, çünkü iki uygulama
-       farklı dosyalar yazıyor ve farklı eklentiler taşıyor.
-
-       ⚠️ BEYAN, TÜKETİLEN ÇEKİRDEĞİN davranışını da taahhüt eder
-       (JabLab'ın ölçtüğü katman): aşağıdaki boş listeler yalnız `lib/`
-       için değil, PİNLİ `motion_core`+`motion_camera` (f13bdc9) için de
-       ölçüldü. Pin önemli — pub-cache'te başka checkout'lar da duruyor ve
-       yanlışını okumak ölçümü sessizce geçersiz kılar (L-284'ün tuzağı).
-  -->
-
-  <!-- İZLEME: yok. Reklam/analitik SDK'sı YOK, izleme alanı YOK.
-
-       ⚠️ AMA "hiçbir şey cihazdan ÇIKMIYOR" DEMİYORUZ — ölçüldü ve
-       YANLIŞ olurdu (JabLab J-217'nin Lissom'daki aynısı):
-       `google_fonts` DOĞRUDAN bağımlılık ve ÜRETİMDE kullanılıyor
-       (`lib/app/lissom_theme.dart` → `GoogleFonts.nunitoSansTextTheme()`
-       + `newsreaderTextTheme()`), `allowRuntimeFetching` HİÇ
-       kapatılmamış (varsayılan AÇIK) ve `pubspec`te paketlenmiş font
-       bloğu YOK → uygulama yazı tipi yüzlerini ÇALIŞMA ANINDA Google'ın
-       sunucularından İNDİRİYOR.
-       → *Kendi kodunda ağ olmaması, ÜRÜNÜNDE ağ olmaması demek değildir.*
-         (Üretim Dart'ında `HttpClient`/`package:http` = 0, ölçüldü.)
-
-       DOĞRU BEYAN: giden tek istek bir FONT dosyası içindir ve KULLANICI
-       VERİSİ TAŞIMAZ. Kameradan gelen hiçbir şey — ne video ne vücut
-       noktası — cihazdan ÇIKMAZ ve diske YAZILMAZ.
-
-       Diske yazılan TEK şeyler: seans geçmişi (`lissom/sessions.jsonl`),
-       onboarding profili (`lissom/onboarding.json`) ve paketten
-       çıkarılan poz modeli (`.task`, asset). Üçü de yalnız cihazda.
-  -->
+  <!-- Motion hesabı Supabase Auth'a e-posta, hesap kimliği ve isteğe bağlı
+       görünen ad gönderir. Hareket ölçümleri ve kamera görüntüsü yereldir.
+       App Store Connect gizlilik formu ayrıca bu beyanla eşleşmelidir. -->
   <key>NSPrivacyTracking</key>
   <false/>
   <key>NSPrivacyTrackingDomains</key>
   <array/>
-
-  <!-- TOPLANAN VERİ: yok. Hesap yok, sunucu yok, gönderim yok.
-       Onboarding'de beyan edilen yaş bandı yalnız CİHAZDA saklanır ve
-       yalnız skorlama bandını seçmek için okunur (L-280). -->
   <key>NSPrivacyCollectedDataTypes</key>
-  <array/>
-
-  <!-- GEREKÇELİ API'LER: liste BOŞ, ve bu ÖLÇÜLMÜŞ bir boşluk.
-
-       Taranan (app `lib/` + `packages/lissom_engine` + PİNLİ çekirdek):
-         · dosya ZAMAN DAMGASI  (`lastModified`/`stat`/`FileStat`) → 0
-         · disk ALANI            (`freeSpace`/`totalSpace`)         → 0
-         · sistem AÇILIŞ zamanı  (`systemUptime`/`bootTime`)        → 0
-         · aktif KLAVYELER       (`activeInputModes`)               → 0
-         · UserDefaults          (`shared_preferences`/NSUserDefaults) → 0
-       Pozitif kontrol: aynı tarama aynı ağaçlarda `readAsString`/
-       `readAsLines`/`File(` isabetleri BULUYOR — yani "0" aracın
-       körlüğü değil, ölçülmüş bir yokluk.
-
-       Uygulama dosya YAZIP OKUYOR ama zaman damgası OKUMUYOR; okuma/yazma
-       tek başına gerekçeli API DEĞİLDİR.
-
-       Eklenti manifestleri — ÇÖZÜLMÜŞ sürümde ölçüldü (L-291 düzeltmesi):
-         · permission_handler_apple 9.6.1  ✅ kendi manifesti VAR
-         · path_provider_foundation 2.6.0  ⛔ manifest YOK — ve bunun
-           SONUCU YOK (aşağıda), ama iddia düzeltilmelidir.
-
-       🪤 İLK KAYDIM YANLIŞTI ve sebebi öğretici: pub-cache'te İKİ sürüm
-       duruyor (2.5.1 + 2.6.0); taramam `head -1` ile **2.5.1**i seçti ve
-       "✅ manifest var" dedi. ÇÖZÜLMÜŞ sürüm (pubspec.lock + package_
-       config.json, iki bağımsız kaynak) **2.6.0** ve onda manifest YOK.
-       → *Bir bağımlılığın "kendi manifestini taşıdığı" iddiası, O SÜRÜMDE
-         ölçülmeden yazılamaz — SÜRÜM, İDDİANIN PARÇASIDIR.*
-       (Aynı tuzağa bugün `motion_camera`da da düştüm: pin `f13bdc9` yerine
-       başka bir checkout okumuştum. Pub-cache çoklu-sürüm tutar.)
-
-       ⭐ VE SONUCU SIFIR — ölçüldü, devralınmadı:
-       2.6.0 artık Swift eklenti DEĞİL, **FFI** (`ffi_bindings.g.dart`).
-       İlk taramam yalnız `*.swift` uzantısına bakıyordu ve o da yalnız
-       ÖRNEK kodu görüyordu; kapsam düzeltilip GERÇEK uygulama tarandı:
-         · `creationDate`/`modificationDate`/`attributesOfItem`/
-           `getattrlist`/`systemUptime`/`freeSize` → **0**
-         · yaptığı tek şey DİZİN ÇÖZÜMLEME (`NSFileManager` +
-           `NS…Directory` sabitleri) — gerekçeli-API listesinde DEĞİL
-         · pozitif kontrol AYNI dosyalarda: `FileManager` 15 · `Directory`
-           66 isabet → "0" aracın körlüğü değil
-       → Manifestin kaldırılması bir beyanın kaybı DEĞİL, **boş bir
-         beyanın** kaldırılmasıdır (2.5.1'inki de her listeyi boş
-         bildiriyordu). Aşağıdaki boş `NSPrivacyAccessedAPITypes` DOĞRU.
-  -->
+  <array>
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeEmailAddress</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+    </dict>
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeName</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+    </dict>
+    <dict>
+      <key>NSPrivacyCollectedDataType</key>
+      <string>NSPrivacyCollectedDataTypeUserID</string>
+      <key>NSPrivacyCollectedDataTypeLinked</key>
+      <true/>
+      <key>NSPrivacyCollectedDataTypeTracking</key>
+      <false/>
+      <key>NSPrivacyCollectedDataTypePurposes</key>
+      <array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+    </dict>
+  </array>
+  <!-- Bağımlılıkların birleşik Xcode gizlilik raporu release kapısıdır. -->
   <key>NSPrivacyAccessedAPITypes</key>
   <array/>
 </dict>

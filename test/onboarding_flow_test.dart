@@ -109,6 +109,9 @@ void main() {
     await _continue(tester);
     await _continue(tester); // O3 → O4
 
+    expect(find.textContaining('Choose your age range to continue'),
+        findsOneWidget);
+
     FilledButton btn = tester
         .widget<FilledButton>(find.byKey(const Key('onboarding.continue')));
     expect(btn.onPressed, isNull,

@@ -21,11 +21,16 @@ import 'support/copy_gate.dart';
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
 
-Future<void> _pump(WidgetTester tester, Future<AppFacts> Function() loader) async {
-  await tester.pumpWidget(MaterialApp(
-    theme: buildLissomTheme(),
-    home: LissomShell(loader: loader),
-  ));
+Future<void> _pump(
+  WidgetTester tester,
+  Future<AppFacts> Function() loader,
+) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: buildLissomTheme(),
+      home: LissomShell(loader: loader),
+    ),
+  );
   await tester.pumpAndSettle();
 }
 
@@ -41,19 +46,26 @@ void main() {
     expect(f.ia.tabs, <String>['home', 'library', 'progress', 'profile']);
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(
-        tester.widget<NavigationBar>(find.byType(NavigationBar)).destinations,
-        hasLength(4));
+      tester.widget<NavigationBar>(find.byType(NavigationBar)).destinations,
+      hasLength(4),
+    );
     for (final String label in <String>[
       'Home',
       'Library',
       'Progress',
       'Profile',
     ]) {
-      expect(find.text(label), findsOneWidget,
-          reason: 'sekme etiketi id\'den TÜRETİLİR; eksikse türetim kırık');
+      expect(
+        find.text(label),
+        findsOneWidget,
+        reason: 'sekme etiketi id\'den TÜRETİLİR; eksikse türetim kırık',
+      );
     }
-    expect(find.byType(HomeScreen), findsOneWidget,
-        reason: 'açılış sekmesi home olmalı');
+    expect(
+      find.byType(HomeScreen),
+      findsOneWidget,
+      reason: 'açılış sekmesi home olmalı',
+    );
   });
 
   testWidgets('sekme değişimi GERÇEKTEN ekran değiştirir', (
@@ -106,11 +118,16 @@ void main() {
     WidgetTester tester,
   ) async {
     pinNarrowSurface(tester);
-    await _pump(tester,
-        () async => throw const FormatException('bozuk ia config'));
+    await _pump(
+      tester,
+      () async => throw const FormatException('bozuk ia config'),
+    );
     expect(find.text("Lissom couldn't start"), findsOneWidget);
-    expect(find.textContaining('bozuk ia config'), findsOneWidget,
-        reason: 'sebep YUTULMAZ — kullanıcı neyin patladığını görür');
+    expect(
+      find.textContaining('bozuk ia config'),
+      findsOneWidget,
+      reason: 'sebep YUTULMAZ — kullanıcı neyin patladığını görür',
+    );
   });
 
   testWidgets('L-242: ÖLÇÜM İMA EDEN her sekme, capture beyanını TAŞIR', (
@@ -128,19 +145,20 @@ void main() {
     for (final String tab in <String>['Library', 'Progress']) {
       await tester.tap(find.text(tab));
       await tester.pumpAndSettle();
-      expect(find.byKey(CaptureUnavailableNote.key_), findsOneWidget,
-          reason: '$tab sekmesi ölçümden bahsediyor ama capture beyanını '
-              'taşımıyor — kullanıcı buradan başlarsa yanlış bilgilenir');
+      expect(
+        find.byKey(CaptureUnavailableNote.key_),
+        findsOneWidget,
+        reason:
+            '$tab sekmesi ölçümden bahsediyor ama capture beyanını '
+            'taşımıyor — kullanıcı buradan başlarsa yanlış bilgilenir',
+      );
     }
-    // Home kendi beyanını taşıyor (aynı olguyu iki kez basmaz).
-    //
-    // ⚠️ Metin 2026-08-12'de değişti (kamera-kabuğu sevki): "camera run is
-    // not wired" artık YANLIŞ — `LiveCaptureScreen` bağlandı. Yeni iddia
-    // "connected, cihazda doğrulanmadı" sınıfında; bu satır o dönüşü kaydediyor.
+    // Home kendi beyanını taşıyor. İlk sürümün kamerası ve abonelik satışı
+    // kapalı olduğundan metin bugünkü kullanıcı yolunu anlatmalı.
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('has not been tried on a real phone'),
-        findsOneWidget);
+    expect(find.textContaining('not open in this release'), findsOneWidget);
+    expect(find.byKey(HomeScreen.startMeasurementKey), findsNothing);
   });
 
   testWidgets('dört sekmenin HİÇBİRİNDE yasaklı yüzey kopyası yok', (
@@ -148,7 +166,12 @@ void main() {
   ) async {
     pinNarrowSurface(tester);
     await _pump(tester, () async => factsFromDisk());
-    for (final String tab in <String>['Home', 'Library', 'Progress', 'Profile']) {
+    for (final String tab in <String>[
+      'Home',
+      'Library',
+      'Progress',
+      'Profile',
+    ]) {
       await tester.tap(find.text(tab));
       await tester.pumpAndSettle();
       expectNoBannedCopy(tester);
