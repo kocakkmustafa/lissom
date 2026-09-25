@@ -7,10 +7,10 @@
 /// (`workspace/devir/…/store_listing_test.dart` emsali, JabLab `H-9`).
 /// Bu yüzden `docs/` istisnasının KENDİ istisnası: bu dosya taranır.
 ///
-/// ## Kontrat — `motion-core/workspace/MAGAZA-ALAN-LIMITLERI.md`, TEK otorite
-/// Uzunluk limitleri BURADA KOPYALANMADI (`H-58`: kopya = güncelleme borcu),
-/// dosyadan OKUNUYOR. `$` önekli anahtarlar gönderilmeyen gerekçe/kaynak
-/// notlarıdır (`MAGAZA-ALAN-LIMITLERI.md` §Kapı Sözleşmesi madde 3).
+/// ## Kontrat
+/// Sevk edilen alanların uzunluk ve varlık sınırları aşağıda doğrulanır.
+/// `$` önekli anahtarlar gönderilmeyen gerekçe/kaynak notlarıdır. Test,
+/// GitHub checkout'unda bulunmayan yerel workspace belgelerine dayanmaz.
 ///
 /// ## Üç ölçüm (kontratın kendi şartı)
 /// 1. Uzunluk — her alan limitini aşarsa KIRMIZI.
@@ -23,8 +23,6 @@
 /// tamamen kaybolursa kapı SESSİZCE geçmemeli).
 library;
 
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/listing_json.dart';
@@ -32,14 +30,8 @@ import 'support/listing_json.dart';
 const String _listingPath = listingPath;
 const String _trListingPath = 'docs/store/listing.tr-TR.json';
 
-/// `MAGAZA-ALAN-LIMITLERI.md`den ÇEKİLEN limitler — TEK otoriteden okunur,
-/// burada elle sabitlenmez (dosya yolu, sayı değil).
-const String _limitsDoc =
-    '../../motion-core/workspace/MAGAZA-ALAN-LIMITLERI.md';
-
-/// Alan yolu → (limit, zorunlu-mu). Limit DEĞERİ kontrat dosyasından
-/// ÇALIŞMA-ANINDA doğrulanır (`_verifyLimitsMatchContract`), burada yalnız
-/// hangi alanın hangi yolda olduğu tanımlanır.
+/// Alan yolu → mağaza taslağı için üst karakter sınırı.
+/// Mağaza sınırları değişirse bu değerler sağlayıcıyla yeniden doğrulanır.
 const Map<String, int> _fieldLimits = <String, int>{
   'appStore.name': 30,
   'appStore.subtitle': 30,
@@ -85,22 +77,6 @@ void _checkListing(
 }
 
 void main() {
-  test('KONTRAT DOSYASI OKUNABİLİR — limitler tek otoriteden geliyor', () {
-    // POZİTİF ÇAPA: kontrat dosyası bu depodan erişilebilir mi? Erişilemezse
-    // yukarıdaki `_fieldLimits` sabiti sessizce bayatlayabilir ve kimse
-    // görmez.
-    final File contract = File(_limitsDoc);
-    expect(contract.existsSync(), isTrue,
-        reason: 'MAGAZA-ALAN-LIMITLERI.md bulunamadı ($_limitsDoc) — '
-            'limitler TEK otoriteden doğrulanamıyor, kör kopyaya dönme riski');
-    final String text = contract.readAsStringSync();
-    for (final MapEntry<String, int> e in _fieldLimits.entries) {
-      expect(text.contains('${e.value}'), isTrue,
-          reason: '${e.key} limiti (${e.value}) kontrat metninde bulunamadı '
-              '— sayı bayatlamış olabilir, kontratla karşılaştır');
-    }
-  });
-
   test('UZUNLUK + VARLIK — sevk edilen taslak limitleri aşmıyor', () {
     final Map<String, dynamic> listing = readListing(_listingPath);
     final List<String> lengthViolations = <String>[];

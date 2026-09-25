@@ -1,5 +1,5 @@
 {
-  "$doc": "Mağaza liste metni TASLAĞI — makine-okur kaynak. Bu dosya test/store_listing_test.dart tarafından taranır (uzunluk · varlık · $ sözleşmesi · karşılıksız-vaat taraması, workspace/MAGAZA-ALAN-LIMITLERI.md kontratı). Gönderim KURUCU kalemi (M-F-77: store gönderimi) — bu dosya yalnız TASLAK, onay bekliyor.",
+  "$doc": "Mağaza liste metni TASLAĞI — makine-okur kaynak. Bu dosya test/store_listing_test.dart tarafından taranır (uzunluk · varlık · $ sözleşmesi · karşılıksız-vaat taraması). Gönderim KURUCU kalemi (M-F-77: store gönderimi) — bu dosya yalnız TASLAK, onay bekliyor.",
   "appStore": {
     "name": "Lissom: Movement Checks",
     "subtitle": "Explore movement tests",
