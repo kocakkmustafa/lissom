@@ -39,6 +39,9 @@ import 'package:flutter/material.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
+import 'hatha_course.dart';
+import 'hatha_course_screen.dart';
+import 'hatha_progress.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
 import 'session_history_view.dart';
@@ -111,7 +114,6 @@ class ProgressScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-
           // ⭐ A3'ün ikinci kolu, geçmiş katmanında: iş sunamıyorsan NEDEN
           // sunmadığını söyle. Kıyas kartıyla aynı yerde ve aynı tonda —
           // envanter, özür değil.
@@ -251,6 +253,14 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
           ),
+
+          if (facts.hatha != null && facts.hathaProgress != null) ...<Widget>[
+            _HathaProgressCard(
+              course: facts.hatha!,
+              progress: facts.hathaProgress!,
+            ),
+            const SizedBox(height: 18),
+          ],
 
           if (!h.countsAreTrustworthy)
             NamedGapCard(
@@ -462,6 +472,74 @@ class ProgressScreen extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _HathaProgressCard extends StatelessWidget {
+  const _HathaProgressCard({required this.course, required this.progress});
+
+  final HathaCourse course;
+  final HathaProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Set<String> practiced = progress.practicedIn(course);
+    return LissomCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            localeText(context, 'Hatha practice', 'Hatha çalışması'),
+            style: theme.textTheme.titleLarge,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            localeText(
+              context,
+              '${practiced.length}/${course.lessons.length} lessons practised · self-recorded',
+              '${practiced.length}/${course.lessons.length} ders çalışıldı · öz kayıt',
+            ),
+            style: theme.textTheme.bodySmall,
+          ),
+          const SizedBox(height: 12),
+          Table(
+            columnWidths: const <int, TableColumnWidth>{
+              0: FlexColumnWidth(),
+              1: IntrinsicColumnWidth(),
+            },
+            children: <TableRow>[
+              for (final HathaModule module in course.modules)
+                TableRow(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(hathaText(context, module.title)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text(
+                        '${module.lessons.where((HathaLesson l) => practiced.contains(l.id)).length}/${module.lessons.length}',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+          if (progress.unreadableRecords > 0) ...<Widget>[
+            const SizedBox(height: 8),
+            Text(
+              localeText(
+                context,
+                '${progress.unreadableRecords} practice records could not be read.',
+                '${progress.unreadableRecords} çalışma kaydı okunamadı.',
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 /// Defter satırı — bir OLGU, bir hüküm değil.

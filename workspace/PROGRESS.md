@@ -1059,3 +1059,21 @@ YARIN penceresi **3 başlıklı boşluk** buldu, üçü kapandı.
 ⛔ `A12` cihaz koşusu — telefon uyanınca **tek komut**.
 ⛔ H-15 tam uygulanamadı: `lissom-hatti` sim'i var ama **MCP gezinme erişimi
 kurucu onayı** istiyor.
+
+
+## 2026-09-26 — ilk tam Hatha öğretim yolu (yerel WIP)
+
+60 TR/EN ders / 10 modül / 240 teknik adım; Home, Library ve Progress
+girişleri, önerilen sıra ve öz beyanlı çalışma kaydı eklendi. Hesap/sürüm
+ayrımı, atomik-seri yazım ve silme sonrası eski deponun yeniden yazamaması
+sınandı. Mevcut ölçüm bataryası ve kamera skor kapıları açılmadı.
+
+Tam Flutter 314 PASS / 6 mevcut SKIP; analiz temiz; mağaza metni 10 PASS.
+Son kurs iPhone iOS 27 simülatörü ve Android API 37 emülatöründe gerçek
+yerel kayıt / ekran yeniden açılış / silme readback testini geçti. iPhone
+dört kurs görüntüsü alındı; Android SDK görüntü yakalama takılması ayrı
+kaydedildi. Fiziksel kişi/telefon modeli, AI medya, imzalı son paket ve
+mağaza kabulü hâlâ açık. Commit/push/deploy yapılmadı.
+
+Kanıt: `docs/research/HATHA-COURSE-EVIDENCE-2026-09-26.md` ve kapsam matrisi.
+Önceden var olan iş akışı WIP'i korundu; ortak motion-core değiştirilmedi.

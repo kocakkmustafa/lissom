@@ -11,7 +11,7 @@ from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "docs/store/icon-candidates/tree-pose-yoga-selected-reference-1254.png"
+SOURCE = ROOT / "docs/store/icon-candidates/tree-pose-yoga-App-Store-1024.png"
 IOS_ASSETS = ROOT / "ios/Runner/Assets.xcassets"
 ANDROID_RES = ROOT / "android/app/src/main/res"
 
@@ -44,8 +44,8 @@ ANDROID_SIZES = {
 
 def main() -> None:
     with Image.open(SOURCE) as source:
-        if source.size != (1254, 1254) or source.mode not in ("RGB", "RGBA"):
-            raise ValueError("Selected icon must be a 1254px square RGB image")
+        if source.size != (1024, 1024) or source.mode not in ("RGB", "RGBA"):
+            raise ValueError("Selected icon must be a 1024px square RGB image")
         master = source.convert("RGB")
 
         icon_dir = IOS_ASSETS / "AppIcon.appiconset"

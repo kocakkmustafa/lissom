@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'local_write_guard.dart';
+
 /// Must match the app identifier used by the shared Motion entitlement table.
 const String kLissomMotionAppId = 'lissom';
 
@@ -14,7 +16,8 @@ typedef LissomAccountRouteBuilder =
 enum LissomLocalFile {
   onboarding('onboarding.json'),
   sessions('sessions.jsonl'),
-  attemptValues('attempt_values.jsonl');
+  attemptValues('attempt_values.jsonl'),
+  hathaProgress('hatha_progress.jsonl');
 
   const LissomLocalFile(this.fileName);
   final String fileName;
@@ -111,5 +114,7 @@ Future<void> clearLissomLocalData(
       throw StateError('Refusing to delete account data through a link');
     }
   }
-  if (await target.exists()) await target.delete(recursive: true);
+  await LissomLocalWriteGuard.retireAndClear(target.path, () async {
+    if (await target.exists()) await target.delete(recursive: true);
+  });
 }

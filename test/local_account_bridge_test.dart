@@ -242,7 +242,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.text(
-        'Browse assessments without an account. Live camera checks require a Motion account and Lissom or Motion+ membership.',
+        'Practise the Hatha yoga course without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
       ),
       findsOneWidget,
     );

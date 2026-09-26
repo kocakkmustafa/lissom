@@ -143,15 +143,20 @@ void main() {
     pinNarrowSurface(tester);
     final AppFacts facts = factsFromDisk();
 
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      home: LissomShell(loader: () async => facts),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildLissomTheme(),
+        home: LissomShell(loader: () async => facts),
+      ),
+    );
     await tester.pumpAndSettle();
 
     // POZİTİF ÇAPA — config boşsa aşağıdaki her sayı VAKUM-DOĞRU olurdu.
-    expect(facts.ia.families, isNotEmpty,
-        reason: 'IA config aile taşımıyorsa bu sayım hiçbir şey ölçmez');
+    expect(
+      facts.ia.families,
+      isNotEmpty,
+      reason: 'IA config aile taşımıyorsa bu sayım hiçbir şey ölçmez',
+    );
 
     final List<String> startable = <String>[];
     final Map<String, DeadEndClass> deadEnds = <String, DeadEndClass>{};
@@ -160,27 +165,43 @@ void main() {
       await _openLibrary(tester);
       final Finder card = find.text(fam.title);
       await scrollTo(tester, card);
-      expect(card.evaluate(), isNotEmpty,
-          reason: '«${fam.title}» kartına HİÇ varılamadı — varılamayan bir '
-              'hedef çıkmaz sokak DEĞİLDİR, ama sayımdan sessizce düşmesi '
-              'paydayı yalanlar (sözleşme (d))');
+      expect(
+        card.evaluate(),
+        isNotEmpty,
+        reason:
+            '«${fam.title}» kartına HİÇ varılamadı — varılamayan bir '
+            'hedef çıkmaz sokak DEĞİLDİR, ama sayımdan sessizce düşmesi '
+            'paydayı yalanlar (sözleşme (d))',
+      );
       await tester.tap(card.first, warnIfMissed: false);
       await tester.pumpAndSettle();
-      expect(find.byType(FamilyPage), findsOneWidget,
-          reason: '«${fam.title}» kartına basıldı, FamilyPage açılmadı');
+      expect(
+        find.byType(FamilyPage),
+        findsOneWidget,
+        reason: '«${fam.title}» kartına basıldı, FamilyPage açılmadı',
+      );
 
       // İÇERİK = gerçek config'ten TÜREYEN öğe. Çerçeve (başlık · giriş ·
       // dürüstlük kutusu) içerik SAYILMAZ — aksi hâlde her sayfa tanım
       // gereği dolu olurdu (`reachable_but_empty_test` §②).
-      final bool rendersAnyItem = facts.live
-          .any((TestLiveness x) => find.text(x.name).evaluate().isNotEmpty);
+      final bool rendersAnyItem =
+          facts.live.any(
+            (TestLiveness x) => find.text(x.name).evaluate().isNotEmpty,
+          ) ||
+          (fam.teachingOnly &&
+              facts.hatha != null &&
+              find.text('Open Hatha course').evaluate().isNotEmpty);
 
       if (rendersAnyItem) {
         startable.add(fam.id);
       } else {
         deadEnds[fam.id] = classifyDeadEnd(
           hasItemsSource: fam.itemsSource != null,
-          resolvedItemCount: fam.itemsSource != null ? facts.liveness.length : 0,
+          resolvedItemCount: fam.teachingOnly
+              ? (facts.hatha?.lessons.length ?? 0)
+              : fam.itemsSource != null
+              ? facts.liveness.length
+              : 0,
           rendersAnyItem: false,
           deliberatelyClosed: false,
           // Aile düzeyinde engel İÇERİKtir, yetenek değil: bir ailenin
@@ -195,8 +216,11 @@ void main() {
     }
 
     // ⑤ DENKLEM — türetilmiş bir toplam kaynağını denetleyemez.
-    expect(startable.length + deadEnds.length, facts.ia.families.length,
-        reason: 'payda tutmuyor: yürüyüş bir aile hedefini ATLADI');
+    expect(
+      startable.length + deadEnds.length,
+      facts.ia.families.length,
+      reason: 'payda tutmuyor: yürüyüş bir aile hedefini ATLADI',
+    );
 
     final Map<String, int> dist = _distribution(deadEnds.values);
     _report('AİLE DÜZEYİ', payda: facts.ia.families.length, <String, Object>{
@@ -210,35 +234,43 @@ void main() {
     expect(_i(doc, 'aile.baslatilabilir'), startable.length);
     expect(_i(doc, 'aile.cikmaz'), deadEnds.length);
     for (final DeadEndClass c in DeadEndClass.values) {
-      expect(_i(doc, 'aile.${c.name}'), dist[c.label] ?? 0,
-          reason: 'sayım dokümanı «${c.label}» sınıfında türetimle AYRIŞIYOR '
-              '— doküman bayatladı ya da ağaç değişti');
+      expect(
+        _i(doc, 'aile.${c.name}'),
+        dist[c.label] ?? 0,
+        reason:
+            'sayım dokümanı «${c.label}» sınıfında türetimle AYRIŞIYOR '
+            '— doküman bayatladı ya da ağaç değişti',
+      );
     }
   });
 
   testWidgets('A4 — test düzeyi: 12 testin hiçbiri HEDEF değil, ve engelli '
-      '9\'un sınıfı köprünün KENDİ beyanından gelir',
-      (WidgetTester tester) async {
+      '9\'un sınıfı köprünün KENDİ beyanından gelir', (
+    WidgetTester tester,
+  ) async {
     pinNarrowSurface(tester);
     final AppFacts facts = factsFromDisk();
 
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      home: LissomShell(
-        loader: () async => facts,
-        // D13/F2 — CANLI satır artık GERÇEKTEN bir hedefe gidiyor
-        // (`TestDetailScreen`). Enjekte EDİLMEZSE üretim yolu
-        // `openAttemptValueStore`a düşer, `path_provider` widget testinde
-        // KİLİTLENİR (aile gotcha'sı) ve `pumpAndSettle` SONSUZA dek bekler
-        // — bu turda tam bunu ölçtüm (test önce "timed out" diye düştü).
-        attemptValueStoreLoader: () async => _EmptyAttemptValueStore(),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildLissomTheme(),
+        home: LissomShell(
+          loader: () async => facts,
+          // D13/F2 — CANLI satır artık GERÇEKTEN bir hedefe gidiyor
+          // (`TestDetailScreen`). Enjekte EDİLMEZSE üretim yolu
+          // `openAttemptValueStore`a düşer, `path_provider` widget testinde
+          // KİLİTLENİR (aile gotcha'sı) ve `pumpAndSettle` SONSUZA dek bekler
+          // — bu turda tam bunu ölçtüm (test önce "timed out" diye düştü).
+          attemptValueStoreLoader: () async => _EmptyAttemptValueStore(),
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     await _openLibrary(tester);
-    final LibraryFamily built =
-        facts.ia.families.firstWhere((LibraryFamily f) => f.isBuilt);
+    final LibraryFamily built = facts.ia.families.firstWhere(
+      (LibraryFamily f) => f.isBuilt,
+    );
     final Finder card = find.text(built.title);
     await scrollTo(tester, card);
     await tester.tap(card.first, warnIfMissed: false);
@@ -267,14 +299,22 @@ void main() {
     await scrollTo(tester, liveRow);
     await tester.tap(liveRow.first, warnIfMissed: false);
     await tester.pumpAndSettle();
-    expect(find.byType(TestDetailScreen), findsOneWidget,
-        reason: 'CANLI bir test satırı artık GERÇEK bir hedef (D13) — '
-            'basmak hiçbir yere gitmiyorsa bu bir REGRESYONDUR');
+    expect(
+      find.byType(TestDetailScreen),
+      findsOneWidget,
+      reason:
+          'CANLI bir test satırı artık GERÇEK bir hedef (D13) — '
+          'basmak hiçbir yere gitmiyorsa bu bir REGRESYONDUR',
+    );
     // Hedefin İÇERİKSİZ olmadığının pozitif kanıtı — boş depoda bile
     // adıyla-beyanlı bir kart çiziliyor, sessiz boşluk değil.
-    expect(find.byKey(TestDetailScreen.emptyKey), findsOneWidget,
-        reason: 'yeni hedef içeriksiz görünüyor — bu gerçekten çıkmaz sokak '
-            'olurdu');
+    expect(
+      find.byKey(TestDetailScreen.emptyKey),
+      findsOneWidget,
+      reason:
+          'yeni hedef içeriksiz görünüyor — bu gerçekten çıkmaz sokak '
+          'olurdu',
+    );
 
     // Geri dön, ENGELLİ satırın hâlâ dokunulamaz olduğunu ölç.
     Navigator.of(tester.element(find.byType(TestDetailScreen))).pop();
@@ -283,15 +323,20 @@ void main() {
     await scrollTo(tester, blockedRow);
     await tester.tap(blockedRow.first, warnIfMissed: false);
     await tester.pumpAndSettle();
-    expect(_routeDepth(tester), before,
-        reason: 'ENGELLİ bir test satırına basmak rota itti — 9\'un sınıfı '
-            'hâlâ E (awaiting-capability), hâlâ dokunulamaz olmalı');
+    expect(
+      _routeDepth(tester),
+      before,
+      reason:
+          'ENGELLİ bir test satırına basmak rota itti — 9\'un sınıfı '
+          'hâlâ E (awaiting-capability), hâlâ dokunulamaz olmalı',
+    );
 
     // Engelli testlerin sınıfı: her eksik metrik `BridgeBlocker` taşıyorsa
     // engel YETENEKtir (E). Beyansız bir metrik varsa o AYRI bir hâldir ve
     // sınıflandırılamaz — sessizce E sayılmaz.
-    final Set<String> bridged =
-        kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+    final Set<String> bridged = kMetricBindings
+        .map((MetricBinding b) => b.lissomMetric)
+        .toSet();
     final Set<String> phaseDerived = facts.battery.derivedMeasures.entries
         .where((MapEntry<String, DerivedMeasure> e) => e.value.isPhaseDerived)
         .map((MapEntry<String, DerivedMeasure> e) => e.key)
@@ -300,24 +345,32 @@ void main() {
     final List<String> capability = <String>[];
     final List<String> undeclared = <String>[];
     for (final TestLiveness t in facts.blocked) {
-      final List<String> missing =
-          t.metrics.where((String m) => !bridged.contains(m)).toList();
-      final bool allNamed = missing.every((String m) =>
-          phaseDerived.contains(m) || kUnbridgedMetrics.containsKey(m));
+      final List<String> missing = t.metrics
+          .where((String m) => !bridged.contains(m))
+          .toList();
+      final bool allNamed = missing.every(
+        (String m) =>
+            phaseDerived.contains(m) || kUnbridgedMetrics.containsKey(m),
+      );
       (allNamed ? capability : undeclared).add(t.testId);
     }
 
     _report('TEST DÜZEYİ', payda: facts.liveness.length, <String, Object>{
-      'canlı': '${facts.live.length}  '
+      'canlı':
+          '${facts.live.length}  '
           '${facts.live.map((TestLiveness x) => x.testId).toList()}',
       'engelli → E (yetenek)': '${capability.length}  $capability',
       'BEYANSIZ (sınıflandırılamaz)': '${undeclared.length}  $undeclared',
       'çıkmaz sokak': '0 — satırlar hedef değil (yukarıda ölçüldü)',
     });
 
-    expect(undeclared, isEmpty,
-        reason: 'bir engelli testin eksik metriği hiçbir yerde BEYAN edilmemiş '
-            '— sınıfı bilinmiyor, ve bilinmeyen bir engel E sayılamaz');
+    expect(
+      undeclared,
+      isEmpty,
+      reason:
+          'bir engelli testin eksik metriği hiçbir yerde BEYAN edilmemiş '
+          '— sınıfı bilinmiyor, ve bilinmeyen bir engel E sayılamaz',
+    );
 
     final Map<String, String> doc = _censusDoc();
     expect(_i(doc, 'test.payda'), facts.liveness.length);
@@ -326,45 +379,48 @@ void main() {
     expect(_i(doc, 'test.cikmaz'), 0);
   });
 
-  test('A4 — kural tablosu ÖLÜ DAL taşımıyor: altı olgu demeti, altı sınıf',
-      () {
-    // M-F-58 dördüncü canlılık sorusu: *bu sınıflandırma A'dan başka bir şey
-    // üretebiliyor mu?* Bugünkü ağaç yalnız A ve E üretiyor; kalan dört sınıf
-    // ancak olgu demetleriyle ötürtülebilir. Ötürtülemeyen bir sınıf, sayımın
-    // "0" yazdığı yerde ASLA ötmeyecek demektir — ve o sıfır ölçüm değil süs
-    // olurdu.
-    DeadEndClass call({
-      bool items = true,
-      int count = 3,
-      bool renders = true,
-      bool closed = false,
-      bool capability = false,
-    }) =>
-        classifyDeadEnd(
-          hasItemsSource: items,
-          resolvedItemCount: count,
-          rendersAnyItem: renders,
-          deliberatelyClosed: closed,
-          blockedByCapability: capability,
-        );
+  test(
+    'A4 — kural tablosu ÖLÜ DAL taşımıyor: altı olgu demeti, altı sınıf',
+    () {
+      // M-F-58 dördüncü canlılık sorusu: *bu sınıflandırma A'dan başka bir şey
+      // üretebiliyor mu?* Bugünkü ağaç yalnız A ve E üretiyor; kalan dört sınıf
+      // ancak olgu demetleriyle ötürtülebilir. Ötürtülemeyen bir sınıf, sayımın
+      // "0" yazdığı yerde ASLA ötmeyecek demektir — ve o sıfır ölçüm değil süs
+      // olurdu.
+      DeadEndClass call({
+        bool items = true,
+        int count = 3,
+        bool renders = true,
+        bool closed = false,
+        bool capability = false,
+      }) => classifyDeadEnd(
+        hasItemsSource: items,
+        resolvedItemCount: count,
+        rendersAnyItem: renders,
+        deliberatelyClosed: closed,
+        blockedByCapability: capability,
+      );
 
-    expect(call(items: false), DeadEndClass.contentNeverWritten);
-    expect(call(count: 0), DeadEndClass.contentStartedNoReference);
-    expect(call(renders: false), DeadEndClass.contentUnwired);
-    expect(call(closed: true), DeadEndClass.deliberatelyClosed);
-    expect(call(capability: true), DeadEndClass.awaitingCapability);
+      expect(call(items: false), DeadEndClass.contentNeverWritten);
+      expect(call(count: 0), DeadEndClass.contentStartedNoReference);
+      expect(call(renders: false), DeadEndClass.contentUnwired);
+      expect(call(closed: true), DeadEndClass.deliberatelyClosed);
+      expect(call(capability: true), DeadEndClass.awaitingCapability);
 
-    // `C` KASITLI olarak türetilmiyor (dosya başlığındaki gerekçe). Bunu bir
-    // beklentiyle mühürlüyorum ki biri sahte bir yüklem eklediğinde bu satır
-    // onu görsün.
-    expect(
+      // `C` KASITLI olarak türetilmiyor (dosya başlığındaki gerekçe). Bunu bir
+      // beklentiyle mühürlüyorum ki biri sahte bir yüklem eklediğinde bu satır
+      // onu görsün.
+      expect(
         DeadEndClass.values
             .where((DeadEndClass c) => c == DeadEndClass.shouldNotExist)
             .length,
         1,
-        reason: 'C sınıfı taksonomide DURUYOR ama çalışma-zamanında '
-            'türetilmiyor — dayanağı sayım dokümanında yazılı');
-  });
+        reason:
+            'C sınıfı taksonomide DURUYOR ama çalışma-zamanında '
+            'türetilmiyor — dayanağı sayım dokümanında yazılı',
+      );
+    },
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────
@@ -372,8 +428,10 @@ void main() {
 // ─────────────────────────────────────────────────────────────────────
 
 Future<void> _openLibrary(WidgetTester tester) async {
-  await tester.tap(find.byIcon(Icons.grid_view_outlined).first,
-      warnIfMissed: false);
+  await tester.tap(
+    find.byIcon(Icons.grid_view_outlined).first,
+    warnIfMissed: false,
+  );
   await tester.pumpAndSettle();
 }
 
@@ -399,8 +457,10 @@ Map<String, int> _distribution(Iterable<DeadEndClass> classes) {
 Map<String, String> _censusDoc() {
   final File f = File('docs/A4-CIKMAZ-SOKAK-SAYIMI.md');
   if (!f.existsSync()) {
-    fail('A4 sayım dokümanı YOK: ${f.path} — "ölçülmüş" ile "ADIYLA yazılmış" '
-        'A4in İKİ ayrı şartı; ölçüm tek başına kalemi kapatmaz');
+    fail(
+      'A4 sayım dokümanı YOK: ${f.path} — "ölçülmüş" ile "ADIYLA yazılmış" '
+      'A4in İKİ ayrı şartı; ölçüm tek başına kalemi kapatmaz',
+    );
   }
   final List<String> lines = f.readAsLinesSync();
   final int start = lines.indexWhere((String l) => l.contains('A4-SAYIM:BAŞ'));
@@ -420,8 +480,10 @@ Map<String, String> _censusDoc() {
 int _i(Map<String, String> doc, String key) {
   final String? v = doc[key];
   if (v == null) {
-    fail('sayım dokümanında «$key» anahtarı yok — türetim onu ölçüyor ama '
-        'doküman ondan bahsetmiyor');
+    fail(
+      'sayım dokümanında «$key» anahtarı yok — türetim onu ölçüyor ama '
+      'doküman ondan bahsetmiyor',
+    );
   }
   return int.parse(v);
 }

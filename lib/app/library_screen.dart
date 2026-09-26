@@ -21,6 +21,9 @@ import 'package:lissom_engine/lissom_engine.dart';
 
 import 'app_facts.dart';
 import 'attempt_values.dart';
+import 'hatha_course.dart';
+import 'hatha_course_screen.dart';
+import 'hatha_progress.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
@@ -31,6 +34,8 @@ class LibraryScreen extends StatelessWidget {
   const LibraryScreen({
     required this.facts,
     this.attemptValueStoreLoader,
+    this.hathaStoreLoader,
+    this.onCourseDone,
     super.key,
   });
 
@@ -38,6 +43,8 @@ class LibraryScreen extends StatelessWidget {
   /// sözleşmesi (D13) — testte enjekte edilir, üretimde `null` ⇒
   /// `openAttemptValueStore`.
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<HathaProgressStore> Function()? hathaStoreLoader;
+  final VoidCallback? onCourseDone;
 
   static const Key builtSectionKey = Key('library.built');
   static const Key notBuiltSectionKey = Key('library.notBuilt');
@@ -88,6 +95,8 @@ class LibraryScreen extends StatelessWidget {
                     family: f,
                     facts: facts,
                     attemptValueStoreLoader: attemptValueStoreLoader,
+                    hathaStoreLoader: hathaStoreLoader,
+                    onCourseDone: onCourseDone,
                   ),
                 ),
             ],
@@ -160,10 +169,14 @@ class _BuiltFamilyCard extends StatelessWidget {
     required this.family,
     required this.facts,
     this.attemptValueStoreLoader,
+    this.hathaStoreLoader,
+    this.onCourseDone,
   });
   final LibraryFamily family;
   final AppFacts facts;
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<HathaProgressStore> Function()? hathaStoreLoader;
+  final VoidCallback? onCourseDone;
 
   @override
   Widget build(BuildContext context) {
@@ -172,15 +185,19 @@ class _BuiltFamilyCard extends StatelessWidget {
     final int total = facts.liveness.length;
     return InkWell(
       borderRadius: BorderRadius.circular(LissomRadii.card),
-      onTap: () => Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(
-          builder: (_) => FamilyPage(
-            family: family,
-            facts: facts,
-            attemptValueStoreLoader: attemptValueStoreLoader,
+      onTap: () async {
+        await Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => FamilyPage(
+              family: family,
+              facts: facts,
+              attemptValueStoreLoader: attemptValueStoreLoader,
+              hathaStoreLoader: hathaStoreLoader,
+            ),
           ),
-        ),
-      ),
+        );
+        onCourseDone?.call();
+      },
       child: LissomCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,11 +216,25 @@ class _BuiltFamilyCard extends StatelessWidget {
             // olmazdı: 12'sinden 3'ü ölçülebiliyor ve fark kullanıcının
             // görmesi gereken şeyin ta kendisi.
             Text(
-              localeText(
-                context,
-                '$total tests · $live measurable by camera in this build',
-                '$total test · bu sürümde $live tanesi kamerayla ölçülebiliyor',
-              ),
+              family.teachingOnly
+                  ? facts.hatha == null
+                        ? localeText(
+                            context,
+                            'Course data unavailable',
+                            'Kurs verisi açılamadı',
+                          )
+                        : localeText(
+                            context,
+                            '${facts.hatha!.modules.length} modules · '
+                                '${facts.hatha!.lessons.length} guided lessons',
+                            '${facts.hatha!.modules.length} modül · '
+                                '${facts.hatha!.lessons.length} rehberli ders',
+                          )
+                  : localeText(
+                      context,
+                      '$total tests · $live measurable by camera in this build',
+                      '$total test · bu sürümde $live tanesi kamerayla ölçülebiliyor',
+                    ),
               style: t.textTheme.bodySmall?.copyWith(
                 color: LissomColors.roseDeepHover,
               ),
@@ -276,6 +307,7 @@ class FamilyPage extends StatelessWidget {
     required this.family,
     required this.facts,
     this.attemptValueStoreLoader,
+    this.hathaStoreLoader,
     super.key,
   });
 
@@ -293,6 +325,7 @@ class FamilyPage extends StatelessWidget {
   final LibraryFamily family;
   final AppFacts facts;
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<HathaProgressStore> Function()? hathaStoreLoader;
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +350,9 @@ class FamilyPage extends StatelessWidget {
             ),
             const SizedBox(height: 22),
             if (family.isBuilt)
-              ..._batteryBody(context)
+              ...family.teachingOnly
+                  ? _hathaBody(context)
+                  : _batteryBody(context)
             else
               ..._namedBody(context),
             const SizedBox(height: 8),
@@ -335,6 +370,79 @@ class FamilyPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _hathaBody(BuildContext context) {
+    final HathaCourse? course = facts.hatha;
+    if (course == null) {
+      return <Widget>[
+        NamedGapCard(
+          title: localeText(
+            context,
+            'Course cannot be opened',
+            'Kurs açılamıyor',
+          ),
+          reason: localeText(
+            context,
+            'The lesson asset was not loaded.',
+            'Ders dosyası yüklenmedi.',
+          ),
+        ),
+      ];
+    }
+    return <Widget>[
+      LissomCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              hathaText(context, course.title),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              localeText(
+                context,
+                '${course.modules.length} modules · ${course.lessons.length} lessons',
+                '${course.modules.length} modül · ${course.lessons.length} ders',
+              ),
+            ),
+            const SizedBox(height: 12),
+            FilledButton(
+              onPressed: hathaStoreLoader == null
+                  ? null
+                  : () async {
+                      final HathaProgressStore store =
+                          await hathaStoreLoader!();
+                      final HathaProgress progress = await store.read();
+                      if (!context.mounted) return;
+                      await Navigator.of(context).push<void>(
+                        MaterialPageRoute<void>(
+                          builder: (_) => HathaCourseScreen(
+                            course: course,
+                            initialProgress: progress,
+                            storeLoader: hathaStoreLoader!,
+                          ),
+                        ),
+                      );
+                    },
+              child: Text(
+                localeText(context, 'Open Hatha course', 'Hatha kursunu aç'),
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        localeText(
+          context,
+          'Other named yoga styles have no classes in this build.',
+          'Adı geçen diğer yoga stillerinin bu sürümde dersleri yok.',
+        ),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ];
   }
 
   /// İnşa edilmiş aile: gerçek testler, canlı/engelli ayrımıyla — TÜRETİLİR.

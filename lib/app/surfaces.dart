@@ -146,7 +146,13 @@ class HonestyBoxCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           LissomEyebrow(
-            localeText(context, 'What this measures', 'Neyi ölçer?'),
+            box.measured.isEmpty
+                ? localeText(
+                    context,
+                    'Camera feedback',
+                    'Kamera geri bildirimi',
+                  )
+                : localeText(context, 'What this measures', 'Neyi ölçer?'),
             color: LissomColors.roseDeepHover,
           ),
           const SizedBox(height: 10),
@@ -154,6 +160,15 @@ class HonestyBoxCard extends StatelessWidget {
             key: measuredKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              if (box.measured.isEmpty)
+                Text(
+                  localeText(
+                    context,
+                    'This guided course does not grade posture with the camera.',
+                    'Bu rehberli kurs, duruşu kamerayla puanlamaz.',
+                  ),
+                  style: t.textTheme.bodyMedium,
+                ),
               for (final HonestyClaim c in box.measured)
                 _claimRow(context, t, c, liveness(c), verdictNote(c)),
             ],

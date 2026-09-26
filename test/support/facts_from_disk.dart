@@ -11,12 +11,15 @@ import 'dart:io';
 
 import 'package:lissom/app/app_facts.dart';
 import 'package:lissom/app/ia.dart';
+import 'package:lissom/app/hatha_course.dart';
+import 'package:lissom/app/hatha_progress.dart';
 import 'package:lissom/app/session_history_view.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
 
 Battery batteryFromDisk() => Battery.parseJson(
-    File('config/tests/lissom-assessment.v1.json').readAsStringSync());
+  File('config/tests/lissom-assessment.v1.json').readAsStringSync(),
+);
 
 LibraryIa iaFromDisk() =>
     LibraryIa.parseJson(File('config/ia/library.v1.json').readAsStringSync());
@@ -30,6 +33,13 @@ AppFacts factsFromDisk({SessionHistoryView? history}) {
     battery: battery,
     liveness: deriveLiveness(battery),
     history: history ?? const SessionHistoryView.ok(<SessionRecord>[]),
+    hatha: HathaCourse.parse(
+      File('config/courses/hatha.v1.json').readAsStringSync(),
+    ),
+    hathaProgress: const HathaProgress(
+      records: <HathaPracticeRecord>[],
+      unreadableRecords: 0,
+    ),
   );
 }
 
@@ -41,15 +51,14 @@ SessionRecord recordOf({
   DateTime? at,
   int unmeasuredUnits = 0,
   String? unmeasuredReason,
-}) =>
-    SessionRecord(
-      lessonId: lessonId,
-      completedAt: at ?? DateTime.utc(2026, 8, 3, 9, 30),
-      workedSeconds: 12,
-      unitsCompleted: lessonClass == 'notMeasured' ? 0 : 1,
-      unmeasuredUnits: unmeasuredUnits,
-      unmeasuredReason: unmeasuredReason,
-      plannedUnits: 1,
-      unitLabel: 'attempt',
-      lessonClass: lessonClass,
-    );
+}) => SessionRecord(
+  lessonId: lessonId,
+  completedAt: at ?? DateTime.utc(2026, 8, 3, 9, 30),
+  workedSeconds: 12,
+  unitsCompleted: lessonClass == 'notMeasured' ? 0 : 1,
+  unmeasuredUnits: unmeasuredUnits,
+  unmeasuredReason: unmeasuredReason,
+  plannedUnits: 1,
+  unitLabel: 'attempt',
+  lessonClass: lessonClass,
+);

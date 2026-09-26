@@ -26,14 +26,18 @@ LibraryFamily _batteryFamily(AppFacts f) =>
     f.ia.built.singleWhere((LibraryFamily x) => x.id == 'assessment_battery');
 
 Future<void> _pumpBattery(WidgetTester tester, AppFacts f) async {
-  await tester.pumpWidget(MaterialApp(
-      home: FamilyPage(family: _batteryFamily(f), facts: f)));
+  await tester.pumpWidget(
+    MaterialApp(
+      home: FamilyPage(family: _batteryFamily(f), facts: f),
+    ),
+  );
   await tester.pumpAndSettle();
 }
 
 void main() {
-  testWidgets('KURAL: canlılık köprüden TÜRETİLİR — sayı DEĞİL, kural ölçülür',
-      (WidgetTester tester) async {
+  testWidgets('KURAL: canlılık köprüden TÜRETİLİR — sayı DEĞİL, kural ölçülür', (
+    WidgetTester tester,
+  ) async {
     pinNarrowSurface(tester);
     final AppFacts f = factsFromDisk();
 
@@ -51,35 +55,53 @@ void main() {
     // Ölçülen şey artık bir DENKLİK: bir test canlıdır ⟺ birincil
     // metriklerinin HEPSİ köprüde. Bu kural köprü büyüse de küçülse de aynı
     // kalır.
-    final Set<String> bridged =
-        kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+    final Set<String> bridged = kMetricBindings
+        .map((MetricBinding b) => b.lissomMetric)
+        .toSet();
     for (final TestLiveness x in f.liveness) {
       final bool shouldBeLive = x.metrics.every(bridged.contains);
-      expect(x.isLive, shouldBeLive,
-          reason: '${x.testId}: canlılık köprüyle uyuşmuyor — '
-              'metrikler ${x.metrics}, köprüde ${x.metrics.where(bridged.contains)}');
+      expect(
+        x.isLive,
+        shouldBeLive,
+        reason:
+            '${x.testId}: canlılık köprüyle uyuşmuyor — '
+            'metrikler ${x.metrics}, köprüde ${x.metrics.where(bridged.contains)}',
+      );
     }
 
     // POZİTİF ÇAPA (iki yönlü): kural boş kümede de doğrudur. Hem canlı hem
     // engelli EN AZ BİR üye olmalı — yoksa yukarıdaki döngü hiçbir şey
     // kanıtlamaz (L-183).
     expect(f.live, isNotEmpty, reason: 'hiç canlı test yok — türetim ölmüş');
-    expect(f.blocked, isNotEmpty,
-        reason: 'hiç engelli test yok — ya köprü tamamlandı (o zaman bu satır '
-            'ZAFERLE silinir) ya da türetim kırık');
+    expect(
+      f.blocked,
+      isNotEmpty,
+      reason:
+          'hiç engelli test yok — ya köprü tamamlandı (o zaman bu satır '
+          'ZAFERLE silinir) ya da türetim kırık',
+    );
 
     // Okuyucu hiçbir testi DÜŞÜRMÜYOR — sayı çivilemeden bütünlük kontrolü.
-    final Map<String, dynamic> raw = jsonDecode(
-        File('config/tests/lissom-assessment.v1.json').readAsStringSync())
-        as Map<String, dynamic>;
-    expect(f.liveness.length, (raw['tests'] as List<dynamic>).length,
-        reason: 'config\'te N test var ama türetim M üretti — okuyucu kayıt '
-            'düşürüyor');
+    final Map<String, dynamic> raw =
+        jsonDecode(
+              File('config/tests/lissom-assessment.v1.json').readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    expect(
+      f.liveness.length,
+      (raw['tests'] as List<dynamic>).length,
+      reason:
+          'config\'te N test var ama türetim M üretti — okuyucu kayıt '
+          'düşürüyor',
+    );
 
     for (final TestLiveness x in f.blocked) {
       expect(x.blocker, isNotNull);
-      expect(x.blocker!.trim(), isNotEmpty,
-          reason: '${x.testId} gerekçesiz engelli — L-135 ihlali');
+      expect(
+        x.blocker!.trim(),
+        isNotEmpty,
+        reason: '${x.testId} gerekçesiz engelli — L-135 ihlali',
+      );
     }
   });
 
@@ -93,14 +115,19 @@ void main() {
     // YÖN 1 — canlı testlerin ADI yüzeyde. Ad listesi TÜRETİLİR: elle yazılmış
     // üç ad, köprü büyüyünce eksik kalırdı ve test yine de yeşil yanardı.
     for (final TestLiveness x in f.live) {
-      expect(find.text(x.name, skipOffstage: false), findsOneWidget,
-          reason: 'canlı test yüzeyde yok: ${x.name}');
+      expect(
+        find.text(x.name, skipOffstage: false),
+        findsOneWidget,
+        reason: 'canlı test yüzeyde yok: ${x.name}',
+      );
     }
     // Başlıktaki SAYI da türetilir — "3" yazmak, ürün ilerleyince yalan olurdu.
     expect(
-        find.textContaining(
-            'MEASURED BY CAMERA IN THIS BUILD (${f.live.length})'),
-        findsOneWidget);
+      find.textContaining(
+        'MEASURED BY CAMERA IN THIS BUILD (${f.live.length})',
+      ),
+      findsOneWidget,
+    );
 
     // YÖN 2 — engelli testler de yüzeyde, GEREKÇELİ.
     // 🪤 **KAYDIRMA L-328'de GEREKLİ OLDU:** canlı satırlara talimat alt-satırı
@@ -113,15 +140,18 @@ void main() {
     // ekranın dışına iter ve `ListView` onu bırakır ⇒ arama yine bulamaz.
     // (İlk düzeltmem `blockedListKey`e kaydırıyordu ve tam bu yüzden hâlâ
     // kırmızıydı — *doğru sınıf, yanlış hedef.*)
-    final Finder blockedHeader =
-        find.textContaining('NOT MEASURED BY CAMERA (${f.blocked.length})');
+    final Finder blockedHeader = find.textContaining(
+      'NOT MEASURED BY CAMERA (${f.blocked.length})',
+    );
     await scrollTo(tester, blockedHeader);
     expect(blockedHeader, findsOneWidget);
     expect(
-        find.textContaining('measurement engine', skipOffstage: false),
-        findsWidgets,
-        reason: 'engel gerekçesi yüzeyde görünmüyorsa "isimli engel" iddiası '
-            'boş kalır');
+      find.textContaining('measurement engine', skipOffstage: false),
+      findsWidgets,
+      reason:
+          'engel gerekçesi yüzeyde görünmüyorsa "isimli engel" iddiası '
+          'boş kalır',
+    );
   });
 
   testWidgets('engel gerekçesi DOĞRU ANATOMİYİ adlandırır (L-196 sınıfı)', (
@@ -134,18 +164,24 @@ void main() {
     // Bir önceki turda bu gerekçe "gövde" diyordu ve ekran kanıtı yakaladı.
     // Artık iddia TESTLE de tutuluyor: gerekçe kaval kemiğini adlandırmalı ve
     // gövdeden BAHSETMEMELİ.
-    final TestLiveness ankle = f.liveness
-        .singleWhere((TestLiveness x) => x.testId == 'ankle_dorsiflexion');
+    final TestLiveness ankle = f.liveness.singleWhere(
+      (TestLiveness x) => x.testId == 'ankle_dorsiflexion',
+    );
     expect(ankle.blocker, contains('Shin angle'));
-    expect(ankle.blocker!.toLowerCase(), isNot(contains('trunk')),
-        reason: 'ankle_dorsiflexion gövdeyi ölçmüyor — yanlış anatomi geri '
-            'geldi');
+    expect(
+      ankle.blocker!.toLowerCase(),
+      isNot(contains('trunk')),
+      reason:
+          'ankle_dorsiflexion gövdeyi ölçmüyor — yanlış anatomi geri '
+          'geldi',
+    );
 
     // Karşıt yön: gövde metriği olan test GERÇEKTEN gövdeyi adlandırmalı.
     // (Tek yön sınanırsa "hiçbir gerekçede trunk geçmesin" gibi yanlış bir
     // kural da geçerdi.)
-    final TestLiveness bend = f.liveness
-        .singleWhere((TestLiveness x) => x.testId == 'lateral_bend');
+    final TestLiveness bend = f.liveness.singleWhere(
+      (TestLiveness x) => x.testId == 'lateral_bend',
+    );
     expect(bend.blocker!.toLowerCase(), contains('trunk'));
   });
 
@@ -167,10 +203,14 @@ void main() {
 
     for (final TestLiveness x in f.blocked) {
       for (final String id in internalIds) {
-        expect(x.blocker!.contains(id), isFalse,
-            reason: '${x.testId} gerekçesinde HAM METRİK ID var: «$id» — '
-                'dahili sözlük kullanıcı yüzeyine ait değil. Bu tam olarak '
-                '`plank_hold`da simülatörde görülen kusur.');
+        expect(
+          x.blocker!.contains(id),
+          isFalse,
+          reason:
+              '${x.testId} gerekçesinde HAM METRİK ID var: «$id» — '
+              'dahili sözlük kullanıcı yüzeyine ait değil. Bu tam olarak '
+              '`plank_hold`da simülatörde görülen kusur.',
+        );
       }
       // Geliştirici jargonu da sızmaz.
       expect(x.blocker!.toLowerCase(), isNot(contains('not declared (')));
@@ -188,11 +228,16 @@ void main() {
     expect(f.battery.derivedMeasures['hold_duration']?.isPhaseDerived, isTrue);
 
     for (final String id in <String>['plank_hold', 'single_leg_balance']) {
-      final TestLiveness t =
-          f.liveness.singleWhere((TestLiveness x) => x.testId == id);
-      expect(t.blocker, contains('timed by the session'),
-          reason: '$id faz-türevli bir büyüklük kullanıyor; gerekçe bunu '
-              'söylemeli');
+      final TestLiveness t = f.liveness.singleWhere(
+        (TestLiveness x) => x.testId == id,
+      );
+      expect(
+        t.blocker,
+        contains('timed by the session'),
+        reason:
+            '$id faz-türevli bir büyüklük kullanıyor; gerekçe bunu '
+            'söylemeli',
+      );
       // ⛔ "çalışmıyor" İDDİA EDİLMEZ — ölçülmedi.
       expect(t.blocker!.toLowerCase(), isNot(contains('does not work')));
     }
@@ -212,9 +257,11 @@ void main() {
 
     // Kutunun İÇERİĞİ config'ten TAŞINIR — widget'ın kendi metni değil.
     final HonestyBox box = _batteryFamily(f).honestyBox;
-    expect(find.text(box.notMeasured.first.claim, skipOffstage: false),
-        findsOneWidget,
-        reason: 'kutu var ama config metnini taşımıyorsa kutu bir dekordur');
+    expect(
+      find.text(box.notMeasured.first.claim, skipOffstage: false),
+      findsOneWidget,
+      reason: 'kutu var ama config metnini taşımıyorsa kutu bir dekordur',
+    );
   });
 
   testWidgets('kalıcı ölçüm-sınırı beyanı sayfada (uyum maddesi ⑱)', (
@@ -226,9 +273,13 @@ void main() {
     expect(find.byKey(MeasurementLimitsFootnote.key_), findsOneWidget);
     // Marj SAYISI yok, marjın ÖLÇÜLMEDİĞİ beyanı var. Bir sayı belirirse
     // (ör. "±5°") o sayının bir ölçümü olmalı — bu kapı onu görünür yapar.
-    expect(find.textContaining('±', skipOffstage: false), findsNothing,
-        reason: 'kod tabanında ölçülmüş bir doğruluk marjı YOK; bir marj '
-            'işareti belirdiyse uydurulmuş demektir (madde ⑫)');
+    expect(
+      find.textContaining('±', skipOffstage: false),
+      findsNothing,
+      reason:
+          'kod tabanında ölçülmüş bir doğruluk marjı YOK; bir marj '
+          'işareti belirdiyse uydurulmuş demektir (madde ⑫)',
+    );
   });
 
   test('TERS İKİZ: kapı fazla genişlerse canlı cümleler ölür (L-248)', () {
@@ -263,16 +314,20 @@ void main() {
   ) async {
     pinNarrowSurface(tester);
     final AppFacts f = factsFromDisk();
-    final LibraryFamily yoga =
-        f.ia.families.singleWhere((LibraryFamily x) => x.id == 'yoga_styles');
+    final LibraryFamily named = f.ia.families.singleWhere(
+      (LibraryFamily x) => x.id == 'population_packs',
+    );
 
     await tester.pumpWidget(
-        MaterialApp(home: FamilyPage(family: yoga, facts: f)));
+      MaterialApp(
+        home: FamilyPage(family: named, facts: f),
+      ),
+    );
     await tester.pumpAndSettle();
 
     // Adlar görünür (genişlik saklanmıyor)...
     expect(find.byKey(FamilyPage.namedChildrenKey), findsOneWidget);
-    expect(find.text('Hatha', skipOffstage: false), findsOneWidget);
+    expect(find.text('Desk Worker', skipOffstage: false), findsOneWidget);
     // ...ama test listesi/kurs kartı YOK (sahte doluluk yasağı).
     expect(find.byKey(FamilyPage.liveListKey), findsNothing);
     expect(find.byKey(FamilyPage.blockedListKey), findsNothing);
@@ -281,47 +336,60 @@ void main() {
     expectNoBannedCopy(tester);
   });
 
-  testWidgets('"What Lissom doesn\'t do" — defter atfı SIZMAZ, dışlamalar VAR',
-      (WidgetTester tester) async {
-    pinNarrowSurface(tester);
-    final AppFacts f = factsFromDisk();
-    await tester.pumpWidget(MaterialApp(
-      home: WhatLissomDoesntDoScreen(
-          items: f.ia.whyNot,
-          excluded: f.battery.excluded,
-          poseTiers: f.ia.poseTiers),
-    ));
-    await tester.pumpAndSettle();
+  testWidgets(
+    '"What Lissom doesn\'t do" — defter atfı SIZMAZ, dışlamalar VAR',
+    (WidgetTester tester) async {
+      pinNarrowSurface(tester);
+      final AppFacts f = factsFromDisk();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: WhatLissomDoesntDoScreen(
+            items: f.ia.whyNot,
+            excluded: f.battery.excluded,
+            poseTiers: f.ia.poseTiers,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
 
-    // Ürün sınırları config'ten (5 kalem, elle yazılmış Dart ikizi SİLİNDİ).
-    // Sayı DEĞİL kural: okuyucu hiçbir kalemi düşürmüyor (L-239).
-    final Map<String, dynamic> rawIa = jsonDecode(
-        File('config/ia/library.v1.json').readAsStringSync())
-        as Map<String, dynamic>;
-    expect(
+      // Ürün sınırları config'ten (5 kalem, elle yazılmış Dart ikizi SİLİNDİ).
+      // Sayı DEĞİL kural: okuyucu hiçbir kalemi düşürmüyor (L-239).
+      final Map<String, dynamic> rawIa =
+          jsonDecode(File('config/ia/library.v1.json').readAsStringSync())
+              as Map<String, dynamic>;
+      expect(
         f.ia.whyNot.length,
         ((rawIa['whyNotPage'] as Map<String, dynamic>)['items']
                 as List<dynamic>)
-            .length);
-    expect(f.ia.whyNot, isNotEmpty, reason: 'pozitif çapa');
-    expect(find.byKey(WhatLissomDoesntDoScreen.boundariesKey), findsOneWidget);
+            .length,
+      );
+      expect(f.ia.whyNot, isNotEmpty, reason: 'pozitif çapa');
+      expect(
+        find.byKey(WhatLissomDoesntDoScreen.boundariesKey),
+        findsOneWidget,
+      );
 
-    // Bağlanmamış dışlama KENDİ satırını alır — `cervical_rotation` daha önce
-    // hiçbir yüzeyde görünmüyordu (L-219).
-    await scrollTo(tester, find.byKey(WhatLissomDoesntDoScreen.excludedKey));
-    expect(find.text('Cervical rotation'), findsOneWidget);
+      // Bağlanmamış dışlama KENDİ satırını alır — `cervical_rotation` daha önce
+      // hiçbir yüzeyde görünmüyordu (L-219).
+      await scrollTo(tester, find.byKey(WhatLissomDoesntDoScreen.excludedKey));
+      expect(find.text('Cervical rotation'), findsOneWidget);
 
-    // Ham id de defter atfı da SIZMAZ (L-223, ekran kanıtı yakaladı).
-    expect(find.textContaining('cervical_rotation', skipOffstage: false),
-        findsNothing);
-    expectNoBannedCopy(tester);
-    // Atıf config'te DURUYOR — silinmedi, yalnız yüzeyden çıkarıldı.
-    expect(
-        f.battery.excluded
-            .every((ExcludedTest e) => (e.record ?? '').isNotEmpty),
+      // Ham id de defter atfı da SIZMAZ (L-223, ekran kanıtı yakaladı).
+      expect(
+        find.textContaining('cervical_rotation', skipOffstage: false),
+        findsNothing,
+      );
+      expectNoBannedCopy(tester);
+      // Atıf config'te DURUYOR — silinmedi, yalnız yüzeyden çıkarıldı.
+      expect(
+        f.battery.excluded.every(
+          (ExcludedTest e) => (e.record ?? '').isNotEmpty,
+        ),
         isTrue,
-        reason: 'izlenebilirlik kaybolmamalı — atıf `record` alanında yaşar');
-  });
+        reason: 'izlenebilirlik kaybolmamalı — atıf `record` alanında yaşar',
+      );
+    },
+  );
 
   test('config asset olarak KAYITLI (yoksa canlı cihazda okunamaz)', () {
     final String pubspec = File('pubspec.yaml').readAsStringSync();
@@ -330,13 +398,19 @@ void main() {
       'config/ia/library.v1.json',
     ]) {
       final String dir = '${path.substring(0, path.lastIndexOf('/'))}/';
-      expect(pubspec.contains(path) || pubspec.contains('- $dir'), isTrue,
-          reason: 'asset kaydı olmadan `rootBundle` cihazda FIRLATIR — test '
-              'dosyadan okuduğu için bunu yakalamaz, o yüzden ayrı iddia: '
-              '$path');
+      expect(
+        pubspec.contains(path) || pubspec.contains('- $dir'),
+        isTrue,
+        reason:
+            'asset kaydı olmadan `rootBundle` cihazda FIRLATIR — test '
+            'dosyadan okuduğu için bunu yakalamaz, o yüzden ayrı iddia: '
+            '$path',
+      );
       expect(File(path).existsSync(), isTrue);
-      expect(jsonDecode(File(path).readAsStringSync()),
-          isA<Map<String, dynamic>>());
+      expect(
+        jsonDecode(File(path).readAsStringSync()),
+        isA<Map<String, dynamic>>(),
+      );
     }
   });
 }

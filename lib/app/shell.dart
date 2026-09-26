@@ -31,6 +31,8 @@ import 'package:motion_core/motion_core.dart';
 import 'app_facts.dart';
 import 'attempt_values.dart';
 import 'home_screen.dart';
+import 'hatha_progress.dart';
+import 'hatha_course_screen.dart';
 import 'library_screen.dart';
 import 'lissom_theme.dart';
 import 'local_account_bridge.dart';
@@ -132,6 +134,36 @@ class _LissomShellState extends State<LissomShell> {
     });
   }
 
+  Future<HathaProgressStore> Function() _hathaStoreLoader() {
+    final LissomLocalScope scope = widget.localScope;
+    return () => openHathaProgressStore(
+      scope: scope,
+      canWrite: () => mounted && widget.localScope.ownerKey == scope.ownerKey,
+    );
+  }
+
+  Future<void> _openHatha(AppFacts facts) async {
+    final course = facts.hatha;
+    if (course == null) return;
+    final Future<HathaProgressStore> Function() storeLoader =
+        _hathaStoreLoader();
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => HathaCourseScreen(
+          course: course,
+          initialProgress:
+              facts.hathaProgress ??
+              const HathaProgress(
+                records: <HathaPracticeRecord>[],
+                unreadableRecords: 0,
+              ),
+          storeLoader: storeLoader,
+        ),
+      ),
+    );
+    if (mounted) _reloadFacts();
+  }
+
   @override
   Widget build(BuildContext context) => FutureBuilder<AppFacts>(
     future: _facts,
@@ -186,6 +218,7 @@ class _LissomShellState extends State<LissomShell> {
       onOpenLibrary: () =>
           setState(() => _index = facts.ia.tabs.indexOf('library')),
       onMeasurementDone: _reloadFacts,
+      onOpenHatha: () => _openHatha(facts),
       poseSourceLoader: widget.poseSourceLoader,
       sessionStoreLoader:
           widget.sessionStoreLoader ??
@@ -196,6 +229,8 @@ class _LissomShellState extends State<LissomShell> {
     ),
     'library' => LibraryScreen(
       facts: facts,
+      onCourseDone: _reloadFacts,
+      hathaStoreLoader: _hathaStoreLoader(),
       attemptValueStoreLoader:
           widget.attemptValueStoreLoader ??
           () => openAttemptValueStore(scope: widget.localScope),

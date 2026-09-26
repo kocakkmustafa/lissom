@@ -47,11 +47,11 @@ enum FamilyStatus {
   available;
 
   static FamilyStatus parse(String path, String raw) => switch (raw) {
-        'in_progress' => FamilyStatus.inProgress,
-        'coming_soon' => FamilyStatus.notBuilt,
-        'available' => FamilyStatus.available,
-        _ => throw IaError(path, 'bilinmeyen status: $raw'),
-      };
+    'in_progress' => FamilyStatus.inProgress,
+    'coming_soon' => FamilyStatus.notBuilt,
+    'available' => FamilyStatus.available,
+    _ => throw IaError(path, 'bilinmeyen status: $raw'),
+  };
 }
 
 /// Dürüstlük kutusundaki TEK bir "şunu ölçüyoruz" iddiası — **ve dayanağı.**
@@ -92,7 +92,10 @@ final class HonestyClaim {
 
 /// Bir "şunu ölçmüyoruz" satırı — ve varsa, onu YALANLAYACAK koşul.
 final class NotMeasuredLine {
-  const NotMeasuredLine({required this.claim, required this.falsifiedIfBridged});
+  const NotMeasuredLine({
+    required this.claim,
+    required this.falsifiedIfBridged,
+  });
 
   final String claim;
 
@@ -153,6 +156,7 @@ final class LibraryFamily {
     required this.children,
     required this.honestyBox,
     required this.itemsSource,
+    this.teachingOnly = false,
   });
 
   final String id;
@@ -166,6 +170,9 @@ final class LibraryFamily {
   /// Boş ise ailenin öğeleri yalnız [children] olarak İSİMLENDİRİLMİŞTİR —
   /// isimlendirilmiş ≠ inşa edilmiş.
   final String? itemsSource;
+
+  /// Built guided course with no camera measurement claim.
+  final bool teachingOnly;
 
   bool get isBuilt => status == FamilyStatus.inProgress;
 
@@ -293,14 +300,14 @@ enum LimitKind {
 
   /// Kullanıcının okuyacağı hâl — makine adı yüzeye SIZMAZ (G-100).
   String get userText => switch (this) {
-        LimitKind.capability =>
-          'A limit of what a phone camera can do. Better hardware could '
-              'change this.',
-        LimitKind.measurement =>
-          'A limit of what we can measure apart from everything else.',
-        LimitKind.judgement =>
-          'A choice. We would keep it even with perfect measurement.',
-      };
+    LimitKind.capability =>
+      'A limit of what a phone camera can do. Better hardware could '
+          'change this.',
+    LimitKind.measurement =>
+      'A limit of what we can measure apart from everything else.',
+    LimitKind.judgement =>
+      'A choice. We would keep it even with perfect measurement.',
+  };
 }
 
 /// Sınıf adını çözer — bilinmeyen bir ad SESSİZCE varsayılana düşmez.
@@ -310,7 +317,8 @@ LimitKind _limitKind(String name, int index) {
   }
   final String valid = LimitKind.values.map((LimitKind k) => k.name).join(', ');
   throw StateError(
-      'whyNotPage.items[$index].kind bilinmiyor: "$name" — geçerli: $valid');
+    'whyNotPage.items[$index].kind bilinmiyor: "$name" — geçerli: $valid',
+  );
 }
 
 final class WhyNotItem {
@@ -361,8 +369,10 @@ final class LibraryIa {
       throw IaError('<root>', 'nesne olmalı');
     }
     if (decoded['version'] is! String) {
-      throw IaError('version',
-          'sürüm beyan edilmemiş — sürümsüz config izlenemez (Battery emsali)');
+      throw IaError(
+        'version',
+        'sürüm beyan edilmemiş — sürümsüz config izlenemez (Battery emsali)',
+      );
     }
 
     final Object? rawTabs = decoded['tabs'];
@@ -386,11 +396,13 @@ final class LibraryIa {
       if (s is! Map<String, dynamic>) {
         throw IaError('home.sections[$i]', 'nesne olmalı');
       }
-      sections.add(HomeSection(
-        id: _str(s['id'], 'home.sections[$i].id'),
-        title: _str(s['title'], 'home.sections[$i].title'),
-        source: _str(s['source'], 'home.sections[$i].source'),
-      ));
+      sections.add(
+        HomeSection(
+          id: _str(s['id'], 'home.sections[$i].id'),
+          title: _str(s['title'], 'home.sections[$i].title'),
+          source: _str(s['source'], 'home.sections[$i].source'),
+        ),
+      );
     }
 
     final Object? rawFamilies = decoded['families'];
@@ -416,15 +428,16 @@ final class LibraryIa {
       if (it is! Map<String, dynamic>) {
         throw IaError('whyNotPage.items[$i]', 'nesne olmalı');
       }
-      whyNot.add(WhyNotItem(
-        topic: _str(it['topic'], 'whyNotPage.items[$i].topic'),
-        reason: _str(it['reason'], 'whyNotPage.items[$i].reason'),
-        // Sınıf ZORUNLU: sınıfsız bir sınır satırı, okuyucunun kendi
-        // varsayımına bırakılır — ve varsayılan varsayım "teknoloji çözer"
-        // olur (L-265).
-        kind: _limitKind(
-            _str(it['kind'], 'whyNotPage.items[$i].kind'), i),
-      ));
+      whyNot.add(
+        WhyNotItem(
+          topic: _str(it['topic'], 'whyNotPage.items[$i].topic'),
+          reason: _str(it['reason'], 'whyNotPage.items[$i].reason'),
+          // Sınıf ZORUNLU: sınıfsız bir sınır satırı, okuyucunun kendi
+          // varsayımına bırakılır — ve varsayılan varsayım "teknoloji çözer"
+          // olur (L-265).
+          kind: _limitKind(_str(it['kind'], 'whyNotPage.items[$i].kind'), i),
+        ),
+      );
     }
 
     return LibraryIa(
@@ -451,17 +464,21 @@ final class LibraryIa {
       // Tam skorlanmayan katman GEREKÇESİZ olamaz: bu ürünün tüm duruşu
       // "neyi ölçmediğimizi SEBEBİYLE söylemek".
       if (scored != 'true' && (reason == null || reason.trim().isEmpty)) {
-        throw IaError('poseLibraryTiers[$i].reason',
-            'tam skorlanmayan katman için ZORUNLU — gerekçesiz sınır, '
-            'açıklanmamış bir eksikliktir');
+        throw IaError(
+          'poseLibraryTiers[$i].reason',
+          'tam skorlanmayan katman için ZORUNLU — gerekçesiz sınır, '
+              'açıklanmamış bir eksikliktir',
+        );
       }
-      out.add(PoseTier(
-        tier: (e['tier'] as num).toInt(),
-        scope: _str(e['scope'], 'poseLibraryTiers[$i].scope'),
-        coaching: _str(e['coaching'], 'poseLibraryTiers[$i].coaching'),
-        scoredLabel: scored,
-        reason: reason,
-      ));
+      out.add(
+        PoseTier(
+          tier: (e['tier'] as num).toInt(),
+          scope: _str(e['scope'], 'poseLibraryTiers[$i].scope'),
+          coaching: _str(e['coaching'], 'poseLibraryTiers[$i].coaching'),
+          scoredLabel: scored,
+          reason: reason,
+        ),
+      );
     }
     return out;
   }
@@ -475,11 +492,13 @@ final class LibraryIa {
       if (v is! num) throw IaError('navigationRules.$k', 'sayı zorunlu');
       return v.toInt();
     }
+
     bool flag(String k) {
       final Object? v = raw[k];
       if (v is! bool) throw IaError('navigationRules.$k', 'bool zorunlu');
       return v;
     }
+
     return NavigationRules(
       maxTapsHomeToActiveCourse: req('maxTapsHomeToActiveCourse'),
       maxTapsLibraryToAnyCourse: req('maxTapsLibraryToAnyCourse'),
@@ -490,6 +509,18 @@ final class LibraryIa {
 
   static LibraryFamily _family(Object? raw, String path) {
     if (raw is! Map<String, dynamic>) throw IaError(path, 'nesne olmalı');
+    final bool teachingOnly = raw['teachingOnly'] == true;
+    if (raw.containsKey('teachingOnly') && raw['teachingOnly'] is! bool) {
+      throw IaError('$path.teachingOnly', 'bool olmalı');
+    }
+    if (teachingOnly &&
+        (raw['itemsSource'] is! String ||
+            (raw['itemsSource'] as String).isEmpty)) {
+      throw IaError(
+        '$path.itemsSource',
+        'teachingOnly için kurs kaynağı zorunlu',
+      );
+    }
 
     final List<FamilyChild> children = <FamilyChild>[];
     final Object? rawChildren = raw['children'];
@@ -500,27 +531,43 @@ final class LibraryIa {
         if (c is! Map<String, dynamic>) {
           throw IaError('$path.children[$i]', 'nesne olmalı');
         }
-        children.add(FamilyChild(
-          id: _str(c['id'], '$path.children[$i].id'),
-          title: _str(c['title'], '$path.children[$i].title'),
-          status: FamilyStatus.parse('$path.children[$i].status',
-              _str(c['status'], '$path.children[$i].status')),
-          deepLink: c['deepLink'] as String?,
-        ));
+        children.add(
+          FamilyChild(
+            id: _str(c['id'], '$path.children[$i].id'),
+            title: _str(c['title'], '$path.children[$i].title'),
+            status: FamilyStatus.parse(
+              '$path.children[$i].status',
+              _str(c['status'], '$path.children[$i].status'),
+            ),
+            deepLink: c['deepLink'] as String?,
+          ),
+        );
       }
     }
 
     return LibraryFamily(
       id: _str(raw['id'], '$path.id'),
       title: _str(raw['title'], '$path.title'),
-      status: FamilyStatus.parse('$path.status', _str(raw['status'], '$path.status')),
+      status: FamilyStatus.parse(
+        '$path.status',
+        _str(raw['status'], '$path.status'),
+      ),
       intro: _str(raw['intro'], '$path.intro'),
       children: children,
-      honestyBox: _honesty(raw['honestyBox'], '$path.honestyBox',
-          requireEvidence:
-              FamilyStatus.parse('$path.status', _str(raw['status'], '$path.status')) ==
-                  FamilyStatus.inProgress),
+      honestyBox: _honesty(
+        raw['honestyBox'],
+        '$path.honestyBox',
+        requireEvidence:
+            FamilyStatus.parse(
+                  '$path.status',
+                  _str(raw['status'], '$path.status'),
+                ) ==
+                FamilyStatus.inProgress &&
+            !teachingOnly,
+        allowNoMeasurement: teachingOnly,
+      ),
       itemsSource: raw['itemsSource'] as String?,
+      teachingOnly: teachingOnly,
     );
   }
 
@@ -533,23 +580,37 @@ final class LibraryIa {
   /// ZORUNDA. Bu, L-230'un yapısal panzehiri: kanıtsız bir "şunu ölçüyoruz"
   /// cümlesi config'e giremez, dolayısıyla doğrulanamayan bir iddia yüzeye
   /// ÇIKAMAZ.
-  static HonestyBox _honesty(Object? raw, String path,
-      {required bool requireEvidence}) {
+  static HonestyBox _honesty(
+    Object? raw,
+    String path, {
+    required bool requireEvidence,
+    bool allowNoMeasurement = false,
+  }) {
     if (raw is! Map<String, dynamic>) {
-      throw IaError(path,
-          'ZORUNLU — dürüstlük kutusu olmayan aile yüzeye çıkamaz (IA config '
-          'notu: "Bu kutu opsiyonel değil")');
+      throw IaError(
+        path,
+        'ZORUNLU — dürüstlük kutusu olmayan aile yüzeye çıkamaz (IA config '
+        'notu: "Bu kutu opsiyonel değil")',
+      );
     }
-    final List<HonestyClaim> measured =
-        _claims(raw['measured'], '$path.measured', requireEvidence);
-    final List<NotMeasuredLine> notMeasured =
-        _notMeasured(raw['notMeasured'], '$path.notMeasured');
+    final List<HonestyClaim> measured = _claims(
+      raw['measured'],
+      '$path.measured',
+      requireEvidence,
+      allowEmpty: allowNoMeasurement,
+    );
+    final List<NotMeasuredLine> notMeasured = _notMeasured(
+      raw['notMeasured'],
+      '$path.notMeasured',
+    );
     if (notMeasured.isEmpty) {
-      throw IaError('$path.notMeasured',
-          'boş olamaz — "neler ölçülmez" boş bir liste, dürüstlük kutusunu '
-          'pazarlama kutusuna çevirir');
+      throw IaError(
+        '$path.notMeasured',
+        'boş olamaz — "neler ölçülmez" boş bir liste, dürüstlük kutusunu '
+            'pazarlama kutusuna çevirir',
+      );
     }
-    if (measured.isEmpty) {
+    if (measured.isEmpty && !allowNoMeasurement) {
       throw IaError('$path.measured', 'boş olamaz');
     }
     return HonestyBox(measured: measured, notMeasured: notMeasured);
@@ -560,18 +621,24 @@ final class LibraryIa {
   ///     canlı değil ve bunu aile durumu söylüyor)
   ///   - `{claim, requires}` nesnesi (inşa edilmiş ailede ZORUNLU)
   static List<HonestyClaim> _claims(
-      Object? raw, String path, bool requireEvidence) {
+    Object? raw,
+    String path,
+    bool requireEvidence, {
+    bool allowEmpty = false,
+  }) {
     if (raw is! List) throw IaError(path, 'liste olmalı');
-    if (raw.isEmpty) throw IaError(path, 'boş olamaz');
+    if (raw.isEmpty && !allowEmpty) throw IaError(path, 'boş olamaz');
     final List<HonestyClaim> out = <HonestyClaim>[];
     for (int i = 0; i < raw.length; i++) {
       final Object? e = raw[i];
       if (e is String) {
         if (requireEvidence) {
-          throw IaError('$path[$i]',
-              'inşa edilmiş ailede düz metin iddia YASAK — her iddia '
-              '`requires` ile dayanağını beyan etmeli (L-230: kanıtsız iddia '
-              'doğrulanamaz, doğrulanamayan iddia pazarlamadır)');
+          throw IaError(
+            '$path[$i]',
+            'inşa edilmiş ailede düz metin iddia YASAK — her iddia '
+                '`requires` ile dayanağını beyan etmeli (L-230: kanıtsız iddia '
+                'doğrulanamaz, doğrulanamayan iddia pazarlamadır)',
+          );
         }
         out.add(HonestyClaim(claim: e, requires: const <String>[]));
         continue;
@@ -579,14 +646,22 @@ final class LibraryIa {
       if (e is! Map<String, dynamic>) {
         throw IaError('$path[$i]', 'dize ya da nesne olmalı');
       }
-      final List<String> requires =
-          _strList(e['requires'], '$path[$i].requires');
+      final List<String> requires = _strList(
+        e['requires'],
+        '$path[$i].requires',
+      );
       if (requireEvidence && requires.isEmpty) {
-        throw IaError('$path[$i].requires',
-            'boş olamaz — dayanaksız iddia yüzeye çıkamaz');
+        throw IaError(
+          '$path[$i].requires',
+          'boş olamaz — dayanaksız iddia yüzeye çıkamaz',
+        );
       }
-      out.add(HonestyClaim(
-          claim: _str(e['claim'], '$path[$i].claim'), requires: requires));
+      out.add(
+        HonestyClaim(
+          claim: _str(e['claim'], '$path[$i].claim'),
+          requires: requires,
+        ),
+      );
     }
     return out;
   }
@@ -598,17 +673,23 @@ final class LibraryIa {
     for (int i = 0; i < raw.length; i++) {
       final Object? e = raw[i];
       if (e is String) {
-        out.add(NotMeasuredLine(claim: e, falsifiedIfBridged: const <String>[]));
+        out.add(
+          NotMeasuredLine(claim: e, falsifiedIfBridged: const <String>[]),
+        );
         continue;
       }
       if (e is! Map<String, dynamic>) {
         throw IaError('$path[$i]', 'dize ya da nesne olmalı');
       }
-      out.add(NotMeasuredLine(
-        claim: _str(e['claim'], '$path[$i].claim'),
-        falsifiedIfBridged:
-            _strList(e['falsifiedIfBridged'] ?? <String>[], '$path[$i].falsifiedIfBridged'),
-      ));
+      out.add(
+        NotMeasuredLine(
+          claim: _str(e['claim'], '$path[$i].claim'),
+          falsifiedIfBridged: _strList(
+            e['falsifiedIfBridged'] ?? <String>[],
+            '$path[$i].falsifiedIfBridged',
+          ),
+        ),
+      );
     }
     return out;
   }
@@ -625,6 +706,6 @@ final class LibraryIa {
 
   static String _str(Object? raw, String path) =>
       raw is String && raw.trim().isNotEmpty
-          ? raw
-          : throw IaError(path, 'boş olmayan dize zorunlu');
+      ? raw
+      : throw IaError(path, 'boş olmayan dize zorunlu');
 }

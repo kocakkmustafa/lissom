@@ -86,6 +86,7 @@ class LissomApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
     key: ValueKey<String>('lissom:${localScope.ownerKey}'),
     title: 'Lissom',
     theme: buildLissomTheme(),
@@ -167,6 +168,7 @@ class _AccountSetupFailureApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
     supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
       GlobalMaterialLocalizations.delegate,

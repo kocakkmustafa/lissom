@@ -155,8 +155,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                         Text(
                           localeText(
                             context,
-                            'Browse assessments without an account. Live camera checks require a Motion account and Lissom or Motion+ membership.',
-                            'Ölçümlere hesap açmadan göz atabilirsin. Canlı kamera ölçümleri için Motion hesabı ve Lissom veya Motion+ üyeliği gerekir.',
+                            'Practise the Hatha yoga course without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
+                            'Hatha yoga kursunu hesap veya kamera olmadan çalışabilirsin. Motion hesabı isteğe bağlıdır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.',
                           ),
                           style: t.textTheme.bodySmall,
                         ),
@@ -227,11 +227,14 @@ class _WelcomeStep extends StatelessWidget {
         Text(
           localeText(
             context,
-            'Lissom uses your phone\'s camera to measure how you move, and '
-                'tells you plainly what it measured and what it did not. It '
-                'measures — it does not guess.',
-            'Lissom, nasıl hareket ettiğini ölçmek için telefonunun kamerasını '
-                'kullanır. Neyi ölçebildiğini ve neyi ölçemediğini açıkça söyler.',
+            'Lissom offers a progressive Hatha yoga course with practice tasks, '
+                'adaptations and self-checks. Course progress stays on this '
+                'device and reflects your own practice record. Live camera '
+                'measurements and subscription sales are closed in this release.',
+            'Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren '
+                'sıralı bir Hatha yoga kursu sunar. Kurs ilerlemesi bu cihazda '
+                'kalır ve kendi çalışma kaydını gösterir. Bu sürümde canlı '
+                'kamera ölçümleri ve abonelik satışı kapalıdır.',
           ),
           style: t.textTheme.bodyMedium,
         ),
@@ -250,8 +253,8 @@ class _DisclaimerStep extends StatelessWidget {
   /// BİREBİR (bkz. `MeasurementLimitsFootnote.limitsCopy` ile aynı sözleşme
   /// — TAŞINDI, UYDURULMADI).
   static const String text =
-      'Lissom is a general wellness app. It uses your phone\'s camera to '
-      'estimate movement capacity for tracking purposes only. It is not a '
+      'Lissom is a general wellness app offering Hatha yoga practice. '
+      'Live camera measurements are closed in this release. It is not a '
       'medical device, does not diagnose or treat any condition, and is '
       'not a substitute for professional medical or physical therapy '
       'advice. If you have pain, an injury, or a medical condition, talk '
@@ -272,9 +275,9 @@ class _DisclaimerStep extends StatelessWidget {
           localeText(
             context,
             text,
-            'Lissom genel sağlıklı yaşam amaçlı bir uygulamadır. Hareketini '
-            'yaklaşık olarak değerlendirmek için telefonunun kamerasını '
-            'kullanır. Tıbbi cihaz değildir; herhangi bir hastalığı '
+            'Lissom, Hatha yoga çalışması sunan genel sağlıklı yaşam amaçlı '
+            'bir uygulamadır. Bu sürümde canlı kamera ölçümleri kapalıdır. '
+            'Tıbbi cihaz değildir; herhangi bir hastalığı '
             'teşhis veya tedavi etmez. Tıbbi ya da fizyoterapi tavsiyesinin '
             'yerine geçmez. Ağrın, sakatlığın veya bir sağlık sorunun '
             'varsa yeni bir hareket programına başlamadan önce yetkin '

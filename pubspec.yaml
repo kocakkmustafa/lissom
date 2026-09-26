@@ -1,7 +1,7 @@
 name: lissom
 description: Lissom — movement-health assessment. Camera-based, on device.
 publish_to: none
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.9.0
@@ -72,6 +72,8 @@ dependencies:
   permission_handler: ^11.3.1
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   lints: ^5.0.0
@@ -93,6 +95,7 @@ flutter:
     - config/metrics/
     - config/phases/
     - config/ia/
+    - config/courses/
 
     # ⚠️ POZ MODELİ — `motion_camera` modeli **KASITLI taşımıyor**:
     # "the plugin deliberately bundles no model (apps pin their own and ship

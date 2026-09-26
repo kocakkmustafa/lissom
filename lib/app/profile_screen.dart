@@ -159,12 +159,15 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       localeText(
                         context,
-                        'The camera reads your movement while you measure. '
-                            'Video is not kept or uploaded. Test results and dates '
-                            'are saved in Lissom\'s local app storage.',
-                        'Kamera, ölçüm sırasında hareketini anlık olarak okur. '
-                            'Video saklanmaz veya yüklenmez. Test sonuçları ve '
-                            'tarihleri Lissom\'un yerel uygulama alanına kaydedilir.',
+                        'Live camera measurements and subscription sales are '
+                            'closed in this release. The Hatha yoga course works '
+                            'without a camera. Course progress and self-checks '
+                            'stay in local app storage. Existing measurement '
+                            'records also remain on this device.',
+                        'Bu sürümde canlı kamera ölçümleri ve abonelik satışı '
+                            'kapalıdır. Hatha yoga kursu kamera olmadan çalışır. '
+                            'Kurs ilerlemesi ve öz denetimler yerel uygulama '
+                            'alanında kalır. Önceki ölçüm kayıtları da bu cihazda kalır.',
                       ),
                       style: t.textTheme.bodyMedium,
                     ),

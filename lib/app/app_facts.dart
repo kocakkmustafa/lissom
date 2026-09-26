@@ -14,6 +14,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:lissom_engine/lissom_engine.dart';
 
 import 'assessment_history.dart';
+import 'hatha_course.dart';
+import 'hatha_progress.dart';
 import 'ia.dart';
 import 'local_account_bridge.dart';
 import 'session_history_view.dart';
@@ -24,6 +26,8 @@ final class AppFacts {
     required this.battery,
     required this.liveness,
     required this.history,
+    this.hatha,
+    this.hathaProgress,
   });
 
   final LibraryIa ia;
@@ -34,6 +38,8 @@ final class AppFacts {
 
   /// Geçmiş katmanının üç hâlli okuması.
   final SessionHistoryView history;
+  final HathaCourse? hatha;
+  final HathaProgress? hathaProgress;
 
   List<TestLiveness> get live =>
       liveness.where((TestLiveness x) => x.isLive).toList(growable: false);
@@ -147,7 +153,14 @@ final class AppFacts {
     final String iaRaw = await rootBundle.loadString(
       'config/ia/library.v1.json',
     );
+    final String hathaRaw = await rootBundle.loadString(
+      'config/courses/hatha.v1.json',
+    );
     final Battery battery = Battery.parseJson(batteryRaw);
+    final HathaCourse hatha = HathaCourse.parse(hathaRaw);
+    final HathaProgress hathaProgress = await (await openHathaProgressStore(
+      scope: scope,
+    )).read();
     return AppFacts(
       ia: LibraryIa.parseJson(iaRaw),
       battery: battery,
@@ -155,6 +168,8 @@ final class AppFacts {
       history: await SessionHistoryView.read(
         () => openSessionStore(scope: scope),
       ),
+      hatha: hatha,
+      hathaProgress: hathaProgress,
     );
   }
 }

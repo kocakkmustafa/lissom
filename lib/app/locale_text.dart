@@ -195,6 +195,14 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   _assessmentIntro:
       'On iki hareket değerlendirmesi listelenir; bu sürümde üçünün kamera ölçüm yolu vardır. Her test mevcut sınırlarını açıklar.',
   'Yoga Styles': 'Yoga türleri',
+  'A complete guided Hatha course is available. Other named styles have no classes in this build; yoga postures are not camera-scored.':
+      'Tam bir rehberli Hatha kursu mevcut. Adı geçen diğer stillerin bu sürümde dersi yok; yoga pozları kamerayla puanlanmaz.',
+  'No Hatha posture is graded or certified by the camera in this course':
+      'Bu kursta hiçbir Hatha pozu kamerayla puanlanmaz veya onaylanmaz.',
+  'Breath, pain, joint load and safety cannot be judged from the camera':
+      'Nefes, ağrı, eklem yükü ve güvenlik kamera görüntüsünden değerlendirilemez.',
+  'Advanced inversions are not required practice in this course':
+      'İleri ters duruşlar bu kursun zorunlu pratiği değildir.',
   'Hatha': 'Hatha',
   'Vinyasa': 'Vinyasa',
   'Yin': 'Yin',

@@ -34,6 +34,8 @@ import 'package:motion_account/motion_account.dart'
 
 import 'app_facts.dart';
 import 'attempt_values.dart';
+import 'hatha_course.dart';
+import 'hatha_course_screen.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
@@ -45,6 +47,7 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({
     required this.facts,
     required this.onOpenLibrary,
+    this.onOpenHatha,
     this.ageBand,
     this.onMeasurementDone,
     this.poseSourceLoader,
@@ -97,6 +100,7 @@ class HomeScreen extends StatelessWidget {
   static const Key continueKey = Key('home.continue');
   static const Key quickStartKey = Key('home.quick_start');
   static const Key startMeasurementKey = Key('home.startMeasurement');
+  static const Key hathaCourseKey = Key('home.hathaCourse');
 
   /// Bölüm id'si → o bölümün gövdesi. Config'te TANIMSIZ bir bölüm gelirse
   /// sessizce atlanmaz: [_unknownSection] onu ADIYLA gösterir. Sessiz atlama,
@@ -111,6 +115,7 @@ class HomeScreen extends StatelessWidget {
 
   final AppFacts facts;
   final VoidCallback onOpenLibrary;
+  final VoidCallback? onOpenHatha;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +124,10 @@ class HomeScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
+          if (facts.hatha case final HathaCourse course) ...<Widget>[
+            _courseCard(context, course),
+            const SizedBox(height: 24),
+          ],
           // Cihaz-geçişi olgusu [DevicePassClaim]'den TÜRETİLİR (L-318) —
           // burada elle yazılsaydı A12 kapandığında güncellenmeyen üçüncü
           // kopya BU olurdu.
@@ -135,6 +144,58 @@ class HomeScreen extends StatelessWidget {
             _section(context, s),
             const SizedBox(height: 20),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _courseCard(BuildContext context, HathaCourse course) {
+    final int practiced = facts.hathaProgress?.practicedIn(course).length ?? 0;
+    return LissomCard(
+      key: hathaCourseKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          LissomEyebrow(localeText(context, 'YOUR HATHA PATH', 'HATHA YOLUN')),
+          const SizedBox(height: 8),
+          Text(
+            hathaText(context, course.title),
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            localeText(
+              context,
+              '${course.modules.length} modules · ${course.lessons.length} lessons · '
+                  '$practiced practised',
+              '${course.modules.length} modül · ${course.lessons.length} ders · '
+                  '$practiced çalışıldı',
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            localeText(
+              context,
+              'Choose a lesson, explore its easier options, and record your practice. '
+                  'Your pace is part of the path.',
+              'Bir ders seç, kolay seçeneklerini keşfet ve çalışmanı kaydet. '
+                  'Kendi hızın bu yolun bir parçası.',
+            ),
+          ),
+          const SizedBox(height: 14),
+          FilledButton.icon(
+            onPressed: onOpenHatha ?? onOpenLibrary,
+            icon: const Icon(Icons.play_arrow_rounded),
+            label: Text(
+              localeText(
+                context,
+                practiced == 0 ? 'Start Hatha course' : 'Continue Hatha course',
+                practiced == 0
+                    ? 'Hatha kursuna başla'
+                    : 'Hatha kursuna devam et',
+              ),
+            ),
+          ),
         ],
       ),
     );

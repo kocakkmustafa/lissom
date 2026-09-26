@@ -141,6 +141,9 @@ USER_FACING_KEYS = {
     # metinleri sessizce denetim DIŞINDA kalırdı: şemayı değiştirip bu listeyi
     # güncellememek, dosyanın kendi uyarısının canlı örneği.
     "claim",
+    # Guided-course copy is bilingual and includes step arrays.
+    "outcome", "objective", "steps", "practice", "selfCheck",
+    "adaptation", "stopSignal",
 }
 
 #: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
@@ -150,7 +153,7 @@ USER_FACING_KEYS = {
 #:
 #: `config/metrics/` kasıtlı olarak DIŞARIDA: metrik tanımları teknik config'tir,
 #: içindeki `description` alanları geliştiriciye yazılmıştır, kullanıcıya değil.
-CONTENT_DIRS = ("config/content", "config/tests", "config/copy", "config/ia", "l10n")
+CONTENT_DIRS = ("config/content", "config/courses", "config/tests", "config/copy", "config/ia", "l10n")
 MIN_STRINGS_PER_FILE = 1
 
 #: Kullanıcı metni TAŞIYAN Dart kaynağı.
@@ -198,6 +201,12 @@ def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
     """JSON ağacından yalnız kullanıcıya görünen string alanları topla."""
     out: list[tuple[str, str]] = []
     if isinstance(node, dict):
+        # English-only policy: scan the displayed English translation, while
+        # the course parser separately requires both languages. Internal
+        # media briefs remain outside user-facing copy.
+        field = path.rsplit(".", 1)[-1].split("[", 1)[0]
+        if field in USER_FACING_KEYS and isinstance(node.get("en"), str) and "tr" in node:
+            return [(f"{path}.en", node["en"])]
         for k, v in node.items():
             child = f"{path}.{k}" if path else k
             if isinstance(v, str):

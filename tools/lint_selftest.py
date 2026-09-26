@@ -162,6 +162,15 @@ def main() -> int:
         if code != 0:
             failures.append(f"YANLIŞ ALARM ({label}): {text}")
 
+    # The new Hatha schema must not pass by scanning zero translated fields.
+    for field in ("objective", "steps", "selfCheck", "adaptation"):
+        pair = {"en": "Clinically proven to cure your pain.", "tr": "Denetim örneği"}
+        value = [pair] if field == "steps" else pair
+        if run({"modules": [{"lessons": [{field: value}]}]}) == 0:
+            failures.append(f"KAÇIRDI (iki dilli kurs): {field} alanı taranmıyor")
+    if run({"title": {"en": "Choose a comfortable chair", "tr": "Rahat sandalye seç"}}) != 0:
+        failures.append("YANLIŞ ALARM (iki dilli kurs): nötr yönerge reddedildi")
+
     # İçerik şemasının alanları taranıyor mu? (egzersiz havuzu alan adları)
     code = run({"schemaVersion": 1, "id": "t",
                 "exercises": [{"safetyNote": "Stop if this treats your sciatica."}]})
@@ -190,7 +199,7 @@ def main() -> int:
                 f"KAPI FAZLA GENİŞ ({label}): üründe CANLI olan bu cümle "
                 f"yakalandı — «{text[:70]}…»")
 
-    total = len(MUST_CATCH) + len(MUST_PASS) + len(live) + 2
+    total = len(MUST_CATCH) + len(MUST_PASS) + len(live) + 7
     print(f"Süzgeç öz-testi — {total} vaka "
           f"({len(MUST_CATCH)+1} yakalanmalı, {len(MUST_PASS)} geçmeli, "
           f"{len(live)} TERS İKİZ, 1 sessiz-tarama)")

@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "lissom.ia.library",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "_notes": [
+    "1.4.0: Hatha rehberli kursu gerçek ders dosyası, öz kayıt ve ekran yoluyla açıldı. Yoga ailesi teachingOnly: kamera ölçümü/puanı yok, diğer stiller yok. Ölçüm bataryasının kanıt kutusu değişmedi.",
     "1.3.0 (L-253): dürüstlük kutusu SESSİZ bir sınıf taşıyordu — 7 metrik `coreLacksMeasureKind` sınıfında (mesafe/yükseklik) ve kutu o sınıftan HİÇ bahsetmiyordu. Kullanıcı test-başına gerekçeleri görüyordu ama ailenin ÖZETİ o boşluğu atlıyordu. Kapı artık her engel SINIFININ kutuda adlandırılmasını zorluyor.",
     "1.2.0 (L-251, J-133): honestyBox.notMeasured satırları da SEVK EDİLMİŞ İDDİADIR. Motor sınırı anan bir satır, o sınır kalktığı gün YALAN olur — ve kimse yalan söylemeye karar vermez, bir göç yapar. `falsifiedIfBridged` o satırı yalanlayacak metrikleri BEYAN eder; kapı metrik köprüye girdiği an kırmızı yanar ve cümlenin yeniden yazılmasını ZORLAR.",
     "1.1.0 (L-230, Ostinato O-040 aktarımı): honestyBox.measured artık DÜZ METİN DEĞİL, KANIT TAŞIYAN nesne — her iddia dayandığı metrikleri `requires` ile beyan eder ve kabuk onu köprüye karşı DOĞRULAR. Ölçüldü: eski üç iddiadan İKİSİ kabukta canlı değildi ('trunk/shank' düzlem-ayrımı yok, 'hold duration' faz-türevi) ve 'frontal plane' HİÇBİR metrik için doğru değildi (köprü uzayı isotropic). Dürüstlük kutusunun kendisi, uygulamanın en az dürüst yüzeyiydi.",
@@ -125,14 +126,16 @@
     {
       "id": "yoga_styles",
       "title": "Yoga Styles",
-      "status": "coming_soon",
+      "status": "in_progress",
       "wave": 1,
-      "intro": "Hatha, Vinyasa and Yin are listed here. Classes and course content are not available in this version.",
+      "intro": "A complete guided Hatha course is available. Other named styles have no classes in this build; yoga postures are not camera-scored.",
+      "teachingOnly": true,
+      "itemsSource": "config/courses/hatha.v1.json",
       "children": [
         {
           "id": "hatha",
           "title": "Hatha",
-          "status": "coming_soon",
+          "status": "in_progress",
           "wave": 1,
           "coachingMode": "pose_by_pose"
         },
@@ -167,13 +170,11 @@
         }
       ],
       "honestyBox": {
-        "measured": [
-          "Standing, seated and kneeling poses — joint angles and hold time"
-        ],
+        "measured": [],
         "notMeasured": [
-          "Floor and prone poses are guided but not scored: lying on the floor is where a single camera is weakest",
-          "Inversions are demonstrated by the avatar only",
-          "Breath is never measured by the camera"
+          "No Hatha posture is graded or certified by the camera in this course",
+          "Breath, pain, joint load and safety cannot be judged from the camera",
+          "Advanced inversions are not required practice in this course"
         ]
       }
     },

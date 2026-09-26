@@ -2,16 +2,16 @@
   "$doc": "Mağaza liste metni TASLAĞI — makine-okur kaynak. Bu dosya test/store_listing_test.dart tarafından taranır (uzunluk · varlık · $ sözleşmesi · karşılıksız-vaat taraması). Gönderim KURUCU kalemi (M-F-77: store gönderimi) — bu dosya yalnız TASLAK, onay bekliyor.",
   "appStore": {
     "name": "Lissom: Movement Checks",
-    "subtitle": "Explore movement tests",
-    "promotionalText": "Browse movement-test descriptions and measurement limits. Camera assessments and subscriptions are not open in this release.",
+    "subtitle": "Your Hatha yoga practice path",
+    "promotionalText": "Explore Hatha from setup and natural breath to standing, seated and floor postures, transitions and an independent practice with support options.",
     "keywords": "mobility,flexibility,movement,wellness,stretching,squat,range of motion"
   },
   "playStore": {
-    "shortDescription": "Explore movement tests and their limits; camera assessments are not open."
+    "shortDescription": "Progressive Hatha yoga lessons with support options and local practice records."
   },
-  "description": "Lissom is a general wellness catalogue of movement tests. Explore Overhead Reach, Deep Squat, Active Straight Leg Raise and the other listed tests. Each page explains what the measurement work covers and where it is still incomplete.\n\nIn this first release, you can browse without signing in and create an optional shared Motion account. Camera assessments, dated measurement results, yoga lessons and subscriptions are not available.\n\nThe Motion account uses your email address, account ID and an optional display name. Account deletion is available in the app. Lissom is not a medical device and does not diagnose or treat any condition.",
-  "$sourceOfFacts": "Current camera capability: docs/evidence/production-line/assessment-capabilities.json (3 live / 12 listed); live test IDs overhead_reach, deep_squat, active_straight_leg_raise. Local history: lib/app/live_capture_screen.dart, lib/app/local_account_bridge.dart, test/measurement_persistence_test.dart. Optional account/remote data: lib/main.dart and shared motion_account_client.dart. Recheck after courses or privacy behavior changes.",
-  "$notClaimed": "No physical-device performance or twelve-test coverage claim. Real-device A12 acceptance and provider metadata readback remain open. Live Motion privacy policy content lacks Lissom account data and retention details (2026-09-24 curl readback); update before submission. This is a local draft, not a submission.",
+  "description": "Lissom offers 60 original English and Turkish Hatha yoga lessons across 10 modules. Learn natural breathing, preparation, supported postures, controlled transitions and independent session planning. Choose comfortable support, chair or rest options. Each lesson includes a learning goal, practice task, self-check and teaching sources. The movement-test catalogue also explains Overhead Reach, Deep Squat and Active Straight Leg Raise.\n\nRead original text lessons, follow practice tasks, review your own practice and continue from your local lesson record. You can browse without signing in and use an optional shared Motion account. The account uses your email address, account ID and optional display name; account deletion is available in the app. Course records stay on the device within the current guest or account scope. No lesson completion certifies mastery. Demonstration video is not included in this content preparation version.\n\nPractice progress is self-recorded, not a posture grade. Camera assessments and subscription sales are not open. General information and adaptations do not provide individual rehabilitation or prenatal treatment. Lissom is not a medical device and does not diagnose or treat any condition.",
+  "$sourceOfFacts": "Current course: config/courses/hatha.v1.json; its app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Readback of provider metadata is separate.",
+  "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded.",
   "$ageRating": {
     "expectedTier": "App Store 4+ / Google Play Everyone — TAHMİN, nihai sonuç ASC/Play'in kendi süreci",
     "rationale": [
@@ -28,5 +28,14 @@
   "supportUrl": "https://yulalab.com/support",
   "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
   "$urlWhy": "Kurucu karari 2026-08-17 (H-85): supportUrl+privacyPolicyUrl alanlari icin ortak Motion URL'leri secildi. Canli /privacy/motion sayfasi Lissom'un guncel hesap/veri isleme ayrintilarini kapsamiyor; gonderimden once icerik dogrulanmali. Bu alanlar taslaktir, saglayiciya gonderilmedi.",
-  "$releasePolicy20260925": "Founder deferred all paid camera sessions and subscription sales in the first release. Provider listings must use only the external fields above; older dollar-prefixed research notes describe deferred capabilities."
+  "$releasePolicy20260925": "Founder deferred all paid camera sessions and subscription sales in the first release. Provider listings must use only the external fields above; older dollar-prefixed research notes describe deferred capabilities.",
+  "$coursePreparation20260926": {
+    "status": "local_content_preparation_not_provider_readback_or_release_acceptance",
+    "asset": "config/courses/hatha.v1.json",
+    "sha256": "77c91c0bd89914dc146cb4fe2455f23ca88117f5eea11c8e2963c14739e32f2c",
+    "lessonCount": 60,
+    "moduleCount": 10,
+    "mediaIncluded": false,
+    "physicalDeviceAccepted": false
+  }
 }
