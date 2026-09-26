@@ -9,6 +9,51 @@ Başlıktaki 2026-09-25 ilk taslak tarihidir. Bu güncelleme mevcut ilk kurs,
 yerel ilerleme, çözümlenen hesap paketi ve native izin kaynaklarının
 kontrolüdür; canlı sağlayıcı, fiziksel cihaz veya mağaza formu kabulü değildir.
 
+## Sağlayıcı günlükleri ve kimlik doğrulama — 2026-09-27
+
+Üretim sağlayıcısının 2026-09-26 21:36 UTC tarihli salt okunur alan/sayı
+makbuzu, cihaz dışındaki Auth ve edge günlüklerinin saklandığını doğrular.
+Ölçüm anına kadar dönen örnekte edge günlüklerinin 6/6 kaydında IP, user-agent ve
+ülke/bölge/şehir alanları; Auth günlüklerinin 6/6 kaydında IP ve 2/6 kaydında
+hesap kimliği; ayrı Auth audit deposunun 1/1 kaydında kimlik ve user-agent
+vardır. Veritabanındaki `auth.audit_log_entries` satır sayısının sıfır olması,
+[ayrı Auth günlük deposunun](https://supabase.com/docs/guides/auth/audit-logs)
+boş olduğu anlamına gelmez. Ham IP, kimlik, parola veya günlük içeriği bu
+belgeye alınmamıştır. Makbuz ortak servise aittir; her uygulamada yeni bir
+canlı ağ oturumu ölçüldüğü iddiası değildir.
+
+| Sunucuda saklanan veri | Apple manifest türü | Amaç ve bağlantı |
+|---|---|---|
+| IP, user-agent, istemci platform/sürüm bilgisi ve Auth/istek güvenlik günlükleri | `NSPrivacyCollectedDataTypeOtherDiagnosticData` | İşletim, güvenlik ve teknik tanılama; App Functionality, kullanıcıya bağlı, tracking yok |
+| Edge isteğine eklenen IP tabanlı ülke/bölge/şehir | `NSPrivacyCollectedDataTypeCoarseLocation` | Aynı hizmetin işletim/güvenlik kaydı; App Functionality, kullanıcıya bağlı, tracking yok; GPS veya kesin konum izni değildir |
+| Parola kimlik doğrulama verisi ve saklanan parola hash'i | `NSPrivacyCollectedDataTypeOtherDataTypes` | Hesap doğrulama; App Functionality, kullanıcıya bağlı, tracking yok |
+
+[Supabase Auth](https://supabase.com/docs/guides/auth/password-security)
+parolanın bcrypt hash'ini `auth.users.encrypted_password` alanında tutar;
+parola uygulamanın kurs/seans geçmişine yazılmaz. Apple parola için ayrı
+bir tür adlandırmadığından **Other Data Types eşlemesi bu projede yapılan
+bir sınıflandırma çıkarımıdır**. Kullanıcı kimliğinin tek yönlü özetiyle
+tutulan hesap silme makbuzu da güvenlik/hesap verisidir; hash olması tek
+başına anonim veri olduğu anlamına gelmez. IP ve hesap ilişkisinin toplama
+öncesinde kaldırıldığı kanıtlanmadığından bu üç tür `Linked=true` beyan edilir.
+
+Manifest artık e-posta, isteğe bağlı ad, kullanıcı ID'si ve bu üç türden
+oluşan **altı** collected-data kaydı taşır. Hepsinde
+`NSPrivacyCollectedDataTypePurposeAppFunctionality`, `Linked=true` ve
+`Tracking=false` vardır. Bu, davranış analitiği veya reklam amacı eklendiği
+anlamına gelmez. Kamera/kareler, cihazda kalan kurs ilerlemesi ve seans
+geçmişi için collection beyanı eklenmez; Ostinato'nun isteğe bağlı ham sesi
+de yalnız cihazdaki sınırlı RAM'de kalır. Diğer dört uygulama mikrofon
+kullanmaz. Sunucu günlükleri, cihaz içi geçici işleme ile aynı şey değildir.
+
+[Apple collection ve kullanım tanımları](https://developer.apple.com/app-store/app-privacy-details/)
+ve [manifest tür/anahtarları](https://developer.apple.com/documentation/bundleresources/describing-data-use-in-privacy-manifests)
+bu ayrımın temelidir. Apple manifestinin güncellenmesi App Store Connect
+veya Play Data safety formunun girildiği/onaylandığı anlamına gelmez.
+Play kategorileri kendi form tanımlarıyla ayrıca eşleştirilir. Sağlayıcı
+saklama süreleri, günlüklerin silme/erişim politikası, gerçek hesap silme
+akışı ve son paket/SDK gizlilik raporu ayrı kabul kapılarıdır.
+
 | Veri | Cihaz dışına çıkar mı? | Amaç | Mağaza veri türü |
 |---|---|---|---|
 | E-posta adresi | Evet, Motion Auth | Kayıt, giriş, doğrulama, kurtarma | Apple Email Address; Play Personal info / Email address |
@@ -21,7 +66,7 @@ kontrolüdür; canlı sağlayıcı, fiziksel cihaz veya mağaza formu kabulü de
 | Ölçüm ve seans geçmişi | Hayır | Cihazdaki uygulama geçmişi | Sunucuya toplanmaz |
 
 Parola Auth isteğinde iletilir; uygulama geçmişinde tutulmaz. Ödeme kartı
-bilgisi Motion'a gelmez. Apple manifestinde üç toplanan tür `Linked=true`,
+bilgisi Motion'a gelmez. Apple manifestinde altı toplanan tür `Linked=true`,
 `Tracking=false`, `PurposeAppFunctionality` olarak beyanlıdır. Kamera/video,
 yerel geçmiş, mikrofon ve reklam kimliği sunucuya gönderilmez; ilk sürümde
 mikrofon izni yoktur. Bu tablo gerçek cihaz, birleşik iOS gizlilik raporu ve
@@ -40,7 +85,6 @@ Kaynaklar: `lib/main.dart`, `lib/app/hatha_progress.dart`,
 `ios/Runner/PrivacyInfo.xcprivacy`. Hesap silme ilgili hesabın yerel dizinini
 kapsar; konuk verisi ayrı kalır. Çözümlenen `motion_account` paketindeki
 `motion_release_policy.dart` değeri `motionPaidFeaturesAvailable=false`;
-satış/üyelik ve paid-session girişleri kapalıdır. Manifestte yalnız e-posta,
-ad ve kullanıcı ID'si collected olarak beyanlıdır; purchase-history türü
-yoktur. Final paket/SDK raporu, sağlayıcı günlükleri/saklama, uygulama dışı
+satış/üyelik ve paid-session girişleri kapalıdır. Manifestte e-posta, ad, kullanıcı ID'si ve yukarıdaki üç sağlayıcı veri türü
+collected olarak beyanlıdır; purchase-history türü yoktur. Final paket/SDK raporu, sağlayıcı günlükleri/saklama, uygulama dışı
 hesap silme bağlantısı ve gerçek Apple/Play yanıtları ayrıca doğrulanır.
