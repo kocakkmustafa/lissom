@@ -1,5 +1,21 @@
 # Lissom — İlerleme Kaydı
 
+## 2026-09-28 — Hatha Yoga ilk kursu; içerik köprüsü dar PASS, ürün kabulü açık
+
+İlk Hatha Yoga kursu **60 ders** ve canlı v8d kaynak paketinde. Gebelik,
+sakatlık ve kronik durumlar için yalnız genel bilgi/uyarlama sınırı geçerli;
+kişisel rehabilitasyon veya otomatik güvenli form hükmü yok. Gerçek onaylı
+video, uzman kişi-ayrık hata verisi ve tam-kurs form modeli **0**. Sabit
+Motion Core `motion_content` okuyucusu güncel kurs JSON'unu SHA ile
+doğruladı; odak testi **4/4**, bağımsız dar peer PASS
+(`scratch/2026-09-28-lissom-content-bridge-peer-v1/REPORT.md`). Üretim
+manifesti, ekran/oynatıcı ve gerçek cihaz kabulü açık.
+
+Güncel kurs ve kaynak düzeyi içerik köprüsü `a9599ab` commitinde mevcut PR #1
+incelemesine taşındı. GitHub Actions'ın üç işi bütçe engeliyle başlamadı;
+bu kaynaklar için yararlı CI, merge veya mağaza kabulü yok. Kanonik devam:
+`holding/plans/MOTION-MODEL-RESUME-2026-09-27.md`.
+
 ## 2026-07-25 — Venture AÇILDI (ayrı repo; kod YOK)
 - Kurucu kararıyla monorepo'dan ayrı repoya kuruldu (`kocakkmustafa/lissom`); plan + kilitli CLAUDE.md + defterler hazır; bundle-id `com.yulalab.lissom` rezerve.
 
