@@ -26,7 +26,10 @@
     "aol_sphinx": "https://www.artofliving.org/us-en/yoga/poses/sphinx-pose",
     "yi_reverse": "https://yogainternational.com/article/view/upward-plank-pose/",
     "podclass_warrior3": "https://www.yogapodclass.com/poses/warrior-iii",
-    "nhs_pregnancy": "https://www.nhs.uk/pregnancy/keeping-well/exercise/"
+    "nhs_pregnancy": "https://www.nhs.uk/pregnancy/keeping-well/exercise/",
+    "ya_standards": "https://yogaalliance.org/wp-content/uploads/2025/05/Standards-for-RYS-Credentials_NB22my-.pdf",
+    "ya_scope": "https://yogaalliance.org/policies-priorities-progress/scope-of-practice/",
+    "ayush2016": "https://www.dpiit.gov.in/static/uploads/2025/09/5fd8ab8a6cb07c25b70c5df780258a5b.pdf"
   },
   "modules": [
     {
@@ -69,12 +72,12 @@
             }
           ],
           "practice": {
-            "en": "Point to your support, an exit route and a comfortable rest position before moving.",
-            "tr": "Hareket etmeden destek noktanı, çıkış yolunu ve rahat dinlenme konumunu belirle."
+            "en": "Point to your support, an exit route and a comfortable rest position before moving.\n\nCommon mistake: A pose is chosen before a rest or exit is available. Correction: Choose a rest and an exit before choosing a pose.\n\nCompare a chair-based route with an observation route.",
+            "tr": "Hareket etmeden destek noktanı, çıkış yolunu ve rahat dinlenme konumunu belirle.\n\nSık hata: Dinlenme veya çıkış hazır olmadan poz seçilir. Düzeltme: Poz seçmeden dinlenme ve çıkış seç.\n\nSandalye yolunu gözlem yoluyla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you describe one reason to pause and one easier option?",
-            "tr": "Durmak için bir neden ve daha kolay bir seçenek söyleyebiliyor musun?"
+            "en": "Can you describe one reason to pause and one easier option?\n\nCan you explain this in your own words? Choose a rest and an exit before choosing a pose.\n\nNext practice, explain this idea without the page: Choose a rest and an exit before choosing a pose. Then check what you missed.",
+            "tr": "Durmak için bir neden ve daha kolay bir seçenek söyleyebiliyor musun?\n\nŞunu kendi sözlerinle açıklayabilir misin? Poz seçmeden dinlenme ve çıkış seç.\n\nSonraki çalışmada yönergeye bakmadan şu fikri anlat: Poz seçmeden dinlenme ve çıkış seç. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Pregnancy, injury and chronic conditions need individual advice about personal limits; gentle, chair or supported does not automatically mean suitable. Observing is a valid choice.",
@@ -92,7 +95,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": []
@@ -126,12 +132,12 @@
             }
           ],
           "practice": {
-            "en": "For two minutes, name each exhale silently and return attention when it wanders.",
-            "tr": "İki dakika her verişi içinden adlandır; dikkat dağılınca geri dön."
+            "en": "For two minutes, name each exhale silently and return attention when it wanders.\n\nCommon mistake: Breath awareness becomes forced deep breathing. Correction: Notice the breath without making it deeper or slower to meet a target.\n\nPractise with eyes open and then softly focused, without holding the breath.",
+            "tr": "İki dakika her verişi içinden adlandır; dikkat dağılınca geri dön.\n\nSık hata: Nefes farkındalığı zorla derin nefese dönüşür. Düzeltme: Hedefe uymak için nefesi derinleştirmeden veya yavaşlatmadan izle.\n\nNefes tutmadan gözler açık ve sonra yumuşak odaklı çalış."
           },
           "selfCheck": {
-            "en": "Could you breathe and speak comfortably throughout?",
-            "tr": "Çalışma boyunca rahat nefes alıp konuşabildin mi?"
+            "en": "Could you breathe and speak comfortably throughout?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Notice the breath without making it deeper or slower to meet a target.\n\nNext practice, try this without checking the instructions: Notice the breath without making it deeper or slower to meet a target. Then review what you missed.",
+            "tr": "Çalışma boyunca rahat nefes alıp konuşabildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Hedefe uymak için nefesi derinleştirmeden veya yavaşlatmadan izle.\n\nSonraki çalışmada yönergeye bakmadan dene: Hedefe uymak için nefesi derinleştirmeden veya yavaşlatmadan izle. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a chair, side lying or shorter observation; avoid any breath retention.",
@@ -148,7 +154,10 @@
           "minutes": 6,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -184,12 +193,12 @@
             }
           ],
           "practice": {
-            "en": "Stand for three easy breaths, step away, then return twice and compare the feeling.",
-            "tr": "Üç rahat nefes dur, ayrıl, sonra iki kez dönüp hissi karşılaştır."
+            "en": "Stand for three easy breaths, step away, then return twice and compare the feeling.\n\nCommon mistake: Knees lock or toes grip to imitate a still demonstration. Correction: Distribute contact under both feet without locking the knees.\n\nCompare a supported stance with a lightly supported stance using the same foot spacing.",
+            "tr": "Üç rahat nefes dur, ayrıl, sonra iki kez dönüp hissi karşılaştır.\n\nSık hata: Sabit gösterimi taklit için diz kilitlenir veya ayak parmakları sıkıca kavrar. Düzeltme: Dizleri kilitlemeden teması iki ayağa dağıt.\n\nAynı ayak aralığında destekli ve hafif destekli duruşu karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you shift weight gently without gripping your toes or locking the knees?",
-            "tr": "Parmakları sıkmadan veya dizleri kilitlemeden ağırlığı hafifçe değiştirebiliyor musun?"
+            "en": "Can you shift weight gently without gripping your toes or locking the knees?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Distribute contact under both feet without locking the knees.\n\nNext practice, try this without checking the instructions: Distribute contact under both feet without locking the knees. Then review what you missed.",
+            "tr": "Parmakları sıkmadan veya dizleri kilitlemeden ağırlığı hafifçe değiştirebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dizleri kilitlemeden teması iki ayağa dağıt.\n\nSonraki çalışmada yönergeye bakmadan dene: Dizleri kilitlemeden teması iki ayağa dağıt. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep a hand on the wall or practise seated foot contact if standing is uncomfortable.",
@@ -207,7 +216,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "adriene_tadasana"
+            "adriene_tadasana",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -243,12 +255,12 @@
             }
           ],
           "practice": {
-            "en": "Try two one-minute seats, changing the cross of the legs between them.",
-            "tr": "İki kez birer dakika otur; arada bacakların çaprazını değiştir."
+            "en": "Try two one-minute seats, changing the cross of the legs between them.\n\nCommon mistake: Knees are pressed down to make the seat symmetrical. Correction: Raise the seat or use a chair before forcing the knees down.\n\nCompare chair sitting with a supported easy seat; do not force symmetry.",
+            "tr": "İki kez birer dakika otur; arada bacakların çaprazını değiştir.\n\nSık hata: Oturuşu simetrik göstermek için dizler aşağı bastırılır. Düzeltme: Dizleri aşağı zorlamadan oturuşu yükselt veya sandalye kullan.\n\nSandalyeyi destekli rahat oturuşla karşılaştır; simetriyi zorlama."
           },
           "selfCheck": {
-            "en": "Do hips and knees have a comfortable support, without pressure to look symmetrical?",
-            "tr": "Simetrik görünme zorunluluğu olmadan kalça ve dizlerin rahat destek buluyor mu?"
+            "en": "Do hips and knees have a comfortable support, without pressure to look symmetrical?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Raise the seat or use a chair before forcing the knees down.\n\nNext practice, try this without checking the instructions: Raise the seat or use a chair before forcing the knees down. Then review what you missed.",
+            "tr": "Simetrik görünme zorunluluğu olmadan kalça ve dizlerin rahat destek buluyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dizleri aşağı zorlamadan oturuşu yükselt veya sandalye kullan.\n\nSonraki çalışmada yönergeye bakmadan dene: Dizleri aşağı zorlamadan oturuşu yükselt veya sandalye kullan. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Choose a chair or cushions under the knees; do not force lotus position.",
@@ -265,7 +277,10 @@
           "minutes": 7,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -301,12 +316,12 @@
             }
           ],
           "practice": {
-            "en": "Make five unhurried movements in each comfortable direction; rest between regions.",
-            "tr": "Her rahat yönde acele etmeden beş hareket yap; bölgeler arasında dinlen."
+            "en": "Make five unhurried movements in each comfortable direction; rest between regions.\n\nCommon mistake: Joint preparation is moved into a pinching range. Correction: Move one region gently, then return before changing regions.\n\nCompare smaller shoulder and ankle movements with the familiar range.",
+            "tr": "Her rahat yönde acele etmeden beş hareket yap; bölgeler arasında dinlen.\n\nSık hata: Eklem hazırlığı sıkışan aralığa taşınır. Düzeltme: Tek bölgeyi yumuşak hareket ettir; bölge değişmeden dön.\n\nKüçük omuz ve bilek hareketlerini tanıdık aralıkla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you stop short of a pinching sensation and keep the breath easy?",
-            "tr": "Sıkışma hissinden önce durup nefesi rahat tutabiliyor musun?"
+            "en": "Can you stop short of a pinching sensation and keep the breath easy?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Move one region gently, then return before changing regions.\n\nNext practice, try this without checking the instructions: Move one region gently, then return before changing regions. Then review what you missed.",
+            "tr": "Sıkışma hissinden önce durup nefesi rahat tutabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Tek bölgeyi yumuşak hareket ettir; bölge değişmeden dön.\n\nSonraki çalışmada yönergeye bakmadan dene: Tek bölgeyi yumuşak hareket ettir; bölge değişmeden dön. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Make smaller motions or omit a region that feels uncomfortable; seek individual advice for recent injury.",
@@ -323,7 +338,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -359,12 +377,12 @@
             }
           ],
           "practice": {
-            "en": "Follow the sequence once and repeat only if it still feels comfortable.",
-            "tr": "Sırayı bir kez uygula; yalnız hâlâ rahat geliyorsa tekrarla."
+            "en": "Follow the sequence once and repeat only if it still feels comfortable.\n\nCommon mistake: Rest or a smaller range is omitted to keep up with the sequence. Correction: Retain preparation, standing or seated choice, breath and rest.\n\nRepeat the eight-minute route entirely with chair choices.",
+            "tr": "Sırayı bir kez uygula; yalnız hâlâ rahat geliyorsa tekrarla.\n\nSık hata: Sıraya yetişmek için dinlenme veya küçük aralık atlanır. Düzeltme: Hazırlık, ayakta veya oturarak seçenek, nefes ve dinlenmeyi koru.\n\nSekiz dakikalık yolu tamamen sandalye seçenekleriyle yinele."
           },
           "selfCheck": {
-            "en": "Could you choose a smaller range or rest without losing the sequence?",
-            "tr": "Sırayı kaybetmeden daha küçük hareket veya dinlenme seçebildin mi?"
+            "en": "Could you choose a smaller range or rest without losing the sequence?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Retain preparation, standing or seated choice, breath and rest.\n\nNext practice, try this without checking the instructions: Retain preparation, standing or seated choice, breath and rest. Then review what you missed.",
+            "tr": "Sırayı kaybetmeden daha küçük hareket veya dinlenme seçebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Hazırlık, ayakta veya oturarak seçenek, nefes ve dinlenmeyi koru.\n\nSonraki çalışmada yönergeye bakmadan dene: Hazırlık, ayakta veya oturarak seçenek, nefes ve dinlenmeyi koru. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "All standing moments may be done beside a wall or replaced by chair sitting.",
@@ -381,7 +399,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -430,12 +451,12 @@
             }
           ],
           "practice": {
-            "en": "Do three slow reaches each way with a normal breath.",
-            "tr": "Normal nefesle her yana üç yavaş uzanma yap."
+            "en": "Do three slow reaches each way with a normal breath.\n\nCommon mistake: The side reach compresses one point instead of spreading the movement. Correction: Reach upward first, then lean a little without jamming one side.\n\nCompare the standing reach with a supported seated reach.",
+            "tr": "Normal nefesle her yana üç yavaş uzanma yap.\n\nSık hata: Yana uzanma hareketi yaymak yerine tek noktayı sıkıştırır. Düzeltme: Önce yukarı uzan; tek tarafı sıkıştırmadan az eğil.\n\nAyakta uzanmayı destekli oturarak uzanmayla karşılaştır."
           },
           "selfCheck": {
-            "en": "Is the movement spread along the side body rather than jammed at one point?",
-            "tr": "Hareket tek noktada sıkışmak yerine yan gövdeye dağılıyor mu?"
+            "en": "Is the movement spread along the side body rather than jammed at one point?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reach upward first, then lean a little without jamming one side.\n\nNext practice, try this without checking the instructions: Reach upward first, then lean a little without jamming one side. Then review what you missed.",
+            "tr": "Hareket tek noktada sıkışmak yerine yan gövdeye dağılıyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Önce yukarı uzan; tek tarafı sıkıştırmadan az eğil.\n\nSonraki çalışmada yönergeye bakmadan dene: Önce yukarı uzan; tek tarafı sıkıştırmadan az eğil. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep the reaching hand below shoulder height or sit in a chair.",
@@ -452,7 +473,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -488,12 +512,12 @@
             }
           ],
           "practice": {
-            "en": "Repeat three alternating turns without swinging the arms for momentum.",
-            "tr": "Kolları savurmadan üç dönüş çifti yap."
+            "en": "Repeat three alternating turns without swinging the arms for momentum.\n\nCommon mistake: Arm swing supplies momentum for the turn. Correction: Turn gently from a stable base; let the feet reset when needed.\n\nCompare a smaller and familiar standing turn with the same comfortable foot placement.",
+            "tr": "Kolları savurmadan üç dönüş çifti yap.\n\nSık hata: Kol savurma dönüşe momentum sağlar. Düzeltme: Sabit tabandan yumuşak dön; gerekirse ayakları yeniden kur.\n\nAynı rahat ayak yerinde küçük ve tanıdık ayakta dönüşü karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you keep the movement smooth and stop before a pinch in back or neck?",
-            "tr": "Hareketi akıcı tutup sırt veya boyunda sıkışmadan önce durabiliyor musun?"
+            "en": "Can you keep the movement smooth and stop before a pinch in back or neck?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Turn gently from a stable base; let the feet reset when needed.\n\nNext practice, try this without checking the instructions: Turn gently from a stable base; let the feet reset when needed. Then review what you missed.",
+            "tr": "Hareketi akıcı tutup sırt veya boyunda sıkışmadan önce durabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Sabit tabandan yumuşak dön; gerekirse ayakları yeniden kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Sabit tabandan yumuşak dön; gerekirse ayakları yeniden kur. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a chair and turn the head less; skip twisting if advised against it.",
@@ -510,7 +534,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -546,12 +573,12 @@
             }
           ],
           "practice": {
-            "en": "Hold for two natural breaths per side, then repeat once.",
-            "tr": "Her tarafta iki doğal nefes kal, sonra bir kez tekrarla."
+            "en": "Hold for two natural breaths per side, then repeat once.\n\nCommon mistake: The learner reaches for the floor despite losing a supported base. Correction: Place the support before reaching; the hand need not reach the floor.\n\nCompare higher and familiar hand support without changing foot direction.",
+            "tr": "Her tarafta iki doğal nefes kal, sonra bir kez tekrarla.\n\nSık hata: Destekli taban kaybolurken yere uzanılır. Düzeltme: Uzanmadan desteği yerleştir; elin yere ulaşması gerekmez.\n\nAyak yönünü değiştirmeden yüksek ve tanıdık el desteğini karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you see both feet grounded and speak comfortably without straining the neck?",
-            "tr": "İki ayağın da yerde mi; boynu zorlamadan rahat konuşabiliyor musun?"
+            "en": "Can you see both feet grounded and speak comfortably without straining the neck?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Place the support before reaching; the hand need not reach the floor.\n\nNext practice, try this without checking the instructions: Place the support before reaching; the hand need not reach the floor. Then review what you missed.",
+            "tr": "İki ayağın da yerde mi; boynu zorlamadan rahat konuşabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Uzanmadan desteği yerleştir; elin yere ulaşması gerekmez.\n\nSonraki çalışmada yönergeye bakmadan dene: Uzanmadan desteği yerleştir; elin yere ulaşması gerekmez. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Narrow the stance and keep both hands on the chair if balance is uncertain.",
@@ -568,7 +595,10 @@
           "minutes": 11,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -604,12 +634,12 @@
             }
           ],
           "practice": {
-            "en": "Try three easy breaths each side, hand on wall whenever needed.",
-            "tr": "Gerektiğinde el duvardayken her yanda üç rahat nefes dene."
+            "en": "Try three easy breaths each side, hand on wall whenever needed.\n\nCommon mistake: The lifted foot presses on the knee or the wall becomes unreachable. Correction: Keep the wall available and place the lifted foot away from the knee joint.\n\nCompare toe-down tree with a small lifted foot while keeping the wall hand.",
+            "tr": "Gerektiğinde el duvardayken her yanda üç rahat nefes dene.\n\nSık hata: Kaldırılan ayak dize basar veya duvar erişilemez olur. Düzeltme: Duvarı erişimde tut; kaldırılan ayağı diz ekleminden uzak yerleştir.\n\nDuvar elini koruyarak parmak yerde ağaç ile az kaldırılan ayağı karşılaştır."
           },
           "selfCheck": {
-            "en": "Did you choose a foot height that allowed a soft standing knee and easy breath?",
-            "tr": "Destek dizini rahat ve nefesi kolay tutan ayak yüksekliği seçtin mi?"
+            "en": "Did you choose a foot height that allowed a soft standing knee and easy breath?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Keep the wall available and place the lifted foot away from the knee joint.\n\nNext practice, try this without checking the instructions: Keep the wall available and place the lifted foot away from the knee joint. Then review what you missed.",
+            "tr": "Destek dizini rahat ve nefesi kolay tutan ayak yüksekliği seçtin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Duvarı erişimde tut; kaldırılan ayağı diz ekleminden uzak yerleştir.\n\nSonraki çalışmada yönergeye bakmadan dene: Duvarı erişimde tut; kaldırılan ayağı diz ekleminden uzak yerleştir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep toes on the floor or both hands on a stable chair.",
@@ -626,7 +656,10 @@
           "minutes": 10,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -657,17 +690,17 @@
               "tr": "Kendi rahat derinliğinde dur, ardından ayaklardan güç alıp doğrul."
             },
             {
-              "en": "Walk closer to the chair before standing; raise the torso gradually and keep your gaze level if light-headed.",
+              "en": "Walk closer to the chair before standing and raise the torso gradually. If light-headed, stop rising and use the stable support.",
               "tr": "Doğrulmadan sandalyeye yaklaş; gövdeyi yavaş yükselt, sersemlikte durup destek al."
             }
           ],
           "practice": {
-            "en": "Do four short folds, using the same controlled return each time.",
-            "tr": "Her seferinde kontrollü doğrularak dört kısa katlanma yap."
+            "en": "Do four short folds, using the same controlled return each time.\n\nCommon mistake: The fold is bounced or pulled deeper using the hands. Correction: Hinge towards the chair with soft knees; rise through support.\n\nCompare a smaller chair fold with the familiar fold and the same controlled return.",
+            "tr": "Her seferinde kontrollü doğrularak dört kısa katlanma yap.\n\nSık hata: Katlanma yaylanarak veya elle çekilerek derinleştirilir. Düzeltme: Yumuşak dizlerle sandalyeye katlan; destekle doğrul.\n\nKüçük sandalye katlanmasını tanıdık katlanma ve aynı kontrollü dönüşle karşılaştır."
           },
           "selfCheck": {
-            "en": "Could you keep breathing without pulling on the back or bouncing?",
-            "tr": "Sırtı çekiştirmeden veya zıplamadan nefes alabiliyor musun?"
+            "en": "Could you keep breathing without pulling on the back or bouncing?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Hinge towards the chair with soft knees; rise through support.\n\nNext practice, try this without checking the instructions: Hinge towards the chair with soft knees; rise through support. Then review what you missed.",
+            "tr": "Sırtı çekiştirmeden veya zıplamadan nefes alabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Yumuşak dizlerle sandalyeye katlan; destekle doğrul.\n\nSonraki çalışmada yönergeye bakmadan dene: Yumuşak dizlerle sandalyeye katlan; destekle doğrul. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Raise the chair support or perform a seated hip hinge.",
@@ -684,7 +717,10 @@
           "minutes": 9,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -703,8 +739,8 @@
           },
           "steps": [
             {
-              "en": "Choose mountain, side reach, wall tree and supported fold; put the wall and chair along one clear route.",
-              "tr": "Dağ, yana uzanma, duvarda ağaç ve destekli katlanmayı seç; duvarla sandalyeyi açık yol üzerinde hazırla."
+              "en": "Choose mountain, side reach, the supported triangle from lesson 9, wall tree and supported fold; put the wall and chair along one clear route. Return upright and reset foot direction between shapes.",
+              "tr": "Dağ, yana uzanma, ders 9’daki destekli üçgen, duvarda ağaç ve destekli katlanmayı seç; duvarla sandalyeyi açık yol üzerinde hazırla. Şekiller arasında dikleşip ayak yönünü yeniden kur."
             },
             {
               "en": "Start and finish in mountain; practise each side before changing posture.",
@@ -720,12 +756,12 @@
             }
           ],
           "practice": {
-            "en": "Run one 12-minute sequence, note which support helped and repeat on another day.",
-            "tr": "Bir 12 dakikalık dizi yap, hangi desteğin yardım ettiğini not et ve başka gün tekrarla."
+            "en": "Run one 12-minute sequence, note which support helped and repeat on another day.\n\nCommon mistake: Foot direction changes occur without an upright reset. Correction: Reset upright between the five standing shapes.\n\nChoose one shorter round with wall support and omit an uncertain balance.",
+            "tr": "Bir 12 dakikalık dizi yap, hangi desteğin yardım ettiğini not et ve başka gün tekrarla.\n\nSık hata: Dik yeniden kurulum olmadan ayak yönü değiştirilir. Düzeltme: Beş ayakta şekil arasında dik duruşu yeniden kur.\n\nDuvar destekli kısa tur seç; belirsiz dengeyi atla."
           },
           "selfCheck": {
-            "en": "Could you name the easier form of each posture before entering it?",
-            "tr": "Her poza girmeden kolay biçimini söyleyebiliyor musun?"
+            "en": "Could you name the easier form of each posture before entering it?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reset upright between the five standing shapes.\n\nNext practice, try this without checking the instructions: Reset upright between the five standing shapes. Then review what you missed.",
+            "tr": "Her poza girmeden kolay biçimini söyleyebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Beş ayakta şekil arasında dik duruşu yeniden kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Beş ayakta şekil arasında dik duruşu yeniden kur. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use wall and chair for the whole sequence, or practise it seated.",
@@ -742,7 +778,10 @@
           "minutes": 12,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -791,12 +830,12 @@
             }
           ],
           "practice": {
-            "en": "Try three short tabletop holds with seated rest between them.",
-            "tr": "Aralarında oturarak dinlenip üç kısa masa duruşu dene."
+            "en": "Try three short tabletop holds with seated rest between them.\n\nCommon mistake: Hands are loaded before their placement and unloading route are checked. Correction: Place hands and knees before loading, then practise unloading.\n\nCompare a brief tabletop with a seated shoulder preparation.",
+            "tr": "Aralarında oturarak dinlenip üç kısa masa duruşu dene.\n\nSık hata: Yer ve yük bırakma yolu kontrol edilmeden ellere yük verilir. Düzeltme: Yük vermeden el ve dizleri yerleştir; sonra yükü bırakmayı çalış.\n\nKısa masa duruşunu oturarak omuz hazırlığıyla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you unload the hands by moving back or widening them when needed?",
-            "tr": "Gerektiğinde geriye giderek veya elleri açarak yükü azaltabiliyor musun?"
+            "en": "Can you unload the hands by moving back or widening them when needed?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Place hands and knees before loading, then practise unloading.\n\nNext practice, try this without checking the instructions: Place hands and knees before loading, then practise unloading. Then review what you missed.",
+            "tr": "Gerektiğinde geriye giderek veya elleri açarak yükü azaltabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Yük vermeden el ve dizleri yerleştir; sonra yükü bırakmayı çalış.\n\nSonraki çalışmada yönergeye bakmadan dene: Yük vermeden el ve dizleri yerleştir; sonra yükü bırakmayı çalış. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Place forearms on a chair or skip weight bearing for sensitive wrists or knees.",
@@ -813,7 +852,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -849,12 +891,12 @@
             }
           ],
           "practice": {
-            "en": "Move slowly for six cycles, then rest on a chair or mat.",
-            "tr": "Altı çevrim yavaş hareket et; sonra sandalye veya matta dinlen."
+            "en": "Move slowly for six cycles, then rest on a chair or mat.\n\nCommon mistake: Cat-cow is forced to an end range with breath holding. Correction: Make a small spinal wave and return to neutral between directions.\n\nCompare a small tabletop wave with a seated small wave.",
+            "tr": "Altı çevrim yavaş hareket et; sonra sandalye veya matta dinlen.\n\nSık hata: Kedi-inek nefes tutarak uç aralığa zorlanır. Düzeltme: Küçük omurga dalgası yap; yönler arasında nötre dön.\n\nKüçük masa dalgasını oturarak küçük dalgayla karşılaştır."
           },
           "selfCheck": {
-            "en": "Did the breath continue without a forced arch or held end point?",
-            "tr": "Nefes, zorlanmış bel kavsi veya tutulmuş uç poz olmadan sürdü mü?"
+            "en": "Did the breath continue without a forced arch or held end point?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Make a small spinal wave and return to neutral between directions.\n\nNext practice, try this without checking the instructions: Make a small spinal wave and return to neutral between directions. Then review what you missed.",
+            "tr": "Nefes, zorlanmış bel kavsi veya tutulmuş uç poz olmadan sürdü mü?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Küçük omurga dalgası yap; yönler arasında nötre dön.\n\nSonraki çalışmada yönergeye bakmadan dene: Küçük omurga dalgası yap; yönler arasında nötre dön. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Perform the same small spinal motion seated with hands on thighs.",
@@ -871,7 +913,10 @@
           "minutes": 9,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -907,12 +952,12 @@
             }
           ],
           "practice": {
-            "en": "Take three comfortable breaths, then choose a chair rest for comparison.",
-            "tr": "Üç rahat nefes al; sonra karşılaştırmak için sandalyede dinlenmeyi seç."
+            "en": "Take three comfortable breaths, then choose a chair rest for comparison.\n\nCommon mistake: Child rest compresses the abdomen or strains the knees. Correction: Select a rest that leaves the abdomen and breathing comfortable.\n\nCompare supported child rest with chair rest instead of increasing the fold.",
+            "tr": "Üç rahat nefes al; sonra karşılaştırmak için sandalyede dinlenmeyi seç.\n\nSık hata: Çocuk dinlenmesi karnı sıkıştırır veya dizleri zorlar. Düzeltme: Karın ve nefesi rahat bırakan dinlenmeyi seç.\n\nKatlanmayı artırmak yerine destekli çocuk dinlenmesini sandalye dinlenmesiyle karşılaştır."
           },
           "selfCheck": {
-            "en": "Which rest position kept breathing easy and the knees comfortable?",
-            "tr": "Hangi dinlenme konumu nefesi kolay, dizleri rahat tuttu?"
+            "en": "Which rest position kept breathing easy and the knees comfortable?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Select a rest that leaves the abdomen and breathing comfortable.\n\nNext practice, try this without checking the instructions: Select a rest that leaves the abdomen and breathing comfortable. Then review what you missed.",
+            "tr": "Hangi dinlenme konumu nefesi kolay, dizleri rahat tuttu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Karın ve nefesi rahat bırakan dinlenmeyi seç.\n\nSonraki çalışmada yönergeye bakmadan dene: Karın ve nefesi rahat bırakan dinlenmeyi seç. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Widen knees only if comfortable; use a chair or side rest for pregnancy or knee discomfort.",
@@ -930,7 +975,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -966,12 +1014,12 @@
             }
           ],
           "practice": {
-            "en": "Rest for one minute, then compare with side lying or a supported chair.",
-            "tr": "Bir dakika dinlen, sonra yan yatış veya destekli sandalyeyle karşılaştır."
+            "en": "Rest for one minute, then compare with side lying or a supported chair.\n\nCommon mistake: Prone rest is retained despite neck or abdominal pressure. Correction: Rest without compressing the abdomen or rotating the neck to an extreme.\n\nCompare prone observation with side-lying or chair rest according to personal limits.",
+            "tr": "Bir dakika dinlen, sonra yan yatış veya destekli sandalyeyle karşılaştır.\n\nSık hata: Boyun veya karın basıncına rağmen yüzüstü dinlenme korunur. Düzeltme: Karnı sıkıştırmadan veya boynu uç sınıra döndürmeden dinlen.\n\nKişisel sınıra göre yüzüstü gözlemi yan yatış veya sandalye dinlenmesiyle karşılaştır."
           },
           "selfCheck": {
-            "en": "Is the abdomen uncompressed and the neck comfortable?",
-            "tr": "Karın sıkışmadan, boyun rahat kalıyor mu?"
+            "en": "Is the abdomen uncompressed and the neck comfortable?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Rest without compressing the abdomen or rotating the neck to an extreme.\n\nNext practice, try this without checking the instructions: Rest without compressing the abdomen or rotating the neck to an extreme. Then review what you missed.",
+            "tr": "Karın sıkışmadan, boyun rahat kalıyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Karnı sıkıştırmadan veya boynu uç sınıra döndürmeden dinlen.\n\nSonraki çalışmada yönergeye bakmadan dene: Karnı sıkıştırmadan veya boynu uç sınıra döndürmeden dinlen. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Skip prone lying in pregnancy or if it feels uncomfortable; use side lying or a chair. Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain.",
@@ -989,7 +1037,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1025,12 +1076,12 @@
             }
           ],
           "practice": {
-            "en": "Try three short lifts without pressing the hands hard into the floor.",
-            "tr": "Elleri zemine sert bastırmadan üç kısa yükseliş dene."
+            "en": "Try three short lifts without pressing the hands hard into the floor.\n\nCommon mistake: Hand pressure forces a high cobra and a back pinch. Correction: Lift a little through the chest and lower without pushing for height.\n\nCompare a tiny chest lift with prone observation or chair chest opening.",
+            "tr": "Elleri zemine sert bastırmadan üç kısa yükseliş dene.\n\nSık hata: El baskısı yüksek kobra ve bel sıkışması oluşturur. Düzeltme: Göğüsten az yüksel; yükseklik için bastırmadan alçal.\n\nÇok küçük göğüs kaldırmayı yüzüstü gözlem veya sandalyede göğüs açmayla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you lower smoothly and avoid pinching in the lower back?",
-            "tr": "Yumuşak inip belde sıkışmadan kalabiliyor musun?"
+            "en": "Can you lower smoothly and avoid pinching in the lower back?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Lift a little through the chest and lower without pushing for height.\n\nNext practice, try this without checking the instructions: Lift a little through the chest and lower without pushing for height. Then review what you missed.",
+            "tr": "Yumuşak inip belde sıkışmadan kalabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Göğüsten az yüksel; yükseklik için bastırmadan alçal.\n\nSonraki çalışmada yönergeye bakmadan dene: Göğüsten az yüksel; yükseklik için bastırmadan alçal. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "For wrist or back discomfort, use a smaller chest lift or stay in side rest; skip prone during pregnancy. Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain.",
@@ -1048,7 +1099,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1084,12 +1138,12 @@
             }
           ],
           "practice": {
-            "en": "Practise one 12-minute circuit with your chosen exclusions and rests.",
-            "tr": "Seçtiğin atlamalar ve dinlenmelerle bir 12 dakikalık tur yap."
+            "en": "Practise one 12-minute circuit with your chosen exclusions and rests.\n\nCommon mistake: The sequence keeps prone work despite a personal restriction. Correction: Enter each floor orientation separately and keep the rest choice.\n\nUse a chair-only version with the same preparation and rest order.",
+            "tr": "Seçtiğin atlamalar ve dinlenmelerle bir 12 dakikalık tur yap.\n\nSık hata: Kişisel kısıta rağmen sıra yüzüstü işi korur. Düzeltme: Her yer yönüne ayrı gir; dinlenme seçimini koru.\n\nAynı hazırlık ve dinlenme sırasıyla yalnız sandalye biçimini kullan."
           },
           "selfCheck": {
-            "en": "Can you explain why you chose or skipped prone work today?",
-            "tr": "Bugün yüzüstü çalışmayı neden seçtiğini veya atladığını açıklayabiliyor musun?"
+            "en": "Can you explain why you chose or skipped prone work today?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Enter each floor orientation separately and keep the rest choice.\n\nNext practice, try this without checking the instructions: Enter each floor orientation separately and keep the rest choice. Then review what you missed.",
+            "tr": "Bugün yüzüstü çalışmayı neden seçtiğini veya atladığını açıklayabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Her yer yönüne ayrı gir; dinlenme seçimini koru.\n\nSonraki çalışmada yönergeye bakmadan dene: Her yer yönüne ayrı gir; dinlenme seçimini koru. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "The whole circuit may stay seated: small cat-cow followed by chair rest. Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain.",
@@ -1106,7 +1160,10 @@
           "minutes": 12,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1155,12 +1212,12 @@
             }
           ],
           "practice": {
-            "en": "Hold Dandasana for three easy breaths, twice, resting between attempts.",
-            "tr": "Dandasana'da üç rahat nefes, iki kez kal; arada dinlen."
+            "en": "Hold Dandasana for three easy breaths, twice, resting between attempts.\n\nCommon mistake: Straightening the knees makes the seated trunk collapse. Correction: Elevate the seat and soften the knees before reaching upright.\n\nCompare bent-knee supported staff with chair sitting.",
+            "tr": "Dandasana'da üç rahat nefes, iki kez kal; arada dinlen.\n\nSık hata: Dizleri düzeltmek oturan gövdeyi çökertir. Düzeltme: Dik uzanmadan oturuşu yükselt ve dizleri yumuşat.\n\nDiz bükülü destekli staff biçimini sandalyede oturuşla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you sit without rounding from effort or gripping the thighs?",
-            "tr": "Çabayla yuvarlanmadan veya uylukları sıkmadan oturabiliyor musun?"
+            "en": "Can you sit without rounding from effort or gripping the thighs?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Elevate the seat and soften the knees before reaching upright.\n\nNext practice, try this without checking the instructions: Elevate the seat and soften the knees before reaching upright. Then review what you missed.",
+            "tr": "Çabayla yuvarlanmadan veya uylukları sıkmadan oturabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dik uzanmadan oturuşu yükselt ve dizleri yumuşat.\n\nSonraki çalışmada yönergeye bakmadan dene: Dik uzanmadan oturuşu yükselt ve dizleri yumuşat. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a higher blanket or sit on a chair with feet grounded.",
@@ -1177,7 +1234,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1213,12 +1273,12 @@
             }
           ],
           "practice": {
-            "en": "Take five natural breaths, then stretch legs out and compare sides.",
-            "tr": "Beş doğal nefes al, bacakları uzat ve iki tarafın hissini karşılaştır."
+            "en": "Take five natural breaths, then stretch legs out and compare sides.\n\nCommon mistake: Knees are bounced or pushed towards the floor. Correction: Support the thighs rather than pressing the knees down.\n\nCompare closer and farther foot placement with supports kept under the legs.",
+            "tr": "Beş doğal nefes al, bacakları uzat ve iki tarafın hissini karşılaştır.\n\nSık hata: Dizler yaylanır veya yere itilir. Düzeltme: Dizleri aşağı bastırmak yerine uylukları destekle.\n\nBacak destekleri yerindeyken yakın ve uzak ayak yerini karşılaştır."
           },
           "selfCheck": {
-            "en": "Could you avoid bouncing and keep knees supported throughout?",
-            "tr": "Zıplamadan ve dizleri baştan sona destekleyerek kalabildin mi?"
+            "en": "Could you avoid bouncing and keep knees supported throughout?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Support the thighs rather than pressing the knees down.\n\nNext practice, try this without checking the instructions: Support the thighs rather than pressing the knees down. Then review what you missed.",
+            "tr": "Zıplamadan ve dizleri baştan sona destekleyerek kalabildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dizleri aşağı bastırmak yerine uylukları destekle.\n\nSonraki çalışmada yönergeye bakmadan dene: Dizleri aşağı bastırmak yerine uylukları destekle. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Sit on a chair with feet apart if floor sitting or hip opening is uncomfortable.",
@@ -1235,7 +1295,10 @@
           "minutes": 9,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1271,12 +1334,12 @@
             }
           ],
           "practice": {
-            "en": "Compare two short, comfortable seats rather than increasing hold time.",
-            "tr": "Tutma süresini uzatmak yerine iki kısa rahat oturuşu karşılaştır."
+            "en": "Compare two short, comfortable seats rather than increasing hold time.\n\nCommon mistake: A kneeling seat is retained despite knee or ankle pressure. Correction: Choose the chair before knee or ankle pressure builds in kneeling.\n\nCompare a brief supported kneeling seat with a chair seat; they are distinct forms.",
+            "tr": "Tutma süresini uzatmak yerine iki kısa rahat oturuşu karşılaştır.\n\nSık hata: Diz veya bilek basıncına rağmen diz üstü oturuş korunur. Düzeltme: Diz üstünde diz veya bilek basıncı artmadan sandalyeyi seç.\n\nKısa destekli diz üstü oturuşu sandalyeyle karşılaştır; ayrı biçimlerdir."
           },
           "selfCheck": {
-            "en": "Are knees and ankles free of pressure, and is leaving the posture easy?",
-            "tr": "Diz ve ayak bilekleri baskısız mı, pozdan çıkmak kolay mı?"
+            "en": "Are knees and ankles free of pressure, and is leaving the posture easy?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Choose the chair before knee or ankle pressure builds in kneeling.\n\nNext practice, try this without checking the instructions: Choose the chair before knee or ankle pressure builds in kneeling. Then review what you missed.",
+            "tr": "Diz ve ayak bilekleri baskısız mı, pozdan çıkmak kolay mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Diz üstünde diz veya bilek basıncı artmadan sandalyeyi seç.\n\nSonraki çalışmada yönergeye bakmadan dene: Diz üstünde diz veya bilek basıncı artmadan sandalyeyi seç. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use the chair for knee, ankle or pregnancy discomfort; no kneeling is required.",
@@ -1294,7 +1357,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1330,12 +1396,12 @@
             }
           ],
           "practice": {
-            "en": "Do three small turns per side, pausing at centre each time.",
-            "tr": "Her yana üç küçük dönüş yap; her seferinde merkezde dur."
+            "en": "Do three small turns per side, pausing at centre each time.\n\nCommon mistake: The arms pull the trunk deeper while a sitting bone lifts. Correction: Keep both sitting bones supported while making a small turn.\n\nCompare turns each side with a return to centre and no arm pulling.",
+            "tr": "Her yana üç küçük dönüş yap; her seferinde merkezde dur.\n\nSık hata: Oturma kemiği kalkarken kollar gövdeyi derin çekişe taşır. Düzeltme: Küçük dönüşte iki oturma kemiği destekli kalsın.\n\nKol çekmeden ortaya dönüşle iki tarafın dönüşlerini karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you keep both sitting bones supported and breathe without strain?",
-            "tr": "İki oturma kemiği destekli kalırken zorlanmadan nefes alabiliyor musun?"
+            "en": "Can you keep both sitting bones supported and breathe without strain?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Keep both sitting bones supported while making a small turn.\n\nNext practice, try this without checking the instructions: Keep both sitting bones supported while making a small turn. Then review what you missed.",
+            "tr": "İki oturma kemiği destekli kalırken zorlanmadan nefes alabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Küçük dönüşte iki oturma kemiği destekli kalsın.\n\nSonraki çalışmada yönergeye bakmadan dene: Küçük dönüşte iki oturma kemiği destekli kalsın. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Reduce range or choose only head-and-eye turning if spinal rotation is uncomfortable.",
@@ -1352,7 +1418,10 @@
           "minutes": 9,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1388,12 +1457,12 @@
             }
           ],
           "practice": {
-            "en": "Try four short reaches with a pause between them; avoid bouncing.",
-            "tr": "Aralarda durarak dört kısa uzanma dene; zıplama."
+            "en": "Try four short reaches with a pause between them; avoid bouncing.\n\nCommon mistake: The learner pulls on the legs to reach farther. Correction: Reach from a comfortable hinge without pulling yourself along the legs.\n\nCompare soft-knee forward reaching with an upright staff reset.",
+            "tr": "Aralarda durarak dört kısa uzanma dene; zıplama.\n\nSık hata: Uzak uzanmak için bacaklardan çekilir. Düzeltme: Bacaklardan kendini çekmeden rahat katlanmadan uzan.\n\nYumuşak dizli öne uzanmayı dik staff yeniden kurulumu ile karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you return to upright without pulling on the legs?",
-            "tr": "Bacakları çekiştirmeden dik oturuşa dönebiliyor musun?"
+            "en": "Can you return to upright without pulling on the legs?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reach from a comfortable hinge without pulling yourself along the legs.\n\nNext practice, try this without checking the instructions: Reach from a comfortable hinge without pulling yourself along the legs. Then review what you missed.",
+            "tr": "Bacakları çekiştirmeden dik oturuşa dönebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Bacaklardan kendini çekmeden rahat katlanmadan uzan.\n\nSonraki çalışmada yönergeye bakmadan dene: Bacaklardan kendini çekmeden rahat katlanmadan uzan. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a chair and fold only slightly, or skip if it worsens discomfort.",
@@ -1410,7 +1479,10 @@
           "minutes": 9,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1429,8 +1501,8 @@
           },
           "steps": [
             {
-              "en": "Arrange staff, bound angle and a gentle turn on paper; choose which uses the chair.",
-              "tr": "Asa, bağlı açı ve hafif dönüşü kâğıtta sırala; hangisinde sandalye kullanılacağını seç."
+              "en": "Arrange staff, supported bound angle, a gentle turn and the supported forward reach from lesson 23 on paper; choose which uses the chair. Return to a neutral seat between all four shapes.",
+              "tr": "Asa, destekli bağlı açı, hafif dönüş ve ders 23’teki destekli öne uzanmayı kâğıtta sırala; hangisinde sandalye kullanılacağını seç. Dört şeklin arasında nötr oturuşa dön."
             },
             {
               "en": "Choose chair or floor before starting and put supports within reach.",
@@ -1446,12 +1518,12 @@
             }
           ],
           "practice": {
-            "en": "Follow one 14-minute sequence and note which options you kept.",
-            "tr": "Bir 14 dakikalık dizi uygula ve kullandığın seçenekleri not et."
+            "en": "Follow one 14-minute sequence and note which options you kept.\n\nCommon mistake: An uncomfortable exit is ignored because the next seat follows. Correction: Return to a neutral seat before the next seated shape.\n\nBuild a shorter seated route retaining the easiest seat and rest.",
+            "tr": "Bir 14 dakikalık dizi uygula ve kullandığın seçenekleri not et.\n\nSık hata: Sonraki oturuş geldiği için rahatsız çıkış göz ardı edilir. Düzeltme: Sonraki oturuş öncesi nötr oturuşa dön.\n\nEn kolay oturuşu ve dinlenmeyi koruyan kısa oturarak yol kur."
           },
           "selfCheck": {
-            "en": "Did you leave each posture as comfortably as you entered it?",
-            "tr": "Her pozdan girdiğin kadar rahat çıkabildin mi?"
+            "en": "Did you leave each posture as comfortably as you entered it?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Return to a neutral seat before the next seated shape.\n\nNext practice, try this without checking the instructions: Return to a neutral seat before the next seated shape. Then review what you missed.",
+            "tr": "Her pozdan girdiğin kadar rahat çıkabildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Sonraki oturuş öncesi nötr oturuşa dön.\n\nSonraki çalışmada yönergeye bakmadan dene: Sonraki oturuş öncesi nötr oturuşa dön. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use only the chair versions; none of the floor shapes is compulsory.",
@@ -1468,7 +1540,10 @@
           "minutes": 14,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1517,12 +1592,12 @@
             }
           ],
           "practice": {
-            "en": "Take three easy breaths per side, once or twice.",
-            "tr": "Her yanda üç rahat nefes, bir veya iki tur yap."
+            "en": "Take three easy breaths per side, once or twice.\n\nCommon mistake: The thigh is pulled against the abdomen beyond comfort. Correction: Bring one thigh towards the trunk only as far as the abdomen stays comfortable.\n\nCompare a light hand-supported release with a smaller unsupported leg movement.",
+            "tr": "Her yanda üç rahat nefes, bir veya iki tur yap.\n\nSık hata: Uyluk rahatlığın ötesinde karna çekilir. Düzeltme: Karın rahat kaldığı kadar tek uyluğu gövdeye yaklaştır.\n\nHafif el destekli bırakmayı daha küçük desteksiz bacak hareketiyle karşılaştır."
           },
           "selfCheck": {
-            "en": "Can the abdomen and lower back remain comfortable as the leg returns?",
-            "tr": "Bacak dönerken karın ve bel rahat kalabiliyor mu?"
+            "en": "Can the abdomen and lower back remain comfortable as the leg returns?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Bring one thigh towards the trunk only as far as the abdomen stays comfortable.\n\nNext practice, try this without checking the instructions: Bring one thigh towards the trunk only as far as the abdomen stays comfortable. Then review what you missed.",
+            "tr": "Bacak dönerken karın ve bel rahat kalabiliyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Karın rahat kaldığı kadar tek uyluğu gövdeye yaklaştır.\n\nSonraki çalışmada yönergeye bakmadan dene: Karın rahat kaldığı kadar tek uyluğu gövdeye yaklaştır. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a strap behind the thigh, smaller range, or side-lying rest; avoid supine pressure when pregnant. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -1541,7 +1616,10 @@
             "ycb",
             "nccih",
             "acog",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1577,12 +1655,12 @@
             }
           ],
           "practice": {
-            "en": "Try four small bridges with a pause on the floor between them.",
-            "tr": "Aralarda yerde durarak dört küçük köprü dene."
+            "en": "Try four small bridges with a pause on the floor between them.\n\nCommon mistake: Bridge height is gained with neck pressure or breath holding. Correction: Raise the pelvis a little and lower without loading the neck.\n\nCompare the taught small lift with a smaller lift, or keep both feet grounded and observe the entry and exit.",
+            "tr": "Aralarda yerde durarak dört küçük köprü dene.\n\nSık hata: Köprü yüksekliği boyun basıncı veya nefes tutmayla elde edilir. Düzeltme: Kalçayı az kaldır; boyna yük vermeden alçal.\n\nÖğretilmiş küçük kaldırmayı daha küçük kaldırmayla karşılaştır veya iki ayağı yerde tutup giriş ve çıkışı gözle."
           },
           "selfCheck": {
-            "en": "Could you lower smoothly without neck pressure or breath holding?",
-            "tr": "Boyna baskı veya nefes tutma olmadan yavaş inebildin mi?"
+            "en": "Could you lower smoothly without neck pressure or breath holding?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Raise the pelvis a little and lower without loading the neck.\n\nNext practice, try this without checking the instructions: Raise the pelvis a little and lower without loading the neck. Then review what you missed.",
+            "tr": "Boyna baskı veya nefes tutma olmadan yavaş inebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Kalçayı az kaldır; boyna yük vermeden alçal.\n\nSonraki çalışmada yönergeye bakmadan dene: Kalçayı az kaldır; boyna yük vermeden alçal. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep the lift very small or practise a seated pelvic tilt instead. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -1601,7 +1679,10 @@
             "ycb",
             "nccih",
             "acog",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1637,12 +1718,12 @@
             }
           ],
           "practice": {
-            "en": "Alternate six small lifts; take a full rest before repeating.",
-            "tr": "Altı küçük kaldırmayı sırayla yap; tekrarlamadan önce tam dinlen."
+            "en": "Alternate six small lifts; take a full rest before repeating.\n\nCommon mistake: The return of one leg is uncontrolled while the other support shifts. Correction: Move one bent leg while the other leg remains a stable support.\n\nCompare a heel unweighting with a small bent-knee lift.",
+            "tr": "Altı küçük kaldırmayı sırayla yap; tekrarlamadan önce tam dinlen.\n\nSık hata: Öteki destek kayarken tek bacağın dönüşü kontrolsüzdür. Düzeltme: Öteki bacak sabit destekken tek bükülü bacağı hareket ettir.\n\nTopuk yükünü azaltma ile küçük bükülü diz kaldırmayı karşılaştır."
           },
           "selfCheck": {
-            "en": "Could you make the same controlled return on both sides?",
-            "tr": "İki tarafta da aynı kontrollü dönüşü yapabildin mi?"
+            "en": "Could you make the same controlled return on both sides?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Move one bent leg while the other leg remains a stable support.\n\nNext practice, try this without checking the instructions: Move one bent leg while the other leg remains a stable support. Then review what you missed.",
+            "tr": "İki tarafta da aynı kontrollü dönüşü yapabildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Öteki bacak sabit destekken tek bükülü bacağı hareket ettir.\n\nSonraki çalışmada yönergeye bakmadan dene: Öteki bacak sabit destekken tek bükülü bacağı hareket ettir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Reduce the lift or do a seated march; no straight-leg lift is required. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -1660,7 +1741,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1696,12 +1780,12 @@
             }
           ],
           "practice": {
-            "en": "Rest briefly, then compare with legs on a chair or ordinary side lying.",
-            "tr": "Kısa dinlen, sonra bacaklar sandalyede veya normal yan yatışla karşılaştır."
+            "en": "Rest briefly, then compare with legs on a chair or ordinary side lying.\n\nCommon mistake: Supported leg rest becomes an inversion or prolonged restricted supine hold. Correction: Set the hips and supports without turning the rest into an inversion.\n\nCompare legs on a chair with wall support; omit flat-back rest when personally restricted.",
+            "tr": "Kısa dinlen, sonra bacaklar sandalyede veya normal yan yatışla karşılaştır.\n\nSık hata: Destekli bacak dinlenmesi ters duruşa veya kısıtlı uzun sırtüstü tutuşa dönüşür. Düzeltme: Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur.\n\nSandalyede bacak ile duvar desteğini karşılaştır; kişisel kısıtta düz sırtüstü dinlenmeyi atla."
           },
           "selfCheck": {
-            "en": "Is breathing easy, and is there any pressure in head or eyes?",
-            "tr": "Nefes kolay mı; baş veya gözlerde baskı var mı?"
+            "en": "Is breathing easy, and is there any pressure in head or eyes?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Set the hips and supports without turning the rest into an inversion.\n\nNext practice, try this without checking the instructions: Set the hips and supports without turning the rest into an inversion. Then review what you missed.",
+            "tr": "Nefes kolay mı; baş veya gözlerde baskı var mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Choose chair-leg or side-lying rest for pregnancy or any discomfort; skip wall position. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -1720,7 +1804,10 @@
             "ycb",
             "nccih",
             "acog",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1756,12 +1843,12 @@
             }
           ],
           "practice": {
-            "en": "Rest for three minutes and notice whether a different support would help.",
-            "tr": "Üç dakika dinlen ve başka desteğin yararlı olup olmayacağını gözle."
+            "en": "Rest for three minutes and notice whether a different support would help.\n\nCommon mistake: Stillness is prioritised over a needed change of rest position. Correction: Change the rest position whenever comfort or breathing changes.\n\nCompare chair rest and an individually suitable lying rest without a stillness target.",
+            "tr": "Üç dakika dinlen ve başka desteğin yararlı olup olmayacağını gözle.\n\nSık hata: Gerekli dinlenme değişimi yerine hareketsizlik öncelenir. Düzeltme: Rahatlık veya nefes değişince dinlenme konumunu değiştir.\n\nHareketsizlik hedefi olmadan sandalye ve kişiye uygun yatarak dinlenmeyi karşılaştır."
           },
           "selfCheck": {
-            "en": "Did the position allow comfort, and could you change it when needed?",
-            "tr": "Konum rahat mıydı ve gerektiğinde değiştirebildin mi?"
+            "en": "Did the position allow comfort, and could you change it when needed?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Change the rest position whenever comfort or breathing changes.\n\nNext practice, try this without checking the instructions: Change the rest position whenever comfort or breathing changes. Then review what you missed.",
+            "tr": "Konum rahat mıydı ve gerektiğinde değiştirebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Rahatlık veya nefes değişince dinlenme konumunu değiştir.\n\nSonraki çalışmada yönergeye bakmadan dene: Rahatlık veya nefes değişince dinlenme konumunu değiştir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use side lying or chair for pregnancy, back discomfort or difficulty lying still. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -1780,7 +1867,10 @@
             "ycb",
             "nccih",
             "acog",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1816,12 +1906,12 @@
             }
           ],
           "practice": {
-            "en": "Practise one 12-minute sequence without trying to match a model's range.",
-            "tr": "Modelin hareket aralığını taklit etmeye çalışmadan 12 dakikalık bir dizi yap."
+            "en": "Practise one 12-minute sequence without trying to match a model's range.\n\nCommon mistake: Floor transitions are rushed to match the demonstration's range. Correction: Use a controlled side or seated reset instead of hurried floor changes.\n\nRehearse the same rest route with chair alternatives and name the omissions.",
+            "tr": "Modelin hareket aralığını taklit etmeye çalışmadan 12 dakikalık bir dizi yap.\n\nSık hata: Gösterimdeki aralığa uymak için yer geçişleri acele edilir. Düzeltme: Acele yer değişimi yerine kontrollü yan veya oturarak yeniden kurulum kullan.\n\nAynı dinlenme yolunu sandalye alternatifleriyle prova et; atlananları adlandır."
           },
           "selfCheck": {
-            "en": "Which part did you reduce or skip, and did rest remain available?",
-            "tr": "Hangi bölümü küçülttün veya atladın; dinlenme seçeneği açık kaldı mı?"
+            "en": "Which part did you reduce or skip, and did rest remain available?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Use a controlled side or seated reset instead of hurried floor changes.\n\nNext practice, try this without checking the instructions: Use a controlled side or seated reset instead of hurried floor changes. Then review what you missed.",
+            "tr": "Hangi bölümü küçülttün veya atladın; dinlenme seçeneği açık kaldı mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Acele yer değişimi yerine kontrollü yan veya oturarak yeniden kurulum kullan.\n\nSonraki çalışmada yönergeye bakmadan dene: Acele yer değişimi yerine kontrollü yan veya oturarak yeniden kurulum kullan. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a fully seated sequence: march, gentle pelvic movement and chair rest. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -1839,7 +1929,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1888,12 +1981,12 @@
             }
           ],
           "practice": {
-            "en": "Spend about a minute on each area, resting whenever attention or breath feels strained.",
-            "tr": "Her bölgeye yaklaşık bir dakika ayır; dikkat veya nefes zorlanırsa dinlen."
+            "en": "Spend about a minute on each area, resting whenever attention or breath feels strained.\n\nCommon mistake: Attention to three areas is mistaken for forcing breath into compartments. Correction: Observe where breathing is noticed without forcing separate compartments.\n\nUse shorter attention periods and then return to ordinary awareness.",
+            "tr": "Her bölgeye yaklaşık bir dakika ayır; dikkat veya nefes zorlanırsa dinlen.\n\nSık hata: Üç bölgeye dikkat nefesi bölmelere zorlamak sanılır. Düzeltme: Ayrı bölmeleri zorlamadan nefesin nerede hissedildiğini izle.\n\nKısa dikkat süreleri kullan; sonra olağan farkındalığa dön."
           },
           "selfCheck": {
-            "en": "Can you distinguish observation from deliberately making breaths deeper?",
-            "tr": "Gözlemlemeyi bilerek daha derin nefes almaktan ayırabiliyor musun?"
+            "en": "Can you distinguish observation from deliberately making breaths deeper?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Observe where breathing is noticed without forcing separate compartments.\n\nNext practice, try this without checking the instructions: Observe where breathing is noticed without forcing separate compartments. Then review what you missed.",
+            "tr": "Gözlemlemeyi bilerek daha derin nefes almaktan ayırabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Ayrı bölmeleri zorlamadan nefesin nerede hissedildiğini izle.\n\nSonraki çalışmada yönergeye bakmadan dene: Ayrı bölmeleri zorlamadan nefesin nerede hissedildiğini izle. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep hands in the lap and shorten the lesson if breath focus is uncomfortable.",
@@ -1910,7 +2003,10 @@
           "minutes": 7,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1946,12 +2042,12 @@
             }
           ],
           "practice": {
-            "en": "Try four easy alternations, then return to ordinary breathing.",
-            "tr": "Dört rahat dönüşüm dene, sonra normal nefese dön."
+            "en": "Try four easy alternations, then return to ordinary breathing.\n\nCommon mistake: Nostril alternation introduces retention, pressure or air hunger. Correction: Alternate gently without breath retention or a forced ratio.\n\nCompare nose-touch alternation with mental alternation when nasal contact is unsuitable.",
+            "tr": "Dört rahat dönüşüm dene, sonra normal nefese dön.\n\nSık hata: Burun değişimi tutma, basınç veya hava açlığı oluşturur. Düzeltme: Nefes tutmadan veya zorunlu oran olmadan yumuşak değiştir.\n\nBurun teması uygun değilse temaslı değişimi zihinsel değişimle karşılaştır."
           },
           "selfCheck": {
-            "en": "Could you end at any point without air hunger or pressure?",
-            "tr": "Hava açlığı veya baskı olmadan dilediğin anda bitirebildin mi?"
+            "en": "Could you end at any point without air hunger or pressure?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Alternate gently without breath retention or a forced ratio.\n\nNext practice, try this without checking the instructions: Alternate gently without breath retention or a forced ratio. Then review what you missed.",
+            "tr": "Hava açlığı veya baskı olmadan dilediğin anda bitirebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Nefes tutmadan veya zorunlu oran olmadan yumuşak değiştir.\n\nSonraki çalışmada yönergeye bakmadan dene: Nefes tutmadan veya zorunlu oran olmadan yumuşak değiştir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use mental left-right attention with both nostrils open; skip if congested or distressed.",
@@ -1968,7 +2064,10 @@
           "minutes": 8,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2004,12 +2103,12 @@
             }
           ],
           "practice": {
-            "en": "Try three gentle hums with ordinary breaths between them.",
-            "tr": "Aralarında normal nefeslerle üç hafif mırıldanma dene."
+            "en": "Try three gentle hums with ordinary breaths between them.\n\nCommon mistake: Humming is prolonged until ear pressure or air hunger appears. Correction: Hum softly on a comfortable exhale and release before air hunger.\n\nCompare a short hum with an ordinary silent exhale.",
+            "tr": "Aralarında normal nefeslerle üç hafif mırıldanma dene.\n\nSık hata: Mırıldanma kulak basıncı veya hava açlığına kadar uzatılır. Düzeltme: Rahat verişte hafif mırıldan; hava açlığından önce bırak.\n\nKısa mırıldanmayı olağan sessiz verişle karşılaştır."
           },
           "selfCheck": {
-            "en": "Did the sound stay easy, without ear pressure or a forced long exhale?",
-            "tr": "Ses kulak baskısı veya zorunlu uzun veriş olmadan rahat kaldı mı?"
+            "en": "Did the sound stay easy, without ear pressure or a forced long exhale?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Hum softly on a comfortable exhale and release before air hunger.\n\nNext practice, try this without checking the instructions: Hum softly on a comfortable exhale and release before air hunger. Then review what you missed.",
+            "tr": "Ses kulak baskısı veya zorunlu uzun veriş olmadan rahat kaldı mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Rahat verişte hafif mırıldan; hava açlığından önce bırak.\n\nSonraki çalışmada yönergeye bakmadan dene: Rahat verişte hafif mırıldan; hava açlığından önce bırak. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Simply listen to the breath if humming is uncomfortable; no ear-closing hand position is required.",
@@ -2026,7 +2125,10 @@
           "minutes": 7,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2062,12 +2164,12 @@
             }
           ],
           "practice": {
-            "en": "Rehearse the order twice without holding poses or adding speed.",
-            "tr": "Poz tutmadan veya hız eklemeden sırayı iki kez prova et."
+            "en": "Rehearse the order twice without holding poses or adding speed.\n\nCommon mistake: An unfamiliar floor station is added from a complete flow video. Correction: Name the stations and exits before linking a sun-salutation route.\n\nMap standing and chair routes without adding an untaught floor station.",
+            "tr": "Poz tutmadan veya hız eklemeden sırayı iki kez prova et.\n\nSık hata: Tam akış videosundan tanıdık olmayan yer durağı eklenir. Düzeltme: Güneşe selam yolunu bağlamadan durak ve çıkışları adlandır.\n\nÖğretilmeyen yer durağı eklemeden ayakta ve sandalye yollarını haritala."
           },
           "selfCheck": {
-            "en": "Can you name a rest or chair alternative at each transition?",
-            "tr": "Her geçişte bir dinlenme veya sandalye seçeneği söyleyebiliyor musun?"
+            "en": "Can you name a rest or chair alternative at each transition?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Name the stations and exits before linking a sun-salutation route.\n\nNext practice, try this without checking the instructions: Name the stations and exits before linking a sun-salutation route. Then review what you missed.",
+            "tr": "Her geçişte bir dinlenme veya sandalye seçeneği söyleyebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Güneşe selam yolunu bağlamadan durak ve çıkışları adlandır.\n\nSonraki çalışmada yönergeye bakmadan dene: Güneşe selam yolunu bağlamadan durak ve çıkışları adlandır. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use chair fold and chair cat-cow; omit prone work entirely if needed.",
@@ -2085,7 +2187,10 @@
           "sourceIds": [
             "ycb",
             "ayush",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2121,12 +2226,12 @@
             }
           ],
           "practice": {
-            "en": "Practise three slow rounds with a pause after each return.",
-            "tr": "Her dönüşten sonra durarak üç yavaş tur yap."
+            "en": "Practise three slow rounds with a pause after each return.\n\nCommon mistake: A support change is rushed and interrupts ordinary breathing. Correction: Stop at each support change before moving to the next station.\n\nCompare separate stations with a gently linked route while preserving pauses.",
+            "tr": "Her dönüşten sonra durarak üç yavaş tur yap.\n\nSık hata: Destek değişimi acele edilip doğal nefesi keser. Düzeltme: Sonraki durağa geçmeden destek değişiminde dur.\n\nDuraklamaları koruyarak ayrı duraklar ile yumuşak bağlantılı yolu karşılaştır."
           },
           "selfCheck": {
-            "en": "Did any transition make you hold your breath or lose support?",
-            "tr": "Herhangi bir geçiş nefesi tutmana veya desteği kaybetmene yol açtı mı?"
+            "en": "Did any transition make you hold your breath or lose support?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Stop at each support change before moving to the next station.\n\nNext practice, try this without checking the instructions: Stop at each support change before moving to the next station. Then review what you missed.",
+            "tr": "Herhangi bir geçiş nefesi tutmana veya desteği kaybetmene yol açtı mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Sonraki durağa geçmeden destek değişiminde dur.\n\nSonraki çalışmada yönergeye bakmadan dene: Sonraki durağa geçmeden destek değişiminde dur. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Do the entire path with a chair and omit going to the floor.",
@@ -2143,7 +2248,10 @@
           "minutes": 12,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2179,12 +2287,12 @@
             }
           ],
           "practice": {
-            "en": "Carry out one 20-minute session and write down what you chose rather than a score.",
-            "tr": "Bir 20 dakikalık oturum yap ve puan yerine seçtiklerini kaydet."
+            "en": "Carry out one 20-minute session and write down what you chose rather than a score.\n\nCommon mistake: The route is chosen to achieve a score rather than today's manageable skills. Correction: Choose taught blocks with planned rests rather than matching a score.\n\nWrite a shorter route using the same selected skill IDs.",
+            "tr": "Bir 20 dakikalık oturum yap ve puan yerine seçtiklerini kaydet.\n\nSık hata: Yol bugünün yapılabilir becerileri yerine puan için seçilir. Düzeltme: Puana uymak yerine planlı molayla öğretilmiş bölümleri seç.\n\nAynı seçilmiş beceri kimlikleriyle daha kısa yol yaz."
           },
           "selfCheck": {
-            "en": "Could you explain why your chosen option fitted today's comfort and energy?",
-            "tr": "Seçtiğin biçimin bugünkü rahatlık ve enerjine neden uyduğunu açıklayabiliyor musun?"
+            "en": "Could you explain why your chosen option fitted today's comfort and energy?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Choose taught blocks with planned rests rather than matching a score.\n\nNext practice, try this without checking the instructions: Choose taught blocks with planned rests rather than matching a score. Then review what you missed.",
+            "tr": "Seçtiğin biçimin bugünkü rahatlık ve enerjine neden uyduğunu açıklayabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Puana uymak yerine planlı molayla öğretilmiş bölümleri seç.\n\nSonraki çalışmada yönergeye bakmadan dene: Puana uymak yerine planlı molayla öğretilmiş bölümleri seç. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "The session can be entirely seated and shorter on a difficult day.",
@@ -2202,7 +2310,10 @@
           "sourceIds": [
             "ycb",
             "ayush",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2251,12 +2362,12 @@
             }
           ],
           "practice": {
-            "en": "Try two short holds per side without pulling on the strap.",
-            "tr": "Kayışı çekiştirmeden her yanda iki kısa tutuş dene."
+            "en": "Try two short holds per side without pulling on the strap.\n\nCommon mistake: The strap is pulled to force hands closer together. Correction: Let the strap bridge the distance; do not pull the shoulders together.\n\nCompare a wider strap distance with comfortable hands on the chair.",
+            "tr": "Kayışı çekiştirmeden her yanda iki kısa tutuş dene.\n\nSık hata: Elleri yaklaştırmak için kayış zorla çekilir. Düzeltme: Mesafeyi kayış kapatsın; omuzları birbirine çekme.\n\nGeniş kayış mesafesini sandalyede rahat el konumuyla karşılaştır."
           },
           "selfCheck": {
-            "en": "Could both shoulders move without a sharp pinch or head jutting forward?",
-            "tr": "İki omuz keskin sıkışma veya başı öne itme olmadan hareket etti mi?"
+            "en": "Could both shoulders move without a sharp pinch or head jutting forward?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Let the strap bridge the distance; do not pull the shoulders together.\n\nNext practice, try this without checking the instructions: Let the strap bridge the distance; do not pull the shoulders together. Then review what you missed.",
+            "tr": "İki omuz keskin sıkışma veya başı öne itme olmadan hareket etti mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Mesafeyi kayış kapatsın; omuzları birbirine çekme.\n\nSonraki çalışmada yönergeye bakmadan dene: Mesafeyi kayış kapatsın; omuzları birbirine çekme. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep both hands in front of the body, or omit the overhead arm.",
@@ -2273,7 +2384,10 @@
           "minutes": 10,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2309,12 +2423,12 @@
             }
           ],
           "practice": {
-            "en": "Try three small openings with upright rest between them; no heel reach is required.",
-            "tr": "Aralarında dik dinlenerek üç küçük açılma dene; topuğa uzanmak zorunlu değil."
+            "en": "Try three small openings with upright rest between them; no heel reach is required.\n\nCommon mistake: A heel reach or head tilt substitutes for a small chest opening. Correction: Open the chest a little without chasing the heels or compressing the neck.\n\nCompare upright chair chest opening with supported small kneeling opening.",
+            "tr": "Aralarında dik dinlenerek üç küçük açılma dene; topuğa uzanmak zorunlu değil.\n\nSık hata: Küçük göğüs açma yerine topuğa uzanma veya baş geriye atma kullanılır. Düzeltme: Topukları kovalamadan veya boynu sıkıştırmadan göğsü az aç.\n\nSandalyede dik göğüs açmayı destekli küçük diz üstü açmayla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you keep the neck long and exit without pushing through discomfort?",
-            "tr": "Boynu uzun tutup rahatsızlığı zorlamadan çıkabiliyor musun?"
+            "en": "Can you keep the neck long and exit without pushing through discomfort?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Open the chest a little without chasing the heels or compressing the neck.\n\nNext practice, try this without checking the instructions: Open the chest a little without chasing the heels or compressing the neck. Then review what you missed.",
+            "tr": "Boynu uzun tutup rahatsızlığı zorlamadan çıkabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Topukları kovalamadan veya boynu sıkıştırmadan göğsü az aç.\n\nSonraki çalışmada yönergeye bakmadan dene: Topukları kovalamadan veya boynu sıkıştırmadan göğsü az aç. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Perform the same small chest opening in a chair or skip kneeling.",
@@ -2331,7 +2445,10 @@
           "minutes": 10,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2367,12 +2484,12 @@
             }
           ],
           "practice": {
-            "en": "Make three small lifts separated by complete seated rest.",
-            "tr": "Aralarında tam oturarak dinlenip üç küçük yükseliş yap."
+            "en": "Make three small lifts separated by complete seated rest.\n\nCommon mistake: Hip lift is attempted before wrists and hands can tolerate setup. Correction: Place the hands before a small lift and keep the head neutral.\n\nCompare a small seated unweighting with observation before raising the hips.",
+            "tr": "Aralarında tam oturarak dinlenip üç küçük yükseliş yap.\n\nSık hata: El bileği ve eller kurulumu taşıyamadan kalça kaldırılır. Düzeltme: Küçük kaldırmadan önce elleri yerleştir; başı nötr tut.\n\nKalçayı kaldırmadan küçük oturarak yük azaltmayı gözlemle karşılaştır."
           },
           "selfCheck": {
-            "en": "Can wrists and shoulders tolerate the load, and does the neck stay neutral?",
-            "tr": "Bilek ve omuz yükü tolere ediyor mu, boyun nötr kalıyor mu?"
+            "en": "Can wrists and shoulders tolerate the load, and does the neck stay neutral?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Place the hands before a small lift and keep the head neutral.\n\nNext practice, try this without checking the instructions: Place the hands before a small lift and keep the head neutral. Then review what you missed.",
+            "tr": "Bilek ve omuz yükü tolere ediyor mu, boyun nötr kalıyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Küçük kaldırmadan önce elleri yerleştir; başı nötr tut.\n\nSonraki çalışmada yönergeye bakmadan dene: Küçük kaldırmadan önce elleri yerleştir; başı nötr tut. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a chair-supported seated chest opening instead; skip weight bearing with wrist discomfort.",
@@ -2389,7 +2506,10 @@
           "minutes": 10,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2425,12 +2545,12 @@
             }
           ],
           "practice": {
-            "en": "Try three small lifts per leg, breathing normally and resting afterward.",
-            "tr": "Normal nefesle her bacakta üç küçük yükseliş yap, sonra dinlen."
+            "en": "Try three small lifts per leg, breathing normally and resting afterward.\n\nCommon mistake: Single-leg lift is made higher by forcing the lower back. Correction: Lift one limb only as far as the pelvis and back stay comfortable.\n\nCompare a toe slide with a small single-leg locust preparation.",
+            "tr": "Normal nefesle her bacakta üç küçük yükseliş yap, sonra dinlen.\n\nSık hata: Tek bacak kaldırma beli zorlayarak yükseltilir. Düzeltme: Kalça ve bel rahat kaldığı kadar tek uzvu kaldır.\n\nParmak kaydırmayı küçük tek bacak çekirge hazırlığıyla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can the pelvis stay comfortable without arching hard through the lower back?",
-            "tr": "Belden sert kavis yapmadan leğen kemiği rahat kalabiliyor mu?"
+            "en": "Can the pelvis stay comfortable without arching hard through the lower back?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Lift one limb only as far as the pelvis and back stay comfortable.\n\nNext practice, try this without checking the instructions: Lift one limb only as far as the pelvis and back stay comfortable. Then review what you missed.",
+            "tr": "Belden sert kavis yapmadan leğen kemiği rahat kalabiliyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Kalça ve bel rahat kaldığı kadar tek uzvu kaldır.\n\nSonraki çalışmada yönergeye bakmadan dene: Kalça ve bel rahat kaldığı kadar tek uzvu kaldır. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "When prone is unsuitable, observe from a chair or try a previously comfortable supported standing leg reach. The alternative is a separate practice, not proof of locust ability. Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain.",
@@ -2448,7 +2568,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2484,12 +2607,12 @@
             }
           ],
           "practice": {
-            "en": "Write a 25-minute route and rehearse only the transitions once.",
-            "tr": "25 dakikalık yol yaz ve yalnız geçişleri bir kez prova et."
+            "en": "Write a 25-minute route and rehearse only the transitions once.\n\nCommon mistake: Exits and supports are missing from the written route. Correction: Write supports and exits beside every selected rehearsal block.\n\nDesign a chair-heavy route using only already taught alternatives.",
+            "tr": "25 dakikalık yol yaz ve yalnız geçişleri bir kez prova et.\n\nSık hata: Yazılı yolda çıkış ve destekler eksiktir. Düzeltme: Seçilen her prova bölümünün yanına destek ve çıkışı yaz.\n\nYalnız öğretilmiş alternatiflerle ağırlıkla sandalyeli yol tasarla."
           },
           "selfCheck": {
-            "en": "Are alternatives and exit routes written next to the difficult shapes?",
-            "tr": "Zor şekillerin yanında kolay seçenek ve çıkış yolu yazılı mı?"
+            "en": "Are alternatives and exit routes written next to the difficult shapes?\n\nCan you explain this in your own words? Write supports and exits beside every selected rehearsal block.\n\nNext practice, explain this idea without the page: Write supports and exits beside every selected rehearsal block. Then check what you missed.",
+            "tr": "Zor şekillerin yanında kolay seçenek ve çıkış yolu yazılı mı?\n\nŞunu kendi sözlerinle açıklayabilir misin? Seçilen her prova bölümünün yanına destek ve çıkışı yaz.\n\nSonraki çalışmada yönergeye bakmadan şu fikri anlat: Seçilen her prova bölümünün yanına destek ve çıkışı yaz. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep only familiar basic shapes; optional intermediate preparations are not a test.",
@@ -2506,7 +2629,10 @@
           "minutes": 10,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2542,12 +2668,12 @@
             }
           ],
           "practice": {
-            "en": "Practise 25-30 minutes at your own pace; record which parts were practiced and changed.",
-            "tr": "Kendi hızında 25-30 dakika çalış; yaptığın ve değiştirdiğin bölümleri kaydet."
+            "en": "Practise 25-30 minutes at your own pace; record which parts were practiced and changed.\n\nCommon mistake: A participation record is treated as retained movement skill. Correction: Show your route and its adaptations; completion alone is not retained ability.\n\nRepeat after a break with one taught easier choice and explain it.",
+            "tr": "Kendi hızında 25-30 dakika çalış; yaptığın ve değiştirdiğin bölümleri kaydet.\n\nSık hata: Katılım kaydı kalıcı hareket becerisi sayılır. Düzeltme: Yolunu ve uyarlamalarını göster; tamamlama tek başına kalıcı beceri değildir.\n\nAradan sonra tek öğretilmiş kolay seçenekle yinele ve açıkla."
           },
           "selfCheck": {
-            "en": "Can you name three skills gained: setup, controlled exit and choosing an adaptation?",
-            "tr": "Kazandığın üç beceriyi söyleyebiliyor musun: hazırlık, kontrollü çıkış, uyarlama seçimi?"
+            "en": "Can you name three skills gained: setup, controlled exit and choosing an adaptation?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Show your route and its adaptations; completion alone is not retained ability.\n\nNext practice, try this without checking the instructions: Show your route and its adaptations; completion alone is not retained ability. Then review what you missed.",
+            "tr": "Kazandığın üç beceriyi söyleyebiliyor musun: hazırlık, kontrollü çıkış, uyarlama seçimi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Yolunu ve uyarlamalarını göster; tamamlama tek başına kalıcı beceri değildir.\n\nSonraki çalışmada yönergeye bakmadan dene: Yolunu ve uyarlamalarını göster; tamamlama tek başına kalıcı beceri değildir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "A shorter or chair-based checkpoint can document the practices actually chosen; it does not establish competence in omitted floor or balance skills.",
@@ -2565,7 +2691,10 @@
           "sourceIds": [
             "ycb",
             "ayush",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2614,12 +2743,12 @@
             }
           ],
           "practice": {
-            "en": "Try two slow entries per side with a rest in tabletop or chair between.",
-            "tr": "Arada masa veya sandalye dinlenmesiyle her tarafta iki yavaş giriş dene."
+            "en": "Try two slow entries per side with a rest in tabletop or chair between.\n\nCommon mistake: The front foot is dragged or the padded rear knee loses its supported position during tabletop entry. Correction: Keep the rear knee on its padding while placing and retrieving the front foot in small steps, using hand support.\n\nCompare hand-supported floor entry with a separate chair-supported split stance.",
+            "tr": "Arada masa veya sandalye dinlenmesiyle her tarafta iki yavaş giriş dene.\n\nSık hata: Masadan girişte ön ayak sürüklenir veya minderli arka dizin destekli konumu kaybolur. Düzeltme: Ön ayağı el desteğiyle küçük adımlarda yerleştirip geri alırken arka dizi minder üzerinde tut.\n\nEl destekli yer girişini ayrı sandalye destekli ayrık duruşla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you place and retrieve the foot without dropping onto the knee or holding your breath?",
-            "tr": "Dize düşmeden veya nefes tutmadan ayağı yerleştirip geri alabiliyor musun?"
+            "en": "Can you place and retrieve the foot without dropping onto the knee or holding your breath?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Keep the rear knee on its padding while placing and retrieving the front foot in small steps, using hand support.\n\nNext practice, try this without checking the instructions: Keep the rear knee on its padding while placing and retrieving the front foot in small steps, using hand support. Then review what you missed.",
+            "tr": "Dize düşmeden veya nefes tutmadan ayağı yerleştirip geri alabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Ön ayağı el desteğiyle küçük adımlarda yerleştirip geri alırken arka dizi minder üzerinde tut.\n\nSonraki çalışmada yönergeye bakmadan dene: Ön ayağı el desteğiyle küçük adımlarda yerleştirip geri alırken arka dizi minder üzerinde tut. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a shorter standing split stance with both hands on a secured chair, or observe; a supported option still needs personal suitability.",
@@ -2637,7 +2766,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "adriene_lunge"
+            "adriene_lunge",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2673,12 +2805,12 @@
             }
           ],
           "practice": {
-            "en": "Practise one entry and exit per side twice, holding only two or three comfortable breaths.",
-            "tr": "İki tur her tarafta bir giriş ve çıkış çalış; yalnız iki üç rahat nefes kal."
+            "en": "Practise one entry and exit per side twice, holding only two or three comfortable breaths.\n\nCommon mistake: The pelvis is forced to face forward while the heel or knee twists. Correction: Choose a short stance and let the pelvis face forward only as comfortable, without forcing it.\n\nCompare a shorter and familiar Warrior I stance with the same heel support.",
+            "tr": "İki tur her tarafta bir giriş ve çıkış çalış; yalnız iki üç rahat nefes kal.\n\nSık hata: Topuk veya diz dönerken kalça zorla öne çevrilir. Düzeltme: Kısa duruş seç; kalçayı zorla öne çevirmeden rahatlığın izin verdiği kadar öne yönel.\n\nAynı topuk desteğinde kısa ve tanıdık Savaşçı I duruşunu karşılaştır."
           },
           "selfCheck": {
-            "en": "Can the heel remain grounded without twisting a knee or forcing the pelvis square?",
-            "tr": "Dizi döndürmeden veya leğeni zorla düzlemeden topuk yerde kalıyor mu?"
+            "en": "Can the heel remain grounded without twisting a knee or forcing the pelvis square?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Choose a short stance and let the pelvis face forward only as comfortable, without forcing it.\n\nNext practice, try this without checking the instructions: Choose a short stance and let the pelvis face forward only as comfortable, without forcing it. Then review what you missed.",
+            "tr": "Dizi döndürmeden veya leğeni zorla düzlemeden topuk yerde kalıyor mu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Kısa duruş seç; kalçayı zorla öne çevirmeden rahatlığın izin verdiği kadar öne yönel.\n\nSonraki çalışmada yönergeye bakmadan dene: Kısa duruş seç; kalçayı zorla öne çevirmeden rahatlığın izin verdiği kadar öne yönel. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep a wall hand and arms low; choose mountain or the previously learned short lunge if this foot position is unsuitable.",
@@ -2695,7 +2827,10 @@
           "minutes": 12,
           "sourceIds": [
             "nccih",
-            "adriene_warrior1"
+            "adriene_warrior1",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2731,12 +2866,12 @@
             }
           ],
           "practice": {
-            "en": "Rehearse the foot setup separately, then try two short holds per side.",
-            "tr": "Ayak hazırlığını ayrı prova et; sonra iki tarafta ikişer kısa kalış dene."
+            "en": "Rehearse the foot setup separately, then try two short holds per side.\n\nCommon mistake: The learner pivots on the loaded bent knee. Correction: Reset the feet before bending the front knee or changing direction.\n\nCompare shallow Warrior II with a wider arm reach only when the base stays steady.",
+            "tr": "Ayak hazırlığını ayrı prova et; sonra iki tarafta ikişer kısa kalış dene.\n\nSık hata: Yüklü bükülü diz üzerinde dönülür. Düzeltme: Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur.\n\nTaban sabitken sığ Savaşçı II ile daha geniş kol uzanmasını karşılaştır."
           },
           "selfCheck": {
-            "en": "Did you reset the feet before changing direction and keep breathing at your chosen depth?",
-            "tr": "Yön değiştirmeden ayakları yeniden kurup seçtiğin derinlikte nefes alabildin mi?"
+            "en": "Did you reset the feet before changing direction and keep breathing at your chosen depth?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reset the feet before bending the front knee or changing direction.\n\nNext practice, try this without checking the instructions: Reset the feet before bending the front knee or changing direction. Then review what you missed.",
+            "tr": "Yön değiştirmeden ayakları yeniden kurup seçtiğin derinlikte nefes alabildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Shorten stance, keep hands on hips or use a wall hand; observation is available when standing balance is uncertain.",
@@ -2753,7 +2888,10 @@
           "minutes": 12,
           "sourceIds": [
             "nccih",
-            "adriene_warrior2"
+            "adriene_warrior2",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2789,12 +2927,12 @@
             }
           ],
           "practice": {
-            "en": "Compare one wall entry with observation or one short floor entry; record which route you actually practised.",
-            "tr": "Bir duvar girişini gözlemle veya kısa yer girişiyle karşılaştır; gerçekten çalıştığın yolu kaydet."
+            "en": "Compare one wall entry with observation or one short floor entry; record which route you actually practised.\n\nCommon mistake: Heels are forced down or floor loading exceeds the chosen route. Correction: Choose the wall route before floor loading; heels need not reach the ground.\n\nCompare wall dog with observation or one taught brief floor entry.",
+            "tr": "Bir duvar girişini gözlemle veya kısa yer girişiyle karşılaştır; gerçekten çalıştığın yolu kaydet.\n\nSık hata: Topuklar aşağı zorlanır veya yer yükü seçilmiş yolu aşar. Düzeltme: Yer yükünden önce duvar yolunu seç; topukların yere ulaşması gerekmez.\n\nDuvar köpeğini gözlem veya tek öğretilmiş kısa yer girişiyle karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you exit before wrist loading or breath effort increases, without forcing heels down?",
-            "tr": "Topukları zorlamadan, bilek yükü veya nefes çabası artmadan çıkabiliyor musun?"
+            "en": "Can you exit before wrist loading or breath effort increases, without forcing heels down?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Choose the wall route before floor loading; heels need not reach the ground.\n\nNext practice, try this without checking the instructions: Choose the wall route before floor loading; heels need not reach the ground. Then review what you missed.",
+            "tr": "Topukları zorlamadan, bilek yükü veya nefes çabası artmadan çıkabiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Yer yükünden önce duvar yolunu seç; topukların yere ulaşması gerekmez.\n\nSonraki çalışmada yönergeye bakmadan dene: Yer yükünden önce duvar yolunu seç; topukların yere ulaşması gerekmez. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Wall support reduces some loads but is not medical clearance; skip head-below-heart or hand loading if your individual advice restricts it.",
@@ -2811,7 +2949,10 @@
           "minutes": 12,
           "sourceIds": [
             "nccih",
-            "adriene_dog"
+            "adriene_dog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2847,12 +2988,12 @@
             }
           ],
           "practice": {
-            "en": "Try two brief lifts with a full lowering between; height is not the target.",
-            "tr": "Arada tam inişle iki kısa yükseliş dene; hedef yükseklik değil."
+            "en": "Try two brief lifts with a full lowering between; height is not the target.\n\nCommon mistake: Forearm support is used to chase height and pinch the back. Correction: Lift the chest with forearm support without pursuing a high backbend.\n\nCompare a low forearm-supported lift with a fully lowered rest.",
+            "tr": "Arada tam inişle iki kısa yükseliş dene; hedef yükseklik değil.\n\nSık hata: Ön kol desteği yükseklik kovalamak ve beli sıkıştırmak için kullanılır. Düzeltme: Yüksek geriye eğilmeyi kovalamadan ön kol desteğiyle göğsü kaldır.\n\nAlçak ön kol destekli kaldırmayı tamamen indirilmiş dinlenmeyle karşılaştır."
           },
           "selfCheck": {
-            "en": "Did the movement stay in a comfortable small range without a lower-back pinch?",
-            "tr": "Hareket belde sıkışma olmadan rahat küçük aralıkta kaldı mı?"
+            "en": "Did the movement stay in a comfortable small range without a lower-back pinch?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Lift the chest with forearm support without pursuing a high backbend.\n\nNext practice, try this without checking the instructions: Lift the chest with forearm support without pursuing a high backbend. Then review what you missed.",
+            "tr": "Hareket belde sıkışma olmadan rahat küçük aralıkta kaldı mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Yüksek geriye eğilmeyi kovalamadan ön kol desteğiyle göğsü kaldır.\n\nSonraki çalışmada yönergeye bakmadan dene: Yüksek geriye eğilmeyi kovalamadan ön kol desteğiyle göğsü kaldır. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Do not use prone practice as a general pregnancy adaptation; choose chair observation when abdomen contact, back or arm loading is unsuitable. Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain.",
@@ -2870,7 +3011,10 @@
           "sourceIds": [
             "nccih",
             "acog",
-            "aol_sphinx"
+            "aol_sphinx",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2906,12 +3050,12 @@
             }
           ],
           "practice": {
-            "en": "Perform three short enter-pause-exit cycles, resting fully between them.",
-            "tr": "Arada tam dinlenmeyle üç kısa giriş-bekleme-çıkış döngüsü yap."
+            "en": "Perform three short enter-pause-exit cycles, resting fully between them.\n\nCommon mistake: Knees lift or the trunk sags before returning to tabletop. Correction: Keep both knees supported and return to tabletop before sagging.\n\nCompare a short knees-down pause with an earlier tabletop hold.",
+            "tr": "Arada tam dinlenmeyle üç kısa giriş-bekleme-çıkış döngüsü yap.\n\nSık hata: Masaya dönmeden dizler kalkar veya gövde çöker. Düzeltme: İki diz destekli kalsın; çökmeden masaya dön.\n\nKısa diz destekli duraklamayı önceki masa tutuşuyla karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you return to tabletop before the trunk sags, with knees still supported?",
-            "tr": "Dizler destekliyken gövde sarkmadan masaya dönebiliyor musun?"
+            "en": "Can you return to tabletop before the trunk sags, with knees still supported?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Keep both knees supported and return to tabletop before sagging.\n\nNext practice, try this without checking the instructions: Keep both knees supported and return to tabletop before sagging. Then review what you missed.",
+            "tr": "Dizler destekliyken gövde sarkmadan masaya dönebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? İki diz destekli kalsın; çökmeden masaya dön.\n\nSonraki çalışmada yönergeye bakmadan dene: İki diz destekli kalsın; çökmeden masaya dön. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use a wall plank with hands at chest height or observe; wrist, shoulder, abdominal and pregnancy-related limits require individual advice.",
@@ -2928,7 +3072,10 @@
           "minutes": 12,
           "sourceIds": [
             "nccih",
-            "adriene_plank"
+            "adriene_plank",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -2977,12 +3124,12 @@
             }
           ],
           "practice": {
-            "en": "Rehearse one round as separate stations, then repeat only if entries and exits remain controlled.",
-            "tr": "Bir turu ayrı duraklar olarak prova et; yalnız giriş ve çıkışlar kontrollüyse yinele."
+            "en": "Rehearse one round as separate stations, then repeat only if entries and exits remain controlled.\n\nCommon mistake: Stations are linked before their entries and exits are understood. Correction: Treat Sun A as separate taught stations with chosen replacements.\n\nCompare a chair route with a floor route only for stations already practised.",
+            "tr": "Bir turu ayrı duraklar olarak prova et; yalnız giriş ve çıkışlar kontrollüyse yinele.\n\nSık hata: Giriş ve çıkışları anlaşılmadan duraklar bağlanır. Düzeltme: Güneşe Selam A'yı seçilmiş alternatifli ayrı öğretilmiş duraklar olarak gör.\n\nSandalyeli yol ile yer yolunu yalnız çalışılmış duraklarda karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you name each transition and the floor stations you replaced or observed?",
-            "tr": "Her geçişi ve değiştirdiğin ya da gözlediğin yer duraklarını adlandırabilir misin?"
+            "en": "Can you name each transition and the floor stations you replaced or observed?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Treat Sun A as separate taught stations with chosen replacements.\n\nNext practice, try this without checking the instructions: Treat Sun A as separate taught stations with chosen replacements. Then review what you missed.",
+            "tr": "Her geçişi ve değiştirdiğin ya da gözlediğin yer duraklarını adlandırabilir misin?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Güneşe Selam A'yı seçilmiş alternatifli ayrı öğretilmiş duraklar olarak gör.\n\nSonraki çalışmada yönergeye bakmadan dene: Güneşe Selam A'yı seçilmiş alternatifli ayrı öğretilmiş duraklar olarak gör. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "This is an adapted learning sequence, not the complete traditional vinyasa; choose wall hinge and mountain if floor, prone or balance demands are unsuitable.",
@@ -3000,7 +3147,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "adriene_suna"
+            "adriene_suna",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3036,12 +3186,12 @@
             }
           ],
           "practice": {
-            "en": "Try toe-down and optional small-lift versions on both sides; choose support before increasing reach.",
-            "tr": "İki tarafta parmak yerde ve seçmeli küçük kaldırmayı dene; uzanmayı artırmadan desteği seç."
+            "en": "Try toe-down and optional small-lift versions on both sides; choose support before increasing reach.\n\nCommon mistake: The lifted toes return with a hop or a knee twist. Correction: Set the hand support before hinging and retain a toe-down exit.\n\nCompare toe-down hinge balance with a tiny foot lift using the same support.",
+            "tr": "İki tarafta parmak yerde ve seçmeli küçük kaldırmayı dene; uzanmayı artırmadan desteği seç.\n\nSık hata: Kaldırılan parmaklar sıçrama veya diz dönmesiyle geri gelir. Düzeltme: Katlanmadan el desteğini kur; parmak yerde çıkışı koru.\n\nAynı destekle parmak yerde katlanma dengesini çok küçük ayak kaldırmayla karşılaştır."
           },
           "selfCheck": {
-            "en": "Could you replace the toes deliberately without hopping or twisting the standing knee?",
-            "tr": "Sekmeden veya taşıyan dizi döndürmeden parmakları bilinçli koyabildin mi?"
+            "en": "Could you replace the toes deliberately without hopping or twisting the standing knee?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Set the hand support before hinging and retain a toe-down exit.\n\nNext practice, try this without checking the instructions: Set the hand support before hinging and retain a toe-down exit. Then review what you missed.",
+            "tr": "Sekmeden veya taşıyan dizi döndürmeden parmakları bilinçli koyabildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Katlanmadan el desteğini kur; parmak yerde çıkışı koru.\n\nSonraki çalışmada yönergeye bakmadan dene: Katlanmadan el desteğini kur; parmak yerde çıkışı koru. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Keep both feet grounded or observe when falling is a concern; a wall or chair cannot remove fall risk or establish pregnancy suitability.",
@@ -3058,7 +3208,10 @@
           "minutes": 12,
           "sourceIds": [
             "nccih",
-            "podclass_warrior3"
+            "podclass_warrior3",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3094,12 +3247,12 @@
             }
           ],
           "practice": {
-            "en": "Compare a chest-only lift with observation or one combined lift; rest fully after each.",
-            "tr": "Göğüs yükselişini gözlemle veya bir birleşik yükselişle karşılaştır; her birinden sonra tam dinlen."
+            "en": "Compare a chest-only lift with observation or one combined lift; rest fully after each.\n\nCommon mistake: Combined lift throws the head back or interrupts breathing. Correction: Choose a chest-only or small coordinated lift and lower smoothly.\n\nCompare chest-only lift with observation before attempting combined limbs.",
+            "tr": "Göğüs yükselişini gözlemle veya bir birleşik yükselişle karşılaştır; her birinden sonra tam dinlen.\n\nSık hata: Birleşik kaldırma başı geri atar veya nefesi keser. Düzeltme: Yalnız göğüs veya küçük eşgüdümlü kaldırma seç; yumuşak indir.\n\nUzuvları birleştirmeden yalnız göğüs kaldırmayı gözlemle karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you lower smoothly without a back pinch, breath holding or throwing the head back?",
-            "tr": "Bel sıkışması, nefes tutma veya başı geriye atma olmadan yumuşak inebiliyor musun?"
+            "en": "Can you lower smoothly without a back pinch, breath holding or throwing the head back?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Choose a chest-only or small coordinated lift and lower smoothly.\n\nNext practice, try this without checking the instructions: Choose a chest-only or small coordinated lift and lower smoothly. Then review what you missed.",
+            "tr": "Bel sıkışması, nefes tutma veya başı geriye atma olmadan yumuşak inebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Yalnız göğüs veya küçük eşgüdümlü kaldırma seç; yumuşak indir.\n\nSonraki çalışmada yönergeye bakmadan dene: Yalnız göğüs veya küçük eşgüdümlü kaldırma seç; yumuşak indir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Pregnancy or abdominal-contact restrictions call for omitting this prone block and seeking personal guidance; h40 is also prone, not an automatic safe substitute. Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain.",
@@ -3118,7 +3271,10 @@
             "ycb",
             "nccih",
             "acog",
-            "adriene_locust"
+            "adriene_locust",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3154,12 +3310,12 @@
             }
           ],
           "practice": {
-            "en": "Do two separate lifts, choosing the short h39 version whenever shoulder range limits height.",
-            "tr": "İki ayrı yükseliş yap; omuz aralığı yüksekliği sınırlıyorsa kısa h39 biçimini seç."
+            "en": "Do two separate lifts, choosing the short h39 version whenever shoulder range limits height.\n\nCommon mistake: The reverse-table hold continues after wrist or shoulder strain begins. Correction: Use bent knees and stop the lift before wrist or shoulder strain.\n\nCompare the shorter preparation with a small reverse table and unchanged hand position.",
+            "tr": "İki ayrı yükseliş yap; omuz aralığı yüksekliği sınırlıyorsa kısa h39 biçimini seç.\n\nSık hata: El bileği veya omuz zorlanınca ters masa tutuşu sürer. Düzeltme: Dizleri bük; el bileği veya omuz zorlanmadan kaldırmayı bitir.\n\nEl yerini değiştirmeden kısa hazırlığı küçük ters masayla karşılaştır."
           },
           "selfCheck": {
-            "en": "Did you keep the neck comfortable and lower before hand or shoulder strain appeared?",
-            "tr": "Boynu rahat tutup el veya omuz zorlanmadan indin mi?"
+            "en": "Did you keep the neck comfortable and lower before hand or shoulder strain appeared?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Use bent knees and stop the lift before wrist or shoulder strain.\n\nNext practice, try this without checking the instructions: Use bent knees and stop the lift before wrist or shoulder strain. Then review what you missed.",
+            "tr": "Boynu rahat tutup el veya omuz zorlanmadan indin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dizleri bük; el bileği veya omuz zorlanmadan kaldırmayı bitir.\n\nSonraki çalışmada yönergeye bakmadan dene: Dizleri bük; el bileği veya omuz zorlanmadan kaldırmayı bitir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Observe or choose seated chest opening if hand loading is unsuitable. This bent-knee version does not establish the straight-leg Purvottanasana skill.",
@@ -3177,7 +3333,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "yi_reverse"
+            "yi_reverse",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3213,12 +3372,12 @@
             }
           ],
           "practice": {
-            "en": "Rehearse two small extensions with a complete mountain reset between them.",
-            "tr": "Arada tam dağ kurulumu ile iki küçük uzamayı prova et."
+            "en": "Rehearse two small extensions with a complete mountain reset between them.\n\nCommon mistake: A small extension becomes a lumbar pinch or loss of balance. Correction: Lift the chest slightly while keeping the support base and a long neck.\n\nCompare neutral mountain with a small extension without increasing the lean.",
+            "tr": "Arada tam dağ kurulumu ile iki küçük uzamayı prova et.\n\nSık hata: Küçük uzanma bel sıkışmasına veya denge kaybına dönüşür. Düzeltme: Destek tabanını ve uzun boynu korurken göğsü az kaldır.\n\nEğilmeyi artırmadan nötr dağ ile küçük uzanmayı karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you distinguish lifting the chest from pinching the lower back or tipping off balance?",
-            "tr": "Göğsü kaldırmayı bel sıkıştırmaktan veya dengeden çıkmaktan ayırt edebiliyor musun?"
+            "en": "Can you distinguish lifting the chest from pinching the lower back or tipping off balance?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Lift the chest slightly while keeping the support base and a long neck.\n\nNext practice, try this without checking the instructions: Lift the chest slightly while keeping the support base and a long neck. Then review what you missed.",
+            "tr": "Göğsü kaldırmayı bel sıkıştırmaktan veya dengeden çıkmaktan ayırt edebiliyor musun?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Destek tabanını ve uzun boynu korurken göğsü az kaldır.\n\nSonraki çalışmada yönergeye bakmadan dene: Destek tabanını ve uzun boynu korurken göğsü az kaldır. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Stay in mountain or observe with back discomfort, dizziness or uncertain balance. A smaller backbend is not automatically suitable for a health condition.",
@@ -3236,7 +3395,10 @@
           "sourceIds": [
             "ycb",
             "ayush",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3272,12 +3434,12 @@
             }
           ],
           "practice": {
-            "en": "Practise the h27-based one-leg option or explain the diagram; record practice and knowledge separately.",
-            "tr": "h27 temelli tek bacak seçeneğini çalış veya çizimi açıkla; çalışma ve bilgiyi ayrı kaydet."
+            "en": "Practise the h27-based one-leg option or explain the diagram; record practice and knowledge separately.\n\nCommon mistake: A one-leg preparation is recorded as full half-plough or shoulder stand. Correction: Keep one-leg preparation separate from paired-leg or shoulder-bearing shapes.\n\nCompare the h27-based action with a labeled knowledge diagram, without copying the diagram physically.",
+            "tr": "h27 temelli tek bacak seçeneğini çalış veya çizimi açıkla; çalışma ve bilgiyi ayrı kaydet.\n\nSık hata: Tek bacak hazırlığı tam yarım saban veya omuz duruşu diye kaydedilir. Düzeltme: Tek bacak hazırlığını çift bacak veya omuz yükü şekillerinden ayrı tut.\n\nÇizimi fiziksel kopyalamadan h27 eylemini etiketli bilgi çizimiyle karşılaştır."
           },
           "selfCheck": {
-            "en": "Can you explain why this one-leg preparation is not the full paired-leg pose or a shoulder stand?",
-            "tr": "Bu tek bacak hazırlığının neden tam çift bacak pozu veya omuz duruşu olmadığını açıklayabilir misin?"
+            "en": "Can you explain why this one-leg preparation is not the full paired-leg pose or a shoulder stand?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Keep one-leg preparation separate from paired-leg or shoulder-bearing shapes.\n\nNext practice, try this without checking the instructions: Keep one-leg preparation separate from paired-leg or shoulder-bearing shapes. Then review what you missed.",
+            "tr": "Bu tek bacak hazırlığının neden tam çift bacak pozu veya omuz duruşu olmadığını açıklayabilir misin?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Tek bacak hazırlığını çift bacak veya omuz yükü şekillerinden ayrı tut.\n\nSonraki çalışmada yönergeye bakmadan dene: Tek bacak hazırlığını çift bacak veya omuz yükü şekillerinden ayrı tut. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Supine and abdominal-loading restrictions, including pregnancy-related limits, require a different personal plan; chair observation is available. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
@@ -3296,7 +3458,10 @@
             "ycb",
             "nccih",
             "acog",
-            "nhs_pregnancy"
+            "nhs_pregnancy",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3345,12 +3510,12 @@
             }
           ],
           "practice": {
-            "en": "Name the three forms and write one personal question for a teacher; no physical performance is required.",
-            "tr": "Üç biçimi adlandır, eğitmene bir kişisel soru yaz; fiziksel uygulama gerekmez."
+            "en": "Name the three forms and write one personal question for a teacher; no physical performance is required.\n\nCommon mistake: A knowledge diagram is used to pull the foot into lotus. Correction: Know the names without forcing hips, knees or abdominal compression.\n\nCompare the three knowledge diagrams and select a question for a teacher.",
+            "tr": "Üç biçimi adlandır, eğitmene bir kişisel soru yaz; fiziksel uygulama gerekmez.\n\nSık hata: Bilgi çizimi ayağı lotusa çekmek için kullanılır. Düzeltme: Kalça, diz veya karın sıkıştırmayı zorlamadan adları öğren.\n\nÜç bilgi çizimini karşılaştır; eğitmen için bir soru seç."
           },
           "selfCheck": {
-            "en": "Can you distinguish knowing a pose name from practising or being assessed in it?",
-            "tr": "Pozun adını bilmeyi çalışmaktan veya değerlendirilmekten ayırt edebiliyor musun?"
+            "en": "Can you distinguish knowing a pose name from practising or being assessed in it?\n\nCan you explain this in your own words? Know the names without forcing hips, knees or abdominal compression.\n\nNext practice, explain this idea without the page: Know the names without forcing hips, knees or abdominal compression. Then check what you missed.",
+            "tr": "Pozun adını bilmeyi çalışmaktan veya değerlendirilmekten ayırt edebiliyor musun?\n\nŞunu kendi sözlerinle açıklayabilir misin? Kalça, diz veya karın sıkıştırmayı zorlamadan adları öğren.\n\nSonraki çalışmada yönergeye bakmadan şu fikri anlat: Kalça, diz veya karın sıkıştırmayı zorlamadan adları öğren. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Pregnancy, knee or hip concerns can change suitability; this knowledge lesson gives no clearance for lotus, compression or kneeling.",
@@ -3368,7 +3533,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3404,12 +3572,12 @@
             }
           ],
           "practice": {
-            "en": "Explain the diagram, then optionally compare neutral sitting and a small seated chest opening.",
-            "tr": "Çizimi açıkla; sonra seçmeli nötr oturuş ile küçük oturarak göğüs açmayı karşılaştır."
+            "en": "Explain the diagram, then optionally compare neutral sitting and a small seated chest opening.\n\nCommon mistake: A chair chest opening is treated as floor fish competence. Correction: Study fish separately from a seated chest opening; head support is not equivalent.\n\nExplain which neck-loading feature is absent from the chair alternative.",
+            "tr": "Çizimi açıkla; sonra seçmeli nötr oturuş ile küçük oturarak göğüs açmayı karşılaştır.\n\nSık hata: Sandalyede göğüs açma yerde balık yeterliği sayılır. Düzeltme: Balığı oturarak göğüs açmadan ayrı incele; baş desteği eşdeğer değildir.\n\nSandalye alternatifinde hangi boyun yükü özelliğinin olmadığını açıkla."
           },
           "selfCheck": {
-            "en": "Can you name the neck-loading issue and explain why the seated option is a separate movement?",
-            "tr": "Boyun yükü konusunu adlandırıp oturarak seçeneğin neden ayrı hareket olduğunu açıklayabilir misin?"
+            "en": "Can you name the neck-loading issue and explain why the seated option is a separate movement?\n\nCan you explain this in your own words? Study fish separately from a seated chest opening; head support is not equivalent.\n\nNext practice, explain this idea without the page: Study fish separately from a seated chest opening; head support is not equivalent. Then check what you missed.",
+            "tr": "Boyun yükü konusunu adlandırıp oturarak seçeneğin neden ayrı hareket olduğunu açıklayabilir misin?\n\nŞunu kendi sözlerinle açıklayabilir misin? Balığı oturarak göğüs açmadan ayrı incele; baş desteği eşdeğer değildir.\n\nSonraki çalışmada yönergeye bakmadan şu fikri anlat: Balığı oturarak göğüs açmadan ayrı incele; baş desteği eşdeğer değildir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Neck, back, balance or pregnancy-related supine limits require personal advice; no prop or alternate shape here guarantees suitability.",
@@ -3427,7 +3595,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3463,12 +3634,12 @@
             }
           ],
           "practice": {
-            "en": "Complete one slow sequence per side, pausing in mountain between skills.",
-            "tr": "Beceriler arasında dağda durarak iki tarafta birer yavaş sıra tamamla."
+            "en": "Complete one slow sequence per side, pausing in mountain between skills.\n\nCommon mistake: Directions change while a knee remains deeply bent and loaded. Correction: Return to mountain before every foot-direction reset.\n\nReplace balance with mountain while preserving both-side foot resets.",
+            "tr": "Beceriler arasında dağda durarak iki tarafta birer yavaş sıra tamamla.\n\nSık hata: Diz derin bükülü ve yüklüyken yön değiştirilir. Düzeltme: Her ayak yönü yeniden kurulumu öncesi dağa dön.\n\nİki tarafın ayak kurulumunu koruyarak dengeyi dağla değiştir."
           },
           "selfCheck": {
-            "en": "Could you tell which foot needed resetting before each change and choose support before losing balance?",
-            "tr": "Her değişimden önce hangi ayağı yeniden kuracağını bilip denge kaybından önce desteği seçebildin mi?"
+            "en": "Could you tell which foot needed resetting before each change and choose support before losing balance?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Return to mountain before every foot-direction reset.\n\nNext practice, try this without checking the instructions: Return to mountain before every foot-direction reset. Then review what you missed.",
+            "tr": "Her değişimden önce hangi ayağı yeniden kuracağını bilip denge kaybından önce desteği seçebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Her ayak yönü yeniden kurulumu öncesi dağa dön.\n\nSonraki çalışmada yönergeye bakmadan dene: Her ayak yönü yeniden kurulumu öncesi dağa dön. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Use shallow two-foot versions or replace the balance block with mountain; record the selected skills instead of claiming all variations.",
@@ -3486,7 +3657,10 @@
           "sourceIds": [
             "nccih",
             "adriene_warrior1",
-            "adriene_warrior2"
+            "adriene_warrior2",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3522,12 +3696,12 @@
             }
           ],
           "practice": {
-            "en": "Practise one flow block and up to two optional strength blocks with generous pauses.",
-            "tr": "Bol duraklamayla bir akış bölümü ve en fazla iki seçmeli güç bölümü çalış."
+            "en": "Practise one flow block and up to two optional strength blocks with generous pauses.\n\nCommon mistake: Fatigue from flow carries into a hurried loaded floor transition. Correction: Finish and rest between flow and separately set strength blocks.\n\nChoose a flow-only or chair route with the same planned rest opportunities.",
+            "tr": "Bol duraklamayla bir akış bölümü ve en fazla iki seçmeli güç bölümü çalış.\n\nSık hata: Akış yorgunluğu acele yüklü yer geçişine taşınır. Düzeltme: Akış ve ayrı kurulmuş güç bölümleri arasında bitir ve dinlen.\n\nAynı planlı molalarla yalnız akış veya sandalye yolunu seç."
           },
           "selfCheck": {
-            "en": "Could you maintain deliberate setup after the flow, or was it better to rest and omit a block?",
-            "tr": "Akıştan sonra bilinçli kurulumu koruyabildin mi, yoksa dinlenip bir bölümü atlamak daha mı uygundu?"
+            "en": "Could you maintain deliberate setup after the flow, or was it better to rest and omit a block?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Finish and rest between flow and separately set strength blocks.\n\nNext practice, try this without checking the instructions: Finish and rest between flow and separately set strength blocks. Then review what you missed.",
+            "tr": "Akıştan sonra bilinçli kurulumu koruyabildin mi, yoksa dinlenip bir bölümü atlamak daha mı uygundu?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Akış ve ayrı kurulmuş güç bölümleri arasında bitir ve dinlen.\n\nSonraki çalışmada yönergeye bakmadan dene: Akış ve ayrı kurulmuş güç bölümleri arasında bitir ve dinlen. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "Omit prone, supine, hand-loading or balance blocks according to your personal limits; there is no universal pregnancy sequence in this lesson.",
@@ -3548,7 +3722,10 @@
             "acog",
             "adriene_suna",
             "adriene_locust",
-            "yi_reverse"
+            "yi_reverse",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3584,12 +3761,12 @@
             }
           ],
           "practice": {
-            "en": "Create one standard and one shorter personal plan with the actual selected lesson IDs.",
-            "tr": "Gerçekte seçilen ders kimlikleriyle bir olağan ve bir kısa kişisel plan hazırla."
+            "en": "Create one standard and one shorter personal plan with the actual selected lesson IDs.\n\nCommon mistake: An intermediate plan contains a demand not taught earlier. Correction: Give every demanding block an already taught replacement and exit.\n\nWrite a shorter route retaining preparation, familiar standing work and rest.",
+            "tr": "Gerçekte seçilen ders kimlikleriyle bir olağan ve bir kısa kişisel plan hazırla.\n\nSık hata: Orta plan önce öğretilmemiş bir talep içerir. Düzeltme: Zorlayıcı her bölüme önceden öğretilmiş alternatif ve çıkış koy.\n\nHazırlık, tanıdık ayakta iş ve dinlenmeyi koruyan kısa yol yaz."
           },
           "selfCheck": {
-            "en": "Does every demanded action appear in an earlier taught lesson, and can you explain what your plan does not demonstrate?",
-            "tr": "İstenen her eylem önceki öğretilen derste var mı; planının neyi göstermediğini açıklayabilir misin?"
+            "en": "Does every demanded action appear in an earlier taught lesson, and can you explain what your plan does not demonstrate?\n\nCan you explain this in your own words? Give every demanding block an already taught replacement and exit.\n\nNext practice, explain this idea without the page: Give every demanding block an already taught replacement and exit. Then check what you missed.",
+            "tr": "İstenen her eylem önceki öğretilen derste var mı; planının neyi göstermediğini açıklayabilir misin?\n\nŞunu kendi sözlerinle açıklayabilir misin? Zorlayıcı her bölüme önceden öğretilmiş alternatif ve çıkış koy.\n\nSonraki çalışmada yönergeye bakmadan şu fikri anlat: Zorlayıcı her bölüme önceden öğretilmiş alternatif ve çıkış koy. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "If new health limits make the old plan uncertain, use observation and individual guidance instead of assuming an earlier adaptation still applies.",
@@ -3606,7 +3783,10 @@
           "minutes": 15,
           "sourceIds": [
             "ycb",
-            "nccih"
+            "nccih",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3642,12 +3822,12 @@
             }
           ],
           "practice": {
-            "en": "Use the h59 plan for approximately 25–35 minutes or its shorter version; repeats are available and no pose is compulsory.",
-            "tr": "h59 planını yaklaşık 25–35 dakika veya kısa biçimiyle kullan; tekrar yapılabilir ve hiçbir poz zorunlu değildir."
+            "en": "Use the h59 plan for approximately 25–35 minutes or its shorter version; repeats are available and no pose is compulsory.\n\nCommon mistake: Omitted or observed skills are claimed as practised competence. Correction: Review setup, controlled transitions, retention and remaining questions separately.\n\nRepeat after a break with a different taught support choice and record actual skills.",
+            "tr": "h59 planını yaklaşık 25–35 dakika veya kısa biçimiyle kullan; tekrar yapılabilir ve hiçbir poz zorunlu değildir.\n\nSık hata: Atlanan veya gözlenen beceriler çalışılmış yeterlik sayılır. Düzeltme: Kurulum, kontrollü geçiş, hatırlama ve kalan soruları ayrı değerlendir.\n\nAradan sonra farklı öğretilmiş destekle yinele; gerçek becerileri kaydet."
           },
           "selfCheck": {
-            "en": "Can you explain your setup, foot resets, controlled exits and chosen omissions? Completion records participation, not certified intermediate ability or medical suitability.",
-            "tr": "Kurulumunu, ayak değişimlerini, kontrollü çıkışlarını ve atlamalarını açıklayabilir misin? Tamamlama katılım kaydıdır; sertifikalı orta seviye beceri veya tıbbi uygunluk değildir."
+            "en": "Can you explain your setup, foot resets, controlled exits and chosen omissions? Completion records participation, not certified intermediate ability or medical suitability.\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Review setup, controlled transitions, retention and remaining questions separately.\n\nNext practice, try this without checking the instructions: Review setup, controlled transitions, retention and remaining questions separately. Then review what you missed.",
+            "tr": "Kurulumunu, ayak değişimlerini, kontrollü çıkışlarını ve atlamalarını açıklayabilir misin? Tamamlama katılım kaydıdır; sertifikalı orta seviye beceri veya tıbbi uygunluk değildir.\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Kurulum, kontrollü geçiş, hatırlama ve kalan soruları ayrı değerlendir.\n\nSonraki çalışmada yönergeye bakmadan dene: Kurulum, kontrollü geçiş, hatırlama ve kalan soruları ayrı değerlendir. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
             "en": "An adapted or observation route remains available; it records what you actually did and does not establish competence in omitted balance, floor or strength skills.",
@@ -3665,7 +3845,10 @@
           "sourceIds": [
             "ycb",
             "nccih",
-            "acog"
+            "acog",
+            "ya_standards",
+            "ya_scope",
+            "ayush2016"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [

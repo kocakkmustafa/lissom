@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'hatha_course.dart';
+import 'hatha_knowledge_diagrams.dart';
 import 'hatha_progress.dart';
+import 'hatha_session_preparation.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
 
@@ -27,10 +31,29 @@ class HathaCourseScreen extends StatefulWidget {
   State<HathaCourseScreen> createState() => _HathaCourseScreenState();
 }
 
-class _HathaCourseScreenState extends State<HathaCourseScreen> {
+class _HathaCourseScreenState extends State<HathaCourseScreen>
+    with WidgetsBindingObserver {
   late HathaProgress _progress = widget.initialProgress;
+  final HathaSessionPreparation _preparation = HathaSessionPreparation();
   bool _opening = false;
   bool _loadFailed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) _preparation.reset();
+  }
 
   Set<String> get _practiced => _progress.practicedIn(widget.course);
 
@@ -50,6 +73,7 @@ class _HathaCourseScreenState extends State<HathaCourseScreen> {
             lesson: lesson,
             store: store,
             isRepeat: _practiced.contains(lesson.id),
+            preparation: _preparation,
           ),
         ),
       );
@@ -272,6 +296,7 @@ class HathaLessonScreen extends StatefulWidget {
     required this.lesson,
     required this.store,
     required this.isRepeat,
+    this.preparation,
     super.key,
   });
 
@@ -282,17 +307,75 @@ class HathaLessonScreen extends StatefulWidget {
   final HathaLesson lesson;
   final HathaProgressStore store;
   final bool isRepeat;
+  final HathaSessionPreparation? preparation;
 
   @override
   State<HathaLessonScreen> createState() => _HathaLessonScreenState();
 }
 
-class _HathaLessonScreenState extends State<HathaLessonScreen> {
+class _HathaLessonScreenState extends State<HathaLessonScreen>
+    with WidgetsBindingObserver {
   bool _saving = false;
   bool _saveFailed = false;
   bool _reflected = false;
+  bool _readOnly = false;
+  late final HathaSessionPreparation _preparation;
+  Timer? _dateBoundary;
+
+  bool get _requiresPreparation =>
+      HathaSessionPreparation.requiredFor(widget.lesson.id);
+
+  @override
+  void initState() {
+    super.initState();
+    _preparation = widget.preparation ?? HathaSessionPreparation();
+    WidgetsBinding.instance.addObserver(this);
+    _scheduleDateBoundary();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _dateBoundary?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) return;
+    _dateBoundary?.cancel();
+    _preparation.reset();
+    if (mounted) {
+      setState(() {
+        _readOnly = false;
+        _reflected = false;
+      });
+    }
+  }
+
+  void _scheduleDateBoundary() {
+    _dateBoundary?.cancel();
+    if (!_requiresPreparation || !_preparation.acknowledged) return;
+    _dateBoundary = Timer(
+      _preparation.untilNextDay() + const Duration(milliseconds: 20),
+      () {
+        if (!mounted) return;
+        if (_preparation.acknowledged) {
+          _scheduleDateBoundary();
+        } else {
+          setState(() {
+            _readOnly = false;
+            _reflected = false;
+          });
+        }
+      },
+    );
+  }
 
   Future<void> _save() async {
+    if (_readOnly || (_requiresPreparation && !_preparation.acknowledged)) {
+      return;
+    }
     setState(() {
       _saving = true;
       _saveFailed = false;
@@ -311,6 +394,8 @@ class _HathaLessonScreenState extends State<HathaLessonScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final HathaLesson lesson = widget.lesson;
+    final bool needsPreparation =
+        _requiresPreparation && !_preparation.acknowledged && !_readOnly;
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
@@ -338,109 +423,195 @@ class _HathaLessonScreenState extends State<HathaLessonScreen> {
               style: theme.textTheme.bodyMedium,
             ),
             const SizedBox(height: 18),
-            _LessonBlock(
-              title: localeText(context, 'Learn', 'Öğren'),
-              children: <Widget>[
-                for (int index = 0; index < lesson.steps.length; index++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Text(
-                      '${index + 1}. ${hathaText(context, lesson.steps[index])}',
+            if (needsPreparation)
+              HathaSessionPreparationCard(
+                onPrepared: () => setState(() {
+                  _preparation.acknowledge();
+                  _reflected = false;
+                  _scheduleDateBoundary();
+                }),
+                onReadOnly: () => setState(() => _readOnly = true),
+                onStop: () => Navigator.of(context).pop(false),
+              ),
+            if (!needsPreparation) ...<Widget>[
+              if (_readOnly)
+                LissomCard(
+                  child: Text(
+                    localeText(
+                      context,
+                      lesson.id == 'h59'
+                          ? 'Written planning is open. Transition rehearsal stays closed until you prepare; this view cannot record practice.'
+                          : 'Goal, knowledge diagrams and sources only. Physical steps stay closed until you prepare; this view cannot record practice.',
+                      lesson.id == 'h59'
+                          ? 'Yazılı planlama açık. Hazırlanana kadar geçiş provası kapalıdır; bu görünüm çalışma kaydedemez.'
+                          : 'Yalnız hedef, bilgi şemaları ve kaynaklar. Hazırlanana kadar fiziksel adımlar kapalıdır; bu görünüm çalışma kaydedemez.',
                     ),
                   ),
-              ],
-            ),
-            _LessonBlock(
-              title: localeText(context, 'Practice', 'Çalış'),
-              children: <Widget>[Text(hathaText(context, lesson.practice))],
-            ),
-            _LessonBlock(
-              title: localeText(
-                context,
-                'Check yourself',
-                'Kendini değerlendir',
-              ),
-              children: <Widget>[Text(hathaText(context, lesson.selfCheck))],
-            ),
-            _LessonBlock(
-              title: localeText(
-                context,
-                'Choose an easier path',
-                'Daha kolay yolu seç',
-              ),
-              children: <Widget>[Text(hathaText(context, lesson.adaptation))],
-            ),
-            _LessonBlock(
-              title: localeText(context, 'When to stop', 'Ne zaman durmalı'),
-              children: <Widget>[Text(hathaText(context, lesson.stopSignal))],
-            ),
-            LissomCard(
-              child: Text(
-                localeText(
-                  context,
-                  'This lesson uses your own practice record. No camera posture or safety grade is made.',
-                  'Bu derste kendi çalışma kaydın kullanılır. Kamera duruş veya güvenlik puanı vermez.',
                 ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            ExpansionTile(
-              title: Text(
-                localeText(context, 'Teaching sources', 'Öğretim kaynakları'),
-              ),
-              children: <Widget>[
-                for (final String sourceId in lesson.sourceIds)
-                  ListTile(
-                    title: Text(
-                      Uri.parse(widget.course.sources[sourceId]!).host,
+              if (_readOnly)
+                TextButton(
+                  key: const Key('hatha.session.prepareToPractice'),
+                  onPressed: () => setState(() => _readOnly = false),
+                  child: Text(
+                    localeText(
+                      context,
+                      'Prepare before practising',
+                      'Çalışmadan önce hazırlan',
                     ),
-                    subtitle: SelectableText(widget.course.sources[sourceId]!),
                   ),
-              ],
-            ),
-            if (_saveFailed)
-              Text(
-                localeText(
-                  context,
-                  'Your practice was not saved. Reopen the course if your account changed, or try again.',
-                  'Çalışman kaydedilemedi. Hesabın değiştiyse kursu yeniden aç veya tekrar dene.',
                 ),
-                style: TextStyle(color: theme.colorScheme.error),
-              ),
-            CheckboxListTile(
-              key: HathaLessonScreen.reflectionKey,
-              contentPadding: EdgeInsets.zero,
-              value: _reflected,
-              onChanged: _saving
-                  ? null
-                  : (bool? value) =>
-                        setState(() => _reflected = value ?? false),
-              title: Text(
-                localeText(
-                  context,
-                  'I answered the self-check and want to record my practice.',
-                  'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
+              if (_requiresPreparation && !_readOnly)
+                TextButton(
+                  key: const Key('hatha.session.restart'),
+                  onPressed: () => setState(() {
+                    _preparation.reset();
+                    _reflected = false;
+                    _dateBoundary?.cancel();
+                  }),
+                  child: Text(
+                    localeText(
+                      context,
+                      'After a break · prepare again',
+                      'Moladan sonra · yeniden hazırlan',
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 14),
-            FilledButton(
-              key: HathaLessonScreen.practiceKey,
-              onPressed: _saving || !_reflected ? null : _save,
-              child: Text(
-                widget.isRepeat
-                    ? localeText(
-                        context,
-                        'Record another practice',
-                        'Bir çalışma daha kaydet',
-                      )
-                    : localeText(
-                        context,
-                        'I practised this lesson',
-                        'Bu dersi çalıştım',
+              if (!_readOnly)
+                _LessonBlock(
+                  title: localeText(context, 'Learn', 'Öğren'),
+                  children: <Widget>[
+                    for (int index = 0; index < lesson.steps.length; index++)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          '${index + 1}. ${hathaText(context, lesson.steps[index])}',
+                        ),
                       ),
+                  ],
+                ),
+              if (_readOnly && lesson.id == 'h59')
+                _LessonBlock(
+                  title: localeText(
+                    context,
+                    'Written plan only',
+                    'Yalnız yazılı plan',
+                  ),
+                  children: <Widget>[
+                    for (int index = 0; index < 3; index++)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          '${index + 1}. ${hathaText(context, lesson.steps[index])}',
+                        ),
+                      ),
+                    Text(hathaText(context, lesson.practice)),
+                  ],
+                ),
+              if (HathaKnowledgeDiagrams.supports(lesson.id))
+                HathaKnowledgeDiagrams(lessonId: lesson.id),
+              if (!_readOnly)
+                _LessonBlock(
+                  title: localeText(context, 'Practice', 'Çalış'),
+                  children: <Widget>[Text(hathaText(context, lesson.practice))],
+                ),
+              if (!_readOnly)
+                _LessonBlock(
+                  title: localeText(
+                    context,
+                    'Check yourself',
+                    'Kendini değerlendir',
+                  ),
+                  children: <Widget>[
+                    Text(hathaText(context, lesson.selfCheck)),
+                  ],
+                ),
+              if (!_readOnly)
+                _LessonBlock(
+                  title: localeText(
+                    context,
+                    'Choose an easier path',
+                    'Daha kolay yolu seç',
+                  ),
+                  children: <Widget>[
+                    Text(hathaText(context, lesson.adaptation)),
+                  ],
+                ),
+              _LessonBlock(
+                title: localeText(context, 'When to stop', 'Ne zaman durmalı'),
+                children: <Widget>[Text(hathaText(context, lesson.stopSignal))],
               ),
-            ),
+              LissomCard(
+                child: Text(
+                  localeText(
+                    context,
+                    'This lesson uses your own practice record. No camera posture or safety grade is made.',
+                    'Bu derste kendi çalışma kaydın kullanılır. Kamera duruş veya güvenlik puanı vermez.',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              ExpansionTile(
+                title: Text(
+                  localeText(context, 'Teaching sources', 'Öğretim kaynakları'),
+                ),
+                children: <Widget>[
+                  for (final String sourceId in lesson.sourceIds)
+                    ListTile(
+                      title: Text(
+                        Uri.parse(widget.course.sources[sourceId]!).host,
+                      ),
+                      subtitle: SelectableText(
+                        widget.course.sources[sourceId]!,
+                      ),
+                    ),
+                ],
+              ),
+              if (_saveFailed)
+                Text(
+                  localeText(
+                    context,
+                    'Your practice was not saved. Reopen the course if your account changed, or try again.',
+                    'Çalışman kaydedilemedi. Hesabın değiştiyse kursu yeniden aç veya tekrar dene.',
+                  ),
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
+              if (!_readOnly)
+                CheckboxListTile(
+                  key: HathaLessonScreen.reflectionKey,
+                  contentPadding: EdgeInsets.zero,
+                  value: _reflected,
+                  onChanged: _saving
+                      ? null
+                      : (bool? value) =>
+                            setState(() => _reflected = value ?? false),
+                  title: Text(
+                    localeText(
+                      context,
+                      'I answered the self-check and want to record my practice.',
+                      'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
+                    ),
+                  ),
+                ),
+              if (!_readOnly) const SizedBox(height: 14),
+              if (!_readOnly)
+                FilledButton(
+                  key: HathaLessonScreen.practiceKey,
+                  onPressed: _saving || !_reflected ? null : _save,
+                  child: Text(
+                    widget.isRepeat
+                        ? localeText(
+                            context,
+                            'Record another practice',
+                            'Bir çalışma daha kaydet',
+                          )
+                        : localeText(
+                            context,
+                            'I practised this lesson',
+                            'Bu dersi çalıştım',
+                          ),
+                  ),
+                ),
+            ],
           ],
         ),
       ),

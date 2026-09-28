@@ -35,6 +35,14 @@ dependencies:
       path: packages/motion_core
       ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
+  # Bundled content reader/validator contract at the same immutable Core pin.
+  # No production manifest or startup wiring is asserted by this dependency.
+  motion_content:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_content
+      ref: f2ea161c7e974d57b114ba7773836c72be17a381
+
   # Kamera → PoseSource. Motorla AYNI 40-SHA'dan, TEK pin (J-071).
   #
   # ⚠️ TAM-40-SHA yazılıyor, kısa SHA ya da tag adı DEĞİL: pub `ref:` değerini

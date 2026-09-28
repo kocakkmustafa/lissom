@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/hatha_course.dart';
 import 'package:lissom/app/hatha_course_screen.dart';
 import 'package:lissom/app/hatha_progress.dart';
+import 'package:lissom/app/hatha_session_preparation.dart';
 import 'package:lissom/app/ia.dart';
 import 'package:lissom/app/library_screen.dart';
 import 'package:lissom/app/lissom_theme.dart';
@@ -41,6 +42,212 @@ final class _MemoryHathaProgressStore implements HathaProgressStore {
 }
 
 void main() {
+  test('session bridge scopes physical lessons without gating knowledge', () {
+    expect(HathaSessionPreparation.requiredFor('h03'), isTrue);
+    expect(HathaSessionPreparation.requiredFor('h44'), isTrue);
+    expect(HathaSessionPreparation.requiredFor('h54'), isTrue);
+    expect(HathaSessionPreparation.requiredFor('h56'), isTrue);
+    expect(HathaSessionPreparation.requiredFor('h57'), isTrue);
+    expect(HathaSessionPreparation.requiredFor('h59'), isTrue);
+    expect(HathaSessionPreparation.requiredFor('h60'), isTrue);
+    for (final String id in <String>['h05', 'h06', 'h31', 'h55']) {
+      expect(HathaSessionPreparation.requiredFor(id), isFalse, reason: id);
+    }
+    DateTime now = DateTime(2026, 9, 28, 20);
+    final HathaSessionPreparation preparation = HathaSessionPreparation(
+      now: () => now,
+    );
+    preparation.acknowledge();
+    expect(preparation.acknowledged, isTrue);
+    now = DateTime(2026, 9, 29, 8);
+    expect(preparation.acknowledged, isFalse);
+    preparation.acknowledge();
+    preparation.reset();
+    expect(preparation.acknowledged, isFalse);
+  });
+
+  testWidgets(
+    'yesterday progress opens h44 through fresh preparation without false practice',
+    (tester) async {
+      final HathaCourse course = HathaCourse.parse(_asset());
+      final _MemoryHathaProgressStore store = _MemoryHathaProgressStore();
+      final DateTime yesterday = DateTime.now().subtract(
+        const Duration(days: 1),
+      );
+      for (final HathaLesson lesson in course.lessons.take(43)) {
+        store.records.add(
+          HathaPracticeRecord(
+            lessonId: lesson.id,
+            courseId: course.id,
+            courseVersion: course.version,
+            practicedAt: yesterday,
+          ),
+        );
+      }
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          locale: const Locale('tr'),
+          supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          home: HathaCourseScreen(
+            course: course,
+            initialProgress: await store.read(),
+            storeLoader: () async => store,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(HathaCourseScreen.continueKey));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const Key('hatha.session.preparation')),
+        findsOneWidget,
+      );
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+      expect(find.text('ÖĞREN'), findsNothing);
+      expect(store.records.length, 43);
+
+      await tester.tap(find.byKey(const Key('hatha.session.readOnly')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+      expect(find.text('ÖĞREN'), findsNothing);
+      await tester.tap(
+        find.byKey(const Key('hatha.session.prepareToPractice')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('hatha.session.prepared')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('hatha.session.preparation')), findsNothing);
+      await tester.scrollUntilVisible(
+        find.byKey(HathaLessonScreen.reflectionKey),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await Scrollable.ensureVisible(
+        tester.element(find.byKey(HathaLessonScreen.reflectionKey)),
+        alignment: 0.5,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(HathaLessonScreen.reflectionKey));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(HathaLessonScreen.practiceKey),
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(
+        tester
+            .widget<FilledButton>(find.byKey(HathaLessonScreen.practiceKey))
+            .onPressed,
+        isNotNull,
+      );
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('hatha.session.restart')),
+        -250,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.tap(find.byKey(const Key('hatha.session.restart')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+      expect(store.records.length, 43);
+      await tester.tap(find.byKey(const Key('hatha.session.prepared')));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(HathaLessonScreen.practiceKey),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsOneWidget);
+      expect(
+        tester
+            .widget<FilledButton>(find.byKey(HathaLessonScreen.practiceKey))
+            .onPressed,
+        isNull,
+      );
+      await tester.scrollUntilVisible(
+        find.text('NE ZAMAN DURMALI'),
+        -180,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(find.text('DAHA KOLAY YOLU SEÇ'), findsOneWidget);
+      expect(find.text('NE ZAMAN DURMALI'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'h59 written plan can be previewed without transition rehearsal',
+    (tester) async {
+      final HathaCourse course = HathaCourse.parse(_asset());
+      final _MemoryHathaProgressStore store = _MemoryHathaProgressStore();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          home: HathaLessonScreen(
+            course: course,
+            lesson: course.lessons.firstWhere((lesson) => lesson.id == 'h59'),
+            store: store,
+            isRepeat: false,
+          ),
+        ),
+      );
+      expect(
+        find.byKey(const Key('hatha.session.preparation')),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('hatha.session.readOnly')));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Written planning is open'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.textContaining('Review h42'),
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(find.textContaining('Review h42'), findsOneWidget);
+      expect(
+        find.textContaining('Rehearse only', skipOffstage: false),
+        findsNothing,
+      );
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+      expect(store.records, isEmpty);
+    },
+  );
+
+  testWidgets('an open physical lesson relocks after the local day changes', (
+    tester,
+  ) async {
+    final HathaCourse course = HathaCourse.parse(_asset());
+    final _MemoryHathaProgressStore store = _MemoryHathaProgressStore();
+    DateTime now = DateTime(2026, 9, 28, 23, 59, 59);
+    final HathaSessionPreparation preparation = HathaSessionPreparation(
+      now: () => now,
+    )..acknowledge();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildLissomTheme(),
+        home: HathaLessonScreen(
+          course: course,
+          lesson: course.lessons.firstWhere((lesson) => lesson.id == 'h44'),
+          store: store,
+          isRepeat: false,
+          preparation: preparation,
+        ),
+      ),
+    );
+    expect(find.byKey(const Key('hatha.session.preparation')), findsNothing);
+    now = DateTime(2026, 9, 29);
+    await tester.pump(const Duration(seconds: 2));
+    expect(preparation.acknowledged, isFalse);
+    expect(find.byKey(const Key('hatha.session.preparation')), findsOneWidget);
+    expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+    expect(store.records, isEmpty);
+  });
+
   test(
     'shipped Hatha path has bilingual complete lessons and self reports',
     () {
@@ -287,6 +494,18 @@ void main() {
     await tester.scrollUntilVisible(
       find.byKey(HathaLessonScreen.reflectionKey),
       300,
+    );
+    // Lazy text blocks can settle after first visibility. Centre the actual
+    // control before tapping, rather than accepting a partial intersection.
+    await tester.pumpAndSettle();
+    await Scrollable.ensureVisible(
+      tester.element(find.byKey(HathaLessonScreen.reflectionKey)),
+      alignment: 0.5,
+    );
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(HathaLessonScreen.reflectionKey).hitTestable(),
+      findsOneWidget,
     );
     await tester.tap(find.byKey(HathaLessonScreen.reflectionKey));
     await tester.pumpAndSettle();
