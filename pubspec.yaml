@@ -104,6 +104,8 @@ flutter:
     - config/phases/
     - config/ia/
     - config/courses/
+    # Course-byte integrity only; no video, lesson, or model claim.
+    - assets/motion_content/manifest.json
 
     # ⚠️ POZ MODELİ — `motion_camera` modeli **KASITLI taşımıyor**:
     # "the plugin deliberately bundles no model (apps pin their own and ship

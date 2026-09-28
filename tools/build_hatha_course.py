@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
-"""Build the original, bilingual Hatha course asset from reviewed lesson copy.
+"""Build the bilingual Hatha course asset from reviewed lesson copy.
 
 Each lesson has its own teaching, practice, reflection, adaptation and media
-shot. The JSON is checked into the app; this script keeps it reproducible.
+shot. The published additions live in a bounded, reviewed overlay. Both the
+original authored base and the final JSON are pinned by exact byte hashes.
 """
+import argparse
+import hashlib
 import json
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "config/courses/hatha.v1.json"
+OVERLAY = ROOT / "tools/hatha_course_overlay.v1.json"
+BASELINE_LENGTH = 188964
+BASELINE_SHA256 = "77c91c0bd89914dc146cb4fe2455f23ca88117f5eea11c8e2963c14739e32f2c"
+PUBLISHED_LENGTH = 259103
+PUBLISHED_SHA256 = "0e339eec3e24446260621703ab93f8163efc750f76979b0c4210abd942d4ff08"
+SOURCE_IDS_APPEND = ("ya_standards", "ya_scope", "ayush2016")
+STEP_REPLACEMENTS = {"h11": "3", "h12": "0", "h24": "0"}
 
 
 def text_pair(raw):
@@ -1052,7 +1061,7 @@ SOURCES = {
 }
 
 
-def render():
+def render_base():
     previous = None
     for mod in MODULES:
         for item in mod["lessons"]:
@@ -1073,11 +1082,119 @@ def render():
     return json.dumps(result, ensure_ascii=False, indent=2) + "\n"
 
 
-if __name__ == "__main__":
-    rendered = render()
-    if "--check" in sys.argv:
-        if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8") != rendered:
-            raise SystemExit("hatha course JSON differs from authored source")
+def _check_bytes(data, length, digest, stage):
+    actual_digest = hashlib.sha256(data).hexdigest()
+    if len(data) != length or actual_digest != digest:
+        raise ValueError(
+            f"{stage} changed: expected {length} bytes / {digest}, "
+            f"got {len(data)} bytes / {actual_digest}"
+        )
+
+
+def _unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate overlay key: {key}")
+        result[key] = value
+    return result
+
+
+def load_overlay(path=OVERLAY):
+    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_unique_object)
+
+
+def _text_append(value, field):
+    if (not isinstance(value, dict) or set(value) != {"en", "tr"}
+            or any(not isinstance(value[lang], str) or not value[lang].strip()
+                   for lang in ("en", "tr"))):
+        raise ValueError(f"invalid bilingual overlay field: {field}")
+
+
+def apply_overlay(course, overlay):
+    """Apply only the reviewed published additions to a parsed base course."""
+    if not isinstance(overlay, dict) or set(overlay) != {
+            "sourcesAppend", "sourceIdsAppend", "lessons"}:
+        raise ValueError("overlay root fields changed")
+
+    sources = overlay["sourcesAppend"]
+    if (not isinstance(sources, dict) or tuple(sources) != SOURCE_IDS_APPEND
+            or any(not isinstance(url, str) or not url.startswith("https://")
+                   for url in sources.values())
+            or any(source_id in course["sources"] for source_id in sources)):
+        raise ValueError("overlay source additions changed")
+    if overlay["sourceIdsAppend"] != list(SOURCE_IDS_APPEND):
+        raise ValueError("overlay lesson source additions changed")
+
+    lesson_list = [item for mod in course["modules"] for item in mod["lessons"]]
+    lesson_ids = [item["id"] for item in lesson_list]
+    expected_ids = [f"h{number:02d}" for number in range(1, 61)]
+    if lesson_ids != expected_ids:
+        raise ValueError("base lesson IDs or order changed")
+    additions = overlay["lessons"]
+    if not isinstance(additions, dict) or list(additions) != expected_ids:
+        raise ValueError("overlay must cover the 60 lesson IDs in order")
+
+    course["sources"].update(sources)
+    for item in lesson_list:
+        lesson_id = item["id"]
+        addition = additions[lesson_id]
+        expected_fields = {"practiceAppend", "selfCheckAppend"}
+        if lesson_id in STEP_REPLACEMENTS:
+            expected_fields.add("stepsReplace")
+        if not isinstance(addition, dict) or set(addition) != expected_fields:
+            raise ValueError(f"overlay fields changed for {lesson_id}")
+
+        for field in ("practice", "selfCheck"):
+            append = addition[f"{field}Append"]
+            _text_append(append, f"{lesson_id}.{field}Append")
+            for lang in ("en", "tr"):
+                item[field][lang] += "\n\n" + append[lang]
+
+        if lesson_id in STEP_REPLACEMENTS:
+            replacements = addition["stepsReplace"]
+            index = STEP_REPLACEMENTS[lesson_id]
+            if not isinstance(replacements, dict) or set(replacements) != {index}:
+                raise ValueError(f"step targets changed for {lesson_id}")
+            _text_append(replacements[index], f"{lesson_id}.steps[{index}]")
+            if int(index) >= len(item["steps"]):
+                raise ValueError(f"step index out of range for {lesson_id}")
+            item["steps"][int(index)] = replacements[index]
+
+        source_ids = item["sourceIds"]
+        if any(source_id in source_ids for source_id in SOURCE_IDS_APPEND):
+            raise ValueError(f"duplicate source ID for {lesson_id}")
+        source_ids.extend(SOURCE_IDS_APPEND)
+    return course
+
+
+def render():
+    base_bytes = render_base().encode("utf-8")
+    _check_bytes(base_bytes, BASELINE_LENGTH, BASELINE_SHA256, "authored base")
+    course = apply_overlay(json.loads(base_bytes), load_overlay())
+    published_bytes = (json.dumps(course, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    _check_bytes(published_bytes, PUBLISHED_LENGTH, PUBLISHED_SHA256, "published course")
+    return published_bytes.decode("utf-8")
+
+
+def check_output(path=OUTPUT):
+    if not path.is_file() or path.read_bytes() != render().encode("utf-8"):
+        raise ValueError("hatha course JSON differs from authored source and overlay")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--check", action="store_true", help="compare exact published bytes")
+    mode.add_argument("--write", action="store_true", help="write the verified published bytes")
+    args = parser.parse_args(argv)
+    if args.check:
+        check_output()
     else:
+        rendered = render().encode("utf-8")
         OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-        OUTPUT.write_text(rendered, encoding="utf-8")
+        OUTPUT.write_bytes(rendered)
+
+
+if __name__ == "__main__":
+    main()

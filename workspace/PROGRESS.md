@@ -1,5 +1,24 @@
 # Lissom — İlerleme Kaydı
 
+## 2026-09-28 — Hatha paket bütünlüğü ve üretici sapması onarımı
+
+Değişmeyen 60 derslik Hatha JSON'u (259.103 bayt; SHA
+`0e339eec3e24446260621703ab93f8163efc750f76979b0c4210abd942d4ff08`)
+tek varlıklı Motion Content manifestiyle açılışta doğrulanıyor; bozuk veya
+eksik paket ders/ilerleme görünmeden yükleme hatasına düşüyor. Manifest
+`--check`, **9/9** odak Flutter testi ve hedefli analiz geçti. Bağımsız
+kaynak incelemesi runtime yamada P0/P1/P2 bulmadı.
+
+Eski Hatha üreticisi yayımlanan zenginleştirilmiş JSON'u yeniden
+üretemiyordu: `--write` 60 dersin pratik/öz değerlendirme eklerini geri
+alabilirdi. Repo içi, 60 kimliğe ve izinli alanlara bağlı overlay ile taban
+ve çıktı SHA/uzunluk kapıları eklendi. `--check` artık yayımlanan JSON'la
+bayt-bayt eşit; **11/11** Python testi ve bağımsız tekrar inceleme PASS
+(`scratch/2026-09-28-lissom-runtime-integrity-peer/ADDENDUM.md`). Üretici
+ve manifest kontrolleri CI'a bağlandı. Kurs JSON'u, ders sırası ve
+ilerleme şeması değiştirilmedi. Gerçek video, kişi-ayrık uzman form modeli,
+native cihaz ve kurucu fiziksel kabulü açık.
+
 ## 2026-09-28 — Hatha Yoga ilk kursu; içerik köprüsü dar PASS, ürün kabulü açık
 
 İlk Hatha Yoga kursu **60 ders** ve canlı v8d kaynak paketinde. Gebelik,

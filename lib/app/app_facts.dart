@@ -10,10 +10,14 @@
 /// sessizce boş listeye düşmek, "veri yok" ile "okuyamadım"ı karıştırırdı.
 library;
 
-import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert' show utf8;
+
+import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_content/motion_content.dart';
 
 import 'assessment_history.dart';
+import 'flutter_bundle_content_asset_reader.dart';
 import 'hatha_course.dart';
 import 'hatha_progress.dart';
 import 'ia.dart';
@@ -146,18 +150,15 @@ final class AppFacts {
 
   static Future<AppFacts> load({
     LissomLocalScope scope = LissomLocalScope.guest,
+    AssetBundle? bundle,
   }) async {
-    final String batteryRaw = await rootBundle.loadString(
+    final AssetBundle assets = bundle ?? rootBundle;
+    final String batteryRaw = await assets.loadString(
       'config/tests/lissom-assessment.v1.json',
     );
-    final String iaRaw = await rootBundle.loadString(
-      'config/ia/library.v1.json',
-    );
-    final String hathaRaw = await rootBundle.loadString(
-      'config/courses/hatha.v1.json',
-    );
+    final String iaRaw = await assets.loadString('config/ia/library.v1.json');
     final Battery battery = Battery.parseJson(batteryRaw);
-    final HathaCourse hatha = HathaCourse.parse(hathaRaw);
+    final HathaCourse hatha = await loadVerifiedHathaCourse(assets);
     final HathaProgress hathaProgress = await (await openHathaProgressStore(
       scope: scope,
     )).read();
@@ -172,4 +173,24 @@ final class AppFacts {
       hathaProgress: hathaProgress,
     );
   }
+}
+
+const String kHathaCourseAssetPath = 'config/courses/hatha.v1.json';
+
+/// Only a byte-integrity envelope for the existing course. The manifest does
+/// not claim that lesson media or a form model has been delivered.
+Future<HathaCourse> loadVerifiedHathaCourse(AssetBundle bundle) async {
+  final ContentLoadResult result = await ContentBundleLoader(
+    reader: FlutterBundleContentAssetReader(bundle: bundle),
+    expectedAppId: 'com.yulalab.lissom',
+    currentCoreContract: currentMotionContentContract,
+  ).load();
+  if (result is ContentBlocked) throw ContentException(result.error);
+  if (result is! ContentReady) {
+    throw const ContentException(
+      ContentError(code: ContentErrorCode.capability),
+    );
+  }
+  final bytes = await result.assets.read(kHathaCourseAssetPath);
+  return HathaCourse.parse(utf8.decode(bytes));
 }

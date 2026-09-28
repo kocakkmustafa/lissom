@@ -2,7 +2,7 @@
 
 ## 2026-09-28 güncel kuyruk
 1. PR #1'e taşınan 60 derslik Hatha Yoga kaynağında Actions bütçe engeli kalkınca son başta yararlı CI al.
-2. Sentetik içerik köprüsünü üretim manifesti/gerçek medya/altyazı ve cihaz oynatmasına ancak ayrı kabul sonrası bağla; medya izlemek ilerleme sağlamaz.
+2. Mevcut 60 derslik JSON üretim paket manifesti ve yeniden üretilebilir kaynak/overlay kapısında; gerçek medya/altyazı ve cihaz oynatması ayrı kabul bekliyor. Medya izlemek ilerleme sağlamaz.
 3. Kişi-ayrık uzman hareket hatası olmadan tam-kurs form modeli fit yok. Gebelik/sakatlık/kronik durumlar için yalnız genel bilgi/uyarlama; kişisel rehabilitasyon hükmü yok.
 4. Kurucu bütün dersleri en son toplu fiziksel test eder; mağaza kapıları ayrıca doğrulanır.
 

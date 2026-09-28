@@ -6,7 +6,7 @@ import 'package:lissom/app/flutter_bundle_content_asset_reader.dart';
 import 'package:lissom/app/hatha_course.dart';
 import 'package:motion_content/motion_content.dart';
 
-const String _manifestPath = 'config/motion_content/manifest.json';
+const String _manifestPath = 'assets/motion_content/manifest.json';
 const String _coursePath = 'config/courses/hatha.v1.json';
 // Current reviewed working-tree asset; an authored change requires a repin.
 const int _courseByteLength = 259103;
