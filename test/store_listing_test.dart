@@ -7,10 +7,10 @@
 /// (`workspace/devir/…/store_listing_test.dart` emsali, JabLab `H-9`).
 /// Bu yüzden `docs/` istisnasının KENDİ istisnası: bu dosya taranır.
 ///
-/// ## Kontrat — `motion-core/workspace/MAGAZA-ALAN-LIMITLERI.md`, TEK otorite
-/// Uzunluk limitleri BURADA KOPYALANMADI (`H-58`: kopya = güncelleme borcu),
-/// dosyadan OKUNUYOR. `$` önekli anahtarlar gönderilmeyen gerekçe/kaynak
-/// notlarıdır (`MAGAZA-ALAN-LIMITLERI.md` §Kapı Sözleşmesi madde 3).
+/// ## Kontrat
+/// Sevk edilen alanların uzunluk ve varlık sınırları aşağıda doğrulanır.
+/// `$` önekli anahtarlar gönderilmeyen gerekçe/kaynak notlarıdır. Test,
+/// GitHub checkout'unda bulunmayan yerel workspace belgelerine dayanmaz.
 ///
 /// ## Üç ölçüm (kontratın kendi şartı)
 /// 1. Uzunluk — her alan limitini aşarsa KIRMIZI.
@@ -23,22 +23,15 @@
 /// tamamen kaybolursa kapı SESSİZCE geçmemeli).
 library;
 
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/listing_json.dart';
 
 const String _listingPath = listingPath;
+const String _trListingPath = 'docs/store/listing.tr-TR.json';
 
-/// `MAGAZA-ALAN-LIMITLERI.md`den ÇEKİLEN limitler — TEK otoriteden okunur,
-/// burada elle sabitlenmez (dosya yolu, sayı değil).
-const String _limitsDoc =
-    '../../motion-core/workspace/MAGAZA-ALAN-LIMITLERI.md';
-
-/// Alan yolu → (limit, zorunlu-mu). Limit DEĞERİ kontrat dosyasından
-/// ÇALIŞMA-ANINDA doğrulanır (`_verifyLimitsMatchContract`), burada yalnız
-/// hangi alanın hangi yolda olduğu tanımlanır.
+/// Alan yolu → mağaza taslağı için üst karakter sınırı.
+/// Mağaza sınırları değişirse bu değerler sağlayıcıyla yeniden doğrulanır.
 const Map<String, int> _fieldLimits = <String, int>{
   'appStore.name': 30,
   'appStore.subtitle': 30,
@@ -84,34 +77,74 @@ void _checkListing(
 }
 
 void main() {
-  test('KONTRAT DOSYASI OKUNABİLİR — limitler tek otoriteden geliyor', () {
-    // POZİTİF ÇAPA: kontrat dosyası bu depodan erişilebilir mi? Erişilemezse
-    // yukarıdaki `_fieldLimits` sabiti sessizce bayatlayabilir ve kimse
-    // görmez.
-    final File contract = File(_limitsDoc);
-    expect(contract.existsSync(), isTrue,
-        reason: 'MAGAZA-ALAN-LIMITLERI.md bulunamadı ($_limitsDoc) — '
-            'limitler TEK otoriteden doğrulanamıyor, kör kopyaya dönme riski');
-    final String text = contract.readAsStringSync();
-    for (final MapEntry<String, int> e in _fieldLimits.entries) {
-      expect(text.contains('${e.value}'), isTrue,
-          reason: '${e.key} limiti (${e.value}) kontrat metninde bulunamadı '
-              '— sayı bayatlamış olabilir, kontratla karşılaştır');
-    }
-  });
-
   test('UZUNLUK + VARLIK — sevk edilen taslak limitleri aşmıyor', () {
     final Map<String, dynamic> listing = readListing(_listingPath);
     final List<String> lengthViolations = <String>[];
     final List<String> missingFields = <String>[];
-    _checkListing(listing,
-        lengthViolations: lengthViolations, missingFields: missingFields);
+    _checkListing(
+      listing,
+      lengthViolations: lengthViolations,
+      missingFields: missingFields,
+    );
 
-    expect(lengthViolations, isEmpty,
-        reason: 'BELGELENMİŞ LİMİTİ AŞIYOR — yükleme reddedebilir '
-            '(bu bir ön-kontrol, otorite değil): ${lengthViolations.join(" · ")}');
-    expect(missingFields, isEmpty,
-        reason: 'ZORUNLU ALAN EKSİK: ${missingFields.join(" · ")}');
+    expect(
+      lengthViolations,
+      isEmpty,
+      reason:
+          'BELGELENMİŞ LİMİTİ AŞIYOR — yükleme reddedebilir '
+          '(bu bir ön-kontrol, otorite değil): ${lengthViolations.join(" · ")}',
+    );
+    expect(
+      missingFields,
+      isEmpty,
+      reason: 'ZORUNLU ALAN EKSİK: ${missingFields.join(" · ")}',
+    );
+  });
+
+  test('tr-TR taslağı alan ve mevcut yetenek sınırını koruyor', () {
+    final Map<String, dynamic> listing = readListing(_trListingPath);
+    final Map<String, dynamic> english = readListing(_listingPath);
+    final List<String> lengthViolations = <String>[];
+    final List<String> missingFields = <String>[];
+    _checkListing(
+      listing,
+      lengthViolations: lengthViolations,
+      missingFields: missingFields,
+    );
+    expect(lengthViolations, isEmpty);
+    expect(missingFields, isEmpty);
+
+    expect(_dig(listing, 'appStore.name'), 'Lissom: Hareket Testleri');
+    final String description = _dig(listing, 'description')!;
+    for (final String name in <String>[
+      'Yukarı uzanma',
+      'derin çömelme',
+      'düz bacak kaldırma',
+    ]) {
+      expect(description, contains(name));
+    }
+    expect(description, contains('Hesabın olmadan kataloğu gezebilir'));
+    expect(description, contains('Kamera değerlendirmeleri'));
+    expect(
+      description,
+      contains('60 özgün Türkçe ve İngilizce Hatha yoga dersi'),
+    );
+    expect(
+      description,
+      contains('Kamera değerlendirmeleri ve abonelik satışı açık değildir'),
+    );
+    expect(description, isNot(contains('Üç canlı kamera ölçümü')));
+    expect(
+      RegExp(
+        r'\b(12|on iki)\b',
+        caseSensitive: false,
+      ).hasMatch(userStrings(listing).join(' ')),
+      isFalse,
+      reason: 'TR taslak 12 kamera ölçümü izlenimi vermemeli',
+    );
+    expect(listing.keys.any((String key) => key.startsWith(r'$')), isTrue);
+    expect(listing['supportUrl'], english['supportUrl']);
+    expect(listing['privacyPolicyUrl'], english['privacyPolicyUrl']);
   });
 
   test('\$ SÖZLEŞMESİ — gönderilen alan \$ taşımaz, gerekçe \$ taşır', () {
@@ -124,11 +157,16 @@ void main() {
     // sessiz varsayım olmasın (H-73: boş alan "yok" ile "bakılmadı"yı
     // ayırt ettirmez; burada "hiç gerekçe yazılmadı" ile "gerekçe var ama
     // görünmüyor"u ayırt ediyoruz).
-    final bool hasDollarKey =
-        listing.keys.any((String k) => k.startsWith(r'$'));
-    expect(hasDollarKey, isTrue,
-        reason: 'kök seviyede hiçbir \$-gerekçe alanı yok — kaynak/provenans '
-            'yazılı değil');
+    final bool hasDollarKey = listing.keys.any(
+      (String k) => k.startsWith(r'$'),
+    );
+    expect(
+      hasDollarKey,
+      isTrue,
+      reason:
+          'kök seviyede hiçbir \$-gerekçe alanı yok — kaynak/provenans '
+          'yazılı değil',
+    );
   });
 
   test('VAAT DİLİ YOK — henüz gelmemiş bir şeyi ima eden kelime yok', () {
@@ -142,8 +180,11 @@ void main() {
       for (final String s in userStrings(listing))
         if (promise.hasMatch(s)) '"$s"',
     ];
-    expect(hits, isEmpty,
-        reason: 'MAĞAZA METNİNDE VAAT DİLİ: ${hits.join(" · ")}');
+    expect(
+      hits,
+      isEmpty,
+      reason: 'MAĞAZA METNİNDE VAAT DİLİ: ${hits.join(" · ")}',
+    );
   });
 
   test('CİHAZ-KANITI İDDİASI YOK — A12 hâlâ açık', () {
@@ -157,50 +198,60 @@ void main() {
       for (final String s in userStrings(listing))
         if (deviceProof.hasMatch(s)) '"$s"',
     ];
-    expect(hits, isEmpty,
-        reason: 'CİHAZ-KANITI İDDİASI: ${hits.join(" · ")} — '
-            'A12 (PROGRESS.md:898) hâlâ kurucuda/cihaz-günü bekliyor');
+    expect(
+      hits,
+      isEmpty,
+      reason:
+          'CİHAZ-KANITI İDDİASI: ${hits.join(" · ")} — '
+          'A12 (PROGRESS.md:898) hâlâ kurucuda/cihaz-günü bekliyor',
+    );
   });
 
-  test('KARŞILIKSIZ YETENEK VAADİ YOK — stale_absence_claim_test ile AYNI liste', () {
-    // Aynı yasak-vaat sözlüğü — iki dosyada TUTMAK yerine burada TEKRAR
-    // yazmak yerine kaynağı işaretliyoruz: değişirse ikisi AYRI turlarda
-    // bayatlayabilir, bu satır o riski adıyla taşıyor.
-    final Map<String, dynamic> listing = readListing(_listingPath);
-    // 🪤 İlk yazım "trend line"/"better than"/"worse than"ı da buraya
-    // koymuştu ve KENDİ KENDİNİ ısırdı: description'ın dürüst cümlesi tam
-    // olarak "does not draw a trend line or say a result is better or
-    // worse than a past one" diyor — yoklukları ADIYLA anlatıyor. Alt-dize
-    // yasağı bağlamı (olumsuzlama) ayırt edemez ve doğru davranışı
-    // cezalandırdı (L-246 emsali: "will not" da aynı sınıfta muaf
-    // tutulmuştu). Bu üçü ÇIKARILDI — riski ["#5/#8" `docs/YOKLUK-
-    // IDDIALARI-ENVANTERI-2026-08-17.md`] zaten adıyla taşıyor.
-    const Map<String, String> unbacked = <String, String>{
-      'feeds your daily plan':
-          'stale_absence_claim_test.dart _capabilityClaimGate ile AYNI — '
-              'home_screen.dart:169 "program_engine — kodda YOK"',
-      'we tell you what to change': 'koçluk katmanı bu derlemede yok',
-      'adapts to you': 'uyarlama yapan hiçbir kod yok',
-    };
-    final List<String> hits = <String>[];
-    for (final String s in userStrings(listing)) {
-      final String low = s.toLowerCase();
-      for (final MapEntry<String, String> c in unbacked.entries) {
-        if (low.contains(c.key)) {
-          hits.add('"$s" → «${c.key}» ÇÜRÜTEN: ${c.value}');
+  test(
+    'KARŞILIKSIZ YETENEK VAADİ YOK — stale_absence_claim_test ile AYNI liste',
+    () {
+      // Aynı yasak-vaat sözlüğü — iki dosyada TUTMAK yerine burada TEKRAR
+      // yazmak yerine kaynağı işaretliyoruz: değişirse ikisi AYRI turlarda
+      // bayatlayabilir, bu satır o riski adıyla taşıyor.
+      final Map<String, dynamic> listing = readListing(_listingPath);
+      // 🪤 İlk yazım "trend line"/"better than"/"worse than"ı da buraya
+      // koymuştu ve KENDİ KENDİNİ ısırdı: description'ın dürüst cümlesi tam
+      // olarak "does not draw a trend line or say a result is better or
+      // worse than a past one" diyor — yoklukları ADIYLA anlatıyor. Alt-dize
+      // yasağı bağlamı (olumsuzlama) ayırt edemez ve doğru davranışı
+      // cezalandırdı (L-246 emsali: "will not" da aynı sınıfta muaf
+      // tutulmuştu). Bu üçü ÇIKARILDI — riski ["#5/#8" `docs/YOKLUK-
+      // IDDIALARI-ENVANTERI-2026-08-17.md`] zaten adıyla taşıyor.
+      const Map<String, String> unbacked = <String, String>{
+        'feeds your daily plan':
+            'stale_absence_claim_test.dart _capabilityClaimGate ile AYNI — '
+            'home_screen.dart:169 "program_engine — kodda YOK"',
+        'we tell you what to change': 'koçluk katmanı bu derlemede yok',
+        'adapts to you': 'uyarlama yapan hiçbir kod yok',
+      };
+      final List<String> hits = <String>[];
+      for (final String s in userStrings(listing)) {
+        final String low = s.toLowerCase();
+        for (final MapEntry<String, String> c in unbacked.entries) {
+          if (low.contains(c.key)) {
+            hits.add('"$s" → «${c.key}» ÇÜRÜTEN: ${c.value}');
+          }
         }
       }
-    }
-    expect(hits, isEmpty, reason: 'KARŞILIKSIZ VAAT: ${hits.join(" · ")}');
-  });
+      expect(hits, isEmpty, reason: 'KARŞILIKSIZ VAAT: ${hits.join(" · ")}');
+    },
+  );
 
   group('ÖZ-TESTLER (H-62/M-F-652)', () {
     test('POZİTİF İKİZ — bugünkü gerçek dosya kapıdan geçer', () {
       final Map<String, dynamic> listing = readListing(_listingPath);
       final List<String> lengthViolations = <String>[];
       final List<String> missingFields = <String>[];
-      _checkListing(listing,
-          lengthViolations: lengthViolations, missingFields: missingFields);
+      _checkListing(
+        listing,
+        lengthViolations: lengthViolations,
+        missingFields: missingFields,
+      );
       expect(lengthViolations, isEmpty);
       expect(missingFields, isEmpty);
     });
@@ -218,10 +269,16 @@ void main() {
       };
       final List<String> lengthViolations = <String>[];
       final List<String> missingFields = <String>[];
-      _checkListing(sabotaged,
-          lengthViolations: lengthViolations, missingFields: missingFields);
-      expect(lengthViolations, isNotEmpty,
-          reason: 'kapı 31/30\'u yakalamadı — kör');
+      _checkListing(
+        sabotaged,
+        lengthViolations: lengthViolations,
+        missingFields: missingFields,
+      );
+      expect(
+        lengthViolations,
+        isNotEmpty,
+        reason: 'kapı 31/30\'u yakalamadı — kör',
+      );
     });
 
     test('VAKUM — dosya bulunamazsa kapı SESSİZCE geçmez, patlar', () {
@@ -245,8 +302,11 @@ void main() {
       };
       final List<String> lengthViolations = <String>[];
       final List<String> missingFields = <String>[];
-      _checkListing(missing,
-          lengthViolations: lengthViolations, missingFields: missingFields);
+      _checkListing(
+        missing,
+        lengthViolations: lengthViolations,
+        missingFields: missingFields,
+      );
       expect(missingFields, contains('appStore.promotionalText'));
     });
   });

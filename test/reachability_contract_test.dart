@@ -120,47 +120,52 @@ Type? _visible(WidgetTester tester) {
 /// GERÇEKTEN görülebiliyor.
 Set<Type> _observedScreenLike(WidgetTester tester) {
   final Set<Type> out = <Type>{};
-  for (final Element e in find
-      .byWidgetPredicate((Widget w) {
-        final String n = w.runtimeType.toString();
-        return (n.endsWith('Screen') || n.endsWith('Page')) &&
-            !n.startsWith('_');
-      })
-      .evaluate()) {
+  for (final Element e in find.byWidgetPredicate((Widget w) {
+    final String n = w.runtimeType.toString();
+    return (n.endsWith('Screen') || n.endsWith('Page')) && !n.startsWith('_');
+  }).evaluate()) {
     out.add(e.widget.runtimeType);
   }
   return out;
 }
 
 void main() {
-  testWidgets('SÖZLEŞME — uygulama kökünden, desen adayı, yürüyerek üyelik',
-      (WidgetTester tester) async {
+  testWidgets('SÖZLEŞME — uygulama kökünden, desen adayı, yürüyerek üyelik', (
+    WidgetTester tester,
+  ) async {
     pinNarrowSurface(tester);
     final AppFacts facts = factsFromDisk();
     final _RouteWitness witness = _RouteWitness();
     final _MemStore store = _MemStore();
 
     // ③ BAŞLANGIÇ = UYGULAMA KÖKÜ, taze kurulum, ilk-koşu bayrağı false.
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      navigatorObservers: <NavigatorObserver>[witness],
-      home: OnboardingGate(
-        storeLoader: () async => store,
-        shellLoader: () async => facts,
-        // D13/F2 — enjekte EDİLMEZSE `TestDetailScreen`e varan yürüyüş
-        // `openAttemptValueStore`a düşer ve `path_provider` widget
-        // testinde SONSUZ ASILI kalır (`deadend_taxonomy_test.dart`ta
-        // ölçüldü).
-        attemptValueStoreLoader: () async => _EmptyAttemptValueStore(),
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildLissomTheme(),
+        navigatorObservers: <NavigatorObserver>[witness],
+        home: OnboardingGate(
+          measurementAvailable: true,
+          storeLoader: () async => store,
+          shellLoader: () async => facts,
+          // D13/F2 — enjekte EDİLMEZSE `TestDetailScreen`e varan yürüyüş
+          // `openAttemptValueStore`a düşer ve `path_provider` widget
+          // testinde SONSUZ ASILI kalır (`deadend_taxonomy_test.dart`ta
+          // ölçüldü).
+          attemptValueStoreLoader: () async => _EmptyAttemptValueStore(),
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     // POZİTİF ÇAPA: soğuk açılış GERÇEKTEN onboarding'e düşmeli — düşmezse
     // aşağıdaki sayı kabuktan başlamış olur ve sözleşmeyi ihlal eder.
-    expect(find.byKey(const Key('onboarding.continue')), findsOneWidget,
-        reason: 'taze kurulumda onboarding görünmedi — başlangıç noktası '
-            'uygulama kökü DEĞİL demektir');
+    expect(
+      find.byKey(const Key('onboarding.continue')),
+      findsOneWidget,
+      reason:
+          'taze kurulumda onboarding görünmedi — başlangıç noktası '
+          'uygulama kökü DEĞİL demektir',
+    );
     expect(store.p.completed, isFalse, reason: 'ilk-koşu bayrağı false olmalı');
 
     // Onboarding DÜĞMEYE BASILARAK geçilir (bayrak SET EDİLEREK değil).
@@ -179,8 +184,11 @@ void main() {
     await tester.tap(find.byKey(const Key('onboarding.continue')));
     await tester.pumpAndSettle();
 
-    expect(store.p.completed, isTrue,
-        reason: 'onboarding düğmelerle tamamlanmalıydı');
+    expect(
+      store.p.completed,
+      isTrue,
+      reason: 'onboarding düğmelerle tamamlanmalıydı',
+    );
     expect(find.byType(LissomShell), findsOneWidget);
 
     // (b) ÜYELİK YÜRÜYEREK — sekmeler + boyanmış kontroller.
@@ -206,8 +214,9 @@ void main() {
     final String builtTitle = facts.ia.families
         .firstWhere((dynamic f) => f.isBuilt as bool)
         .title;
-    for (final String title
-        in facts.ia.families.map((dynamic f) => f.title as String)) {
+    for (final String title in facts.ia.families.map(
+      (dynamic f) => f.title as String,
+    )) {
       final Finder c = find.text(title);
       await scrollTo(tester, c);
       if (c.evaluate().isEmpty) continue;
@@ -266,8 +275,9 @@ void main() {
     }
 
     // (c) ADAY OLUP VARILAMAYAN — kaybolmaz.
-    final List<Type> unreachable =
-        kCandidateScreens.where((Type t) => !reached.contains(t)).toList();
+    final List<Type> unreachable = kCandidateScreens
+        .where((Type t) => !reached.contains(t))
+        .toList();
 
     // ⭐ (d) BÖLME DENETLENİR — ve bu madde bu hattın kendi bulgusundan
     // doğdu: "varılabilir ama boş" turunda yürüyüşüm kaydırmıyordu, altı
@@ -278,19 +288,27 @@ void main() {
     // DEĞİL, bir ARİTMETİK KİMLİKtir (bugün JabLab'da ölçülen kusur).
     // Gerçek denetim ters yönde: ***yürüyüş, aday OLMAYAN bir yere
     // vardıysa aday kümesi EKSİKTİR.***
-    final Set<Type> reachedOutsideCandidates =
-        observed.difference(kCandidateScreens.toSet());
-    expect(reachedOutsideCandidates, isEmpty,
-        reason: 'yürüyüş aday kümesinde OLMAYAN bir yüzeye vardı: '
-            '$reachedOutsideCandidates — desen bu ekranı KAÇIRMIŞ, aday '
-            'kümesi eksik (elle liste hafızadan okur, L-298)');
+    final Set<Type> reachedOutsideCandidates = observed.difference(
+      kCandidateScreens.toSet(),
+    );
+    expect(
+      reachedOutsideCandidates,
+      isEmpty,
+      reason:
+          'yürüyüş aday kümesinde OLMAYAN bir yüzeye vardı: '
+          '$reachedOutsideCandidates — desen bu ekranı KAÇIRMIŞ, aday '
+          'kümesi eksik (elle liste hafızadan okur, L-298)',
+    );
 
     // Ve payda: aday sayısı, iki kümenin AYRI sayımıyla tutmalı.
-    expect(reached.intersection(kCandidateScreens.toSet()).length +
-            unreachable.length,
-        kCandidateScreens.length,
-        reason: 'bölme tutmuyor — sayım bir adayı iki kez ya da hiç '
-            'saymış olabilir');
+    expect(
+      reached.intersection(kCandidateScreens.toSet()).length +
+          unreachable.length,
+      kCandidateScreens.length,
+      reason:
+          'bölme tutmuyor — sayım bir adayı iki kez ya da hiç '
+          'saymış olabilir',
+    );
 
     // ignore: avoid_print
     print('\n═══ GEZİLEBİLİRLİK — SÖZLEŞME (L-298) ═══');
@@ -306,22 +324,31 @@ void main() {
     print('  VARILAMAYAN    : ${unreachable.length}  $unreachable');
     // ignore: avoid_print
     // Başlangıç rotası (`/`) sayılmaz — gezinme DEĞİL, açılışın kendisi.
-    print('  rota tanıklığı : '
-        '${witness.pushed.where((String r) => r != '/').length} push '
-        '(başlangıç rotası hariç)');
+    print(
+      '  rota tanıklığı : '
+      '${witness.pushed.where((String r) => r != '/').length} push '
+      '(başlangıç rotası hariç)',
+    );
     // ignore: avoid_print
     print('════════════════════════════════════════\n');
 
-    expect(unreachable, isEmpty,
-        reason: 'desenden aday çıkan ama VARILAMAYAN yüzey: $unreachable — '
-            '(c) gereği raporlanır, sessizce düşmez');
-    expect(witness.pushed, isNotEmpty,
-        reason: 'NavigatorObserver hiç push görmedi — yürüyüş rota '
-            'açmıyorsa KATI sayısı tanıksızdır');
+    expect(
+      unreachable,
+      isEmpty,
+      reason:
+          'desenden aday çıkan ama VARILAMAYAN yüzey: $unreachable — '
+          '(c) gereği raporlanır, sessizce düşmez',
+    );
+    expect(
+      witness.pushed,
+      isNotEmpty,
+      reason:
+          'NavigatorObserver hiç push görmedi — yürüyüş rota '
+          'açmıyorsa KATI sayısı tanıksızdır',
+    );
   });
 
-  testWidgets(
-      '③ ÖLÇÜM — kabuktan başlayan bir tur onboarding\'i GÖRMEZ '
+  testWidgets('③ ÖLÇÜM — kabuktan başlayan bir tur onboarding\'i GÖRMEZ '
       '(başlangıç noktası evreni tanımlar)', (WidgetTester tester) async {
     pinNarrowSurface(tester);
     // Eski kapımın başlangıcı: doğrudan `LissomShell`. Bu turun tek amacı
@@ -330,19 +357,29 @@ void main() {
     // onun EVRENİNİ tanımlar; kabuktan başlamak, kullanıcının hiç
     // görmediği bir uygulamayı ölçmektir.*
     final _RouteWitness witness = _RouteWitness();
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      navigatorObservers: <NavigatorObserver>[witness],
-      home: LissomShell(loader: () async => factsFromDisk()),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildLissomTheme(),
+        navigatorObservers: <NavigatorObserver>[witness],
+        home: LissomShell(loader: () async => factsFromDisk()),
+      ),
+    );
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('onboarding.continue')), findsNothing,
-        reason: 'kabuktan başlayan tur onboarding\'i GÖRMEMELİ — görüyorsa '
-            'bu ölçümün öncülü yanlış');
-    expect(find.byType(LissomShell), findsOneWidget,
-        reason: 'POZİTİF ÇAPA — kabuk gerçekten açıldı, yani "onboarding '
-            'yok" bulgusu boş ekranın değil KABUĞUN ölçümü');
+    expect(
+      find.byKey(const Key('onboarding.continue')),
+      findsNothing,
+      reason:
+          'kabuktan başlayan tur onboarding\'i GÖRMEMELİ — görüyorsa '
+          'bu ölçümün öncülü yanlış',
+    );
+    expect(
+      find.byType(LissomShell),
+      findsOneWidget,
+      reason:
+          'POZİTİF ÇAPA — kabuk gerçekten açıldı, yani "onboarding '
+          'yok" bulgusu boş ekranın değil KABUĞUN ölçümü',
+    );
 
     // ⚖️ ÖLÇÜLEN SONUÇ: onboarding kabuk turunda GÖRÜNMEZ. Ama KATI'ya
     // etkisi SIFIR — çünkü onboarding bir ROTA AÇMIYOR (tek `Scaffold`,
@@ -351,10 +388,14 @@ void main() {
     // 🪤 İlk iddiam `pushed` BOŞ olmalı diyordu ve YANLIŞTI: `MaterialApp`in
     // başlangıç rotası (`/`) da bir push. Ürün kusuru değil, CÜMLEM fazla
     // genişti — ölçülen şey *"başlangıç ROTASININ ÖTESİNDE gezinme"*.
-    expect(witness.pushed.where((String r) => r != '/'), isEmpty,
-        reason: 'kabuk açılışında başlangıç rotasının ÖTESİNDE push olmamalı '
-            '— olsaydı KATI sayısı başlangıç noktasına göre değişirdi ve '
-            'iki ölçüm kıyaslanamazdı');
+    expect(
+      witness.pushed.where((String r) => r != '/'),
+      isEmpty,
+      reason:
+          'kabuk açılışında başlangıç rotasının ÖTESİNDE push olmamalı '
+          '— olsaydı KATI sayısı başlangıç noktasına göre değişirdi ve '
+          'iki ölçüm kıyaslanamazdı',
+    );
   });
 }
 

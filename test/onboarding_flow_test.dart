@@ -8,12 +8,15 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/onboarding_flow.dart';
 import 'package:lissom/app/onboarding_store.dart';
+import 'package:lissom/app/profile_screen.dart';
 
 import 'support/narrow_surface.dart';
+import 'support/facts_from_disk.dart';
 
 /// Bellek-içi sahte depo — gerçek dosya sistemine dokunmadan `write`
 /// çağrısını GÖZLEMLENEBİLİR kılar.
@@ -44,6 +47,80 @@ Future<void> _continue(WidgetTester tester) async {
 }
 
 void main() {
+  for (final language in ['en', 'tr']) {
+    testWidgets(
+      'current course and closed camera copy is visible in $language',
+      (tester) async {
+        Widget host(Widget child) => MaterialApp(
+          locale: Locale(language),
+          supportedLocales: const [Locale('en'), Locale('tr')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          theme: buildLissomTheme(),
+          home: child,
+        );
+        await tester.pumpWidget(
+          host(
+            OnboardingFlow(
+              store: _FakeStore(),
+              onDone: (_) {},
+              onOpenAccount: () {},
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          find.textContaining(
+            language == 'tr'
+                ? 'Hatha yoga kursunu hesap veya kamera olmadan'
+                : 'Practise the Hatha yoga course without an account or camera',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.textContaining(
+            language == 'tr'
+                ? 'kamera ölçümleri ve abonelik satışı kapalıdır'
+                : 'measurements and subscription sales are closed',
+          ),
+          findsWidgets,
+        );
+        expect(find.textContaining('uses your phone\'s camera'), findsNothing);
+        expect(find.textContaining('üyeliği gerekir'), findsNothing);
+        await _continue(tester);
+        expect(
+          find.textContaining(
+            language == 'tr'
+                ? 'Bu sürümde canlı kamera ölçümleri kapalıdır'
+                : 'Live camera measurements are closed in this release',
+          ),
+          findsOneWidget,
+        );
+        await tester.pumpWidget(
+          host(Scaffold(body: ProfileScreen(facts: factsFromDisk()))),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          find.textContaining(
+            language == 'tr'
+                ? 'Hatha yoga kursu kamera olmadan çalışır'
+                : 'The Hatha yoga course works without a camera',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.textContaining(
+            'The camera reads your movement while you measure',
+          ),
+          findsNothing,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
   testWidgets('O1 — hoş geldin metni ve Continue baştan AKTİF', (WidgetTester tester) async {
     final _FakeStore store = _FakeStore();
     await _pump(tester, store, () {});
@@ -108,6 +185,9 @@ void main() {
     await tester.pumpAndSettle();
     await _continue(tester);
     await _continue(tester); // O3 → O4
+
+    expect(find.textContaining('Choose your age range to continue'),
+        findsOneWidget);
 
     FilledButton btn = tester
         .widget<FilledButton>(find.byKey(const Key('onboarding.continue')));

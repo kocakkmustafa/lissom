@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 2,
+  "asOf": "2026-09-30",
+  "scope": "Two exact movement teaching ties only; no complete-lesson, dose, personal-safety or camera validation.",
+  "sourceResearchManifestSha256": "dec2b43795a06b456bfb6b64f3645d836574a8d4ada8b41b09d959d4a2e8ebb6",
+  "parentCourseSha256": "e83c86d939d8d5527dec6fe3820b416f1aaec5dff7ef1c81e8de04ab90dc685c",
+  "courseSha256": "aa9ccfb5adc397e00c14247746b868d9d7ca93d45de0ccbdaa116f880f852b57",
+  "generatedMediaCount": 0,
+  "acceptedExpertLabelCount": 0,
+  "qualifiedModelCount": 0,
+  "sources": {
+    "umich_standing_turn": {
+      "lessonId": "h08",
+      "url": "https://hr.umich.edu/node/74294",
+      "locator": "Rotation: Mid and Low Back, lines 39-43",
+      "accessMode": "original_publisher_page_opened",
+      "supports": {
+        "en": "Hip-width, even-weight gentle standing turns that return through centre.",
+        "tr": "Kalça genişliğinde ve ağırlık dengeliyken merkezden geçen hafif ayakta dönüşleri."
+      },
+      "doesNotSupport": {
+        "en": "Lissom’s exact arm placement, three-turn dose, neck range, personal suitability or camera scoring.",
+        "tr": "Lissom’un tam kol yerini, üç dönüş dozunu, boyun aralığını, kişisel uygunluğu veya kamera puanlamasını."
+      },
+      "rights": "Teaching text attribution only; commercial imagery/audio/video reuse and model-training rights not verified.",
+      "realPersonErrorLabel": false,
+      "modelTrainingRightsVerified": false,
+      "automaticFormVerdictSupported": false
+    },
+    "ace_bent_knee_reverse_table": {
+      "lessonId": "h52",
+      "url": "https://www.acefitness.org/resources/pros/expert-articles/5659/yoga-for-9-to-5ers-6-poses-to-enhance-posture/",
+      "locator": "Reverse plank: bent-knee reverse-table variation, lines 206-210",
+      "accessMode": "original_publisher_page_opened",
+      "supports": {
+        "en": "A bent-knee reverse-table option with hands behind the hips, feet flat and pelvis lifting.",
+        "tr": "Eller kalça arkasında, ayaklar yerde ve leğen yükselirken diz bükülü ters masa seçeneğini."
+      },
+      "doesNotSupport": {
+        "en": "The lesson’s repetition count, a wrist or shoulder safety threshold, diagnosis-specific clearance or camera scoring.",
+        "tr": "Dersin tekrar sayısını, bilek veya omuz güvenliği eşiğini, tanıya özel uygunluk iznini veya kamera puanlamasını."
+      },
+      "rights": "Teaching text attribution only; commercial imagery/audio/video reuse and model-training rights not verified.",
+      "realPersonErrorLabel": false,
+      "modelTrainingRightsVerified": false,
+      "automaticFormVerdictSupported": false
+    }
+  }
+}

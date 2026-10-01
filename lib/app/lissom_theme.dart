@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract final class LissomColors {
@@ -193,6 +194,7 @@ ThemeData buildLissomTheme() {
       backgroundColor: Colors.transparent,
       elevation: 0,
       foregroundColor: LissomColors.ink,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       titleTextStyle: textTheme.titleLarge,
     ),
     filledButtonTheme: FilledButtonThemeData(

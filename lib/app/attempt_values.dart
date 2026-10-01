@@ -19,6 +19,8 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import 'local_account_bridge.dart';
+
 /// Bir denemenin ölçülen DEĞERİ — `AssessmentResult`in kalıcılaşan yarısı.
 ///
 /// [lessonId] çekirdeğin `SessionRecord.lessonId`iyle AYNI biçimde kurulur
@@ -58,26 +60,26 @@ final class AttemptValue {
   final Map<String, String> provenance;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'lessonId': lessonId,
-        'completedAt': completedAt.toUtc().toIso8601String(),
-        'value': value,
-        'unit': unit,
-        'tier': tier,
-        'provenance': provenance,
-        if (bandLabel != null) 'bandLabel': bandLabel,
-        if (lowestBandFloor != null) 'lowestBandFloor': lowestBandFloor,
-      };
+    'lessonId': lessonId,
+    'completedAt': completedAt.toUtc().toIso8601String(),
+    'value': value,
+    'unit': unit,
+    'tier': tier,
+    'provenance': provenance,
+    if (bandLabel != null) 'bandLabel': bandLabel,
+    if (lowestBandFloor != null) 'lowestBandFloor': lowestBandFloor,
+  };
 
   factory AttemptValue.fromJson(Map<String, dynamic> j) => AttemptValue(
-        lessonId: j['lessonId'] as String,
-        completedAt: DateTime.parse(j['completedAt'] as String),
-        value: (j['value'] as num).toDouble(),
-        unit: j['unit'] as String,
-        tier: j['tier'] as String,
-        provenance: (j['provenance'] as Map).cast<String, String>(),
-        bandLabel: j['bandLabel'] as String?,
-        lowestBandFloor: (j['lowestBandFloor'] as num?)?.toDouble(),
-      );
+    lessonId: j['lessonId'] as String,
+    completedAt: DateTime.parse(j['completedAt'] as String),
+    value: (j['value'] as num).toDouble(),
+    unit: j['unit'] as String,
+    tier: j['tier'] as String,
+    provenance: (j['provenance'] as Map).cast<String, String>(),
+    bandLabel: j['bandLabel'] as String?,
+    lowestBandFloor: (j['lowestBandFloor'] as num?)?.toDouble(),
+  );
 }
 
 /// Deneme-değeri deposu — arayüz `SessionStore`unkiyle AYNI ÜÇ hükmü taşır
@@ -107,11 +109,14 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
 
   @override
   Future<void> append(AttemptValue value) async {
-    final String line =
-        jsonEncode(<String, dynamic>{'v': schemaVersion, ...value.toJson()});
+    final String line = jsonEncode(<String, dynamic>{
+      'v': schemaVersion,
+      ...value.toJson(),
+    });
 
-    final String existing =
-        await _file.exists() ? await _file.readAsString() : '';
+    final String existing = await _file.exists()
+        ? await _file.readAsString()
+        : '';
     final String next = existing.isEmpty ? '$line\n' : '$existing$line\n';
 
     // Atomik tmp+rename — `JsonlSessionStore`un aynı gerekçesi: yarım kalan
@@ -124,10 +129,13 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
 
   @override
   Future<List<AttemptValue>> forLesson(String lessonId) async {
-    final List<AttemptValue> all =
-        (await _readAll()).values.where((AttemptValue v) => v.lessonId == lessonId).toList();
+    final List<AttemptValue> all = (await _readAll()).values
+        .where((AttemptValue v) => v.lessonId == lessonId)
+        .toList();
     all.sort(
-        (AttemptValue a, AttemptValue b) => b.completedAt.compareTo(a.completedAt));
+      (AttemptValue a, AttemptValue b) =>
+          b.completedAt.compareTo(a.completedAt),
+    );
     return all;
   }
 
@@ -138,8 +146,9 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
     // M-F-251 (Gravita) burada da geçerli: `File.exists()` bir DİZİN için
     // false döner. Yol var-ama-dosya-değilken "hiç yazılmamış" dalına
     // girmek, var olan ama okunamayan bir geçmişi `ok` diye okutur.
-    final FileSystemEntityType pathType =
-        await FileSystemEntity.type(_file.path);
+    final FileSystemEntityType pathType = await FileSystemEntity.type(
+      _file.path,
+    );
     if (pathType == FileSystemEntityType.notFound) {
       // Yok olan dosya BOŞ geçmiştir, KAYIP geçmiş değil — hiç yazılmadıysa
       // okunamayan da yok. İlk açılış `ok`/0 okumalı.
@@ -160,8 +169,8 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
       // Bozuk TEK satır tüm geçmişi silmez — ama SESSİZCE de değil: atlanan
       // sayılır ve okuyucuya (`unreadableRecords`) taşınır (M-F-228).
       try {
-        final Map<String, dynamic> j =
-            (jsonDecode(line) as Map).cast<String, dynamic>();
+        final Map<String, dynamic> j = (jsonDecode(line) as Map)
+            .cast<String, dynamic>();
         final int v = (j['v'] as num?)?.toInt() ?? 0;
         if (v == schemaVersion) {
           out.add(AttemptValue.fromJson(j));
@@ -181,7 +190,9 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
 /// Gerçek cihazdaki depo. `path_provider` YALNIZ burada — `openSessionStore`
 /// ile aynı desen, aynı gerekçe (`assessment_history.dart`): çekirdek depo
 /// saf Dart kalır, testler geçici bir dosyayla aynı sınıfı koşturabilir.
-Future<AttemptValueStore> openAttemptValueStore() async {
+Future<AttemptValueStore> openAttemptValueStore({
+  LissomLocalScope scope = LissomLocalScope.guest,
+}) async {
   final Directory dir = await getApplicationSupportDirectory();
-  return JsonlAttemptValueStore(File('${dir.path}/lissom/attempt_values.jsonl'));
+  return JsonlAttemptValueStore(scope.file(dir, LissomLocalFile.attemptValues));
 }

@@ -1,5 +1,50 @@
 # Lissom — İlerleme Kaydı
 
+## 2026-10-01 — Hatha kaynak paketi app pinine bağlandı
+
+60 ders, 480 sahne ve 480 varyantın kurs/dilim/projeksiyon SHA'ları
+uygulama Dart sabitleri ve paket testiyle eşleşiyor. h30'un sekiz
+semantik varyantı hâlâ **HOLD**; medya okunmadan reddediliyor. Medya
+odak testleri **22/22**, hedefli analiz temiz, bağımsız kaynak incelemesi
+dar PASS (`scratch/2026-10-01-motion-ol-live-pin-independent-peer-v1/REPORT.md`).
+Gerçek video, kişi-ayrık uzman form modeli ve fiziksel cihaz kabulü açık.
+
+
+## 2026-09-28 — Hatha paket bütünlüğü ve üretici sapması onarımı
+
+Değişmeyen 60 derslik Hatha JSON'u (259.103 bayt; SHA
+`0e339eec3e24446260621703ab93f8163efc750f76979b0c4210abd942d4ff08`)
+tek varlıklı Motion Content manifestiyle açılışta doğrulanıyor; bozuk veya
+eksik paket ders/ilerleme görünmeden yükleme hatasına düşüyor. Manifest
+`--check`, **9/9** odak Flutter testi ve hedefli analiz geçti. Bağımsız
+kaynak incelemesi runtime yamada P0/P1/P2 bulmadı.
+
+Eski Hatha üreticisi yayımlanan zenginleştirilmiş JSON'u yeniden
+üretemiyordu: `--write` 60 dersin pratik/öz değerlendirme eklerini geri
+alabilirdi. Repo içi, 60 kimliğe ve izinli alanlara bağlı overlay ile taban
+ve çıktı SHA/uzunluk kapıları eklendi. `--check` artık yayımlanan JSON'la
+bayt-bayt eşit; **11/11** Python testi ve bağımsız tekrar inceleme PASS
+(`scratch/2026-09-28-lissom-runtime-integrity-peer/ADDENDUM.md`). Üretici
+ve manifest kontrolleri CI'a bağlandı. Kurs JSON'u, ders sırası ve
+ilerleme şeması değiştirilmedi. Gerçek video, kişi-ayrık uzman form modeli,
+native cihaz ve kurucu fiziksel kabulü açık.
+
+## 2026-09-28 — Hatha Yoga ilk kursu; içerik köprüsü dar PASS, ürün kabulü açık
+
+İlk Hatha Yoga kursu **60 ders** ve canlı v8d kaynak paketinde. Gebelik,
+sakatlık ve kronik durumlar için yalnız genel bilgi/uyarlama sınırı geçerli;
+kişisel rehabilitasyon veya otomatik güvenli form hükmü yok. Gerçek onaylı
+video, uzman kişi-ayrık hata verisi ve tam-kurs form modeli **0**. Sabit
+Motion Core `motion_content` okuyucusu güncel kurs JSON'unu SHA ile
+doğruladı; odak testi **4/4**, bağımsız dar peer PASS
+(`scratch/2026-09-28-lissom-content-bridge-peer-v1/REPORT.md`). Üretim
+manifesti, ekran/oynatıcı ve gerçek cihaz kabulü açık.
+
+Güncel kurs ve kaynak düzeyi içerik köprüsü `a9599ab` commitinde mevcut PR #1
+incelemesine taşındı. GitHub Actions'ın üç işi bütçe engeliyle başlamadı;
+bu kaynaklar için yararlı CI, merge veya mağaza kabulü yok. Kanonik devam:
+`holding/plans/MOTION-MODEL-RESUME-2026-09-27.md`.
+
 ## 2026-07-25 — Venture AÇILDI (ayrı repo; kod YOK)
 - Kurucu kararıyla monorepo'dan ayrı repoya kuruldu (`kocakkmustafa/lissom`); plan + kilitli CLAUDE.md + defterler hazır; bundle-id `com.yulalab.lissom` rezerve.
 
@@ -1059,3 +1104,21 @@ YARIN penceresi **3 başlıklı boşluk** buldu, üçü kapandı.
 ⛔ `A12` cihaz koşusu — telefon uyanınca **tek komut**.
 ⛔ H-15 tam uygulanamadı: `lissom-hatti` sim'i var ama **MCP gezinme erişimi
 kurucu onayı** istiyor.
+
+
+## 2026-09-26 — ilk tam Hatha öğretim yolu (yerel WIP)
+
+60 TR/EN ders / 10 modül / 240 teknik adım; Home, Library ve Progress
+girişleri, önerilen sıra ve öz beyanlı çalışma kaydı eklendi. Hesap/sürüm
+ayrımı, atomik-seri yazım ve silme sonrası eski deponun yeniden yazamaması
+sınandı. Mevcut ölçüm bataryası ve kamera skor kapıları açılmadı.
+
+Tam Flutter 314 PASS / 6 mevcut SKIP; analiz temiz; mağaza metni 10 PASS.
+Son kurs iPhone iOS 27 simülatörü ve Android API 37 emülatöründe gerçek
+yerel kayıt / ekran yeniden açılış / silme readback testini geçti. iPhone
+dört kurs görüntüsü alındı; Android SDK görüntü yakalama takılması ayrı
+kaydedildi. Fiziksel kişi/telefon modeli, AI medya, imzalı son paket ve
+mağaza kabulü hâlâ açık. Commit/push/deploy yapılmadı.
+
+Kanıt: `docs/research/HATHA-COURSE-EVIDENCE-2026-09-26.md` ve kapsam matrisi.
+Önceden var olan iş akışı WIP'i korundu; ortak motion-core değiştirilmedi.

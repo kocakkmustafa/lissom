@@ -10,11 +10,18 @@
 /// sessizce boş listeye düşmek, "veri yok" ile "okuyamadım"ı karıştırırdı.
 library;
 
-import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert' show utf8;
+
+import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_content/motion_content.dart';
 
 import 'assessment_history.dart';
+import 'flutter_bundle_content_asset_reader.dart';
+import 'hatha_course.dart';
+import 'hatha_progress.dart';
 import 'ia.dart';
+import 'local_account_bridge.dart';
 import 'session_history_view.dart';
 
 final class AppFacts {
@@ -23,6 +30,8 @@ final class AppFacts {
     required this.battery,
     required this.liveness,
     required this.history,
+    this.hatha,
+    this.hathaProgress,
   });
 
   final LibraryIa ia;
@@ -33,6 +42,8 @@ final class AppFacts {
 
   /// Geçmiş katmanının üç hâlli okuması.
   final SessionHistoryView history;
+  final HathaCourse? hatha;
+  final HathaProgress? hathaProgress;
 
   List<TestLiveness> get live =>
       liveness.where((TestLiveness x) => x.isLive).toList(growable: false);
@@ -67,8 +78,9 @@ final class AppFacts {
   /// olmadığını söylüyor.
   String? blockerForClaim(HonestyClaim claim) {
     if (!claim.isCheckable) return null;
-    final Set<String> bridged =
-        kMetricBindings.map((MetricBinding b) => b.lissomMetric).toSet();
+    final Set<String> bridged = kMetricBindings
+        .map((MetricBinding b) => b.lissomMetric)
+        .toSet();
     final List<String> missing = claim.requires
         .where((String m) => !bridged.contains(m))
         .toList(growable: false);
@@ -109,10 +121,12 @@ final class AppFacts {
     final Set<String> withRef = <String>{};
     final Set<String> withoutRef = <String>{};
     for (final TestSpec t in battery.tests.values) {
-      final List<String> sides =
-          t.perSide ? <String>['right', 'left'] : <String>['right'];
-      final bool touches =
-          sides.any((String s) => needed.contains(t.primaryMetricFor(s)));
+      final List<String> sides = t.perSide
+          ? <String>['right', 'left']
+          : <String>['right'];
+      final bool touches = sides.any(
+        (String s) => needed.contains(t.primaryMetricFor(s)),
+      );
       if (!touches) continue;
       if (t.referenceStatus?.isMeasurementOnly ?? false) {
         withoutRef.add(t.id);
@@ -134,17 +148,49 @@ final class AppFacts {
         'carries no verdict.';
   }
 
-  static Future<AppFacts> load() async {
-    final String batteryRaw =
-        await rootBundle.loadString('config/tests/lissom-assessment.v1.json');
-    final String iaRaw =
-        await rootBundle.loadString('config/ia/library.v1.json');
+  static Future<AppFacts> load({
+    LissomLocalScope scope = LissomLocalScope.guest,
+    AssetBundle? bundle,
+  }) async {
+    final AssetBundle assets = bundle ?? rootBundle;
+    final String batteryRaw = await assets.loadString(
+      'config/tests/lissom-assessment.v1.json',
+    );
+    final String iaRaw = await assets.loadString('config/ia/library.v1.json');
     final Battery battery = Battery.parseJson(batteryRaw);
+    final HathaCourse hatha = await loadVerifiedHathaCourse(assets);
+    final HathaProgress hathaProgress = await (await openHathaProgressStore(
+      scope: scope,
+    )).read();
     return AppFacts(
       ia: LibraryIa.parseJson(iaRaw),
       battery: battery,
       liveness: deriveLiveness(battery),
-      history: await SessionHistoryView.read(openSessionStore),
+      history: await SessionHistoryView.read(
+        () => openSessionStore(scope: scope),
+      ),
+      hatha: hatha,
+      hathaProgress: hathaProgress,
     );
   }
+}
+
+const String kHathaCourseAssetPath = 'config/courses/hatha.v1.json';
+
+/// Only a byte-integrity envelope for the existing course. The manifest does
+/// not claim that lesson media or a form model has been delivered.
+Future<HathaCourse> loadVerifiedHathaCourse(AssetBundle bundle) async {
+  final ContentLoadResult result = await ContentBundleLoader(
+    reader: FlutterBundleContentAssetReader(bundle: bundle),
+    expectedAppId: 'com.yulalab.lissom',
+    currentCoreContract: currentMotionContentContract,
+  ).load();
+  if (result is ContentBlocked) throw ContentException(result.error);
+  if (result is! ContentReady) {
+    throw const ContentException(
+      ContentError(code: ContentErrorCode.capability),
+    );
+  }
+  final bytes = await result.assets.read(kHathaCourseAssetPath);
+  return HathaCourse.parse(utf8.decode(bytes));
 }

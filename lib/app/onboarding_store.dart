@@ -15,6 +15,8 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import 'local_account_bridge.dart';
+
 /// Onboarding'in KULLANICIYA SUNDUĞU yaş bantları — **tek adres**
 /// (`kImplementedTabs` / `kCountableScreens` deseni).
 ///
@@ -85,24 +87,23 @@ final class OnboardingProfile {
   static String? _str(Object? v) => v is String ? v : null;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'completed': completed,
-        if (ageBand != null) 'ageBand': ageBand,
-        if (gender != null) 'gender': gender,
-        if (painNotes != null) 'painNotes': painNotes,
-      };
+    'completed': completed,
+    if (ageBand != null) 'ageBand': ageBand,
+    if (gender != null) 'gender': gender,
+    if (painNotes != null) 'painNotes': painNotes,
+  };
 
   OnboardingProfile copyWith({
     bool? completed,
     String? ageBand,
     String? gender,
     String? painNotes,
-  }) =>
-      OnboardingProfile(
-        completed: completed ?? this.completed,
-        ageBand: ageBand ?? this.ageBand,
-        gender: gender ?? this.gender,
-        painNotes: painNotes ?? this.painNotes,
-      );
+  }) => OnboardingProfile(
+    completed: completed ?? this.completed,
+    ageBand: ageBand ?? this.ageBand,
+    gender: gender ?? this.gender,
+    painNotes: painNotes ?? this.painNotes,
+  );
 }
 
 abstract interface class OnboardingStore {
@@ -124,7 +125,8 @@ final class JsonOnboardingStore implements OnboardingStore {
     if (raw.trim().isEmpty) return const OnboardingProfile.notStarted();
     try {
       return OnboardingProfile.fromJson(
-          jsonDecode(raw) as Map<String, dynamic>);
+        jsonDecode(raw) as Map<String, dynamic>,
+      );
     } on Object {
       // Bozuk dosya — çökme yerine "başlanmamış" say: en kötü sonuç
       // kullanıcının onboarding'i BİR KEZ daha görmesi, veri kaybı değil
@@ -147,7 +149,9 @@ final class JsonOnboardingStore implements OnboardingStore {
   }
 }
 
-Future<OnboardingStore> openOnboardingStore() async {
+Future<OnboardingStore> openOnboardingStore({
+  LissomLocalScope scope = LissomLocalScope.guest,
+}) async {
   final Directory dir = await getApplicationSupportDirectory();
-  return JsonOnboardingStore(File('${dir.path}/lissom/onboarding.json'));
+  return JsonOnboardingStore(scope.file(dir, LissomLocalFile.onboarding));
 }

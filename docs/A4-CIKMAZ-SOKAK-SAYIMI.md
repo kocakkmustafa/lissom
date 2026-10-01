@@ -1,7 +1,7 @@
 # 🚧 A4 — ÇIKMAZ SOKAK SAYIMI (Lissom)
 
 > **Evergreen.** Tarih başlıkta değil, `guncelleme` satırında ve satır içlerinde.
-> **guncelleme:** 2026-08-16 (test düzeyi §2, D13) · **kanıt:** `test/deadend_taxonomy_test.dart`
+> **guncelleme:** 2026-09-26 (Hatha kursu §1 sayımını değiştirdi) · **kanıt:** `test/deadend_taxonomy_test.dart`
 > **doğrular:** `YAYIN-HAZIRLIK-OLCUTU.md` **A4** — *"çıkmaz sokak sayısı ölçülmüş ve ADIYLA yazılmış"*
 
 ⚠️ **Bu doküman ANKRAJDIR, özet değil.** Aşağıdaki makine-okur blok testin
@@ -34,22 +34,22 @@ tamamını görünmez kılıyordu.
 
 ---
 
-## 1. AİLE DÜZEYİ — payda **6**, işlem **6 − 1 = 5**
+## 1. AİLE DÜZEYİ — payda **6**, işlem **6 − 2 = 4**
 
 **Payda:** IA config'in ilan ettiği 6 aile hedefi.
 **Başlatılabilir:** yürüyüşte config'ten türeyen **en az bir öğe** sunan hedef.
-**İşlem:** `çıkmaz = payda − başlatılabilir` = **6 − 1 = 5**.
+**İşlem:** `çıkmaz = payda − başlatılabilir` = **6 − 2 = 4**.
 
 | aile | sınıf | dayanak (ölçülen olgu) |
 |---|---|---|
 | `assessment_battery` | — *(çıkmaz değil)* | `itemsSource` dolu · yürüyüşte 3 canlı test adı **çizildi** |
-| `yoga_styles` | **A** | `itemsSource` **yok** · 5 çocuk **yalnız ad** |
+| `yoga_styles` | — *(çıkmaz değil)* | `itemsSource` Hatha kursu · 42 ders ve kurs açma düğmesi çizildi; diğer stiller yalnız ad |
 | `flexibility_goals` | **A** | `itemsSource` **yok** · 6 çocuk yalnız ad |
 | `population_packs` | **A** | `itemsSource` **yok** · 5 çocuk yalnız ad |
 | `family_warmups` | **A** | `itemsSource` **yok** · 3 çocuk yalnız ad |
 | `breath_meditation` | **A** | `itemsSource` **yok** · **çocuk da yok** — `NamedGapCard` |
 
-**Dağılım:** `A=5 · A′=0 · B=0 · C=0 · D=0 · E=0`
+**Dağılım:** `A=4 · A′=0 · B=0 · C=0 · D=0 · E=0`
 
 📌 **Sınıf `A`nın dayanağı yorum değil, modelin kendi beyanı:**
 `LibraryFamily.itemsSource` docstring'i — *"Boş ise ailenin öğeleri yalnız
@@ -57,10 +57,10 @@ tamamını görünmez kılıyordu.
 Yüzey de aynı şeyi kullanıcıya söylüyor: *"Names, not content. Nothing below
 exists in the app you are holding."* ⇒ ad, içerik değildir ⇒ `A′` değil `A`.
 
-⚠️ **`breath_meditation` diğer dördünden AYRI bir yüzey hâli** (çocuk yok →
+⚠️ **`breath_meditation` diğer üçünden AYRI bir yüzey hâli** (çocuk yok →
 `NamedGapCard`) ama **aynı sınıf**: ikisinde de yazılmış içerik sıfır. Devir
 notunun *"yalnız çocuk adları"* ifadesi beşini tek kalıba sokuyordu; ölçüm
-**dört + bir** gösterdi. Sınıf değişmedi, **gerekçe metni değişti.**
+**üç + bir** gösterdi. Sınıf değişmedi, **gerekçe metni değişti.**
 
 ### `C = 0` — dayanağı bir YÜKLEM değil, BEYAN EDİLMİŞ KAPSAM STANDARDI
 
@@ -71,8 +71,7 @@ ateşlenmezdi** — ölü dal, `L-011`in ölü metriğiyle aynı sınıf.
 
 `C = 0`ın gerçek dayanağı: 6 ailenin tamamını göstermek **IA config'te beyan
 edilmiş kapsam standardıdır** (`_notes`: *"Kapsamın TAMAMI kullanıcıya baştan
-görünür… Ama SAHTE/boş kurs asla listelenmez"*), ve yüzey bunu kullanıcıya
-sayısıyla söylüyor (*"Planned, not in this build (5)"*). Kaza değil, karar.
+görünür… Ama SAHTE/boş kurs asla listelenmez"*). Kaza değil, karar.
 
 ---
 
@@ -161,9 +160,9 @@ ve bu hattın kendi başına kapatamayacağı sınıftadır → **koordinatöre*
 
 <!-- A4-SAYIM:BAŞ -->
 aile.payda = 6
-aile.baslatilabilir = 1
-aile.cikmaz = 5
-aile.contentNeverWritten = 5
+aile.baslatilabilir = 2
+aile.cikmaz = 4
+aile.contentNeverWritten = 4
 aile.contentStartedNoReference = 0
 aile.contentUnwired = 0
 aile.shouldNotExist = 0

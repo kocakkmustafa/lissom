@@ -21,18 +21,30 @@ import 'package:lissom_engine/lissom_engine.dart';
 
 import 'app_facts.dart';
 import 'attempt_values.dart';
+import 'hatha_course.dart';
+import 'hatha_course_screen.dart';
+import 'hatha_progress.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 import 'surfaces.dart';
 import 'test_detail_screen.dart';
 
 class LibraryScreen extends StatelessWidget {
-  const LibraryScreen({required this.facts, this.attemptValueStoreLoader, super.key});
+  const LibraryScreen({
+    required this.facts,
+    this.attemptValueStoreLoader,
+    this.hathaStoreLoader,
+    this.onCourseDone,
+    super.key,
+  });
 
   /// `LiveCaptureScreen.attemptValueStoreLoader`la AYNI enjeksiyon
   /// sözleşmesi (D13) — testte enjekte edilir, üretimde `null` ⇒
   /// `openAttemptValueStore`.
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<HathaProgressStore> Function()? hathaStoreLoader;
+  final VoidCallback? onCourseDone;
 
   static const Key builtSectionKey = Key('library.built');
   static const Key notBuiltSectionKey = Key('library.notBuilt');
@@ -62,13 +74,18 @@ class LibraryScreen extends StatelessWidget {
             key: builtSectionKey,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const SectionHeading(
-                'In this build',
+              SectionHeading(
+                localeText(context, 'In this build', 'Bu sürümde'),
                 // ⚠️ Eskiden "What Lissom can actually do on your phone
                 // today" yazıyordu — Home'un beyanıyla DOĞRUDAN çelişiyordu
                 // (L-242). Batarya telefonda çalıştırılamıyor.
-                subtitle: 'What the measurement engine covers. Running it is '
-                    'a separate thing — see the note above.',
+                subtitle: localeText(
+                  context,
+                  'What the measurement engine covers. Running it is '
+                      'a separate thing — see the note above.',
+                  'Ölçüm motorunun kapsadığı alanlar. Gerçek cihazda çalışma '
+                      'durumu için yukarıdaki açıklamaya bak.',
+                ),
               ),
               const SizedBox(height: 14),
               for (final LibraryFamily f in built)
@@ -78,6 +95,8 @@ class LibraryScreen extends StatelessWidget {
                     family: f,
                     facts: facts,
                     attemptValueStoreLoader: attemptValueStoreLoader,
+                    hathaStoreLoader: hathaStoreLoader,
+                    onCourseDone: onCourseDone,
                   ),
                 ),
             ],
@@ -99,19 +118,34 @@ class LibraryScreen extends StatelessWidget {
               // yazılsaydı ürünün sesi çatallanırdı.
               if (pending.isEmpty)
                 Text(
-                  'Everything named in the plan is built and in this app.',
+                  localeText(
+                    context,
+                    'Everything named in the plan is built and in this app.',
+                    'Planda adı geçen her bölüm bu uygulamada mevcut.',
+                  ),
                   key: nothingPendingKey,
                   style: t.textTheme.bodyMedium,
                 )
               else ...<Widget>[
                 // Bölüm başlığı SAYIYI taşır: genişlik saklanmıyor, ama
                 // birinci-sınıf yerleşim de verilmiyor.
-                LissomEyebrow('Planned, not in this build (${pending.length})'),
+                LissomEyebrow(
+                  localeText(
+                    context,
+                    'Planned, not in this build (${pending.length})',
+                    'Bu sürümde bulunmayan bölümler (${pending.length})',
+                  ),
+                ),
                 const SizedBox(height: 6),
                 Text(
-                  'These are named so you can see the whole shape of Lissom. '
-                  'None of them has content in the app you are holding, and we '
-                  'are not going to guess when they will.',
+                  localeText(
+                    context,
+                    'These are named so you can see the whole shape of Lissom. '
+                        'None of them has content in the app you are holding, and we '
+                        'are not going to guess when they will.',
+                    'Bu başlıklar Lissom’un planlanan kapsamını gösterir. '
+                        'Henüz içerik barındırmazlar; bir yayın tarihi belirtilmez.',
+                  ),
                   style: t.textTheme.bodySmall,
                 ),
                 const SizedBox(height: 12),
@@ -135,10 +169,14 @@ class _BuiltFamilyCard extends StatelessWidget {
     required this.family,
     required this.facts,
     this.attemptValueStoreLoader,
+    this.hathaStoreLoader,
+    this.onCourseDone,
   });
   final LibraryFamily family;
   final AppFacts facts;
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<HathaProgressStore> Function()? hathaStoreLoader;
+  final VoidCallback? onCourseDone;
 
   @override
   Widget build(BuildContext context) {
@@ -147,30 +185,59 @@ class _BuiltFamilyCard extends StatelessWidget {
     final int total = facts.liveness.length;
     return InkWell(
       borderRadius: BorderRadius.circular(LissomRadii.card),
-      onTap: () => Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(
-          builder: (_) => FamilyPage(
-            family: family,
-            facts: facts,
-            attemptValueStoreLoader: attemptValueStoreLoader,
+      onTap: () async {
+        await Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => FamilyPage(
+              family: family,
+              facts: facts,
+              attemptValueStoreLoader: attemptValueStoreLoader,
+              hathaStoreLoader: hathaStoreLoader,
+            ),
           ),
-        ),
-      ),
+        );
+        onCourseDone?.call();
+      },
       child: LissomCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(family.title, style: t.textTheme.headlineSmall),
+            Text(
+              configText(context, family.title),
+              style: t.textTheme.headlineSmall,
+            ),
             const SizedBox(height: 8),
-            Text(family.intro, style: t.textTheme.bodyMedium),
+            Text(
+              configText(context, family.intro),
+              style: t.textTheme.bodyMedium,
+            ),
             const SizedBox(height: 12),
             // Sayı TÜRETİLİR (köprüden), yazılmaz. "12 test" demek yeterli
             // olmazdı: 12'sinden 3'ü ölçülebiliyor ve fark kullanıcının
             // görmesi gereken şeyin ta kendisi.
             Text(
-              '$total tests · $live measurable by camera in this build',
-              style: t.textTheme.bodySmall
-                  ?.copyWith(color: LissomColors.roseDeepHover),
+              family.teachingOnly
+                  ? facts.hatha == null
+                        ? localeText(
+                            context,
+                            'Course data unavailable',
+                            'Kurs verisi açılamadı',
+                          )
+                        : localeText(
+                            context,
+                            '${facts.hatha!.modules.length} modules · '
+                                '${facts.hatha!.lessons.length} guided lessons',
+                            '${facts.hatha!.modules.length} modül · '
+                                '${facts.hatha!.lessons.length} rehberli ders',
+                          )
+                  : localeText(
+                      context,
+                      '$total tests · $live measurable by camera in this build',
+                      '$total test · bu sürümde $live tanesi kamerayla ölçülebiliyor',
+                    ),
+              style: t.textTheme.bodySmall?.copyWith(
+                color: LissomColors.roseDeepHover,
+              ),
             ),
           ],
         ),
@@ -209,14 +276,23 @@ class _PendingFamilyRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(family.title, style: t.textTheme.titleSmall),
+                    Text(
+                      configText(context, family.title),
+                      style: t.textTheme.titleSmall,
+                    ),
                     const SizedBox(height: 3),
-                    Text(family.inventoryLine, style: t.textTheme.bodySmall),
+                    Text(
+                      configText(context, family.inventoryLine),
+                      style: t.textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right,
-                  size: 18, color: LissomColors.bodySecondary),
+              const Icon(
+                Icons.chevron_right,
+                size: 18,
+                color: LissomColors.bodySecondary,
+              ),
             ],
           ),
         ),
@@ -231,6 +307,7 @@ class FamilyPage extends StatelessWidget {
     required this.family,
     required this.facts,
     this.attemptValueStoreLoader,
+    this.hathaStoreLoader,
     super.key,
   });
 
@@ -248,6 +325,7 @@ class FamilyPage extends StatelessWidget {
   final LibraryFamily family;
   final AppFacts facts;
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
+  final Future<HathaProgressStore> Function()? hathaStoreLoader;
 
   @override
   Widget build(BuildContext context) {
@@ -255,22 +333,37 @@ class FamilyPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
           children: <Widget>[
-            Text(family.title, style: t.textTheme.headlineLarge),
+            Text(
+              configText(context, family.title),
+              style: t.textTheme.headlineLarge,
+            ),
             const SizedBox(height: 10),
-            Text(family.intro, style: t.textTheme.bodyMedium),
+            Text(
+              configText(context, family.intro),
+              style: t.textTheme.bodyMedium,
+            ),
             const SizedBox(height: 22),
-            if (family.isBuilt) ..._batteryBody(context) else ..._namedBody(context),
+            if (family.isBuilt)
+              ...family.teachingOnly
+                  ? _hathaBody(context)
+                  : _batteryBody(context)
+            else
+              ..._namedBody(context),
             const SizedBox(height: 8),
             Padding(
               key: honestyKey,
               padding: const EdgeInsets.only(top: 8),
-              child: HonestyBoxCard(family.honestyBox,
-                  liveness: facts.blockerForClaim,
-                  verdictNote: facts.verdictNoteFor),
+              child: HonestyBoxCard(
+                family.honestyBox,
+                liveness: facts.blockerForClaim,
+                verdictNote: facts.verdictNoteFor,
+              ),
             ),
             const MeasurementLimitsFootnote(),
           ],
@@ -279,26 +372,118 @@ class FamilyPage extends StatelessWidget {
     );
   }
 
+  List<Widget> _hathaBody(BuildContext context) {
+    final HathaCourse? course = facts.hatha;
+    if (course == null) {
+      return <Widget>[
+        NamedGapCard(
+          title: localeText(
+            context,
+            'Course cannot be opened',
+            'Kurs açılamıyor',
+          ),
+          reason: localeText(
+            context,
+            'The lesson asset was not loaded.',
+            'Ders dosyası yüklenmedi.',
+          ),
+        ),
+      ];
+    }
+    return <Widget>[
+      LissomCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              hathaText(context, course.title),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              localeText(
+                context,
+                '${course.modules.length} modules · ${course.lessons.length} lessons',
+                '${course.modules.length} modül · ${course.lessons.length} ders',
+              ),
+            ),
+            const SizedBox(height: 12),
+            FilledButton(
+              onPressed: hathaStoreLoader == null
+                  ? null
+                  : () async {
+                      final HathaProgressStore store =
+                          await hathaStoreLoader!();
+                      final HathaProgress progress = await store.read();
+                      if (!context.mounted) return;
+                      await Navigator.of(context).push<void>(
+                        MaterialPageRoute<void>(
+                          builder: (_) => HathaCourseScreen(
+                            course: course,
+                            initialProgress: progress,
+                            storeLoader: hathaStoreLoader!,
+                          ),
+                        ),
+                      );
+                    },
+              child: Text(
+                localeText(context, 'Open Hatha course', 'Hatha kursunu aç'),
+              ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        localeText(
+          context,
+          'Other named yoga styles have no classes in this build.',
+          'Adı geçen diğer yoga stillerinin bu sürümde dersleri yok.',
+        ),
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    ];
+  }
+
   /// İnşa edilmiş aile: gerçek testler, canlı/engelli ayrımıyla — TÜRETİLİR.
   List<Widget> _batteryBody(BuildContext context) {
     final ThemeData t = Theme.of(context);
     final List<TestLiveness> live = facts.live;
     final List<TestLiveness> blocked = facts.blocked;
+    final String liveHeading = localeText(
+      context,
+      'Measured by camera in this build',
+      'Bu sürümde kamerayla ölçülenler',
+    );
+    final String blockedHeading = localeText(
+      context,
+      'Not measured by camera',
+      'Kamerayla ölçülemeyenler',
+    );
     return <Widget>[
       // ⓑ **BAŞLIKLI BOŞLUK YOK (A3, L-315).** `live` boşalırsa eski kod
       // *"Measured by camera in this build (0)"* başlığını çizip altına
       // HİÇBİR ŞEY koymuyordu: kullanıcı sıfır ilan eden bir vaat görüp
       // karşılığını bulamıyordu. Sayı sıfırsa başlık değil GEREKÇE çizilir.
       if (live.isEmpty)
-        const NamedGapCard(
+        NamedGapCard(
           key: noLiveTestsKey,
-          title: 'No test in this battery can be read by the camera',
-          reason: 'Every test here needs a measurement the engine cannot '
-              'produce in this build. Nothing is hidden from you — there is '
-              'simply nothing this camera can score right now.',
+          title: localeText(
+            context,
+            'No test in this battery can be read by the camera',
+            'Bu listedeki hiçbir test kamerayla ölçülemiyor',
+          ),
+          reason: localeText(
+            context,
+            'Every test here needs a measurement the engine cannot '
+                'produce in this build. Nothing is hidden from you — there is '
+                'simply nothing this camera can score right now.',
+            'Bu testler ölçüm motorunun üretemediği değerlere ihtiyaç '
+                'duyuyor. Bu sürümde kamera ile sonuç verilemiyor.',
+          ),
         )
       else ...<Widget>[
-        LissomEyebrow('Measured by camera in this build (${live.length})'),
+        LissomEyebrow('$liveHeading (${live.length})'),
         const SizedBox(height: 10),
         Column(
           key: liveListKey,
@@ -359,16 +544,24 @@ class FamilyPage extends StatelessWidget {
       // ⇒ Cümle TÜRETİLİR (`blocked` boşsa her test canlıdır), uydurulmaz.
       if (blocked.isEmpty)
         Text(
-          'Every test in this battery can be read by the camera.',
+          localeText(
+            context,
+            'Every test in this battery can be read by the camera.',
+            'Bu listedeki her test kamerayla ölçülebiliyor.',
+          ),
           key: noBlockedTestsKey,
           style: t.textTheme.bodyMedium,
         )
       else ...<Widget>[
-        LissomEyebrow('Not measured by camera (${blocked.length})'),
+        LissomEyebrow('$blockedHeading (${blocked.length})'),
         const SizedBox(height: 4),
         Text(
-          'Each one below names the reason it cannot be read, and the reason '
-          'is what would have to change.',
+          localeText(
+            context,
+            'Each one below names the reason it cannot be read, and the reason '
+                'is what would have to change.',
+            'Her testin neden ölçülemediği kendi satırında açıklanır.',
+          ),
           style: t.textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
@@ -407,19 +600,28 @@ class FamilyPage extends StatelessWidget {
   /// bunu söyler. Sahte kart, sahte süre, sahte seviye YOK.
   List<Widget> _namedBody(BuildContext context) {
     final ThemeData t = Theme.of(context);
+    final String namedHeading = localeText(
+      context,
+      'Named in the plan',
+      'Planda adı geçenler',
+    );
     if (family.children.isEmpty) {
       return <Widget>[
         NamedGapCard(
-          title: family.title,
-          reason: family.inventoryLine,
+          title: configText(context, family.title),
+          reason: configText(context, family.inventoryLine),
         ),
       ];
     }
     return <Widget>[
-      LissomEyebrow('Named in the plan (${family.children.length})'),
+      LissomEyebrow('$namedHeading (${family.children.length})'),
       const SizedBox(height: 4),
       Text(
-        'Names, not content. Nothing below exists in the app you are holding.',
+        localeText(
+          context,
+          'Names, not content. Nothing below exists in the app you are holding.',
+          'Bunlar yalnız adlardan oluşur; bu sürümde içerikleri bulunmaz.',
+        ),
         style: t.textTheme.bodySmall,
       ),
       const SizedBox(height: 10),
@@ -435,12 +637,19 @@ class FamilyPage extends StatelessWidget {
                 children: <Widget>[
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: Icon(Icons.circle_outlined,
-                        size: 9, color: LissomColors.bodySecondary),
+                    child: Icon(
+                      Icons.circle_outlined,
+                      size: 9,
+                      color: LissomColors.bodySecondary,
+                    ),
                   ),
                   const SizedBox(width: 11),
                   Expanded(
-                      child: Text(c.title, style: t.textTheme.bodyMedium)),
+                    child: Text(
+                      configText(context, c.title),
+                      style: t.textTheme.bodyMedium,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -484,10 +693,13 @@ class _TestRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(title, style: t.textTheme.titleMedium),
+              Text(configText(context, title), style: t.textTheme.titleMedium),
               if (subtitle != null) ...<Widget>[
                 const SizedBox(height: 3),
-                Text(subtitle!, style: t.textTheme.bodySmall),
+                Text(
+                  configText(context, subtitle!),
+                  style: t.textTheme.bodySmall,
+                ),
               ],
             ],
           ),
@@ -495,8 +707,11 @@ class _TestRow extends StatelessWidget {
         if (onTap != null)
           const Padding(
             padding: EdgeInsets.only(top: 2, left: 6),
-            child: Icon(Icons.chevron_right,
-                size: 18, color: LissomColors.bodySecondary),
+            child: Icon(
+              Icons.chevron_right,
+              size: 18,
+              color: LissomColors.bodySecondary,
+            ),
           ),
       ],
     );
@@ -509,8 +724,7 @@ class _TestRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(LissomRadii.card),
             onTap: onTap,
             child: LissomCard(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
               child: row,
             ),
           );

@@ -13,6 +13,8 @@ import 'package:lissom/app/live_capture_screen.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
 
+import 'support/facts_from_disk.dart';
+
 const FrameSize _size = FrameSize(1080, 1920);
 
 PoseFrame _armFrame({required double elbowY, int tUs = 0}) {
@@ -129,6 +131,26 @@ Future<void> _pump(WidgetTester tester, PoseSource source,
 }
 
 void main() {
+  testWidgets('floor setup uses the test posture and floor camera height',
+      (WidgetTester tester) async {
+    final Battery battery = batteryFromDisk();
+    await tester.pumpWidget(MaterialApp(
+      theme: buildLissomTheme(),
+      home: LiveCaptureScreen(
+        test: battery.tests['active_straight_leg_raise']!,
+        batteryVersion: battery.version,
+        cameraSetup: battery.cameraSetup,
+        sourceOverride: FakePoseSource(const <PoseSourceEvent>[]),
+      ),
+    ));
+    await tester.pump();
+
+    expect(find.textContaining('Lie on your back, side-on'), findsOneWidget);
+    expect(find.textContaining('floor height'), findsOneWidget);
+    expect(find.textContaining('90–110 cm'), findsNothing);
+    expect(find.textContaining('Face the camera square-on'), findsNothing);
+  });
+
   testWidgets('hâl olayı olduğu gibi geçer — PermissionDenied İSİMLE görünür',
       (WidgetTester tester) async {
     await _pump(

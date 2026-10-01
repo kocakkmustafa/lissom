@@ -2,7 +2,7 @@ name: checks
 
 on:
   push:
-    branches: ["**"]
+    branches: ["main"]
   pull_request:
 
 jobs:
@@ -17,6 +17,16 @@ jobs:
           # mocore hattı MediaPipe yüzünden 3.12'ye sabit (3.13/3.14 wheel yok).
           # Bu iş yalnız stdlib kullanıyor ama sürümü aynı tutuyoruz.
           python-version: "3.12"
+
+      - name: Hatha kurs üretimi ve negatif kontroller
+        run: |
+          python3 -B -m unittest discover -s tools -p 'test_build_hatha_course.py'
+          python3 -B tools/build_hatha_course.py --check
+
+      - name: App-owned kaynak projeksiyonu ve HOLD negatif kontrolleri
+        run: |
+          python3 -B -m unittest discover -s tools -p 'test_lissom_source_projection.py'
+          python3 -B tools/check_lissom_source_projection.py --check
 
       - name: Config JSON geçerliliği + şema sürümü
         # Sürümsüz config sessizce yorumlanır; yorumlayıcı sürüm uyumsuzluğunda
@@ -91,6 +101,12 @@ jobs:
           git config --global url."https://x-access-token:${MOTION_CORE_RO_TOKEN}@github.com/kocakkmustafa/motion-core.git".insteadOf "https://github.com/kocakkmustafa/motion-core.git"
 
       - run: flutter pub get
+
+      - name: Hatha kurs bütünlük manifesti güncel mi
+        run: dart run tool/build_hatha_integrity_manifest.dart --check
+
+      - name: lissom_engine test bağımlılıkları
+        run: (cd packages/lissom_engine && dart pub get)
 
       - name: flutter analyze
         run: flutter analyze

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 // ⚠️ `java.util.Properties`i NİTELİKLİ adla yazmak Gradle Kotlin DSL'inde
 // DERLENMEZ: `java` burada `JavaPluginExtension`a çözümleniyor ve paket adını
 // GÖLGELİYOR (`Unresolved reference: util`). İçe aktarma ZORUNLU — ve bunu
@@ -13,16 +15,13 @@ plugins {
 
 android {
     namespace = "com.yulalab.lissom"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 37
+    buildToolsVersion = "37.0.0"
+    ndkVersion = "30.0.16248370"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -31,7 +30,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 37
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -107,6 +106,12 @@ android {
                 else -> signingConfig = signingConfigs.getByName("debug")
             }
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 

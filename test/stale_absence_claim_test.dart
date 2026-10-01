@@ -174,7 +174,7 @@ void main() {
 
     // ⇒ Ve "hiçbir şey saklanmıyor" ARTIK DENMİYOR: saklananın ne olduğu
     // adıyla söyleniyor, Progress'in listesiyle aynı cümleyle.
-    expect(find.textContaining('which test you measured and when'),
+    expect(find.textContaining('Test results and dates are saved'),
         findsOneWidget,
         reason: 'onboarding neyin saklandığını SÖYLEMİYOR — kullanıcı '
             '"hiçbir şey saklanmıyor" diye anlar ve Progress onu yalanlar');

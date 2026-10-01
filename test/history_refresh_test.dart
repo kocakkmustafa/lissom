@@ -34,55 +34,67 @@ import 'support/narrow_surface.dart';
 
 void main() {
   testWidgets(
-      'ölçümden DÖNÜNCE geçmiş yeniden okunur — yüzey yeni kaydı GÖSTERİR',
-      (WidgetTester tester) async {
-    pinNarrowSurface(tester);
+    'ölçümden DÖNÜNCE geçmiş yeniden okunur — yüzey yeni kaydı GÖSTERİR',
+    (WidgetTester tester) async {
+      pinNarrowSurface(tester);
 
-    int loads = 0;
-    // İlk açılış: geçmiş BOŞ. Ölçümden dönüşte: bir kayıt VAR.
-    // (Gerçek dünyada değişimi disk yapar; burada yükleyici, çünkü ölçülen
-    // şey deponun kendisi değil KABUĞUN yeniden okuyup okumadığı.)
-    Future<AppFacts> loader() async {
-      loads++;
-      return factsFromDisk(
-        history: loads == 1
-            ? const SessionHistoryView.ok(<SessionRecord>[])
-            : SessionHistoryView.ok(<SessionRecord>[
-                recordOf(
-                  lessonId: 'overhead_reach:right',
-                  lessonClass: 'measurementOnly',
-                ),
-              ]),
+      int loads = 0;
+      // İlk açılış: geçmiş BOŞ. Ölçümden dönüşte: bir kayıt VAR.
+      // (Gerçek dünyada değişimi disk yapar; burada yükleyici, çünkü ölçülen
+      // şey deponun kendisi değil KABUĞUN yeniden okuyup okumadığı.)
+      Future<AppFacts> loader() async {
+        loads++;
+        return factsFromDisk(
+          history: loads == 1
+              ? const SessionHistoryView.ok(<SessionRecord>[])
+              : SessionHistoryView.ok(<SessionRecord>[
+                  recordOf(
+                    lessonId: 'overhead_reach:right',
+                    lessonClass: 'measurementOnly',
+                  ),
+                ]),
+        );
+      }
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          home: LissomShell(loader: loader, measurementAvailable: true),
+        ),
       );
-    }
+      await tester.pumpAndSettle();
+      expect(loads, 1, reason: 'POZİTİF ÇAPA — kabuk bir kez okumuş olmalı');
 
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      home: LissomShell(loader: loader),
-    ));
-    await tester.pumpAndSettle();
-    expect(loads, 1, reason: 'POZİTİF ÇAPA — kabuk bir kez okumuş olmalı');
+      // Ölçüm yolunu GERÇEKTEN sür: Home → LiveCaptureScreen → geri.
+      await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
+      await tester.tap(find.byKey(HomeScreen.startMeasurementKey));
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
 
-    // Ölçüm yolunu GERÇEKTEN sür: Home → LiveCaptureScreen → geri.
-    await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));
-    await tester.tap(find.byKey(HomeScreen.startMeasurementKey));
-    await tester.pumpAndSettle();
-    await tester.pageBack();
-    await tester.pumpAndSettle();
-
-    expect(loads, 2,
-        reason: 'ölçüm ekranından dönüldü — geçmiş YENİDEN okunmalıydı. '
+      expect(
+        loads,
+        2,
+        reason:
+            'ölçüm ekranından dönüldü — geçmiş YENİDEN okunmalıydı. '
             'Okunmazsa kullanıcı ölçüm yapar, kayıt diske girer, ve Home '
-            'hâlâ ölçümden önceki dünyayı gösterir (L-287).');
+            'hâlâ ölçümden önceki dünyayı gösterir (L-287).',
+      );
 
-    // VARLIK değil ETKİ: yüzey gerçekten YENİ olguyu mu gösteriyor?
-    expect(find.textContaining('Nothing recorded on this device'), findsNothing,
-        reason: 'geçmişte artık bir kayıt VAR — "hiçbir şey kaydedilmedi" '
-            'cümlesi ayakta kalıyorsa yüzey eski dünyayı gösteriyordur');
-  });
+      // VARLIK değil ETKİ: yüzey gerçekten YENİ olguyu mu gösteriyor?
+      expect(
+        find.textContaining('Nothing recorded on this device'),
+        findsNothing,
+        reason:
+            'geçmişte artık bir kayıt VAR — "hiçbir şey kaydedilmedi" '
+            'cümlesi ayakta kalıyorsa yüzey eski dünyayı gösteriyordur',
+      );
+    },
+  );
 
-  testWidgets('ölçüme HİÇ girilmezse gereksiz yeniden okuma YOK',
-      (WidgetTester tester) async {
+  testWidgets('ölçüme HİÇ girilmezse gereksiz yeniden okuma YOK', (
+    WidgetTester tester,
+  ) async {
     pinNarrowSurface(tester);
     int loads = 0;
     Future<AppFacts> loader() async {
@@ -90,10 +102,12 @@ void main() {
       return factsFromDisk();
     }
 
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      home: LissomShell(loader: loader),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildLissomTheme(),
+        home: LissomShell(loader: loader),
+      ),
+    );
     await tester.pumpAndSettle();
 
     // Sekmeler arasında gezinmek geçmişi değiştirmez — tazeleme ölçüme
@@ -104,9 +118,13 @@ void main() {
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();
 
-    expect(loads, 1,
-        reason: 'sekme gezinmesi geçmişi değiştirmez; her dokunuşta diski '
-            'yeniden okumak tazelemeyi ANLAMSIZ kılardı (koşulsuz tazeleyen '
-            'bir yüzey, yukarıdaki testi de geçerdi — L-258 sınıfı)');
+    expect(
+      loads,
+      1,
+      reason:
+          'sekme gezinmesi geçmişi değiştirmez; her dokunuşta diski '
+          'yeniden okumak tazelemeyi ANLAMSIZ kılardı (koşulsuz tazeleyen '
+          'bir yüzey, yukarıdaki testi de geçerdi — L-258 sınıfı)',
+    );
   });
 }

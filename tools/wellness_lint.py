@@ -17,6 +17,7 @@ Bağımlılık YOK — saf stdlib, herhangi bir python3 ile koşar.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -115,6 +116,36 @@ NEGATION = re.compile(
 #: olumsuzlama içinde kullanmak zorundadır.
 EXEMPT_FILES = {"disclaimers.en.json"}
 
+# Only these exact shipped Hatha fields have been reviewed as contextual
+# false positives. The digest binds every byte of the user-facing sentence;
+# changing a warning or adding a new claim makes the normal rules fire again.
+# The h28 blood-pressure warning is a contraindication, not an efficacy claim:
+# https://health.clevelandclinic.org/benefits-of-legs-up-the-wall
+# The four "treat" matches describe how to regard learning stations/records,
+# never treatment of a person or condition.
+REVIEWED_HATHA_COPY = {
+    ("hatha.v1.json :: modules[4].lessons[3].adaptation.en",
+     "2654f05c260112ec01fd3d14da15a27bd13214aea9350b6bd2fa7b69e32725ec"):
+        frozenset({"blood pressure"}),
+    ("hatha.v1.json :: modules[6].lessons[5].practice.en",
+     "4d374f5a4d54d909b37c1047edaecad9a26648675953d9047594f43b4e60c5d0"):
+        frozenset({"treated"}),
+    ("hatha.v1.json :: modules[8].lessons[0].practice.en",
+     "2a7aad02f555461b61169a20752e74e04a22a6b8c962295224930d59085ddfb2"):
+        frozenset({"treat"}),
+    ("hatha.v1.json :: modules[8].lessons[0].selfCheck.en",
+     "5fec91d92f6d99dacb5ce6c7dd100f82437cd25abfd0a3876d5e4b4a8f0748d6"):
+        frozenset({"treat"}),
+    ("hatha.v1.json :: modules[9].lessons[1].practice.en",
+     "a73b628ad950a32030954b282089129de0f29ce7ecc4230d8a4155a251d4474c"):
+        frozenset({"treated"}),
+}
+
+
+def _reviewed_word(where: str, text: str, word: str) -> bool:
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return word.lower() in REVIEWED_HATHA_COPY.get((where, digest), ())
+
 #: JSON içinde kullanıcıya GÖRÜNEN alanlar. Diğer alanlar (açıklama, kaynak,
 #: not) iç dokümandır ve taranmaz — yoksa her literatür atıfı false-positive olur.
 #:
@@ -141,6 +172,9 @@ USER_FACING_KEYS = {
     # metinleri sessizce denetim DIŞINDA kalırdı: şemayı değiştirip bu listeyi
     # güncellememek, dosyanın kendi uyarısının canlı örneği.
     "claim",
+    # Guided-course copy is bilingual and includes step arrays.
+    "outcome", "objective", "steps", "practice", "selfCheck",
+    "adaptation", "stopSignal",
 }
 
 #: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
@@ -150,7 +184,7 @@ USER_FACING_KEYS = {
 #:
 #: `config/metrics/` kasıtlı olarak DIŞARIDA: metrik tanımları teknik config'tir,
 #: içindeki `description` alanları geliştiriciye yazılmıştır, kullanıcıya değil.
-CONTENT_DIRS = ("config/content", "config/tests", "config/copy", "config/ia", "l10n")
+CONTENT_DIRS = ("config/content", "config/courses", "config/tests", "config/copy", "config/ia", "l10n")
 MIN_STRINGS_PER_FILE = 1
 
 #: Kullanıcı metni TAŞIYAN Dart kaynağı.
@@ -198,6 +232,12 @@ def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
     """JSON ağacından yalnız kullanıcıya görünen string alanları topla."""
     out: list[tuple[str, str]] = []
     if isinstance(node, dict):
+        # English-only policy: scan the displayed English translation, while
+        # the course parser separately requires both languages. Internal
+        # media briefs remain outside user-facing copy.
+        field = path.rsplit(".", 1)[-1].split("[", 1)[0]
+        if field in USER_FACING_KEYS and isinstance(node.get("en"), str) and "tr" in node:
+            return [(f"{path}.en", node["en"])]
         for k, v in node.items():
             child = f"{path}.{k}" if path else k
             if isinstance(v, str):
@@ -225,6 +265,8 @@ def scan_text(where: str, text: str) -> list[str]:
     problems: list[str] = []
     for pat in HARD:
         for m in re.finditer(pat, text, re.IGNORECASE):
+            if _reviewed_word(where, text, m.group(0)):
+                continue
             problems.append(f"{where}: HARD  «{m.group(0)}»  — {text[:90]}…")
     for pat in PROMISE:
         for m in re.finditer(pat, text, re.IGNORECASE):
@@ -246,6 +288,8 @@ def scan_text(where: str, text: str) -> list[str]:
                     f"koşula bağlanmamış gelecek zaman  — {text[:90]}…")
     for pat in SOFT:
         for m in re.finditer(pat, text, re.IGNORECASE):
+            if _reviewed_word(where, text, m.group(0)):
+                continue
             if not _is_negated(text, m.start()):
                 problems.append(
                     f"{where}: SOFT  «{m.group(0)}» olumsuzlanmamış  — {text[:90]}…"

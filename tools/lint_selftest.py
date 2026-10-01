@@ -15,6 +15,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+import wellness_lint
+
 TOOLS = Path(__file__).resolve().parent
 ROOT = TOOLS.parent
 
@@ -162,6 +164,33 @@ def main() -> int:
         if code != 0:
             failures.append(f"YANLIŞ ALARM ({label}): {text}")
 
+    # A reviewed warning is permitted only at its exact field with its exact
+    # wording. A changed sentence or the same text in a different field must
+    # pass through the ordinary medical-claim rules again.
+    hatha = json.loads((ROOT / "config/courses/hatha.v1.json").read_text(encoding="utf-8"))
+    reviewed_fields = ((4, 3, "adaptation"), (6, 5, "practice"),
+                       (8, 0, "practice"), (8, 0, "selfCheck"),
+                       (9, 1, "practice"))
+    for module_index, lesson_index, field in reviewed_fields:
+        where = (f"hatha.v1.json :: modules[{module_index}]."
+                 f"lessons[{lesson_index}].{field}.en")
+        text = hatha["modules"][module_index]["lessons"][lesson_index][field]["en"]
+        if wellness_lint.scan_text(where, text):
+            failures.append(f"İNCELEME KAYDI BAYAT: {where}")
+        if not wellness_lint.scan_text(where, text + " This cures pain."):
+            failures.append(f"DEĞİŞEN METİN KAÇTI: {where}")
+        if not wellness_lint.scan_text(where + ".copy", text):
+            failures.append(f"BAŞKA ALANA KOPYA KAÇTI: {where}")
+
+    # The new Hatha schema must not pass by scanning zero translated fields.
+    for field in ("objective", "steps", "selfCheck", "adaptation"):
+        pair = {"en": "Clinically proven to cure your pain.", "tr": "Denetim örneği"}
+        value = [pair] if field == "steps" else pair
+        if run({"modules": [{"lessons": [{field: value}]}]}) == 0:
+            failures.append(f"KAÇIRDI (iki dilli kurs): {field} alanı taranmıyor")
+    if run({"title": {"en": "Choose a comfortable chair", "tr": "Rahat sandalye seç"}}) != 0:
+        failures.append("YANLIŞ ALARM (iki dilli kurs): nötr yönerge reddedildi")
+
     # İçerik şemasının alanları taranıyor mu? (egzersiz havuzu alan adları)
     code = run({"schemaVersion": 1, "id": "t",
                 "exercises": [{"safetyNote": "Stop if this treats your sciatica."}]})
@@ -190,10 +219,9 @@ def main() -> int:
                 f"KAPI FAZLA GENİŞ ({label}): üründe CANLI olan bu cümle "
                 f"yakalandı — «{text[:70]}…»")
 
-    total = len(MUST_CATCH) + len(MUST_PASS) + len(live) + 2
-    print(f"Süzgeç öz-testi — {total} vaka "
-          f"({len(MUST_CATCH)+1} yakalanmalı, {len(MUST_PASS)} geçmeli, "
-          f"{len(live)} TERS İKİZ, 1 sessiz-tarama)")
+    total = len(MUST_CATCH) + len(MUST_PASS) + len(live) + 7 + 3 * len(reviewed_fields)
+    print(f"Süzgeç öz-testi — {total} kontrol "
+          f"({3 * len(reviewed_fields)} tam-metin/konum ikizi dahil)")
     if failures:
         print(f"\n❌ Süzgeç BOZUK — {len(failures)} vaka:")
         for f in failures:

@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'lissom_theme.dart';
+import 'locale_text.dart';
 import 'onboarding_store.dart';
 import 'surfaces.dart';
 
@@ -30,6 +31,7 @@ class OnboardingFlow extends StatefulWidget {
     required this.store,
     required this.onDone,
     this.onOpenSettings,
+    this.onOpenAccount,
     super.key,
   });
 
@@ -38,6 +40,9 @@ class OnboardingFlow extends StatefulWidget {
   /// OS ayarlarını açar; testte enjekte edilir (platform kanalı widget
   /// testinde doğrulanamaz). Bkz. O3 — [_CameraInfoStep].
   final Future<bool> Function()? onOpenSettings;
+
+  /// Only supplied after a real shared-account page is wired by the host.
+  final VoidCallback? onOpenAccount;
 
   /// Akış TAMAMLANDIĞINDA, **az önce YAZILAN profille** çağrılır — kabuğa
   /// geçiş çağıranın sorumluluğu (bu widget navigasyon kararı VERMEZ).
@@ -75,12 +80,12 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   int get _index => _order.indexOf(_step);
 
   bool get _canContinue => switch (_step) {
-        _Step.welcome => true,
-        _Step.disclaimer => _disclaimerAcked,
-        _Step.camera => true,
-        _Step.profile => _ageBand != null,
-        _Step.limits => true,
-      };
+    _Step.welcome => true,
+    _Step.disclaimer => _disclaimerAcked,
+    _Step.camera => true,
+    _Step.profile => _ageBand != null,
+    _Step.limits => true,
+  };
 
   void _next() {
     if (!_canContinue) return;
@@ -97,8 +102,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     // `gender`/`painNotes` YAZILMIYOR — onboarding onları artık TOPLAMIYOR
     // (L-281). Şema alanları duruyor ki daha eski bir build'in yazdığı
     // profil hâlâ ayrıştırılabilsin; bu akış onlara asla değer koymaz.
-    final OnboardingProfile profile =
-        OnboardingProfile(completed: true, ageBand: _ageBand);
+    final OnboardingProfile profile = OnboardingProfile(
+      completed: true,
+      ageBand: _ageBand,
+    );
     await widget.store.write(profile);
     if (!mounted) return;
     // Diske YAZILAN nesnenin AYNISI geçiyor — ikinci bir kopya kurulsaydı
@@ -111,8 +118,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     final ThemeData t = Theme.of(context);
     return Scaffold(
       body: DecoratedBox(
-        decoration:
-            const BoxDecoration(gradient: LissomColors.screenBackground),
+        decoration: const BoxDecoration(
+          gradient: LissomColors.screenBackground,
+        ),
         child: SafeArea(
           child: Column(
             children: <Widget>[
@@ -120,8 +128,13 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 padding: const EdgeInsets.fromLTRB(22, 12, 22, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child:
-                      LissomEyebrow('Step ${_index + 1} of ${_order.length}'),
+                  child: LissomEyebrow(
+                    localeText(
+                      context,
+                      'Step ${_index + 1} of ${_order.length}',
+                      '${_order.length} adımın ${_index + 1}. adımı',
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -131,6 +144,31 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                   children: <Widget>[_stepContent(t)],
                 ),
               ),
+              if (_step == _Step.welcome && widget.onOpenAccount != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          localeText(
+                            context,
+                            'Practise the Hatha yoga course without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
+                            'Hatha yoga kursunu hesap veya kamera olmadan çalışabilirsin. Motion hesabı isteğe bağlıdır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.',
+                          ),
+                          style: t.textTheme.bodySmall,
+                        ),
+                        TextButton(
+                          key: const Key('onboarding.accountEntry'),
+                          onPressed: widget.onOpenAccount,
+                          child: Text(localeText(context, 'Account', 'Hesap')),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
                 child: Align(
@@ -139,7 +177,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                     key: const Key('onboarding.continue'),
                     onPressed: (_canContinue && !_saving) ? _next : null,
                     child: Text(
-                        _index == _order.length - 1 ? 'Get started' : 'Continue'),
+                      _index == _order.length - 1
+                          ? localeText(context, 'Get started', 'Başla')
+                          : localeText(context, 'Continue', 'Devam et'),
+                    ),
                   ),
                 ),
               ),
@@ -151,19 +192,20 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Widget _stepContent(ThemeData t) => switch (_step) {
-        _Step.welcome => const _WelcomeStep(),
-        _Step.disclaimer => _DisclaimerStep(
-            acked: _disclaimerAcked,
-            onChanged: (bool v) => setState(() => _disclaimerAcked = v),
-          ),
-        _Step.camera =>
-          _CameraInfoStep(onOpenSettings: widget.onOpenSettings ?? openAppSettings),
-        _Step.profile => _ProfileStep(
-            ageBand: _ageBand,
-            onAgeBand: (String v) => setState(() => _ageBand = v),
-          ),
-        _Step.limits => const _LimitsStep(),
-      };
+    _Step.welcome => const _WelcomeStep(),
+    _Step.disclaimer => _DisclaimerStep(
+      acked: _disclaimerAcked,
+      onChanged: (bool v) => setState(() => _disclaimerAcked = v),
+    ),
+    _Step.camera => _CameraInfoStep(
+      onOpenSettings: widget.onOpenSettings ?? openAppSettings,
+    ),
+    _Step.profile => _ProfileStep(
+      ageBand: _ageBand,
+      onAgeBand: (String v) => setState(() => _ageBand = v),
+    ),
+    _Step.limits => const _LimitsStep(),
+  };
 }
 
 class _WelcomeStep extends StatelessWidget {
@@ -175,14 +217,25 @@ class _WelcomeStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Welcome to Lissom', style: t.textTheme.headlineSmall),
+        Text(
+          localeText(context, 'Welcome to Lissom', 'Lissom’a hoş geldin'),
+          style: t.textTheme.headlineSmall,
+        ),
         const SizedBox(height: 12),
         // "measures, doesn't guess" — UI-BRIEF §0'ın ürün cümlesinin özeti,
         // §1 marka tonuyla AYNI kayıt (kesinlik taklidi yok, ölçtüğünü söyler).
         Text(
-          'Lissom uses your phone\'s camera to measure how you move, and '
-          'tells you plainly what it measured and what it did not. It '
-          'measures — it does not guess.',
+          localeText(
+            context,
+            'Lissom offers a progressive Hatha yoga course with practice tasks, '
+                'adaptations and self-checks. Course progress stays on this '
+                'device and reflects your own practice record. Live camera '
+                'measurements and subscription sales are closed in this release.',
+            'Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren '
+                'sıralı bir Hatha yoga kursu sunar. Kurs ilerlemesi bu cihazda '
+                'kalır ve kendi çalışma kaydını gösterir. Bu sürümde canlı '
+                'kamera ölçümleri ve abonelik satışı kapalıdır.',
+          ),
           style: t.textTheme.bodyMedium,
         ),
       ],
@@ -200,8 +253,8 @@ class _DisclaimerStep extends StatelessWidget {
   /// BİREBİR (bkz. `MeasurementLimitsFootnote.limitsCopy` ile aynı sözleşme
   /// — TAŞINDI, UYDURULMADI).
   static const String text =
-      'Lissom is a general wellness app. It uses your phone\'s camera to '
-      'estimate movement capacity for tracking purposes only. It is not a '
+      'Lissom is a general wellness app offering Hatha yoga practice. '
+      'Live camera measurements are closed in this release. It is not a '
       'medical device, does not diagnose or treat any condition, and is '
       'not a substitute for professional medical or physical therapy '
       'advice. If you have pain, an injury, or a medical condition, talk '
@@ -214,9 +267,24 @@ class _DisclaimerStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const LissomEyebrow('Before you continue'),
+        LissomEyebrow(
+          localeText(context, 'Before you continue', 'Devam etmeden önce'),
+        ),
         const SizedBox(height: 10),
-        Text(text, style: t.textTheme.bodyMedium),
+        Text(
+          localeText(
+            context,
+            text,
+            'Lissom, Hatha yoga çalışması sunan genel sağlıklı yaşam amaçlı '
+            'bir uygulamadır. Bu sürümde canlı kamera ölçümleri kapalıdır. '
+            'Tıbbi cihaz değildir; herhangi bir hastalığı '
+            'teşhis veya tedavi etmez. Tıbbi ya da fizyoterapi tavsiyesinin '
+            'yerine geçmez. Ağrın, sakatlığın veya bir sağlık sorunun '
+            'varsa yeni bir hareket programına başlamadan önce yetkin '
+            'bir sağlık uzmanına danış.',
+          ),
+          style: t.textTheme.bodyMedium,
+        ),
         const SizedBox(height: 18),
         InkWell(
           key: const Key('onboarding.disclaimer.ack'),
@@ -224,12 +292,18 @@ class _DisclaimerStep extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Checkbox(value: acked, onChanged: (bool? v) => onChanged(v ?? false)),
+              Checkbox(
+                value: acked,
+                onChanged: (bool? v) => onChanged(v ?? false),
+              ),
               const SizedBox(width: 4),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 12),
-                  child: Text('I understand', style: t.textTheme.bodyMedium),
+                  child: Text(
+                    localeText(context, 'I understand', 'Anladım'),
+                    style: t.textTheme.bodyMedium,
+                  ),
                 ),
               ),
             ],
@@ -283,19 +357,33 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
     return s != null && (s.isPermanentlyDenied || s.isRestricted);
   }
 
-  String get _statusText {
+  String _statusText(BuildContext context) {
     final PermissionStatus? s = _status;
     if (s == null) return '';
     if (s.isGranted) {
-      return 'Camera access granted.';
+      return localeText(
+        context,
+        'Camera access granted.',
+        'Kamera izni verildi.',
+      );
     }
     if (_isPermanentlyDenied) {
-      return 'Camera access is off, and the system will not ask again. '
-          'You can turn it on in Settings — the rest of Lissom still '
-          'works without it.';
+      return localeText(
+        context,
+        'Camera access is off, and the system will not ask again. '
+            'You can turn it on in Settings — the rest of Lissom still '
+            'works without it.',
+        'Kamera erişimi kapalı ve sistem tekrar sormayacak. Ayarlar’dan '
+            'açabilirsin. Lissom’un diğer bölümleri kamera olmadan da çalışır.',
+      );
     }
-    return 'Camera access was not granted. You can try again later — the '
-        'rest of Lissom still works without it.';
+    return localeText(
+      context,
+      'Camera access was not granted. You can try again later — the '
+          'rest of Lissom still works without it.',
+      'Kamera izni verilmedi. Daha sonra tekrar deneyebilirsin; '
+          'Lissom’un diğer bölümleri kamera olmadan da çalışır.',
+    );
   }
 
   @override
@@ -304,7 +392,9 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const LissomEyebrow('About the camera'),
+        LissomEyebrow(
+          localeText(context, 'About the camera', 'Kamera hakkında'),
+        ),
         const SizedBox(height: 10),
         // 🔴 **ÖZNE BELİRSİZLİĞİ = BAYAT YOKLUK CÜMLESİ (H-10 sınıfı, L-319).**
         // Eski hâli: *"The video never leaves this device — nothing is
@@ -318,23 +408,26 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
         // > *okuyucu onu en geniş haliyle anlar, ve en geniş hâli yalandır.*
         // ⇒ Özne artık AÇIK, ve saklananın ne olduğu ADIYLA söyleniyor.
         Text(
-          'When you take a measurement, Lissom reads your movement through '
-          'the camera in real time. The video is never recorded and never '
-          'leaves this device.',
+          localeText(
+            context,
+            'When you take a measurement, Lissom reads your movement through '
+                'the camera in real time. The video is never recorded and never '
+                'leaves this device.',
+            'Ölçüm yaparken Lissom hareketini kameradan anlık olarak okur. '
+                'Video kaydedilmez ve bu cihazdan dışarı gönderilmez.',
+          ),
           style: t.textTheme.bodyMedium,
         ),
         const SizedBox(height: 8),
         Text(
-          'What is written down is which test you measured and when. That '
-          'file stays on this phone and is not sent anywhere.',
+          localeText(
+            context,
+            'Test results and dates are saved in Lissom\'s local app storage. '
+                'Lissom does not upload or sync them to your Motion account.',
+            'Test sonuçları ve tarihleri Lissom\'un yerel uygulama alanına '
+                'kaydedilir. Lissom bunları Motion hesabına yüklemez veya eşitlemez.',
+          ),
           style: t.textTheme.bodyMedium,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Lissom has no account and no server of its own, so there is '
-          'nowhere for your data to go.',
-          style: t.textTheme.bodySmall
-              ?.copyWith(color: LissomColors.bodySecondary),
         ),
         const SizedBox(height: 18),
         Align(
@@ -342,12 +435,20 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
           child: OutlinedButton(
             key: const Key('onboarding.camera.requestPermission'),
             onPressed: _requesting ? null : _requestPermission,
-            child: Text(_status == null ? 'Allow camera access' : 'Check again'),
+            child: Text(
+              _status == null
+                  ? localeText(
+                      context,
+                      'Allow camera access',
+                      'Kamera izni ver',
+                    )
+                  : localeText(context, 'Check again', 'Yeniden denetle'),
+            ),
           ),
         ),
         if (_status != null) ...<Widget>[
           const SizedBox(height: 10),
-          Text(_statusText, style: t.textTheme.bodySmall),
+          Text(_statusText(context), style: t.textTheme.bodySmall),
         ],
         // ⛔ ÇIKMAZ SOKAK (L-283): kalıcı rette metin *"You can turn it on
         // later in Settings"* diyor, ama oraya GİDEN yol yoktu. Kalan tek
@@ -365,7 +466,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
             child: FilledButton(
               key: const Key('onboarding.camera.openSettings'),
               onPressed: () => unawaited(widget.onOpenSettings()),
-              child: const Text('Open Settings'),
+              child: Text(localeText(context, 'Open Settings', 'Ayarları aç')),
             ),
           ),
         ],
@@ -404,16 +505,25 @@ class _ProfileStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const LissomEyebrow('About you'),
+        LissomEyebrow(localeText(context, 'About you', 'Senin hakkında')),
         const SizedBox(height: 4),
         Text(
-          'Scoring bands are age-based. Without an age range, Lissom uses '
-          'the most conservative band so it does not overstate anything.',
-          style: t.textTheme.bodySmall
-              ?.copyWith(color: LissomColors.bodySecondary),
+          localeText(
+            context,
+            'Reference ranges vary by age. Choose your age range to continue '
+                'so Lissom can use the appropriate range.',
+            'Değerlendirme aralıkları yaşa göre değişir. Devam etmek için '
+                'yaş aralığını seç; Lissom buna uygun aralığı kullansın.',
+          ),
+          style: t.textTheme.bodySmall?.copyWith(
+            color: LissomColors.bodySecondary,
+          ),
         ),
         const SizedBox(height: 16),
-        Text('Age range', style: t.textTheme.titleSmall),
+        Text(
+          localeText(context, 'Age range', 'Yaş aralığı'),
+          style: t.textTheme.titleSmall,
+        ),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8,
@@ -424,7 +534,16 @@ class _ProfileStep extends StatelessWidget {
             for (final String band in kOfferedAgeBands)
               ChoiceChip(
                 key: Key('onboarding.ageBand.$band'),
-                label: Text(kAgeBandLabels[band] ?? band),
+                label: Text(
+                  Localizations.localeOf(context).languageCode == 'tr'
+                      ? switch (band) {
+                          'u40' => '40 yaş altı',
+                          '40-59' => '40–59 yaş',
+                          '60plus' => '60 yaş ve üzeri',
+                          _ => band,
+                        }
+                      : (kAgeBandLabels[band] ?? band),
+                ),
                 selected: ageBand == band,
                 onSelected: (_) => onAgeBand(band),
               ),
@@ -444,12 +563,23 @@ class _LimitsStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const LissomEyebrow('What measurement can and cannot tell you'),
+        LissomEyebrow(
+          localeText(
+            context,
+            'What measurement can and cannot tell you',
+            'Ölçümün gösterebildikleri ve sınırları',
+          ),
+        ),
         const SizedBox(height: 10),
-        Text(MeasurementLimitsFootnote.limitsCopy, style: t.textTheme.bodyMedium),
+        Text(
+          MeasurementLimitsFootnote.localizedLimits(context),
+          style: t.textTheme.bodyMedium,
+        ),
         const SizedBox(height: 8),
-        Text(MeasurementLimitsFootnote.accuracyStatement,
-            style: t.textTheme.bodyMedium),
+        Text(
+          MeasurementLimitsFootnote.localizedAccuracy(context),
+          style: t.textTheme.bodyMedium,
+        ),
       ],
     );
   }

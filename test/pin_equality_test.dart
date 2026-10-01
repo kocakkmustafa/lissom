@@ -34,7 +34,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// **ikisi tek ref** `f13bdc9`'ten. Ölçüldü: `f13bdc9` = `motion_camera-v0.1.2`
 /// tag'i ve `motion_core-v0.11.0` (`2018469`) commit'inin ARDILI, yani tek pin
 /// ikisini de kapsıyor.
-const String kSealedRef = 'f13bdc93b2eae2f741bfcdb4c9270a88e5d75e5d';
+const String kSealedRef = 'f2ea161c7e974d57b114ba7773836c72be17a381';
 const String kSealedCoreVersion = '0.11.0';
 const String kSealedCameraVersion = '0.1.2';
 

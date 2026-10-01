@@ -41,6 +41,7 @@ library;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/assessment_history.dart';
 import 'package:lissom/app/attempt_values.dart';
@@ -169,8 +170,16 @@ Future<void> _run(
   required Future<SessionStore> Function() loader,
   Future<AttemptValueStore> Function()? attemptLoader,
   List<PoseSourceEvent>? script,
+  Locale? locale,
 }) async {
   await tester.pumpWidget(MaterialApp(
+    locale: locale,
+    supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+    localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
     theme: buildLissomTheme(),
     home: LiveCaptureScreen(
       test: _overheadReach(),
@@ -292,6 +301,19 @@ void main() {
         reason: 'sessizce yutmak yasak — kullanıcı kaydın düştüğünü bilmeli');
     expect(find.textContaining('disk dolu'), findsOneWidget,
         reason: 'sebep isimli gider (ikincil tonda)');
+  });
+
+  testWidgets('Türkçe kayıt hatası ham işletim sistemi metnini göstermiyor',
+      (WidgetTester tester) async {
+    pinNarrowSurface(tester);
+    await _run(tester,
+        loader: () async => _FailingStore(), locale: const Locale('tr'));
+
+    expect(find.textContaining('geçmişe kaydedilemedi'), findsOneWidget);
+    expect(find.textContaining('Kaydetme sırasında hata oluştu'),
+        findsOneWidget);
+    expect(find.textContaining('disk dolu'), findsNothing);
+    expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget);
   });
 
   testWidgets('"Try again" kayıt hâlini SIFIRLAR — önceki denemenin '
