@@ -312,10 +312,16 @@ class HathaCourseBuildTest(unittest.TestCase):
 
     def test_write_to_workspace_scratch_produces_exact_staged_bytes(self):
         scratch = hatha.ROOT.parents[2] / "scratch"
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
-            path = Path(directory) / "hatha.v1.json"
-            hatha.main(["--write", "--output", str(path)])
-            self.assertEqual(path.read_bytes(), hatha.render().encode("utf-8"))
+        created_scratch = not scratch.exists()
+        scratch.mkdir(parents=True, exist_ok=True)
+        try:
+            with tempfile.TemporaryDirectory(dir=scratch) as directory:
+                path = Path(directory) / "hatha.v1.json"
+                hatha.main(["--write", "--output", str(path)])
+                self.assertEqual(path.read_bytes(), hatha.render().encode("utf-8"))
+        finally:
+            if created_scratch:
+                scratch.rmdir()
 
     def test_staged_output_is_restricted_to_workspace_scratch(self):
         workspace = hatha.ROOT.parents[2]
