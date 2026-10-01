@@ -9,9 +9,9 @@ import 'package:motion_content/motion_content.dart';
 const String _manifestPath = 'assets/motion_content/manifest.json';
 const String _coursePath = 'config/courses/hatha.v1.json';
 // Current reviewed working-tree asset; an authored change requires a repin.
-const int _courseByteLength = 259103;
+const int _courseByteLength = 270935;
 const String _courseSha256 =
-    '0e339eec3e24446260621703ab93f8163efc750f76979b0c4210abd942d4ff08';
+    'be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c';
 
 final class _ManifestOverlayBundle extends CachingAssetBundle {
   _ManifestOverlayBundle(this.manifestBytes);
@@ -38,7 +38,7 @@ final class _ManifestOverlayBundle extends CachingAssetBundle {
 Uint8List _manifestBytes({String? assetPath, String? assetSha256}) {
   final Map<String, Object?> manifest = <String, Object?>{
     'schemaVersion': 1,
-    'contentVersion': '1.0.0',
+    'contentVersion': '1.0.1',
     'appId': 'com.yulalab.lissom',
     'minimumCoreContract': '1.0.0',
     'locales': <String>['tr', 'en'],
@@ -94,6 +94,14 @@ ContentBundleLoader _loader(_ManifestOverlayBundle bundle) =>
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('published manifest keeps the reviewed content version', () async {
+    final ByteData bytes = await rootBundle.load(_manifestPath);
+    final Map<String, dynamic> manifest =
+        jsonDecode(utf8.decode(Uint8List.sublistView(bytes)))
+            as Map<String, dynamic>;
+    expect(manifest['contentVersion'], '1.0.1');
+  });
 
   test('reads pinned Hatha bytes and parses the active course', () async {
     final _ManifestOverlayBundle bundle = _ManifestOverlayBundle(

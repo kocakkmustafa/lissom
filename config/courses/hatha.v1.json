@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lissom.hatha.foundations",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": {
     "en": "Hatha: foundations to intermediate practice",
     "tr": "Hatha: temelden orta seviye çalışmaya"
@@ -24,12 +24,23 @@
     "adriene_suna": "https://yogawithadriene.com/sun-salutation-a-surya-namaskara-a/",
     "adriene_locust": "https://yogawithadriene.com/locust-pose-salabasana/",
     "aol_sphinx": "https://www.artofliving.org/us-en/yoga/poses/sphinx-pose",
+    "aol_triangle": "https://www.artofliving.org/us-en/yoga/poses/triangle-pose",
+    "yj_slow_morning": "https://www.yogajournal.com/practice/slow-morning-yoga/",
+    "yi_chair_triangle": "https://yogainternational.com/article/view/trikonasana-to-sidebend-or-not/",
+    "yj_wall_chair_rest": "https://www.yogajournal.com/poses/anatomy/legs/let-go/?scope=anon",
+    "yi_wall_side_exit": "https://yogainternational.com/article/view/yoga-for-tight-hamstrings/",
+    "yj_locust_components": "https://www.yogajournal.com/poses/4-ways-to-modify-locust-pose/",
+    "yj_locust_combined": "https://www.yogajournal.com/practice/5-minute-yoga-for-strength/",
     "yi_reverse": "https://yogainternational.com/article/view/upward-plank-pose/",
     "podclass_warrior3": "https://www.yogapodclass.com/poses/warrior-iii",
     "nhs_pregnancy": "https://www.nhs.uk/pregnancy/keeping-well/exercise/",
     "ya_standards": "https://yogaalliance.org/wp-content/uploads/2025/05/Standards-for-RYS-Credentials_NB22my-.pdf",
     "ya_scope": "https://yogaalliance.org/policies-priorities-progress/scope-of-practice/",
-    "ayush2016": "https://www.dpiit.gov.in/static/uploads/2025/09/5fd8ab8a6cb07c25b70c5df780258a5b.pdf"
+    "ayush2016": "https://www.dpiit.gov.in/static/uploads/2025/09/5fd8ab8a6cb07c25b70c5df780258a5b.pdf",
+    "umich_standing_turn": "https://hr.umich.edu/node/74294",
+    "ace_bent_knee_reverse_table": "https://www.acefitness.org/resources/pros/expert-articles/5659/yoga-for-9-to-5ers-6-poses-to-enhance-posture/",
+    "yei_bridge_flow": "https://yogaeducation.org/wp-content/uploads/2019/05/teaching-restorative-yoga-and-savasana.pdf",
+    "cc_wall_legs": "https://health.clevelandclinic.org/benefits-of-legs-up-the-wall"
   },
   "modules": [
     {
@@ -537,7 +548,8 @@
             "nccih",
             "ya_standards",
             "ya_scope",
-            "ayush2016"
+            "ayush2016",
+            "umich_standing_turn"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -547,12 +559,12 @@
         {
           "id": "h09",
           "title": {
-            "en": "Supported triangle",
-            "tr": "Destekli üçgen"
+            "en": "Chair-supported triangle variation",
+            "tr": "Sandalyeyle destekli üçgen varyasyonu"
           },
           "objective": {
-            "en": "Learn the hip-led reach of Trikonasana without chasing the floor.",
-            "tr": "Zemine yetişmeye çalışmadan Trikonasana'nın kalçadan uzanışını öğren."
+            "en": "Explore a short chair-supported Trikonasana variation without chasing the floor.",
+            "tr": "Zemine yetişmeye çalışmadan kısa, sandalyeli Trikonasana varyasyonunu dene."
           },
           "steps": [
             {
@@ -589,13 +601,15 @@
             "tr": "Keskin ağrı, baş dönmesi veya alışılmadık nefes darlığı olursa dur."
           },
           "mediaBrief": {
-            "en": "Wide front and side views of supported Trikonasana, chair height and short stance.",
-            "tr": "Destekli Trikonasana'yı önden/yandan, sandalye yüksekliği ve kısa adımla göster."
+            "en": "Front and side views of this short chair-supported triangle variation; show chair height, foot reset and controlled return.",
+            "tr": "Bu kısa sandalyeli üçgen varyasyonunu önden ve yandan; sandalye yüksekliği, ayakların yeniden kurulumu ve kontrollü dönüşle göster."
           },
           "minutes": 11,
           "sourceIds": [
             "ycb",
             "nccih",
+            "aol_triangle",
+            "yi_chair_triangle",
             "ya_standards",
             "ya_scope",
             "ayush2016"
@@ -1758,8 +1772,8 @@
             "tr": "Duvar destekli bacaklar"
           },
           "objective": {
-            "en": "Choose a restful leg position without turning it into an inversion goal.",
-            "tr": "Dinlendirici bacak konumunu ters duruş hedefine çevirmeden seç."
+            "en": "Choose a comfortable rest position while recognizing wall-supported legs as a supported inversion.",
+            "tr": "Duvar destekli bacakların destekli bir ters duruş olduğunu bilerek rahat bir dinlenme konumu seç."
           },
           "steps": [
             {
@@ -1780,34 +1794,37 @@
             }
           ],
           "practice": {
-            "en": "Rest briefly, then compare with legs on a chair or ordinary side lying.\n\nCommon mistake: Supported leg rest becomes an inversion or prolonged restricted supine hold. Correction: Set the hips and supports without turning the rest into an inversion.\n\nCompare legs on a chair with wall support; omit flat-back rest when personally restricted.",
-            "tr": "Kısa dinlen, sonra bacaklar sandalyede veya normal yan yatışla karşılaştır.\n\nSık hata: Destekli bacak dinlenmesi ters duruşa veya kısıtlı uzun sırtüstü tutuşa dönüşür. Düzeltme: Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur.\n\nSandalyede bacak ile duvar desteğini karşılaştır; kişisel kısıtta düz sırtüstü dinlenmeyi atla."
+            "en": "Rest briefly; compare with legs on a chair only if supine rest suits your personal limits, or choose side-lying or seated rest.\n\nCommon mistake with wall support: Trying to make this supported inversion more demanding, or holding a supine position beyond personal limits. Correction: With wall support, keep the knees relaxed and place the hips at a comfortable distance from the wall.\n\nCompare legs on a chair with wall support; omit flat-back rest when personally restricted.",
+            "tr": "Kısa dinlen; yalnız sırtüstü dinlenme kişisel sınırlarına uygunsa sandalyede bacaklarla karşılaştır, değilse yan yatış veya oturarak dinlenme seç.\n\nDuvar desteğinde sık hata: Bu destekli ters duruşu zorlaştırmaya çalışmak veya kişisel sınırları aşan sırtüstü konumda kalmak. Düzeltme: Duvar desteğinde dizleri rahat tut ve kalçayı duvardan rahat bir uzaklığa yerleştir.\n\nSandalyede bacak ile duvar desteğini karşılaştır; kişisel kısıtta düz sırtüstü dinlenmeyi atla."
           },
           "selfCheck": {
-            "en": "Is breathing easy, and is there any pressure in head or eyes?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Set the hips and supports without turning the rest into an inversion.\n\nNext practice, try this without checking the instructions: Set the hips and supports without turning the rest into an inversion. Then review what you missed.",
-            "tr": "Nefes kolay mı; baş veya gözlerde baskı var mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur. Ardından eksiklerini kontrol et."
+            "en": "Is breathing easy, and is there any pressure in head or eyes?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? For wall rest, set hips at a comfortable distance and keep knees relaxed; for a chair, side-lying or seated rest, notice whether breathing and the chosen position remain comfortable.\n\nNext practice, try this without checking the instructions: For wall rest, set hips at a comfortable distance and keep knees relaxed; for a chair, side-lying or seated rest, notice whether breathing and the chosen position remain comfortable. Then review what you missed.",
+            "tr": "Nefes kolay mı; baş veya gözlerde baskı var mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Duvar dinlenmesinde kalçayı rahat bir uzaklıkta kurup dizleri rahat tut; sandalye, yan yatış veya oturma dinlenmesinde nefesin ve seçtiğin konumun rahat kalıp kalmadığını fark et.\n\nSonraki çalışmada yönergeye bakmadan dene: Duvar dinlenmesinde kalçayı rahat bir uzaklıkta kurup dizleri rahat tut; sandalye, yan yatış veya oturma dinlenmesinde nefesin ve seçtiğin konumun rahat kalıp kalmadığını fark et. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
-            "en": "Choose chair-leg or side-lying rest for pregnancy or any discomfort; skip wall position. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
-            "tr": "Gebelikte veya rahatsızlıkta sandalye-bacak ya da yan yatış seç; duvar konumunu atla. Gebelikte uzun süre düz sırtüstü yatmaktan kaçınmak gerekebilir; bu seçeneği uygunluk onayı saymak yerine bireysel görüş al."
+            "en": "For pregnancy, skip wall and legs-on-chair supine options; choose seated or side-lying rest only if comfortable and seek individual guidance. With other discomfort, stop and choose comfortable rest or observation. Skip the wall inversion with glaucoma or unmanaged high blood pressure. If excessive fluid retention is linked to congestive heart failure, kidney failure or liver failure/cirrhosis, do not try it without clinician guidance; ask about a suitable rest option. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
+            "tr": "Gebelikte duvar ve sandalyede bacak sırtüstü seçeneklerini atla; yalnız rahatsa oturarak veya yan yatıp dinlen, kişisel görüş al. Başka rahatsızlıkta durup rahat dinlenme veya gözlem seç. Glokom veya kontrol altına alınmamış yüksek tansiyonda duvar ters duruşunu atla. Aşırı sıvı tutulumu konjestif kalp yetmezliği, böbrek yetmezliği veya karaciğer yetmezliği/sirozla ilişkiliyse hekim görüşü olmadan deneme; uygun dinlenme seçeneğini sor. Gebelikte uzun süre düz sırtüstü yatmaktan kaçınmak gerekebilir; bu seçeneği uygunluk onayı saymak yerine bireysel görüş al."
           },
           "stopSignal": {
             "en": "Leave the position if head or eye pressure, dizziness, pain or unusual breathlessness appears.",
             "tr": "Baş/göz baskısı, baş dönmesi, ağrı veya alışılmadık nefes darlığı olursa çık."
           },
           "mediaBrief": {
-            "en": "Wide Viparita Karani support and side exit; equal-length chair-leg and side-rest alternatives.",
-            "tr": "Destekli Viparita Karani ve yandan çıkış; sandalye-bacak ve yan dinlenmeye eşit süre ver."
+            "en": "Show wide wall-supported Viparita Karani and side exit; label legs-on-chair as another supine option, then separately show side-lying and seated rest for pregnancy or supine restrictions.",
+            "tr": "Duvar destekli Viparita Karani'yi geniş açıdan ve yandan çıkışla göster; sandalyede bacakları ayrı bir sırtüstü seçenek diye etiketle, gebelik veya sırtüstü kısıtında yan ve oturarak dinlenmeyi ayrı göster."
           },
           "minutes": 8,
           "sourceIds": [
             "ycb",
             "nccih",
             "acog",
+            "yj_wall_chair_rest",
+            "yi_wall_side_exit",
             "nhs_pregnancy",
             "ya_standards",
             "ya_scope",
-            "ayush2016"
+            "ayush2016",
+            "cc_wall_legs"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -1897,8 +1914,8 @@
               "tr": "Hangi yer hareketlerini yapacağını seçmeden sandalyeyi veya minderi yakına koy."
             },
             {
-              "en": "Move from one-leg release to small bridges, pause, then choose a rest shape.",
-              "tr": "Tek bacak rahatlamasından küçük köprülere geç, dur, sonra dinlenme biçimi seç."
+              "en": "If you choose the supine route, lift one bent knee only as comfortable, return that foot fully to the mat before switching sides, then reset both feet on the mat before a small bridge; lower fully and choose rest.",
+              "tr": "Sırtüstü yolu seçtiysen bükülü dizi yalnız rahat olduğu kadar kaldır, taraf değiştirmeden ayağı tamamen mata indir; küçük köprüden önce iki ayağı da mata yeniden yerleştir, tamamen in ve dinlenmeyi seç."
             },
             {
               "en": "End with a chosen rest; compare how easy it was to enter and leave each shape, without a flexibility score.",
@@ -1914,25 +1931,27 @@
             "tr": "Hangi bölümü küçülttün veya atladın; dinlenme seçeneği açık kaldı mı?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Acele yer değişimi yerine kontrollü yan veya oturarak yeniden kurulum kullan.\n\nSonraki çalışmada yönergeye bakmadan dene: Acele yer değişimi yerine kontrollü yan veya oturarak yeniden kurulum kullan. Ardından eksiklerini kontrol et."
           },
           "adaptation": {
-            "en": "Use a fully seated sequence: march, gentle pelvic movement and chair rest. Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance.",
-            "tr": "Tamamen oturarak çalış: diz kaldır, hafif leğen hareketi ve sandalye dinlenmesi. Gebelikte uzun süre düz sırtüstü yatmaktan kaçınmak gerekebilir; bu seçeneği uygunluk onayı saymak yerine bireysel görüş al."
+            "en": "For pregnancy or any reason to avoid back lying, skip the supine branch; choose a fully seated sequence of marching, gentle pelvic movement and chair rest, and seek personal guidance for limits.",
+            "tr": "Gebelikte veya sırtüstü yatmamak için başka bir neden varsa sırtüstü yolu atla; oturarak diz kaldırma, hafif leğen hareketi ve sandalye dinlenmesinden oluşan tam oturma yolunu seç, kişisel sınırlar için uzman görüşü al."
           },
           "stopSignal": {
             "en": "Stop if sharp pain, dizziness, or unusual breathlessness appears.",
             "tr": "Keskin ağrı, baş dönmesi veya alışılmadık nefes darlığı olursa dur."
           },
           "mediaBrief": {
-            "en": "Continuous floor and chair branches with clear pause/exit after each shape.",
-            "tr": "Her şekilden sonra durma/çıkış gösteren kesintisiz yer ve sandalye dalları."
+            "en": "Show separate floor and chair branches; in the floor branch show one bent-knee lift at a time, full foot landing and both-feet reset before a small bridge, then pause/exit after each shape; no form-score overlay.",
+            "tr": "Yer ve sandalye yollarını ayrı göster; yer yolunda birer bükülü diz kaldırma, ayağın tamamen inişi ve küçük köprüden önce iki ayağın yeniden yerleşmesini, sonra her şekilden çıkış/durmayı göster; form puanı bindirme."
           },
           "minutes": 12,
           "sourceIds": [
             "ycb",
             "nccih",
+            "yj_slow_morning",
             "nhs_pregnancy",
             "ya_standards",
             "ya_scope",
-            "ayush2016"
+            "ayush2016",
+            "yei_bridge_flow"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3263,8 +3282,8 @@
             "tr": "Keskin ağrı, baş dönmesi veya alışılmadık nefes darlığı olursa dur."
           },
           "mediaBrief": {
-            "en": "Side and three-quarter continuous lift and lowering; label chest-only, single-leg and combined options, keeping neck and pelvis visible.",
-            "tr": "Yandan ve çapraz kesintisiz yükseliş-iniş; yalnız göğüs, tek bacak ve birleşik seçenekleri etiketle, boyunla leğen görünür kalsın."
+            "en": "Side and three-quarter continuous lift and lowering; label chest-only, the h40 single-leg recap and optional combined lift, keeping neck and pelvis visible.",
+            "tr": "Yandan ve çapraz kesintisiz yükseliş-iniş; yalnız göğüs, h40 tek bacak tekrarı ve seçmeli birleşik yükselişi etiketle, boyunla leğen görünür kalsın."
           },
           "minutes": 12,
           "sourceIds": [
@@ -3272,6 +3291,8 @@
             "nccih",
             "acog",
             "adriene_locust",
+            "yj_locust_components",
+            "yj_locust_combined",
             "ya_standards",
             "ya_scope",
             "ayush2016"
@@ -3336,7 +3357,8 @@
             "yi_reverse",
             "ya_standards",
             "ya_scope",
-            "ayush2016"
+            "ayush2016",
+            "ace_bent_knee_reverse_table"
           ],
           "evidenceMode": "self_report",
           "prerequisites": [
@@ -3857,5 +3879,117 @@
         }
       ]
     }
-  ]
+  ],
+  "sourceScopes": {
+    "umich_standing_turn": {
+      "supports": {
+        "en": "Hip-width, even-weight gentle standing turns that return through centre.",
+        "tr": "Kalça genişliğinde ve ağırlık dengeliyken merkezden geçen hafif ayakta dönüşleri."
+      },
+      "doesNotSupport": {
+        "en": "Lissom’s exact arm placement, three-turn dose, neck range, personal suitability or camera scoring.",
+        "tr": "Lissom’un tam kol yerini, üç dönüş dozunu, boyun aralığını, kişisel uygunluğu veya kamera puanlamasını."
+      }
+    },
+    "ace_bent_knee_reverse_table": {
+      "supports": {
+        "en": "A bent-knee reverse-table option with hands behind the hips, feet flat and pelvis lifting.",
+        "tr": "Eller kalça arkasında, ayaklar yerde ve leğen yükselirken diz bükülü ters masa seçeneğini."
+      },
+      "doesNotSupport": {
+        "en": "The lesson’s repetition count, a wrist or shoulder safety threshold, diagnosis-specific clearance or camera scoring.",
+        "tr": "Dersin tekrar sayısını, bilek veya omuz güvenliği eşiğini, tanıya özel uygunluk iznini veya kamera puanlamasını."
+      }
+    },
+    "yi_chair_triangle": {
+      "supports": {
+        "en": "In a triangle variation, the lower hand can rest lightly on the seat of a chair while the feet are set apart.",
+        "tr": "Üçgen varyasyonunda ayaklar yerleşikken alt elin sandalye oturağına hafifçe dayanmasını."
+      },
+      "doesNotSupport": {
+        "en": "This lesson's exact chair placement, stance length, two-breath hold, foot reset, safe depth or personal balance judgment.",
+        "tr": "Dersin tam sandalye yerini, duruş uzunluğunu, iki nefes tutuşunu, ayak sıfırlamasını, güvenli derinliği veya kişisel denge kararını."
+      }
+    },
+    "yj_wall_chair_rest": {
+      "supports": {
+        "en": "Legs up a wall and legs on a chair are separate supine rest setups.",
+        "tr": "Duvara uzanan bacaklar ile sandalyedeki bacakların ayrı sırtüstü dinlenme kurulumları olmasını."
+      },
+      "doesNotSupport": {
+        "en": "Side-lying or seated rest as the same posture, a universal duration, pregnancy clearance, personal suitability or camera assessment.",
+        "tr": "Yan yatış veya oturma dinlenmesini aynı poz saymayı, evrensel süreyi, gebelik onayını, kişisel uygunluğu veya kamera değerlendirmesini."
+      }
+    },
+    "yi_wall_side_exit": {
+      "supports": {
+        "en": "After the wall-supported position, bring knees in and roll onto a side before sitting.",
+        "tr": "Duvar destekli konumdan sonra dizleri toplayıp oturmadan önce yana dönmeyi."
+      },
+      "doesNotSupport": {
+        "en": "The lesson's full setup or duration, pregnancy clearance, personal suitability or camera assessment.",
+        "tr": "Dersin bütün kurulumunu veya süresini, gebelik onayını, kişisel uygunluğu ya da kamera değerlendirmesini."
+      }
+    },
+    "nhs_pregnancy": {
+      "supports": {
+        "en": "Pregnancy advice cautions against exercise lying flat on the back for more than a few minutes, especially after 16 weeks.",
+        "tr": "Gebelik rehberi, özellikle 16 haftadan sonra birkaç dakikadan uzun sırtüstü egzersize karşı uyarır."
+      },
+      "doesNotSupport": {
+        "en": "An automatic pregnancy diagnosis, a ban for every person or every pregnancy week, a course-wide duration threshold, or personal clearance.",
+        "tr": "Otomatik gebelik tanısını, herkes veya gebeliğin her haftası için yasağı, kurs geneli süre eşiğini ya da kişisel uygunluk onayını."
+      }
+    },
+    "acog": {
+      "supports": {
+        "en": "Pregnancy exercise guidance gives a separate reason to discuss personal limits and avoid lying flat on the back as much as possible.",
+        "tr": "Gebelikte egzersiz rehberi kişisel sınırları görüşmek ve düz sırtüstü yatmaktan olabildiğince kaçınmak için ayrı bağlam sunar."
+      },
+      "doesNotSupport": {
+        "en": "A universal medical ban, a camera-detected pregnancy state, a wall or chair variant's clinical clearance, or a duration threshold for all users.",
+        "tr": "Evrensel tıbbi yasağı, kameradan gebelik saptamasını, duvar veya sandalye varyantının klinik onayını ya da herkese süre eşiğini."
+      }
+    },
+    "yj_locust_components": {
+      "supports": {
+        "en": "A chest-oriented lift with legs down and a separate single-leg prone variation are distinct locust components.",
+        "tr": "Bacaklar yerdeyken göğüs odaklı yükseliş ile ayrı yüzüstü tek bacak varyantının farklı çekirge bileşenleri olmasını."
+      },
+      "doesNotSupport": {
+        "en": "The combined chest-and-both-legs option by itself; the hands-and-knees pregnancy variation is not the prone one-leg variation or clearance for prone practice.",
+        "tr": "Tek başına göğüs ve iki bacağı birlikte kaldırmayı; eller-dizler gebelik varyantı yüzüstü tek bacakla aynı değildir ve yüzüstü çalışmaya onay vermez."
+      }
+    },
+    "yj_locust_combined": {
+      "supports": {
+        "en": "A locust chest lift may optionally add the legs in a separate combined variation.",
+        "tr": "Çekirgede göğüs yükselişine ayrı seçmeli birleşik varyantta bacakların eklenmesini."
+      },
+      "doesNotSupport": {
+        "en": "Lissom's lift height, breath-interruption diagnosis, pregnancy or abdominal-contact clearance, or camera form judgment.",
+        "tr": "Lissom'un yükselme yüksekliğini, nefes kesilmesi teşhisini, gebelik veya karın teması uygunluğunu ya da kamera form kararını."
+      }
+    },
+    "yei_bridge_flow": {
+      "supports": {
+        "en": "Bridge Flow begins with both knees bent and both feet on the floor, then raises and fully lowers the hips.",
+        "tr": "Bridge Flow'un iki diz bükülü ve iki ayak yerde başlayıp kalçayı yükselterek tamamen indirmesini."
+      },
+      "doesNotSupport": {
+        "en": "The separate bent-knee single-leg reset, the lesson's transition order or 12-minute dose, side-roll, chair rest, pregnancy suitability or camera judgment.",
+        "tr": "Ayrı bükülü tek diz sıfırlamasını, ders sırasını veya 12 dakikalık dozunu, yana dönüşü, sandalye dinlenmesini, gebelik uygunluğunu ya da kamera kararını."
+      }
+    },
+    "cc_wall_legs": {
+      "supports": {
+        "en": "The wall-supported legs pose is an inversion. For its setup, Cleveland Clinic describes a blanket or mat, hips slightly away from the wall, and relaxed knees. It warns against the pose with glaucoma or unmanaged high blood pressure, and calls for physician guidance with excessive fluid retention from congestive heart failure, kidney failure or liver failure/cirrhosis.",
+        "tr": "Duvar destekli bacak pozunun ters duruş olarak sınıflandırılmasını; kurulumda battaniye veya mat, duvardan biraz uzak kalça ve rahat dizleri. Glokom veya kontrol altına alınmamış yüksek tansiyonda pozdan kaçınmayı; konjestif kalp yetmezliği, böbrek yetmezliği veya karaciğer yetmezliği/siroza bağlı aşırı sıvı tutulumunda hekim görüşünü destekler."
+      },
+      "doesNotSupport": {
+        "en": "The lesson's side-roll exit or chair, seated and side-lying alternatives; pregnancy or personal suitability, a universal hold duration, symptom treatment, camera form assessment, media reuse or model training rights.",
+        "tr": "Dersin yana dönerek çıkışını veya sandalye, oturma ve yan yatış seçeneklerini; gebelik ya da kişisel uygunluğu, evrensel tutuş süresini, belirti tedavisini, kamera form değerlendirmesini, medya yeniden kullanımını veya model eğitimi haklarını."
+      }
+    }
+  }
 }

@@ -265,6 +265,125 @@ void main() {
     },
   );
 
+  test('reviewed narrow lesson sources have visible scope boundaries', () {
+    final HathaCourse course = HathaCourse.parse(_asset());
+    const Map<String, String> expected = <String, String>{
+      'h08': 'umich_standing_turn',
+      'h28': 'cc_wall_legs',
+      'h52': 'ace_bent_knee_reverse_table',
+    };
+    expect(course.version, '1.0.1');
+    expect(course.sourceScopes.keys.toSet(), <String>{
+      ...expected.values,
+      'yi_chair_triangle',
+      'cc_wall_legs',
+      'yj_wall_chair_rest',
+      'yi_wall_side_exit',
+      'nhs_pregnancy',
+      'acog',
+      'yj_locust_components',
+      'yj_locust_combined',
+      'yei_bridge_flow',
+    });
+    for (final HathaLesson lesson in course.lessons) {
+      final String? sourceId = expected[lesson.id];
+      final Iterable<String> credited = lesson.sourceIds.where(
+        expected.values.toSet().contains,
+      );
+      expect(
+        credited,
+        sourceId == null ? isEmpty : contains(sourceId),
+        reason: lesson.id,
+      );
+      if (sourceId != null) {
+        expect(credited, hasLength(1));
+        expect(course.sourceScopes[sourceId]!.supports.tr, isNotEmpty);
+        expect(course.sourceScopes[sourceId]!.doesNotSupport.en, isNotEmpty);
+      }
+    }
+    expect(
+      course.sources['umich_standing_turn'],
+      'https://hr.umich.edu/node/74294',
+    );
+    expect(
+      course.lessons.singleWhere((l) => l.id == 'h08').sourceIds,
+      isNot(contains('artofliving_standing_spinal_twist')),
+    );
+  });
+
+  test(
+    'source scope requires an existing source and bilingual limitations',
+    () {
+      final Map<String, dynamic> content = (jsonDecode(_asset()) as Map)
+          .cast<String, dynamic>();
+      final Map<String, dynamic> scopes = (content['sourceScopes'] as Map)
+          .cast<String, dynamic>();
+      scopes['not-a-course-source'] = scopes['umich_standing_turn'];
+      expect(
+        () => HathaCourse.parse(jsonEncode(content)),
+        throwsFormatException,
+      );
+      scopes.remove('not-a-course-source');
+      (scopes['umich_standing_turn'] as Map)['doesNotSupport']['tr'] = '';
+      expect(
+        () => HathaCourse.parse(jsonEncode(content)),
+        throwsFormatException,
+      );
+    },
+  );
+
+  testWidgets('reviewed lessons display the source boundary beside the link', (
+    tester,
+  ) async {
+    final HathaCourse course = HathaCourse.parse(_asset());
+    for (final MapEntry<String, String> entry in <String, String>{
+      'h08': 'umich_standing_turn',
+      'h28': 'cc_wall_legs',
+      'h52': 'ace_bent_knee_reverse_table',
+    }.entries) {
+      final HathaSessionPreparation preparation = HathaSessionPreparation();
+      preparation.acknowledge();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          home: HathaLessonScreen(
+            course: course,
+            lesson: course.lessons.firstWhere((l) => l.id == entry.key),
+            store: _MemoryHathaProgressStore(),
+            isRepeat: false,
+            preparation: preparation,
+          ),
+        ),
+      );
+      await tester.scrollUntilVisible(
+        find.text('Teaching sources'),
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
+      // scrollUntilVisible accepts a sliver child whose bottom edge is one
+      // pixel beyond the test viewport; bring the header into the hit area.
+      await tester.drag(find.byType(Scrollable).last, const Offset(0, -100));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Teaching sources'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(Key('hatha.sourceScope.${entry.value}')),
+        200,
+        scrollable: find.byType(Scrollable).last,
+        maxScrolls: 30,
+      );
+      expect(
+        find.byKey(Key('hatha.sourceScope.${entry.value}')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(Key('hatha.sourceLimit.${entry.value}')),
+        findsOneWidget,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
+
   test('unsupported camera grades and skipped prerequisites fail closed', () {
     final Map<String, dynamic> content = (jsonDecode(_asset()) as Map)
         .cast<String, dynamic>();

@@ -1,0 +1,57 @@
+{
+  "asOf": "2026-09-30",
+  "scope": "Editorial movement attribution only; no personal safety, clinical clearance, model labels, training rights or automatic form grading.",
+  "readbackMethod": "Original publisher HTML fetched on 2026-09-30 with urllib and a Mozilla user-agent; each final response was HTTP 200. Raw HTML SHA-256 values are dated readback receipts, not immutable article identities.",
+  "sources": {
+    "yi_chair_triangle": {
+      "url": "https://yogainternational.com/article/view/trikonasana-to-sidebend-or-not/",
+      "accessMode": "direct_original_publisher_page_opened",
+      "readbackHtmlSha256": "6940eed2ea3741a3056efb43d5738888da292c335c957a9fddbb611be4d2ef70",
+      "locator": "Trikonasana numbered setup, step 5",
+      "supports": "Lower hand may rest lightly on the seat of a chair in a triangle variation.",
+      "doesNotSupport": "Lissom hold length, exact stance or foot angle, personal balance clearance, or camera safe-form judgment."
+    },
+    "yj_wall_chair_rest": {
+      "url": "https://www.yogajournal.com/poses/anatomy/legs/let-go/?scope=anon",
+      "accessMode": "direct_original_publisher_page_opened",
+      "readbackHtmlSha256": "ff9576e47c0dd919479cfd5c902c3631c136e6421ef7650fae946b02a2e0971b",
+      "locator": "Basic Legs-up-the-Wall and Legs up the Chair sections",
+      "supports": "Wall-supported supine legs and chair-supported supine legs are distinct rest setups.",
+      "doesNotSupport": "A universal rest duration, fluid-drainage benefit, pregnancy suitability, or camera clearance."
+    },
+    "yi_wall_side_exit": {
+      "url": "https://yogainternational.com/article/view/yoga-for-tight-hamstrings/",
+      "accessMode": "direct_original_publisher_page_opened",
+      "readbackHtmlSha256": "a7d44bea26d8ca548c561e2acf01ad2965841cfe6c67665a351639ba263afbc6",
+      "locator": "Wall-supported rest paragraph ending with knees to chest, roll to one side, come to seated",
+      "supports": "After wall-supported legs, bring knees in and roll to a side before sitting.",
+      "doesNotSupport": "Hamstring therapy, source hold time as a Lissom threshold, pregnancy suitability, or camera clearance."
+    },
+    "yj_locust_components": {
+      "url": "https://www.yogajournal.com/poses/4-ways-to-modify-locust-pose/",
+      "accessMode": "direct_original_publisher_page_opened",
+      "readbackHtmlSha256": "c6ce3d344381e4d224f4303efd0b85530701d7ecbcfc82199de600196a66a3ce",
+      "locator": "Separate head-and-shoulders-only and one-leg options",
+      "supports": "Chest-oriented and one-leg locust modifications are separate component options.",
+      "doesNotSupport": "The combined chest-and-both-legs option by itself, personal back or abdominal suitability, pregnancy clearance, or form scoring."
+    },
+    "yj_locust_combined": {
+      "url": "https://www.yogajournal.com/practice/5-minute-yoga-for-strength/",
+      "accessMode": "direct_original_publisher_page_opened",
+      "readbackHtmlSha256": "31373e33f2339e9f51a1c91719a13c760424e1e66389ebe9355eb7432dc7038d",
+      "locator": "Locust Pose section, chest and optional legs",
+      "supports": "Locust practice can include a chest lift with optional simultaneous leg lift.",
+      "doesNotSupport": "Lissom repetition count, personal back or abdominal suitability, pregnancy clearance, or camera safe-form judgment."
+    }
+  },
+  "existingSourceClarifications": {
+    "yj_slow_morning": {
+      "url": "https://www.yogajournal.com/practice/slow-morning-yoga/",
+      "accessMode": "direct_original_publisher_page_opened",
+      "readbackHtmlSha256": "f25896e1a8f0fa8ddb6bfab38099b70f6541054fa1533dcc43b7c8b9b7040209",
+      "locator": "Numbered sections 2 Bridge Pose and 3 Knee to Chest",
+      "supports": "Bridge with both feet planted and a one-knee-to-chest component with a full foot return before switching sides.",
+      "doesNotSupport": "Lissom h30's knee-lift-before-bridge order: the article places Bridge before Knee to Chest. It also does not establish Lissom's 12-minute duration, seated chair route, pregnancy clearance, or form scoring."
+    }
+  }
+}

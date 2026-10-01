@@ -21,6 +21,15 @@ final class HathaText {
   final String tr;
 }
 
+/// A reviewed citation supports only a named teaching component. Its scope is
+/// course content, never a personal safety or camera-form assessment.
+final class HathaSourceScope {
+  const HathaSourceScope(this.supports, this.doesNotSupport);
+
+  final HathaText supports;
+  final HathaText doesNotSupport;
+}
+
 final class HathaLesson {
   const HathaLesson({
     required this.id,
@@ -74,6 +83,7 @@ final class HathaCourse {
     required this.title,
     required this.intro,
     required this.sources,
+    required this.sourceScopes,
     required this.modules,
   });
 
@@ -100,6 +110,33 @@ final class HathaCourse {
         throw FormatException('source $sourceId must be an HTTPS URL');
       }
       sources[sourceId] = url;
+    }
+    final Map<String, HathaSourceScope> sourceScopes =
+        <String, HathaSourceScope>{};
+    final Object? rawScopes = decoded['sourceScopes'];
+    if (rawScopes != null) {
+      if (rawScopes is! Map) {
+        throw const FormatException('source scopes must be an object');
+      }
+      for (final MapEntry<dynamic, dynamic> entry in rawScopes.entries) {
+        final String sourceId = _id(entry.key, 'source scope ID');
+        if (!sources.containsKey(sourceId) || entry.value is! Map) {
+          throw FormatException('invalid source scope for $sourceId');
+        }
+        final Map<dynamic, dynamic> scope = entry.value as Map;
+        if (scope.keys.toSet().difference(<String>{
+              'supports',
+              'doesNotSupport',
+            }).isNotEmpty ||
+            !scope.containsKey('supports') ||
+            !scope.containsKey('doesNotSupport')) {
+          throw FormatException('invalid source scope fields for $sourceId');
+        }
+        sourceScopes[sourceId] = HathaSourceScope(
+          HathaText.read(scope['supports'], '$sourceId.supports'),
+          HathaText.read(scope['doesNotSupport'], '$sourceId.doesNotSupport'),
+        );
+      }
     }
     final Object? rawModules = decoded['modules'];
     if (rawModules is! List || rawModules.isEmpty) {
@@ -220,6 +257,7 @@ final class HathaCourse {
       title: HathaText.read(decoded['title'], 'title'),
       intro: HathaText.read(decoded['intro'], 'intro'),
       sources: Map<String, String>.unmodifiable(sources),
+      sourceScopes: Map<String, HathaSourceScope>.unmodifiable(sourceScopes),
       modules: List<HathaModule>.unmodifiable(modules),
     );
   }
@@ -229,6 +267,7 @@ final class HathaCourse {
   final HathaText title;
   final HathaText intro;
   final Map<String, String> sources;
+  final Map<String, HathaSourceScope> sourceScopes;
   final List<HathaModule> modules;
 
   List<HathaLesson> get lessons => modules

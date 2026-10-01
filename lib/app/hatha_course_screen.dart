@@ -6,6 +6,7 @@ import 'hatha_course.dart';
 import 'hatha_knowledge_diagrams.dart';
 import 'hatha_progress.dart';
 import 'hatha_session_preparation.dart';
+import 'lesson_media.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
 
@@ -489,6 +490,13 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                       ),
                   ],
                 ),
+              if (!_readOnly)
+                LessonMediaSlot.empty(
+                  key: const Key('hatha.lesson.media'),
+                  course: widget.course,
+                  lessonId: lesson.id,
+                  locale: Localizations.localeOf(context).languageCode,
+                ),
               if (_readOnly && lesson.id == 'h59')
                 _LessonBlock(
                   title: localeText(
@@ -555,13 +563,39 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   localeText(context, 'Teaching sources', 'Öğretim kaynakları'),
                 ),
                 children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      localeText(
+                        context,
+                        'Sources guide the named teaching detail; they do not validate this whole lesson, personal safety or a camera verdict.',
+                        'Kaynaklar belirtilen öğretim ayrıntısını destekler; tüm dersi, kişisel güvenliği veya kamera kararını doğrulamaz.',
+                      ),
+                    ),
+                  ),
                   for (final String sourceId in lesson.sourceIds)
                     ListTile(
                       title: Text(
                         Uri.parse(widget.course.sources[sourceId]!).host,
                       ),
-                      subtitle: SelectableText(
-                        widget.course.sources[sourceId]!,
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SelectableText(widget.course.sources[sourceId]!),
+                          if (widget.course.sourceScopes[sourceId]
+                              case final HathaSourceScope scope) ...<Widget>[
+                            Text(
+                              '${localeText(context, 'Supports only:', 'Yalnız destekler:')} '
+                              '${hathaText(context, scope.supports)}',
+                              key: Key('hatha.sourceScope.$sourceId'),
+                            ),
+                            Text(
+                              '${localeText(context, 'Does not establish:', 'Kanıtlamaz:')} '
+                              '${hathaText(context, scope.doesNotSupport)}',
+                              key: Key('hatha.sourceLimit.$sourceId'),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                 ],

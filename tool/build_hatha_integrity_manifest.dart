@@ -19,7 +19,7 @@ Future<void> main(List<String> arguments) async {
 
   final Map<String, Object?> source = <String, Object?>{
     'schemaVersion': 1,
-    'contentVersion': '1.0.0',
+    'contentVersion': '1.0.1',
     'appId': 'com.yulalab.lissom',
     'minimumCoreContract': currentMotionContentContract.toString(),
     'locales': <String>['tr', 'en'],

@@ -23,6 +23,11 @@ jobs:
           python3 -B -m unittest discover -s tools -p 'test_build_hatha_course.py'
           python3 -B tools/build_hatha_course.py --check
 
+      - name: App-owned kaynak projeksiyonu ve HOLD negatif kontrolleri
+        run: |
+          python3 -B -m unittest discover -s tools -p 'test_lissom_source_projection.py'
+          python3 -B tools/check_lissom_source_projection.py --check
+
       - name: Config JSON geçerliliği + şema sürümü
         # Sürümsüz config sessizce yorumlanır; yorumlayıcı sürüm uyumsuzluğunda
         # patlamalı, tahmin etmemeli.

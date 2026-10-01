@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "editorialLayer": "v8m",
+  "parentOverlaySha256": "e7efcf2ea8eb2bc9cbef2e8a1ce83c5fe2057d29dab1452db6fa9a9369ded34a",
+  "parentCourseSha256": "c4bff9f6ac351cb15f3222bdf51e7768aece3071044f1459df388bb0c4db1fb3",
+  "courseVersion": "1.0.1",
+  "courseSha256": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
+  "addedSources": {
+    "cc_wall_legs": "https://health.clevelandclinic.org/benefits-of-legs-up-the-wall"
+  },
+  "sourceScopes": {
+    "cc_wall_legs": {
+      "supports": {
+        "en": "The wall-supported legs pose is an inversion. For its setup, Cleveland Clinic describes a blanket or mat, hips slightly away from the wall, and relaxed knees. It warns against the pose with glaucoma or unmanaged high blood pressure, and calls for physician guidance with excessive fluid retention from congestive heart failure, kidney failure or liver failure/cirrhosis.",
+        "tr": "Duvar destekli bacak pozunun ters duruş olarak sınıflandırılmasını; kurulumda battaniye veya mat, duvardan biraz uzak kalça ve rahat dizleri. Glokom veya kontrol altına alınmamış yüksek tansiyonda pozdan kaçınmayı; konjestif kalp yetmezliği, böbrek yetmezliği veya karaciğer yetmezliği/siroza bağlı aşırı sıvı tutulumunda hekim görüşünü destekler."
+      },
+      "doesNotSupport": {
+        "en": "The lesson's side-roll exit or chair, seated and side-lying alternatives; pregnancy or personal suitability, a universal hold duration, symptom treatment, camera form assessment, media reuse or model training rights.",
+        "tr": "Dersin yana dönerek çıkışını veya sandalye, oturma ve yan yatış seçeneklerini; gebelik ya da kişisel uygunluğu, evrensel tutuş süresini, belirti tedavisini, kamera form değerlendirmesini, medya yeniden kullanımını veya model eğitimi haklarını."
+      }
+    }
+  },
+  "lessonSourceAdds": {
+    "h28": ["cc_wall_legs"]
+  },
+  "lessonTextEdits": {
+    "h28": {
+      "objective": {
+        "en": {
+          "from": "Choose a restful leg position without turning it into an inversion goal.",
+          "to": "Choose a comfortable rest position while recognizing wall-supported legs as a supported inversion."
+        },
+        "tr": {
+          "from": "Dinlendirici bacak konumunu ters duruş hedefine çevirmeden seç.",
+          "to": "Duvar destekli bacakların destekli bir ters duruş olduğunu bilerek rahat bir dinlenme konumu seç."
+        }
+      },
+      "practice": {
+        "en": {
+          "from": "Common mistake: Supported leg rest becomes an inversion or prolonged restricted supine hold. Correction: Set the hips and supports without turning the rest into an inversion.",
+          "to": "Common mistake with wall support: Trying to make this supported inversion more demanding, or holding a supine position beyond personal limits. Correction: With wall support, keep the knees relaxed and place the hips at a comfortable distance from the wall."
+        },
+        "tr": {
+          "from": "Sık hata: Destekli bacak dinlenmesi ters duruşa veya kısıtlı uzun sırtüstü tutuşa dönüşür. Düzeltme: Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur.",
+          "to": "Duvar desteğinde sık hata: Bu destekli ters duruşu zorlaştırmaya çalışmak veya kişisel sınırları aşan sırtüstü konumda kalmak. Düzeltme: Duvar desteğinde dizleri rahat tut ve kalçayı duvardan rahat bir uzaklığa yerleştir."
+        }
+      },
+      "selfCheck": {
+        "en": {
+          "from": "Set the hips and supports without turning the rest into an inversion.",
+          "to": "For wall rest, set hips at a comfortable distance and keep knees relaxed; for a chair, side-lying or seated rest, notice whether breathing and the chosen position remain comfortable."
+        },
+        "tr": {
+          "from": "Dinlenmeyi ters duruşa çevirmeden kalça ve destekleri kur.",
+          "to": "Duvar dinlenmesinde kalçayı rahat bir uzaklıkta kurup dizleri rahat tut; sandalye, yan yatış veya oturma dinlenmesinde nefesin ve seçtiğin konumun rahat kalıp kalmadığını fark et."
+        }
+      },
+      "adaptation": {
+        "en": {
+          "from": "With other discomfort, stop and choose comfortable rest or observation.",
+          "to": "With other discomfort, stop and choose comfortable rest or observation. Skip the wall inversion with glaucoma or unmanaged high blood pressure. If excessive fluid retention is linked to congestive heart failure, kidney failure or liver failure/cirrhosis, do not try it without clinician guidance; ask about a suitable rest option."
+        },
+        "tr": {
+          "from": "Başka rahatsızlıkta durup rahat dinlenme veya gözlem seç.",
+          "to": "Başka rahatsızlıkta durup rahat dinlenme veya gözlem seç. Glokom veya kontrol altına alınmamış yüksek tansiyonda duvar ters duruşunu atla. Aşırı sıvı tutulumu konjestif kalp yetmezliği, böbrek yetmezliği veya karaciğer yetmezliği/sirozla ilişkiliyse hekim görüşü olmadan deneme; uygun dinlenme seçeneğini sor."
+        }
+      }
+    }
+  }
+}

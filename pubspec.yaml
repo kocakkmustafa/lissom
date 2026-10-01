@@ -43,6 +43,10 @@ dependencies:
       path: packages/motion_content
       ref: f2ea161c7e974d57b114ba7773836c72be17a381
 
+  # Offline, packaged lesson demonstrations only. The shipping media catalog
+  # remains empty until separately accepted files are available.
+  video_player: ^2.11.1
+
   # Kamera → PoseSource. Motorla AYNI 40-SHA'dan, TEK pin (J-071).
   #
   # ⚠️ TAM-40-SHA yazılıyor, kısa SHA ya da tag adı DEĞİL: pub `ref:` değerini
@@ -106,6 +110,11 @@ flutter:
     - config/courses/
     # Course-byte integrity only; no video, lesson, or model claim.
     - assets/motion_content/manifest.json
+    # Code-pinned QA source membership only; production media stays empty.
+    - assets/motion_content/lissom_source_pins_v2k.json
+    # App-owned v2l source identity only; neither file contains playable media.
+    - assets/motion_content/lissom.source-slice.v1.json
+    - assets/motion_content/lissom.source-projection.v1.json
 
     # ⚠️ POZ MODELİ — `motion_camera` modeli **KASITLI taşımıyor**:
     # "the plugin deliberately bundles no model (apps pin their own and ship

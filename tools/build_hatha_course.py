@@ -13,10 +13,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "config/courses/hatha.v1.json"
 OVERLAY = ROOT / "tools/hatha_course_overlay.v1.json"
-BASELINE_LENGTH = 188964
-BASELINE_SHA256 = "77c91c0bd89914dc146cb4fe2455f23ca88117f5eea11c8e2963c14739e32f2c"
-PUBLISHED_LENGTH = 259103
-PUBLISHED_SHA256 = "0e339eec3e24446260621703ab93f8163efc750f76979b0c4210abd942d4ff08"
+SOURCE_OVERLAY = ROOT / "tools/hatha_source_overlay.v8k.json"
+SCOPED_SOURCE_OVERLAY = ROOT / "tools/hatha_source_overlay.v8l.json"
+CORRECTED_SOURCE_OVERLAY = ROOT / "tools/hatha_source_overlay.v8m.json"
+BASELINE_LENGTH = 191216
+BASELINE_SHA256 = "07e6f2f73fb1822276c4333117c8472076f75573d19f8742f61fe0fb06bfc44d"
+PUBLISHED_LENGTH = 261355
+PUBLISHED_SHA256 = "e83c86d939d8d5527dec6fe3820b416f1aaec5dff7ef1c81e8de04ab90dc685c"
+SOURCE_PUBLISHED_LENGTH = 262824
+SOURCE_PUBLISHED_SHA256 = "aa9ccfb5adc397e00c14247746b868d9d7ca93d45de0ccbdaa116f880f852b57"
+SCOPED_PUBLISHED_LENGTH = 268197
+SCOPED_PUBLISHED_SHA256 = "c4bff9f6ac351cb15f3222bdf51e7768aece3071044f1459df388bb0c4db1fb3"
+CORRECTED_PUBLISHED_LENGTH = 270935
+CORRECTED_PUBLISHED_SHA256 = "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c"
 SOURCE_IDS_APPEND = ("ya_standards", "ya_scope", "ayush2016")
 STEP_REPLACEMENTS = {"h11": "3", "h12": "0", "h24": "0"}
 
@@ -195,9 +204,9 @@ MODULES = [
                "Front and overhead-friendly view of Kati Chakrasana range, no extreme end position."
                " | Kati Chakrasana aralığını önden ve üstten anlaşılır göster; uç konuma zorlama.",
                minutes=8),
-        lesson("h09", "Supported triangle | Destekli üçgen",
-               "Learn the hip-led reach of Trikonasana without chasing the floor."
-               " | Zemine yetişmeye çalışmadan Trikonasana'nın kalçadan uzanışını öğren.",
+        lesson("h09", "Chair-supported triangle variation | Sandalyeyle destekli üçgen varyasyonu",
+               "Explore a short chair-supported Trikonasana variation without chasing the floor."
+               " | Zemine yetişmeye çalışmadan kısa, sandalyeli Trikonasana varyasyonunu dene.",
                "Take a comfortable wide stance and turn the front foot out slightly; keep a chair beside it."
                " | Rahat geniş dur, öndeki ayağı biraz dışa çevir; yanına sandalye koy.",
                "Reach over the front leg, rest the lower hand on a chair and rise back with control."
@@ -208,9 +217,9 @@ MODULES = [
                " | İki ayağın da yerde mi; boynu zorlamadan rahat konuşabiliyor musun?",
                "Narrow the stance and keep both hands on the chair if balance is uncertain."
                " | Denge belirsizse adımı daraltıp iki eli sandalyede tut.",
-               "Wide front and side views of supported Trikonasana, chair height and short stance."
-               " | Destekli Trikonasana'yı önden/yandan, sandalye yüksekliği ve kısa adımla göster.",
-               minutes=11),
+               "Front and side views of this short chair-supported triangle variation; show chair height, foot reset and controlled return."
+               " | Bu kısa sandalyeli üçgen varyasyonunu önden ve yandan; sandalye yüksekliği, ayakların yeniden kurulumu ve kontrollü dönüşle göster.",
+               minutes=11, sources=("ycb", "nccih", "aol_triangle", "yi_chair_triangle")),
         lesson("h10", "Tree with a wall | Duvar yanında ağaç",
                "Develop a calm balance choice without forcing the standing knee."
                " | Destek bacağını zorlamadan sakin denge seçeneği geliştir.",
@@ -518,17 +527,17 @@ MODULES = [
                " | Duvar yakınına oturup yana dön; bacakları yalnız rahat olduğu kadar yükselt.",
                "Keep knees soft and leave by rolling onto the side rather than sitting straight up."
                " | Dizleri rahat tut; doğruca kalkmak yerine yana dönerek çık.",
-               "Rest briefly, then compare with legs on a chair or ordinary side lying."
-               " | Kısa dinlen, sonra bacaklar sandalyede veya normal yan yatışla karşılaştır.",
+               "Rest briefly; compare with legs on a chair only if supine rest suits your personal limits, or choose side-lying or seated rest."
+               " | Kısa dinlen; yalnız sırtüstü dinlenme kişisel sınırlarına uygunsa sandalyede bacaklarla karşılaştır, değilse yan yatış veya oturarak dinlenme seç.",
                "Is breathing easy, and is there any pressure in head or eyes?"
                " | Nefes kolay mı; baş veya gözlerde baskı var mı?",
-               "Choose chair-leg or side-lying rest for pregnancy or any discomfort; skip wall position."
-               " | Gebelikte veya rahatsızlıkta sandalye-bacak ya da yan yatış seç; duvar konumunu atla.",
-               "Wide Viparita Karani support and side exit; equal-length chair-leg and side-rest alternatives."
-               " | Destekli Viparita Karani ve yandan çıkış; sandalye-bacak ve yan dinlenmeye eşit süre ver.",
+               "For pregnancy, skip wall and legs-on-chair supine options; choose seated or side-lying rest only if comfortable and seek individual guidance. With other discomfort, stop and choose comfortable rest or observation."
+               " | Gebelikte duvar ve sandalyede bacak sırtüstü seçeneklerini atla; yalnız rahatsa oturarak veya yan yatıp dinlen, kişisel görüş al. Başka rahatsızlıkta durup rahat dinlenme veya gözlem seç.",
+               "Show wide wall-supported Viparita Karani and side exit; label legs-on-chair as another supine option, then separately show side-lying and seated rest for pregnancy or supine restrictions."
+               " | Duvar destekli Viparita Karani'yi geniş açıdan ve yandan çıkışla göster; sandalyede bacakları ayrı bir sırtüstü seçenek diye etiketle, gebelik veya sırtüstü kısıtında yan ve oturarak dinlenmeyi ayrı göster.",
                minutes=8, stop="Leave the position if head or eye pressure, dizziness, pain or unusual breathlessness appears."
                     " | Baş/göz baskısı, baş dönmesi, ağrı veya alışılmadık nefes darlığı olursa çık.",
-               sources=("ycb", "nccih", "acog")),
+               sources=("ycb", "nccih", "acog", "yj_wall_chair_rest", "yi_wall_side_exit")),
         lesson("h29", "Resting pose | Dinlenme pozu",
                "Make Shavasana a supported, optional period of rest."
                " | Shavasana'yı destekli ve seçilebilir dinlenme olarak kur.",
@@ -550,17 +559,17 @@ MODULES = [
                " | Küçük bacak hareketi, köprü ve dinlenmeyi rahat geçişlerle bağla.",
                "Set a chair or cushion nearby before choosing which floor movements to include."
                " | Hangi yer hareketlerini yapacağını seçmeden sandalyeyi veya minderi yakına koy.",
-               "Move from one-leg release to small bridges, pause, then choose a rest shape."
-               " | Tek bacak rahatlamasından küçük köprülere geç, dur, sonra dinlenme biçimi seç.",
+               "If you choose the supine route, lift one bent knee only as comfortable, return that foot fully to the mat before switching sides, then reset both feet on the mat before a small bridge; lower fully and choose rest."
+               " | Sırtüstü yolu seçtiysen bükülü dizi yalnız rahat olduğu kadar kaldır, taraf değiştirmeden ayağı tamamen mata indir; küçük köprüden önce iki ayağı da mata yeniden yerleştir, tamamen in ve dinlenmeyi seç.",
                "Practise one 12-minute sequence without trying to match a model's range."
                " | Modelin hareket aralığını taklit etmeye çalışmadan 12 dakikalık bir dizi yap.",
                "Which part did you reduce or skip, and did rest remain available?"
                " | Hangi bölümü küçülttün veya atladın; dinlenme seçeneği açık kaldı mı?",
-               "Use a fully seated sequence: march, gentle pelvic movement and chair rest."
-               " | Tamamen oturarak çalış: diz kaldır, hafif leğen hareketi ve sandalye dinlenmesi.",
-               "Continuous floor and chair branches with clear pause/exit after each shape."
-               " | Her şekilden sonra durma/çıkış gösteren kesintisiz yer ve sandalye dalları.",
-               minutes=12),
+               "For pregnancy or any reason to avoid back lying, skip the supine branch; choose a fully seated sequence of marching, gentle pelvic movement and chair rest, and seek personal guidance for limits."
+               " | Gebelikte veya sırtüstü yatmamak için başka bir neden varsa sırtüstü yolu atla; oturarak diz kaldırma, hafif leğen hareketi ve sandalye dinlenmesinden oluşan tam oturma yolunu seç, kişisel sınırlar için uzman görüşü al.",
+               "Show separate floor and chair branches; in the floor branch show one bent-knee lift at a time, full foot landing and both-feet reset before a small bridge, then pause/exit after each shape; no form-score overlay."
+               " | Yer ve sandalye yollarını ayrı göster; yer yolunda birer bükülü diz kaldırma, ayağın tamamen inişi ve küçük köprüden önce iki ayağın yeniden yerleşmesini, sonra her şekilden çıkış/durmayı göster; form puanı bindirme.",
+               minutes=12, sources=("ycb", "nccih", "yj_slow_morning", "nhs_pregnancy")),
     ]),
     module("breath_flow", "Breath and gentle flow | Nefes ve yumuşak akış",
            "Use breath awareness to connect familiar movements, without breath holds."
@@ -932,7 +941,7 @@ MODULES.extend([
             "Compare a chest-only lift with observation or one combined lift; rest fully after each. | Göğüs yükselişini gözlemle veya bir birleşik yükselişle karşılaştır; her birinden sonra tam dinlen.",
             "Can you lower smoothly without a back pinch, breath holding or throwing the head back? | Bel sıkışması, nefes tutma veya başı geriye atma olmadan yumuşak inebiliyor musun?",
             "Pregnancy or abdominal-contact restrictions call for omitting this prone block and seeking personal guidance; h40 is also prone, not an automatic safe substitute. | Gebelik veya karın teması kısıtında bu yüzüstü bölümü atla ve kişisel görüş al; h40 da yüzüstüdür, otomatik güvenli alternatif değildir.",
-            "Side and three-quarter continuous lift and lowering; label chest-only, single-leg and combined options, keeping neck and pelvis visible. | Yandan ve çapraz kesintisiz yükseliş-iniş; yalnız göğüs, tek bacak ve birleşik seçenekleri etiketle, boyunla leğen görünür kalsın.", sources=("ycb", "nccih", "acog", "adriene_locust")),
+            "Side and three-quarter continuous lift and lowering; label chest-only, the h40 single-leg recap and optional combined lift, keeping neck and pelvis visible. | Yandan ve çapraz kesintisiz yükseliş-iniş; yalnız göğüs, h40 tek bacak tekrarı ve seçmeli birleşik yükselişi etiketle, boyunla leğen görünür kalsın.", sources=("ycb", "nccih", "acog", "adriene_locust", "yj_locust_components", "yj_locust_combined")),
         progression("h52", "Reverse table with bent knees | Dizler bükülü ters masa",
             "Extend h39 into a controlled bent-knee reverse-table option. | h39'u kontrollü diz bükülü ters masa seçeneğine genişlet.", [
             "Sit with knees bent, feet flat roughly hip width and palms behind the hips in a comfortable direction. | Dizler bükülü otur; ayaklar yaklaşık kalça genişliğinde tam yerde, avuçlar kalça arkasında rahat yönde olsun.",
@@ -1034,7 +1043,7 @@ for _id in ("h16", "h17", "h18", "h40", "h47", "h51"):
     _item = next(item for mod in MODULES for item in mod["lessons"] if item["id"] == _id)
     _item["adaptation"]["en"] += " Prone abdominal contact is not a general pregnancy option; observe when personal suitability is uncertain."
     _item["adaptation"]["tr"] += " Yüzüstü karın teması genel gebelik seçeneği değildir; kişisel uygunluk belirsizse gözle."
-for _id in ("h25", "h26", "h27", "h28", "h29", "h30", "h54"):
+for _id in ("h25", "h26", "h27", "h28", "h29", "h54"):
     _item = next(item for mod in MODULES for item in mod["lessons"] if item["id"] == _id)
     _item["sourceIds"] = list(dict.fromkeys([*_item["sourceIds"], "nhs_pregnancy"]))
     _item["adaptation"]["en"] += " Pregnancy may require avoiding prolonged flat-back lying; seek individual advice rather than treating this option as clearance."
@@ -1055,6 +1064,13 @@ SOURCES = {
     "adriene_suna": "https://yogawithadriene.com/sun-salutation-a-surya-namaskara-a/",
     "adriene_locust": "https://yogawithadriene.com/locust-pose-salabasana/",
     "aol_sphinx": "https://www.artofliving.org/us-en/yoga/poses/sphinx-pose",
+    "aol_triangle": "https://www.artofliving.org/us-en/yoga/poses/triangle-pose",
+    "yj_slow_morning": "https://www.yogajournal.com/practice/slow-morning-yoga/",
+    "yi_chair_triangle": "https://yogainternational.com/article/view/trikonasana-to-sidebend-or-not/",
+    "yj_wall_chair_rest": "https://www.yogajournal.com/poses/anatomy/legs/let-go/?scope=anon",
+    "yi_wall_side_exit": "https://yogainternational.com/article/view/yoga-for-tight-hamstrings/",
+    "yj_locust_components": "https://www.yogajournal.com/poses/4-ways-to-modify-locust-pose/",
+    "yj_locust_combined": "https://www.yogajournal.com/practice/5-minute-yoga-for-strength/",
     "yi_reverse": "https://yogainternational.com/article/view/upward-plank-pose/",
     "podclass_warrior3": "https://www.yogapodclass.com/poses/warrior-iii",
     "nhs_pregnancy": "https://www.nhs.uk/pregnancy/keeping-well/exercise/",
@@ -1070,7 +1086,7 @@ def render_base():
     result = {
         "schemaVersion": 1,
         "id": "lissom.hatha.foundations",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "title": text_pair("Hatha: foundations to intermediate practice | Hatha: temelden orta seviye çalışmaya"),
         "intro": text_pair(
             "A 60-lesson Hatha course from foundations to selected intermediate practice. Routes include adaptations and knowledge-only topics; this is not the whole yoga tradition or instructor certification. You record practice yourself; the camera does not grade these postures."
@@ -1168,13 +1184,192 @@ def apply_overlay(course, overlay):
     return course
 
 
-def render():
+def render_v8l():
     base_bytes = render_base().encode("utf-8")
     _check_bytes(base_bytes, BASELINE_LENGTH, BASELINE_SHA256, "authored base")
     course = apply_overlay(json.loads(base_bytes), load_overlay())
     published_bytes = (json.dumps(course, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     _check_bytes(published_bytes, PUBLISHED_LENGTH, PUBLISHED_SHA256, "published course")
-    return published_bytes.decode("utf-8")
+    source_overlay = load_overlay(SOURCE_OVERLAY)
+    if (source_overlay.get("schemaVersion") != 1
+            or source_overlay.get("editorialLayer") != "v8k"
+            or source_overlay.get("parentCourseSha256") != PUBLISHED_SHA256
+            or source_overlay.get("courseVersion") != course["version"]
+            or course["version"] != "1.0.1"):
+        raise ValueError("v8k source overlay is not pinned to the published course")
+    if set(source_overlay) != {
+            "schemaVersion", "editorialLayer", "parentCourseSha256",
+            "courseVersion", "courseSha256", "addedSources", "sourceScopes",
+            "lessonSourceAdds"}:
+        raise ValueError("unexpected v8k source overlay fields")
+    new_sources = source_overlay["addedSources"]
+    expected_sources = {
+        "umich_standing_turn": "https://hr.umich.edu/node/74294",
+        "ace_bent_knee_reverse_table": "https://www.acefitness.org/resources/pros/expert-articles/5659/yoga-for-9-to-5ers-6-poses-to-enhance-posture/",
+    }
+    if new_sources != expected_sources or set(new_sources) & set(course["sources"]):
+        raise ValueError("v8k source registry differs from the two reviewed pages")
+    scopes = source_overlay["sourceScopes"]
+    if set(scopes) != set(expected_sources):
+        raise ValueError("v8k must scope each new source")
+    for source_id, scope in scopes.items():
+        if set(scope) != {"supports", "doesNotSupport"}:
+            raise ValueError(f"v8k scope fields differ for {source_id}")
+        for field in ("supports", "doesNotSupport"):
+            _text_append(scope[field], f"{source_id}.{field}")
+    source_adds = source_overlay["lessonSourceAdds"]
+    if source_adds != {
+            "h08": ["umich_standing_turn"],
+            "h52": ["ace_bent_knee_reverse_table"]}:
+        raise ValueError("v8k may bind only h08 and h52")
+    course["sources"].update(new_sources)
+    course["sourceScopes"] = scopes
+    lessons = {item["id"]: item for mod in course["modules"]
+               for item in mod["lessons"]}
+    for lesson_id, source_ids in source_adds.items():
+        if set(source_ids) & set(lessons[lesson_id]["sourceIds"]):
+            raise ValueError(f"duplicate v8k source on {lesson_id}")
+        lessons[lesson_id]["sourceIds"].extend(source_ids)
+    source_bytes = (json.dumps(course, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    _check_bytes(source_bytes, SOURCE_PUBLISHED_LENGTH, SOURCE_PUBLISHED_SHA256,
+                 "v8k source course")
+    if source_overlay["courseSha256"] != SOURCE_PUBLISHED_SHA256:
+        raise ValueError("v8k overlay course SHA differs")
+    attribution = load_overlay(ROOT / "tools/hatha_source_attribution.v2.json")
+    if (attribution.get("schemaVersion") != 2
+            or attribution.get("sourceResearchManifestSha256") !=
+            "dec2b43795a06b456bfb6b64f3645d836574a8d4ada8b41b09d959d4a2e8ebb6"
+            or attribution.get("parentCourseSha256") != PUBLISHED_SHA256
+            or attribution.get("courseSha256") != SOURCE_PUBLISHED_SHA256
+            or set(attribution.get("sources", {})) != set(expected_sources)
+            or any(attribution.get(key) != 0 for key in (
+                "generatedMediaCount", "acceptedExpertLabelCount",
+                "qualifiedModelCount"))):
+        raise ValueError("v8k narrow attribution contract is not pinned")
+    for source_id, url in expected_sources.items():
+        claim = attribution["sources"][source_id]
+        if (claim.get("lessonId") != next(k for k,v in source_adds.items()
+                                         if source_id in v)
+                or claim.get("url") != url
+                or any(claim.get(field) != scopes[source_id][field]
+                       for field in ("supports", "doesNotSupport"))
+                or not claim.get("locator") or not claim.get("rights")
+                or claim.get("realPersonErrorLabel") is not False
+                or claim.get("modelTrainingRightsVerified") is not False
+                or claim.get("automaticFormVerdictSupported") is not False):
+            raise ValueError(f"unscoped v8k attribution: {source_id}")
+    # v8l only scopes existing exact teaching URLs and adds Bridge Flow to the
+    # two-foot bridge component. G/L operational and source-ledger flags stay open.
+    scoped_overlay = load_overlay(SCOPED_SOURCE_OVERLAY)
+    if (set(scoped_overlay) != {
+            "schemaVersion", "editorialLayer", "parentOverlaySha256",
+            "parentCourseSha256", "courseVersion", "courseSha256",
+            "addedSources", "sourceScopes", "lessonSourceAdds"}
+            or scoped_overlay["schemaVersion"] != 1
+            or scoped_overlay["editorialLayer"] != "v8l"
+            or hashlib.sha256(SOURCE_OVERLAY.read_bytes()).hexdigest() !=
+            scoped_overlay["parentOverlaySha256"]
+            or hashlib.sha256(source_bytes).hexdigest() !=
+            scoped_overlay["parentCourseSha256"]
+            or scoped_overlay["courseVersion"] != course["version"]):
+        raise ValueError("v8l source overlay is not pinned to v8k")
+    additions = scoped_overlay["addedSources"]
+    if additions != {
+            "yei_bridge_flow":
+            "https://yogaeducation.org/wp-content/uploads/2019/05/teaching-restorative-yoga-and-savasana.pdf"}:
+        raise ValueError("v8l may add only the two-foot Bridge Flow PDF")
+    expected_scopes = {
+        "yi_chair_triangle", "yj_wall_chair_rest", "yi_wall_side_exit",
+        "nhs_pregnancy", "acog", "yj_locust_components",
+        "yj_locust_combined", "yei_bridge_flow",
+    }
+    if set(scoped_overlay["sourceScopes"]) != expected_scopes:
+        raise ValueError("v8l source scopes differ from the exact variants")
+    for source_id, scope in scoped_overlay["sourceScopes"].items():
+        if set(scope) != {"supports", "doesNotSupport"}:
+            raise ValueError(f"v8l source scope fields differ for {source_id}")
+        for field in ("supports", "doesNotSupport"):
+            _text_append(scope[field], f"{source_id}.{field}")
+    if scoped_overlay["lessonSourceAdds"] != {"h30": ["yei_bridge_flow"]}:
+        raise ValueError("v8l may bind only the h30 two-foot bridge component")
+    if any(source_id in course["sources"] for source_id in additions):
+        raise ValueError("v8l source id already exists")
+    course["sources"].update(additions)
+    course["sourceScopes"].update(scoped_overlay["sourceScopes"])
+    h30 = lessons["h30"]
+    if "yei_bridge_flow" in h30["sourceIds"]:
+        raise ValueError("v8l duplicate h30 bridge citation")
+    h30["sourceIds"].append("yei_bridge_flow")
+    scoped_bytes = (json.dumps(course, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    actual_sha = hashlib.sha256(scoped_bytes).hexdigest()
+    if scoped_overlay["courseSha256"] != actual_sha:
+        raise ValueError(f"v8l course SHA does not match scoped attribution: {actual_sha}")
+    _check_bytes(scoped_bytes, SCOPED_PUBLISHED_LENGTH,
+                 SCOPED_PUBLISHED_SHA256, "v8l source course")
+    return scoped_bytes.decode("utf-8")
+
+
+def render():
+    """Apply the h28 wording correction after verifying all frozen stages."""
+    previous = render_v8l().encode("utf-8")
+    course = json.loads(previous)
+    overlay = load_overlay(CORRECTED_SOURCE_OVERLAY)
+    if (set(overlay) != {
+            "schemaVersion", "editorialLayer", "parentOverlaySha256",
+            "parentCourseSha256", "courseVersion", "courseSha256",
+            "addedSources", "sourceScopes", "lessonSourceAdds",
+            "lessonTextEdits"}
+            or overlay["schemaVersion"] != 1
+            or overlay["editorialLayer"] != "v8m"
+            or overlay["parentOverlaySha256"] !=
+            hashlib.sha256(SCOPED_SOURCE_OVERLAY.read_bytes()).hexdigest()
+            or overlay["parentCourseSha256"] != SCOPED_PUBLISHED_SHA256
+            or hashlib.sha256(previous).hexdigest() != SCOPED_PUBLISHED_SHA256
+            or overlay["courseVersion"] != course["version"]):
+        raise ValueError("v8m correction is not pinned to v8l")
+    source_id = "cc_wall_legs"
+    if overlay["addedSources"] != {
+            source_id: "https://health.clevelandclinic.org/benefits-of-legs-up-the-wall"
+            } or source_id in course["sources"]:
+        raise ValueError("v8m may add only the Cleveland Clinic wall-legs page")
+    if (set(overlay["sourceScopes"]) != {source_id}
+            or set(overlay["sourceScopes"][source_id]) !=
+            {"supports", "doesNotSupport"}):
+        raise ValueError("v8m must scope the wall-legs citation")
+    for field in ("supports", "doesNotSupport"):
+        _text_append(overlay["sourceScopes"][source_id][field],
+                     f"{source_id}.{field}")
+    if overlay["lessonSourceAdds"] != {"h28": [source_id]}:
+        raise ValueError("v8m may cite Cleveland Clinic only on h28")
+    if set(overlay["lessonTextEdits"]) != {"h28"}:
+        raise ValueError("v8m may edit only h28")
+    edits = overlay["lessonTextEdits"]["h28"]
+    if set(edits) != {"objective", "practice", "selfCheck", "adaptation"}:
+        raise ValueError("v8m may edit only h28 objective, practice, selfCheck and adaptation")
+    h28 = next(item for mod in course["modules"]
+               for item in mod["lessons"] if item["id"] == "h28")
+    expected_occurrences = {"objective": 1, "practice": 1,
+                            "selfCheck": 2, "adaptation": 1}
+    for field, count in expected_occurrences.items():
+        if set(edits[field]) != {"en", "tr"}:
+            raise ValueError(f"v8m {field} must be bilingual")
+        for lang in ("en", "tr"):
+            edit = edits[field][lang]
+            if (not isinstance(edit, dict) or set(edit) != {"from", "to"}
+                    or any(not isinstance(edit[key], str) or not edit[key].strip()
+                           for key in ("from", "to"))
+                    or h28[field][lang].count(edit["from"]) != count):
+                raise ValueError(f"v8m {field}.{lang} does not match the frozen lesson")
+            h28[field][lang] = h28[field][lang].replace(edit["from"], edit["to"])
+    h28["sourceIds"].append(source_id)
+    course["sources"].update(overlay["addedSources"])
+    course["sourceScopes"].update(overlay["sourceScopes"])
+    corrected = (json.dumps(course, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    if overlay["courseSha256"] != hashlib.sha256(corrected).hexdigest():
+        raise ValueError("v8m course SHA does not match corrected attribution")
+    _check_bytes(corrected, CORRECTED_PUBLISHED_LENGTH,
+                 CORRECTED_PUBLISHED_SHA256, "v8m corrected course")
+    return corrected.decode("utf-8")
 
 
 def check_output(path=OUTPUT):
@@ -1182,18 +1377,38 @@ def check_output(path=OUTPUT):
         raise ValueError("hatha course JSON differs from authored source and overlay")
 
 
+def staged_output(path):
+    """Resolve an explicit preview destination inside workspace scratch."""
+    workspace = ROOT.parents[2]
+    scratch = workspace / "scratch"
+    destination = path if path.is_absolute() else workspace / path
+    if (destination == scratch or not destination.is_relative_to(scratch)
+            or destination.is_symlink()
+            or not destination.resolve().is_relative_to(scratch.resolve())):
+        raise ValueError("staged Hatha output must be inside workspace scratch")
+    return destination
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--check", action="store_true", help="compare exact published bytes")
     mode.add_argument("--write", action="store_true", help="write the verified published bytes")
+    parser.add_argument("--output", type=Path,
+                        help="optional staged path under workspace scratch")
     args = parser.parse_args(argv)
+    destination = staged_output(args.output) if args.output else OUTPUT
     if args.check:
-        check_output()
+        check_output(destination)
     else:
         rendered = render().encode("utf-8")
-        OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-        OUTPUT.write_bytes(rendered)
+        if args.output is None and (
+                not OUTPUT.is_file() or OUTPUT.read_bytes() != rendered):
+            raise ValueError(
+                "live Hatha publication requires coordinated cutover; "
+                "use --output inside workspace scratch for staging")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(rendered)
 
 
 if __name__ == "__main__":

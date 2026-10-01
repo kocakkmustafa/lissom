@@ -1,5 +1,15 @@
 # Lissom — İlerleme Kaydı
 
+## 2026-10-01 — Hatha kaynak paketi app pinine bağlandı
+
+60 ders, 480 sahne ve 480 varyantın kurs/dilim/projeksiyon SHA'ları
+uygulama Dart sabitleri ve paket testiyle eşleşiyor. h30'un sekiz
+semantik varyantı hâlâ **HOLD**; medya okunmadan reddediliyor. Medya
+odak testleri **22/22**, hedefli analiz temiz, bağımsız kaynak incelemesi
+dar PASS (`scratch/2026-10-01-motion-ol-live-pin-independent-peer-v1/REPORT.md`).
+Gerçek video, kişi-ayrık uzman form modeli ve fiziksel cihaz kabulü açık.
+
+
 ## 2026-09-28 — Hatha paket bütünlüğü ve üretici sapması onarımı
 
 Değişmeyen 60 derslik Hatha JSON'u (259.103 bayt; SHA
