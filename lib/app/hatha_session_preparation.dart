@@ -65,8 +65,8 @@ class HathaSessionPreparationCard extends StatelessWidget {
       ),
       localeText(
         context,
-        'Recall lesson h05: move joints gently within a comfortable range, starting small and unhurried.',
-        'h05 dersini hatırla: eklemleri rahat aralıkta, küçük ve acele etmeden hareket ettir.',
+        'Before this lesson, move joints gently within a comfortable range, starting small and unhurried.',
+        'Bu dersten önce eklemleri rahat aralıkta, küçük ve acele etmeden hareket ettir.',
       ),
       localeText(
         context,

@@ -179,6 +179,7 @@ void main() {
         theme: buildLissomTheme(),
         home: OnboardingFlow(
           store: _NullStore(),
+          measurementAvailable: true,
           onDone: (OnboardingProfile _) {},
           onOpenSettings: () async {
             opened.add('yes');
@@ -230,6 +231,7 @@ void main() {
         theme: buildLissomTheme(),
         home: OnboardingFlow(
           store: _NullStore(),
+          measurementAvailable: true,
           onDone: (OnboardingProfile _) {},
           onOpenSettings: () async {
             opened.add('yes');
@@ -269,6 +271,7 @@ void main() {
         theme: buildLissomTheme(),
         home: OnboardingFlow(
           store: _NullStore(),
+          measurementAvailable: true,
           onDone: (OnboardingProfile _) {},
           onOpenSettings: () async => true,
         ),

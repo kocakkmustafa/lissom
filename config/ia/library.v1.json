@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "lissom.ia.library",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "_notes": [
+    "1.4.1: Doğal nefes h02 kurs içeriği ile kamera nefes/meditasyon ölçümü ayrıldı; sınırlar sayfası mevcut nefes dersini yok saymaz.",
     "1.4.0: Hatha rehberli kursu gerçek ders dosyası, öz kayıt ve ekran yoluyla açıldı. Yoga ailesi teachingOnly: kamera ölçümü/puanı yok, diğer stiller yok. Ölçüm bataryasının kanıt kutusu değişmedi.",
     "1.3.0 (L-253): dürüstlük kutusu SESSİZ bir sınıf taşıyordu — 7 metrik `coreLacksMeasureKind` sınıfında (mesafe/yükseklik) ve kutu o sınıftan HİÇ bahsetmiyordu. Kullanıcı test-başına gerekçeleri görüyordu ama ailenin ÖZETİ o boşluğu atlıyordu. Kapı artık her engel SINIFININ kutuda adlandırılmasını zorluyor.",
     "1.2.0 (L-251, J-133): honestyBox.notMeasured satırları da SEVK EDİLMİŞ İDDİADIR. Motor sınırı anan bir satır, o sınır kalktığı gün YALAN olur — ve kimse yalan söylemeye karar vermez, bir göç yapar. `falsifiedIfBridged` o satırı yalanlayacak metrikleri BEYAN eder; kapı metrik köprüye girdiği an kırmızı yanar ve cümlenin yeniden yazılmasını ZORLAR.",
@@ -375,7 +376,7 @@
       },
       {
         "topic": "Breath or meditation measurement",
-        "reason": "A phone camera cannot see breathing well enough to measure it, and we will not estimate a number we cannot take — there is nothing there for a camera to read. This build carries no breath or meditation content at all: the family is named in the library and nothing sits behind that name.",
+        "reason": "Lissom does not measure breathing or meditation with the camera. The Hatha course includes natural-breath practice without a breathing score; guided meditation sessions are not included.",
         "kind": "capability"
       },
       {

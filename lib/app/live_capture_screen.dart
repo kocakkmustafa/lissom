@@ -37,6 +37,8 @@ import 'attempt_values.dart';
 import 'camera_pose_source.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
+import 'local_owner.dart';
+import 'local_owner_context.dart';
 import 'pose_model.dart';
 import 'surfaces.dart';
 
@@ -166,7 +168,8 @@ AssessmentEngine buildLiveEngine({
   );
 }
 
-class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
+class _LiveCaptureScreenState extends State<LiveCaptureScreen>
+    with WidgetsBindingObserver {
   late final PoseSource _source = widget.sourceOverride ?? CameraPoseSource();
   late final LiveEvaluator _evaluator = LiveEvaluator(
     test: widget.test,
@@ -181,6 +184,10 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
 
   LiveSessionState _state = const LiveIdle();
   AssessmentResult? _result;
+  bool _sourceRetired = false;
+  LissomLocalOwner? _owner;
+  LissomResourceLease? _resource;
+  Future<void>? _sourceClose;
 
   AssessmentEngine _newEngine() => buildLiveEngine(
     test: widget.test,
@@ -199,8 +206,15 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _owner = LissomOwnerContext.maybeOf(context);
+    if (_owner?.isActive == false) {
+      _sourceRetired = true;
+      return;
+    }
+    _resource = _owner?.registerResource(_closeSource);
     _stateSub = _evaluator.states().listen((LiveSessionState s) {
-      if (mounted) setState(() => _state = s);
+      if (mounted && !_sourceRetired) setState(() => _state = s);
     });
     _rawSub = _source.events().listen(_onRawEvent);
     final PoseSource s = _source;
@@ -210,7 +224,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   }
 
   void _onRawEvent(PoseSourceEvent e) {
-    if (_result != null) return; // deneme bitti, motor daha fazla kare almaz
+    if (_sourceRetired || _result != null) return;
     if (e is SourceFrameEvent) {
       _latestSize = e.size;
       _engine.process(e.frame);
@@ -224,6 +238,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   String? _saveError;
 
   Future<void> _finish() async {
+    if (_sourceRetired || _result != null || !_state.canMeasure) return;
     final AssessmentResult r = _engine.finish();
     setState(() => _result = r);
     await _persist(r);
@@ -246,8 +261,10 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   Future<void> _persist(AssessmentResult r) async {
     final DateTime completedAt = (widget.clock ?? DateTime.now)();
     try {
+      _owner?.checkActive();
       final SessionStore store =
           await (widget.storeLoader ?? openSessionStore)();
+      _owner?.checkActive();
       await store.append(
         recordFor(test: widget.test, result: r, completedAt: completedAt),
       );
@@ -260,6 +277,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
       if (r.value != null) {
         final AttemptValueStore valueStore =
             await (widget.attemptValueStoreLoader ?? openAttemptValueStore)();
+        _owner?.checkActive();
         await valueStore.append(
           AttemptValue(
             lessonId: historyKeyFor(widget.test, r.side),
@@ -273,7 +291,9 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
           ),
         );
       }
-      if (mounted) setState(() => _saved = true);
+      if (mounted && (_owner?.isActive ?? true)) {
+        setState(() => _saved = true);
+      }
     } on Object catch (e) {
       // ÇIKMAZ SOKAK YASAĞI (M-F-267): yazma patlarsa ekran ÇÖKMEZ — ama
       // SUSMAZ da. Sessizce yutmak, kullanıcıya tutulmayan bir takip sözü
@@ -282,7 +302,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
       // İKİ YAZMA TEK SÖZ TAŞIR (D13): `_saved` yalnız İKİSİ DE başarılıysa
       // true olur. Oturum yazılıp değer düşerse "kaydedildi" demek, sayının
       // kaybolduğunu gizlemek olurdu — L-316'nın kendisi, bir katman derinde.
-      if (mounted) {
+      if (mounted && (_owner?.isActive ?? true)) {
         setState(() {
           _saved = false;
           _saveError = '$e';
@@ -292,6 +312,11 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   }
 
   void _tryAgain() {
+    if (_sourceRetired) {
+      Navigator.of(context).maybePop();
+      return;
+    }
+    if (_saved == null) return;
     setState(() {
       _result = null;
       // Kayıt hâli DENEME BAŞINADIR — sıfırlanmazsa yeni denemenin ekranı
@@ -308,10 +333,35 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Inactive also occurs during an OS permission prompt; it is not proof
+    // that the app entered the background. A retired source is never resumed.
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.detached) {
+      if (_sourceRetired) return;
+      setState(_retireSource);
+    }
+  }
+
+  void _retireSource() {
+    final Future<void> close = _resource?.close() ?? _closeSource();
+    unawaited(close.then<void>((_) {}, onError: (Object _, StackTrace __) {}));
+  }
+
+  Future<void> _closeSource() {
+    if (!_sourceRetired) {
+      _sourceRetired = true;
+      _stateSub?.cancel();
+      _rawSub?.cancel();
+    }
+    return _sourceClose ??= _source.dispose();
+  }
+
+  @override
   void dispose() {
-    _stateSub?.cancel();
-    _rawSub?.cancel();
-    _source.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _retireSource();
     super.dispose();
   }
 
@@ -332,7 +382,10 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
                     onTryAgain: _tryAgain,
                     saved: _saved,
                     saveError: _saveError,
+                    sourceRetired: _sourceRetired,
                   )
+                : _sourceRetired
+                ? const _InterruptedView()
                 : _LiveView(
                     test: widget.test,
                     state: _state,
@@ -343,6 +396,42 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _InterruptedView extends StatelessWidget {
+  const _InterruptedView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Semantics(
+          liveRegion: true,
+          child: Text(
+            localeText(context, 'Measurement stopped', 'Ölçüm durduruldu'),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          localeText(
+            context,
+            'Lissom went into the background, so this attempt was not saved. '
+                'Return to the test and start a new attempt when you are ready.',
+            'Lissom arka plana geçtiği için bu deneme kaydedilmedi. '
+                'Hazır olduğunda test sayfasına dönüp yeni bir deneme başlat.',
+          ),
+        ),
+        const Spacer(),
+        OutlinedButton(
+          key: const Key('liveCapture.returnToTest'),
+          onPressed: () => Navigator.of(context).maybePop(),
+          child: Text(localeText(context, 'Back to test', 'Teste dön')),
+        ),
+      ],
     );
   }
 }
@@ -573,6 +662,7 @@ class _ResultView extends StatelessWidget {
     required this.onTryAgain,
     required this.saved,
     required this.saveError,
+    required this.sourceRetired,
   });
 
   final AssessmentResult result;
@@ -581,6 +671,7 @@ class _ResultView extends StatelessWidget {
   /// `null` = yazma henüz bitmedi · `true` = geçmişe girdi · `false` = giremedi.
   final bool? saved;
   final String? saveError;
+  final bool sourceRetired;
 
   @override
   Widget build(BuildContext context) {
@@ -642,8 +733,12 @@ class _ResultView extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: OutlinedButton(
             key: const Key('liveCapture.tryAgain'),
-            onPressed: onTryAgain,
-            child: Text(localeText(context, 'Try again', 'Yeniden dene')),
+            onPressed: saved == null && !sourceRetired ? null : onTryAgain,
+            child: Text(
+              sourceRetired
+                  ? localeText(context, 'Back to test', 'Teste dön')
+                  : localeText(context, 'Try again', 'Yeniden dene'),
+            ),
           ),
         ),
       ],

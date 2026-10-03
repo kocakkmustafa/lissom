@@ -1,7 +1,12 @@
 /// Onboarding akışı — O1 Welcome → O2 Disclaimer → O3 Camera permission →
 /// O4 Profile → O5 Measurement limits (`docs/design/UI-BRIEF.md` §2.1).
 ///
-/// **O3 (2026-08-12 GÜNCELLENDİ):** `CameraPoseSource` bağlandığı GÜN,
+/// **O3 yayın politikası (2026-10-02):** ortak ölçüm kapısı kapalıysa
+/// yalnız bilgi gösterir, kamera izni istemez. Ertelenmiş izin yolu
+/// `measurementAvailable: true` ile ayrı sınanır; üretim varsayılanı
+/// Home ekranıyla aynı `motionPaidFeaturesAvailable` sabitidir.
+///
+/// **Tarihsel O3 (2026-08-12):** `CameraPoseSource` bağlandığı GÜN,
 /// AYNI commit'te O3 brief'in aslına döndü — gerçek bir izin isteği
 /// (`test/onboarding_camera_gate_test.dart` bunu zorluyor, koordinatör
 /// şartı: "bugün doğru olan bir dürüstlük metni, bir sonraki commit'le
@@ -19,6 +24,8 @@ library;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 import 'package:permission_handler/permission_handler.dart';
 
 import 'lissom_theme.dart';
@@ -32,6 +39,7 @@ class OnboardingFlow extends StatefulWidget {
     required this.onDone,
     this.onOpenSettings,
     this.onOpenAccount,
+    this.measurementAvailable = motionPaidFeaturesAvailable,
     super.key,
   });
 
@@ -43,6 +51,7 @@ class OnboardingFlow extends StatefulWidget {
 
   /// Only supplied after a real shared-account page is wired by the host.
   final VoidCallback? onOpenAccount;
+  final bool measurementAvailable;
 
   /// Akış TAMAMLANDIĞINDA, **az önce YAZILAN profille** çağrılır — kabuğa
   /// geçiş çağıranın sorumluluğu (bu widget navigasyon kararı VERMEZ).
@@ -74,6 +83,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   bool _disclaimerAcked = false;
   String? _ageBand;
   bool _saving = false;
+  bool _saveFailed = false;
 
   static const List<_Step> _order = _Step.values;
 
@@ -98,7 +108,11 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Future<void> _finish() async {
-    setState(() => _saving = true);
+    if (_saving) return;
+    setState(() {
+      _saving = true;
+      _saveFailed = false;
+    });
     // `gender`/`painNotes` YAZILMIYOR — onboarding onları artık TOPLAMIYOR
     // (L-281). Şema alanları duruyor ki daha eski bir build'in yazdığı
     // profil hâlâ ayrıştırılabilsin; bu akış onlara asla değer koymaz.
@@ -106,7 +120,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       completed: true,
       ageBand: _ageBand,
     );
-    await widget.store.write(profile);
+    try {
+      await widget.store.write(profile);
+    } on Object {
+      if (mounted) setState(() => _saveFailed = true);
+      return;
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
     if (!mounted) return;
     // Diske YAZILAN nesnenin AYNISI geçiyor — ikinci bir kopya kurulsaydı
     // iki kaynak tek olgu olurdu (L-272) ve sessizce ayrışabilirdi.
@@ -144,6 +165,24 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                   children: <Widget>[_stepContent(t)],
                 ),
               ),
+              if (_saveFailed)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22),
+                  child: Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      key: const Key('onboarding.saveError'),
+                      localeText(
+                        context,
+                        'Your profile could not be saved. Tap Get started to try again.',
+                        'Profil kaydedilemedi. Başla düğmesine dokunarak yeniden dene.',
+                      ),
+                      style: t.textTheme.bodyMedium?.copyWith(
+                        color: t.colorScheme.error,
+                      ),
+                    ),
+                  ),
+                ),
               if (_step == _Step.welcome && widget.onOpenAccount != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22),
@@ -199,6 +238,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     ),
     _Step.camera => _CameraInfoStep(
       onOpenSettings: widget.onOpenSettings ?? openAppSettings,
+      measurementAvailable: widget.measurementAvailable,
     ),
     _Step.profile => _ProfileStep(
       ageBand: _ageBand,
@@ -327,9 +367,13 @@ class _DisclaimerStep extends StatelessWidget {
 /// olmadan bu adımdan (`onboarding.continue`ya dokunarak) geçilebilmesi
 /// için (bkz. `onboarding_flow_test.dart`, düğmeye hiç dokunmuyor).
 class _CameraInfoStep extends StatefulWidget {
-  const _CameraInfoStep({required this.onOpenSettings});
+  const _CameraInfoStep({
+    required this.onOpenSettings,
+    required this.measurementAvailable,
+  });
 
   final Future<bool> Function() onOpenSettings;
+  final bool measurementAvailable;
 
   @override
   State<_CameraInfoStep> createState() => _CameraInfoStepState();
@@ -340,6 +384,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   bool _requesting = false;
 
   Future<void> _requestPermission() async {
+    if (!widget.measurementAvailable || _requesting) return;
     setState(() => _requesting = true);
     final PermissionStatus status = await Permission.camera.request();
     if (!mounted) return;
@@ -389,6 +434,28 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
+    if (!widget.measurementAvailable) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          LissomEyebrow(
+            localeText(context, 'About the camera', 'Kamera hakkında'),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            localeText(
+              context,
+              'Camera measurements are closed in this release. '
+                  'We do not request camera access; the Hatha course works '
+                  'without it.',
+              'Bu sürümde kamera ölçümleri kapalıdır. Kamera izni istemiyoruz; '
+                  'Hatha kursu kamera olmadan çalışır.',
+            ),
+            style: t.textTheme.bodyMedium,
+          ),
+        ],
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

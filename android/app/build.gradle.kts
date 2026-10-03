@@ -54,6 +54,7 @@ android {
         keyPropsFile.inputStream().use { keyProps.load(it) }
     }
     val hasRealSigning = keyProps.getProperty("storeFile") != null
+    val allowDebugSigning = providers.gradleProperty("allowDebugSigning").orNull == "true"
 
     if (hasRealSigning) {
         signingConfigs {
@@ -68,14 +69,6 @@ android {
 
     buildTypes {
         release {
-            val allowDebugSigning = project.hasProperty("allowDebugSigning")
-            // Yalnız GERÇEKTEN bir release görevi istendiğinde patla —
-            // aksi hâlde debug derlemeleri de kırılırdı (kapı, ürünün
-            // kendisini engellememeli).
-            val wantsRelease = gradle.startParameter.taskNames.any {
-                it.contains("Release") || it.contains("bundle")
-            }
-
             when {
                 hasRealSigning ->
                     signingConfig = signingConfigs.getByName("release")
@@ -84,11 +77,27 @@ android {
                     signingConfig = signingConfigs.getByName("debug")
                     logger.warn(
                         "⚠️  Lissom: release DEBUG anahtarlarıyla imzalanıyor " +
-                        "(-PallowDebugSigning). Bu çıktı Play'e YÜKLENEMEZ."
+                        "(-PallowDebugSigning=true). Bu çıktı Play'e YÜKLENEMEZ."
                     )
                 }
 
-                wantsRelease -> throw GradleException(
+                // No signing fallback is applied while debug-only tasks are
+                // configured. Any actual release task is rejected below.
+                else -> signingConfig = null
+            }
+        }
+    }
+
+    if (!hasRealSigning && !allowDebugSigning) {
+        // Requested names can be generic assemble or a wrapper task. Inspect
+        // their resolved dependency graph, before any tasks execute. The app
+        // project scope keeps unrelated plugin tasks out of this decision.
+        gradle.taskGraph.whenReady {
+            val graph = this
+            if (graph.allTasks.any { task ->
+                task.project == project && task.name.contains("Release", ignoreCase = true)
+            }) {
+                throw GradleException(
                     "\n⛔ Lissom: release imzası YOK — bu derleme durduruldu.\n" +
                     "   `android/key.properties` bulunamadı, ve debug " +
                     "anahtarlarıyla imzalanmış bir AAB'yi Play REDDEDER.\n" +
@@ -101,9 +110,6 @@ android {
                     "   Bilerek imzasız bir yerel release istiyorsan: " +
                     "-PallowDebugSigning=true\n"
                 )
-
-                // Release istenmiyor (debug/test yolu) — imza sorusu doğmaz.
-                else -> signingConfig = signingConfigs.getByName("debug")
             }
         }
     }

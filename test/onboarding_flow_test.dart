@@ -28,11 +28,13 @@ final class _FakeStore implements OnboardingStore {
   Future<void> write(OnboardingProfile profile) async => written = profile;
 }
 
-Future<void> _pump(WidgetTester tester, OnboardingStore store, VoidCallback onDone) async {
+Future<void> _pump(WidgetTester tester, OnboardingStore store, VoidCallback onDone,
+    {bool measurementAvailable = false}) async {
   await tester.pumpWidget(MaterialApp(
     theme: buildLissomTheme(),
     home: OnboardingFlow(
       store: store,
+      measurementAvailable: measurementAvailable,
       // `onDone` artık YAZILAN profili taşıyor (yaş bandı zinciri, L-280);
       // bu dosyanın iddiaları profile bakmıyor, o yüzden yutuluyor.
       onDone: (OnboardingProfile _) => onDone(),
@@ -154,7 +156,7 @@ void main() {
       'O3 — gerçek izin metni ("video never leaves this device"), '
       'düğme dokunulmadan Continue AKTİF kalır', (WidgetTester tester) async {
     final _FakeStore store = _FakeStore();
-    await _pump(tester, store, () {});
+    await _pump(tester, store, () {}, measurementAvailable: true);
     await _continue(tester); // O1 → O2
     await tester.tap(find.byKey(const Key('onboarding.disclaimer.ack')));
     await tester.pumpAndSettle();

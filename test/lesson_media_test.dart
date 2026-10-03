@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/hatha_course.dart';
 import 'package:lissom/app/lesson_media.dart';
+import 'package:lissom/app/local_owner.dart';
+import 'package:lissom/app/local_owner_context.dart';
 import 'package:motion_content/motion_content.dart';
 import 'package:video_player/video_player.dart';
 
@@ -32,15 +34,26 @@ final class _FakeController extends VideoPlayerController {
 
   bool retired = false;
   bool failNativeMute = false;
+  bool failNativePlay = false;
+  bool failNativeDispose = false;
+  int initializeCalls = 0;
   int muteCalls = 0;
   int playCalls = 0;
+  int pauseCalls = 0;
+  int disposeCalls = 0;
+  Completer<void>? initializeGate;
+  Completer<void>? initialMuteGate;
+  Completer<void>? verifiedMuteGate;
   Completer<void>? prePlayMuteGate;
   Completer<void>? pauseGate;
   Completer<void>? playGate;
+  Completer<void>? disposeGate;
   VoidCallback? onPlay;
 
   @override
   Future<void> initialize() async {
+    initializeCalls++;
+    await initializeGate?.future;
     value = VideoPlayerValue(
       duration: Duration(milliseconds: 1000),
       size: Size(16, 9),
@@ -52,9 +65,11 @@ final class _FakeController extends VideoPlayerController {
   @override
   Future<void> setVolume(double volume) async {
     muteCalls++;
+    if (muteCalls == 1) await initialMuteGate?.future;
     if (value.isInitialized && failNativeMute) {
       throw StateError('native mute failed');
     }
+    if (muteCalls == 2) await verifiedMuteGate?.future;
     if (muteCalls >= 3) await prePlayMuteGate?.future;
     value = value.copyWith(volume: volume);
   }
@@ -64,18 +79,23 @@ final class _FakeController extends VideoPlayerController {
     playCalls++;
     if (value.volume != 0) throw StateError('unmuted playback');
     onPlay?.call();
+    if (failNativePlay) throw StateError('native play failed');
     await playGate?.future;
     value = value.copyWith(isPlaying: true);
   }
 
   @override
   Future<void> pause() async {
+    pauseCalls++;
     value = value.copyWith(isPlaying: false);
     await pauseGate?.future;
   }
 
   @override
   Future<void> dispose() async {
+    disposeCalls++;
+    await disposeGate?.future;
+    if (failNativeDispose) throw StateError('native disposal failed');
     retired = true;
     await super.dispose();
   }
@@ -697,6 +717,279 @@ void main() {
     identity.dispose();
   });
 
+  for (final pendingStage in <String>[
+    'initial mute', 'initialize', 'verified mute', 'pre-play mute', 'play', 'dispose',
+  ]) {
+    testWidgets('same-owner recovery drains pending $pendingStage before successor', (tester) async {
+      resetLessonMediaNativeProcessForTesting();
+      const userId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+      final identity = ValueNotifier<String?>(userId);
+      final owner = LissomLocalOwner(userId: userId, epoch: 1);
+      final successor = LissomLocalOwner(userId: userId, epoch: 2);
+      final first = _FakeController(videoPath);
+      final second = _FakeController(videoPath);
+      final gate = Completer<void>();
+      switch (pendingStage) {
+        case 'initial mute': first.initialMuteGate = gate;
+        case 'initialize': first.initializeGate = gate;
+        case 'verified mute': first.verifiedMuteGate = gate;
+        case 'pre-play mute': first.prePlayMuteGate = gate;
+        case 'play': first.playGate = gate;
+        case 'dispose': first.disposeGate = gate;
+      }
+      final created = <_FakeController>[];
+      final catalog = LessonMediaCatalog.syntheticForTesting(<LessonMediaCandidate>[candidate()]);
+      final assets = bundle();
+      Widget routes({bool withSuccessor = false}) => MaterialApp(
+        home: Scaffold(
+          body: Column(children: <Widget>[
+            for (final entry in <(LissomLocalOwner, _FakeController)>[
+              (owner, first), if (withSuccessor) (successor, second),
+            ]) LissomOwnerContext(
+              key: ObjectKey(entry.$1),
+              owner: entry.$1,
+              child: LessonMediaSlot.syntheticForTesting(
+                key: ObjectKey(entry.$2),
+                course: course, lessonId: 'h01', sceneId: 'lissom:h01:orientation',
+                variantStem: stem, locale: 'tr', catalog: catalog, bundle: assets,
+                accountUserId: identity,
+                controllerFactory: (_) { created.add(entry.$2); return entry.$2; },
+                videoBuilder: (_) => const Text('synthetic player surface'),
+              ),
+            ),
+          ]),
+        ),
+      );
+      Future<void>? draining;
+      try {
+        await tester.pumpWidget(routes());
+        await tester.pumpAndSettle();
+        VoidCallback? retainedPlay;
+        if (pendingStage == 'pre-play mute' || pendingStage == 'play' || pendingStage == 'dispose') {
+          retainedPlay = tester.widget<TextButton>(
+            find.byKey(const Key('hatha.lesson.media.playPause')),
+          ).onPressed;
+        }
+        if (pendingStage == 'pre-play mute' || pendingStage == 'play') {
+          await tester.tap(find.byKey(const Key('hatha.lesson.media.playPause')));
+          await tester.pump();
+        }
+        final muteCalls = first.muteCalls;
+        final playCalls = first.playCalls;
+        draining = owner.retireAndDrain();
+        expect(owner.isActive, isFalse);
+        expect(identical(draining, owner.retireAndDrain()), isTrue);
+        retainedPlay?.call();
+        expect(first.muteCalls, muteCalls, reason: 'Retirement closes admission before the next frame');
+        expect(first.playCalls, playCalls);
+        expect(identity.value, userId, reason: 'Recovery retirement needs no account-ID notification');
+        var drained = false;
+        unawaited(draining.then((_) => drained = true));
+        await tester.pump();
+        expect(drained, isFalse);
+        expect(first.retired, isFalse);
+        expect(find.text('synthetic player surface'), findsNothing);
+        expect(first.pauseCalls, pendingStage == 'dispose' ? 1 : 0);
+        expect(first.disposeCalls, pendingStage == 'dispose' ? 1 : 0);
+        await tester.pumpWidget(routes(withSuccessor: true));
+        await tester.pumpAndSettle();
+        expect(created, <_FakeController>[first]);
+        expect(second.initializeCalls, 0);
+        gate.complete();
+        await tester.pumpAndSettle();
+        await draining;
+        expect(first.pauseCalls, 1);
+        expect(first.disposeCalls, 1);
+        expect(first.retired, isTrue);
+        expect(first.value.isPlaying, isFalse);
+        expect(created, <_FakeController>[first, second]);
+        expect(second.initializeCalls, 1);
+        retainedPlay?.call();
+        await owner.retireAndDrain();
+        await tester.pump();
+        expect(second.pauseCalls, 0, reason: 'Late retired-owner callbacks cannot mutate the successor');
+        expect(second.disposeCalls, 0);
+      } finally {
+        if (!gate.isCompleted) gate.complete();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        await draining;
+        await successor.retireAndDrain();
+        identity.dispose();
+        resetLessonMediaNativeProcessForTesting();
+      }
+    });
+  }
+
+  for (final closeTrigger in <String>['unmount', 'background']) {
+    testWidgets('pending $closeTrigger resource close remains in owner drain', (tester) async {
+      resetLessonMediaNativeProcessForTesting();
+      final owner = LissomLocalOwner(userId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', epoch: 1);
+      final fake = _FakeController(videoPath)..pauseGate = Completer<void>();
+      final gate = fake.pauseGate!;
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: LissomOwnerContext(
+        owner: owner,
+        child: LessonMediaSlot.syntheticForTesting(
+          course: course, lessonId: 'h01', sceneId: 'lissom:h01:orientation',
+          variantStem: stem, locale: 'tr',
+          catalog: LessonMediaCatalog.syntheticForTesting(<LessonMediaCandidate>[candidate()]),
+          bundle: bundle(), controllerFactory: (_) => fake,
+          videoBuilder: (_) => const Text('synthetic player surface'),
+        ),
+      ))));
+      await tester.pumpAndSettle();
+      if (closeTrigger == 'unmount') {
+        await tester.pumpWidget(const SizedBox.shrink());
+      } else {
+        final observer = tester.state(find.byType(LessonMediaSlot)) as WidgetsBindingObserver;
+        observer.didChangeAppLifecycleState(AppLifecycleState.paused);
+        await tester.pump();
+      }
+      final draining = owner.retireAndDrain();
+      var drained = false;
+      unawaited(draining.then((_) => drained = true));
+      try {
+        await tester.pump();
+        expect(fake.pauseCalls, 1);
+        expect(fake.disposeCalls, 0);
+        expect(drained, isFalse, reason: 'Route close is still registered until its native Future settles');
+        gate.complete();
+        await tester.pumpAndSettle();
+        await draining;
+        expect(fake.pauseCalls, 1);
+        expect(fake.disposeCalls, 1);
+      } finally {
+        if (!gate.isCompleted) gate.complete();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        await draining;
+        resetLessonMediaNativeProcessForTesting();
+      }
+    });
+  }
+
+  testWidgets('background successor re-registers with the same owner', (tester) async {
+    resetLessonMediaNativeProcessForTesting();
+    final owner = LissomLocalOwner(userId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', epoch: 1);
+    final first = _FakeController(videoPath);
+    final second = _FakeController(videoPath);
+    var created = 0;
+    await tester.pumpWidget(MaterialApp(home: Scaffold(body: LissomOwnerContext(
+      owner: owner,
+      child: LessonMediaSlot.syntheticForTesting(
+        course: course, lessonId: 'h01', sceneId: 'lissom:h01:orientation',
+        variantStem: stem, locale: 'tr',
+        catalog: LessonMediaCatalog.syntheticForTesting(<LessonMediaCandidate>[candidate()]),
+        bundle: bundle(), controllerFactory: (_) => created++ == 0 ? first : second,
+        videoBuilder: (_) => const Text('synthetic player surface'),
+      ),
+    ))));
+    await tester.pumpAndSettle();
+    final observer = tester.state(find.byType(LessonMediaSlot)) as WidgetsBindingObserver;
+    observer.didChangeAppLifecycleState(AppLifecycleState.paused);
+    await tester.pumpAndSettle();
+    expect(first.retired, isTrue);
+    observer.didChangeAppLifecycleState(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(created, 2);
+    final draining = owner.retireAndDrain();
+    await tester.pumpAndSettle();
+    await draining;
+    expect(second.pauseCalls, 1);
+    expect(second.disposeCalls, 1, reason: 'Reopened controller belongs to a fresh registered resource');
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    resetLessonMediaNativeProcessForTesting();
+  });
+
+  for (final failureStage in <String>['dispose', 'play']) {
+    testWidgets('failed native $failureStage remains a failing owner barrier and blocks successor', (tester) async {
+      resetLessonMediaNativeProcessForTesting();
+      const userId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+      final owner = LissomLocalOwner(userId: userId, epoch: 1);
+      final successor = LissomLocalOwner(userId: userId, epoch: 2);
+      final gate = Completer<void>();
+      final first = _FakeController(videoPath)
+        ..disposeGate = gate
+        ..failNativeDispose = failureStage == 'dispose'
+        ..failNativePlay = failureStage == 'play';
+      final second = _FakeController(videoPath);
+      var created = 0;
+      Widget route(LissomLocalOwner selected, _FakeController controller) => MaterialApp(
+        home: Scaffold(body: LissomOwnerContext(
+          key: ObjectKey(selected), owner: selected,
+          child: LessonMediaSlot.syntheticForTesting(
+            course: course, lessonId: 'h01', sceneId: 'lissom:h01:orientation',
+            variantStem: stem, locale: 'tr',
+            catalog: LessonMediaCatalog.syntheticForTesting(<LessonMediaCandidate>[candidate()]),
+            bundle: bundle(), controllerFactory: (_) { created++; return controller; },
+            videoBuilder: (_) => const Text('synthetic player surface'),
+          ),
+        )),
+      );
+      await tester.pumpWidget(route(owner, first));
+      await tester.pumpAndSettle();
+      if (failureStage == 'play') {
+        await tester.tap(find.byKey(const Key('hatha.lesson.media.playPause')));
+        await tester.pump();
+        expect(first.playCalls, 1);
+        expect(first.pauseCalls, 1);
+        expect(first.disposeCalls, 1);
+      }
+      final draining = owner.retireAndDrain();
+      var erased = false;
+      final cleanup = draining.then((_) => erased = true);
+      final failed = expectLater(cleanup, throwsA(isA<StateError>().having(
+        (error) => error.message, 'message', contains('closure was not confirmed'),
+      )));
+      try {
+        await tester.pump();
+        expect(first.disposeCalls, 1);
+        expect(first.retired, isFalse);
+        expect(erased, isFalse);
+        gate.complete();
+        await tester.pumpAndSettle();
+        await failed;
+        expect(erased, isFalse, reason: 'Unconfirmed native closure cannot authorize file erasure');
+        expect(identical(draining, owner.retireAndDrain()), isTrue);
+        await expectLater(owner.retireAndDrain(), throwsA(isA<StateError>()));
+        await tester.pumpWidget(route(successor, second));
+        await tester.pumpAndSettle();
+        expect(created, 1);
+        expect(second.initializeCalls, 0);
+        expect(first.disposeCalls, 1);
+      } finally {
+        if (!gate.isCompleted) gate.complete();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        await successor.retireAndDrain();
+        resetLessonMediaNativeProcessForTesting();
+      }
+    });
+  }
+
+  testWidgets('retired inherited owner cannot create a player', (tester) async {
+    resetLessonMediaNativeProcessForTesting();
+    final owner = LissomLocalOwner(userId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', epoch: 1);
+    await owner.retireAndDrain();
+    var created = 0;
+    await tester.pumpWidget(MaterialApp(home: Scaffold(body: LissomOwnerContext(
+      owner: owner,
+      child: LessonMediaSlot.syntheticForTesting(
+        course: course, lessonId: 'h01', sceneId: 'lissom:h01:orientation',
+        variantStem: stem, locale: 'tr',
+        catalog: LessonMediaCatalog.syntheticForTesting(<LessonMediaCandidate>[candidate()]),
+        bundle: bundle(), controllerFactory: (_) { created++; return _FakeController(videoPath); },
+        videoBuilder: (_) => const Text('synthetic player surface'),
+      ),
+    ))));
+    await tester.pumpAndSettle();
+    expect(created, 0);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    resetLessonMediaNativeProcessForTesting();
+  });
+
   testWidgets('failed native mute keeps synthetic player hidden', (
     tester,
   ) async {
@@ -845,6 +1138,100 @@ void main() {
     await tester.pumpAndSettle();
     expect(second.retired, isTrue);
   });
+
+  for (final pendingStage in <String>[
+    'delayed initialize',
+    'pending native mute',
+  ]) {
+    testWidgets('$pendingStage unmount retires once and preserves next owner', (
+      tester,
+    ) async {
+      resetLessonMediaNativeProcessForTesting();
+      final first = _FakeController(videoPath);
+      final second = _FakeController(videoPath);
+      final third = _FakeController(videoPath);
+      final gate = Completer<void>();
+      if (pendingStage == 'delayed initialize') {
+        first.initializeGate = gate;
+      } else {
+        first.verifiedMuteGate = gate;
+      }
+      final created = <_FakeController>[];
+      final catalog = LessonMediaCatalog.syntheticForTesting(
+        <LessonMediaCandidate>[candidate()],
+      );
+      final assets = bundle();
+      Widget routes(List<_FakeController> controllers) => MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: <Widget>[
+              for (final controller in controllers)
+                LessonMediaSlot.syntheticForTesting(
+                  key: ObjectKey(controller),
+                  course: course,
+                  lessonId: 'h01',
+                  sceneId: 'lissom:h01:orientation',
+                  variantStem: stem,
+                  locale: 'tr',
+                  catalog: catalog,
+                  bundle: assets,
+                  controllerFactory: (_) {
+                    created.add(controller);
+                    return controller;
+                  },
+                  videoBuilder: (_) => const SizedBox.shrink(),
+                ),
+            ],
+          ),
+        ),
+      );
+      try {
+        await tester.pumpWidget(routes(<_FakeController>[first]));
+        await tester.pumpAndSettle();
+        expect(created, <_FakeController>[first]);
+        expect(first.initializeCalls, 1);
+        expect(first.muteCalls, pendingStage == 'delayed initialize' ? 1 : 2);
+        await tester.pumpWidget(routes(<_FakeController>[second]));
+        await tester.pumpAndSettle();
+        expect(created, <_FakeController>[first]);
+        expect(first.pauseCalls, 0);
+        expect(first.disposeCalls, 0);
+
+        gate.complete();
+        await tester.pumpAndSettle();
+        expect(first.pauseCalls, 1);
+        expect(first.disposeCalls, 1);
+        expect(first.playCalls, 0);
+        expect(first.value.isPlaying, isFalse);
+        expect(created, <_FakeController>[first, second]);
+
+        // The old route's late continuation cannot release the second route's
+        // native slot. A third mounted widget must wait for its actual owner.
+        await tester.pumpWidget(routes(<_FakeController>[second, third]));
+        await tester.pumpAndSettle();
+        expect(created, <_FakeController>[first, second]);
+        expect(second.pauseCalls, 0);
+        expect(second.disposeCalls, 0);
+        expect(third.initializeCalls, 0);
+
+        await tester.pumpWidget(routes(<_FakeController>[third]));
+        await tester.pumpAndSettle();
+        expect(second.pauseCalls, 1);
+        expect(second.disposeCalls, 1);
+        expect(created, <_FakeController>[first, second, third]);
+        expect(third.initializeCalls, 1);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        expect(third.pauseCalls, 1);
+        expect(third.disposeCalls, 1);
+      } finally {
+        if (!gate.isCompleted) gate.complete();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        resetLessonMediaNativeProcessForTesting();
+      }
+    });
+  }
 
   testWidgets('synchronous account revocation waits for pending play', (
     tester,

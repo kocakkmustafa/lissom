@@ -1,5 +1,39 @@
 # Cihaz günü reçetesi — Lissom (`L-347`, 2026-08-17)
 
+## Güncel ilk sürüm kabul yolu — 2026-10-02
+
+Kaynak `1.0.0+2`, Hatha60 ders/course1.0.1; kamera ölçümü ve abonelik
+satışı kapalı. Motion hesabı isteğe bağlıdır. Bu reçete hazırlanmış
+kontrol yoludur; cihaz, imzalı paket, canlı mail/provider veya mağaza
+kabulü değildir. Kurucu fiziksel ders testi aile planında en son yapılır.
+Önce merkez native/device lease'i ve exact binary SHA/build/OS kaydı gerekir.
+
+| Akış | Beklenen güncel davranış | Saklanacak kanıt |
+|---|---|---|
+| İlk açılış TR/EN | Hatha kapsamı/feragatname; kamera izni istenmez, devam eder | OS izin listesi + ilk açılış/küçük ekran görüntüsü |
+| Konuk kurs yolu | Home/Library→h01; metin/görev/öz denetim, medya yokluğu açık | Aynı lesson/course SHA; görüntü ve boot log |
+| Yerel ilerleme | Hazırlık+öz beyan sonrası kayıt; restartta aynı scope'ta kalır | Önce/sonra record readback; puan/ustalık iddiası yok |
+| Offline/hata | Metin kurs açılır; bozuk/başarısız kayıt bildirimi, tekrar yolu | Hata/retry gözlemi; kayıt bulunmadan kaydedildi sözü yok |
+| İsteğe bağlı hesap | Login/signup/reset/callback doğru Lissom rotasına gelir | Yalnız yetkili test hesabı; gerçek mail receipt+callback |
+| Konuk/A/B ayrımı | Hesap değişiminde diğer scope ilerlemesi görünmez | Scope UUID, önce/sonra görünüm; sırlar kaydedilmez |
+| Çıkış ve silme | Çıkış yerel hesabı silme kabulü sayılmaz; silme receipt ile stale writer kapanır | Canlı provider receipt + yerel directory readback |
+| Sınırlar/TR-EN | h02 doğal nefes dersi vardır; kamera nefes puanı yok | Sınırlar sayfası iki dilde; kıyas/klinik hüküm yok |
+| İzin ve satış kapısı | Kapalı ölçüm native kamera açmaz, paywall satın alma başlatmaz | Ayarlar/route gözlemi; gerçek ödeme yok |
+| Yeniden açma/erişilebilirlik | Onboarding korunur, guest/account kaydı doğru; geri/VoiceOver/font ölçeği çalışır | Crash/boot logs; küçük+büyük ekran ve erişim gözlemi |
+
+Bu yolun kaynak testleri gerçek cihaz koşumunu yerine getirmez. Gerçek
+medya/native ses, yeni Core native owner sözleşmesi, signed privacy/ABI,
+ASC/Play metadata ve reviewer readback ayrı yayın kartlarındadır.
+
+---
+
+## Tarihsel kamera cihaz reçetesi — ertelenmiş kapsam
+
+Aşağıdaki2026-08-17 reçetesi kamera yolunun eski hazırlığını korur. Mevcut
+ilk sürümün kabul yürüyüşü değildir; kamera kapısı ve yeni Core native
+sahiplik kabulü açık olmadan uygulanmaz. Eski profil/ikon/sim gözlemleri
+tarihsel kanıttır; güncel binary/cihaz/portal durumunu göstermez.
+
 **Amaç:** kurucu telefonunu bağladığında beş dakikada yürünecek, üç adımlı
 bir akış. **Kurulum** (adım 2) otomatik/betiklenebilir — **yürüyüş**
 (adım 3) kurucunun elini ister (`H-9`: fiziksel cihazda dokunuş MCP ile
@@ -73,7 +107,7 @@ Cihaz gününde tekrar bakılacak TEK şey: bu ikisinin GERÇEK cihazda (simüla
 değil) doğru göründüğü — renk/boyut kanıtı burada duruyor, görsel doğrulama
 cihaz gününün kendi işi.
 
-## 4 — Yürüyüş tablosu (kurucunun eli) — Lissom'un kendi ekranları
+## 4 — Tarihsel ertelenmiş kamera yürüyüşü
 
 | # | Ekran/eylem | Ne YAPILACAK | "Çalışıyor" NASIL görünür | Sorun işareti |
 |---|---|---|---|---|

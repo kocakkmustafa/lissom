@@ -16,6 +16,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 import 'local_account_bridge.dart';
+import 'local_write_guard.dart';
+import 'local_owner.dart';
 
 /// Onboarding'in KULLANICIYA SUNDUĞU yaş bantları — **tek adres**
 /// (`kImplementedTabs` / `kCountableScreens` deseni).
@@ -115,11 +117,15 @@ abstract interface class OnboardingStore {
 /// KASITLI FARKLI: burada tek bir profil VARDIR ya da YOKTUR, biriken bir
 /// olay dizisi değil, o yüzden üzerine-yazma doğru sözleşme.
 final class JsonOnboardingStore implements OnboardingStore {
-  JsonOnboardingStore(this.file);
+  JsonOnboardingStore(this.file, {LissomLocalOwner? owner})
+    : _writeGuard = LissomLocalWriteGuard(file.parent.path, owner: owner);
   final File file;
+  final LissomLocalWriteGuard _writeGuard;
 
   @override
-  Future<OnboardingProfile> read() async {
+  Future<OnboardingProfile> read() => _writeGuard.read(_read);
+
+  Future<OnboardingProfile> _read() async {
     if (!await file.exists()) return const OnboardingProfile.notStarted();
     final String raw = await file.readAsString();
     if (raw.trim().isEmpty) return const OnboardingProfile.notStarted();
@@ -143,15 +149,25 @@ final class JsonOnboardingStore implements OnboardingStore {
   }
 
   @override
-  Future<void> write(OnboardingProfile profile) async {
-    await file.parent.create(recursive: true);
-    await file.writeAsString(jsonEncode(profile.toJson()));
-  }
+  Future<void> write(OnboardingProfile profile) => _writeGuard.write(() async {
+    final File temporary = File('${file.path}.tmp');
+    await temporary.parent.create(recursive: true);
+    _writeGuard.owner.checkActive();
+    await temporary.writeAsString(jsonEncode(profile.toJson()), flush: true);
+    _writeGuard.owner.checkActive();
+    await temporary.rename(file.path);
+  });
 }
 
 Future<OnboardingStore> openOnboardingStore({
   LissomLocalScope scope = LissomLocalScope.guest,
 }) async {
-  final Directory dir = await getApplicationSupportDirectory();
-  return JsonOnboardingStore(scope.file(dir, LissomLocalFile.onboarding));
+  scope.owner?.checkActive();
+  final Directory dir = scope.owner?.supportDirectory ??
+      await getApplicationSupportDirectory();
+  scope.owner?.checkActive();
+  return JsonOnboardingStore(
+    scope.file(dir, LissomLocalFile.onboarding),
+    owner: scope.owner,
+  );
 }

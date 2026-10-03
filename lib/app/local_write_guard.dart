@@ -1,31 +1,42 @@
 import 'dart:async';
 
+import 'local_owner.dart';
+
 /// Serializes course writes and account deletion within this app process.
 /// A deleted account's pending screens keep an invalid lease and cannot
 /// recreate its directory after the account host has removed local data.
 final class LissomLocalWriteGuard {
-  LissomLocalWriteGuard(this.directoryPath);
+  LissomLocalWriteGuard(this.directoryPath, {LissomLocalOwner? owner})
+    : owner = owner ?? _legacyOwners.putIfAbsent(
+        directoryPath,
+        () => LissomLocalOwner(userId: null, epoch: 0),
+      );
 
   final String directoryPath;
+  final LissomLocalOwner owner;
   static final Map<String, Future<void>> _tails = <String, Future<void>>{};
-  static final Set<String> _retired = <String>{};
+  static final Map<String, LissomLocalOwner> _legacyOwners =
+      <String, LissomLocalOwner>{};
 
-  Future<T> write<T>(Future<T> Function() operation) => _serialize(
-    directoryPath,
-    () async {
-      if (_retired.contains(directoryPath)) {
-        throw StateError('This account was deleted; course writing is closed');
-      }
+  Future<T> read<T>(Future<T> Function() operation) => owner.io.run(operation);
+
+  Future<T> write<T>(Future<T> Function() operation) => owner.io.run(
+    () => _serialize(directoryPath, () {
+      owner.checkActive();
       return operation();
-    },
+    }),
   );
 
   static Future<void> retireAndClear(
     String directoryPath,
     Future<void> Function() clear,
   ) {
-    _retired.add(directoryPath);
-    return _serialize(directoryPath, clear);
+    final LissomLocalOwner owner = LissomLocalWriteGuard(directoryPath).owner;
+    final Future<void> drained = owner.retireAndDrain();
+    return _serialize(directoryPath, () async {
+      await drained;
+      await clear();
+    });
   }
 
   static Future<T> _serialize<T>(

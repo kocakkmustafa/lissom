@@ -32,32 +32,36 @@ def check(src: str) -> list[str]:
     # (L-273'ün dersi: kelimenin varlığı, çağrının çalıştığı değildir).
     code = re.sub(r"//[^\n]*", " ", src)
 
-    # ① Koşulsuz debug imzası: `signingConfig = signingConfigs.getByName("debug")`
-    #    release bloğunda, hiçbir dal/koşul olmadan duruyorsa SESSİZ DÜŞÜŞTÜR.
-    m = re.search(r"release\s*\{(.*?)\n\s{8}\}", code, re.S)
-    if m is None:
-        problems.append(
-            "`release { … }` bloğu bulunamadı — kapı ölçemediği bir şeyi "
-            "geçirmez (yapı değiştiyse kapı da güncellenmeli)"
-        )
-        return problems
-
-    block = m.group(1)
-    has_debug = 'signingConfigs.getByName("debug")' in block
-    has_guard = "GradleException" in block
-    has_optin = "allowDebugSigning" in block
-
-    if has_debug and not has_guard:
-        problems.append(
-            "release bloğu debug anahtarlarıyla imzalıyor ve GÜRÜLTÜLÜ bir "
-            "durdurucu (GradleException) YOK → imzasız bir AAB SESSİZCE "
-            "üretilir ve Play REDDEDER (L-286)"
-        )
-    if has_debug and not has_optin:
-        problems.append(
-            "debug imzasına düşüş açık bir KARAR olmalı "
-            "(`-PallowDebugSigning`), sessiz bir VARSAYILAN değil"
-        )
+    # This is a source regression gate, not a Kotlin/Gradle interpreter.
+    # The exact policy anchors below must be kept together; native Gradle
+    # graph/configuration checks remain separate acceptance evidence.
+    required = {
+        "release build type": r"\brelease\s*\{",
+        "real signing source":
+            r'val\s+hasRealSigning\s*=\s*keyProps\.getProperty\("storeFile"\)\s*!=\s*null',
+        "true-only opt-in":
+            r'val\s+allowDebugSigning\s*=\s*providers\.gradleProperty\("allowDebugSigning"\)\.orNull\s*==\s*"true"',
+        "real signing selection": r'hasRealSigning\s*->\s*signingConfig\s*=\s*signingConfigs\.getByName\("release"\)',
+        "explicit debug selection":
+            r'allowDebugSigning\s*->\s*\{\s*signingConfig\s*=\s*signingConfigs\.getByName\("debug"\)\s*logger\.warn\(',
+        "unsigned fallback": r'else\s*->\s*signingConfig\s*=\s*null',
+        "actual app release graph refusal":
+            r'if\s*\(!hasRealSigning\s*&&\s*!allowDebugSigning\)\s*\{\s*'
+            r'gradle\.taskGraph\.whenReady\s*\{\s*val\s+graph\s*=\s*this\s*'
+            r'if\s*\(graph\.allTasks\.any\s*\{\s*task\s*->\s*'
+            r'task\.project\s*==\s*project\s*&&\s*'
+            r'task\.name\.contains\("Release",\s*ignoreCase\s*=\s*true\)\s*'
+            r'\}\)\s*\{\s*throw\s+GradleException\(',
+    }
+    for name, pattern in required.items():
+        if re.search(pattern, code, re.S) is None:
+            problems.append(f"signing policy anchor missing: {name}")
+    if re.search(r'hasProperty\("allowDebugSigning"\)', code):
+        problems.append("presence-only debug opt-in accepts false/empty values")
+    if "gradle.startParameter.taskNames" in code:
+        problems.append("requested task names miss release dependencies of assemble/wrappers")
+    if re.search(r'else\s*->\s*signingConfig\s*=\s*signingConfigs\.getByName\("debug"\)', code):
+        problems.append("release without explicit opt-in falls back to debug signing")
     return problems
 
 
@@ -100,7 +104,8 @@ def main() -> int:
         for p in problems:
             print(f"   · {p}")
         return 1
-    print("✅ release imzası: sessiz düşüş YOK (gürültülü durdurucu + açık opt-in)")
+    print("✅ release signing source: true-only opt-in + actual app task graph guard")
+    print("   Native Gradle/configuration and signed-binary acceptance remain separate.")
     return 0
 
 

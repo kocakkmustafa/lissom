@@ -12,11 +12,13 @@
 /// (gerçek bir Gradle koşumu gerekir — pahalı, ve CI'da AYRI bir adım
 /// olarak zaten var: `flutter build appbundle --release
 /// -PallowDebugSigning=true`, bkz. `.github/workflows/checks.yml`). Bu
-/// dosya GRADLE'I ÇALIŞTIRMAZ; kaynak metninin kendisinin hâlâ üç kritik
+/// dosya GRADLE'I ÇALIŞTIRMAZ; kaynak metninin kendisinin hâlâ kritik
 /// parçayı taşıdığını doğrular — `shipped_claim_test.dart`nin
 /// `wellness_lint.py` kaynak-doğrulama desenindeki AYNI teknik. Biri
 /// sessizce silinirse (ör. bir refactor sırasında) bu kapı KIRMIZI yanar;
-/// gerçek koruma yalnız CI'ın gerçek `-release` koşumuyla TAM doğrulanır.
+/// Native kabul ayrıca false/boş opt-in ve generic assemble/wrapper görev
+/// grafikleriyle doğrulanmalıdır; CI'ın explicit-true koşumu ret yollarını
+/// tek başına kanıtlamaz.
 library;
 
 import 'dart:io';
@@ -26,36 +28,48 @@ import 'package:flutter_test/flutter_test.dart';
 const String _gradlePath = 'android/app/build.gradle.kts';
 
 void main() {
-  test('debug-imza-düşüşü guard\'ının üç parçası da kaynakta duruyor', () {
+  test('debug signing requires an exact true property value', () {
     final String src = File(_gradlePath).readAsStringSync();
-    final Map<String, String> mustContain = <String, String>{
-      'gerçek keystore kontrolü':
-          'val hasRealSigning = keyProps.getProperty("storeFile") != null',
-      'bilinçli debug-imza kapısı': 'project.hasProperty("allowDebugSigning")',
-      'sessiz düşüşü durduran hata': 'throw GradleException(',
-    };
-    final List<String> missing = <String>[
-      for (final MapEntry<String, String> e in mustContain.entries)
-        if (!src.contains(e.value)) '${e.key}: «${e.value}» bulunamadı',
-    ];
-    expect(missing, isEmpty,
-        reason: 'L-286 GUARD\'I ZAYIFLADI:\n${missing.join("\n")}\n\n'
-            'Bu, release AAB\'nin debug anahtarıyla SESSİZCE üretilip '
-            'Play\'de reddedilmesi riskini geri getirir.');
+    expect(
+      src,
+      contains(
+        'providers.gradleProperty("allowDebugSigning").orNull == "true"',
+      ),
+    );
+    expect(src, isNot(contains('hasProperty("allowDebugSigning")')));
   });
 
-  test('SABOTAJ — desen gerçekten ateşliyor mu', () {
-    const String sabotaged = '''
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-    ''';
-    final bool wouldCatch = !sabotaged.contains(
-        'val hasRealSigning = keyProps.getProperty("storeFile") != null');
-    expect(wouldCatch, isTrue,
-        reason: 'BULUCU BOZUK: guard\'ı tamamen kaldırılmış bir dosyayı '
-            'bile ihlal olarak görmüyor');
+  test('release guard reads actual app tasks and leaves no debug fallback', () {
+    final String src = File(_gradlePath).readAsStringSync();
+    expect(src, contains('gradle.taskGraph.whenReady {'));
+    expect(src, contains('val graph = this'));
+    expect(src, isNot(contains('gradle.taskGraph.whenReady { graph ->')));
+    expect(src, contains('graph.allTasks.any { task ->'));
+    expect(src, contains('task.project == project'));
+    expect(src, contains('task.name.contains("Release", ignoreCase = true)'));
+    expect(src, contains('if (!hasRealSigning && !allowDebugSigning)'));
+    expect(src, contains('else -> signingConfig = null'));
+    expect(src, contains('throw GradleException('));
+    expect(src, isNot(contains('gradle.startParameter.taskNames')));
+    expect(
+      src,
+      isNot(
+        contains('else -> signingConfig = signingConfigs.getByName("debug")'),
+      ),
+    );
+  });
+
+  test('real signing and explicit local debug signing remain distinct', () {
+    final String src = File(_gradlePath).readAsStringSync();
+    expect(
+      src,
+      contains(
+        'val hasRealSigning = keyProps.getProperty("storeFile") != null',
+      ),
+    );
+    expect(src, contains('signingConfigs.getByName("release")'));
+    expect(src, contains('allowDebugSigning -> {'));
+    expect(src, contains('signingConfigs.getByName("debug")'));
+    expect(src, contains('logger.warn('));
   });
 }

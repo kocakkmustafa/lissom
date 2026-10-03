@@ -1122,3 +1122,72 @@ mağaza kabulü hâlâ açık. Commit/push/deploy yapılmadı.
 
 Kanıt: `docs/research/HATHA-COURSE-EVIDENCE-2026-09-26.md` ve kapsam matrisi.
 Önceden var olan iş akışı WIP'i korundu; ortak motion-core değiştirilmedi.
+## 2026-10-02 — yayın haftası kaynak devamı
+
+Thread `01a0f939-e1fa-7c13-bd5b-3aa1b931f610`, host local; app baseline
+`main@7f2e8f27669d83598800b5cab89bbb5a0c0e6b81`, güncel uncommitted WIP.
+READY source lease altında çalışıldı. Mevcut SDK Flutter3.47.5/Dart3.13.4
+offline bootstrap tamamlandı; RW-SDK-004 released, descriptor/lock pinleri
+`f2ea161c` ve dosya hashleri değişmedi. Yeni commit/push/submit/deploy yok.
+
+İlk dalga: onboarding diske yazma/okuma hata yolu TR/EN yeniden denenebilir;
+onboarding/attempt/session yazıcıları hesap silme kuyruğuna katılır, emekli
+hesabın dizinini yeniden yaratamaz; concurrent session append korunur.
+h03/h04 hazırlığı kilitli gelecekteki h05 dersini varsaymaz. Medya kapanışı
+tek controller retirement ve token-sahipli native slot bırakma kullanır.
+
+Gerçek RED kayıtları sonrası recovery13/13, affected74/74 ve media23/23 PASS.
+İlk dalga full app383/383 PASS, analyze no issues; bağımsız storage+media
+R2 blocker yok ve exact SHA mühürleri eşlendi. Bunlar yerel kaynak kanıtıdır.
+
+İkinci dalga camera adapter delayed permission/model/native-start retirement
+ve live capture actual background invalidation kaynak düzeyinde tamamlandı. Root ekranı
+paused/hidden/detached için kapatır, OS permission `inactive` durumunu korur;
+yarım denemenin geç finish/kare kaydı olmaz, completed result korunur.
+Peer pending-save retry yarışını buldu; meaningful RED2 sonrası minimum
+retry guard ile final focused24/24 PASS, bağımsız R2 ACCEPTED. Camera adapter
+pre-start disposal'ın yeni kaynağı stop etmesi iki-source RED ile düzeltildi;
+final19/19 ve bağımsız19/19 PASS. Native issued-start gerçek owner kabulü değildir.
+
+İlk sürüm TR/EN onboarding kamera izni istemiyor; ertelenmiş izin akışı testte
+açık seçiliyor. h02 doğal nefes içeriği sınırlar metnine doğru yansıtıldı;
+listing tarihsel snapshot korunup current course SHA eklendi, cihaz recipe
+ilk sürüm kapsamına bağlandı. İlgili49/49 ve son metadata/test addendum11/11
+PASS. Canlı privacy/support anonim GET HTTP200; gizlilik sayfası hesap ve yerel
+veri kapsamını açıklıyor. Sağlayıcı mağaza alanları yüklenmedi.
+
+Android signing exacttrue debug opt-in ve gerçek app release taskGraph guard
+kullanır. Bağımsız source/API R2 ACCEPTED; Python14/14, Dart3/3 ve RW-GRADLE-001
+izole pluginsiz Groovy host API fixture22/22 PASS. Lease RELEASE edildi.
+Android Kotlin/AGP/configuration-cache ve gerçek imzalı binary kabulü açık.
+
+Son kaynak dalgası full app **408/408 PASS**, engine **114/114 PASS**, analyze
+**no issues**. `evidence/app-final-green-verified.log`, `engine-final-green.log`,
+`analyze-final.log`. İlk final app407+1 ara sonucu eski deferred kamera testinin
+closed-default varsayımı nedeniyleydi; test scope'u düzeltilip full yeniden
+ölçüldü, ara log korundu. Suite sayıları örtüşür, birbirine eklenmez.
+
+Course generator21/21, projection8/8 ve --check60/480/480/HOLD8 PASS;
+course1.0.1 SHA `be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c`
+değişmedi. h08 üç toplam/üç çift TR-EN farkı için bounded generator stage
+hazır: base21+new25=46/46, bağımsız46/46 ve same temp-alias positive1/1
+PASS. Yalnız scratch output; exact overlay/parent/hash/tek h08.TR alanı;
+default live --check be597 aynı. Mac temp path alias fikstürü gerçek yola
+alındı; production symlink/no-follow ret korunur. Canlı ortak cutover yapılmadı;
+h30 sekiz HOLD ve frozen19/no-retry sınırı korunur. Gerçek config
+battery1.13.0 source-capable3/12; release camera/payments gate kapalı.
+
+Kalan: reviewed immutable Core adoption, h08 ortak cutover, native/device
+lease ve gerçek kapanış/ses, signed paket/privacy readback, canlı mail/auth/
+deletion-provider ve mağaza readback; gerçek Flow/model/kurucu fiziksel kabul
+en son. `scratch/2026-10-01-release-week-dispatch/lanes/lissom/` STATUS,
+peer raporları/evidence ve uygulanabilir RELEASE-CARDS kanonik bu-tur kanıtı.
+Vault/holding/shared kayıtların tek yazarı merkez; deltalara mesaj gönderildi.
+
+Flow current60/480 pointer/hash teslim indeksi ownlane'de hazır. Ortak
+v2k delivery validator manifest/file bytes kontrolüne current source-pin/HOLD
+gate'ini bağlamıyor; iki bağımsız salt okunur source readback doğruladı.
+Review trust yoksa kapalı, releaseEligible/visible false/progress0 ve app
+runtime h30 HOLD ret korunur. Bu actual media acceptance/bypass değil; merkez
+ayrı current-only joined guard planı istedi. Frozen shared files değiştirilmez;
+prototip için ortak delivery lease beklenir. Yeni gerçek medya/approval yok.

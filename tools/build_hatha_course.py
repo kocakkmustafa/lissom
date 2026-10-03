@@ -8,7 +8,10 @@ original authored base and the final JSON are pinned by exact byte hashes.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
+import stat
+import uuid
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "config/courses/hatha.v1.json"
@@ -26,6 +29,13 @@ SCOPED_PUBLISHED_LENGTH = 268197
 SCOPED_PUBLISHED_SHA256 = "c4bff9f6ac351cb15f3222bdf51e7768aece3071044f1459df388bb0c4db1fb3"
 CORRECTED_PUBLISHED_LENGTH = 270935
 CORRECTED_PUBLISHED_SHA256 = "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c"
+EDITORIAL_STAGE_OVERLAY_SHA256 = "6a6214d4ccd19f2a5e37aaa83c5d6f1d32c3d7f52b5994373813189161c28f8c"
+EDITORIAL_STAGE_PARENT_OVERLAY_SHA256 = "43acb804f9bf86775706df300a29251af5ca347058e1927acdd3541574d74b83"
+EDITORIAL_STAGE_LENGTH = 270969
+EDITORIAL_STAGE_SHA256 = "746a0a0be7f1791bac84824e79c8c95b54149a2e64185b7137fcf57d5ae7ec07"
+EDITORIAL_STAGE_OLD_TR = "Kolları savurmadan üç dönüş çifti yap."
+EDITORIAL_STAGE_NEW_TR = "Kolları savurmadan, yönleri sırayla değiştirerek toplam üç dönüş yap."
+EDITORIAL_STAGE_DOSE_AUTHORITY = "Existing authored English total of three alternating turns; translation parity only, no new clinical dose."
 SOURCE_IDS_APPEND = ("ya_standards", "ya_scope", "ayush2016")
 STEP_REPLACEMENTS = {"h11": "3", "h12": "0", "h24": "0"}
 
@@ -1382,11 +1392,121 @@ def staged_output(path):
     workspace = ROOT.parents[2]
     scratch = workspace / "scratch"
     destination = path if path.is_absolute() else workspace / path
-    if (destination == scratch or not destination.is_relative_to(scratch)
-            or destination.is_symlink()
-            or not destination.resolve().is_relative_to(scratch.resolve())):
+    if (".." in destination.parts or destination == scratch
+            or not destination.is_relative_to(scratch)
+            or any(part.is_symlink() for part in (destination, *destination.parents))
+            or not destination.resolve().is_relative_to(scratch.resolve())
+            or (destination.exists() and not destination.is_file())):
         raise ValueError("staged Hatha output must be inside workspace scratch")
     return destination
+
+
+def _staged_parent(path, create=False):
+    """Open every directory component without following symlinks."""
+    destination = staged_output(path)
+    scratch = ROOT.parents[2] / "scratch"
+    if not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "O_DIRECTORY"):
+        raise ValueError("safe staged Hatha I/O requires no-follow directory support")
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    directory = os.open(scratch.anchor, flags)
+    # Anchor at the filesystem root so a workspace ancestor swapped after
+    # validation cannot redirect directory creation or staged I/O elsewhere.
+    parts = scratch.parts[1:] + destination.relative_to(scratch).parts[:-1]
+    scratch_index = len(scratch.parts) - 2
+    try:
+        for index, part in enumerate(parts):
+            if create and index >= scratch_index:
+                try:
+                    os.mkdir(part, dir_fd=directory)
+                except FileExistsError:
+                    pass
+            child = os.open(part, flags, dir_fd=directory)
+            os.close(directory)
+            directory = child
+        return directory, destination.name
+    except BaseException:
+        os.close(directory)
+        raise
+
+
+def _read_staged_bytes(path):
+    directory, name = _staged_parent(path)
+    try:
+        descriptor = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                             dir_fd=directory)
+        with os.fdopen(descriptor, "rb") as stream:
+            if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                raise ValueError("staged Hatha input must be a regular file")
+            return stream.read()
+    finally:
+        os.close(directory)
+
+
+def _write_staged_bytes(path, data):
+    """Replace a scratch file atomically; never truncate a linked target."""
+    directory, name = _staged_parent(path, create=True)
+    temporary = ".hatha-stage-" + uuid.uuid4().hex
+    try:
+        descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                             0o644, dir_fd=directory)
+        with os.fdopen(descriptor, "wb") as stream:
+            stream.write(data)
+            stream.flush()
+        os.replace(temporary, name, src_dir_fd=directory, dst_dir_fd=directory)
+    finally:
+        try:
+            try:
+                os.unlink(temporary, dir_fd=directory)
+            except FileNotFoundError:
+                pass
+        finally:
+            os.close(directory)
+
+
+def render_editorial_stage(path):
+    """Render the one pinned h08 translation preview; no publication version."""
+    raw = _read_staged_bytes(path)
+    overlay = json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_object)
+    if (not isinstance(overlay, dict) or set(overlay) != {
+            "schemaVersion", "status", "editorialLayer", "parentCourseSha256",
+            "parentOverlaySha256", "candidateCourseSha256", "publicationVersion",
+            "lessonTextEdits", "doseAuthority", "unchangedEnglish"}
+            or type(overlay["schemaVersion"]) is not int
+            or overlay["schemaVersion"] != 1
+            or overlay["status"] != "LOCAL_EDITORIAL_PREVIEW_NOT_PUBLISHED"
+            or overlay["editorialLayer"] != "v8n-proposal"
+            or overlay["publicationVersion"] != "UNDECIDED_CENTER"):
+        raise ValueError("editorial stage schema/status/publication contract differs")
+    parent = render().encode("utf-8")
+    _check_bytes(parent, CORRECTED_PUBLISHED_LENGTH, CORRECTED_PUBLISHED_SHA256,
+                 "editorial parent")
+    if (overlay["parentCourseSha256"] != CORRECTED_PUBLISHED_SHA256
+            or overlay["parentOverlaySha256"] != EDITORIAL_STAGE_PARENT_OVERLAY_SHA256
+            or hashlib.sha256(CORRECTED_SOURCE_OVERLAY.read_bytes()).hexdigest() !=
+            EDITORIAL_STAGE_PARENT_OVERLAY_SHA256):
+        raise ValueError("editorial stage is not pinned to the frozen v8m parent")
+    expected_edits = {"h08": {"practice": {"tr": {
+        "from": EDITORIAL_STAGE_OLD_TR, "to": EDITORIAL_STAGE_NEW_TR}}}}
+    if overlay["lessonTextEdits"] != expected_edits:
+        raise ValueError("editorial stage may only correct exact h08.practice.tr wording")
+    course = json.loads(parent)
+    h08 = course["modules"][1]["lessons"][1]
+    if (h08["id"] != "h08" or course["version"] != "1.0.1"
+            or not h08["practice"]["tr"].startswith(EDITORIAL_STAGE_OLD_TR)
+            or h08["practice"]["en"] != overlay["unchangedEnglish"]
+            or overlay["doseAuthority"] != EDITORIAL_STAGE_DOSE_AUTHORITY):
+        raise ValueError("editorial stage parent wording/English/dose authority differs")
+    if hashlib.sha256(raw).hexdigest() != EDITORIAL_STAGE_OVERLAY_SHA256:
+        raise ValueError("editorial stage overlay bytes differ from the reviewed proposal")
+    old = EDITORIAL_STAGE_OLD_TR.encode("utf-8")
+    if parent.count(old) != 1:
+        raise ValueError("editorial stage requires one exact Turkish replacement")
+    candidate = parent.replace(old, EDITORIAL_STAGE_NEW_TR.encode("utf-8"), 1)
+    _check_bytes(candidate, EDITORIAL_STAGE_LENGTH, EDITORIAL_STAGE_SHA256,
+                 "editorial candidate")
+    if overlay["candidateCourseSha256"] != EDITORIAL_STAGE_SHA256:
+        raise ValueError("editorial stage candidate digest differs")
+    return candidate.decode("utf-8")
 
 
 def main(argv=None):
@@ -1396,9 +1516,20 @@ def main(argv=None):
     mode.add_argument("--write", action="store_true", help="write the verified published bytes")
     parser.add_argument("--output", type=Path,
                         help="optional staged path under workspace scratch")
+    parser.add_argument("--editorial-overlay", type=Path,
+                        help="exact reviewed h08 preview overlay in scratch; requires --output")
     args = parser.parse_args(argv)
+    if args.editorial_overlay is not None and args.output is None:
+        raise ValueError("editorial staging requires --output inside workspace scratch")
     destination = staged_output(args.output) if args.output else OUTPUT
-    if args.check:
+    if args.editorial_overlay is not None:
+        rendered = render_editorial_stage(args.editorial_overlay).encode("utf-8")
+        if args.check:
+            if _read_staged_bytes(destination) != rendered:
+                raise ValueError("staged Hatha editorial candidate JSON differs")
+        else:
+            _write_staged_bytes(destination, rendered)
+    elif args.check:
         check_output(destination)
     else:
         rendered = render().encode("utf-8")
@@ -1407,8 +1538,10 @@ def main(argv=None):
             raise ValueError(
                 "live Hatha publication requires coordinated cutover; "
                 "use --output inside workspace scratch for staging")
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(rendered)
+        if args.output is not None:
+            _write_staged_bytes(destination, rendered)
+        else:
+            destination.write_bytes(rendered)
 
 
 if __name__ == "__main__":

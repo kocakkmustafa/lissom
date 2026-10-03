@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,19 +7,53 @@ import 'package:lissom/app/local_account_bridge.dart';
 import 'package:lissom/app/onboarding_gate.dart';
 import 'package:lissom/main.dart';
 import 'package:motion_account/motion_account.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final class _GateAccount extends MotionAccountClient {
+  _GateAccount() : super(
+    supabase: SupabaseClient(
+      'https://fixture.invalid',
+      'public-fixture',
+      authOptions: const AuthClientOptions(autoRefreshToken: false),
+    ),
+    app: MotionApp.lissom,
+    emailRedirectTo: kLissomAuthRedirect,
+  );
+
+  @override
+  User? get currentUser => null;
+  @override
+  Stream<AuthState> get authChanges => const Stream<AuthState>.empty();
+}
 
 final class _GateRuntime implements MotionAccountRuntime {
+  @override
+  final _GateAccount account = _GateAccount();
   @override
   final ValueNotifier<MotionIdentityPhase> phase = ValueNotifier(
     MotionIdentityPhase.verifying,
   );
   @override
   final ValueNotifier<String?> userId = ValueNotifier('stored-user');
+  @override
+  final ValueNotifier<bool> passwordRecovery = ValueNotifier(false);
+  @override
+  bool get isPasswordRecovery => passwordRecovery.value;
+  @override
+  Listenable get identityVerification => phase;
+  @override
+  bool get isCurrentSessionVerified => false;
+  @override
+  bool get isDisposed => _disposed;
+  bool _disposed = false;
 
   @override
   void dispose() {
+    _disposed = true;
     phase.dispose();
     userId.dispose();
+    passwordRecovery.dispose();
+    unawaited(account.supabase.dispose());
   }
 
   @override

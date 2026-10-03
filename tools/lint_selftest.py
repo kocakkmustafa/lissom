@@ -32,6 +32,7 @@ MUST_CATCH = {
 MUST_PASS = {
     "olumsuzlama": "Lissom is not a medical device and does not diagnose any condition.",
     "nötr yönerge": "Raise your arm slowly overhead and hold for two seconds.",
+    "vaadin reddi (will not)": "We will not estimate a number we cannot measure.",
 }
 
 
@@ -79,12 +80,12 @@ def _live_sentences() -> dict[str, str]:
             out[f"⑱ beyanı ({name})"] = "".join(
                 re.findall(r"'((?:[^'\\]|\\.)*)'", m.group(1)))
 
-    # ③ Vaadin REDDİ — `will not` bir vaat değil, bu ürünün en dürüst
-    #    cümlelerinden biri.
+    # ③ Canlı ölçüm-sınırı beyanı — kelime biçimi değişse de ürünün
+    #    kamera ile nefes/meditasyon ölçmediğini söyleyen metin korunur.
     ia = json.loads((ROOT / "config/ia/library.v1.json").read_text(encoding="utf-8"))
     for item in ia["whyNotPage"]["items"]:
-        if "will not" in item["reason"]:
-            out["vaadin reddi (will not)"] = item["reason"]
+        if item["topic"] == "Breath or meditation measurement":
+            out["kamera ölçümünün sınırı"] = item["reason"]
             break
     return out
 

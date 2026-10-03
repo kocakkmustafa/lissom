@@ -84,7 +84,7 @@ class _OnboardingGateState extends State<OnboardingGate> {
   @override
   void didUpdateWidget(covariant OnboardingGate oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.localScope.ownerKey != widget.localScope.ownerKey) {
+    if (oldWidget.localScope.lifetimeKey != widget.localScope.lifetimeKey) {
       _completed = false;
       _justCompleted = null;
       _loaded = _load();
@@ -113,7 +113,14 @@ class _OnboardingGateState extends State<OnboardingGate> {
   Widget build(BuildContext context) => FutureBuilder<_Loaded>(
     future: _loaded,
     builder: (BuildContext c, AsyncSnapshot<_Loaded> s) {
-      if (s.hasError) return _GateFailureScreen(error: '${s.error}');
+      if (s.hasError) {
+        return _GateFailureScreen(
+          error: '${s.error}',
+          onRetry: () => setState(() {
+            _loaded = _load();
+          }),
+        );
+      }
       if (!s.hasData) return const _GateLoadingScreen();
 
       if (_completed || s.data!.profile.completed) {
@@ -166,9 +173,10 @@ class _GateLoadingScreen extends StatelessWidget {
 }
 
 class _GateFailureScreen extends StatelessWidget {
-  const _GateFailureScreen({required this.error});
+  const _GateFailureScreen({required this.error, required this.onRetry});
   static const Key key_ = Key('onboarding.gate.loadFailure');
   final String error;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -182,14 +190,25 @@ class _GateFailureScreen extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Text(
-              localeText(
-                context,
-                "Lissom couldn't check your setup: $error",
-                'Lissom kurulumunu denetleyemedi: $error',
-              ),
-              style: t.textTheme.bodyMedium,
-              textAlign: TextAlign.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  localeText(
+                    context,
+                    "Lissom couldn't check your setup: $error",
+                    'Lissom kurulumunu denetleyemedi: $error',
+                  ),
+                  style: t.textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                FilledButton(
+                  key: const Key('onboarding.gate.retry'),
+                  onPressed: onRetry,
+                  child: Text(localeText(context, 'Try again', 'Yeniden dene')),
+                ),
+              ],
             ),
           ),
         ),

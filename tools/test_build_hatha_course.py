@@ -334,5 +334,13 @@ class HathaCourseBuildTest(unittest.TestCase):
                 hatha.staged_output(path)
 
 
+def load_tests(loader, tests, pattern):
+    # Keep the existing CI's exact filename entry point responsible for the
+    # optional staging feature too. Broad discovery loads that file directly.
+    if pattern in (None, "test_build_hatha_course.py"):
+        tests.addTests(loader.loadTestsFromName("test_hatha_editorial_stage"))
+    return tests
+
+
 if __name__ == "__main__":
     unittest.main()

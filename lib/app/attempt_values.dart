@@ -20,6 +20,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 import 'local_account_bridge.dart';
+import 'local_write_guard.dart';
+import 'local_owner.dart';
 
 /// Bir denemenin ölçülen DEĞERİ — `AssessmentResult`in kalıcılaşan yarısı.
 ///
@@ -99,16 +101,21 @@ abstract interface class AttemptValueStore {
 }
 
 final class JsonlAttemptValueStore implements AttemptValueStore {
-  JsonlAttemptValueStore(this._file);
+  JsonlAttemptValueStore(this._file, {LissomLocalOwner? owner})
+    : _writeGuard = LissomLocalWriteGuard(_file.parent.path, owner: owner);
 
   /// Bu yazıcının ürettiği satır şeması. H-21'in dersi: sürümsüz kayıt
   /// sessizce atlanır, sınıfını YAZ — burada sınıf en baştan `v: 1`.
   static const int schemaVersion = 1;
 
   final File _file;
+  final LissomLocalWriteGuard _writeGuard;
 
   @override
-  Future<void> append(AttemptValue value) async {
+  Future<void> append(AttemptValue value) =>
+      _writeGuard.write(() => _append(value));
+
+  Future<void> _append(AttemptValue value) async {
     final String line = jsonEncode(<String, dynamic>{
       'v': schemaVersion,
       ...value.toJson(),
@@ -122,13 +129,19 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
     // Atomik tmp+rename — `JsonlSessionStore`un aynı gerekçesi: yarım kalan
     // bir doğrudan-ekleme bir sonraki okumayı bozar, POSIX rename atomiktir.
     final File tmp = File('${_file.path}.tmp');
+    _writeGuard.owner.checkActive();
     await tmp.parent.create(recursive: true);
+    _writeGuard.owner.checkActive();
     await tmp.writeAsString(next, flush: true);
+    _writeGuard.owner.checkActive();
     await tmp.rename(_file.path);
   }
 
   @override
-  Future<List<AttemptValue>> forLesson(String lessonId) async {
+  Future<List<AttemptValue>> forLesson(String lessonId) =>
+      _writeGuard.read(() => _forLesson(lessonId));
+
+  Future<List<AttemptValue>> _forLesson(String lessonId) async {
     final List<AttemptValue> all = (await _readAll()).values
         .where((AttemptValue v) => v.lessonId == lessonId)
         .toList();
@@ -140,7 +153,8 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
   }
 
   @override
-  Future<int> unreadableRecords() async => (await _readAll()).unreadable;
+  Future<int> unreadableRecords() =>
+      _writeGuard.read(() async => (await _readAll()).unreadable);
 
   Future<({List<AttemptValue> values, int unreadable})> _readAll() async {
     // M-F-251 (Gravita) burada da geçerli: `File.exists()` bir DİZİN için
@@ -193,6 +207,12 @@ final class JsonlAttemptValueStore implements AttemptValueStore {
 Future<AttemptValueStore> openAttemptValueStore({
   LissomLocalScope scope = LissomLocalScope.guest,
 }) async {
-  final Directory dir = await getApplicationSupportDirectory();
-  return JsonlAttemptValueStore(scope.file(dir, LissomLocalFile.attemptValues));
+  scope.owner?.checkActive();
+  final Directory dir = scope.owner?.supportDirectory ??
+      await getApplicationSupportDirectory();
+  scope.owner?.checkActive();
+  return JsonlAttemptValueStore(
+    scope.file(dir, LissomLocalFile.attemptValues),
+    owner: scope.owner,
+  );
 }

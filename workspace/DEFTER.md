@@ -5862,3 +5862,46 @@ all_gates.py` → app **281→282** (+1) · engine **114/114** · python
 
 **Kapılar:** app **282/288** (6 atlanan) · engine **114/114** · python
 **21/22** (M-F-280) · `all_gates.py` **TÜMÜ YEŞİL**.
+## 2026-10-02 — yayın haftası kaynak fişi
+
+Baseline main7f2e8f2 üzerinde WIP korundu; RW-SDK-004 offline bootstrap
+descriptor/lock hashlerini değiştirmedi, lease released. Onboarding disk
+hatası tekrar yolu; onboarding/attempt/session account deletion guard;
+concurrent session append; h03/h04 bağımsız hazırlık; media initialize/mute
+unmount token/disposal düzeltmeleri gerçek RED→GREEN ile kapatıldı.
+Recovery13, affected74, media23; full app383 ve full analyze PASS.
+Bağımsız storage/media R2 exact-source SHA mühürlü ACCEPTED.
+
+Yeni kamera/ekran dalgası: actual background source retire, stale finish
+ve pending-save retry ownership. Ekran focused24/24 ve bağımsız24/24 PASS;
+pre-native adapter disposal'ın yeni owner native stop'una ulaşması root
+R2'de bulundu ve ayrı iki-source RED→GREEN ile düzeltildi. Adapter19/19 ve
+bağımsız19/19 PASS, native issued-start owner kabulü hâlâ açık. Native
+donanım/readback iddiası yok. Kaynak cap readback3/12, kamera satış kapısı
+kapalı; h30 HOLD8/course hash/frozen19 korunur.
+
+İlk sürüm unused kamera izin isteği TR/EN0, h02 içerik sınırı ve current
+listing provenance düzeltildi;49/49 ilgili test PASS. Eski deferred kamera
+testi explicit measurementAvailable:true scope'una bağlandı; focused11/11
+sonrası **full app408/408, engine114/114, analyze no issues**. Ara407+1 hata
+logu korunur. Signing14Python/3Dart bağımsız source/API R2 kabulü ve actual
+Gradle pluginsiz Groovy fixture22/22; RW-GRADLE-001 RELEASE. Gerçek Android
+Kotlin/config-cache/signed package değil. Privacy/support anonim HTTP200
+readback yerel stale URL açıklamasını düzeltti; portal upload yapılmadı.
+
+Güncel fişler: `scratch/2026-10-01-release-week-dispatch/lanes/lissom/`.
+Core immutable adoption ve h08 shared cutover merkezde; local-native,
+imzalı aday, canlı provider/mail/store ve gerçek medya/model/fiziksel kabul
+açık. Commit/push/submit/deploy yok; merkez Vault delta mesajı aldı.
+
+H08 optional scratch generator stage46/46 ve bağımsız46/46; tek h08.TR
+toplam üç dönüş eşliği, diğer59ders/h30/frozenpins aynı. Test temporary
+alias RED1 kanıtı sonrası fikstür gerçek path'e alınarak positive1/1 PASS;
+production no-follow kuralı korunur. Canlı h08 cutover uygulanmadı.
+
+Flow exact60/480/480/HOLD8 index,3884pointer ve24input byte/hash doğrulaması
+hazır;480scene teknik storyboard/format/duration/rights/realmedia kabulü açık.
+Merkezi v2k delivery validator source-pin/HOLD inspector'ını çağırmıyor;
+iki bağımsız statik peer doğruladı. App HOLD ret/closed release flags korunur,
+observedmediaPASS yok. Merkez immutable current-only joined guard dar planı
+istedi; source prototype ayrı delivery lease'ine bağlı, frozen ops değişmez.
