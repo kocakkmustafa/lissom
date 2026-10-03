@@ -139,7 +139,7 @@ void main() {
             'tamamen kaybolur');
   });
 
-  testWidgets('ONBOARDING ile PROGRESS aynı şeyi söylüyor — çelişki YOK',
+  testWidgets('Ertelenmiş kamera onboarding ile PROGRESS çelişmiyor',
       (WidgetTester tester) async {
     pinTallSurface(tester);
 
@@ -150,6 +150,7 @@ void main() {
       home: OnboardingFlow(
         store: _FakeStore(),
         onDone: (OnboardingProfile _) {},
+        measurementAvailable: true,
       ),
     ));
     await tester.pumpAndSettle();

@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'hatha_course.dart';
 import 'local_account_bridge.dart';
 import 'local_write_guard.dart';
+import 'local_owner.dart';
 
 final class HathaPracticeRecord {
   const HathaPracticeRecord({
@@ -80,8 +81,11 @@ abstract interface class HathaProgressStore {
 }
 
 final class JsonlHathaProgressStore implements HathaProgressStore {
-  JsonlHathaProgressStore(this._file, {bool Function()? canWrite})
-    : _writeGuard = LissomLocalWriteGuard(_file.parent.path),
+  JsonlHathaProgressStore(
+    this._file, {
+    bool Function()? canWrite,
+    LissomLocalOwner? owner,
+  }) : _writeGuard = LissomLocalWriteGuard(_file.parent.path, owner: owner),
       _canWrite = canWrite;
 
   final File _file;
@@ -95,7 +99,9 @@ final class JsonlHathaProgressStore implements HathaProgressStore {
   }
 
   @override
-  Future<HathaProgress> read() async {
+  Future<HathaProgress> read() => _writeGuard.read(_read);
+
+  Future<HathaProgress> _read() async {
     final FileSystemEntityType type = await FileSystemEntity.type(
       _file.path,
       followLinks: false,
@@ -161,8 +167,11 @@ final class JsonlHathaProgressStore implements HathaProgressStore {
     final String next = '$prefix${jsonEncode(record.toJson())}\n';
     final File tmp = File('${_file.path}.tmp');
     _assertWritable();
+    _writeGuard.owner.checkActive();
     await tmp.parent.create(recursive: true);
+    _writeGuard.owner.checkActive();
     await tmp.writeAsString(next, flush: true);
+    _writeGuard.owner.checkActive();
     if (_canWrite?.call() == false) {
       await tmp.delete();
       throw StateError('Account changed; reopen the course to record practice');
@@ -175,9 +184,13 @@ Future<HathaProgressStore> openHathaProgressStore({
   LissomLocalScope scope = LissomLocalScope.guest,
   bool Function()? canWrite,
 }) async {
-  final Directory support = await getApplicationSupportDirectory();
+  scope.owner?.checkActive();
+  final Directory support = scope.owner?.supportDirectory ??
+      await getApplicationSupportDirectory();
+  scope.owner?.checkActive();
   return JsonlHathaProgressStore(
     scope.file(support, LissomLocalFile.hathaProgress),
     canWrite: canWrite,
+    owner: scope.owner,
   );
 }

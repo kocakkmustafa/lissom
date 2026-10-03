@@ -42,6 +42,8 @@ import 'package:motion_core/motion_core.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'local_account_bridge.dart';
+import 'local_write_guard.dart';
+import 'local_owner.dart';
 
 /// Lissom'un `lessonClass` SÖZLÜĞÜ — yazım anında damgalanır.
 ///
@@ -160,9 +162,42 @@ Future<int> appendPreserved({
 
 /// Gerçek cihazdaki depo. `path_provider` YALNIZ burada — çekirdek depo saf
 /// Dart kaldığı için testler geçici bir dosyayla aynı sınıfı koşturabiliyor.
+final class _AccountSessionStore implements SessionStore {
+  _AccountSessionStore(File file, {LissomLocalOwner? owner})
+    : this._(file, LissomLocalWriteGuard(file.parent.path, owner: owner));
+
+  _AccountSessionStore._(File file, LissomLocalWriteGuard guard)
+    : _delegate = JsonlSessionStore(file, writeLease: guard.owner.journalWrites),
+      _writeGuard = guard;
+
+  final SessionStore _delegate;
+  final LissomLocalWriteGuard _writeGuard;
+
+  @override
+  Future<void> append(SessionRecord record) =>
+      _writeGuard.write(() => _delegate.append(record));
+
+  @override
+  Future<List<SessionRecord>> recent({int? limit}) =>
+      _delegate.recent(limit: limit);
+
+  @override
+  Future<int> workedSecondsFor(String lessonId) =>
+      _delegate.workedSecondsFor(lessonId);
+
+  @override
+  Future<int> unreadableRecords() => _delegate.unreadableRecords();
+}
+
 Future<SessionStore> openSessionStore({
   LissomLocalScope scope = LissomLocalScope.guest,
 }) async {
-  final Directory dir = await getApplicationSupportDirectory();
-  return JsonlSessionStore(scope.file(dir, LissomLocalFile.sessions));
+  scope.owner?.checkActive();
+  final Directory dir = scope.owner?.supportDirectory ??
+      await getApplicationSupportDirectory();
+  scope.owner?.checkActive();
+  return _AccountSessionStore(
+    scope.file(dir, LissomLocalFile.sessions),
+    owner: scope.owner,
+  );
 }

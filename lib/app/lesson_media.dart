@@ -10,6 +10,8 @@ import 'package:video_player/video_player.dart';
 import 'hatha_course.dart';
 import 'flutter_bundle_content_asset_reader.dart';
 import 'lissom_source_projection_pin.dart';
+import 'local_owner.dart';
+import 'local_owner_context.dart';
 
 const String _courseAssetPath = LissomSourceProjectionPin.coursePath;
 const String _productionIndexSha256 =
@@ -30,22 +32,23 @@ const Duration _nativeRetireDeadline = Duration(seconds: 2);
 bool _nativePlaybackUnconfirmed = false;
 Completer<void>? _nativeSlotOwner;
 
-Future<bool> _takeNativeSlot() async {
+Future<Completer<void>?> _takeNativeSlot() async {
   while (!_nativePlaybackUnconfirmed) {
     final owner = _nativeSlotOwner;
     if (owner == null) {
-      _nativeSlotOwner = Completer<void>();
-      return true;
+      final slot = Completer<void>();
+      _nativeSlotOwner = slot;
+      return slot;
     }
     await owner.future;
   }
-  return false;
+  return null;
 }
 
-void _releaseNativeSlot() {
-  final owner = _nativeSlotOwner;
+void _releaseNativeSlot(Completer<void> owner) {
+  if (!identical(_nativeSlotOwner, owner)) return;
   _nativeSlotOwner = null;
-  owner?.complete();
+  owner.complete();
 }
 
 /// Models a fresh OS process between independent widget-test scenarios.
@@ -584,14 +587,37 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
   bool _closed = false;
   bool _accountRevoked = false;
   bool _backgrounded = false;
+  bool _disposing = false;
+  LissomLocalOwner? _owner;
+  LissomResourceLease? _resource;
   VideoPlayerController? _controller;
+  Completer<void>? _controllerSlot;
+  final Expando<bool> _retirementQueued = Expando<bool>();
   Future<void> _retiring = Future<void>.value();
   Future<void>? _nativeCommand;
   bool _commandPending = false;
 
+  bool get _ownerActive => _owner?.isActive ?? true;
+
+  void _registerOwnerResource() {
+    final owner = _owner;
+    if (_resource == null && owner != null && owner.isActive) {
+      _resource = owner.registerResource(_close);
+    }
+  }
+
+  Future<void> _closeRegistered() {
+    final resource = _resource;
+    _resource = null;
+    return resource?.close() ?? _close();
+  }
+
   @override
   void initState() {
     super.initState();
+    // Capture this State's lifetime once. A same-UUID recovery has a new owner.
+    _owner = LissomOwnerContext.maybeOf(context);
+    _registerOwnerResource();
     WidgetsBinding.instance.addObserver(this);
     widget.accountUserId?.addListener(_onAccount);
     _open();
@@ -604,7 +630,7 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       oldWidget.accountUserId?.removeListener(_onAccount);
       widget.accountUserId?.addListener(_onAccount);
       _accountRevoked = true;
-      _close();
+      unawaited(_closeRegistered());
     }
     if (oldWidget.lessonId != widget.lessonId ||
         oldWidget.course != widget.course ||
@@ -613,8 +639,9 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
         oldWidget.locale != widget.locale ||
         oldWidget.catalog != widget.catalog ||
         oldWidget.bundle != widget.bundle) {
-      _close();
-      if (!_accountRevoked && !_backgrounded && !_nativePlaybackUnconfirmed) {
+      unawaited(_closeRegistered());
+      if (_ownerActive &&
+          !_accountRevoked && !_backgrounded && !_nativePlaybackUnconfirmed) {
         _closed = false;
         _open();
       }
@@ -625,8 +652,9 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _backgrounded = state != AppLifecycleState.resumed;
     if (_backgrounded) {
-      _close();
-    } else if (_closed && !_accountRevoked && !_nativePlaybackUnconfirmed) {
+      unawaited(_closeRegistered());
+    } else if (_ownerActive &&
+        _closed && !_accountRevoked && !_nativePlaybackUnconfirmed) {
       _closed = false;
       _open();
     }
@@ -634,13 +662,15 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
 
   void _onAccount() {
     _accountRevoked = true;
-    _close();
+    unawaited(_closeRegistered());
   }
 
   Future<void> _open() async {
+    _registerOwnerResource();
     final sceneId = widget.sceneId;
     final variantStem = widget.variantStem;
-    if (!widget.syntheticPlayback ||
+    if (!_ownerActive ||
+        !widget.syntheticPlayback ||
         widget.catalog.isEmpty ||
         _closed ||
         _backgrounded ||
@@ -651,8 +681,13 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       return;
     }
     final turn = ++_epoch;
-    await _retiring;
-    if (!mounted ||
+    try {
+      await _retiring;
+    } on Object {
+      return;
+    }
+    if (!_ownerActive ||
+        !mounted ||
         _closed ||
         _backgrounded ||
         _nativePlaybackUnconfirmed ||
@@ -667,22 +702,26 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       variantStem: variantStem,
       locale: widget.locale,
     );
-    if (media == null ||
+    if (!_ownerActive ||
+        media == null ||
         !mounted ||
         _closed ||
         _nativePlaybackUnconfirmed ||
         turn != _epoch) {
       return;
     }
-    if (!await _takeNativeSlot()) return;
-    if (!mounted || _closed || _nativePlaybackUnconfirmed || turn != _epoch) {
-      _releaseNativeSlot();
+    final slot = await _takeNativeSlot();
+    if (slot == null) return;
+    if (!_ownerActive ||
+        !mounted || _closed || _nativePlaybackUnconfirmed || turn != _epoch) {
+      _releaseNativeSlot(slot);
       return;
     }
     VideoPlayerController? controller;
     try {
       controller = widget.controllerFactory(media);
       _controller = controller;
+      _controllerSlot = slot;
       // video_player keeps a pre-initialization volume and reapplies it as
       // soon as native metadata arrives. Start the player muted as well.
       final initialMute = controller.setVolume(0);
@@ -692,10 +731,12 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       } finally {
         if (identical(_nativeCommand, initialMute)) _nativeCommand = null;
       }
-      if (!mounted || _closed || _nativePlaybackUnconfirmed || turn != _epoch) {
+      if (!_ownerActive ||
+          !mounted || _closed || _nativePlaybackUnconfirmed || turn != _epoch) {
         if (_controller == controller) {
           _controller = null;
-          _queueRetire(controller);
+          _controllerSlot = null;
+          _queueRetire(controller, slot);
         }
         return;
       }
@@ -706,7 +747,8 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       } finally {
         if (identical(_nativeCommand, initialize)) _nativeCommand = null;
       }
-      if (!mounted ||
+      if (!_ownerActive ||
+          !mounted ||
           _closed ||
           _nativePlaybackUnconfirmed ||
           turn != _epoch ||
@@ -714,7 +756,8 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
               media.candidate.durationMs) {
         if (_controller == controller) {
           _controller = null;
-          _queueRetire(controller);
+          _controllerSlot = null;
+          _queueRetire(controller, slot);
         }
         return;
       }
@@ -726,14 +769,16 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       } finally {
         if (identical(_nativeCommand, verifiedMute)) _nativeCommand = null;
       }
-      if (!mounted ||
+      if (!_ownerActive ||
+          !mounted ||
           _closed ||
           _nativePlaybackUnconfirmed ||
           turn != _epoch ||
           controller.value.volume != 0) {
         if (_controller == controller) {
           _controller = null;
-          _queueRetire(controller);
+          _controllerSlot = null;
+          _queueRetire(controller, slot);
         }
         return;
       }
@@ -742,19 +787,20 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
     } on Object {
       if (controller != null && _controller == controller) {
         _controller = null;
-        _queueRetire(controller);
+        _controllerSlot = null;
+        _queueRetire(controller, slot);
       } else if (controller == null) {
-        _releaseNativeSlot();
+        _releaseNativeSlot(slot);
       }
     }
   }
 
   void _rebuild() {
-    if (mounted && !_closed) setState(() {});
+    if (mounted && _ownerActive && !_closed) setState(() {});
   }
 
   Future<void> _retire(VideoPlayerController controller) async {
-    var unconfirmed = false;
+    var unconfirmed = _nativePlaybackUnconfirmed;
     final pending = _nativeCommand;
     if (pending != null) {
       try {
@@ -777,51 +823,59 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
     }
     // A timeout does not cancel the native operation. Keep this process closed
     // to another demo session until a fresh process can establish ownership.
-    if (unconfirmed) _nativePlaybackUnconfirmed = true;
+    if (unconfirmed) {
+      _nativePlaybackUnconfirmed = true;
+      throw StateError('Native lesson media closure was not confirmed');
+    }
   }
 
-  void _close() {
+  Future<void> _close() {
     _epoch++;
     _closed = true;
     final old = _controller;
+    final slot = _controllerSlot;
     _controller = null;
+    _controllerSlot = null;
     if (old != null) {
       old.removeListener(_rebuild);
-      _queueRetire(old);
+      _queueRetire(old, slot!);
     }
-    if (mounted) setState(() {});
+    if (mounted && !_disposing) setState(() {});
+    return _retiring;
   }
 
-  void _queueRetire(VideoPlayerController controller) {
+  void _queueRetire(VideoPlayerController controller, Completer<void> slot) {
+    if (_retirementQueued[controller] == true) return;
+    _retirementQueued[controller] = true;
     _retiring = _retiring.then((_) async {
       try {
         await _retire(controller);
       } on Object {
         _nativePlaybackUnconfirmed = true;
+        rethrow;
       } finally {
-        _releaseNativeSlot();
+        _releaseNativeSlot(slot);
       }
     });
-    unawaited(_retiring);
+    // Route disposal observes errors; the owner still receives the failing
+    // original Future and cannot mistake an uncertain native close for success.
+    unawaited(_retiring.then<void>((_) {}, onError: (Object _, StackTrace __) {}));
   }
 
   @override
   void dispose() {
-    _epoch++;
+    _disposing = true;
     widget.accountUserId?.removeListener(_onAccount);
     WidgetsBinding.instance.removeObserver(this);
-    final old = _controller;
-    if (old != null) {
-      old.removeListener(_rebuild);
-      _queueRetire(old);
-    }
+    unawaited(_closeRegistered());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = _controller;
-    if (controller == null ||
+    if (!_ownerActive ||
+        controller == null ||
         !controller.value.isInitialized ||
         _closed ||
         _nativePlaybackUnconfirmed) {
@@ -850,7 +904,8 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
             onPressed: _commandPending
                 ? null
                 : () async {
-                    if (_closed ||
+                    if (!_ownerActive ||
+                        _closed ||
                         _nativePlaybackUnconfirmed ||
                         !identical(_controller, controller)) {
                       return;
@@ -863,7 +918,8 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
                         command = controller.setVolume(0);
                         _nativeCommand = command;
                         await command;
-                        if (_closed ||
+                        if (!_ownerActive ||
+                            _closed ||
                             _nativePlaybackUnconfirmed ||
                             !identical(_controller, controller)) {
                           return;
@@ -881,13 +937,13 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
                       await command;
                     } on Object {
                       _nativePlaybackUnconfirmed = true;
-                      _close();
+                      unawaited(_closeRegistered());
                     } finally {
                       if (identical(_nativeCommand, command)) {
                         _nativeCommand = null;
                       }
                       _commandPending = false;
-                      if (mounted && !_closed) {
+                      if (mounted && _ownerActive && !_closed) {
                         setState(() {});
                       }
                     }

@@ -12,15 +12,14 @@
 /// `events()` stream'i + sealed `PoseSourceEvent`. Bu sınıf Lissom'un
 /// KENDİ arayüzüne yazıldı.
 ///
-/// ## Kapanış kilidi (O-076/C-195) BİLEREK YOK
+/// ## Sahipli kapanış
 ///
-/// Ölçüldü (`docs/C-195-YARIS-OLCUMU-2026-08-12.md`, koordinatör hükmü):
-/// Ostinato'nun asıl tetiklediği yol (iki AYRI ekran, iki AYRI controller
-/// örneği) Lissom'un TEK-EKRAN mimarisinde yapısal olarak yok. Kalan risk
-/// (retry-sırasında-stop, dispose-sırasında-start) TEK State içinde —
-/// [_enqueue] bunu yerel bir sıralamayla çözer, paylaşımlı süreç-geneli
-/// kilit GEREKMEZ (O-076 çekirdek kuyrukta, beş hat ortak, yerel çözüm
-/// ayrışma üretirdi).
+/// İzin/model hazırlığından önce bir Core capture lease yaratılır. Dispose
+/// isteği hazırlık kuyruğunu beklemeden senkron retire eder; admitted native
+/// iş, raw stream iptali ve exact owner ACK/readback Core close bariyerindedir.
+/// Eski/ret edilmiş route başka bir route'un native oturumunu durduramaz.
+/// Uygulamanın varsayılan controller lifetime'ı route'ları aşar; uncertain
+/// kapanış yeni controller yaratarak geçilmez. Gerçek native kabul ayrı kalır.
 ///
 /// ## Kanıt sınıfı DÜRÜST — Ostinato'nun kendi itirafıyla AYNI
 ///
@@ -52,61 +51,95 @@ abstract interface class StartablePoseSource implements PoseSource {
   Future<void> start();
 }
 
-final class CameraPoseSource implements StartablePoseSource {
-  CameraPoseSource({MotionCameraController? controller})
-      : _camera = controller ?? MotionCameraController();
+// Keep Core's controller-local closure quarantine across route-created sources.
+// Tests inject their own controller; production does not recreate this on retry.
+final MotionCameraController _appCameraController = MotionCameraController();
 
-  final MotionCameraController _camera;
+final class CameraPoseSource implements StartablePoseSource {
+  /// Callback injection holds preparation in lifecycle tests. The defaults
+  /// still request OS permission and unpack the pinned model.
+  CameraPoseSource({
+    MotionCameraController? controller,
+    Future<PermissionStatus> Function()? requestPermission,
+    Future<String> Function()? prepareModel,
+  }) : _capture = (controller ?? _appCameraController).createCaptureLease(),
+       _requestPermission = requestPermission ?? Permission.camera.request,
+       _prepareModel = prepareModel ?? materializePoseModel;
+
+  final CameraCaptureLease _capture;
+  final Future<PermissionStatus> Function() _requestPermission;
+  final Future<String> Function() _prepareModel;
   final StreamController<PoseSourceEvent> _events =
       StreamController<PoseSourceEvent>.broadcast();
   StreamSubscription<CameraFrameEnvelope>? _frameSub;
+  bool _retired = false;
+  Future<void>? _disposeFuture;
 
-  /// Sıradaki işlem — `start()`/`dispose()` birbirini BEKLER, çakışmaz
-  /// (bkz. sınıf dokümanı, C-195 ölçümü).
+  /// Serialize preparation attempts. Disposal never queues behind permission
+  /// or materialization; Core owns the admitted native start/close barrier.
   Future<void> _chain = Future<void>.value();
 
   Future<void> _enqueue(Future<void> Function() op) {
-    final Future<void> next =
-        _chain.catchError((Object _, StackTrace __) {}).then((_) => op());
+    final Future<void> next = _chain
+        .catchError((Object _, StackTrace __) {})
+        .then((_) => op());
     _chain = next;
     return next;
   }
 
   @override
-  Stream<PoseSourceEvent> events() => _events.stream;
+  Stream<PoseSourceEvent> events() => _events.stream.where((_) => !_retired);
 
   @override
-  Future<void> start() => _enqueue(_start);
+  Future<void> start() => _retired || _capture.isRetired
+      ? Future<void>.value()
+      : _enqueue(_start);
+
+  void _emit(PoseSourceEvent event) {
+    if (!_retired && !_events.isClosed) _events.add(event);
+  }
 
   Future<void> _start() async {
-    _events.add(const SourceStateEvent(LiveIdle()));
-    final PermissionStatus perm = await Permission.camera.request();
-    if (!perm.isGranted) {
-      _events.add(SourceStateEvent(permissionState(perm)));
-      return;
-    }
+    if (_retired || _capture.isRetired || _capture.sessionInfo != null) return;
+    _emit(const SourceStateEvent(LiveIdle()));
     try {
-      final String modelPath = await materializePoseModel();
-      final CameraSessionInfo info = await _camera.start(
+      if (_retired) return;
+      final PermissionStatus perm = await _requestPermission();
+      if (_retired) return;
+      if (!perm.isGranted) {
+        _emit(SourceStateEvent(permissionState(perm)));
+        return;
+      }
+      final String modelPath = await _prepareModel();
+      if (_retired) return;
+      final CameraSessionInfo info = await _capture.start(
         modelPath: modelPath,
         modelId: kPoseModelId,
       );
+      if (_retired) return;
       final FrameSize size = FrameSize(info.width, info.height);
-      _frameSub = _camera.frames().listen(
+      _frameSub = _capture.frames().listen(
         (CameraFrameEnvelope e) => _onEnvelope(e, size),
-        onError: (Object err) =>
-            _events.add(SourceStateEvent(failureState(err))),
+        onError: (Object err) => _emit(SourceStateEvent(failureState(err))),
       );
     } on CameraException catch (e) {
-      _events.add(SourceStateEvent(failureState(e)));
+      _emit(SourceStateEvent(failureState(e)));
     } on Object catch (e) {
-      _events.add(SourceStateEvent(
-          SetupFailed(code: 'unexpected', userText: 'Something unexpected '
-              'happened while starting the camera ($e). Try again.')));
+      _emit(
+        SourceStateEvent(
+          SetupFailed(
+            code: 'unexpected',
+            userText:
+                'Something unexpected '
+                'happened while starting the camera ($e). Try again.',
+          ),
+        ),
+      );
     }
   }
 
   void _onEnvelope(CameraFrameEnvelope e, FrameSize size) {
+    if (_retired) return;
     // `PassPlan.uprightOnly` (varsayılan) HER zaman bu geçişi çalıştırır;
     // olmaması planlama hatası olurdu — `CameraFrameEnvelope.pass` kendi
     // `StateError`ünü fırlatır, kare-başına sessizce yutulmaz.
@@ -114,27 +147,33 @@ final class CameraPoseSource implements StartablePoseSource {
     final PoseFrame? frame = e.pass(BodyOrientation.upright);
     if (frame == null) {
       // MediaPipe kimseyi görmedi — uydurma bir okuma YOK.
-      _events.add(const SourceStateEvent(NoPersonDetected()));
+      _emit(const SourceStateEvent(NoPersonDetected()));
       return;
     }
-    _events.add(SourceFrameEvent(frame, size: size));
+    _emit(SourceFrameEvent(frame, size: size));
   }
 
   @override
-  Future<void> dispose() async {
-    await _enqueue(_stop);
-    await _events.close();
-  }
-
-  Future<void> _stop() async {
-    await _frameSub?.cancel();
+  Future<void> dispose() {
+    _retired = true;
+    _capture.retire();
+    final existing = _disposeFuture;
+    if (existing != null) return existing;
+    final nativeClosed = _capture.close();
+    final frameSub = _frameSub;
     _frameSub = null;
-    try {
-      await _camera.stop();
-    } on Object {
-      // Durdurmada arıza kullanıcıyı ilgilendirmez: oturum zaten bitiyor
-      // (Ostinato deseni, camera_pose_source.dart `stop()`).
-    }
+    // A paused app listener may delay its local done event. It owns no native
+    // resource and must not delay the host's close/drain barrier.
+    unawaited(_events.close());
+    final closing = Future.wait<void>(<Future<void>>[
+      nativeClosed,
+      if (frameSub != null) frameSub.cancel(),
+    ]).then<void>((_) {});
+    _disposeFuture = closing;
+    // Preserve the failing Future for callers while observing fire-and-forget
+    // route teardown. Uncertain closure must never be reported as success.
+    unawaited(closing.then<void>((_) {}, onError: (Object _, StackTrace __) {}));
+    return closing;
   }
 }
 
