@@ -80,6 +80,7 @@ const String _assessmentIntroHonest =
     'Twelve movement assessments are listed; three have a camera measurement path in this build. Each test shows its current limits.';
 
 const Map<String, String> _turkishConfigCopy = <String, String>{
+  'Written Hatha, chair/office, supported standing Vinyasa and adapted supported Yin beginner paths are included. Demonstration and physical acceptance remain separate; the beginner Ashtanga course remains pending. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa ve uyarlanmış destekli Yin başlangıç yolları içerilir. Gösterim ve fiziksel kabul ayrı; başlangıç Ashtanga kursu bekliyor. Yoga duruşları kamerayla puanlanmaz.',
   "Today's plan": 'Bugünün planı',
   'Measuring again': 'Yeniden ölçüm',
   'Continue': 'Devam et',
@@ -195,6 +196,8 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   _assessmentIntro:
       'On iki hareket değerlendirmesi listelenir; bu sürümde üçünün kamera ölçüm yolu vardır. Her test mevcut sınırlarını açıklar.',
   'Yoga Styles': 'Yoga türleri',
+  'Written Hatha and chair/office beginner paths are available. Demonstration and physical acceptance remain separate; Vinyasa, Yin and beginner Ashtanga courses remain pending. Yoga postures are not camera-scored.':
+      'Yazılı Hatha ve sandalye/ofis başlangıç yolları mevcut. Gösterim ve fiziksel kabul ayrıdır; Vinyasa, Yin ve başlangıç Ashtanga kursları bekliyor. Yoga pozları kamerayla puanlanmaz.',
   'A complete guided Hatha course is available. Other named styles have no classes in this build; yoga postures are not camera-scored.':
       'Tam bir rehberli Hatha kursu mevcut. Adı geçen diğer stillerin bu sürümde dersi yok; yoga pozları kamerayla puanlanmaz.',
   'No Hatha posture is graded or certified by the camera in this course':

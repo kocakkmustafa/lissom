@@ -75,6 +75,9 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
             store: store,
             isRepeat: _practiced.contains(lesson.id),
             preparation: _preparation,
+            previewOnly:
+                (widget.course.id == 'lissom.chair-office.beginner' || widget.course.id == 'lissom.vinyasa.supported-standing.beginner' || widget.course.id == 'lissom.yin.supported.beginner') &&
+                !lesson.prerequisites.every(_practiced.contains),
           ),
         ),
       );
@@ -132,8 +135,8 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                   Text(
                     localeText(
                       context,
-                      '${practiced.length} of ${lessons.length} lessons practised',
-                      '${lessons.length} dersten ${practiced.length} tanesi çalışıldı',
+                      widget.course.id == 'lissom.yin.supported.beginner' ? '${practiced.length} participation records across ${lessons.length} units; physical skill is not established.' : '${practiced.length} of ${lessons.length} lessons practised',
+                      widget.course.id == 'lissom.yin.supported.beginner' ? '${lessons.length} birimde ${practiced.length} katılım kaydı; fiziksel beceri gösterilmez.' : '${lessons.length} dersten ${practiced.length} tanesi çalışıldı',
                     ),
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -181,8 +184,12 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
               Text(
                 localeText(
                   context,
-                  'You reached the end. Return to any lesson for another practice.',
-                  'Kursun sonuna geldin. Tekrar çalışmak için istediğin derse dön.',
+                  (widget.course.id == 'lissom.chair-office.beginner' || widget.course.id == 'lissom.vinyasa.supported-standing.beginner' || widget.course.id == 'lissom.yin.supported.beginner')
+                      ? 'Your lesson records reach the end. Review the independent route and later recall; records do not establish mastery.'
+                      : 'You reached the end. Return to any lesson for another practice.',
+                  (widget.course.id == 'lissom.chair-office.beginner' || widget.course.id == 'lissom.vinyasa.supported-standing.beginner' || widget.course.id == 'lissom.yin.supported.beginner')
+                      ? 'Ders kayıtların sona ulaştı. Bağımsız yolu ve sonraki hatırlamayı değerlendir; kayıtlar ustalık göstermez.'
+                      : 'Kursun sonuna geldin. Tekrar çalışmak için istediğin derse dön.',
                 ),
                 style: theme.textTheme.bodyMedium,
               ),
@@ -201,6 +208,8 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                 module: module,
                 practiced: practiced,
                 onOpen: _open,
+                allowPreview:
+                    (widget.course.id == 'lissom.chair-office.beginner' || widget.course.id == 'lissom.vinyasa.supported-standing.beginner' || widget.course.id == 'lissom.yin.supported.beginner'),
               ),
               const SizedBox(height: 18),
             ],
@@ -216,11 +225,13 @@ class _ModuleSection extends StatelessWidget {
     required this.module,
     required this.practiced,
     required this.onOpen,
+    this.allowPreview = false,
   });
 
   final HathaModule module;
   final Set<String> practiced;
   final void Function(HathaLesson) onOpen;
+  final bool allowPreview;
 
   @override
   Widget build(BuildContext context) {
@@ -276,11 +287,17 @@ class _ModuleSection extends StatelessWidget {
                         )
                       : localeText(
                           context,
-                          'Practice the earlier lesson first',
-                          'Önce önceki dersi çalış',
+                          allowPreview
+                              ? 'Preview only · practise the earlier lesson first'
+                              : 'Practice the earlier lesson first',
+                          allowPreview
+                              ? 'Yalnız inceleme · önce önceki dersi çalış'
+                              : 'Önce önceki dersi çalış',
                         ),
                 ),
-                onTap: lesson.prerequisites.every(practiced.contains)
+                onTap:
+                    allowPreview ||
+                        lesson.prerequisites.every(practiced.contains)
                     ? () => onOpen(lesson)
                     : null,
               ),
@@ -298,6 +315,7 @@ class HathaLessonScreen extends StatefulWidget {
     required this.store,
     required this.isRepeat,
     this.preparation,
+    this.previewOnly = false,
     super.key,
   });
 
@@ -309,6 +327,7 @@ class HathaLessonScreen extends StatefulWidget {
   final HathaProgressStore store;
   final bool isRepeat;
   final HathaSessionPreparation? preparation;
+  final bool previewOnly;
 
   @override
   State<HathaLessonScreen> createState() => _HathaLessonScreenState();
@@ -319,7 +338,10 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
   bool _saving = false;
   bool _saveFailed = false;
   bool _reflected = false;
-  bool _readOnly = false;
+  int _answerEpoch = 0;
+  late bool _readOnly = widget.previewOnly;
+
+  bool get _chairOffice => (widget.course.id == 'lissom.chair-office.beginner' || widget.course.id == 'lissom.vinyasa.supported-standing.beginner' || widget.course.id == 'lissom.yin.supported.beginner');
   late final HathaSessionPreparation _preparation;
   Timer? _dateBoundary;
 
@@ -348,8 +370,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
     _preparation.reset();
     if (mounted) {
       setState(() {
-        _readOnly = false;
+        _readOnly = widget.previewOnly;
         _reflected = false;
+        _answerEpoch++;
       });
     }
   }
@@ -365,8 +388,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
           _scheduleDateBoundary();
         } else {
           setState(() {
-            _readOnly = false;
+            _readOnly = widget.previewOnly;
             _reflected = false;
+            _answerEpoch++;
           });
         }
       },
@@ -374,7 +398,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
   }
 
   Future<void> _save() async {
-    if (_readOnly || (_requiresPreparation && !_preparation.acknowledged)) {
+    if (widget.previewOnly ||
+        _readOnly ||
+        (_requiresPreparation && !_preparation.acknowledged)) {
       return;
     }
     setState(() {
@@ -426,9 +452,13 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
             const SizedBox(height: 18),
             if (needsPreparation)
               HathaSessionPreparationCard(
+                chairOnly: widget.course.id == 'lissom.chair-office.beginner',
+                vinyasaOnly: widget.course.id == 'lissom.vinyasa.supported-standing.beginner',
+                yinOnly: widget.course.id == 'lissom.yin.supported.beginner',
                 onPrepared: () => setState(() {
                   _preparation.acknowledge();
                   _reflected = false;
+                  _answerEpoch++;
                   _scheduleDateBoundary();
                 }),
                 onReadOnly: () => setState(() => _readOnly = true),
@@ -440,16 +470,20 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   child: Text(
                     localeText(
                       context,
-                      lesson.id == 'h59'
+                      _chairOffice
+                          ? 'Preview: goal, understanding questions and sources. Physical steps and practice recording stay closed; practise prerequisites and prepare before movement.'
+                          : lesson.id == 'h59'
                           ? 'Written planning is open. Transition rehearsal stays closed until you prepare; this view cannot record practice.'
                           : 'Goal, knowledge diagrams and sources only. Physical steps stay closed until you prepare; this view cannot record practice.',
-                      lesson.id == 'h59'
+                      _chairOffice
+                          ? 'İnceleme: hedef, anlama soruları ve kaynaklar. Fiziksel adımlar ve çalışma kaydı kapalıdır; hareketten önce ön dersleri çalış ve hazırlan.'
+                          : lesson.id == 'h59'
                           ? 'Yazılı planlama açık. Hazırlanana kadar geçiş provası kapalıdır; bu görünüm çalışma kaydedemez.'
                           : 'Yalnız hedef, bilgi şemaları ve kaynaklar. Hazırlanana kadar fiziksel adımlar kapalıdır; bu görünüm çalışma kaydedemez.',
                     ),
                   ),
                 ),
-              if (_readOnly)
+              if (_readOnly && !widget.previewOnly)
                 TextButton(
                   key: const Key('hatha.session.prepareToPractice'),
                   onPressed: () => setState(() => _readOnly = false),
@@ -467,6 +501,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   onPressed: () => setState(() {
                     _preparation.reset();
                     _reflected = false;
+                    _answerEpoch++;
                     _dateBoundary?.cancel();
                   }),
                   child: Text(
@@ -490,12 +525,23 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                       ),
                   ],
                 ),
-              if (!_readOnly)
+              if (!_readOnly && !_chairOffice)
                 LessonMediaSlot.empty(
                   key: const Key('hatha.lesson.media'),
                   course: widget.course,
                   lessonId: lesson.id,
                   locale: Localizations.localeOf(context).languageCode,
+                ),
+              if (!_readOnly && _chairOffice)
+                LissomCard(
+                  key: const Key('chairOffice.lesson.mediaGap'),
+                  child: Text(
+                    localeText(
+                      context,
+                      'Written guidance only. Instructor demonstration and physical teaching acceptance are still pending.',
+                      'Yalnız yazılı rehber. Eğitmen gösterimi ve fiziksel öğretim kabulü bekliyor.',
+                    ),
+                  ),
                 ),
               if (_readOnly && lesson.id == 'h59')
                 _LessonBlock(
@@ -522,7 +568,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   title: localeText(context, 'Practice', 'Çalış'),
                   children: <Widget>[Text(hathaText(context, lesson.practice))],
                 ),
-              if (!_readOnly)
+              if (!_readOnly || _chairOffice)
                 _LessonBlock(
                   title: localeText(
                     context,
@@ -532,6 +578,27 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   children: <Widget>[
                     Text(hathaText(context, lesson.selfCheck)),
                   ],
+                ),
+              if (lesson.answerKey case final HathaText answer)
+                KeyedSubtree(
+                  key: ValueKey<int>(_answerEpoch),
+                  child: ExpansionTile(
+                    key: Key('course.answer.${lesson.id}'),
+                    initiallyExpanded: false,
+                    title: Text(
+                      localeText(
+                        context,
+                        'Reveal after writing your answer',
+                        'Yanıtını yazdıktan sonra aç',
+                      ),
+                    ),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(hathaText(context, answer)),
+                      ),
+                    ],
+                  ),
                 ),
               if (!_readOnly)
                 _LessonBlock(
@@ -621,8 +688,8 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   title: Text(
                     localeText(
                       context,
-                      'I answered the self-check and want to record my practice.',
-                      'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
+                      widget.course.id == 'lissom.yin.supported.beginner' ? 'I answered the self-check and want to record participation; this is not observed physical skill.' : 'I answered the self-check and want to record my practice.',
+                      widget.course.id == 'lissom.yin.supported.beginner' ? 'Öz denetimi yanıtladım ve katılımı kaydetmek istiyorum; bu gözlenmiş fiziksel beceri değildir.' : 'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
                     ),
                   ),
                 ),
@@ -635,13 +702,17 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                     widget.isRepeat
                         ? localeText(
                             context,
-                            'Record another practice',
-                            'Bir çalışma daha kaydet',
+                            widget.course.id == 'lissom.yin.supported.beginner' ? 'Record another participation' : 'Record another practice',
+                            widget.course.id == 'lissom.yin.supported.beginner' ? 'Bir katılım daha kaydet' : 'Bir çalışma daha kaydet',
                           )
                         : localeText(
                             context,
-                            'I practised this lesson',
-                            'Bu dersi çalıştım',
+                            lesson.id == 'c11' ? 'Record my written planning' : (lesson.id == 'v01' || lesson.id == 'v07' || lesson.id == 'y01')
+                                ? 'Record my written study'
+                                : widget.course.id == 'lissom.yin.supported.beginner' ? 'Record my participation' : 'I practised this lesson',
+                            lesson.id == 'c11' ? 'Yazılı planlamamı kaydet' : (lesson.id == 'v01' || lesson.id == 'v07' || lesson.id == 'y01')
+                                ? 'Yazılı çalışmamı kaydet'
+                                : widget.course.id == 'lissom.yin.supported.beginner' ? 'Katılımımı kaydet' : 'Bu dersi çalıştım',
                           ),
                   ),
                 ),

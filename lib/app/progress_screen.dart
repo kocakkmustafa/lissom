@@ -262,6 +262,22 @@ class ProgressScreen extends StatelessWidget {
             const SizedBox(height: 18),
           ],
 
+          if (facts.yin != null && facts.hathaProgress != null) ...<Widget>[
+            _HathaProgressCard(course: facts.yin!, progress: facts.hathaProgress!),
+            const SizedBox(height: 18),
+          ],
+          if (facts.vinyasa != null && facts.hathaProgress != null) ...<Widget>[
+            _HathaProgressCard(course: facts.vinyasa!, progress: facts.hathaProgress!),
+            const SizedBox(height: 18),
+          ],
+          if (facts.chairOffice != null && facts.hathaProgress != null) ...<Widget>[
+            _HathaProgressCard(
+              course: facts.chairOffice!,
+              progress: facts.hathaProgress!,
+            ),
+            const SizedBox(height: 18),
+          ],
+
           if (!h.countsAreTrustworthy)
             NamedGapCard(
               key: unavailableKey,
@@ -489,7 +505,13 @@ class _HathaProgressCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            localeText(context, 'Hatha practice', 'Hatha çalışması'),
+            localeText(
+              context,
+              course.id == 'lissom.chair-office.beginner'
+                  ? 'Chair / office practice' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa participation' : course.id == 'lissom.yin.supported.beginner' ? 'Yin participation' : 'Hatha practice',
+              course.id == 'lissom.chair-office.beginner'
+                  ? 'Sandalye / ofis çalışması' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa katılımı' : course.id == 'lissom.yin.supported.beginner' ? 'Yin katılımı' : 'Hatha çalışması',
+            ),
             style: theme.textTheme.titleLarge,
           ),
           const SizedBox(height: 6),

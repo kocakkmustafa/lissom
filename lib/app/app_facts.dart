@@ -17,6 +17,9 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_content/motion_content.dart';
 
 import 'assessment_history.dart';
+import 'chair_office_course.dart';
+import 'vinyasa_course.dart';
+import 'yin_course.dart';
 import 'flutter_bundle_content_asset_reader.dart';
 import 'hatha_course.dart';
 import 'hatha_progress.dart';
@@ -31,6 +34,9 @@ final class AppFacts {
     required this.liveness,
     required this.history,
     this.hatha,
+    this.chairOffice,
+    this.vinyasa,
+    this.yin,
     this.hathaProgress,
   });
 
@@ -43,6 +49,9 @@ final class AppFacts {
   /// Geçmiş katmanının üç hâlli okuması.
   final SessionHistoryView history;
   final HathaCourse? hatha;
+  final HathaCourse? chairOffice;
+  final HathaCourse? vinyasa;
+  final HathaCourse? yin;
   final HathaProgress? hathaProgress;
 
   List<TestLiveness> get live =>
@@ -159,6 +168,9 @@ final class AppFacts {
     final String iaRaw = await assets.loadString('config/ia/library.v1.json');
     final Battery battery = Battery.parseJson(batteryRaw);
     final HathaCourse hatha = await loadVerifiedHathaCourse(assets);
+    final HathaCourse chairOffice = await loadVerifiedChairOfficeCourse(assets);
+    final HathaCourse vinyasa = await loadVerifiedVinyasaCourse(assets);
+    final HathaCourse yin = await loadVerifiedYinCourse(assets);
     final HathaProgress hathaProgress = await (await openHathaProgressStore(
       scope: scope,
     )).read();
@@ -170,6 +182,9 @@ final class AppFacts {
         () => openSessionStore(scope: scope),
       ),
       hatha: hatha,
+      chairOffice: chairOffice,
+      vinyasa: vinyasa,
+      yin: yin,
       hathaProgress: hathaProgress,
     );
   }

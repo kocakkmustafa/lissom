@@ -1,0 +1,860 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.chair-office.beginner",
+  "version": "1.0.0",
+  "title": {
+    "en": "Chair / office: a seated beginner path",
+    "tr": "Sandalye / ofis: oturarak başlangıç yolu"
+  },
+  "intro": {
+    "en": "An original written beginner path from chair setup and attention to selected seated actions, an independent route and later recall. For adults able to sit and make small movements without physical assistance; uncertain transfer or health limits need individual guidance. Chair/office is an adapted setting, not a historical yoga lineage. Lesson records describe your actual participation, not mastery, clinical suitability or physical teaching validation. Every action is optional; no lesson count establishes completion. No treatment, pain-relief, weight-loss or other health result is promised. Demonstration and qualified physical acceptance remain open.",
+    "tr": "Sandalye kurulumu/dikkatten seçilen oturarak eylem, bağımsız yol ve sonraki hatırlamaya ilerleyen özgün yazılı başlangıç yolu. Fiziksel yardım olmadan oturabilen/küçük hareket yapabilen yetişkinler için; belirsiz geçiş veya sağlık sınırları bireysel rehberlik gerektirir. Sandalye/ofis uyarlanmış ortamdır, tarihsel yoga ekolü değildir. Ders kayıtları gerçek katılımı anlatır; ustalık, klinik uygunluk veya fiziksel öğretim doğrulaması değildir. Her eylem seçmelidir; ders sayısı tamamlama göstermez. Tedavi, ağrı giderme, kilo verme veya sağlık sonucu vaat edilmez. Gösterim ve nitelikli fiziksel kabul açıktır."
+  },
+  "sources": {
+    "nhs_seated": "https://www.nhs.uk/live-well/exercise/sitting-exercises/",
+    "nbt_seated": "https://www.nbt.nhs.uk/our-services/a-z-services/physiotherapy/physiotherapy-patient-information/seated-exercises-hospital-at-home",
+    "nccih": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety",
+    "va_yoga": "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/yoga.asp"
+  },
+  "sourceScopes": {
+    "nhs_seated": {
+      "supports": {
+        "en": "Stable wheelless seating, grounded feet and comfortable turn/march concepts.",
+        "tr": "Sabit tekerleksiz oturuş, yerde ayaklar ve rahat dönüş/adım kavramları."
+      },
+      "doesNotSupport": {
+        "en": "No source validates this original sequence, lesson doses, personal medical suitability, learning retention or camera assessment.",
+        "tr": "Hiçbir kaynak bu özgün diziyi, ders dozunu, kişisel tıbbi uygunluğu, öğrenme/hatırlamayı veya kamera değerlendirmesini doğrulamaz."
+      }
+    },
+    "nbt_seated": {
+      "supports": {
+        "en": "Seated arm/ankle/march/turn components and stopping for sudden illness; author chooses smaller rehearsal ranges.",
+        "tr": "Oturarak kol/ayak bileği/adım/dönüş bileşenleri ve ani kötüleşmede durma; küçük prova aralıkları yazar seçimidir."
+      },
+      "doesNotSupport": {
+        "en": "No source validates this original sequence, lesson doses, personal medical suitability, learning retention or camera assessment.",
+        "tr": "Hiçbir kaynak bu özgün diziyi, ders dozunu, kişisel tıbbi uygunluğu, öğrenme/hatırlamayı veya kamera değerlendirmesini doğrulamaz."
+      }
+    },
+    "nccih": {
+      "supports": {
+        "en": "Yoga context, qualified instruction, novice avoidance of extreme/forceful practices and individual modifications.",
+        "tr": "Yoga bağlamı, nitelikli öğretim, başlangıçta aşırı/zorlayıcı uygulamadan kaçınma ve bireysel uyarlama."
+      },
+      "doesNotSupport": {
+        "en": "No source validates this original sequence, lesson doses, personal medical suitability, learning retention or camera assessment.",
+        "tr": "Hiçbir kaynak bu özgün diziyi, ders dozunu, kişisel tıbbi uygunluğu, öğrenme/hatırlamayı veya kamera değerlendirmesini doğrulamaz."
+      }
+    },
+    "va_yoga": {
+      "supports": {
+        "en": "Yoga includes contemplative practice and postures; beginner personal instruction and limitations of learning from text/media alone.",
+        "tr": "Yoga düşünsel çalışma/duruşları içerir; başlangıçta bireysel öğretim ve yalnız metin/medyayla öğrenmenin sınırları."
+      },
+      "doesNotSupport": {
+        "en": "No source validates this original sequence, lesson doses, personal medical suitability, learning retention or camera assessment.",
+        "tr": "Hiçbir kaynak bu özgün diziyi, ders dozunu, kişisel tıbbi uygunluğu, öğrenme/hatırlamayı veya kamera değerlendirmesini doğrulamaz."
+      }
+    }
+  },
+  "modules": [
+    {
+      "id": "arrival",
+      "title": {
+        "en": "Chair, attention and choice",
+        "tr": "Sandalye, dikkat ve seçim"
+      },
+      "outcome": {
+        "en": "Choose the seated base and explain the limits before movement.",
+        "tr": "Hareketten önce oturuş tabanını seç, sınırları açıkla."
+      },
+      "lessons": [
+        {
+          "id": "c01",
+          "title": {
+            "en": "A chair that fits the practice",
+            "tr": "Çalışmaya uygun sandalye"
+          },
+          "objective": {
+            "en": "Audit support and distinguish a seated adaptation from a named yoga tradition.",
+            "tr": "Desteği kontrol et; oturarak uyarlamayı adı olan yoga geleneğinden ayır."
+          },
+          "steps": [
+            {
+              "en": "Before sitting, check an empty solid chair without wheels or swivel on a level nonslip surface. It must not rock or slide; clear cables and arm space.",
+              "tr": "Oturmadan düz, kaymayan zemindeki sağlam, tekerleksiz ve dönmeyen boş sandalyeyi kontrol et. Sallanmamalı/kaymamalı; kabloları kaldır, kollara alan aç."
+            },
+            {
+              "en": "Choose a height that lets both soles rest on the floor, knees comfortably bent and thighs supported without pressure behind the knees. Choose another chair if feet cannot reach; do not stack books as a foot support.",
+              "tr": "İki tabanı yere, dizleri rahat bükülü ve uylukları diz arkasına baskı olmadan destekli tutan yükseklik seç. Ayaklar ulaşmıyorsa başka sandalye seç; ayak desteği için kitapları üst üste koyma."
+            },
+            {
+              "en": "Sit by your familiar safe method. Rest hands on thighs and use the backrest. If sitting or transfer needs help or is uncertain, choose reading and individual guidance instead of rehearsing it alone.",
+              "tr": "Bildik güvenli yöntemle otur. Elleri uyluklara koy, sırtlığı kullan. Oturma/geçiş yardım gerektiriyor veya belirsizse yalnız prova yerine okuma ve bireysel rehberlik seç."
+            },
+            {
+              "en": "Yoga has Indian roots and includes more than stretching. Here chair/office names an adapted setting: attention, ordinary breath and selected seated movements. No Hatha, Yin, Vinyasa or Ashtanga mastery follows from this seat.",
+              "tr": "Yoganın kökleri Hindistan’dadır, kapsamı esnemeden geniştir. Burada sandalye/ofis uyarlanmış ortamı adlandırır: dikkat, doğal nefes ve seçilmiş oturarak hareketler. Bu oturuş Hatha, Yin, Vinyasa veya Ashtanga ustalığı göstermez."
+            }
+          ],
+          "practice": {
+            "en": "Make a paper support checklist, then optionally point to the chair, grounded feet, backrest and clear arm space. Finish in supported rest. Correction for a moving chair: do not hold it still with your body; postpone movement and choose a suitable chair before any retest.",
+            "tr": "Kâğıtta destek listesi yap; seçmeli olarak sandalye, yerde ayaklar, sırtlık ve açık kol alanını göster. Destekli dinlenmeyle bitir. Hareket eden sandalye düzeltmesi: bedenle sabitlemeye çalışma; hareketi ertele, yeniden denemeden uygun sandalye seç."
+          },
+          "selfCheck": {
+            "en": "With the page aside: only a wheeled chair is available and feet do not reach. Would you start? Name the missing conditions and what a seated adaptation cannot certify. Write before opening the answer.",
+            "tr": "Sayfa kenardayken: yalnız tekerlekli sandalye var ve ayaklar ulaşmıyor. Başlar mıydın? Eksik koşulları ve oturarak uyarlamanın neyi onaylayamayacağını yaz. Cevabı açmadan yanıtla."
+          },
+          "answerKey": {
+            "en": "Read only or postpone movement until a stable fitted base exists. A seated adaptation cannot certify medical suitability or competence in another yoga tradition. Review chair stability and foot contact if missed, then explain again without the page.",
+            "tr": "Sabit ve uygun taban bulunana kadar yalnız oku veya hareketi ertele. Oturarak uyarlama tıbbi uygunluğu veya başka yoga geleneğinde yeterliği onaylayamaz. Eksik varsa sandalye sabitliği/ayak temasını gözden geçir, sonra sayfa olmadan yeniden açıkla."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Keep needed armrests; if they block an action, omit that action rather than remove support. The desk is not a weight-bearing prop.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Gereken kolçakları koru; eylemi engelliyorsa desteği kaldırmak yerine eylemi atla. Masa ağırlık verilecek destek değildir."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nccih",
+            "va_yoga"
+          ],
+          "prerequisites": [],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c02",
+          "title": {
+            "en": "Ordinary breath, returning attention",
+            "tr": "Doğal nefes, dikkati geri getirme"
+          },
+          "objective": {
+            "en": "Notice breath without imposing a rhythm or turning attention into a performance target.",
+            "tr": "Nefese ritim dayatmadan, dikkati performans hedefi yapmadan fark et."
+          },
+          "steps": [
+            {
+              "en": "Use the c01 base and backrest. Set the phone aside, soften the hands and look at a stationary object. Eyes may stay open.",
+              "tr": "c01 tabanını ve sırtlığı kullan. Telefonu kenara koy, elleri gevşet, sabit nesneye bak. Gözler açık kalabilir."
+            },
+            {
+              "en": "Notice two or three ordinary breaths; do not make them larger, slower or deeper. There is no retention, nose-only rule or breath count to achieve.",
+              "tr": "İki veya üç doğal nefesi fark et; büyütme, yavaşlatma, derinleştirme. Nefes tutma, yalnız burundan alma kuralı veya ulaşılacak sayı yok."
+            },
+            {
+              "en": "When attention wanders, return to one simple sensation such as the feet touching the floor. Wandering attention is not a failed attempt.",
+              "tr": "Dikkat dağılırsa ayakların yere teması gibi basit tek duyuma dön. Dikkat dağılması başarısız deneme değildir."
+            },
+            {
+              "en": "Look around, move the fingers and remain supported before choosing the next action. If watching breath feels uncomfortable, use the stationary object throughout.",
+              "tr": "Çevrene bak, parmakları hareket ettir; sonraki eylemi seçmeden destekli kal. Nefesi izlemek rahatsızsa tüm süre sabit nesneyi kullan."
+            }
+          ],
+          "practice": {
+            "en": "Try a brief seated attention period, then a pause looking around. If you notice deliberately holding your breath without symptoms, stop the task, settle and retry once with attention on the feet rather than breath. Stop signals end the task without retest.",
+            "tr": "Kısa oturarak dikkat süresi, sonra çevrene bakarak mola dene. Belirti olmadan bilinçli nefes tuttuğunu fark edersen görevi durdur, yerleş; dikkati nefes yerine ayaklara vererek bir kez yeniden dene. Dur işareti görevi yeniden deneme olmadan bitirir."
+          },
+          "selfCheck": {
+            "en": "Without reading: what do you change if attention makes breathing forced? Can you explain why ordinary breathing is not a pranayama proficiency test?",
+            "tr": "Okumadan: dikkat nefesi zorlamaya dönüşürse neyi değiştirirsin? Doğal nefesin neden pranayama yeterlik testi olmadığını açıklayabilir misin?"
+          },
+          "answerKey": {
+            "en": "Pause, let breathing return to its own pace and choose an external object or foot contact. This is introductory awareness, not assessment of a formal breathing technique. Try recalling the choice in a later session.",
+            "tr": "Mola ver, nefes kendi ritmine dönsün; dış nesne veya ayak temasını seç. Bu başlangıç farkındalığıdır; biçimsel nefes tekniği değerlendirmesi değildir. Seçimi sonraki oturumda hatırlamayı dene."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Shorten the attention period whenever needed; no stillness or closed eyes are compulsory.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Dikkat süresini gerektiğinde kısalt; hareketsizlik veya gözleri kapatma zorunlu değildir."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nccih",
+            "va_yoga"
+          ],
+          "prerequisites": [
+            "c01"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c03",
+          "title": {
+            "en": "Prepare one region at a time",
+            "tr": "Tek bölgeyi sırayla hazırla"
+          },
+          "objective": {
+            "en": "Keep the base while returning one small arm or foot action to support.",
+            "tr": "Küçük tek kol/ayak eylemini desteğe döndürürken tabanı koru."
+          },
+          "steps": [
+            {
+              "en": "Begin supported, both feet flat, hands on thighs. Open and soften the hands once; keep the shoulders easy.",
+              "tr": "Destekli, iki ayak yerde, eller uyluklarda başla. Elleri bir kez açıp gevşet; omuzları rahat tut."
+            },
+            {
+              "en": "Bend one elbow, bringing the hand towards its shoulder while the upper arm stays near the side. Lower the hand to the thigh before trying the other side.",
+              "tr": "Üst kol gövde yanında kalırken bir dirseği bük, eli omza doğru getir. Diğer tarafı denemeden eli uyluğa indir."
+            },
+            {
+              "en": "Separately, keep one heel grounded and lift its toes a little; lower the toes. Try the other side only after the first foot rests flat. Do not lift the leg to enlarge the motion.",
+              "tr": "Ayrı olarak bir topuğu yerde tut, parmakları az kaldır ve indir. Diğer tarafı ilk ayak tabanı yere dönünce dene. Hareketi büyütmek için bacağı kaldırma."
+            },
+            {
+              "en": "Choose one to three small returns per selected action, then rest supported. Counts are optional rehearsal choices; natural breathing does not need to match movement.",
+              "tr": "Seçilen eylem başına bir ila üç küçük dönüş seç, sonra destekli dinlen. Sayılar seçmeli prova seçimidir; doğal nefes harekete uymak zorunda değildir."
+            }
+          ],
+          "practice": {
+            "en": "Compare an elbow return with a toe return, not their height. For a symptom-free toe-lift error where both feet leave the floor: rest, recheck chair fit, keep one heel and opposite sole grounded, reduce the lift and retry once. If control still fails, omit and seek instruction.",
+            "tr": "Dirsek dönüşüyle parmak dönüşünü yüksekliği değil kontrolü açısından karşılaştır. İki ayağın yerden ayrıldığı belirtisiz parmak kaldırma hatasında: dinlen, sandalye uyumunu kontrol et, bir topuk ve karşı tabanı yerde tut, kaldırmayı küçült, bir kez dene. Kontrol hâlâ yoksa atla, öğretim al."
+          },
+          "selfCheck": {
+            "en": "Which contacts should remain in the toe action? On a later practice, recall the correction before reopening this page. What rules out a physical retest?",
+            "tr": "Parmak eyleminde hangi temaslar kalmalı? Sonraki çalışmada sayfayı açmadan düzeltmeyi hatırla. Fiziksel yeniden denemeyi ne engeller?"
+          },
+          "answerKey": {
+            "en": "The chosen heel and opposite sole remain grounded, with a still chair and controlled return. A stop symptom rules out retest. The observation checks contacts only, not injury or joint alignment.",
+            "tr": "Seçilen topuk/karşı taban yerde, sandalye sabit, dönüş kontrollü kalır. Dur belirtisi yeniden denemeyi engeller. Gözlem yalnız temasları kontrol eder; sakatlık veya eklem hizasını değerlendirmez."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Choose hands only or feet only if needed, and record the omitted region honestly.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Gerekirse yalnız elleri veya ayakları seç; atlanan bölgeyi dürüst kaydet."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c02"
+          ],
+          "minutes": 7,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "seated_movement",
+      "title": {
+        "en": "Seated movement with a steady base",
+        "tr": "Sabit tabanla oturarak hareket"
+      },
+      "outcome": {
+        "en": "Explore upper and lower actions without pulling, bracing or losing support.",
+        "tr": "Çekmeden, kasılmadan veya destek kaybetmeden üst/alt eylemleri keşfet."
+      },
+      "lessons": [
+        {
+          "id": "c04",
+          "title": {
+            "en": "Upright base and a small arm arc",
+            "tr": "Dik oturuş tabanı ve küçük kol yayı"
+          },
+          "objective": {
+            "en": "Distinguish an unforced upright seat from a rigid pose; choose a comfortable reach.",
+            "tr": "Zorlanmamış dik oturuşu katı şekilden ayır; rahat uzanma seç."
+          },
+          "steps": [
+            {
+              "en": "Set up c01 and use c03 gently first. Only if comfortable, move your sitting position a little toward the front of the seat, keeping both sitting bones supported. This means moving on the seat, not leaning the torso forward. Keep the head above the trunk; no chin lift is required.",
+              "tr": "c01 kurulumunu yap, önce hafif c03 kullan. Yalnız rahatsa iki oturma kemiğini destekli tutarak oturuş yerini oturağın önüne doğru biraz taşı. Bu, oturak üzerinde yer değiştirmektir; gövdeyi öne eğmek değildir. Baş gövdenin üstünde kalsın; çeneyi kaldırmak gerekmez."
+            },
+            {
+              "en": "Let one arm travel forward in a small arc, palm inward, elbow soft. Stop below shoulder height or earlier where comfortable; do not reach overhead to prove a pose.",
+              "tr": "Bir kolu avuç içeri, dirsek yumuşak, öne küçük yayla götür. Omuz yüksekliğinin altında veya daha erken rahat yerde dur; şekli kanıtlamak için baş üstüne uzanma."
+            },
+            {
+              "en": "Lower the arm to the thigh and pause before the other side. For the optional chest opening, start with both hands resting on the thighs. Bend both elbows gently and lift the hands just clear of the thighs, keeping them low beside the waist, palms facing inward. Move the bent elbows only a little sideways, without pushing the chest forward or tipping the head back. Return both hands to the thighs. This separate optional movement is not Fish pose.",
+              "tr": "Kolu uyluğa indir, diğer taraftan önce bekle. Seçmeli göğüs açılışı için iki el uyluklarda dinlenerek başla. İki dirseği hafifçe bük; elleri uyluklardan çok az kaldır, belin yanında aşağıda tut, avuçlar içeri baksın. Bükülü dirsekleri yalnız biraz yana götür; göğsü öne itme, başı geriye atma. İki eli uyluklara geri getir. Bu ayrı seçmeli hareket Balık pozu değildir."
+            },
+            {
+              "en": "Return both hands to the thighs and use the backrest. Continue ordinary breathing; no end-range hold or perfectly equal arm height is required.",
+              "tr": "İki eli uyluklara döndür, sırtlığı kullan. Doğal nefesi sürdür; son aralıkta bekleme veya tam eşit kol yüksekliği gerekmez."
+            }
+          ],
+          "practice": {
+            "en": "Explore one small arm arc on each chosen side. If you shrug or lean without symptoms, return to support, reduce the arc and retry once with the trunk still. Retest looks for a quiet base and controlled lowering, not maximum reach.",
+            "tr": "Seçilen her yanda küçük tek kol yayı keşfet. Belirti olmadan omuz yükselir/gövde eğilirse desteğe dön, yayı küçült, gövde sabit bir kez dene. Yeniden deneme en fazla uzanmayı değil sakin taban/kontrollü indirmeyi arar."
+          },
+          "selfCheck": {
+            "en": "Explain the exit from the arm arc without watching the steps. Does the optional chest opening demonstrate Fish, or does chair sitting demonstrate standing Mountain?",
+            "tr": "Adımlara bakmadan kol yayından çıkışı açıkla. Seçmeli göğüs açma Balık’ı veya sandalye oturuşu ayakta Dağ’ı gösterir mi?"
+          },
+          "answerKey": {
+            "en": "Lower to the thigh, pause and use the backrest. Both comparisons are false: these are explicitly seated preparatory adaptations, not performance of those floor or standing forms.",
+            "tr": "Uyluğa indir, bekle, sırtlığı kullan. İki karşılaştırma da yanlış: bunlar açıkça oturarak hazırlık uyarlamalarıdır; o yer/ayakta biçimlerin uygulaması değildir."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Keep the hand resting and explore upright attention only if the arm action is unsuitable.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Kol eylemi uygun değilse eli dinlendir; yalnız dik oturuşta dikkati keşfet."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c03"
+          ],
+          "minutes": 7,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c05",
+          "title": {
+            "en": "Turn, return and release",
+            "tr": "Dön, geri gel ve bırak"
+          },
+          "objective": {
+            "en": "Make a small seated turn without using the hand as a lever.",
+            "tr": "Eli kaldıraç yapmadan küçük oturarak dönüş yap."
+          },
+          "steps": [
+            {
+              "en": "Prepare c01/c03, face forward with soles grounded and hands resting on thighs. Do not grip the chair to pull.",
+              "tr": "c01/c03 ile hazırlan; tabanlar yerde, eller uyluklarda öne bak. Çekmek için sandalyeyi kavrama."
+            },
+            {
+              "en": "If comfortable, turn the ribs a little left; let the head follow the torso, not turn farther. Keep the pelvis facing forward without forcing it rigid.",
+              "tr": "Rahatsa kaburgaları az sola çevir; baş gövdeyi izlesin, daha ileri dönmesin. Leğen kemiğini zorlayarak sabitlemeden öne dönük tut."
+            },
+            {
+              "en": "Return slowly to centre and pause. Try the right separately; ranges can differ. Ordinary breathing continues and no end-range hold is required.",
+              "tr": "Yavaş merkeze dön, bekle. Sağı ayrı dene; aralıklar farklı olabilir. Doğal nefes sürer; son aralıkta beklemek gerekmez."
+            },
+            {
+              "en": "After one or two chosen turns, rest with the back supported. Neutral sitting is the alternative whenever a turn is uncomfortable.",
+              "tr": "Bir veya iki seçilen dönüşten sonra sırt destekli dinlen. Dönüş rahatsızsa alternatif nötr oturuştur."
+            }
+          ],
+          "practice": {
+            "en": "Name your central rest point, then explore a small turn and return. If the symptom-free mistake is pulling with the hand, release it, reduce the range and retry once with hands resting. Pinching or any stop symptom ends the action without retest.",
+            "tr": "Merkez dinlenme noktanı söyle; küçük dönüş ve geri geliş keşfet. Belirtisiz hata elle çekmekse eli bırak, aralığı küçült; eller dinlenirken bir kez dene. Sıkışma/diğer dur belirtisi eylemi yeniden deneme olmadan bitirir."
+          },
+          "selfCheck": {
+            "en": "A stable chair is available but turning pinches. What do you choose? What can foot contact tell you, and what can it not tell you about the spine?",
+            "tr": "Sabit sandalye var ama dönüş sıkıştırıyor. Ne seçersin? Ayak teması neyi anlatır, omurga hakkında neyi anlatamaz?"
+          },
+          "answerKey": {
+            "en": "Stop turning, rest supported or observe; seek individual advice if symptoms persist or recur. Contact shows the chosen base was maintained, not spinal alignment, injury status or medical suitability.",
+            "tr": "Dönüşü durdur, destekli dinlen/gözle; belirti sürer/tekrarlarsa bireysel görüş al. Temas seçilen tabanın korunduğunu gösterir; omurga hizası, sakatlık durumu veya tıbbi uygunluk göstermez."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Do not impose matching left/right ranges; note an omission instead of forcing a turn.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Sol/sağ aralıkları eşitleme; zorlamak yerine atlamayı kaydet."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c04"
+          ],
+          "minutes": 7,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c06",
+          "title": {
+            "en": "One foot lifts, one foot supports",
+            "tr": "Bir ayak kalkar, biri destekler"
+          },
+          "objective": {
+            "en": "Explore a small supported seated march while separating limb movement from trunk rocking.",
+            "tr": "Uzuv hareketini gövde sallanmasından ayırarak küçük destekli oturarak adım keşfet."
+          },
+          "steps": [
+            {
+              "en": "Use c01 fit and c03 preparation. Sit fully supported on the seat with both feet down; hold stable chair sides lightly only if reachable without leaning.",
+              "tr": "c01 uyumunu ve c03 hazırlığını kullan. Oturakta tam destekli, iki ayak yerde otur; eğilmeden erişiliyorsa sabit sandalye yanlarını hafif tut."
+            },
+            {
+              "en": "If comfortable, lift one foot just clear of the floor with the knee bent, keeping the other sole grounded and the trunk quiet. No target lift height is needed.",
+              "tr": "Rahatsa diz bükülü bir ayağı yerden ancak ayır; diğer taban yerde, gövde sakin kalsın. Hedef kaldırma yüksekliği gerekmez."
+            },
+            {
+              "en": "Lower the foot gently before choosing the other side. If lifting encourages leaning or strain, keep both feet down and return to c03 toe work or rest.",
+              "tr": "Diğer tarafı seçmeden ayağı yavaş indir. Kaldırma eğilme/zorlanmaya neden olursa iki ayağı yerde tut; c03 parmak çalışması veya dinlenmeye dön."
+            },
+            {
+              "en": "Try one to three selected lifts per side, separated by a neutral pause. Finish both feet down, hands resting, back supported, with ordinary breath.",
+              "tr": "Her yanda bir ila üç seçilen kaldırmayı nötr molayla ayırarak dene. İki ayak yerde, eller dinleniyor, sırt destekli ve doğal nefesle bitir."
+            }
+          ],
+          "practice": {
+            "en": "Compare the foot-lift route with both-feet-down preparation. A symptom-free trunk-rocking error: place both feet down, rest, choose a much smaller lift and retry once. If the trunk still rocks, choose the grounded alternative. No symptom-provoking repeat.",
+            "tr": "Ayak kaldırma yolunu iki ayak yerde hazırlıkla karşılaştır. Belirtisiz gövde sallanma hatası: iki ayağı yere koy, dinlen, çok küçük kaldırma seç, bir kez dene. Gövde hâlâ sallanıyorsa yerde alternatifi seç. Belirti yaratan tekrar yok."
+          },
+          "selfCheck": {
+            "en": "Without the steps: which foot supports and when does the other return? Is a larger lift evidence of a better yoga practice?",
+            "tr": "Adımlar olmadan: hangi ayak destekler, diğeri ne zaman döner? Büyük kaldırma daha iyi yoga çalışmasının kanıtı mı?"
+          },
+          "answerKey": {
+            "en": "The opposite sole stays grounded; the moving foot returns before the next action. Height is not a quality or yoga mastery score. You can report contact and control only.",
+            "tr": "Karşı taban yerde kalır; hareket eden ayak sonraki eylemden önce döner. Yükseklik kalite/yoga ustalık puanı değildir. Yalnız temas ve kontrolü bildirebilirsin."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Omit lifting if uncertain; the grounded alternative is a different recorded route, not equivalent march competence.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Belirsizse kaldırmayı atla; yerde alternatif ayrı kaydedilen yoldur, eşdeğer adım yeterliği değildir."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c05"
+          ],
+          "minutes": 7,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "practice_flow",
+      "title": {
+        "en": "Attention through movement and rest",
+        "tr": "Hareket ve dinlenme boyunca dikkat"
+      },
+      "outcome": {
+        "en": "Connect familiar actions and recover a seated practice after an interruption.",
+        "tr": "Tanıdık eylemleri bağla, kesintiden sonra oturarak çalışmayı yeniden kur."
+      },
+      "lessons": [
+        {
+          "id": "c07",
+          "title": {
+            "en": "A short seated practice with stations",
+            "tr": "Duraklı kısa oturarak çalışma"
+          },
+          "objective": {
+            "en": "Keep deliberate arrival, return and rest while linking chosen actions.",
+            "tr": "Seçilen eylemleri bağlarken bilinçli başlangıç, dönüş ve dinlenmeyi koru."
+          },
+          "steps": [
+            {
+              "en": "On paper choose the c01 setup, c02 attention, c03 preparation, one c04 arm action, optional c05 turn and supported rest. Replace an unsuitable action with neutral attention.",
+              "tr": "Kâğıtta c01 kurulum, c02 dikkat, c03 hazırlık, bir c04 kol eylemi, seçmeli c05 dönüş ve destekli dinlenme seç. Uygun olmayan eylemi nötr dikkatle değiştir."
+            },
+            {
+              "en": "Prepare the chair again today. Follow one station at a time, returning hands and feet to support before moving to the next; put the phone aside during movement.",
+              "tr": "Bugün sandalyeyi yeniden hazırla. Durakları tek tek izle; sonraki durağa geçmeden el/ayakları desteğe döndür; harekette telefonu kenara koy."
+            },
+            {
+              "en": "Allow roughly three to six minutes or shorter. Let breathing continue at its own pace; pausing is part of the route and no action must fit one breath.",
+              "tr": "Yaklaşık üç ila altı dakika veya daha kısa ayır. Nefes kendi ritminde sürsün; mola yolun parçasıdır, hiçbir eylem tek nefese sığmak zorunda değildir."
+            },
+            {
+              "en": "Finish with both feet grounded and back supported. Name the actual actions and omissions. This original adapted route is not a traditional Sun Salutation, Vinyasa, Yin or Ashtanga sequence.",
+              "tr": "İki ayak yerde, sırt destekli bitir. Gerçek eylemleri ve atlamaları söyle. Bu özgün uyarlanmış yol geleneksel Güneşe Selam, Vinyasa, Yin veya Ashtanga dizisi değildir."
+            }
+          ],
+          "practice": {
+            "en": "Walk through the route on paper, then optionally practise. If you rush straight from the arm action to a turn without symptoms, return to neutral, add a written pause and retry that transition once. Retest requires hands/feet reset and ordinary breathing, not speed.",
+            "tr": "Yolu önce kâğıtta izle, sonra seçmeli çalış. Belirti olmadan kol eyleminden dönüşe acele geçersen nötre dön, yazılı mola ekle, o geçişi bir kez dene. Yeniden deneme hız değil el/ayak yerleşimi ve doğal nefes gerektirir."
+          },
+          "selfCheck": {
+            "en": "Close the route card and recall the order and one alternative. Where does attention return between actions? What does the practice record establish?",
+            "tr": "Yol kartını kapat; sırayı ve bir alternatifi hatırla. Eylemler arasında dikkat nereye döner? Çalışma kaydı neyi gösterir?"
+          },
+          "answerKey": {
+            "en": "Recall setup, attention, preparation, selected actions with neutral pauses and rest. Return attention to support/contact. A record describes participation in the chosen route, not physical mastery or medical suitability.",
+            "tr": "Kurulum, dikkat, hazırlık, nötr molalı seçilen eylemler ve dinlenmeyi hatırla. Dikkati desteğe/temasa döndür. Kayıt seçilen yola katılımı anlatır; fiziksel ustalık veya tıbbi uygunluk değildir."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Keep just one familiar action and rest when the longer route is tiring.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Uzun yol yoruyorsa yalnız bir tanıdık eylem ve dinlenme tut."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nccih",
+            "va_yoga"
+          ],
+          "prerequisites": [
+            "c06"
+          ],
+          "minutes": 8,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c08",
+          "title": {
+            "en": "Rest is an active choice",
+            "tr": "Dinlenme bilinçli seçimdir"
+          },
+          "objective": {
+            "en": "Finish movement with supported attention, without requiring stillness or an outcome.",
+            "tr": "Hareketsizlik veya sonuç zorunluluğu olmadan hareketi destekli dikkatle bitir."
+          },
+          "steps": [
+            {
+              "en": "After a familiar short action, place both feet down and hands comfortably on thighs or lap. Use the backrest; do not slump deliberately or force a tall spine.",
+              "tr": "Tanıdık kısa eylemden sonra iki ayağı yere, elleri rahat uyluk/kucağa koy. Sırtlığı kullan; bilerek çökme veya omurgayı dikliğe zorlama."
+            },
+            {
+              "en": "Choose ordinary breath, contact with the seat or a stationary visual object as your attention anchor. No closed-eye demand, breath slowing or silent mind is required.",
+              "tr": "Dikkat dayanağı olarak doğal nefes, oturak teması veya sabit görsel nesne seç. Gözleri kapatma, nefesi yavaşlatma veya zihni sessizleştirme talebi yok."
+            },
+            {
+              "en": "Notice distraction and return gently to the anchor. Move a hand or shift comfortably if needed; rest is not a long-hold posture test.",
+              "tr": "Dağılmayı fark et, dayanağa hafifçe dön. Gerekiyorsa eli hareket ettir veya rahatça konum değiştir; dinlenme uzun tutuş testi değildir."
+            },
+            {
+              "en": "Look around before resuming another task. Record what anchor you used and whether you shortened the rest, without claiming reduced pain, stress or improved health.",
+              "tr": "Başka işe dönmeden çevrene bak. Hangi dayanağı kullandığını ve dinlenmeyi kısaltıp kısaltmadığını kaydet; ağrı/stres azalması veya sağlık gelişimi iddia etme."
+            }
+          ],
+          "practice": {
+            "en": "Try a brief rest after c03 or c04. If you force stillness without symptoms, release that demand and choose an open-eye anchor for a single new attempt. If still uncomfortable, stop and observe the room.",
+            "tr": "c03 veya c04 sonrası kısa dinlenme dene. Belirti olmadan hareketsizliği zorlarsan talebi bırak; tek yeni deneme için göz açık dayanak seç. Hâlâ rahatsızsa dur, çevreyi gözle."
+          },
+          "selfCheck": {
+            "en": "Can rest include a small comfortable adjustment? Explain how this differs from claiming Yin, Yoga Nidra or a formal meditation qualification.",
+            "tr": "Dinlenme küçük rahat konum değişikliği içerebilir mi? Yin, Yoga Nidra veya biçimsel meditasyon yeterliği iddiasından farkını açıkla."
+          },
+          "answerKey": {
+            "en": "Yes. This is brief supported attention within an adapted beginner route, not evidence of those distinct practices. A calm-looking seat is not a safety assessment.",
+            "tr": "Evet. Bu uyarlanmış başlangıç yolunda kısa destekli dikkattir; o ayrı çalışmaların kanıtı değildir. Sakin görünen oturuş güvenlik değerlendirmesi değildir."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Use shorter rest and external attention whenever inward focus is unsuitable.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. İçe odak uygun değilse daha kısa dinlenme ve dış dikkat kullan."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nccih",
+            "va_yoga"
+          ],
+          "prerequisites": [
+            "c07"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c09",
+          "title": {
+            "en": "Office interruption and a fresh setup",
+            "tr": "Ofis kesintisi ve yeni kurulum"
+          },
+          "objective": {
+            "en": "Respond to changed space or support by rechecking rather than continuing from memory.",
+            "tr": "Alan/destek değişiminde hafızadan sürdürmek yerine yeniden kontrol et."
+          },
+          "steps": [
+            {
+              "en": "Read the scenario first: a call interrupts c07 and the chair is moved while you are away. Decide on paper how to restart; do not move an occupied chair for the exercise.",
+              "tr": "Önce durumu oku: c07 sırasında telefon gelir, sen yokken sandalye taşınır. Nasıl başlayacağını kâğıtta seç; alıştırma için dolu sandalyeyi hareket ettirme."
+            },
+            {
+              "en": "For an optional practical rehearsal, pause in supported rest before touching the phone. Keep the call and movements separate; no twisting to reach a device behind you.",
+              "tr": "Seçmeli pratik provada telefonu almadan destekli dinlenmede dur. Görüşme ve hareketleri ayır; arkadaki cihaza uzanmak için dönme."
+            },
+            {
+              "en": "When ready, recheck chair stability, foot fit, clear space and today’s limits with c01. After leaving the course or a break, use Prepare again before resuming physical steps.",
+              "tr": "Hazır olduğunda c01 ile sandalye sabitliği, ayak uyumu, açık alan ve bugünkü sınırları yeniden kontrol et. Kurstan çıkış veya moladan sonra fiziksel adımlara dönmeden Yeniden hazırlan seç."
+            },
+            {
+              "en": "Restart attention and a small familiar preparation, then choose a shorter route or stop. Lost time does not require faster movement or skipping rest.",
+              "tr": "Dikkat ve küçük tanıdık hazırlıkla yeniden başla; kısa yol veya durmayı seç. Kaybedilen zaman hızlanma veya dinlenme atlama gerektirmez."
+            }
+          ],
+          "practice": {
+            "en": "Rehearse the pause and reset without adding an unsafe prop. A missed reset is corrected by returning to c01 and doing one familiar small action only after setup, with its exit planned. Retest asks whether the new context was checked, not whether the original schedule was recovered.",
+            "tr": "Güvensiz destek eklemeden mola/yeniden kurulumu prova et. Atlanan kurulum c01’e dönerek, ancak kurulumdan sonra çıkışı planlı tanıdık tek küçük eylemle düzeltilir. Yeniden deneme eski programa yetişmeyi değil yeni ortamın kontrolünü sorar."
+          },
+          "selfCheck": {
+            "en": "Your chair is moved after a break and you have less time. List what must be checked again and one acceptable route change, without reading the answer.",
+            "tr": "Moladan sonra sandalye taşındı, daha az zamanın var. Yeniden kontrol edilecekleri ve kabul edilebilir bir yol değişimini cevabı okumadan listele."
+          },
+          "answerKey": {
+            "en": "Recheck stability, foot fit, space and personal limits, then renew preparation. Shorten, omit or observe; do not hurry or hold breath to finish. Recalling the old plan does not certify the changed setup.",
+            "tr": "Sabitlik, ayak uyumu, alan ve kişisel sınırları kontrol et, hazırlığı yenile. Kısalt, atla veya gözle; bitirmek için acele/nefes tutma yok. Eski planı hatırlamak yeni kurulumu onaylamaz."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. An office chair with wheels remains unsuitable for this proposed physical route even if a meeting makes another chair inconvenient.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Toplantı başka sandalyeyi zorlaştırsa da tekerlekli ofis sandalyesi önerilen fiziksel yol için uygun değildir."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c08"
+          ],
+          "minutes": 7,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "independent_route",
+      "title": {
+        "en": "Correction, planning and independent review",
+        "tr": "Düzeltme, planlama ve bağımsız değerlendirme"
+      },
+      "outcome": {
+        "en": "Choose and recall a repeatable adapted route, distinguish stop signals from coordination errors, and report remaining limits honestly.",
+        "tr": "Yinelenebilir uyarlanmış yol seç/hatırla; dur işaretlerini koordinasyon hatasından ayır, kalan sınırları dürüst bildir."
+      },
+      "lessons": [
+        {
+          "id": "c10",
+          "title": {
+            "en": "Correction without chasing a pass",
+            "tr": "Geçmeyi kovalamadan düzeltme"
+          },
+          "objective": {
+            "en": "Use one small correction/retest cycle for a symptom-free coordination error; stop for symptoms.",
+            "tr": "Belirtisiz koordinasyon hatasında tek küçük düzeltme/yeniden deneme kullan; belirtide dur."
+          },
+          "steps": [
+            {
+              "en": "After today’s setup and preparation, choose a familiar c03 toe action or c04 arm action, or analyse its written example without movement. Do not deliberately create a symptom.",
+              "tr": "Bugünkü kurulum/hazırlık sonrası tanıdık c03 parmak veya c04 kol eylemi seç ya da yazılı örneği hareketsiz incele. Bilerek belirti yaratma."
+            },
+            {
+              "en": "Name the observed issue precisely: contact lost, trunk rocking or a rushed return. Pain, pinching, dizziness, tingling or unusual breathlessness belong to stopping, not a coordination pass/fail.",
+              "tr": "Gözlenen sorunu kesin söyle: temas kaybı, gövde sallanması veya acele dönüş. Ağrı, sıkışma, baş dönmesi, karıncalanma/alışılmadık nefes darlığı koordinasyon geçti/kaldı değil durmaya aittir."
+            },
+            {
+              "en": "For an issue without symptoms: return to supported rest, check the base, reduce the movement and choose one cue from the original lesson. Retry once only if comfortable.",
+              "tr": "Belirtisiz sorunda: destekli dinlenmeye dön, tabanı kontrol et, hareketi küçült, özgün dersten tek ipucu seç. Yalnız rahatsa bir kez yeniden dene."
+            },
+            {
+              "en": "Compare the chosen cue and controlled return, not range or appearance. If unresolved, omit that action and ask for instruction. Record original issue, change, result and remaining uncertainty.",
+              "tr": "Aralık/görünüş yerine seçilen ipucu ve kontrollü dönüşü karşılaştır. Çözülmezse eylemi atla, öğretim iste. İlk sorun, değişiklik, sonuç ve kalan belirsizliği kaydet."
+            }
+          ],
+          "practice": {
+            "en": "Use the c03 grounded-contact retest or c04 quiet-base retest, not both at once. A symptom-free error that disappears is a reported coordination change, not a clinical finding. Repeated symptoms are not invitations to repeat with smaller range.",
+            "tr": "İkisini bir anda değil c03 yerde temas veya c04 sakin taban yeniden denemesini kullan. Kaybolan belirtisiz hata bildirilen koordinasyon değişimidir; klinik bulgu değildir. Tekrarlayan belirti daha küçük aralıkta tekrarlama daveti değildir."
+          },
+          "selfCheck": {
+            "en": "Case A: toes lift but the heel leaves the floor without symptoms. Case B: a turn causes pinching. Write the different next steps and what would be observed in a permitted retest.",
+            "tr": "Durum A: parmaklar kalkarken belirti olmadan topuk yerden ayrılır. Durum B: dönüş sıkışma yaratır. Farklı sonraki adımları ve izin verilen yeniden denemede gözlenecekleri yaz."
+          },
+          "answerKey": {
+            "en": "A: rest, check fit, reduce toe movement, then one comfortable retest with heel/opposite sole contact and controlled return; omit if unresolved. B: stop the turn, rest/observe, no symptom-provoking retest; individual advice if persistent/recurrent. Neither case is a camera or medical grade.",
+            "tr": "A: dinlen, uyumu kontrol et, parmak hareketini küçült; sonra topuk/karşı taban teması ve kontrollü dönüşle tek rahat deneme; çözülmezse atla. B: dönüşü durdur, dinlen/gözle, belirti yaratan yeniden deneme yok; sürer/tekrarlarsa bireysel görüş. İkisi de kamera/tıbbi puan değildir."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Written comparison is available without provoking any error physically.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Hiçbir hatayı fiziksel yaratmadan yazılı karşılaştırma yapılabilir."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nccih",
+            "nbt_seated"
+          ],
+          "prerequisites": [
+            "c09"
+          ],
+          "minutes": 8,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c11",
+          "title": {
+            "en": "Write an ordinary and a shorter route",
+            "tr": "Olağan ve kısa yol yaz"
+          },
+          "objective": {
+            "en": "Plan a selected seated practice with familiar actions, replacements, exits and explicit limits.",
+            "tr": "Tanıdık eylem, alternatif, çıkış ve açık sınırlarla seçilmiş oturarak çalışma planla."
+          },
+          "steps": [
+            {
+              "en": "On paper list the actions you have actually practised, ones observed only and ones omitted. Reading about a movement is not evidence of performing it.",
+              "tr": "Kâğıtta gerçekten çalışılan, yalnız gözlenen ve atlanan eylemleri listele. Hareket hakkında okumak uygulama kanıtı değildir."
+            },
+            {
+              "en": "Write an ordinary route: c01 setup, c02 attention, c03 preparation, selected c04/c05/c06 actions with a neutral return after each, and c08 rest. Allow roughly eight to twelve minutes or shorter, including rests.",
+              "tr": "Olağan yolu yaz: c01 kurulum, c02 dikkat, c03 hazırlık, her biri sonrası nötr dönüşle seçilen c04/c05/c06 eylemleri ve c08 dinlenme. Molalar dahil yaklaşık sekiz ila on iki dakika veya daha kısa ayır."
+            },
+            {
+              "en": "Write a shorter office route of about two to four minutes: setup, attention, one familiar action and rest. Put a replacement and exit beside every chosen action. Do not add a new pose to fill time.",
+              "tr": "Yaklaşık iki ila dört dakikalık kısa ofis yolu yaz: kurulum, dikkat, tanıdık tek eylem ve dinlenme. Her seçilen eylemin yanına alternatif/çıkış koy. Süre doldurmak için yeni poz ekleme."
+            },
+            {
+              "en": "Check that no route demands forced breath, standing/floor access or an action you cannot currently choose comfortably. This lesson is planning; no physical rehearsal is required.",
+              "tr": "Hiçbir yolun zorlanmış nefes, ayakta/yerde erişim veya bugün rahat seçilemeyen eylem istemediğini kontrol et. Bu ders planlamadır; fiziksel prova gerekmez."
+            }
+          ],
+          "practice": {
+            "en": "Read the two written plans aloud and identify where you would stop after an interruption. Correction: if an exit or replacement is missing, add a previously taught neutral pause or rest, then recheck the paper plan without movement.",
+            "tr": "İki yazılı planı sesli oku, kesintide nerede duracağını belirle. Düzeltme: çıkış/alternatif eksikse önce öğretilen nötr mola veya dinlenme ekle, sonra kâğıt planını hareketsiz yeniden kontrol et."
+          },
+          "selfCheck": {
+            "en": "Close your plan. Recall arrival, preparation, selected actions and rest. Explain why a shorter plan can be valid while omitted actions remain unverified.",
+            "tr": "Planı kapat. Başlangıç, hazırlık, seçilen eylem ve dinlenmeyi hatırla. Atlanan eylemler doğrulanmamış kalırken kısa planın neden geçerli olabileceğini açıkla."
+          },
+          "answerKey": {
+            "en": "The route preserves setup, attention and controlled exits even when actions are omitted. It records the selected scope only; it does not confer competence in omitted movement, another tradition or clinical suitability. Review any missing exit, close the answer, and restate.",
+            "tr": "Eylemler atlandığında da yol kurulum, dikkat ve kontrollü çıkışı korur. Yalnız seçilen kapsamı kaydeder; atlanan hareket, başka gelenek veya klinik uygunlukta yeterlik vermez. Eksik çıkışı gözden geçir, cevabı kapat, yeniden anlat."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. If today’s limits differ, revise on paper or seek individual guidance rather than assuming an old adaptation still fits.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Bugünkü sınırlar farklıysa eski uyarlamanın hâlâ uygun olduğunu varsaymak yerine kâğıtta düzelt veya bireysel görüş al."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nccih",
+            "va_yoga"
+          ],
+          "prerequisites": [
+            "c10"
+          ],
+          "minutes": 10,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c12",
+          "title": {
+            "en": "Independent route and later recall",
+            "tr": "Bağımsız yol ve sonraki hatırlama"
+          },
+          "objective": {
+            "en": "Review the actual selected route, controlled returns and retained decisions without claiming mastery.",
+            "tr": "Ustalık iddia etmeden gerçek seçilen yolu, kontrollü dönüşleri ve hatırlanan kararları değerlendir."
+          },
+          "steps": [
+            {
+              "en": "Prepare today’s support, review the c11 plan and choose physical practice, written review or observation honestly. Previous records never replace today’s preparation.",
+              "tr": "Bugünkü desteği hazırla, c11 planını incele; fiziksel çalışma, yazılı değerlendirme veya gözlemi dürüst seç. Önceki kayıt bugünkü hazırlığın yerine geçmez."
+            },
+            {
+              "en": "If practising, follow the chosen ordinary or short route at your own pace with neutral resets, ordinary breath and rest. Use exits and omissions when limits change; never chase the timer.",
+              "tr": "Çalışıyorsan seçilen olağan/kısa yolu nötr yerleşim, doğal nefes ve dinlenmeyle kendi hızında izle. Sınır değişirse çıkış/atlama kullan; saati kovalama."
+            },
+            {
+              "en": "Write the actual route, supports, one controlled return, one correction or omission and one question needing instruction. Label observation and written understanding separately from movement.",
+              "tr": "Gerçek yol, destek, kontrollü tek dönüş, düzeltme veya atlama ve öğretim gereken tek soruyu yaz. Gözlem/yazılı anlamayı hareketten ayrı işaretle."
+            },
+            {
+              "en": "In a later separate session, before opening the plan, recall the setup, return points and two different responses: a symptom-free contact error and a stop symptom. Then compare the plan and correct gaps on paper before choosing movement.",
+              "tr": "Sonraki ayrı oturumda planı açmadan kurulum, dönüş noktaları ve iki ayrı yanıtı hatırla: belirtisiz temas hatası ve dur belirtisi. Sonra planla karşılaştır; hareket seçmeden eksikleri kâğıtta düzelt."
+            }
+          ],
+          "practice": {
+            "en": "The bounded written beginner endpoint is a self-selected repeatable seated route with explainable support, ordinary breathing, controlled returns, appropriate omissions and later recall of stop/correction choices. Record each as practised, reported, knowledge-only, omitted or unresolved. A series of lesson ticks is participation, not acceptance of this endpoint. No learner trial or instructor demonstration validates this curriculum yet.",
+            "tr": "Sınırlı yazılı başlangıç bitişi: açıklanabilir destek, doğal nefes, kontrollü dönüş, uygun atlama ve dur/düzeltme seçimlerini sonra hatırlama içeren kişisel yinelenebilir oturarak yol. Her birini çalışıldı, öz beyan, yalnız bilgi, atlandı veya çözülmedi olarak kaydet. Ders işaretleri katılımdır; bu bitişin kabulü değildir. Henüz öğrenci denemesi/eğitmen gösterimi bu müfredatı doğrulamaz."
+          },
+          "selfCheck": {
+            "en": "New case, answer first: you remember the route but today only a rolling chair is available. Another learner says an omitted march means they failed yoga. Explain both decisions and one real acceptance gap that this phone course cannot close.",
+            "tr": "Yeni durum, önce yanıtla: yolu hatırlıyorsun ama bugün yalnız hareketli sandalye var. Başka öğrenci atlanan adımın yogada başarısızlık olduğunu söylüyor. İki kararı ve telefon kursunun kapatamayacağı tek gerçek kabul açığını açıkla."
+          },
+          "answerKey": {
+            "en": "Postpone movement or review in writing until the setup fits. Omission is an honest route choice, not failure; it does not verify march competence. Qualified observation of actual entries/actions/exits and later learning retention remains needed. Written source review cannot supply physical acceptance, instructor certification or a health result.",
+            "tr": "Kurulum uygun olana kadar hareketi ertele/yazılı değerlendir. Atlama dürüst yol seçimidir, başarısızlık değildir; adım yeterliğini doğrulamaz. Gerçek giriş/eylem/çıkış ve sonraki hatırlamanın nitelikli gözlemi gerekir. Yazılı kaynak incelemesi fiziksel kabul, eğitmen sertifikası veya sağlık sonucu sağlamaz."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Observation can meet understanding tasks but not physical movement evidence. No standing balance, floor transition, full named-tradition proficiency or therapeutic result is within this endpoint.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Gözlem anlama görevlerini karşılayabilir, fiziksel hareket kanıtını değil. Ayakta denge, yere geçiş, tam adlandırılmış gelenek yeterliği veya tedavi sonucu bu bitişte yoktur."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nccih",
+            "va_yoga"
+          ],
+          "prerequisites": [
+            "c11"
+          ],
+          "minutes": 12,
+          "evidenceMode": "self_report"
+        }
+      ]
+    }
+  ]
+}

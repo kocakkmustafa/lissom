@@ -1,0 +1,748 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.vinyasa.supported-standing.beginner",
+  "version": "1.0.0",
+  "title": {
+    "en": "Supported standing Vinyasa: beginner pathway",
+    "tr": "Destekli ayakta Vinyasa: başlangıç yolu"
+  },
+  "intro": {
+    "en": "Original breath-linked supported standing route. Selected entries, transitions and exits; floor branch is knowledge-only. No fixed traditional sequence, physical mastery, health outcome or complete Vinyasa-domain acceptance is claimed. Preparation and taught foundational references follow below. Minutes are flexible reading estimates, not practice doses.",
+    "tr": "Özgün nefesle bağlı destekli ayakta rota. Seçilen giriş, geçiş ve çıkışlar; yer dalı yalnız bilgi. Sabit geleneksel seri, fiziksel ustalık, sağlık sonucu veya bütün Vinyasa alanı kabulü iddiası yok. Hazırlık ve öğretilen temel kaynaklar aşağıdadır. Dakikalar esnek okuma tahminidir, fiziksel çalışma dozu değil."
+  },
+  "sources": {
+    "s1": "https://www.yogaeasy.com/artikel/vinyasa-yoga",
+    "s2": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety",
+    "s3": "https://www.yogaeasy.com/artikel/vinyasa-flow-transitions-and-how-to-safely-navigate-them",
+    "s4": "https://www.yogaeasy.com/artikel/mountain-pose",
+    "s5": "https://www.yogaeasy.com/artikel/half-standing-forward-bend",
+    "s6": "https://www.yogaeasy.com/artikel/downward-dog-pose",
+    "s7": "https://www.nhs.uk/live-well/exercise/strength-exercises/"
+  },
+  "sourceScopes": {
+    "s1": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s2": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s3": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s4": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s5": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s6": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s7": {
+      "supports": {
+        "en": "Selected concept or component only; see source map.",
+        "tr": "Yalnız seçilen kavram/bileşen; kaynak haritasına bak."
+      },
+      "doesNotSupport": {
+        "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
+        "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    }
+  },
+  "modules": [
+    {
+      "id": "v-foundations",
+      "title": {
+        "en": "Support and selected transitions",
+        "tr": "Destek ve seçilen geçişler"
+      },
+      "outcome": {
+        "en": "Explain entry, breath choice and support-preserving exit.",
+        "tr": "Giriş, nefes seçimi ve destek koruyan çıkışı açıkla."
+      },
+      "lessons": [
+        {
+          "id": "v01",
+          "title": {
+            "en": "Make a route choice",
+            "tr": "Rota seç"
+          },
+          "objective": {
+            "en": "Explain why breath-linked transitions, setup and permission to pause matter more than following every shape.",
+            "tr": "Nefesle bağlı geçiş, kurulum ve duraklama izninin her biçimi izlemekten neden önemli olduğunu açıkla."
+          },
+          "steps": [
+            {
+              "en": "Read the shared entry and stop rules. Put your chosen wall and rest chair on a paper map; do not start a movement while reading the phone.",
+              "tr": "Ortak başlama/dur kurallarını oku. Seçtiğin duvar ve dinlenme sandalyesini kâğıtta işaretle; telefon okurken hareket başlatma."
+            },
+            {
+              "en": "Check clear floor space, wall stability and familiar access to the chair. Choose standing practice, seated observation or postponement.",
+              "tr": "Zemin alanı, duvar sağlamlığı ve sandalyeye tanıdık erişimi kontrol et. Ayakta çalışma, oturarak gözlem veya erteleme seç."
+            },
+            {
+              "en": "While already comfortably supported, notice an ordinary breath without changing it. Name where a pause will occur: upright or supported sitting.",
+              "tr": "Zaten rahat destekliyken olağan nefesi değiştirmeden fark et. Bekleme yerini adlandır: dik veya destekli oturuş."
+            },
+            {
+              "en": "Explain your selected branch and one excluded action. If setup is uncertain, postpone movement and answer in writing.",
+              "tr": "Seçilen dalı ve dışarıda bıraktığın bir eylemi açıkla. Kurulum belirsizse hareketi ertele, yazılı yanıtla."
+            }
+          ],
+          "practice": {
+            "en": "Make a setup map, then close this page and recall two reasons to pause. A forgotten rest point is a written planning error: add it and explain the route again before movement. It is not a symptom test. Advance to v02 only if the setup and standing prerequisite are familiar; otherwise remain knowledge-only or return to the chair path. ",
+            "tr": "Kurulum haritası çiz; sonra sayfayı kapatıp beklemek için iki neden hatırla. Unutulan dinlenme yeri yazılı plan hatasıdır: ekle, hareketten önce yolu yeniden açıkla. Belirti sınaması değildir. Kurulum/ayakta ön koşul tanıdıksa v02’ye geç; değilse yalnız bilgi, sandalye yolu veya erteleme seç. "
+          },
+          "selfCheck": {
+            "en": "A video continues into Chaturanga; does choosing Vinyasa oblige you to follow it?",
+            "tr": "Video Chaturanga’ya geçiyor; Vinyasa seçmek onu izlemeyi zorunlu kılar mı?"
+          },
+          "answerKey": {
+            "en": "No; choose the taught supported route or rest.",
+            "tr": "Hayır; öğretilen destekli rotayı veya dinlenmeyi seç."
+          },
+          "adaptation": {
+            "en": "Vinyasa here means intentionally connecting selected yoga shapes, transitions and attention with an unforced breath. It does not mean compulsory fast exercise or a compulsory plank–Chaturanga–upward-dog cycle. Yoga has Indian philosophical roots and extends beyond exercise. This original adapted pathway is a bounded introduction to Vinyasa learning, not a traditional fixed series or the entire Vinyasa domain. A supported standing route is the initial movement endpoint; the floor branch is explicitly knowledge-only pending individual instruction. Ten study units organize different decisions, not ten ticks that prove completion. [S1,S2,S3]\n\nKnow h01/h02 boundaries and natural breathing, h03 comfortable standing, h05 small joint preparation, h11 supported hinge and h35 unhurried transitions, or equivalent independently explained preparation. Reading/completion records are not proof. Before choosing movement, explain setup, demonstrate only familiar comfortable movements already learned, and identify a supported rest/exit. If standing, hand support, stepping or returning upright is unfamiliar or unsuitable, use written observation and seek qualified instruction; the chair pathway is a separate option, not evidence of standing ability. No full-Hatha completion or floor ability is imposed. Never stand from an unfamiliar floor position to follow this document.\n\nPrepare afresh every session and after interruptions. Use a firm nonslip surface, clear foot space and a solid stationary wall, not glass, a door, heater or furniture that can move. Test light palm contact upright without leaning body weight into an unverified surface. A rest chair must not swivel, roll, rock or slide; both feet reach the floor. Keep eyes open. Wear clothing that permits movement; ordinary comfortable room temperature. Choose observation whenever setup is uncertain. For pregnancy, injury, balance problems or other health limits, ask the relevant health professional and qualified yoga instructor about individual suitability; this text cannot supply that assessment. [S2,S7]\n\nBreathe naturally without holding, force, deliberate throat constriction or required count. An inhale/exhale cue is an optional attention invitation: if breath ends before movement, pause or breathe again; never race, prolong or hold breath to finish. Movements may take several breaths. Use a small comfortable range, soft elbows/knees and no end-range demand. Pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell means stop, use the already familiar supported rest and do not retest the symptom. Sudden serious illness requires prompt medical help; recurrent/persistent symptoms require individual advice before restarting. Only a symptom-free setup/coordination error may receive one smaller retest. Stop cues and the one-retest limit are conservative author rules, not a diagnostic tool or evidence of safe technique. [S2; original pedagogy]",
+            "tr": "Burada Vinyasa, seçilen yoga biçimlerini, geçişleri ve dikkati zorlanmamış nefesle bilinçli bağlamak demektir. Zorunlu hızlı egzersiz veya zorunlu plank–Chaturanga–yukarı bakan köpek döngüsü değildir. Yoga Hint felsefesine dayanır ve egzersizden geniştir. Bu özgün uyarlanmış yol Vinyasa öğrenimine sınırlı bir giriştir; geleneksel sabit seri veya bütün Vinyasa alanı değildir. İlk hareket bitişi destekli ayakta rotadır; yer dalı bireysel öğretim bekleyen açıkça yalnız bilgi çalışmasıdır. On çalışma birimi farklı kararları düzenler; tamamlanmayı kanıtlayan on işaret değildir. [S1,S2,S3]\n\nh01/h02 sınırları/doğal nefes, h03 rahat ayakta duruş, h05 küçük eklem hazırlığı, h11 destekli menteşe ve h35 acele etmeyen geçişleri veya bağımsız açıklanmış eşdeğer hazırlığı bil. Okuma/tamamlama kaydı kanıt değildir. Hareket seçmeden kurulumunu açıkla, yalnız önceden öğrendiğin tanıdık rahat hareketleri göster ve destekli dinlenme/çıkış belirle. Ayakta duruş, el desteği, adımlama veya dik dönme tanıdık/uygun değilse yazılı gözlem ve nitelikli öğretim seç; sandalye yolu ayrı seçenektir, ayakta yeterlik kanıtı değildir. Bütün Hatha veya yer yeterliği zorunlu değildir. Bu belgeyi izlemek için tanımadığın yer pozisyonundan ayağa kalkma.\n\nHer oturumda ve kesintiden sonra yeniden hazırlan. Sağlam kaymayan zemin, açık ayak alanı ve sabit sağlam duvar kullan; cam, kapı, ısıtıcı veya oynayan mobilya kullanma. Doğrulanmamış yüzeye vücut ağırlığı vermeden dikken hafif avuç temasını yokla. Dinlenme sandalyesi dönmemeli, tekerlekli olmamalı, sallanmamalı/kaymamalı; iki ayak yere ulaşmalı. Gözler açık kalsın. Hareketi engellemeyen giysi ve olağan rahat oda sıcaklığı seç. Kurulum belirsizse gözlem seç. Gebelik, sakatlık, denge sorunu veya başka sağlık sınırlarında ilgili sağlık uzmanı ve nitelikli yoga eğitmeninden bireysel uygunluk görüşü al; bu metin bu değerlendirmeyi yapamaz. [S2,S7]\n\nTutmadan, zorlamadan, bilinçli boğaz daraltmadan ve zorunlu sayı olmadan doğal nefes al. Alış/veriş yönergesi seçmeli dikkat davetidir: hareketten önce nefes biterse bekle veya yeniden nefes al; bitirmek için hızlanma, nefesi uzatma/tutma. Hareket birkaç nefes sürebilir. Küçük rahat aralık, yumuşak dirsek/diz ve son aralığı zorlama olmadan çalış. Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur, önceden tanıdık destekli dinlenmeyi kullan ve belirtiyi yeniden sınama. Ani ciddi kötüleşmede hızla tıbbi yardım al; tekrarlayan/süren belirtilerde yeniden başlamadan bireysel görüş al. Yalnız belirtisiz kurulum/koordinasyon hatasında daha küçük tek yeniden deneme yapılabilir. Dur yönergeleri/tek deneme sınırı koruyucu yazar kurallarıdır; tanı aracı veya güvenli teknik kanıtı değildir. [S2; özgün öğretim]"
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2"
+          ],
+          "prerequisites": [],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v02",
+          "title": {
+            "en": "Mountain and an unforced breath link",
+            "tr": "Dağ ve zorlanmamış nefes bağı"
+          },
+          "objective": {
+            "en": "Separate breath attention from breath control.",
+            "tr": "Nefes dikkatini nefes kontrolünden ayır."
+          },
+          "steps": [
+            {
+              "en": "Stand in a comfortable hip-width base near the verified wall; knees not pushed backward, head above torso, eyes forward. Keep one palm at the wall if that support is familiar and needed.",
+              "tr": "Doğrulanmış duvara yakın, rahat kalça genişliğinde ayak tabanı seç; dizleri geriye itme, baş gövde üzerinde, bakış öne. Tanıdık/gerekiyorsa bir avuç duvarda kalsın."
+            },
+            {
+              "en": "Keep shoulders easy. During any comfortable inhalation, let the free arm travel forward only as far as is easy, below shoulder height if preferred. Do not lift the chin to accompany it.",
+              "tr": "Omuzlar rahat olsun. Rahat bir nefes alışında serbest kolu yalnız kolay aralığa öne götür; istersen omuz altında kal. Çeneyi birlikte kaldırma."
+            },
+            {
+              "en": "Lower the arm during an ordinary exhalation if convenient. If the breath changes sooner, pause the arm or use another breath; there is no one-breath deadline.",
+              "tr": "Kolay gelirse olağan nefes verişinde kolu indir. Nefes daha önce değişirse kolu beklet veya başka nefes kullan; tek nefeslik son süre yoktur."
+            },
+            {
+              "en": "Return the hand beside the thigh and settle upright. Use the chair for rest if already familiar; skip the arm action and observe breath if unsuitable.",
+              "tr": "Eli uyluk yanına döndür, dik yerleş. Önceden tanıdıksa sandalyede dinlen; kol eylemi uygun değilse atla, nefesi gözle."
+            }
+          ],
+          "practice": {
+            "en": "Explore one small rise and lowering, optionally the other arm after an upright reset. No repeat count is a target. If you notice a symptom-free shoulder shrug, lower to neutral, keep required support, choose a lower reach and retry once. Observe the controlled return, not symmetry. Explain a breath-mismatch exit before v03. Symptoms mean stop, not a smaller retry. ",
+            "tr": "Küçük tek kaldırma/indirme keşfet; istersen dik yerleşimden sonra diğer kol. Tekrar sayısı hedef değildir. Belirtisiz omuz yükseltme fark edersen nötre indir, gereken desteği koru, daha alçak uzanmayı bir kez dene. Simetriyi değil kontrollü dönüşü gözle. v03 öncesi nefes-hareket uyuşmazlığından çıkışı açıkla. Belirti varsa dur; daha küçük tekrar yapma. "
+          },
+          "selfCheck": {
+            "en": "Your inhale ends halfway through a comfortable arm rise. What can you change without holding breath?",
+            "tr": "Rahat kol kaldırmanın yarısında alış bitti. Nefesi tutmadan neyi değiştirebilirsin?"
+          },
+          "answerKey": {
+            "en": "Pause/lower the arm or take another ordinary breath; smaller movement next time.",
+            "tr": "Kolu beklet/indir veya başka olağan nefes al; sonra daha küçük hareket seç."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s4"
+          ],
+          "prerequisites": [
+            "v01"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v03",
+          "title": {
+            "en": "Supported half hinge and return",
+            "tr": "Destekli yarım menteşe ve dönüş"
+          },
+          "objective": {
+            "en": "Rehearse both entry and return before linking transitions.",
+            "tr": "Geçişleri bağlamadan giriş ve dönüşü birlikte çalış."
+          },
+          "steps": [
+            {
+              "en": "Face the wall in a comfortable standing base. Place palms at a comfortable chest height, fingers up and elbows easy; keep knees slightly soft.",
+              "tr": "Rahat ayakta tabanla duvara dön. Avuçları rahat göğüs yüksekliğinde koy; parmaklar yukarı, dirsekler rahat, dizler hafif yumuşak."
+            },
+            {
+              "en": "With feet grounded, move the hips a little back and the torso a little forward from the hips. If hands need to slide slightly, keep contact and stay within the range you already know. Do not lower the head below the hips or aim for a horizontal torso.",
+              "tr": "Ayaklar yerdeyken kalçayı az geriye, gövdeyi kalçadan az öne götür. Ellerin biraz kayması gerekiyorsa teması koru, yalnız tanıdık aralıkta kal. Başı kalçanın altına indirme veya yatay gövde hedefleme."
+            },
+            {
+              "en": "Keep the neck in line with the torso, gaze toward the floor ahead; do not crane the chin to look at the phone. Take ordinary breaths in the chosen shallow shape.",
+              "tr": "Boyun gövde çizgisinde, bakış öndeki zemine; telefona bakmak için çeneyi kaldırma. Seçilen sığ biçimde olağan nefes al."
+            },
+            {
+              "en": "Keep hand contact, bring hips over the feet and return the trunk to upright together. Do not snap the knees straight or roll up from a deep dangling fold. If entry/return is unfamiliar, study h11 with an instructor instead of experimenting here.",
+              "tr": "El temasını koru, kalçayı ayakların üzerine ve gövdeyi beraber dik konuma döndür. Dizleri aniden düzleştirme, derin sarkmış katlanmadan yuvarlanarak kalkma. Giriş/dönüş tanıdık değilse burada denemek yerine h11’i eğitmenle çalış."
+            }
+          ],
+          "practice": {
+            "en": "One shallow entry and controlled upright return; arm rise is omitted so only one new decision is studied. A symptom-free rushed return: stop upright, shorten the hinge and rehearse one slower supported return. Discomfort is a stop, not an alignment puzzle. v04 requires a familiar supported return; unresolved return means observation and instruction. ",
+            "tr": "Sığ tek giriş ve kontrollü dik dönüş; tek yeni karar için kol kaldırma atlanır. Belirtisiz acele dönüşte dik dur, menteşeyi kısalt, destekli daha yavaş dönüşü bir kez çalış. Rahatsızlık hizalama bulmacası değil, dur nedenidir. v04 için destekli dönüş tanıdık olmalı; çözülmemiş dönüş gözlem/öğretim gerektirir. "
+          },
+          "selfCheck": {
+            "en": "Does touching the floor or becoming horizontal determine whether you can learn this transition?",
+            "tr": "Yere dokunmak veya yatay olmak bu geçişi öğrenip öğrenemeyeceğini belirler mi?"
+          },
+          "answerKey": {
+            "en": "Neither depth nor floor contact is a criterion; familiar controlled support and return are the learning target.",
+            "tr": "Derinlik/yere temas ölçüt değil; tanıdık kontrollü destek ve dönüş öğrenme hedefidir."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s5",
+            "s3"
+          ],
+          "prerequisites": [
+            "v02"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v04",
+          "title": {
+            "en": "Wall dog preparation",
+            "tr": "Duvarda köpek hazırlığı"
+          },
+          "objective": {
+            "en": "Keep feet fixed while learning a shallow supported wall preparation and its return.",
+            "tr": "Sığ destekli duvar hazırlığı ve dönüşünü öğrenirken ayakları sabit tut."
+          },
+          "steps": [
+            {
+              "en": "Start facing a verified solid wall, feet hip-width and palms at comfortable chest height, fingers up, elbows bent softly. Choose a distance at which upright contact is easy; feet stay fixed throughout this unit.",
+              "tr": "Doğrulanmış sağlam duvara dön; ayaklar kalça genişliğinde, avuçlar rahat göğüs yüksekliğinde, parmaklar yukarı, dirsekler hafif bükülü. Dikken temasın kolay olduğu mesafeyi seç; bu birim boyunca ayaklar sabit kalır."
+            },
+            {
+              "en": "Keeping both palms in contact and knees soft, move the hips a little back and incline the trunk only a little. Elbows may straighten comfortably, never lock. This limited high wall variation is a preparation related to Downward Dog, not its floor form; no horizontal torso or head-below-hips target.",
+              "tr": "İki avuç temasını ve yumuşak dizleri koruyarak kalçayı az geriye, gövdeyi yalnız biraz öne götür. Dirsekler rahatça açılabilir, kilitlenmez. Bu sınırlı yüksek duvar uyarlaması Köpek ile ilişkili hazırlıktır; yer biçimi değildir. Yatay gövde veya başı kalçanın altına indirme hedefi yoktur."
+            },
+            {
+              "en": "To return, keep feet fixed and bring hips forward over the feet as the trunk rises. Keep palms at their original height if comfortable; if needed, slide palms a little upward on the wall while returning, one short adjustment at a time without releasing both contacts. Stop at the highest comfortable supported trunk position; do not reach for an inaccessible upright position.",
+              "tr": "Dönüşte ayaklar sabitken kalçayı ayakların üzerine öne getir ve gövdeyi yükselt. Rahatsa avuçlar başlangıç yüksekliğinde kalsın; gerekiyorsa dönüş sırasında avuçları duvarda az yukarı kaydır, iki teması birlikte bırakmadan kısa ayarlamalar yap. En yüksek rahat destekli gövde konumunda dur; erişilemeyen dikliğe uzanma."
+            },
+            {
+              "en": "Once the familiar upright base and comfortable wall contact are restored, pause, then lower one hand to the thigh, followed by the other only if support is no longer needed. No foot approach occurs within this variation. If you cannot maintain comfortable contact/return at this distance, choose a shallower range or omit; do not improvise a backward/forward walking transition.",
+              "tr": "Tanıdık dik taban ve rahat duvar teması geri geldiğinde bekle; destek artık gerekmiyorsa önce bir eli, sonra diğerini uyluk yanına indir. Bu uyarlamada duvara yaklaşma adımı yoktur. Bu mesafede rahat temas/dönüş korunamıyorsa daha sığ aralık seç veya atla; doğaçlama ileri/geri yürüyüş ekleme."
+            }
+          ],
+          "practice": {
+            "en": "Study the hand-contact sequence first; optionally rehearse one shallow fixed-foot entry and return. v03 stationary hinge remains the replacement. For a symptom-free overreach, return by the familiar small support-preserving action, reset upright and select less hip displacement for one smaller attempt. Slipping contact or symptoms end the attempt; no retest through them. Select v03 OR this limited v04 preparation for v06. This unit does not teach the full stepped-back wall-dog variation. ",
+            "tr": "Önce el temasının sırasını incele; istersen sabit ayakla sığ tek giriş/dönüş çalış. v03 sabit menteşe yerine seçilebilir. Belirtisiz fazla uzanmada tanıdık küçük destekli eylemle dön, dik yerleş ve daha az kalça yer değişimini tek kez dene. Kayan temas/belirti denemeyi bitirir; bunları zorlayarak yeniden deneme yok. v06 için v03 VEYA bu sınırlı v04 hazırlığını seç. Bu birim tam geri adımlı duvar köpek varyantını öğretmez. "
+          },
+          "selfCheck": {
+            "en": "Must feet move toward the wall or both hands release before the torso returns?",
+            "tr": "Gövde dönmeden ayaklar duvara yaklaşmalı veya iki el bırakılmalı mı?"
+          },
+          "answerKey": {
+            "en": "Neither is required: feet remain fixed, palm contact stays while hips/trunk return, hands may slide upward; release one then the other only at a stable upright base when support is unnecessary. This is not floor-form evidence.",
+            "tr": "İkisi de gerekmez: ayaklar sabit, kalça/gövde dönerken avuç teması korunur; eller yukarı kayabilir. Destek gerekmeyen sağlam dik tabanda önce biri sonra diğeri bırakılır. Yer biçimi kanıtı değildir."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s5",
+            "s6"
+          ],
+          "prerequisites": [
+            "v03"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v05",
+          "title": {
+            "en": "A supported staggered stance",
+            "tr": "Destekli şaşırtılmış ayak tabanı"
+          },
+          "objective": {
+            "en": "Place and return a foot with awareness rather than jumping between poses.",
+            "tr": "Pozlar arasında atlamak yerine ayağı dikkatle yerleştir ve geri getir."
+          },
+          "steps": [
+            {
+              "en": "Face the wall upright with palms supported, feet hip-width. Check the space behind without turning while a foot is moving; if the path cannot be checked, omit stepping.",
+              "tr": "Avuçlar destekli, ayaklar kalça genişliğinde duvara dönük dik dur. Ayak hareket ederken dönmeden arkadaki alanı kontrol et; yol kontrol edilemiyorsa adımı atla."
+            },
+            {
+              "en": "Keep the left foot grounded and take one short familiar step back with the right, preserving sideways width rather than a tightrope line. The back heel may be lifted; keep the front knee soft and tracking with its toes. Avoid twisting on a loaded foot.",
+              "tr": "Sol ayak yerde kalsın; sağla tanıdık kısa geri adım at, ip üstü çizgi yerine yan genişliği koru. Arka topuk kalkabilir; ön diz yumuşak ve ayak parmakları yönünde olsun. Yüklü ayakta dönme."
+            },
+            {
+              "en": "If comfortable, bend the front knee only a little while torso stays upright; hands remain supported. No deep lunge, chest thrust or overhead arms are needed. Use ordinary breaths and stop before instability.",
+              "tr": "Rahatsa gövde dik kalırken ön dizi yalnız biraz bük; eller destekli kalsın. Derin hamle, göğsü itme veya baş üstü kol gerekmez. Olağan nefes kullan, dengesizlikten önce dur."
+            },
+            {
+              "en": "Reduce the knee bend, bring the rear foot forward with support, restore the two-foot neutral base and pause. Repeat on the other side only if familiar; do not change sides by pivoting loaded knees.",
+              "tr": "Diz bükümünü azalt, destekle arka ayağı öne getir, iki ayak nötr tabana dön ve bekle. Yalnız tanıdıksa diğer yana geç; yüklü dizleri çevirerek taraf değiştirme."
+            }
+          ],
+          "practice": {
+            "en": "One selected-side entry and return, then decide whether the other side is appropriate. A stationary two-foot base with breath attention is the replacement. Exit using the already familiar support route. If symptom-free, start neutral with a shorter step and retry once; if an ordinary return remains unclear, omit and seek instruction. Add to v06 only after a controlled familiar return. Otherwise the hinge loop alone remains the standing route. ",
+            "tr": "Seçilen tek yanda giriş/dönüş; sonra diğer yanın uygunluğuna karar ver. Yerine iki ayak sabit tabanda nefes dikkati seçilebilir. Önceden tanıdık destek yoluyla çık. Belirtisizse nötrden daha kısa adımı bir kez dene; olağan dönüş hâlâ belirsizse atla, öğretim al. v06’ya yalnız kontrollü tanıdık dönüşten sonra ekle. Değilse ayakta rota yalnız menteşe döngüsüdür. "
+          },
+          "selfCheck": {
+            "en": "If a rear-foot return needs a hop, should you lengthen the stance or shorten it before a symptom-free retest?",
+            "tr": "Arka ayağın dönüşü zıplama gerektiriyorsa belirtisiz yeniden denemeden önce tabanı uzatmalı mı, kısaltmalı mı?"
+          },
+          "answerKey": {
+            "en": "Shorten the step after a supported neutral reset only if symptom-free; otherwise omit.",
+            "tr": "Belirtisizse destekli nötrden sonra adımı kısalt; değilse atla."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "prerequisites": [
+            "v04"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "v-independent",
+      "title": {
+        "en": "Link, choose, recall",
+        "tr": "Bağla, seç, hatırla"
+      },
+      "outcome": {
+        "en": "Choose a bounded route and explain corrections and later recall without a mastery claim.",
+        "tr": "Sınırlı rota seç, düzeltme ve sonraki hatırlamayı ustalık iddiası olmadan açıkla."
+      },
+      "lessons": [
+        {
+          "id": "v06",
+          "title": {
+            "en": "Link the selected route",
+            "tr": "Seçilen rotayı bağla"
+          },
+          "objective": {
+            "en": "Sustain attentive transitions while retaining every exit.",
+            "tr": "Her çıkışı koruyarak dikkatli geçişleri sürdür."
+          },
+          "steps": [
+            {
+              "en": "Before movement write: upright base → optional small free-arm rise/lower → supported shallow hinge OR familiar wall-dog preparation → upright base → optional short staggered stance/right return → neutral → optional left return → neutral rest. Choose only familiar components, keep required support and never remove it to make the route look continuous.",
+              "tr": "Hareketten önce yaz: dik taban → seçmeli küçük serbest kol kaldır/indir → destekli sığ menteşe VEYA tanıdık duvar köpek hazırlığı → dik taban → seçmeli kısa şaşırtılmış adım/sağ ayağı nötre geri getir → nötr → seçmeli sol ayağı nötre geri getir → nötr dinlenme. Yalnız tanıdık bileşenleri seç; gereken desteği koru, kesintisiz görünmek için kaldırma."
+            },
+            {
+              "en": "Rehearse the hinge-to-upright link first, without the optional steps. Notice a comfortable exhalation while entering and an inhalation while returning if they happen naturally; otherwise use several ordinary breaths.",
+              "tr": "Önce seçmeli adımlar olmadan menteşe-dik dönüş bağını çalış. Kendiliğinden uygunsa girişte rahat verişi/dönüşte alışın farkına var; değilse birkaç olağan nefes kullan."
+            },
+            {
+              "en": "If that link is familiar and symptom-free, include just one selected optional component. Return upright and pause before a foot changes position. Continuous attention includes stationary pauses; speed is not progression.",
+              "tr": "Bağ tanıdık ve belirtisizse yalnız seçilen bir bileşeni ekle. Ayak yer değiştirmeden dike dön, bekle. Kesintisiz dikkat sabit beklemeyi içerir; hız ilerleme değildir."
+            },
+            {
+              "en": "Finish upright, hands low, then use the familiar rest chair if chosen. End the route whenever attention, contact or breathing becomes uncertain; no timer or compulsory second round.",
+              "tr": "Dik, eller aşağıda bitir; seçtiysen tanıdık dinlenme sandalyesini kullan. Dikkat/temas/nefes belirsizleşirse bitir; süre veya zorunlu ikinci tur yok."
+            }
+          ],
+          "practice": {
+            "en": "Rehearse the selected short route once at your own pace. Write what was practised, observed, omitted or unresolved. Phone reading and movement are separate phases. If you merely forgot which foot to move and have no symptoms, reset upright and simplify to the hinge link once; do not add a new pose during correction. Explain a coherent start, breath choice and end from memory before independent planning. This self-report does not verify physical execution. ",
+            "tr": "Seçilen kısa rotayı kendi hızında bir kez çalış. Çalışılan/gözlenen/atlanan/çözülmemiş kısmı yaz. Telefon okuma ile hareket ayrı aşamalardır. Yalnız hangi ayağın hareket edeceğini unuttuysan ve belirtisizsen dike yerleş, tek kez menteşe bağına sadeleştir; düzeltmede yeni poz ekleme. Bağımsız plandan önce başlangıç/nefes seçimi/bitişi hatırdan açıkla. Öz beyan fiziksel uygulamayı doğrulamaz. "
+          },
+          "selfCheck": {
+            "en": "A pause breaks the music's rhythm but restores your contact awareness. Is it a failed flow?",
+            "tr": "Bekleme müziğin ritmini bozuyor fakat temas dikkatini geri getiriyor. Bu başarısız akış mı?"
+          },
+          "answerKey": {
+            "en": "No; attentive pauses are part of the selected route.",
+            "tr": "Hayır; dikkatli bekleme seçilen rotanın parçasıdır."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "prerequisites": [
+            "v05"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v07",
+          "title": {
+            "en": "Understand the floor branch without following it",
+            "tr": "Yer dalını izlemeden anla"
+          },
+          "objective": {
+            "en": "Identify where a familiar standing pathway ends and individual floor instruction begins.",
+            "tr": "Tanıdık ayakta yolun bittiği ve bireysel yer öğretiminin başladığı yeri belirle."
+          },
+          "steps": [
+            {
+              "en": "Draw the standing route beside a separate floor map: standing-to-floor transfer; all fours; chosen supported rest; possible kneeling/plank/backbend/dog transitions; floor-to-seat/standing transfer.",
+              "tr": "Ayakta rotanın yanına ayrı yer haritası çiz: ayaktan yere geçiş; dört ayak; seçilen destekli dinlenme; olası diz/plank/geriye açılma/köpek geçişleri; yerden oturuş/ayağa geçiş."
+            },
+            {
+              "en": "Mark each unfamiliar transfer, hand/wrist load, kneeling pressure and neck/back demand as unresolved. A floor photo cannot determine any of them.",
+              "tr": "Tanımadığın geçiş, el/bilek yükü, diz teması ve boyun/sırt talebini çözülmemiş işaretle. Yer fotoğrafı bunların hiçbirini belirleyemez."
+            },
+            {
+              "en": "Explain why h48 knees-down plank does not validate Chaturanga, h17 low cobra does not validate upward dog, and h46 wall practice does not validate a floor form. Do not combine these into a video imitation.",
+              "tr": "h48 diz yerde plankın Chaturanga’yı, h17 alçak kobranın yukarı köpeği, h46 duvar çalışmasının yer biçimini neden doğrulamadığını açıkla. Video taklidine birleştirme."
+            },
+            {
+              "en": "Write an instructor question about one concrete entry and its exit. Keep the floor branch closed until those actions and suitability are taught individually; no app tick can open physical eligibility.",
+              "tr": "Somut tek giriş ve çıkışı için eğitmen sorusu yaz. Eylemler/uygunluk bireysel öğretilene kadar yer dalı kapalı kalsın; app işareti fiziksel uygunluğu açamaz."
+            }
+          ],
+          "practice": {
+            "en": "Knowledge-only comparison; remain seated or upright in the already comfortable position. No transfer is requested. Replace an unearned physical claim with “knowledge-only/unresolved” and explain the difference again in writing. Carry this boundary into v09. Optional future floor instruction expands the route only after separate demonstration and observation, never automatically. ",
+            "tr": "Yalnız bilgi karşılaştırması; zaten rahat oturuş/dik konumda kal. Geçiş istenmez. Kazanılmamış fiziksel iddiayı “yalnız bilgi/çözülmemiş” ile değiştir, farkı yazılı yeniden açıkla. Sınırı v09’a taşı. Gelecekte seçmeli yer öğretimi yalnız ayrı gösterim/gözlemden sonra rotayı genişletir; otomatik değil. "
+          },
+          "selfCheck": {
+            "en": "Must floor vinyasas or a traditional Sun A be added before the supported standing endpoint is valid?",
+            "tr": "Destekli ayakta bitiş geçerli olmadan yer vinyasaları veya geleneksel Sun A eklemek zorunlu mu?"
+          },
+          "answerKey": {
+            "en": "No for this bounded standing endpoint; floor/traditional-series competence remains unobserved.",
+            "tr": "Bu sınırlı ayakta bitiş için hayır; yer/geleneksel seri yeterliği gözlenmemiş kalır."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "prerequisites": [
+            "v06"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v08",
+          "title": {
+            "en": "Correction is different from a symptom",
+            "tr": "Düzeltme belirtiden farklıdır"
+          },
+          "objective": {
+            "en": "Make a correction decision without diagnosing yourself.",
+            "tr": "Kendine tanı koymadan düzeltme kararı ver."
+          },
+          "steps": [
+            {
+              "en": "Answer before opening the key: A) you lose count but remain comfortable; B) knee pain appears during a step; C) the wall contact slips; D) you try to hold breath to finish the hinge.",
+              "tr": "Anahtarı açmadan yanıtla: A) sırayı unuttun fakat rahatsın; B) adımda diz ağrısı başladı; C) duvar teması kaydı; D) menteşeyi bitirmek için nefes tutmaya çalışıyorsun."
+            },
+            {
+              "en": "For a symptom-free forgotten-order example only, reset upright and simplify to the stationary hinge already learned. State what changes: fewer choices, not deeper range.",
+              "tr": "Yalnız belirtisiz sıra unutma örneğinde dik yerleş, önceden öğrenilen sabit menteşeye sadeleştir. Değişeni söyle: daha az seçim; daha derin aralık değil."
+            },
+            {
+              "en": "Choose one smaller retest only if setup is secure and there are no symptoms. Observe remembered order, maintained required contact and a controlled return. Failure to restore those means finish and seek instruction.",
+              "tr": "Kurulum sağlamsa ve belirti yoksa daha küçük tek deneme seç. Hatırlanan sıra, gereken temas ve kontrollü dönüşü gözle. Bunlar geri gelmezse bitir, öğretim al."
+            },
+            {
+              "en": "For symptoms, uncertain support or forced breath, finish movement and use the familiar supported rest. Record what happened without assigning a diagnosis; persistent concerns need individual advice.",
+              "tr": "Belirti, belirsiz destek veya zorlanan nefeste hareketi bitir, tanıdık destekli dinlenme kullan. Tanı atamadan olanı kaydet; süren endişede bireysel görüş al."
+            }
+          ],
+          "practice": {
+            "en": "Work the cases in writing; physical retest is optional and never a simulation of pain or imbalance.  Explain the four decisions unaided before v09; a wrong written answer is corrected on paper first. ",
+            "tr": "Durumları yazılı çöz; fiziksel tekrar seçmelidir, ağrı/dengesizlik taklidi asla yapılmaz.  v09 öncesi dört kararı yardımsız açıkla; yanlış yazılı yanıt önce kâğıtta düzeltilir. "
+          },
+          "selfCheck": {
+            "en": "What exactly may be retested, and what must never be “tested through”?",
+            "tr": "Tam olarak ne yeniden denenebilir ve ne asla “zorlayarak sınanmaz”?"
+          },
+          "answerKey": {
+            "en": "A can receive one simplified symptom-free retest. B means stop and appropriate individual advice. C means end and restore verified setup before future movement. D means stop movement and return to ordinary breath; reduce future demands. None requires diagnosing a joint or forcing through a symptom.",
+            "tr": "A’da belirtisiz tek sade deneme olabilir. B’de dur/uygun bireysel görüş. C’de bitir, sonraki hareketten önce doğrulanmış kurulum sağla. D’de hareketi durdur, olağan nefese dön, gelecekteki talebi azalt. Hiçbiri ekleme tanı veya belirtiyi zorlamayı gerektirmez."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2"
+          ],
+          "prerequisites": [
+            "v07"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v09",
+          "title": {
+            "en": "Design your route independently",
+            "tr": "Rotanı bağımsız tasarla"
+          },
+          "objective": {
+            "en": "Make a coherent plan that includes supports, breath choice and early endings.",
+            "tr": "Destek, nefes seçimi ve erken bitiş içeren tutarlı plan oluştur."
+          },
+          "steps": [
+            {
+              "en": "Close the lesson steps. Write your own supported route with entry, selected link, upright reset and supported end; include an ordinary version and a shorter hinge-only version. Duration is your choice, not a prescribed physical dose.",
+              "tr": "Ders adımlarını kapat. Giriş, seçilen bağ, dik yerleşim ve destekli bitişle kendi rotanı yaz; olağan ve daha kısa yalnız menteşe sürümü olsun. Süre kişisel seçimdir, reçeteli fiziksel doz değildir."
+            },
+            {
+              "en": "Name required support at each stage, optional actions omitted, a breath-mismatch response and a symptom-stop response. Record floor actions as knowledge-only unless independently taught and observed outside this proposal.",
+              "tr": "Her aşamanın gereken desteği, atlanan seçmeli eylem, nefes uyumsuzluğu ve belirti-dur yanıtını adlandır. Bu öneri dışında bağımsız öğretilip gözlenmedikçe yer eylemlerini yalnız bilgi kaydet."
+            },
+            {
+              "en": "Explain the plan aloud without moving. Compare to shared rules and revise any missing exit before choosing physical rehearsal.",
+              "tr": "Hareket etmeden planı sesli açıkla. Ortak kuralla karşılaştır, eksik çıkışı fiziksel çalışma seçmeden düzelt."
+            },
+            {
+              "en": "If today’s setup is appropriate and the components familiar, rehearse the chosen short route; otherwise observe. Afterwards label each component practised/self-reported, observed, knowledge-only, omitted or unresolved.",
+              "tr": "Bugünkü kurulum uygunsa/bileşenler tanıdıksa kısa rotayı çalış; değilse gözle. Sonra her kısmı çalışıldı/öz beyan, gözlendi, yalnız bilgi, atlandı veya çözülmemiş işaretle."
+            }
+          ],
+          "practice": {
+            "en": "An original plan, explanation and optional rehearsal; repeating v06’s text without explaining choices does not meet this task. A missing exit is corrected in writing and the explanation repeated. If physical rehearsal exposes a symptom-free coordination error, use v08’s single simplified retest; do not change breathing or add complexity. Save the paper plan for a later separate session; no automatic “mastered” state. ",
+            "tr": "Özgün plan, açıklama ve seçmeli uygulama; seçimleri açıklamadan v06’yı kopyalamak görevi karşılamaz. Eksik çıkışı yazılı düzelt, açıklamayı yinele. Fiziksel çalışmada belirtisiz koordinasyon hatası varsa v08 tek sade denemesini kullan; nefesi değiştirme veya karmaşıklık ekleme. Kâğıt planı sonraki ayrı oturuma sakla; otomatik “ustalaştı” durumu yok. "
+          },
+          "selfCheck": {
+            "en": "How does your shorter route keep Vinyasa’s attention to links while preserving support and pauses?",
+            "tr": "Kısa rotan destek/beklemeyi koruyarak Vinyasa’nın bağlara dikkatini nasıl sürdürür?"
+          },
+          "answerKey": {
+            "en": "Explain your own selected link, optional breath attention, retained support and early exit; no single correct pose list.",
+            "tr": "Kendi seçilen bağını, seçmeli nefes dikkatini, korunan desteği/erken çıkışı açıkla; tek doğru poz listesi yok."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2"
+          ],
+          "prerequisites": [
+            "v08"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v10",
+          "title": {
+            "en": "Recall, select and end",
+            "tr": "Hatırla, seç ve bitir"
+          },
+          "objective": {
+            "en": "Independently recall the route and its limits before checking the plan.",
+            "tr": "Planı kontrol etmeden rotayı/sınırını bağımsız hatırla."
+          },
+          "steps": [
+            {
+              "en": "Before opening the saved plan, write the setup, chosen link, breath-mismatch response, one symptom-free correction and one symptom-stop exit from memory.",
+              "tr": "Saklanan planı açmadan kurulum, seçilen bağ, nefes uyumsuzluğu yanıtı, belirtisiz tek düzeltme ve belirti-dur çıkışını hatırdan yaz."
+            },
+            {
+              "en": "Answer a new case: today the rest chair rolls and the room is crowded. Name what must change before movement; do not rehearse an unsafe setup to prove recall.",
+              "tr": "Yeni durum: bugün dinlenme sandalyesi tekerlekli ve oda kalabalık. Hareketten önce ne değişmeli? Hatırlamayı kanıtlamak için güvensiz kurulumda çalışma."
+            },
+            {
+              "en": "Compare with your plan/shared rules, correct gaps on paper and explain again. Only if today’s setup and familiar components remain suitable, choose the short or ordinary route; movement may still be omitted.",
+              "tr": "Plan/ortak kuralla karşılaştır, eksikleri kâğıtta düzelt, yeniden açıkla. Yalnız bugünkü kurulum ve tanıdık bileşenler uygunsa kısa/olağan rotayı seç; hareket yine atlanabilir."
+            },
+            {
+              "en": "End at your planned supported rest. Record what you recalled, what needed correction and one unresolved instructor question. Omitted actions remain omitted evidence, not invisible passes.",
+              "tr": "Planlanan destekli dinlenmede bitir. Hatırlananı, gereken düzeltmeyi ve çözülmemiş eğitmen sorusunu kaydet. Atlanan eylem atlanmış kanıt olarak kalır; görünmez başarı değildir."
+            }
+          ],
+          "practice": {
+            "en": "Later recall plus a route choice and optional actual rehearsal. An instructor still needs to observe actual support, entry, transitions and exit to judge physical teaching adequacy. Re-explain a corrected memory gap unaided; a repeated movement attempt uses v08 and never tests a symptom.  A self-selected repeatable supported standing route; explainable breath/movement choices, contact and controlled returns; independent stop/modify decisions; later recall with honest omissions. Record each criterion separately as explained, self-reported or unresolved. All units read, a timer completed or an app tick is insufficient. Floor cycle, advanced inversion, named-tradition proficiency, teacher qualification and health outcomes are outside the endpoint.",
+            "tr": "Sonraki hatırlama, rota seçimi ve seçmeli gerçek uygulama. Fiziksel öğretim yeterliği için eğitmen hâlâ gerçek destek, giriş, geçiş ve çıkışı gözlemlemelidir. Düzeltilen hafıza açığını yardımsız yeniden açıkla; hareket tekrarı v08’i kullanır, belirtiyi asla sınamaz.  Kişisel yinelenebilir destekli ayakta rota; açıklanabilir nefes/hareket seçimi, temas ve kontrollü dönüş; bağımsız dur/uyarla kararı; dürüst atlamayla sonraki hatırlama. Her ölçütü ayrı açıklanmış, öz beyan veya çözülmemiş kaydet. Bütün birimleri okumak, süreyi doldurmak veya app işareti yetmez. Yer döngüsü, ileri ters duruş, adlandırılmış gelenek yeterliği, eğitmenlik ve sağlık sonucu kapsam dışıdır."
+          },
+          "selfCheck": {
+            "en": "What does this endpoint establish in writing, and what does it leave unobserved?",
+            "tr": "Bu bitiş yazılı olarak neyi ortaya koyar, neyi gözlenmemiş bırakır?"
+          },
+          "answerKey": {
+            "en": "Written planning/recall and honest self-report can be recorded; physical form, medical suitability and retained real-world skill need separate observation.",
+            "tr": "Yazılı plan/hatırlama ve dürüst öz beyan kaydedilebilir; fiziksel biçim, tıbbi uygunluk ve gerçek hayatta korunan beceri ayrı gözlem gerektirir."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2"
+          ],
+          "prerequisites": [
+            "v09"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        }
+      ]
+    }
+  ]
+}

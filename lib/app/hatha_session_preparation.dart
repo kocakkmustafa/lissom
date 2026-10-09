@@ -33,6 +33,9 @@ final class HathaSessionPreparation {
   /// Physical lesson routes need a fresh self-report. h05 teaches the warm-up
   /// itself; h55 is knowledge-only. h54/h56/h59 mix study with movement.
   static bool requiredFor(String lessonId) {
+    if (RegExp(r'^y0[2-8]$').hasMatch(lessonId)) return true;
+    if (RegExp(r'^v(0[2-6]|0[89]|10)$').hasMatch(lessonId)) return true;
+    if (RegExp(r'^c(0[1-9]|10|12)$').hasMatch(lessonId)) return true;
     if (!RegExp(r'^h\d\d$').hasMatch(lessonId)) return false;
     final int number = int.parse(lessonId.substring(1));
     return number == 3 ||
@@ -48,30 +51,44 @@ class HathaSessionPreparationCard extends StatelessWidget {
     required this.onPrepared,
     required this.onReadOnly,
     required this.onStop,
+    this.chairOnly = false,
+    this.vinyasaOnly = false,
+    this.yinOnly = false,
     super.key,
   });
 
   final VoidCallback onPrepared;
   final VoidCallback onReadOnly;
   final VoidCallback onStop;
+  final bool chairOnly;
+  final bool vinyasaOnly;
+  final bool yinOnly;
 
   @override
   Widget build(BuildContext context) {
     final List<String> steps = <String>[
       localeText(
         context,
-        'Clear space and choose a stable wall, chair or mat before moving.',
-        'Harekete geçmeden alanı boşalt; sağlam duvar, sandalye veya mat desteğini seç.',
+        yinOnly ? 'Use a level nonslip floor, low firm props and a familiar rest/exit. Set supports outside the pose; never move a loaded prop. Chair observation is not the floor skill.' : vinyasaOnly ? 'Use clear nonslip space and a verified solid wall, not glass, a door or moving furniture. Keep required hand support; use a stable wheelless rest chair.' : chairOnly
+            ? 'Choose a solid chair without wheels or swivel that cannot rock or slide, with both feet flat and clear space. Keep needed support; the desk is not a weight-bearing prop.'
+            : 'Clear space and choose a stable wall, chair or mat before moving.',
+        yinOnly ? 'Düz kaymayan zemin, alçak sağlam destek ve tanıdık dinlenme/çıkış seç. Desteği poz dışında kur; yüklü desteği taşıma. Sandalye gözlemi yer becerisi değildir.' : vinyasaOnly ? 'Açık kaymayan alan ve sağlam sabit duvar kullan; cam, kapı veya oynayan mobilya değil. Gereken el desteğini koru; sabit tekerleksiz dinlenme sandalyesi seç.' : chairOnly
+            ? 'Sallanıp kaymayan, tekerleksiz/dönmeyen sağlam sandalye, yerde iki ayak ve açık alan seç. Gereken desteği koru; masaya ağırlık verme.'
+            : 'Harekete geçmeden alanı boşalt; sağlam duvar, sandalye veya mat desteğini seç.',
       ),
       localeText(
         context,
-        'Before this lesson, move joints gently within a comfortable range, starting small and unhurried.',
-        'Bu dersten önce eklemleri rahat aralıkta, küçük ve acele etmeden hareket ettir.',
+        yinOnly ? 'Review y01/y02 setup and real Hatha foundations. Floor access must already be familiar and comfortable; reading h35 or ticking this card does not establish transfer ability or suitability.' : vinyasaOnly ? 'v01 teaches setup, v02 supported standing/breath and v03 shallow entry/return. Study real Hatha h01/h02/h03/h05/h11/h35 foundations if needed; do not use a completion tick as physical readiness.' : chairOnly
+            ? 'Begin with supported arrival and ordinary breathing. Preparation is taught in c03; use only familiar comfortable actions before later movement lessons.'
+            : 'Before this lesson, move joints gently within a comfortable range, starting small and unhurried.',
+        yinOnly ? 'y01/y02 kurulumu ve gerçek Hatha temellerini incele. Yer erişimi zaten tanıdık ve rahat olmalı; h35 okumak veya kartı işaretlemek transfer becerisi/uygunluk göstermez.' : vinyasaOnly ? 'v01 kurulum, v02 destekli duruş/nefes, v03 sığ giriş/dönüşü öğretir. Gerekiyorsa gerçek Hatha h01/h02/h03/h05/h11/h35 temellerini çalış; tamamlama işaretini fiziksel hazırlık sayma.' : chairOnly
+            ? 'Destekli başlangıç ve doğal nefes kullan. Hazırlık c03’te öğretilir; sonraki hareket derslerinden önce yalnız tanıdık rahat eylemleri kullan.'
+            : 'Bu dersten önce eklemleri rahat aralıkta, küçük ve acele etmeden hareket ettir.',
       ),
       localeText(
         context,
-        'Try an easier version before the lesson shape; rest or choose observation whenever needed.',
-        'Ders biçiminden önce kolay seçeneği dene; gerektiğinde dinlen veya yalnız gözlemle.',
+        yinOnly ? 'Choose only suitable familiar small forms; ordinary breath, no deepening or retention. Leave before the timer if needed; no symptomatic retest.' : 'Try an easier version before the lesson shape; rest or choose observation whenever needed.',
+        yinOnly ? 'Yalnız uygun tanıdık küçük biçim seç; normal nefes, derinleşme/tutma yok. Gerektiğinde süreden önce çık; belirtide tekrar yok.' : 'Ders biçiminden önce kolay seçeneği dene; gerektiğinde dinlen veya yalnız gözlemle.',
       ),
     ];
     return LissomCard(
