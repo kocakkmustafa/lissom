@@ -124,7 +124,7 @@ void main() {
     // Başlıktaki SAYI da türetilir — "3" yazmak, ürün ilerleyince yalan olurdu.
     expect(
       find.textContaining(
-        'MEASURED BY CAMERA IN THIS BUILD (${f.live.length})',
+        'CAMERA MEASUREMENT PATHS IN THE ENGINE (${f.live.length})',
       ),
       findsOneWidget,
     );
@@ -141,7 +141,7 @@ void main() {
     // (İlk düzeltmem `blockedListKey`e kaydırıyordu ve tam bu yüzden hâlâ
     // kırmızıydı — *doğru sınıf, yanlış hedef.*)
     final Finder blockedHeader = find.textContaining(
-      'NOT MEASURED BY CAMERA (${f.blocked.length})',
+      'NO CAMERA MEASUREMENT PATH IN THE ENGINE (${f.blocked.length})',
     );
     await scrollTo(tester, blockedHeader);
     expect(blockedHeader, findsOneWidget);
