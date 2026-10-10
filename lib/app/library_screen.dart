@@ -18,6 +18,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
 import 'attempt_values.dart';
@@ -36,6 +38,7 @@ class LibraryScreen extends StatelessWidget {
     this.attemptValueStoreLoader,
     this.hathaStoreLoader,
     this.onCourseDone,
+    this.measurementAvailable = motionPaidFeaturesAvailable,
     super.key,
   });
 
@@ -45,6 +48,7 @@ class LibraryScreen extends StatelessWidget {
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
   final Future<HathaProgressStore> Function()? hathaStoreLoader;
   final VoidCallback? onCourseDone;
+  final bool measurementAvailable;
 
   static const Key builtSectionKey = Key('library.built');
   static const Key notBuiltSectionKey = Key('library.notBuilt');
@@ -69,7 +73,7 @@ class LibraryScreen extends StatelessWidget {
           // ⚠️ Beyan bölümün DIŞINDA: içine koymak onu bir "aile kartı"
           // yapardı ve eşit-ağırlık kapısı (kart sayısı = aile sayısı)
           // yanlış sayardı. Kapı bunu anında yakaladı.
-          const CaptureUnavailableNote(),
+          CaptureUnavailableNote(measurementAvailable: measurementAvailable),
           Column(
             key: builtSectionKey,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,13 +83,8 @@ class LibraryScreen extends StatelessWidget {
                 // ⚠️ Eskiden "What Lissom can actually do on your phone
                 // today" yazıyordu — Home'un beyanıyla DOĞRUDAN çelişiyordu
                 // (L-242). Batarya telefonda çalıştırılamıyor.
-                subtitle: localeText(
-                  context,
-                  'What the measurement engine covers. Running it is '
-                      'a separate thing — see the note above.',
-                  'Ölçüm motorunun kapsadığı alanlar. Gerçek cihazda çalışma '
-                      'durumu için yukarıdaki açıklamaya bak.',
-                ),
+                subtitle:
+                    '${localeText(context, 'Written courses and measurement engine coverage.', 'Yazılı kurslar ve ölçüm motorunun kapsamı.')} ${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: measurementAvailable)}',
               ),
               const SizedBox(height: 14),
               for (final LibraryFamily f in built)
@@ -97,6 +96,7 @@ class LibraryScreen extends StatelessWidget {
                     attemptValueStoreLoader: attemptValueStoreLoader,
                     hathaStoreLoader: hathaStoreLoader,
                     onCourseDone: onCourseDone,
+                    measurementAvailable: measurementAvailable,
                   ),
                 ),
             ],
@@ -152,7 +152,11 @@ class LibraryScreen extends StatelessWidget {
                 for (final LibraryFamily f in pending)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: _PendingFamilyRow(family: f, facts: facts),
+                    child: _PendingFamilyRow(
+                      family: f,
+                      facts: facts,
+                      measurementAvailable: measurementAvailable,
+                    ),
                   ),
               ],
             ],
@@ -171,12 +175,14 @@ class _BuiltFamilyCard extends StatelessWidget {
     this.attemptValueStoreLoader,
     this.hathaStoreLoader,
     this.onCourseDone,
+    required this.measurementAvailable,
   });
   final LibraryFamily family;
   final AppFacts facts;
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
   final Future<HathaProgressStore> Function()? hathaStoreLoader;
   final VoidCallback? onCourseDone;
+  final bool measurementAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +199,7 @@ class _BuiltFamilyCard extends StatelessWidget {
               facts: facts,
               attemptValueStoreLoader: attemptValueStoreLoader,
               hathaStoreLoader: hathaStoreLoader,
+              measurementAvailable: measurementAvailable,
             ),
           ),
         );
@@ -238,8 +245,10 @@ class _BuiltFamilyCard extends StatelessWidget {
                           )
                   : localeText(
                       context,
-                      '$total tests · $live measurable by camera in this build',
-                      '$total test · bu sürümde $live tanesi kamerayla ölçülebiliyor',
+                      '$total tests · $live camera measurement paths in the engine '
+                          '· ${measurementAvailable ? 'camera entry on Home for supported tests' : 'camera closed in this release'}',
+                      '$total test · motorda $live kamera ölçüm yolu '
+                          '· ${measurementAvailable ? 'desteklenen testlerde kamera girişi Ana Sayfa’da' : 'bu sürümde kamera kapalı'}',
                     ),
               style: t.textTheme.bodySmall?.copyWith(
                 color: LissomColors.roseDeepHover,
@@ -255,9 +264,14 @@ class _BuiltFamilyCard extends StatelessWidget {
 /// Kompakt satır: ad + dürüst tek satır durum. Kart YOK, gölge YOK —
 /// birinci-sınıf yerleşimle karışmasın.
 class _PendingFamilyRow extends StatelessWidget {
-  const _PendingFamilyRow({required this.family, required this.facts});
+  const _PendingFamilyRow({
+    required this.family,
+    required this.facts,
+    required this.measurementAvailable,
+  });
   final LibraryFamily family;
   final AppFacts facts;
+  final bool measurementAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +280,11 @@ class _PendingFamilyRow extends StatelessWidget {
       borderRadius: BorderRadius.circular(LissomRadii.inner),
       onTap: () => Navigator.of(context).push<void>(
         MaterialPageRoute<void>(
-          builder: (_) => FamilyPage(family: family, facts: facts),
+          builder: (_) => FamilyPage(
+            family: family,
+            facts: facts,
+            measurementAvailable: measurementAvailable,
+          ),
         ),
       ),
       child: DecoratedBox(
@@ -314,6 +332,7 @@ class FamilyPage extends StatelessWidget {
     required this.facts,
     this.attemptValueStoreLoader,
     this.hathaStoreLoader,
+    this.measurementAvailable = motionPaidFeaturesAvailable,
     super.key,
   });
 
@@ -332,6 +351,7 @@ class FamilyPage extends StatelessWidget {
   final AppFacts facts;
   final Future<AttemptValueStore> Function()? attemptValueStoreLoader;
   final Future<HathaProgressStore> Function()? hathaStoreLoader;
+  final bool measurementAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -350,6 +370,7 @@ class FamilyPage extends StatelessWidget {
               style: t.textTheme.headlineLarge,
             ),
             const SizedBox(height: 10),
+            CaptureUnavailableNote(measurementAvailable: measurementAvailable),
             Text(
               configText(context, family.intro),
               style: t.textTheme.bodyMedium,
@@ -371,7 +392,9 @@ class FamilyPage extends StatelessWidget {
                 verdictNote: facts.verdictNoteFor,
               ),
             ),
-            const MeasurementLimitsFootnote(),
+            MeasurementLimitsFootnote(
+              measurementAvailable: measurementAvailable,
+            ),
           ],
         ),
       ),
@@ -572,13 +595,13 @@ class FamilyPage extends StatelessWidget {
     final List<TestLiveness> blocked = facts.blocked;
     final String liveHeading = localeText(
       context,
-      'Measured by camera in this build',
-      'Bu sürümde kamerayla ölçülenler',
+      'Camera measurement paths in the engine',
+      'Motordaki kamera ölçüm yolları',
     );
     final String blockedHeading = localeText(
       context,
-      'Not measured by camera',
-      'Kamerayla ölçülemeyenler',
+      'No camera measurement path in the engine',
+      'Motorda kamera ölçüm yolu olmayanlar',
     );
     return <Widget>[
       // ⓑ **BAŞLIKLI BOŞLUK YOK (A3, L-315).** `live` boşalırsa eski kod
@@ -590,16 +613,15 @@ class FamilyPage extends StatelessWidget {
           key: noLiveTestsKey,
           title: localeText(
             context,
-            'No test in this battery can be read by the camera',
-            'Bu listedeki hiçbir test kamerayla ölçülemiyor',
+            'No test in this battery has a camera measurement path in the engine',
+            'Bu listedeki hiçbir test için motorda kamera ölçüm yolu yok',
           ),
           reason: localeText(
             context,
             'Every test here needs a measurement the engine cannot '
-                'produce in this build. Nothing is hidden from you — there is '
-                'simply nothing this camera can score right now.',
+                'produce in this build.',
             'Bu testler ölçüm motorunun üretemediği değerlere ihtiyaç '
-                'duyuyor. Bu sürümde kamera ile sonuç verilemiyor.',
+                'duyuyor.',
           ),
         )
       else ...<Widget>[
@@ -664,11 +686,8 @@ class FamilyPage extends StatelessWidget {
       // ⇒ Cümle TÜRETİLİR (`blocked` boşsa her test canlıdır), uydurulmaz.
       if (blocked.isEmpty)
         Text(
-          localeText(
-            context,
-            'Every test in this battery can be read by the camera.',
-            'Bu listedeki her test kamerayla ölçülebiliyor.',
-          ),
+          '${localeText(context, 'Every test in this battery has a camera measurement path in the '
+              'engine.', 'Bu listedeki her test için motorda kamera ölçüm yolu vardır.')} ${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: measurementAvailable)}',
           key: noBlockedTestsKey,
           style: t.textTheme.bodyMedium,
         )

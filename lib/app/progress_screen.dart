@@ -37,6 +37,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:motion_core/motion_core.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
 import 'hatha_course.dart';
@@ -48,7 +50,13 @@ import 'session_history_view.dart';
 import 'surfaces.dart';
 
 class ProgressScreen extends StatelessWidget {
-  const ProgressScreen({required this.facts, super.key});
+  const ProgressScreen({
+    required this.facts,
+    this.measurementAvailable = motionPaidFeaturesAvailable,
+    super.key,
+  });
+
+  final bool measurementAvailable;
 
   static const Key comparisonNoticeKey = Key('progress.comparisonOff');
 
@@ -99,7 +107,7 @@ class ProgressScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
-          const CaptureUnavailableNote(),
+          CaptureUnavailableNote(measurementAvailable: measurementAvailable),
           // ⛔ Altyazı ÜÇ vaat ediyordu — *"what was measured, when, and under
           // what conditions"* — ve depo yalnız **birini** karşılıyordu:
           // koşullar hiç saklanmıyor, ölçülen sayı da saklanmıyor. Vaadi
@@ -405,7 +413,7 @@ class ProgressScreen extends StatelessWidget {
             ),
           ],
 
-          const MeasurementLimitsFootnote(),
+          MeasurementLimitsFootnote(measurementAvailable: measurementAvailable),
         ],
       ),
     );

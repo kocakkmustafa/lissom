@@ -11,6 +11,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 
 import 'ia.dart';
 import 'lissom_theme.dart';
@@ -149,10 +151,14 @@ class HonestyBoxCard extends StatelessWidget {
             box.measured.isEmpty
                 ? localeText(
                     context,
-                    'Camera feedback',
-                    'Kamera geri bildirimi',
+                    'Camera feedback limits',
+                    'Kamera geri bildiriminin sınırları',
                   )
-                : localeText(context, 'What this measures', 'Neyi ölçer?'),
+                : localeText(
+                    context,
+                    'Measurement engine coverage',
+                    'Ölçüm motorunun kapsamı',
+                  ),
             color: LissomColors.roseDeepHover,
           ),
           const SizedBox(height: 10),
@@ -177,7 +183,11 @@ class HonestyBoxCard extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 14),
           LissomEyebrow(
-            localeText(context, 'What it does not measure', 'Neyi ölçmez?'),
+            localeText(
+              context,
+              'Outside the measurement engine coverage',
+              'Ölçüm motorunun kapsamı dışında',
+            ),
           ),
           const SizedBox(height: 10),
           _list(
@@ -402,21 +412,36 @@ abstract final class DevicePassClaim {
 }
 
 class CaptureUnavailableNote extends StatelessWidget {
-  const CaptureUnavailableNote({super.key});
+  const CaptureUnavailableNote({
+    this.measurementAvailable = motionPaidFeaturesAvailable,
+    super.key,
+  });
+
+  final bool measurementAvailable;
 
   static const Key key_ = Key('note.captureUnavailable');
 
-  /// **2026-08-12 GÜNCELLENDİ — kamera-kabuğu sevki.** Eskiden "camera run
-  /// is not wired to any screen" diyordu; `LiveCaptureScreen` bağlandığı
-  /// AYNI turda bu metin de güncellendi (Home'daki O3/DeclarationBanner'la
-  /// AYNI disiplin: bugün doğru olan bir dürüstlük metni bir sonraki
-  /// commit'le yalana dönebilir — yalanı yapacak olan bu metni değiştirmeyen
-  /// olurdu). `key_`/widget adı KORUNDU: yalnız içeriği değişti, üç ekranın
-  /// (Home, Library, Progress) hepsinde TEK yerden düzeltildi.
-  /// ⇒ Artık [DevicePassClaim]'den TÜRETİLİYOR — elle yazılmıyor (L-318).
+  /// Default release copy. Rendered availability follows the same capability
+  /// as Home; device qualification remains separate and is not implied by it.
   static const String text =
-      'Lissom can start a live measurement from Home. '
+      'Live camera measurements are closed in this release. '
+      'Written courses work without a camera. '
       '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.';
+
+  static String localizedAvailability(
+    BuildContext context, {
+    required bool measurementAvailable,
+  }) => measurementAvailable
+      ? localeText(
+          context,
+          'You can start a live camera measurement from Home for supported tests.',
+          'Desteklenen testlerde Ana Sayfa’dan canlı kamera ölçümü başlatabilirsin.',
+        )
+      : localeText(
+          context,
+          'Live camera measurements are closed in this release.',
+          'Bu sürümde canlı kamera ölçümleri kapalıdır.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -429,10 +454,12 @@ class CaptureUnavailableNote extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.only(top: 2),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
               child: Icon(
-                Icons.videocam_off_outlined,
+                measurementAvailable
+                    ? Icons.videocam_outlined
+                    : Icons.videocam_off_outlined,
                 size: 17,
                 color: LissomColors.bodySecondary,
               ),
@@ -440,13 +467,10 @@ class CaptureUnavailableNote extends StatelessWidget {
             const SizedBox(width: 11),
             Expanded(
               child: Text(
-                localeText(
-                  context,
-                  text,
-                  'Lissom Ana Sayfa’dan canlı ölçüm başlatabilir. Gerçek '
-                  'cihazda izin, kare akışı, ışık ve kalibrasyon henüz '
-                  'doğrulanmadı.',
-                ),
+                '${localizedAvailability(context, measurementAvailable: measurementAvailable)} '
+                '${localeText(context, 'Written courses work without a camera. '
+                    '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.', 'Yazılı kurslar kamera olmadan çalışır. Gerçek cihazda kamera izni, kare '
+                    'kalitesi ve kalibrasyon henüz doğrulanmadı.')}',
                 style: t.textTheme.bodyMedium,
               ),
             ),
@@ -479,7 +503,12 @@ class CaptureUnavailableNote extends StatelessWidget {
 /// basmak, dürüstlük ihlalini config'e havale etmek olurdu. Bulgu
 /// koordinatöre isimli gitti.
 class MeasurementLimitsFootnote extends StatelessWidget {
-  const MeasurementLimitsFootnote({super.key});
+  const MeasurementLimitsFootnote({
+    this.measurementAvailable = motionPaidFeaturesAvailable,
+    super.key,
+  });
+
+  final bool measurementAvailable;
 
   static const Key key_ = Key('footnote.measurementLimits');
 
@@ -527,6 +556,13 @@ class MeasurementLimitsFootnote extends StatelessWidget {
         children: <Widget>[
           const Divider(),
           const SizedBox(height: 12),
+          Text(
+            '${localeText(context, 'These limits describe the measurement engine when a camera '
+                'reading is taken.', 'Bu sınırlar, kamera ölçümü alındığında ölçüm motorunun '
+                'davranışını açıklar.')} ${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: measurementAvailable)}',
+            style: small,
+          ),
+          const SizedBox(height: 8),
           Text(localizedLimits(context), style: small),
           const SizedBox(height: 8),
           Text(localizedAccuracy(context), style: small),

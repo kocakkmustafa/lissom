@@ -13,6 +13,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
 import 'lissom_theme.dart';
@@ -25,6 +27,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     required this.facts,
     this.accountRouteBuilder,
+    this.measurementAvailable = motionPaidFeaturesAvailable,
     super.key,
   });
 
@@ -35,6 +38,7 @@ class ProfileScreen extends StatelessWidget {
 
   final AppFacts facts;
   final LissomAccountRouteBuilder? accountRouteBuilder;
+  final bool measurementAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -157,18 +161,26 @@ class ProfileScreen extends StatelessWidget {
                     // > ***BİR RİSKİ YORUMA YAZMAK, ONU ÖNLEMEZ — ÖNLEYEN
                     // > ŞEY KAPIDIR*** (`stale_absence_claim_test.dart`).
                     Text(
-                      localeText(
-                        context,
-                        'Live camera measurements and subscription sales are '
-                            'closed in this release. The Hatha yoga course works '
-                            'without a camera. Course progress and self-checks '
-                            'stay in local app storage. Existing measurement '
-                            'records also remain on this device.',
-                        'Bu sürümde canlı kamera ölçümleri ve abonelik satışı '
-                            'kapalıdır. Hatha yoga kursu kamera olmadan çalışır. '
-                            'Kurs ilerlemesi ve öz denetimler yerel uygulama '
-                            'alanında kalır. Önceki ölçüm kayıtları da bu cihazda kalır.',
-                      ),
+                      measurementAvailable
+                          ? '${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: true)} '
+                                '${localeText(context, 'Subscription sales are closed in this release. The Hatha yoga course works '
+                                    'without a camera. Course progress and self-checks '
+                                    'stay in local app storage. Existing measurement '
+                                    'records also remain on this device.', 'Bu sürümde abonelik satışı kapalıdır. Hatha yoga kursu kamera olmadan çalışır. '
+                                    'Kurs ilerlemesi ve öz denetimler yerel uygulama '
+                                    'alanında kalır. Önceki ölçüm kayıtları da bu cihazda kalır.')}'
+                          : localeText(
+                              context,
+                              'Live camera measurements and subscription sales are '
+                                  'closed in this release. The Hatha yoga course works '
+                                  'without a camera. Course progress and self-checks '
+                                  'stay in local app storage. Existing measurement '
+                                  'records also remain on this device.',
+                              'Bu sürümde canlı kamera ölçümleri ve abonelik satışı '
+                                  'kapalıdır. Hatha yoga kursu kamera olmadan çalışır. '
+                                  'Kurs ilerlemesi ve öz denetimler yerel uygulama '
+                                  'alanında kalır. Önceki ölçüm kayıtları da bu cihazda kalır.',
+                            ),
                       style: t.textTheme.bodyMedium,
                     ),
                   ],
