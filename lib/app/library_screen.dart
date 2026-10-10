@@ -227,10 +227,14 @@ class _BuiltFamilyCard extends StatelessWidget {
                             context,
                             '${facts.hatha!.modules.length} modules · '
                                 '${facts.hatha!.lessons.length} Hatha lessons'
-                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} chair / office lessons'}',
+                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} chair / office lessons'}'
+                                '${facts.vinyasa == null ? '' : ' · ${facts.vinyasa!.lessons.length} Vinyasa lessons'}'
+                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin lessons'}',
                             '${facts.hatha!.modules.length} modül · '
                                 '${facts.hatha!.lessons.length} Hatha dersi'
-                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} sandalye / ofis dersi'}',
+                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} sandalye / ofis dersi'}'
+                                '${facts.vinyasa == null ? '' : ' · ${facts.vinyasa!.lessons.length} Vinyasa dersi'}'
+                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin dersi'}',
                           )
                   : localeText(
                       context,

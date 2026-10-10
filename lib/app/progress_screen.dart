@@ -518,8 +518,12 @@ class _HathaProgressCard extends StatelessWidget {
           Text(
             localeText(
               context,
-              '${practiced.length}/${course.lessons.length} lessons practised · self-recorded',
-              '${practiced.length}/${course.lessons.length} ders çalışıldı · öz kayıt',
+              course.id == 'lissom.yin.supported.beginner'
+                  ? '${practiced.length}/${course.lessons.length} units with participation records · self-recorded; physical skill is not established.'
+                  : '${practiced.length}/${course.lessons.length} lessons practised · self-recorded',
+              course.id == 'lissom.yin.supported.beginner'
+                  ? '${practiced.length}/${course.lessons.length} birimde katılım kaydı · öz kayıt; fiziksel beceri gösterilmez.'
+                  : '${practiced.length}/${course.lessons.length} ders çalışıldı · öz kayıt',
             ),
             style: theme.textTheme.bodySmall,
           ),
