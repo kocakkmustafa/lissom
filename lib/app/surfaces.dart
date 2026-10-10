@@ -406,16 +406,12 @@ class CaptureUnavailableNote extends StatelessWidget {
 
   static const Key key_ = Key('note.captureUnavailable');
 
-  /// **2026-08-12 GÜNCELLENDİ — kamera-kabuğu sevki.** Eskiden "camera run
-  /// is not wired to any screen" diyordu; `LiveCaptureScreen` bağlandığı
-  /// AYNI turda bu metin de güncellendi (Home'daki O3/DeclarationBanner'la
-  /// AYNI disiplin: bugün doğru olan bir dürüstlük metni bir sonraki
-  /// commit'le yalana dönebilir — yalanı yapacak olan bu metni değiştirmeyen
-  /// olurdu). `key_`/widget adı KORUNDU: yalnız içeriği değişti, üç ekranın
-  /// (Home, Library, Progress) hepsinde TEK yerden düzeltildi.
-  /// ⇒ Artık [DevicePassClaim]'den TÜRETİLİYOR — elle yazılmıyor (L-318).
+  /// The release policy closes live camera entry even though the engine has
+  /// measurement paths. Device qualification remains a separate fact derived
+  /// from [DevicePassClaim]; neither engine coverage nor course records open it.
   static const String text =
-      'Lissom can start a live measurement from Home. '
+      'Live camera measurements are closed in this release. '
+      'Written courses work without a camera. '
       '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.';
 
   @override
@@ -443,9 +439,9 @@ class CaptureUnavailableNote extends StatelessWidget {
                 localeText(
                   context,
                   text,
-                  'Lissom Ana Sayfa’dan canlı ölçüm başlatabilir. Gerçek '
-                  'cihazda izin, kare akışı, ışık ve kalibrasyon henüz '
-                  'doğrulanmadı.',
+                  'Bu sürümde canlı kamera ölçümleri kapalıdır. Yazılı kurslar '
+                  'kamera olmadan çalışır. Gerçek cihazda kamera izni, kare '
+                  'kalitesi ve kalibrasyon henüz doğrulanmadı.',
                 ),
                 style: t.textTheme.bodyMedium,
               ),

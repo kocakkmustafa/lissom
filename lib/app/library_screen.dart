@@ -81,10 +81,10 @@ class LibraryScreen extends StatelessWidget {
                 // (L-242). Batarya telefonda çalıştırılamıyor.
                 subtitle: localeText(
                   context,
-                  'What the measurement engine covers. Running it is '
-                      'a separate thing — see the note above.',
-                  'Ölçüm motorunun kapsadığı alanlar. Gerçek cihazda çalışma '
-                      'durumu için yukarıdaki açıklamaya bak.',
+                  'Written courses and measurement engine coverage. '
+                      'Live camera measurements are closed in this release.',
+                  'Yazılı kurslar ve ölçüm motorunun kapsamı. '
+                      'Bu sürümde canlı kamera ölçümleri kapalıdır.',
                 ),
               ),
               const SizedBox(height: 14),
@@ -238,8 +238,10 @@ class _BuiltFamilyCard extends StatelessWidget {
                           )
                   : localeText(
                       context,
-                      '$total tests · $live measurable by camera in this build',
-                      '$total test · bu sürümde $live tanesi kamerayla ölçülebiliyor',
+                      '$total tests · $live camera measurement paths in the engine '
+                          '· camera closed in this release',
+                      '$total test · motorda $live kamera ölçüm yolu '
+                          '· bu sürümde kamera kapalı',
                     ),
               style: t.textTheme.bodySmall?.copyWith(
                 color: LissomColors.roseDeepHover,
@@ -572,13 +574,13 @@ class FamilyPage extends StatelessWidget {
     final List<TestLiveness> blocked = facts.blocked;
     final String liveHeading = localeText(
       context,
-      'Measured by camera in this build',
-      'Bu sürümde kamerayla ölçülenler',
+      'Camera measurement paths in the engine',
+      'Motordaki kamera ölçüm yolları',
     );
     final String blockedHeading = localeText(
       context,
-      'Not measured by camera',
-      'Kamerayla ölçülemeyenler',
+      'No camera measurement path in the engine',
+      'Motorda kamera ölçüm yolu olmayanlar',
     );
     return <Widget>[
       // ⓑ **BAŞLIKLI BOŞLUK YOK (A3, L-315).** `live` boşalırsa eski kod
@@ -590,14 +592,14 @@ class FamilyPage extends StatelessWidget {
           key: noLiveTestsKey,
           title: localeText(
             context,
-            'No test in this battery can be read by the camera',
-            'Bu listedeki hiçbir test kamerayla ölçülemiyor',
+            'No test in this battery has a camera measurement path in the engine',
+            'Bu listedeki hiçbir test için motorda kamera ölçüm yolu yok',
           ),
           reason: localeText(
             context,
             'Every test here needs a measurement the engine cannot '
-                'produce in this build. Nothing is hidden from you — there is '
-                'simply nothing this camera can score right now.',
+                'produce in this build. Live camera measurements are '
+                'closed in this release.',
             'Bu testler ölçüm motorunun üretemediği değerlere ihtiyaç '
                 'duyuyor. Bu sürümde kamera ile sonuç verilemiyor.',
           ),
@@ -666,8 +668,10 @@ class FamilyPage extends StatelessWidget {
         Text(
           localeText(
             context,
-            'Every test in this battery can be read by the camera.',
-            'Bu listedeki her test kamerayla ölçülebiliyor.',
+            'Every test in this battery has a camera measurement path in the '
+                'engine. Live camera measurements are closed in this release.',
+            'Bu listedeki her test için motorda kamera ölçüm yolu vardır. '
+                'Bu sürümde canlı kamera ölçümleri kapalıdır.',
           ),
           key: noBlockedTestsKey,
           style: t.textTheme.bodyMedium,
