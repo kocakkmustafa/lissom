@@ -258,18 +258,73 @@ def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
 
 
 def _is_negated(text: str, start: int) -> bool:
-    return bool(NEGATION.search(text[:start]))
+    # A disclaimer in a previous sentence/clause cannot negate a new claim.
+    prefix = re.split(r"[.!?;\n]", text[:start])[-1]
+    return bool(NEGATION.search(prefix))
+
+
+# Context controls apply to one matched occurrence, never to a field/file.
+# A symptom mention is not a diagnosis when it names a stop, a referral,
+# or an explicitly symptom-free learning error. Other claims in the same
+# sentence continue through every rule. Keep these grammars local: an
+# unrelated safety sentence must not authorize an efficacy claim.
+_CONTEXT_USES = [
+    # A bounded safety condition or a non-symptomatic learning task.
+    r"\bsymptom-free (?:error|toe-lift error|mistake|trunk-rocking error|coordination error|contact error|shoulder shrug|rushed return|overreach|retest|forgotten-order example|correction|distraction|rehearsal|setup(?:/(?:attention|coordination))? (?:error|correction)|written plan)\b",
+    r"\bIf symptom-free\b",
+    r"\bfamiliar and symptom-free\b",
+    r"\b(?:stop symptom|symptom-stop)\b",
+    # Stop/omit instructions, rather than interpreting the cause.
+    r"\b(?:stop|stopping|omit the lesson) for symptoms\b",
+    r"\b(?:pinching or any stop symptom ends the action|slipping contact or symptoms end the attempt)\b",
+    r"(?:^|[.!?]\s+)(?:Symptoms mean stop|Symptoms are not a correction drill|Repeated symptoms are not invitations to repeat)\b",
+    r"\b(?:any knee/hip/back symptoms mean no retest|a symptom that ends attempts)\b",
+    r"(?:^|[.!?]\s+)For symptoms, uncertain support or forced breath, finish movement\b",
+    # Referral language does not claim that the app manages the condition.
+    r"\b(?:persistent or recurrent|recurrent/persistent|persistent/recurrent) symptoms (?:need|require) individual advice\b",
+    r"\bSeek appropriate health assistance if symptoms persist, worsen or concern you\b",
+    # Explicit distinction/recall tasks; no diagnostic interpretation.
+    r"\bCorrection is different from a symptom\b",
+    r"\band [“\"]symptom[”\"]; several may apply\b",
+    r"\bWrite distinct branches for [“\"]prop slips[”\"] and [“\"]symptoms occur\.?[”\"]",
+    r"\bdifferent responses to symptoms versus symptom-free setup errors\b",
+    # Rejection of a physical prescription and of multiple health outcomes.
+    r"\bnot a prescribed physical dose(?:[.!?]|$)",
+    r"\bNo tissue change, organ/meridian effect, treatment, pain relief or health outcome is promised\b",
+    # Missing evidence is a present limit; it supplies no date or capability.
+    r"\bNo learner trial or instructor demonstration validates this curriculum yet\b",
+    # The learner names their own pause, not a future app feature.
+    r"\bName where a pause will occur: upright or supported sitting\b",
+]
+_CONTEXT_PATTERNS = [re.compile(pat, re.IGNORECASE) for pat in _CONTEXT_USES]
+
+# Do not let an asserted diagnostic/efficacy outcome reuse the vocabulary
+# of a safety condition (e.g. "Lissom guarantees a symptom-free retest").
+_SYMPTOM_CLAIM = re.compile(
+    r"\b(?:guarantee\w*|promise\w*|ensure\w*|deliver\w*|offer\w*|enjoy\w*|become\w*|make[sd]?|"
+    r"predict\w*|measure\w*|resolve\w*|reliev\w*|reduc\w*|eliminat\w*|"
+    r"prevent\w*|improv\w*|manage\w*|identif\w*|interpret\w*|assess\w*)"
+    r"(?:[^.!?;]*?)\bsymptoms?\b", re.IGNORECASE,
+)
+
+
+def _contextual_use(text: str, match: re.Match[str]) -> bool:
+    return any(span.start() <= match.start() and match.end() <= span.end()
+               for pattern in _CONTEXT_PATTERNS
+               for span in pattern.finditer(text))
 
 
 def scan_text(where: str, text: str) -> list[str]:
     problems: list[str] = []
     for pat in HARD:
         for m in re.finditer(pat, text, re.IGNORECASE):
-            if _reviewed_word(where, text, m.group(0)):
+            if _reviewed_word(where, text, m.group(0)) or _contextual_use(text, m):
                 continue
             problems.append(f"{where}: HARD  «{m.group(0)}»  — {text[:90]}…")
     for pat in PROMISE:
         for m in re.finditer(pat, text, re.IGNORECASE):
+            if _contextual_use(text, m):
+                continue
             problems.append(
                 f"{where}: VAAT  «{m.group(0)}»  — M-F-186: bilmediğimiz bir "
                 f"tarihi ima eder  — {text[:90]}…"
@@ -280,7 +335,8 @@ def scan_text(where: str, text: str) -> list[str]:
             # REDDİ — "we will not estimate a number we can't take" bu ürünün
             # en dürüst cümlelerinden biri. Kapı onu ihlal sayarsa, doğru
             # davranışı cezalandırır.
-            if re.match(r"will\s+not\b", text[m.start():], re.IGNORECASE):
+            if (_contextual_use(text, m) or
+                    re.match(r"will\s+not\b", text[m.start():], re.IGNORECASE)):
                 continue
             if not CONDITION.search(text[:m.start()]):
                 problems.append(
@@ -288,12 +344,15 @@ def scan_text(where: str, text: str) -> list[str]:
                     f"koşula bağlanmamış gelecek zaman  — {text[:90]}…")
     for pat in SOFT:
         for m in re.finditer(pat, text, re.IGNORECASE):
-            if _reviewed_word(where, text, m.group(0)):
+            if _reviewed_word(where, text, m.group(0)) or _contextual_use(text, m):
                 continue
             if not _is_negated(text, m.start()):
                 problems.append(
                     f"{where}: SOFT  «{m.group(0)}» olumsuzlanmamış  — {text[:90]}…"
                 )
+    for m in _SYMPTOM_CLAIM.finditer(text):
+        if not _is_negated(text, m.start()):
+            problems.append(f"{where}: CLAIM  «{m.group(0)}» — {text[:90]}…")
     return problems
 
 
