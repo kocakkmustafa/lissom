@@ -352,6 +352,7 @@ class FamilyPage extends StatelessWidget {
               style: t.textTheme.headlineLarge,
             ),
             const SizedBox(height: 10),
+            const CaptureUnavailableNote(),
             Text(
               configText(context, family.intro),
               style: t.textTheme.bodyMedium,

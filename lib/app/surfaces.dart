@@ -149,10 +149,14 @@ class HonestyBoxCard extends StatelessWidget {
             box.measured.isEmpty
                 ? localeText(
                     context,
-                    'Camera feedback',
-                    'Kamera geri bildirimi',
+                    'Camera feedback limits',
+                    'Kamera geri bildiriminin sınırları',
                   )
-                : localeText(context, 'What this measures', 'Neyi ölçer?'),
+                : localeText(
+                    context,
+                    'Measurement engine coverage',
+                    'Ölçüm motorunun kapsamı',
+                  ),
             color: LissomColors.roseDeepHover,
           ),
           const SizedBox(height: 10),
@@ -177,7 +181,11 @@ class HonestyBoxCard extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 14),
           LissomEyebrow(
-            localeText(context, 'What it does not measure', 'Neyi ölçmez?'),
+            localeText(
+              context,
+              'Outside the measurement engine coverage',
+              'Ölçüm motorunun kapsamı dışında',
+            ),
           ),
           const SizedBox(height: 10),
           _list(
@@ -523,6 +531,18 @@ class MeasurementLimitsFootnote extends StatelessWidget {
         children: <Widget>[
           const Divider(),
           const SizedBox(height: 12),
+          Text(
+            localeText(
+              context,
+              'These limits describe the measurement engine when a camera '
+                  'reading is taken. Live camera measurements are closed '
+                  'in this release.',
+              'Bu sınırlar, kamera ölçümü alındığında ölçüm motorunun '
+                  'davranışını açıklar. Bu sürümde canlı kamera ölçümleri kapalıdır.',
+            ),
+            style: small,
+          ),
+          const SizedBox(height: 8),
           Text(localizedLimits(context), style: small),
           const SizedBox(height: 8),
           Text(localizedAccuracy(context), style: small),

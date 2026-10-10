@@ -14,8 +14,13 @@ import 'package:motion_account/motion_account.dart'
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
 
-Future<void> _pump(WidgetTester tester, Widget screen, String language) async {
-  pinTallSurface(tester, height: 6000);
+Future<void> _pump(
+  WidgetTester tester,
+  Widget screen,
+  String language, {
+  double height = 6000,
+}) async {
+  pinTallSurface(tester, height: height);
   await tester.pumpWidget(
     MaterialApp(
       locale: Locale(language),
@@ -126,6 +131,46 @@ void main() {
             : 'Measured by camera in this build';
         expect(find.text(heading.toUpperCase()), findsOneWidget);
         expect(find.textContaining(oldHeading.toUpperCase()), findsNothing);
+        final note = find.descendant(
+          of: find.byKey(CaptureUnavailableNote.key_),
+          matching: find.byType(Text),
+        );
+        expect(note, findsOneWidget);
+        expect(tester.widget<Text>(note).data!, contains(closure));
+        expect(
+          tester.getTopLeft(note).dy,
+          lessThan(tester.getTopLeft(find.byKey(FamilyPage.liveListKey)).dy),
+        );
+        final honesty = find.byKey(FamilyPage.honestyKey);
+        expect(
+          find.descendant(
+            of: honesty,
+            matching: find.text(
+              (turkish
+                      ? 'Ölçüm motorunun kapsamı'
+                      : 'Measurement engine coverage')
+                  .toUpperCase(),
+            ),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text(
+            (turkish ? 'Neyi ölçer?' : 'What this measures').toUpperCase(),
+          ),
+          findsNothing,
+        );
+        final footnote = find.byKey(MeasurementLimitsFootnote.key_);
+        final context = find.descendant(
+          of: footnote,
+          matching: find.textContaining(
+            turkish
+                ? 'kamera ölçümü alındığında'
+                : 'when a camera reading is taken',
+          ),
+        );
+        expect(context, findsOneWidget);
+        expect(tester.widget<Text>(context).data!, contains(closure));
         for (final test in facts.live) {
           expect(
             find.text(
@@ -134,6 +179,35 @@ void main() {
             findsOneWidget,
           );
         }
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      'family camera closure is visible after Library navigation ($language)',
+      (tester) async {
+        final facts = factsFromDisk();
+        final family = facts.ia.built.firstWhere(
+          (family) => !family.teachingOnly,
+        );
+        await _pump(tester, LibraryScreen(facts: facts), language, height: 667);
+        final entry = find.text(
+          configText(tester.element(find.byType(LibraryScreen)), family.title),
+        );
+        await tester.ensureVisible(entry);
+        await tester.tap(entry);
+        await tester.pumpAndSettle();
+        expect(find.byType(FamilyPage), findsOneWidget);
+        final note = find.descendant(
+          of: find.byKey(CaptureUnavailableNote.key_),
+          matching: find.byType(Text),
+        );
+        expect(note, findsOneWidget);
+        expect(tester.widget<Text>(note).data!, contains(closure));
+        final screen = tester.getRect(find.byType(Scaffold).last);
+        final noteRect = tester.getRect(note);
+        expect(noteRect.top, greaterThanOrEqualTo(screen.top));
+        expect(noteRect.bottom, lessThanOrEqualTo(screen.bottom));
         expect(tester.takeException(), isNull);
       },
     );
