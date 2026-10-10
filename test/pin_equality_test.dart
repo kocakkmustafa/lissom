@@ -36,7 +36,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// **ikisi tek ref** `f13bdc9`'ten. Ölçüldü: `f13bdc9` = `motion_camera-v0.1.2`
 /// tag'i ve `motion_core-v0.11.0` (`2018469`) commit'inin ARDILI, yani tek pin
 /// ikisini de kapsıyor.
-const String kSealedRef = 'edeec10a161c76bfa086b1d165d53e46ec88c3d7';
+const String kSealedRef = 'ef60e346934d7e5d45c87deb81583b263575b208';
 const String kSealedCoreVersion = '0.12.0';
 const String kSealedCameraVersion = '0.2.0';
 
@@ -83,7 +83,7 @@ _LockEntry _readLock(String lock, String pkg) {
   return _LockEntry(ref, resolved, version, source);
 }
 
-const currentMotionSha = 'edeec10a161c76bfa086b1d165d53e46ec88c3d7';
+const currentMotionSha = 'ef60e346934d7e5d45c87deb81583b263575b208';
 
 bool hasLocalMotionOverrides([String? source]) {
   final file = File('pubspec_overrides.yaml');
