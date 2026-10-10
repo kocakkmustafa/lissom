@@ -28,7 +28,8 @@ ROOT = Path(__file__).resolve().parent.parent
 # --------------------------------------------------------------------------
 # Yasaklı kalıplar
 # --------------------------------------------------------------------------
-# HARD: hiçbir bağlamda kabul edilemez — hastalık adı, regülatif iddia, tedavi
+# HARD: hastalık adı, regülatif iddia, tedavi. Yalnız aşağıdaki dar
+# bağlam kontrolü açık fiziksel doz reddini ayırır; tıbbi reçete reddi geçmez.
 HARD = [
     r"\bcure[sd]?\b",
     r"\bprescrib\w*", r"\bprescription\b",
@@ -301,7 +302,7 @@ _CONTEXT_PATTERNS = [re.compile(pat, re.IGNORECASE) for pat in _CONTEXT_USES]
 # Do not let an asserted diagnostic/efficacy outcome reuse the vocabulary
 # of a safety condition (e.g. "Lissom guarantees a symptom-free retest").
 _SYMPTOM_CLAIM = re.compile(
-    r"\b(?:guarantee\w*|promise\w*|ensure\w*|deliver\w*|offer\w*|enjoy\w*|become\w*|make[sd]?|"
+    r"\b(?:guarantee\w*|promise\w*|ensure\w*|deliver\w*|offer\w*|enjoy\w*|become\w*|remov\w*|giv\w*|provid\w*|abolish\w*|make[sd]?|"
     r"predict\w*|measure\w*|resolve\w*|reliev\w*|reduc\w*|eliminat\w*|"
     r"prevent\w*|improv\w*|manage\w*|identif\w*|interpret\w*|assess\w*)"
     r"(?:[^.!?;]*?)\bsymptoms?\b", re.IGNORECASE,

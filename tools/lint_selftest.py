@@ -39,6 +39,8 @@ MUST_PASS = {
 # Boundary counterexamples: safety language in the same field must never
 # exempt an efficacy claim, a prescription, or an unqualified release date.
 MUST_CATCH.update({
+    "symptom removal in safety vocabulary": "Lissom removes stop symptoms.",
+    "symptom-free provision": "Lissom provides a symptom-free retest.",
     "symptom outcome": "Lissom reduces your symptoms.",
     "symptom-free promise": "Lissom guarantees a symptom-free retest.",
     "symptom-free advertising": "Enjoy a symptom-free future with Lissom.",
