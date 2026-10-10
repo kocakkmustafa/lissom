@@ -155,8 +155,13 @@ class _LissomShellState extends State<LissomShell> {
         () => openAttemptValueStore(scope: scope);
   }
 
-  Future<void> _openHatha(AppFacts facts) async {
-    final course = facts.hatha;
+  Future<void> _openHatha(
+    AppFacts facts, {
+    bool chairOffice = false,
+    bool vinyasa = false,
+    bool yin = false,
+  }) async {
+    final course = yin ? facts.yin : vinyasa ? facts.vinyasa : chairOffice ? facts.chairOffice : facts.hatha;
     if (course == null) return;
     final Future<HathaProgressStore> Function() storeLoader =
         _hathaStoreLoader();
@@ -232,6 +237,9 @@ class _LissomShellState extends State<LissomShell> {
           setState(() => _index = facts.ia.tabs.indexOf('library')),
       onMeasurementDone: _reloadFacts,
       onOpenHatha: () => _openHatha(facts),
+      onOpenYin: () => _openHatha(facts, yin: true),
+      onOpenVinyasa: () => _openHatha(facts, vinyasa: true),
+      onOpenChairOffice: () => _openHatha(facts, chairOffice: true),
       poseSourceLoader: widget.poseSourceLoader,
       sessionStoreLoader: _sessionStoreLoader(),
       attemptValueStoreLoader: _attemptValueStoreLoader(),

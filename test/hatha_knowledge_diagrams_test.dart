@@ -60,6 +60,10 @@ void main() {
           );
           await tester.pumpAndSettle();
           if (id != 'h55') {
+            await tester.scrollUntilVisible(
+              find.byKey(const Key('hatha.session.preparation')), 300,
+              maxScrolls: 80,
+            );
             expect(
               find.byKey(const Key('hatha.session.preparation')),
               findsOneWidget,

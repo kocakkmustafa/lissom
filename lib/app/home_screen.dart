@@ -33,6 +33,8 @@ import 'package:motion_account/motion_account.dart'
     show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
+import 'vinyasa_entry.dart';
+import 'yin_entry.dart';
 import 'attempt_values.dart';
 import 'hatha_course.dart';
 import 'hatha_course_screen.dart';
@@ -48,6 +50,9 @@ class HomeScreen extends StatelessWidget {
     required this.facts,
     required this.onOpenLibrary,
     this.onOpenHatha,
+    this.onOpenChairOffice,
+    this.onOpenVinyasa,
+    this.onOpenYin,
     this.ageBand,
     this.onMeasurementDone,
     this.poseSourceLoader,
@@ -101,6 +106,7 @@ class HomeScreen extends StatelessWidget {
   static const Key quickStartKey = Key('home.quick_start');
   static const Key startMeasurementKey = Key('home.startMeasurement');
   static const Key hathaCourseKey = Key('home.hathaCourse');
+  static const Key chairOfficeCourseKey = Key('home.chairOfficeCourse');
 
   /// Bölüm id'si → o bölümün gövdesi. Config'te TANIMSIZ bir bölüm gelirse
   /// sessizce atlanmaz: [_unknownSection] onu ADIYLA gösterir. Sessiz atlama,
@@ -116,6 +122,9 @@ class HomeScreen extends StatelessWidget {
   final AppFacts facts;
   final VoidCallback onOpenLibrary;
   final VoidCallback? onOpenHatha;
+  final VoidCallback? onOpenChairOffice;
+  final VoidCallback? onOpenVinyasa;
+  final VoidCallback? onOpenYin;
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +135,18 @@ class HomeScreen extends StatelessWidget {
         children: <Widget>[
           if (facts.hatha case final HathaCourse course) ...<Widget>[
             _courseCard(context, course),
+            const SizedBox(height: 24),
+          ],
+          if (facts.yin case final HathaCourse course) ...<Widget>[
+            YinEntry(key: const Key('home.yinCourse'), course: course, onOpen: onOpenYin, onOpenFoundations: onOpenHatha),
+            const SizedBox(height: 18),
+          ],
+          if (facts.vinyasa case final HathaCourse course) ...<Widget>[
+            VinyasaEntry(key: const Key('home.vinyasaCourse'), course: course, onOpen: onOpenVinyasa, onOpenFoundations: onOpenHatha),
+            const SizedBox(height: 18),
+          ],
+          if (facts.chairOffice case final HathaCourse course) ...<Widget>[
+            _courseCard(context, course, chairOffice: true),
             const SizedBox(height: 24),
           ],
           // Cihaz-geçişi olgusu [DevicePassClaim]'den TÜRETİLİR (L-318) —
@@ -149,14 +170,22 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _courseCard(BuildContext context, HathaCourse course) {
+  Widget _courseCard(
+    BuildContext context,
+    HathaCourse course, {
+    bool chairOffice = false,
+  }) {
     final int practiced = facts.hathaProgress?.practicedIn(course).length ?? 0;
     return LissomCard(
-      key: hathaCourseKey,
+      key: chairOffice ? chairOfficeCourseKey : hathaCourseKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          LissomEyebrow(localeText(context, 'YOUR HATHA PATH', 'HATHA YOLUN')),
+          LissomEyebrow(localeText(
+            context,
+            chairOffice ? 'YOUR SEATED PATH' : 'YOUR HATHA PATH',
+            chairOffice ? 'OTURARAK ÇALIŞMA YOLUN' : 'HATHA YOLUN',
+          )),
           const SizedBox(height: 8),
           Text(
             hathaText(context, course.title),
@@ -184,15 +213,26 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           FilledButton.icon(
-            onPressed: onOpenHatha ?? onOpenLibrary,
+            onPressed: (chairOffice ? onOpenChairOffice : onOpenHatha) ??
+                onOpenLibrary,
             icon: const Icon(Icons.play_arrow_rounded),
             label: Text(
               localeText(
                 context,
-                practiced == 0 ? 'Start Hatha course' : 'Continue Hatha course',
-                practiced == 0
-                    ? 'Hatha kursuna başla'
-                    : 'Hatha kursuna devam et',
+                chairOffice
+                    ? (practiced == 0
+                        ? 'Start chair / office path'
+                        : 'Continue chair / office path')
+                    : (practiced == 0
+                        ? 'Start Hatha course'
+                        : 'Continue Hatha course'),
+                chairOffice
+                    ? (practiced == 0
+                        ? 'Sandalye / ofis yoluna başla'
+                        : 'Sandalye / ofis yoluna devam et')
+                    : (practiced == 0
+                        ? 'Hatha kursuna başla'
+                        : 'Hatha kursuna devam et'),
               ),
             ),
           ),

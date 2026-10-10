@@ -129,7 +129,7 @@
       "title": "Yoga Styles",
       "status": "in_progress",
       "wave": 1,
-      "intro": "A complete guided Hatha course is available. Other named styles have no classes in this build; yoga postures are not camera-scored.",
+      "intro": "Written Hatha, chair/office, supported standing Vinyasa and adapted supported Yin beginner paths are included. Demonstration and physical acceptance remain separate; the beginner Ashtanga course remains pending. Yoga postures are not camera-scored.",
       "teachingOnly": true,
       "itemsSource": "config/courses/hatha.v1.json",
       "children": [
@@ -143,7 +143,7 @@
         {
           "id": "vinyasa",
           "title": "Vinyasa",
-          "status": "coming_soon",
+          "status": "in_progress",
           "wave": 1,
           "coachingMode": "flow",
           "note": "Flow modu: poz-poz düzeltme İDDİASIZ — akış ve nefes temposu koçluğu, gevşek skorlama"
@@ -151,7 +151,7 @@
         {
           "id": "yin",
           "title": "Yin",
-          "status": "coming_soon",
+          "status": "in_progress",
           "wave": 1,
           "coachingMode": "long_hold"
         },
@@ -165,7 +165,7 @@
         {
           "id": "chair_yoga",
           "title": "Chair / Office Yoga",
-          "status": "coming_soon",
+          "status": "in_progress",
           "wave": 2,
           "coachingMode": "pose_by_pose"
         }

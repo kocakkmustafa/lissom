@@ -226,9 +226,11 @@ class _BuiltFamilyCard extends StatelessWidget {
                         : localeText(
                             context,
                             '${facts.hatha!.modules.length} modules · '
-                                '${facts.hatha!.lessons.length} guided lessons',
+                                '${facts.hatha!.lessons.length} Hatha lessons'
+                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} chair / office lessons'}',
                             '${facts.hatha!.modules.length} modül · '
-                                '${facts.hatha!.lessons.length} rehberli ders',
+                                '${facts.hatha!.lessons.length} Hatha dersi'
+                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} sandalye / ofis dersi'}',
                           )
                   : localeText(
                       context,
@@ -433,12 +435,126 @@ class FamilyPage extends StatelessWidget {
           ],
         ),
       ),
+      if (facts.chairOffice case final HathaCourse chair) ...<Widget>[
+        const SizedBox(height: 16),
+        LissomCard(
+          key: const Key('library.chairOfficeCourse'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(hathaText(context, chair.title),
+                  style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(hathaText(context, chair.intro)),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: hathaStoreLoader == null
+                    ? null
+                    : () async {
+                        final store = await hathaStoreLoader!();
+                        final progress = await store.read();
+                        if (!context.mounted) return;
+                        await Navigator.of(context).push<void>(
+                          MaterialPageRoute<void>(
+                            builder: (_) => HathaCourseScreen(
+                              course: chair,
+                              initialProgress: progress,
+                              storeLoader: hathaStoreLoader!,
+                            ),
+                          ),
+                        );
+                      },
+                child: Text(localeText(
+                  context, 'Open chair / office path',
+                  'Sandalye / ofis yolunu aç',
+                )),
+              ),
+            ],
+          ),
+        ),
+      ],
+      if (facts.vinyasa case final HathaCourse chair) ...<Widget>[
+        const SizedBox(height: 16),
+        LissomCard(
+          key: const Key('library.vinyasaCourse'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(hathaText(context, chair.title),
+                  style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(hathaText(context, chair.intro)),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: hathaStoreLoader == null
+                    ? null
+                    : () async {
+                        final store = await hathaStoreLoader!();
+                        final progress = await store.read();
+                        if (!context.mounted) return;
+                        await Navigator.of(context).push<void>(
+                          MaterialPageRoute<void>(
+                            builder: (_) => HathaCourseScreen(
+                              course: chair,
+                              initialProgress: progress,
+                              storeLoader: hathaStoreLoader!,
+                            ),
+                          ),
+                        );
+                      },
+                child: Text(localeText(
+                  context, 'Open supported standing Vinyasa',
+                  'Destekli ayakta Vinyasa yolunu aç',
+                )),
+              ),
+            ],
+          ),
+        ),
+      ],
+      if (facts.yin case final HathaCourse chair) ...<Widget>[
+        const SizedBox(height: 16),
+        LissomCard(
+          key: const Key('library.yinCourse'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(hathaText(context, chair.title),
+                  style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(hathaText(context, chair.intro)),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: hathaStoreLoader == null
+                    ? null
+                    : () async {
+                        final store = await hathaStoreLoader!();
+                        final progress = await store.read();
+                        if (!context.mounted) return;
+                        await Navigator.of(context).push<void>(
+                          MaterialPageRoute<void>(
+                            builder: (_) => HathaCourseScreen(
+                              course: chair,
+                              initialProgress: progress,
+                              storeLoader: hathaStoreLoader!,
+                            ),
+                          ),
+                        );
+                      },
+                child: Text(localeText(
+                  context, 'Open supported Yin',
+                  'Destekli Yin yolunu aç',
+                )),
+              ),
+            ],
+          ),
+        ),
+      ],
       const SizedBox(height: 16),
       Text(
         localeText(
           context,
-          'Other named yoga styles have no classes in this build.',
-          'Adı geçen diğer yoga stillerinin bu sürümde dersleri yok.',
+          'The beginner Ashtanga course remains pending. Written courses do not establish physical mastery.',
+          'Başlangıç Ashtanga kursu bekliyor. Yazılı kurslar fiziksel ustalık göstermez.',
         ),
         style: Theme.of(context).textTheme.bodySmall,
       ),

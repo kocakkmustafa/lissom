@@ -45,6 +45,7 @@ final class HathaLesson {
     required this.prerequisites,
     required this.minutes,
     required this.evidenceMode,
+    this.answerKey,
   });
 
   final String id;
@@ -53,6 +54,7 @@ final class HathaLesson {
   final List<HathaText> steps;
   final HathaText practice;
   final HathaText selfCheck;
+  final HathaText? answerKey;
   final HathaText adaptation;
   final HathaText stopSignal;
   final HathaText mediaBrief;
@@ -222,6 +224,9 @@ final class HathaCourse {
               lessonRaw['selfCheck'],
               '$lessonId.selfCheck',
             ),
+            answerKey: lessonRaw['answerKey'] == null
+                ? null
+                : HathaText.read(lessonRaw['answerKey'], '$lessonId.answerKey'),
             adaptation: HathaText.read(
               lessonRaw['adaptation'],
               '$lessonId.adaptation',
