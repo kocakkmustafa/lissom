@@ -226,12 +226,14 @@ class _LissomShellState extends State<LissomShell> {
     return true;
   }
 
+  bool get _measurementAvailable =>
+      widget.measurementAvailable ?? motionPaidFeaturesAvailable;
+
   Widget _page(AppFacts facts) => switch (facts.ia.tabs[_index]) {
     'home' => HomeScreen(
       facts: facts,
       beforeMeasurement: widget.beforeMeasurement,
-      measurementAvailable:
-          widget.measurementAvailable ?? motionPaidFeaturesAvailable,
+      measurementAvailable: _measurementAvailable,
       ageBand: widget.ageBand,
       onOpenLibrary: () =>
           setState(() => _index = facts.ia.tabs.indexOf('library')),
@@ -246,13 +248,18 @@ class _LissomShellState extends State<LissomShell> {
     ),
     'library' => LibraryScreen(
       facts: facts,
+      measurementAvailable: _measurementAvailable,
       onCourseDone: _reloadFacts,
       hathaStoreLoader: _hathaStoreLoader(),
       attemptValueStoreLoader: _attemptValueStoreLoader(),
     ),
-    'progress' => ProgressScreen(facts: facts),
+    'progress' => ProgressScreen(
+      facts: facts,
+      measurementAvailable: _measurementAvailable,
+    ),
     'profile' => ProfileScreen(
       facts: facts,
+      measurementAvailable: _measurementAvailable,
       accountRouteBuilder: widget.accountRouteBuilder,
     ),
     // Erişilemez: `_tabsMatch` yukarıda kapıyı tutuyor. Yine de sessiz

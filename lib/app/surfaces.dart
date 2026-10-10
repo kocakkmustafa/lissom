@@ -11,6 +11,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionPaidFeaturesAvailable;
 
 import 'ia.dart';
 import 'lissom_theme.dart';
@@ -410,17 +412,36 @@ abstract final class DevicePassClaim {
 }
 
 class CaptureUnavailableNote extends StatelessWidget {
-  const CaptureUnavailableNote({super.key});
+  const CaptureUnavailableNote({
+    this.measurementAvailable = motionPaidFeaturesAvailable,
+    super.key,
+  });
+
+  final bool measurementAvailable;
 
   static const Key key_ = Key('note.captureUnavailable');
 
-  /// The release policy closes live camera entry even though the engine has
-  /// measurement paths. Device qualification remains a separate fact derived
-  /// from [DevicePassClaim]; neither engine coverage nor course records open it.
+  /// Default release copy. Rendered availability follows the same capability
+  /// as Home; device qualification remains separate and is not implied by it.
   static const String text =
       'Live camera measurements are closed in this release. '
       'Written courses work without a camera. '
       '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.';
+
+  static String localizedAvailability(
+    BuildContext context, {
+    required bool measurementAvailable,
+  }) => measurementAvailable
+      ? localeText(
+          context,
+          'You can start a live camera measurement from Home for supported tests.',
+          'Desteklenen testlerde Ana Sayfa’dan canlı kamera ölçümü başlatabilirsin.',
+        )
+      : localeText(
+          context,
+          'Live camera measurements are closed in this release.',
+          'Bu sürümde canlı kamera ölçümleri kapalıdır.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -433,10 +454,12 @@ class CaptureUnavailableNote extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.only(top: 2),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
               child: Icon(
-                Icons.videocam_off_outlined,
+                measurementAvailable
+                    ? Icons.videocam_outlined
+                    : Icons.videocam_off_outlined,
                 size: 17,
                 color: LissomColors.bodySecondary,
               ),
@@ -444,13 +467,10 @@ class CaptureUnavailableNote extends StatelessWidget {
             const SizedBox(width: 11),
             Expanded(
               child: Text(
-                localeText(
-                  context,
-                  text,
-                  'Bu sürümde canlı kamera ölçümleri kapalıdır. Yazılı kurslar '
-                  'kamera olmadan çalışır. Gerçek cihazda kamera izni, kare '
-                  'kalitesi ve kalibrasyon henüz doğrulanmadı.',
-                ),
+                '${localizedAvailability(context, measurementAvailable: measurementAvailable)} '
+                '${localeText(context, 'Written courses work without a camera. '
+                    '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.', 'Yazılı kurslar kamera olmadan çalışır. Gerçek cihazda kamera izni, kare '
+                    'kalitesi ve kalibrasyon henüz doğrulanmadı.')}',
                 style: t.textTheme.bodyMedium,
               ),
             ),
@@ -483,7 +503,12 @@ class CaptureUnavailableNote extends StatelessWidget {
 /// basmak, dürüstlük ihlalini config'e havale etmek olurdu. Bulgu
 /// koordinatöre isimli gitti.
 class MeasurementLimitsFootnote extends StatelessWidget {
-  const MeasurementLimitsFootnote({super.key});
+  const MeasurementLimitsFootnote({
+    this.measurementAvailable = motionPaidFeaturesAvailable,
+    super.key,
+  });
+
+  final bool measurementAvailable;
 
   static const Key key_ = Key('footnote.measurementLimits');
 
@@ -532,14 +557,9 @@ class MeasurementLimitsFootnote extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 12),
           Text(
-            localeText(
-              context,
-              'These limits describe the measurement engine when a camera '
-                  'reading is taken. Live camera measurements are closed '
-                  'in this release.',
-              'Bu sınırlar, kamera ölçümü alındığında ölçüm motorunun '
-                  'davranışını açıklar. Bu sürümde canlı kamera ölçümleri kapalıdır.',
-            ),
+            '${localeText(context, 'These limits describe the measurement engine when a camera '
+                'reading is taken.', 'Bu sınırlar, kamera ölçümü alındığında ölçüm motorunun '
+                'davranışını açıklar.')} ${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: measurementAvailable)}',
             style: small,
           ),
           const SizedBox(height: 8),
