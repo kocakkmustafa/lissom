@@ -82,11 +82,8 @@ PROMISE = [
 #: ölçmeli.
 CONDITIONAL_PROMISE = [r"\bwill\b"]
 
-#: `will`i meşru kılan koşul çapaları. NEGATION'dan farklı olarak PENCERE YOK:
-#: koşul cümlesi tüm cümleyi yönetir ("When that study is run, the number will
-#: appear here" — arada altı kelime var). Bedeli isimli: aynı dizede alakasız
-#: bir "when" de geçerse kapı susar. Dar pencere bu meşru biçimi kırardı;
-#: yanlış alarmı insan eler, ama meşru biçimi kıran kapı insanı kapıdan soğutur.
+#: Koşul yalnız ilgili cümle/noktalı-virgül/satır maddesini yönetir.
+#: Önceki güvenlik koşulu bağımsız bir gelecek vaadini yetkilendirmez.
 CONDITION = re.compile(
     r"\b(when|once|if|until|after|as long as)\b", re.IGNORECASE)
 
@@ -264,55 +261,87 @@ def _is_negated(text: str, start: int) -> bool:
     return bool(NEGATION.search(prefix))
 
 
-# Context controls apply to one matched occurrence, never to a field/file.
-# A symptom mention is not a diagnosis when it names a stop, a referral,
-# or an explicitly symptom-free learning error. Other claims in the same
-# sentence continue through every rule. Keep these grammars local: an
-# unrelated safety sentence must not authorize an efficacy claim.
-_CONTEXT_USES = [
-    # A bounded safety condition or a non-symptomatic learning task.
-    r"\bsymptom-free (?:error|toe-lift error|mistake|trunk-rocking error|coordination error|contact error|shoulder shrug|rushed return|overreach|retest|forgotten-order example|correction|distraction|rehearsal|setup(?:/(?:attention|coordination))? (?:error|correction)|written plan)\b",
-    r"\bIf symptom-free\b",
-    r"\bfamiliar and symptom-free\b",
-    r"\b(?:stop symptom|symptom-stop)\b",
-    # Stop/omit instructions, rather than interpreting the cause.
-    r"\b(?:stop|stopping|omit the lesson) for symptoms\b",
-    r"\b(?:pinching or any stop symptom ends the action|slipping contact or symptoms end the attempt)\b",
-    r"(?:^|[.!?]\s+)(?:Symptoms mean stop|Symptoms are not a correction drill|Repeated symptoms are not invitations to repeat)\b",
-    r"\b(?:any knee/hip/back symptoms mean no retest|a symptom that ends attempts)\b",
-    r"(?:^|[.!?]\s+)For symptoms, uncertain support or forced breath, finish movement\b",
-    # Referral language does not claim that the app manages the condition.
-    r"\b(?:persistent or recurrent|recurrent/persistent|persistent/recurrent) symptoms (?:need|require) individual advice\b",
-    r"\bSeek appropriate health assistance if symptoms persist, worsen or concern you\b",
-    # Explicit distinction/recall tasks; no diagnostic interpretation.
-    r"\bCorrection is different from a symptom\b",
-    r"\band [“\"]symptom[”\"]; several may apply\b",
-    r"\bWrite distinct branches for [“\"]prop slips[”\"] and [“\"]symptoms occur\.?[”\"]",
-    r"\bdifferent responses to symptoms versus symptom-free setup errors\b",
-    # Rejection of a physical prescription and of multiple health outcomes.
-    r"\bnot a prescribed physical dose(?:[.!?]|$)",
-    r"\bNo tissue change, organ/meridian effect, treatment, pain relief or health outcome is promised\b",
-    # Missing evidence is a present limit; it supplies no date or capability.
-    r"\bNo learner trial or instructor demonstration validates this curriculum yet\b",
-    # The learner names their own pause, not a future app feature.
-    r"\bName where a pause will occur: upright or supported sitting\b",
+# Safety exceptions prove the entire local clause and name only the
+# occurrence they authorize. A noun phrase such as "symptom-free retest"
+# alone proves nothing: active/passive outcomes cannot reuse its exception.
+# No open-ended efficacy-verb dictionary, file exemption or digest is added.
+# Other matched words, including a second symptom mention, remain scanned.
+_CONTEXT_GRAMMARS = [
+    # Observed, symptom-free learning conditions followed by an instruction.
+    r"If (?:the )?(?P<word>symptom)-free mistake is pulling with the hand, release it, reduce the range and retry once with hands resting",
+    r"If you notice a (?P<word>symptom)-free shoulder shrug, lower to neutral, keep required support, choose a lower reach and retry once",
+    r"If (?P<word>symptom)-free, (?:rehearse once|start neutral with a shorter step and retry once)",
+    r"If (?P<word>symptom)-free and you notice (?:pulling feet close just to [“\"]look better,[”\"] leave, set feet slightly farther away and retest only a smaller entry/exit once|a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form|forcing visual symmetry, leave, choose less range and retest one brief entry/centre return)",
+    r"If even a (?P<word>symptom)-free rehearsal is not comfortable, omit today's floor route",
+    r"If a (?P<word>symptom)-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders",
+    r"If physical rehearsal exposes a (?P<word>symptom)-free coordination error, use v08’s single simplified retest",
+    r"If that link is familiar and (?P<word>symptom)-free, include just one selected optional component",
+    r"If a rear-foot return needs a hop, should you lengthen the stance or shorten it before a (?P<word>symptom)-free retest",
+    # Bounded error/retest instructions, not symptom-free outcome subjects.
+    r"A (?P<word>symptom)-free (?:trunk-rocking error: place both feet down, rest, choose a much smaller lift and retry once|rushed return: stop upright, shorten the hinge and rehearse one slower supported return|error that disappears is a reported coordination change, not a clinical finding)",
+    r"For a (?P<word>symptom)-free (?:toe-lift error where both feet leave the floor: rest, recheck chair fit, keep one heel and opposite sole grounded, reduce the lift and retry once|overreach, return by the familiar small support-preserving action, reset upright and select less hip displacement for one smaller attempt|forgotten-order example only, reset upright and simplify to the stationary hinge already learned)",
+    r"For (?P<word>symptom)-free distraction return to ordinary breathing",
+    r"Only for a (?P<word>symptom)-free setup/attention error: leave the pose",
+    r"Only a (?P<word>symptom)-free setup/coordination error may receive one smaller retest",
+    r"Use one small correction/retest cycle for a (?P<word>symptom)-free coordination error",
+    # Explicit stop/referral predicates; only the named warning token passes.
+    r"(?:stop|stopping) for (?P<word>symptoms)",
+    r"Pinching or any stop (?P<word>symptom) ends the action without retest",
+    r"Slipping contact or (?P<word>symptoms) end the attempt",
+    r"(?P<word>Symptoms) mean stop, not a smaller retry",
+    r"(?P<word>Symptoms) are not a correction drill",
+    r"Repeated (?P<word>symptoms) are not invitations to repeat with smaller range",
+    r"Any knee/hip/back (?P<word>symptoms) mean no retest",
+    r"For (?P<word>symptoms), uncertain support or forced breath, finish movement and use the familiar supported rest",
+    r"Omit the lesson for (?P<word>symptoms) or difficulty controlling the exit",
+    r"(?:persistent or recurrent|recurrent/persistent|persistent/recurrent) (?P<word>symptoms) (?:need|require) individual advice(?: before (?:resuming|restarting))?",
+    r"Seek appropriate health assistance if (?P<word>symptoms) persist, worsen or concern you",
+    # Recall/distinction tasks bind each of their two warning mentions.
+    r"Correction is different from a (?P<word>symptom)",
+    r"Distinguish a (?P<word>symptom)-free setup correction from a (?P<word2>symptom) that ends attempts",
+    r"In neutral distinguish [“\"]time ended,[”\"] [“\"]attention wandered,[”\"] [“\"]setup error[”\"] and [“\"](?P<word>symptom)",
+    r"Write distinct branches for [“\"]prop slips[”\"] and [“\"](?P<word>symptoms) occur",
+    r"In a new case they distinguish stopping for (?P<word>symptoms) from an ordinary setup error",
+    r"Name required support at each stage, optional actions omitted, a breath-mismatch response and a (?P<word>symptom)-stop response",
+    r"Before opening the saved plan, write the setup, chosen link, breath-mismatch response, one (?P<word>symptom)-free correction and one (?P<word2>symptom)-stop exit from memory",
+    r"In a later separate session, before opening the plan, recall the setup, return points and two different responses: a (?P<word>symptom)-free contact error and a stop (?P<word2>symptom)",
+    r"In a later separate session, before opening the page explain your adaptation of Yin waiting, two selected shapes, each support/entry/neutral/exit, a reason to leave before time and the different responses to (?P<word>symptoms) versus (?P<word2>symptom)-free setup errors",
+    # Explicit denials and learner planning, with no trailing asserted claim.
+    r"(?:This is |Duration is your choice, )not a (?P<word>prescribed) physical dose",
+    r"No tissue change, organ/meridian effect, (?P<word>treatment), pain relief or health outcome is promised",
+    r"No learner trial or instructor demonstration validates this curriculum (?P<word>yet)",
+    r"Name where a pause (?P<word>will) occur: upright or supported sitting",
 ]
-_CONTEXT_PATTERNS = [re.compile(pat, re.IGNORECASE) for pat in _CONTEXT_USES]
+_CONTEXT_PATTERNS = [re.compile(pat, re.IGNORECASE) for pat in _CONTEXT_GRAMMARS]
+_CLAUSE_BREAK = re.compile(r"[.!?;\n]")
+_CLAUSE_TRIM = ' \t\r“”"'
 
-# Do not let an asserted diagnostic/efficacy outcome reuse the vocabulary
-# of a safety condition (e.g. "Lissom guarantees a symptom-free retest").
-_SYMPTOM_CLAIM = re.compile(
-    r"\b(?:guarantee\w*|promise\w*|ensure\w*|deliver\w*|offer\w*|enjoy\w*|become\w*|remov\w*|giv\w*|provid\w*|abolish\w*|make[sd]?|"
-    r"predict\w*|measure\w*|resolve\w*|reliev\w*|reduc\w*|eliminat\w*|"
-    r"prevent\w*|improv\w*|manage\w*|identif\w*|interpret\w*|assess\w*)"
-    r"(?:[^.!?;]*?)\bsymptoms?\b", re.IGNORECASE,
-)
+
+def _clause_at(text: str, start: int) -> tuple[str, int]:
+    left = 0
+    right = len(text)
+    for boundary in _CLAUSE_BREAK.finditer(text):
+        if boundary.end() <= start:
+            left = boundary.end()
+        elif boundary.start() >= start:
+            right = boundary.start()
+            break
+    raw = text[left:right]
+    leading = len(raw) - len(raw.lstrip(_CLAUSE_TRIM))
+    return raw.strip(_CLAUSE_TRIM), left + leading
 
 
 def _contextual_use(text: str, match: re.Match[str]) -> bool:
-    return any(span.start() <= match.start() and match.end() <= span.end()
-               for pattern in _CONTEXT_PATTERNS
-               for span in pattern.finditer(text))
+    clause, offset = _clause_at(text, match.start())
+    for pattern in _CONTEXT_PATTERNS:
+        proof = pattern.fullmatch(clause)
+        if proof is None:
+            continue
+        for group in proof.groupdict():
+            begin, end = proof.span(group)
+            if begin + offset == match.start() and end + offset == match.end():
+                return True
+    return False
 
 
 def scan_text(where: str, text: str) -> list[str]:
@@ -339,7 +368,8 @@ def scan_text(where: str, text: str) -> list[str]:
             if (_contextual_use(text, m) or
                     re.match(r"will\s+not\b", text[m.start():], re.IGNORECASE)):
                 continue
-            if not CONDITION.search(text[:m.start()]):
+            clause_prefix = re.split(r"[.!?;\n]", text[:m.start()])[-1]
+            if not CONDITION.search(clause_prefix):
                 problems.append(
                     f"{where}: VAAT  «{m.group(0)}» KOŞULSUZ  — adı olan bir "
                     f"koşula bağlanmamış gelecek zaman  — {text[:90]}…")
@@ -351,9 +381,6 @@ def scan_text(where: str, text: str) -> list[str]:
                 problems.append(
                     f"{where}: SOFT  «{m.group(0)}» olumsuzlanmamış  — {text[:90]}…"
                 )
-    for m in _SYMPTOM_CLAIM.finditer(text):
-        if not _is_negated(text, m.start()):
-            problems.append(f"{where}: CLAIM  «{m.group(0)}» — {text[:90]}…")
     return problems
 
 

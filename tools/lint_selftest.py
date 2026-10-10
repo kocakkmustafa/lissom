@@ -39,6 +39,13 @@ MUST_PASS = {
 # Boundary counterexamples: safety language in the same field must never
 # exempt an efficacy claim, a prescription, or an unqualified release date.
 MUST_CATCH.update({
+    "active creates outcome": "Lissom creates a symptom-free retest.",
+    "passive delivered outcome": "A symptom-free retest is delivered by Lissom.",
+    "passive promised outcome": "A symptom-free retest is promised by Lissom.",
+    "cross-sentence will": "If symptom-free, rehearse once. Lissom will assess your technique.",
+    "cross-semicolon will": "If symptom-free, rehearse once; Camera coaching will be available.",
+    "cross-newline will": "If symptom-free, rehearse once.\nLissom will assess your technique.",
+    "second outcome token": "If symptom-free, rehearse once with a symptom-free retest delivered by Lissom.",
     "symptom removal in safety vocabulary": "Lissom removes stop symptoms.",
     "symptom-free provision": "Lissom provides a symptom-free retest.",
     "symptom outcome": "Lissom reduces your symptoms.",
@@ -54,6 +61,12 @@ MUST_CATCH.update({
 })
 
 
+MUST_PASS.update({
+    "safety learning condition": "If symptom-free, rehearse once.",
+    "named study condition": "When that study is run, the number will appear here.",
+})
+
+
 def _course_context_checks() -> tuple[int, list[str]]:
     """Read shipped fields, then challenge every one with appended claims.
 
@@ -63,6 +76,11 @@ def _course_context_checks() -> tuple[int, list[str]]:
     failures: list[str] = []
     count = 0
     attacks = (
+        " A symptom-free retest is delivered by Lissom.",
+        " A symptom-free retest is promised by Lissom.",
+        " Lissom creates a symptom-free retest.",
+        " Lissom will assess your technique.",
+        " Camera coaching will be available.",
         " This cures pain.",
         " Lissom diagnoses the cause.",
         " Lissom treats your symptoms.",
@@ -82,9 +100,10 @@ def _course_context_checks() -> tuple[int, list[str]]:
             if wellness_lint.scan_text(where, text):
                 failures.append(f"COURSE CONTEXT FALSE ALARM: {where}")
             for attack in attacks:
-                count += 1
-                if not wellness_lint.scan_text(where, text + "." + attack):
-                    failures.append(f"COURSE CLAIM MISSED: {where}: {attack}")
+                for separator in (".", ";", "\n"):
+                    count += 1
+                    if not wellness_lint.scan_text(where, text + separator + attack):
+                        failures.append(f"COURSE CLAIM MISSED: {where}: {separator!r}: {attack}")
     if fields < 200:
         failures.append(f"COURSE CONTEXT READER EMPTY/INCOMPLETE: {fields} fields")
     return count, failures
