@@ -17,6 +17,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'study_review.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_account/motion_account.dart'
     show motionPaidFeaturesAvailable;
@@ -74,6 +75,7 @@ class LibraryScreen extends StatelessWidget {
           // yapardı ve eşit-ağırlık kapısı (kart sayısı = aile sayısı)
           // yanlış sayardı. Kapı bunu anında yakaladı.
           CaptureUnavailableNote(measurementAvailable: measurementAvailable),
+          const StudyReviewEntry(),
           Column(
             key: builtSectionKey,
             crossAxisAlignment: CrossAxisAlignment.start,
