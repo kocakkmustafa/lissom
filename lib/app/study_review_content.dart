@@ -163,10 +163,10 @@ const List<StudyArea> studyAreas = <StudyArea>[
       ),
       RecallLesson(
         id: "vinyasa.2",
-        title: StudyText("Correction versus symptom", "Düzeltme ve belirti"),
+        title: StudyText("Correction and stopping", "Düzeltme ve durma"),
         teaching: StudyText(
-          "The course separates revising an understandable route error from a stop signal. A symptom is not a technique error to erase by repeating until a pass.",
-          "Kurs anlaşılır yol hatasını düzeltmekle durma sinyalini ayırır. Belirti, başarı gelene kadar tekrarla silinecek teknik hata değildir.",
+          "The course distinguishes revising an understandable route error from choosing to stop. A stop signal calls for ending the activity, rather than repeating it until it appears successful.",
+          "Anlaşılır yol hatasını düzeltmekle durmayı seçmek farklıdır. Durma sinyali, çalışma başarılı görünene kadar tekrarlamak yerine onu bitirmeyi gerektirir.",
         ),
         question: StudyText(
           "The record says stopped because of discomfort. Should the next plan demand another attempt?",
