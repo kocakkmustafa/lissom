@@ -24,12 +24,12 @@ String _status(String language, bool available) => language == 'tr'
     ? 'You can start a live camera measurement from Home for supported tests.'
     : 'Live camera measurements are closed in this release.';
 
-void _expectContext(
+Future<void> _expectContext(
   WidgetTester tester,
   String language,
   bool available, {
   bool footnote = false,
-}) {
+}) async {
   final note = find.descendant(
     of: find.byKey(CaptureUnavailableNote.key_),
     matching: find.byType(Text),
@@ -47,6 +47,10 @@ void _expectContext(
           : DevicePassClaim.stillNeeds,
     ),
   );
+  final messagesBeforeScroll = tester
+      .widgetList<Text>(find.byType(Text))
+      .map((text) => text.data ?? '')
+      .join('\n');
   if (footnote) {
     final caption = find.descendant(
       of: find.byKey(MeasurementLimitsFootnote.key_),
@@ -56,6 +60,8 @@ void _expectContext(
             : 'when a camera reading is taken',
       ),
     );
+    // Course inventories can put the footnote beyond the lazy viewport.
+    await scrollTo(tester, caption);
     expect(caption, findsOneWidget);
     expect(
       tester.widget<Text>(caption).data!,
@@ -63,10 +69,11 @@ void _expectContext(
     );
   }
   if (available) {
-    final messages = tester
+    final messagesAfterScroll = tester
         .widgetList<Text>(find.byType(Text))
         .map((text) => text.data ?? '')
         .join('\n');
+    final messages = '$messagesBeforeScroll\n$messagesAfterScroll';
     for (final closed in [
       'Live camera measurements are closed in this release',
       'Live camera measurements and subscription sales are closed',
@@ -143,7 +150,7 @@ void main() {
             }
 
             await tab('Library', 'Kütüphane');
-            _expectContext(tester, language, available);
+            await _expectContext(tester, language, available);
             final family = facts.ia.built.firstWhere(
               (family) => !family.teachingOnly,
             );
@@ -157,7 +164,6 @@ void main() {
             await tester.tap(entry);
             await tester.pumpAndSettle();
             expect(find.byType(FamilyPage), findsOneWidget);
-            _expectContext(tester, language, available, footnote: true);
             expect(
               find.byKey(FamilyPage.liveListKey),
               facts.live.isEmpty ? findsNothing : findsOneWidget,
@@ -166,6 +172,7 @@ void main() {
               find.byKey(FamilyPage.blockedListKey),
               facts.blocked.isEmpty ? findsNothing : findsOneWidget,
             );
+            await _expectContext(tester, language, available, footnote: true);
             expect(find.byType(BackButton), findsOneWidget);
             await tester.tap(find.byType(BackButton));
             await tester.pumpAndSettle();
@@ -180,14 +187,14 @@ void main() {
             await tester.tap(pendingEntry);
             await tester.pumpAndSettle();
             expect(find.byType(FamilyPage), findsOneWidget);
-            _expectContext(tester, language, available, footnote: true);
+            await _expectContext(tester, language, available, footnote: true);
             expect(find.byType(BackButton), findsOneWidget);
             await tester.tap(find.byType(BackButton));
             await tester.pumpAndSettle();
 
             await tab('Progress', 'İlerleme');
             expect(find.byType(ProgressScreen), findsOneWidget);
-            _expectContext(tester, language, available, footnote: true);
+            await _expectContext(tester, language, available, footnote: true);
             await tab('Profile', 'Profil');
             expect(find.byType(ProfileScreen), findsOneWidget);
             expect(

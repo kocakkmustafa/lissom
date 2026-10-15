@@ -244,7 +244,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       ageBand: _ageBand,
       onAgeBand: (String v) => setState(() => _ageBand = v),
     ),
-    _Step.limits => const _LimitsStep(),
+    _Step.limits => _LimitsStep(measurementAvailable: widget.measurementAvailable),
   };
 }
 
@@ -622,7 +622,9 @@ class _ProfileStep extends StatelessWidget {
 }
 
 class _LimitsStep extends StatelessWidget {
-  const _LimitsStep();
+  const _LimitsStep({required this.measurementAvailable});
+
+  final bool measurementAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -638,6 +640,14 @@ class _LimitsStep extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
+        Text(
+          MeasurementLimitsFootnote.localizedContext(
+            context,
+            measurementAvailable: measurementAvailable,
+          ),
+          style: t.textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 8),
         Text(
           MeasurementLimitsFootnote.localizedLimits(context),
           style: t.textTheme.bodyMedium,

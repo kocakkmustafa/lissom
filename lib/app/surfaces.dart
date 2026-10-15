@@ -526,6 +526,14 @@ class MeasurementLimitsFootnote extends StatelessWidget {
       'instrument, so we do not print a margin of error. When that study is '
       'run, the number will appear here.';
 
+  static String localizedContext(
+    BuildContext context, {
+    required bool measurementAvailable,
+  }) =>
+      '${localeText(context, 'These limits describe the measurement engine when a camera '
+          'reading is taken.', 'Bu sınırlar, kamera ölçümü alındığında ölçüm motorunun '
+          'davranışını açıklar.')} ${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: measurementAvailable)}';
+
   static String localizedLimits(BuildContext context) => localeText(
     context,
     limitsCopy,
@@ -557,9 +565,7 @@ class MeasurementLimitsFootnote extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 12),
           Text(
-            '${localeText(context, 'These limits describe the measurement engine when a camera '
-                'reading is taken.', 'Bu sınırlar, kamera ölçümü alındığında ölçüm motorunun '
-                'davranışını açıklar.')} ${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: measurementAvailable)}',
+            localizedContext(context, measurementAvailable: measurementAvailable),
             style: small,
           ),
           const SizedBox(height: 8),
