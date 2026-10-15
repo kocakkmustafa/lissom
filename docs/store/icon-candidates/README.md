@@ -20,3 +20,7 @@ Mevcut native ikon da seçilmiş 1254 px çizimden üretilmişti: eski iOS 1024 
 Eski 20 ikon, bu README ve generator görev kapsamındaki exact yedekte korunuyor. Boyut, PNG biçimi, piksel, opaklık ve SHA256 makbuzu: workspace kökünde `scratch/2026-09-26-motion-device-release/lissom-icon-source-receipt.json`; yedek: aynı dizinde `lissom-icon-source-backup/`.
 
 Bu kayıt native kaynak entegrasyonunu doğrular. Bu işlemde build, cihaz kurulumu veya mağaza konsoluna upload yapılmadı.
+
+## 2026-10-15 — Google Play dosya biçimi
+
+Güncel `tree-pose-yoga-Google-Play-512.png` dosyası, [Google Play ikon şartına](https://developer.android.com/distribute/google-play/resources/icon-design-specifications) uygun 512 × 512, 32-bit RGBA PNG olarak dışa aktarıldı; sRGB etiketi taşır. Önceki RGB pikselleri birebir korundu (fark 0); alfa kanalı her pikselde 255, görünüm opaktır. Kaynak çizim, App Store adayı ve native ikonlar değişmedi. Bu yerel dosya doğrulamasıdır; mağazaya yükleme kabulü değildir.
