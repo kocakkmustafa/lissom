@@ -41,6 +41,10 @@ final _entries = <String, List<String>>{
     'Destekli ayakta Vinyasa yolunu aç',
   ],
   'yin-supported': ['Open supported Yin', 'Destekli Yin yolunu aç'],
+  'ashtanga-foundations': [
+    'Open Ashtanga foundations',
+    'Ashtanga temellerini aç',
+  ],
 };
 
 AppFacts _facts() {
@@ -57,6 +61,7 @@ AppFacts _facts() {
     chairOffice: course('chair-office'),
     vinyasa: course('vinyasa-standing'),
     yin: course('yin-supported'),
+    ashtanga: course('ashtanga-foundations'),
     hathaProgress: base.hathaProgress,
   );
 }

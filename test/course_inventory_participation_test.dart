@@ -27,6 +27,7 @@ AppFacts _facts({bool allCourses = true, HathaProgress? progress}) {
     chairOffice: _course('chair-office'),
     vinyasa: allCourses ? _course('vinyasa-standing') : null,
     yin: allCourses ? _course('yin-supported') : null,
+    ashtanga: allCourses ? _course('ashtanga-foundations') : null,
     hathaProgress: progress ?? base.hathaProgress,
   );
 }
@@ -51,7 +52,7 @@ void main() {
     final lessonWord = turkish ? 'dersi' : 'lessons';
 
     testWidgets(
-      'library inventory includes all four actual courses ($language)',
+      'library inventory includes all five actual courses ($language)',
       (tester) async {
         final facts = _facts();
         await _pump(tester, LibraryScreen(facts: facts), language);
@@ -72,6 +73,12 @@ void main() {
           contains('${facts.vinyasa!.lessons.length} Vinyasa $lessonWord'),
         );
         expect(text, contains('${facts.yin!.lessons.length} Yin $lessonWord'));
+        expect(
+          text,
+          contains(
+            '${facts.ashtanga!.lessons.length} Ashtanga ${turkish ? 'temelleri dersi' : 'foundations lessons'}',
+          ),
+        );
         expect(tester.takeException(), isNull);
       },
     );
@@ -95,6 +102,7 @@ void main() {
       );
       expect(text, isNot(contains('Vinyasa')));
       expect(text, isNot(contains('Yin')));
+      expect(text, isNot(contains('Ashtanga')));
       expect(tester.takeException(), isNull);
     });
 

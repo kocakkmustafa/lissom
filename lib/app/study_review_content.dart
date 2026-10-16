@@ -235,12 +235,14 @@ const List<StudyArea> studyAreas = <StudyArea>[
       "Ashtanga: okuma hazırlığı",
     ),
     boundary: StudyText(
-      "A reading bridge only. The complete beginner Ashtanga course, traditional sequence, demonstrations and physical suitability remain pending. No practice of an untaught station follows from this page.",
-      "Yalnız okuma köprüsüdür. Tam başlangıç Ashtanga kursu, geleneksel dizi, gösterimler ve fiziksel uygunluk bekler. Bu sayfadan öğretilmemiş durakta pratik izni çıkmaz.",
+      "This reading bridge complements the separate Ashtanga beginner foundations course. Full traditional-series teaching, demonstrations and individual physical suitability remain separate. No practice of an untaught station follows from this page.",
+      "Bu okuma köprüsü ayrı Ashtanga başlangıç temelleri kursunu tamamlar. Tam geleneksel seri öğretimi, gösterimler ve bireysel fiziksel uygunluk ayrıdır. Bu sayfadan öğretilmemiş durakta pratik izni çıkmaz.",
     ),
     sourceRefs: <String>[
       "config/courses/hatha.v1.json#h34",
       "config/courses/hatha.v1.json#h49",
+      "config/courses/ashtanga-foundations.v1.json#a01",
+      "config/courses/ashtanga-foundations.v1.json#a08",
       "config/ia/library.v1.json",
     ],
     lessons: <RecallLesson>[
