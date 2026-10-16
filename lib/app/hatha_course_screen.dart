@@ -398,7 +398,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
   }
 
   Future<void> _save() async {
-    if (widget.previewOnly ||
+    if (_saving ||
+        !_reflected ||
+        widget.previewOnly ||
         _readOnly ||
         (_requiresPreparation && !_preparation.acknowledged)) {
       return;
