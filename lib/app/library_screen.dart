@@ -327,6 +327,76 @@ class _PendingFamilyRow extends StatelessWidget {
   }
 }
 
+class _CourseOpenButton extends StatefulWidget {
+  const _CourseOpenButton({
+    required this.course,
+    required this.storeLoader,
+    required this.label,
+  });
+
+  final HathaCourse course;
+  final Future<HathaProgressStore> Function()? storeLoader;
+  final String label;
+
+  @override
+  State<_CourseOpenButton> createState() => _CourseOpenButtonState();
+}
+
+class _CourseOpenButtonState extends State<_CourseOpenButton> {
+  bool _opening = false;
+  bool _failed = false;
+
+  Future<void> _open() async {
+    final loader = widget.storeLoader;
+    if (_opening || loader == null) return;
+    setState(() {
+      _opening = true;
+      _failed = false;
+    });
+    try {
+      final store = await loader();
+      if (!mounted) return;
+      final progress = await store.read();
+      if (!mounted) return;
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => HathaCourseScreen(
+            course: widget.course,
+            initialProgress: progress,
+            storeLoader: loader,
+          ),
+        ),
+      );
+    } on Object {
+      if (mounted) setState(() => _failed = true);
+    } finally {
+      if (mounted) setState(() => _opening = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      FilledButton(
+        onPressed: _opening || widget.storeLoader == null ? null : _open,
+        child: Text(widget.label),
+      ),
+      if (_failed) ...[
+        const SizedBox(height: 8),
+        Text(
+          localeText(
+            context,
+            'Your practice record could not be opened. Tap the course button to try again.',
+            'Çalışma kaydın açılamadı. Yeniden denemek için kurs düğmesine dokun.',
+          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
+      ],
+    ],
+  );
+}
+
 /// Bir ailenin sayfası — **dürüstlük kutusu ZORUNLU** (opsiyonel değil).
 class FamilyPage extends StatelessWidget {
   const FamilyPage({
@@ -439,26 +509,13 @@ class FamilyPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            FilledButton(
-              onPressed: hathaStoreLoader == null
-                  ? null
-                  : () async {
-                      final HathaProgressStore store =
-                          await hathaStoreLoader!();
-                      final HathaProgress progress = await store.read();
-                      if (!context.mounted) return;
-                      await Navigator.of(context).push<void>(
-                        MaterialPageRoute<void>(
-                          builder: (_) => HathaCourseScreen(
-                            course: course,
-                            initialProgress: progress,
-                            storeLoader: hathaStoreLoader!,
-                          ),
-                        ),
-                      );
-                    },
-              child: Text(
-                localeText(context, 'Open Hatha course', 'Hatha kursunu aç'),
+            _CourseOpenButton(
+              course: course,
+              storeLoader: hathaStoreLoader,
+              label: localeText(
+                context,
+                'Open Hatha course',
+                'Hatha kursunu aç',
               ),
             ),
           ],
@@ -471,32 +528,21 @@ class FamilyPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(hathaText(context, chair.title),
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                hathaText(context, chair.title),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
               Text(hathaText(context, chair.intro)),
               const SizedBox(height: 12),
-              FilledButton(
-                onPressed: hathaStoreLoader == null
-                    ? null
-                    : () async {
-                        final store = await hathaStoreLoader!();
-                        final progress = await store.read();
-                        if (!context.mounted) return;
-                        await Navigator.of(context).push<void>(
-                          MaterialPageRoute<void>(
-                            builder: (_) => HathaCourseScreen(
-                              course: chair,
-                              initialProgress: progress,
-                              storeLoader: hathaStoreLoader!,
-                            ),
-                          ),
-                        );
-                      },
-                child: Text(localeText(
-                  context, 'Open chair / office path',
+              _CourseOpenButton(
+                course: chair,
+                storeLoader: hathaStoreLoader,
+                label: localeText(
+                  context,
+                  'Open chair / office path',
                   'Sandalye / ofis yolunu aç',
-                )),
+                ),
               ),
             ],
           ),
@@ -509,32 +555,21 @@ class FamilyPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(hathaText(context, chair.title),
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                hathaText(context, chair.title),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
               Text(hathaText(context, chair.intro)),
               const SizedBox(height: 12),
-              FilledButton(
-                onPressed: hathaStoreLoader == null
-                    ? null
-                    : () async {
-                        final store = await hathaStoreLoader!();
-                        final progress = await store.read();
-                        if (!context.mounted) return;
-                        await Navigator.of(context).push<void>(
-                          MaterialPageRoute<void>(
-                            builder: (_) => HathaCourseScreen(
-                              course: chair,
-                              initialProgress: progress,
-                              storeLoader: hathaStoreLoader!,
-                            ),
-                          ),
-                        );
-                      },
-                child: Text(localeText(
-                  context, 'Open supported standing Vinyasa',
+              _CourseOpenButton(
+                course: chair,
+                storeLoader: hathaStoreLoader,
+                label: localeText(
+                  context,
+                  'Open supported standing Vinyasa',
                   'Destekli ayakta Vinyasa yolunu aç',
-                )),
+                ),
               ),
             ],
           ),
@@ -547,32 +582,21 @@ class FamilyPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(hathaText(context, chair.title),
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                hathaText(context, chair.title),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
               Text(hathaText(context, chair.intro)),
               const SizedBox(height: 12),
-              FilledButton(
-                onPressed: hathaStoreLoader == null
-                    ? null
-                    : () async {
-                        final store = await hathaStoreLoader!();
-                        final progress = await store.read();
-                        if (!context.mounted) return;
-                        await Navigator.of(context).push<void>(
-                          MaterialPageRoute<void>(
-                            builder: (_) => HathaCourseScreen(
-                              course: chair,
-                              initialProgress: progress,
-                              storeLoader: hathaStoreLoader!,
-                            ),
-                          ),
-                        );
-                      },
-                child: Text(localeText(
-                  context, 'Open supported Yin',
+              _CourseOpenButton(
+                course: chair,
+                storeLoader: hathaStoreLoader,
+                label: localeText(
+                  context,
+                  'Open supported Yin',
                   'Destekli Yin yolunu aç',
-                )),
+                ),
               ),
             ],
           ),
