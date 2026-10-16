@@ -1,3 +1,13 @@
+# Güncel native simge — 2026-10-16
+
+Yeni onay: **v17-vivid-jade**. Güncel master, platform envanteri,
+boyutlar ve hashler [onaylı simge kaydında](../../design/icon/approved-2026-10-16/README.md).
+15 iOS AppIcon ve 5 Android launcher PNG güncellendi. Aşağıdaki adaylar ve
+mağaza dosyaları tarihsel kayıttır; yeni onaylı simgeyle mağaza görsellerinin
+hazır olduğu anlamına gelmez. Native kurulum ve mağaza yüklemesi yapılmadı.
+
+---
+
 # Lissom mağaza simgesi adayı — 2026-09-24
 
 Kurucu, pastel mat zemin üzerindeki yoga matında **ağaç pozu** yapan yüzü ayrıntısız figürün son çizimini seçti. Seçilen kaynak `tree-pose-yoga-selected-reference-1254.png` dosyasıdır (SHA-256: `a113af9d54224ba80258754eb1283281cf717d4e57e6dc41913e1176ad3667e9`).

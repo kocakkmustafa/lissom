@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Install the founder-selected tree-pose artwork into native icon slots.
+"""Install the founder-approved 2026-10-16 artwork into native icon slots.
 
 The source stays square and opaque. iOS and Android apply their own launcher
 masks; pre-rounding a store asset would clip the dancer twice.
 """
 
+import argparse
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, PngImagePlugin
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "docs/store/icon-candidates/tree-pose-yoga-App-Store-1024.png"
+SOURCE = ROOT / "docs/design/icon/approved-2026-10-16/master.png"
 IOS_ASSETS = ROOT / "ios/Runner/Assets.xcassets"
 ANDROID_RES = ROOT / "android/app/src/main/res"
 
@@ -43,21 +44,30 @@ ANDROID_SIZES = {
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--include-launch-images", action="store_true",
+                        help="Also regenerate separate splash artwork (opt-in)")
+    args = parser.parse_args()
     with Image.open(SOURCE) as source:
-        if source.size != (1024, 1024) or source.mode not in ("RGB", "RGBA"):
-            raise ValueError("Selected icon must be a 1024px square RGB image")
-        master = source.convert("RGB")
+        if source.size != (1254, 1254) or source.mode != "RGB":
+            raise ValueError("Approved icon must be a 1254px square RGB image")
+        master = source.copy()
+        pnginfo = PngImagePlugin.PngInfo()
+        pnginfo.add(b"sRGB", b"\x00")
 
         icon_dir = IOS_ASSETS / "AppIcon.appiconset"
         for filename, pixels in ICON_SIZES.items():
             master.resize((pixels, pixels), Image.Resampling.LANCZOS).save(
-                icon_dir / filename
+                icon_dir / filename, pnginfo=pnginfo
             )
 
         for folder, pixels in ANDROID_SIZES.items():
             master.resize((pixels, pixels), Image.Resampling.LANCZOS).save(
-                ANDROID_RES / folder / "ic_launcher.png"
+                ANDROID_RES / folder / "ic_launcher.png", pnginfo=pnginfo
             )
+
+        if not args.include_launch_images:
+            return
 
         launch_dir = IOS_ASSETS / "LaunchImage.imageset"
         for filename, scale in (
