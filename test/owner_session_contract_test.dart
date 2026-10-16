@@ -527,8 +527,9 @@ void main() {
     final page = LissomEpochAccountClient(account: f.account, registry: owners, ticket: ticket);
     final marker = scope.file(root, LissomLocalFile.sessions);
     await marker.parent.create(recursive: true); await marker.writeAsString('A');
-    final drain = Completer<void>(); var retired = false;
-    scope.owner!.registerResource(() { retired = true; return drain.future; });
+    final drain = Completer<void>();
+    final retirementEntered = Completer<void>();
+    scope.owner!.registerResource(() { retirementEntered.complete(); return drain.future; });
     f.deletionEntered = Completer<void>(); f.deletionRelease = Completer<void>();
     final deletion = page.deleteCommonAccount(afterRemoteDelete: (id) => owners.eraseWithTicket(ticket, id));
     await f.deletionEntered!.future;
@@ -536,8 +537,12 @@ void main() {
     final replacement = f.client.auth.currentSession;
     expect(owners.isCurrentTicket(ticket), isTrue);
     expect(scope.owner!.isActive, isTrue);
-    f.deletionRelease!.complete(); await _settleSdk();
-    expect(retired, isTrue); expect(scope.owner!.isActive, isFalse);
+    expect(retirementEntered.isCompleted, isFalse);
+    f.deletionRelease!.complete();
+    // The real fence journal uses asynchronous file I/O. Event-loop turns do
+    // not prove that it has finished on a loaded runner; await retirement.
+    await retirementEntered.future.timeout(const Duration(seconds: 10));
+    expect(scope.owner!.isActive, isFalse);
     expect(await marker.exists(), isTrue); expect(owners.isFenced(_alice), isTrue);
     drain.complete(); await deletion;
     expect(await marker.exists(), isFalse);
