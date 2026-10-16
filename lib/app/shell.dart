@@ -160,8 +160,9 @@ class _LissomShellState extends State<LissomShell> {
     bool chairOffice = false,
     bool vinyasa = false,
     bool yin = false,
+    bool ashtanga = false,
   }) async {
-    final course = yin ? facts.yin : vinyasa ? facts.vinyasa : chairOffice ? facts.chairOffice : facts.hatha;
+    final course = ashtanga ? facts.ashtanga : yin ? facts.yin : vinyasa ? facts.vinyasa : chairOffice ? facts.chairOffice : facts.hatha;
     if (course == null) return;
     final Future<HathaProgressStore> Function() storeLoader =
         _hathaStoreLoader();
@@ -240,6 +241,7 @@ class _LissomShellState extends State<LissomShell> {
       onMeasurementDone: _reloadFacts,
       onOpenHatha: () => _openHatha(facts),
       onOpenYin: () => _openHatha(facts, yin: true),
+      onOpenAshtanga: () => _openHatha(facts, ashtanga: true),
       onOpenVinyasa: () => _openHatha(facts, vinyasa: true),
       onOpenChairOffice: () => _openHatha(facts, chairOffice: true),
       poseSourceLoader: widget.poseSourceLoader,

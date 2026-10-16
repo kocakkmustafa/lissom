@@ -33,6 +33,7 @@ import 'package:motion_account/motion_account.dart'
     show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
+import 'ashtanga_entry.dart';
 import 'vinyasa_entry.dart';
 import 'yin_entry.dart';
 import 'attempt_values.dart';
@@ -53,6 +54,7 @@ class HomeScreen extends StatelessWidget {
     this.onOpenChairOffice,
     this.onOpenVinyasa,
     this.onOpenYin,
+    this.onOpenAshtanga,
     this.ageBand,
     this.onMeasurementDone,
     this.poseSourceLoader,
@@ -125,6 +127,7 @@ class HomeScreen extends StatelessWidget {
   final VoidCallback? onOpenChairOffice;
   final VoidCallback? onOpenVinyasa;
   final VoidCallback? onOpenYin;
+  final VoidCallback? onOpenAshtanga;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +139,15 @@ class HomeScreen extends StatelessWidget {
           if (facts.hatha case final HathaCourse course) ...<Widget>[
             _courseCard(context, course),
             const SizedBox(height: 24),
+          ],
+          if (facts.ashtanga case final HathaCourse course) ...<Widget>[
+            AshtangaEntry(
+              key: const Key('home.ashtangaCourse'),
+              course: course,
+              participation: facts.hathaProgress?.practicedIn(course).length ?? 0,
+              onOpen: onOpenAshtanga ?? onOpenLibrary,
+            ),
+            const SizedBox(height: 18),
           ],
           if (facts.yin case final HathaCourse course) ...<Widget>[
             YinEntry(key: const Key('home.yinCourse'), course: course, onOpen: onOpenYin, onOpenFoundations: onOpenHatha),

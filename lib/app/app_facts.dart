@@ -17,6 +17,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_content/motion_content.dart';
 
 import 'assessment_history.dart';
+import 'ashtanga_course.dart';
 import 'chair_office_course.dart';
 import 'vinyasa_course.dart';
 import 'yin_course.dart';
@@ -37,6 +38,7 @@ final class AppFacts {
     this.chairOffice,
     this.vinyasa,
     this.yin,
+    this.ashtanga,
     this.hathaProgress,
   });
 
@@ -52,6 +54,7 @@ final class AppFacts {
   final HathaCourse? chairOffice;
   final HathaCourse? vinyasa;
   final HathaCourse? yin;
+  final HathaCourse? ashtanga;
   final HathaProgress? hathaProgress;
 
   List<TestLiveness> get live =>
@@ -171,6 +174,7 @@ final class AppFacts {
     final HathaCourse chairOffice = await loadVerifiedChairOfficeCourse(assets);
     final HathaCourse vinyasa = await loadVerifiedVinyasaCourse(assets);
     final HathaCourse yin = await loadVerifiedYinCourse(assets);
+    final HathaCourse ashtanga = await loadVerifiedAshtangaCourse(assets);
     final HathaProgress hathaProgress = await (await openHathaProgressStore(
       scope: scope,
     )).read();
@@ -185,6 +189,7 @@ final class AppFacts {
       chairOffice: chairOffice,
       vinyasa: vinyasa,
       yin: yin,
+      ashtanga: ashtanga,
       hathaProgress: hathaProgress,
     );
   }

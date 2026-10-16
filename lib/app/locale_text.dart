@@ -80,6 +80,8 @@ const String _assessmentIntroHonest =
     'Twelve movement assessments are listed; three have a camera measurement path in this build. Each test shows its current limits.';
 
 const Map<String, String> _turkishConfigCopy = <String, String>{
+  'Ashtanga beginner foundations': 'Ashtanga başlangıç temelleri',
+  'Written Hatha, chair/office, supported standing Vinyasa, adapted supported Yin and Ashtanga beginner foundations are included. Ashtanga uses standing adaptations and sequence reading, not the full Primary Series. Demonstration and physical acceptance remain separate. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa, uyarlanmış destekli Yin ve Ashtanga başlangıç temelleri içerilir. Ashtanga ayakta uyarlamalar ve sıra okumayı kullanır; tam temel seri değildir. Gösterim ve fiziksel kabul ayrıdır. Yoga duruşları kamerayla puanlanmaz.',
   'Written Hatha, chair/office, supported standing Vinyasa and adapted supported Yin beginner paths are included. Demonstration and physical acceptance remain separate; the beginner Ashtanga course remains pending. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa ve uyarlanmış destekli Yin başlangıç yolları içerilir. Gösterim ve fiziksel kabul ayrı; başlangıç Ashtanga kursu bekliyor. Yoga duruşları kamerayla puanlanmaz.',
   "Today's plan": 'Bugünün planı',
   'Measuring again': 'Yeniden ölçüm',

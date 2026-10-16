@@ -270,6 +270,10 @@ class ProgressScreen extends StatelessWidget {
             const SizedBox(height: 18),
           ],
 
+          if (facts.ashtanga != null && facts.hathaProgress != null) ...<Widget>[
+            _HathaProgressCard(course: facts.ashtanga!, progress: facts.hathaProgress!),
+            const SizedBox(height: 18),
+          ],
           if (facts.yin != null && facts.hathaProgress != null) ...<Widget>[
             _HathaProgressCard(course: facts.yin!, progress: facts.hathaProgress!),
             const SizedBox(height: 18),
@@ -516,9 +520,9 @@ class _HathaProgressCard extends StatelessWidget {
             localeText(
               context,
               course.id == 'lissom.chair-office.beginner'
-                  ? 'Chair / office practice' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa participation' : course.id == 'lissom.yin.supported.beginner' ? 'Yin participation' : 'Hatha practice',
+                  ? 'Chair / office practice' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa participation' : course.id == 'lissom.yin.supported.beginner' ? 'Yin participation' : course.isAshtanga ? 'Ashtanga participation' : 'Hatha practice',
               course.id == 'lissom.chair-office.beginner'
-                  ? 'Sandalye / ofis çalışması' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa katılımı' : course.id == 'lissom.yin.supported.beginner' ? 'Yin katılımı' : 'Hatha çalışması',
+                  ? 'Sandalye / ofis çalışması' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa katılımı' : course.id == 'lissom.yin.supported.beginner' ? 'Yin katılımı' : course.isAshtanga ? 'Ashtanga katılımı' : 'Hatha çalışması',
             ),
             style: theme.textTheme.titleLarge,
           ),
@@ -526,10 +530,10 @@ class _HathaProgressCard extends StatelessWidget {
           Text(
             localeText(
               context,
-              course.id == 'lissom.yin.supported.beginner'
+              course.recordsParticipation
                   ? '${practiced.length}/${course.lessons.length} units with participation records · self-recorded; physical skill is not established.'
                   : '${practiced.length}/${course.lessons.length} lessons practised · self-recorded',
-              course.id == 'lissom.yin.supported.beginner'
+              course.recordsParticipation
                   ? '${practiced.length}/${course.lessons.length} birimde katılım kaydı · öz kayıt; fiziksel beceri gösterilmez.'
                   : '${practiced.length}/${course.lessons.length} ders çalışıldı · öz kayıt',
             ),

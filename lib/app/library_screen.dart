@@ -238,12 +238,14 @@ class _BuiltFamilyCard extends StatelessWidget {
                                 '${facts.hatha!.lessons.length} Hatha lessons'
                                 '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} chair / office lessons'}'
                                 '${facts.vinyasa == null ? '' : ' · ${facts.vinyasa!.lessons.length} Vinyasa lessons'}'
-                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin lessons'}',
+                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin lessons'}'
+                                '${facts.ashtanga == null ? '' : ' · ${facts.ashtanga!.lessons.length} Ashtanga foundations lessons'}',
                             '${facts.hatha!.modules.length} modül · '
                                 '${facts.hatha!.lessons.length} Hatha dersi'
                                 '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} sandalye / ofis dersi'}'
                                 '${facts.vinyasa == null ? '' : ' · ${facts.vinyasa!.lessons.length} Vinyasa dersi'}'
-                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin dersi'}',
+                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin dersi'}'
+                                '${facts.ashtanga == null ? '' : ' · ${facts.ashtanga!.lessons.length} Ashtanga temelleri dersi'}',
                           )
                   : localeText(
                       context,
@@ -602,12 +604,38 @@ class FamilyPage extends StatelessWidget {
           ),
         ),
       ],
+      if (facts.ashtanga case final HathaCourse ashtanga) ...<Widget>[
+        const SizedBox(height: 16),
+        LissomCard(
+          key: const Key('library.ashtangaCourse'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(hathaText(context, ashtanga.title),
+                  style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Text(hathaText(context, ashtanga.intro)),
+              const SizedBox(height: 12),
+              _CourseOpenButton(
+                course: ashtanga,
+                storeLoader: hathaStoreLoader,
+                label: localeText(context,
+                    'Open Ashtanga foundations', 'Ashtanga temellerini aç'),
+              ),
+            ],
+          ),
+        ),
+      ],
       const SizedBox(height: 16),
       Text(
         localeText(
           context,
-          'The beginner Ashtanga course remains pending. Written courses do not establish physical mastery.',
-          'Başlangıç Ashtanga kursu bekliyor. Yazılı kurslar fiziksel ustalık göstermez.',
+          facts.ashtanga == null
+              ? 'The beginner Ashtanga course remains pending. Written courses do not establish physical mastery.'
+              : 'Ashtanga foundations include standing adaptations and sequence reading, not the full Primary Series. Written courses do not establish physical mastery.',
+          facts.ashtanga == null
+              ? 'Başlangıç Ashtanga kursu bekliyor. Yazılı kurslar fiziksel ustalık göstermez.'
+              : 'Ashtanga temelleri ayakta uyarlamaları ve sıra okumayı içerir; tam temel seri değildir. Yazılı kurslar fiziksel ustalık göstermez.',
         ),
         style: Theme.of(context).textTheme.bodySmall,
       ),

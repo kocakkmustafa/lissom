@@ -47,7 +47,7 @@ void main() {
         const MethodChannel('plugins.flutter.io/path_provider'), null);
     await root.delete(recursive: true); // Only this test's own temporary root.
   });
-  test('actual AppFacts startup loads all four exact course assets', () async {
+  test('actual AppFacts startup loads all five exact course assets', () async {
     final bundle = _DiskBundle();
     final facts = await AppFacts.load(
       scope: registry.openScope(fixtureOwner), bundle: bundle);
@@ -55,6 +55,7 @@ void main() {
     expect(facts.chairOffice!.id, 'lissom.chair-office.beginner');
     expect(facts.vinyasa!.id, 'lissom.vinyasa.supported-standing.beginner');
     expect(facts.yin!.id, 'lissom.yin.supported.beginner');
+    expect(facts.ashtanga!.id, 'lissom.ashtanga.foundations.beginner');
     expect(facts.yin!.lessons.map((lesson) => lesson.id).toList(),
       List.generate(8, (index) => 'y${(index + 1).toString().padLeft(2, '0')}'));
     expect(bundle.requested, contains(kYinCourseAssetPath));

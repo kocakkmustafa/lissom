@@ -275,6 +275,19 @@ final class HathaCourse {
   final Map<String, HathaSourceScope> sourceScopes;
   final List<HathaModule> modules;
 
+  bool get isAshtanga => id == 'lissom.ashtanga.foundations.beginner';
+
+  bool get allowsLessonPreview => isAshtanga ||
+      id == 'lissom.chair-office.beginner' ||
+      id == 'lissom.vinyasa.supported-standing.beginner' ||
+      id == 'lissom.yin.supported.beginner';
+
+  bool get recordsParticipation =>
+      isAshtanga || id == 'lissom.yin.supported.beginner';
+
+  bool isWrittenStudy(String lessonId) => isAshtanga &&
+      const {'a01', 'a02', 'a03', 'a08', 'a10', 'a12', 'a13'}.contains(lessonId);
+
   List<HathaLesson> get lessons => modules
       .expand<HathaLesson>((HathaModule module) => module.lessons)
       .toList(growable: false);

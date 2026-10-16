@@ -1,0 +1,986 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.ashtanga.foundations.beginner",
+  "version": "1.0.0",
+  "title": {
+    "en": "Ashtanga beginner foundations",
+    "tr": "Ashtanga başlangıç temelleri"
+  },
+  "intro": {
+    "en": "Thirteen text lessons: standing foundations, traditional Sun A/B maps and clearly labelled standing adaptations. This is not the full Primary Series. Self-reported study/participation; physical teaching, individual suitability and accepted demonstrations remain separate. No yoga camera grade.",
+    "tr": "On üç metin dersi: ayakta temeller, geleneksel Güneşe Selam A/B haritaları ve açık etiketli ayakta uyarlamalar. Tam temel seri değildir. Öz beyanlı okuma/katılım; fiziksel öğretim, bireysel uygunluk ve kabul edilmiş gösterimler ayrıdır. Yoga kamera puanı yoktur."
+  },
+  "sources": {
+    "kpj_method": "https://kpjayshala.com/about-ashtanga.html",
+    "ayi_series": "https://www.ashtangayoga.info/ashtanga-yoga/traditional-practice-series/",
+    "ayi_sun_a": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/",
+    "ayi_sun_b": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-b-sun-salutation-b/",
+    "ayi_standing": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/item/samasthitih/?cHash=60995883ecbc260524840525a14e6e39",
+    "ayi_arms": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/item/urdhva-vriksasana/?cHash=d266b320140a436debcbb9ef05898021",
+    "ayi_fold": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/item/uttanasana-a/?cHash=0ad70ecda39821b7122c6c613e14aadc",
+    "ayi_half_lift": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/item/uttanasana-b/?cHash=93fbdfdf9bec4c4e3e7aca39ba2ce115",
+    "ayi_chair": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-b-sun-salutation-b/item/utkatasana/?cHash=6c7180eb28375326bf323b6037e94a78",
+    "ayi_warrior": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-b-sun-salutation-b/item/virabhadrasana-a/?cHash=83ca5d046b42fcee295c99916ebb5576"
+  },
+  "sourceScopes": {
+    "kpj_method": {
+      "supports": {
+        "en": "Eight-limb identity, ordered breath/movement/gaze concepts and the role of a trained teacher.",
+        "tr": "Sekiz basamak kimliği, sıralı nefes/hareket/bakış kavramları ve eğitimli öğretmenin rolü."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_series": {
+      "supports": {
+        "en": "Distinguishes Sun A, Sun B, standing foundations, finishing and the Primary Series.",
+        "tr": "Güneşe Selam A/B, ayakta temeller, kapanış ve temel seriyi ayırır."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_sun_a": {
+      "supports": {
+        "en": "Names and order of the nine counted Sun A movements; return to standing follows.",
+        "tr": "Güneşe Selam A’nın dokuz sayılı hareketinin adı ve sırası; ardından ayakta duruşa dönüş."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_sun_b": {
+      "supports": {
+        "en": "Names and order of the seventeen counted Sun B movements, with right and left Warrior A.",
+        "tr": "Güneşe Selam B’nin sağ ve sol Savaşçı A içeren on yedi sayılı hareketinin adı ve sırası."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_standing": {
+      "supports": {
+        "en": "Samasthiti names upright standing and the return point of Sun A.",
+        "tr": "Samasthiti dik duruşu ve Güneşe Selam A’nın dönüş noktasını adlandırır."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_arms": {
+      "supports": {
+        "en": "The upward-arm station in Sun A.",
+        "tr": "Güneşe Selam A’daki kolların yukarı uzandığı durak."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_fold": {
+      "supports": {
+        "en": "The hip-hinge forward-fold station in Sun A.",
+        "tr": "Güneşe Selam A’da kalçadan öne katlanma durağı."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_half_lift": {
+      "supports": {
+        "en": "The halfway-lift station between forward fold and later transfers.",
+        "tr": "Öne katlanma ile sonraki geçişler arasındaki yarı doğrulma durağı."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_chair": {
+      "supports": {
+        "en": "Utkatasana as the bent-knee opening and later return station of Sun B.",
+        "tr": "Utkatasana’nın Güneşe Selam B’de dizler bükülü açılış ve sonraki dönüş durağı olması."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_warrior": {
+      "supports": {
+        "en": "Virabhadrasana A and its right/left placement in Sun B.",
+        "tr": "Virabhadrasana A ve Güneşe Selam B’de sağ/sol yerleşimi."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    }
+  },
+  "modules": [
+    {
+      "id": "a.foundations",
+      "title": {
+        "en": "Identity and preparation",
+        "tr": "Kimlik ve hazırlık"
+      },
+      "outcome": {
+        "en": "Explain the scope and prepare a bounded route.",
+        "tr": "Kapsamı açıkla, sınırlı yol hazırla."
+      },
+      "lessons": [
+        {
+          "id": "a01",
+          "title": {
+            "en": "What this beginner course teaches",
+            "tr": "Bu başlangıç kursu ne öğretir"
+          },
+          "objective": {
+            "en": "Separate Ashtanga foundations from a complete Primary Series.",
+            "tr": "Ashtanga temellerini tam temel seriden ayır."
+          },
+          "steps": [
+            {
+              "en": "Ashtanga also names eight limbs: ethical restraints, observances, posture, breath discipline, sensory withdrawal, concentration, meditation and absorption. A posture list is only part of that context.",
+              "tr": "Ashtanga sekiz basamağı da adlandırır: etik sınırlamalar, kişisel ilkeler, duruş, nefes disiplini, duyuların içe yönelmesi, odaklanma, meditasyon ve bütünleşme. Duruş listesi bu bağlamın yalnız bir parçasıdır."
+            },
+            {
+              "en": "Here Ashtanga Vinyasa refers to an ordered movement tradition. Sun A and Sun B precede standing work and the later series; they are not the entire Primary Series.",
+              "tr": "Burada Ashtanga Vinyasa sıralı hareket geleneğini ifade eder. Güneşe Selam A/B, ayakta çalışmalar ve sonraki seriden önce gelir; tek başlarına tüm temel seri değildir."
+            },
+            {
+              "en": "This course teaches small standing forms and sequence reading. Its two standing routes are Lissom adaptations with explicit omissions, not traditional full salutations.",
+              "tr": "Bu kurs küçük ayakta biçimleri ve sıra okumayı öğretir. İki ayakta yol açık atlamaları olan Lissom uyarlamasıdır; tam geleneksel selam değildir."
+            },
+            {
+              "en": "A trained teacher remains necessary for individual physical instruction. Recording these lessons is self-reported participation, not observed Ashtanga skill.",
+              "tr": "Bireysel fiziksel öğretim için eğitimli öğretmen gerekir. Ders kaydı öz beyanlı katılımdır; gözlenmiş Ashtanga becerisi değildir."
+            }
+          ],
+          "practice": {
+            "en": "Draw three boxes: traditional sequence, this course’s standing adaptation, and instruction still needed. Put an example in each.",
+            "tr": "Üç kutu çiz: geleneksel dizi, bu kursun ayakta uyarlaması, gereken ek öğretim. Her birine örnek koy."
+          },
+          "selfCheck": {
+            "en": "Does finishing these lessons establish the full Primary Series?",
+            "tr": "Bu dersleri bitirmek tüm temel seriyi gösterir mi?"
+          },
+          "answerKey": {
+            "en": "No. It records participation in beginner foundations; full sequence teaching, demonstration and physical review remain separate.",
+            "tr": "Hayır. Başlangıç temellerine katılım kaydeder; tam sıra öğretimi, gösterim ve fiziksel inceleme ayrıdır."
+          },
+          "adaptation": {
+            "en": "Study seated; no movement is required in this lesson.",
+            "tr": "Oturarak incele; bu derste hareket gerekmez."
+          },
+          "stopSignal": {
+            "en": "Stop the study if fatigued. Do not test unfamiliar positions to fill the boxes.",
+            "tr": "Yorulursan okumayı bırak. Kutuları doldurmak için tanımadığın pozları deneme."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "kpj_method",
+            "ayi_series"
+          ],
+          "prerequisites": [],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a02",
+          "title": {
+            "en": "Breath, gaze and the count",
+            "tr": "Nefes, bakış ve sayım"
+          },
+          "objective": {
+            "en": "Understand the terms without forcing a breathing technique.",
+            "tr": "Nefes tekniğini zorlamadan terimleri anla."
+          },
+          "steps": [
+            {
+              "en": "Vinyasa connects movement and breathing; drishti names a gaze focus. Source counts describe a traditional pattern, not a timer or a performance score.",
+              "tr": "Vinyasa hareket ile nefesi bağlar; drishti bakış odağını adlandırır. Kaynak sayımları geleneksel örüntüyü anlatır; süre veya performans puanı değildir."
+            },
+            {
+              "en": "Identify IN and EX in the source table as inhalation and exhalation. Read the table on paper before attempting to coordinate movement.",
+              "tr": "Kaynak tablodaki IN ve EX’i nefes alma ve verme olarak tanı. Hareketle eşlemeyi denemeden tabloyu kâğıtta oku."
+            },
+            {
+              "en": "In our standing adaptations, use ordinary unforced breathing. Pause and breathe freely between actions; do not lengthen or hold breath to keep up.",
+              "tr": "Ayakta uyarlamalarımızda doğal, zorlanmayan nefes kullan. Eylemler arasında durup serbest nefes al; yetişmek için nefesi uzatma veya tutma."
+            },
+            {
+              "en": "A comfortable forward gaze may replace a traditional gaze direction here. This course does not teach throat constriction, breath retention or bandha practice.",
+              "tr": "Burada geleneksel bakış yönü yerine rahat öne bakış seçilebilir. Kurs boğaz daraltma, nefes tutma veya bandha uygulaması öğretmez."
+            }
+          ],
+          "practice": {
+            "en": "Read one source row aloud: name movement, breath label and gaze label separately. Explain what the app cannot observe.",
+            "tr": "Bir kaynak satırını oku: hareket, nefes ve bakış etiketini ayrı adlandır. Uygulamanın neyi gözleyemediğini açıkla."
+          },
+          "selfCheck": {
+            "en": "What should change if a count makes you rush or hold breath?",
+            "tr": "Sayım acele etmene veya nefes tutmana yol açarsa ne değişmeli?"
+          },
+          "answerKey": {
+            "en": "Pause or omit the action and breathe freely. A count is not an instruction to force breathing; no breathing grade is produced.",
+            "tr": "Dur veya eylemi atla, serbest nefes al. Sayım nefesi zorlama talimatı değildir; nefes puanı üretilmez."
+          },
+          "adaptation": {
+            "en": "Read the terms without moving or changing your breath.",
+            "tr": "Hareket etmeden veya nefesini değiştirmeden terimleri oku."
+          },
+          "stopSignal": {
+            "en": "Do not try unfamiliar breath control. Stop physical activity for dizziness, pain or feeling unwell.",
+            "tr": "Tanımadığın nefes kontrolünü deneme. Baş dönmesi, ağrı veya kötü hissetmede fiziksel etkinliği bırak."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "kpj_method",
+            "ayi_standing"
+          ],
+          "prerequisites": [
+            "a01"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a03",
+          "title": {
+            "en": "Prepare a standing route and an exit",
+            "tr": "Ayakta yolu ve çıkışı hazırla"
+          },
+          "objective": {
+            "en": "Plan the space, support and stopping point before movement.",
+            "tr": "Hareketten önce alanı, desteği ve bitirme noktasını planla."
+          },
+          "steps": [
+            {
+              "en": "Choose a clear, level, nonslip area. Remove trip hazards and keep enough room for one short step in either direction.",
+              "tr": "Açık, düz ve kaymayan alan seç. Takılma engellerini kaldır; iki yönde kısa bir adıma yer bırak."
+            },
+            {
+              "en": "If you need hand support, use a verified solid wall within easy reach. A door, glass panel, desk or moving chair is not a support for this route.",
+              "tr": "El desteğine ihtiyacın varsa kolay erişilen sağlam sabit duvar kullan. Kapı, cam, masa veya oynayan sandalye bu yolun desteği değildir."
+            },
+            {
+              "en": "Keep a stable wheelless rest chair available if you already use it comfortably. Plan to return to ordinary standing or seated rest; no floor transfer is required.",
+              "tr": "Zaten rahat kullanıyorsan sabit tekerleksiz dinlenme sandalyesi hazır olsun. Normal ayakta duruşa veya oturarak dinlenmeye dönmeyi planla; yere geçiş gerekmez."
+            },
+            {
+              "en": "Name the actions that are already familiar and suitable for you. Unknown setup or personal suitability belongs in a teacher question, not a completion tick.",
+              "tr": "Sana zaten tanıdık ve uygun eylemleri adlandır. Bilinmeyen kurulum veya kişisel uygunluk tamamlama işaretine değil öğretmen sorusuna girer."
+            }
+          ],
+          "practice": {
+            "en": "Write your chosen route, support and exit. If any is uncertain, choose reading today.",
+            "tr": "Seçtiğin yolu, desteği ve çıkışı yaz. Biri belirsizse bugün okumayı seç."
+          },
+          "selfCheck": {
+            "en": "Is reading the preparation card a warm-up or a personal safety check?",
+            "tr": "Hazırlık kartını okumak ısınma veya kişisel güvenlik kontrolü müdür?"
+          },
+          "answerKey": {
+            "en": "Neither. It is a plan and self-report; a familiar suitable preparation and individual physical guidance remain separate.",
+            "tr": "İkisi de değildir. Plan ve öz beyandır; tanıdık uygun hazırlık ile bireysel fiziksel rehberlik ayrıdır."
+          },
+          "adaptation": {
+            "en": "Make only a written space/exit plan; leave movement for another suitable session.",
+            "tr": "Yalnız yazılı alan/çıkış planı yap; hareketi başka uygun oturuma bırak."
+          },
+          "stopSignal": {
+            "en": "Do not move if the space, support or personal suitability is uncertain.",
+            "tr": "Alan, destek veya kişisel uygunluk belirsizse hareket etme."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "kpj_method",
+            "ayi_series"
+          ],
+          "prerequisites": [
+            "a02"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "a.standing",
+      "title": {
+        "en": "Standing foundations",
+        "tr": "Ayakta temeller"
+      },
+      "outcome": {
+        "en": "Learn small entries and returns before linking.",
+        "tr": "Birleştirmeden küçük giriş ve dönüşleri öğren."
+      },
+      "lessons": [
+        {
+          "id": "a04",
+          "title": {
+            "en": "Standing and upward arms",
+            "tr": "Ayakta duruş ve kolları kaldırma"
+          },
+          "objective": {
+            "en": "Enter and leave a small two-foot standing form.",
+            "tr": "İki ayaklı küçük ayakta biçime gir ve çık."
+          },
+          "steps": [
+            {
+              "en": "After suitable familiar preparation, stand with a comfortable space between the feet, knees unlocked and arms down. Use your planned wall support if needed.",
+              "tr": "Uygun tanıdık hazırlıktan sonra ayaklar rahat aralıklı, dizler kilitsiz ve kollar aşağıda dur. Gerekiyorsa planladığın duvar desteğini kullan."
+            },
+            {
+              "en": "Samasthiti names the upright return point. Notice both feet on the ground without trying to freeze or force symmetry.",
+              "tr": "Samasthiti dik dönüş noktasını adlandırır. Donmaya veya simetriyi zorlamaya çalışmadan iki ayağın yerde olduğunu fark et."
+            },
+            {
+              "en": "Raise the free arm or both arms only as far as comfortable, keeping both feet grounded and gaze easy. Here the upward-arm station is not a one-leg tree balance.",
+              "tr": "İki ayak yerde, bakış rahatken serbest kolu veya iki kolu yalnız rahat mesafeye kaldır. Buradaki yukarı kol durağı tek ayaklı ağaç dengesi değildir."
+            },
+            {
+              "en": "Lower the arms slowly and return to ordinary standing. Pause with free breathing; end at your planned rest if needed.",
+              "tr": "Kolları yavaşça indir, normal ayakta duruşa dön. Serbest nefesle durakla; gerekiyorsa planladığın dinlenmede bitir."
+            }
+          ],
+          "practice": {
+            "en": "Try one small raise-and-lower cycle if suitable. Name the entry and return; the range or number of cycles is not a grade.",
+            "tr": "Uygunsa bir küçük kaldır-indir döngüsü dene. Giriş ve dönüşü adlandır; mesafe veya döngü sayısı puan değildir."
+          },
+          "selfCheck": {
+            "en": "Must the palms meet overhead or feet press together?",
+            "tr": "Avuçlar baş üstünde birleşmeli veya ayaklar birbirine bastırılmalı mı?"
+          },
+          "answerKey": {
+            "en": "No. This is a small standing adaptation; comfort and needed support take priority over reproducing the source photograph.",
+            "tr": "Hayır. Bu küçük ayakta uyarlamadır; rahatlık ve gereken destek kaynak fotoğrafını taklit etmekten önce gelir."
+          },
+          "adaptation": {
+            "en": "Keep both arms low or keep one hand on the wall; observe instead if standing is unsuitable.",
+            "tr": "İki kolu alçakta veya bir eli duvarda tut; ayakta duruş uygun değilse gözlemle."
+          },
+          "stopSignal": {
+            "en": "Lower the arms and stop for pain, dizziness or loss of balance. Do not repeat to test a symptom.",
+            "tr": "Ağrı, baş dönmesi veya denge kaybında kolları indir ve dur. Belirtiyi sınamak için tekrarlama."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_standing",
+            "ayi_arms"
+          ],
+          "prerequisites": [
+            "a03"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a05",
+          "title": {
+            "en": "A shallow fold and halfway lift",
+            "tr": "Sığ katlanma ve yarı doğrulma"
+          },
+          "objective": {
+            "en": "Distinguish the two stations and return without reaching for the floor.",
+            "tr": "Yere uzanmadan iki durağı ayır ve geri dön."
+          },
+          "steps": [
+            {
+              "en": "Start from a04 with easy knees and both feet grounded. Keep needed wall support and choose a small range.",
+              "tr": "a04’ten rahat dizler ve yerde iki ayakla başla. Gereken duvar desteğini koru, küçük aralık seç."
+            },
+            {
+              "en": "Hinge a little at the hips with knees softly bent. Rest free hands lightly on the upper thighs, away from the knees; reaching the floor is not required.",
+              "tr": "Dizler hafif bükülüyken kalçadan biraz öne eğil. Serbest elleri dizlerden uzakta üst uyluklara hafifçe koy; yere erişmek gerekmez."
+            },
+            {
+              "en": "Lengthen the trunk a little and come partway up for the halfway-lift station. Keep the neck easy; do not lift the chin to chase a gaze target.",
+              "tr": "Yarı doğrulma durağında gövdeyi biraz uzatıp kısmen yüksel. Boynu rahat tut; bakış hedefi için çeneyi kaldırma."
+            },
+            {
+              "en": "Return through a small knee bend and slowly come upright with weight through the feet. Pause before deciding whether to repeat.",
+              "tr": "Küçük diz bükmeyle, ağırlık ayaklardayken yavaşça doğrul. Tekrara karar vermeden durakla."
+            }
+          ],
+          "practice": {
+            "en": "If suitable, explore one shallow fold, halfway lift and upright return. Describe how the two stations differ.",
+            "tr": "Uygunsa bir sığ katlanma, yarı doğrulma ve dik dönüşü dene. İki durağın farkını anlat."
+          },
+          "selfCheck": {
+            "en": "Does a halfway lift mean a deep backbend or lifting the chin?",
+            "tr": "Yarı doğrulma derin geriye eğilme veya çeneyi kaldırma mıdır?"
+          },
+          "answerKey": {
+            "en": "No. It is a partial lift/lengthening from the fold. The app does not judge spinal alignment or personal range.",
+            "tr": "Hayır. Katlanmadan kısmi yükselme/uzamadır. Uygulama omurga hizası veya kişisel aralığı değerlendirmez."
+          },
+          "adaptation": {
+            "en": "Make the hinge very small, keep wall support or study the sequence without movement.",
+            "tr": "Eğilmeyi çok küçük tut, duvar desteğini koru veya hareket etmeden sırayı incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness or uncertainty about returning upright; do not force depth or retest symptoms.",
+            "tr": "Ağrı, baş dönmesi veya dik dönüşte belirsizlikte dur; derinliği zorlama, belirtide yeniden deneme."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_fold",
+            "ayi_half_lift"
+          ],
+          "prerequisites": [
+            "a04"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a06",
+          "title": {
+            "en": "A small Utkatasana adaptation",
+            "tr": "Küçük Utkatasana uyarlaması"
+          },
+          "objective": {
+            "en": "Bend and straighten the knees without making depth a target.",
+            "tr": "Derinliği hedef yapmadan dizleri bük ve doğrul."
+          },
+          "steps": [
+            {
+              "en": "Begin upright as in a04, with clear space, easy feet and planned wall support. This is a shallow adaptation of the bent-knee station.",
+              "tr": "a04’teki gibi açık alan, rahat ayaklar ve planlanan duvar desteğiyle dik başla. Bu, dizler bükülü durağın sığ uyarlamasıdır."
+            },
+            {
+              "en": "Bend the knees a little and allow the hips to move back slightly while both feet stay grounded. Do not seek a deep seat or a fixed thigh angle.",
+              "tr": "İki ayak yerde kalırken dizleri biraz bük, kalçayı hafifçe geriye bırak. Derin oturuş veya sabit uyluk açısı arama."
+            },
+            {
+              "en": "Keep arms low or raise the free arm only within the range learned in a04. Breathe freely; staying in the position for a count is optional.",
+              "tr": "Kolları alçakta tut veya serbest kolu yalnız a04’te öğrendiğin aralığa kaldır. Serbest nefes al; sayım boyunca kalmak isteğe bağlıdır."
+            },
+            {
+              "en": "Press through the feet to straighten comfortably and return to ordinary standing. Rest before changing direction or repeating.",
+              "tr": "Ayaklardan destek alarak rahatça doğrul, normal ayakta duruşa dön. Yön değiştirmeden veya tekrardan önce dinlen."
+            }
+          ],
+          "practice": {
+            "en": "Explore one small bend-and-return if suitable; identify the return before linking it to a fold.",
+            "tr": "Uygunsa bir küçük bük-dön dene; katlanmayla birleştirmeden dönüşü tanı."
+          },
+          "selfCheck": {
+            "en": "Is a deep knee bend needed to record this lesson?",
+            "tr": "Bu dersi kaydetmek için derin diz bükme gerekir mi?"
+          },
+          "answerKey": {
+            "en": "No. The lesson is about a small controlled entry and return, with self-reported participation only.",
+            "tr": "Hayır. Ders küçük kontrollü giriş ve dönüş üzerinedir; yalnız öz beyanlı katılım kaydedilir."
+          },
+          "adaptation": {
+            "en": "Use a tiny bend with a hand on the wall, or observe the station seated.",
+            "tr": "Bir el duvarda çok küçük bükülme kullan veya durağı oturarak gözlemle."
+          },
+          "stopSignal": {
+            "en": "Return and stop for joint pain, dizziness or balance loss; do not increase depth to satisfy a picture.",
+            "tr": "Eklem ağrısı, baş dönmesi veya denge kaybında dön ve dur; fotoğrafa uymak için derinliği artırma."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_chair"
+          ],
+          "prerequisites": [
+            "a05"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a07",
+          "title": {
+            "en": "Right and left stepping foundations",
+            "tr": "Sağ ve sol adım temelleri"
+          },
+          "objective": {
+            "en": "Prepare the side distinction of Warrior A with a short standing adaptation.",
+            "tr": "Kısa ayakta uyarlamayla Savaşçı A’nın taraf ayrımını hazırla."
+          },
+          "steps": [
+            {
+              "en": "Start upright near your planned wall support. Keep feet on two comfortable parallel tracks rather than one tight line.",
+              "tr": "Planladığın duvar desteği yakınında dik başla. Ayakları tek dar çizgi yerine iki rahat paralel hatta tut."
+            },
+            {
+              "en": "Take one short step back with the left foot; the right foot is now forward. Bend the front knee slightly in the direction of its foot while keeping the trunk upright.",
+              "tr": "Sol ayakla kısa adım geri at; sağ ayak öndedir. Gövde dikken ön dizi ayağı yönünde hafifçe bük."
+            },
+            {
+              "en": "Keep a needed hand supported and arms low. The back heel may stay lifted in this adaptation; do not twist a loaded foot or force the traditional heel/hip position.",
+              "tr": "Gereken eli destekli, kolları alçakta tut. Bu uyarlamada arka topuk kalkık kalabilir; yüklü ayağı çevirme, geleneksel topuk/kalça konumunu zorlama."
+            },
+            {
+              "en": "Straighten gently and step forward to the same upright stance. Pause, then reverse feet for the left-forward side if suitable. Return upright before ending.",
+              "tr": "Hafifçe doğrul, adımla aynı dik duruşa dön. Durakla, uygunsa sol ayak öne gelecek biçimde taraf değiştir. Bitirmeden dik duruşa dön."
+            }
+          ],
+          "practice": {
+            "en": "Try each suitable side separately. Say which foot is forward and describe the return; the source Warrior A is not certified by this adaptation.",
+            "tr": "Uygun her tarafı ayrı dene. Öndeki ayağı ve dönüşü söyle; bu uyarlama kaynak Savaşçı A biçimini onaylamaz."
+          },
+          "selfCheck": {
+            "en": "Why return upright between sides?",
+            "tr": "Taraflar arasında neden dik duruşa dönülür?"
+          },
+          "answerKey": {
+            "en": "It gives a distinct reset before changing feet; do not pivot or turn a loaded stance to chase the next side.",
+            "tr": "Ayak değiştirmeden belirgin yeniden başlangıç sağlar; sonraki taraf için yüklü duruşta dönülmez."
+          },
+          "adaptation": {
+            "en": "Keep the step short and wall support; if transfer is unfamiliar, choose written side identification instead.",
+            "tr": "Adımı kısa, duvar desteğini koru; geçiş tanıdık değilse yazılı taraf tanıma seç."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, instability or uncertainty about stepping back to neutral; do not practise an uncertain transfer repeatedly.",
+            "tr": "Ağrı, dengesizlik veya nötre adımla dönüşte belirsizlikte dur; belirsiz geçişi tekrar tekrar deneme."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_warrior"
+          ],
+          "prerequisites": [
+            "a06"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "a.sequences",
+      "title": {
+        "en": "Maps and standing adaptations",
+        "tr": "Haritalar ve ayakta uyarlamalar"
+      },
+      "outcome": {
+        "en": "Distinguish source sequences from taught adaptations.",
+        "tr": "Kaynak dizilerini öğretilen uyarlamalardan ayır."
+      },
+      "lessons": [
+        {
+          "id": "a08",
+          "title": {
+            "en": "Read the traditional Sun A map",
+            "tr": "Geleneksel Güneşe Selam A haritasını oku"
+          },
+          "objective": {
+            "en": "Recognize the nine counted movements without attempting untaught floor stations.",
+            "tr": "Öğretilmemiş yer duraklarını denemeden dokuz sayılı hareketi tanı."
+          },
+          "steps": [
+            {
+              "en": "Read counts 1–3 as upward arms, forward fold and halfway lift. Start and return standing frame the counted sequence.",
+              "tr": "1–3 sayımlarını kollar yukarı, öne katlanma ve yarı doğrulma olarak oku. Ayakta başlangıç ve dönüş sayılı diziyi çerçeveler."
+            },
+            {
+              "en": "Counts 4–6 name Chaturanga, upward-facing dog and downward-facing dog. These floor-loading forms and their transfers are map-only here; this course does not teach their physical execution.",
+              "tr": "4–6 sayımları Chaturanga, yukarı bakan köpek ve aşağı bakan köpeği adlandırır. Yerde yük taşıyan bu biçim ve geçişler burada yalnız haritadır; kurs fiziksel uygulamalarını öğretmez."
+            },
+            {
+              "en": "Counts 7–9 return through halfway lift, forward fold and upward arms; standing return follows. Counted movements are not the same thing as a required number of repetitions.",
+              "tr": "7–9 sayımları yarı doğrulma, öne katlanma ve kollar yukarıdan döner; ardından ayakta dönüş gelir. Sayılı hareketler zorunlu tekrar sayısıyla aynı değildir."
+            },
+            {
+              "en": "Mark every untaught station/transfer on your paper. A name, picture or this written answer is not permission to perform it.",
+              "tr": "Kâğıtta öğretilmemiş her durağı/geçişi işaretle. Ad, fotoğraf veya bu yazılı yanıt onu yapma izni değildir."
+            }
+          ],
+          "practice": {
+            "en": "Draw the nine-count order and circle the floor stations. Compare with the linked source, without physical rehearsal.",
+            "tr": "Dokuz sayılı sırayı çiz, yer duraklarını daireye al. Fiziksel prova yapmadan bağlantılı kaynakla karşılaştır."
+          },
+          "selfCheck": {
+            "en": "Are counts 4–6 required physical tasks in this course?",
+            "tr": "4–6 sayımları bu kursta zorunlu fiziksel görev midir?"
+          },
+          "answerKey": {
+            "en": "No. They are sequence-literacy references. Physical teaching, demonstration and individual review are still needed for those forms.",
+            "tr": "Hayır. Sıra okuma referanslarıdır. Bu biçimler için fiziksel öğretim, gösterim ve bireysel inceleme hâlâ gerekir."
+          },
+          "adaptation": {
+            "en": "Read the station names seated; skip physical rehearsal entirely.",
+            "tr": "Durak adlarını oturarak oku; fiziksel provayı tümüyle atla."
+          },
+          "stopSignal": {
+            "en": "Stop if tempted to test an untaught floor transfer; put it in the teacher question list.",
+            "tr": "Öğretilmemiş yer geçişini denemeye yönelirsen dur; öğretmen soru listesine yaz."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_sun_a"
+          ],
+          "prerequisites": [
+            "a07"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a09",
+          "title": {
+            "en": "Link the standing Sun A elements",
+            "tr": "Ayakta Güneşe Selam A öğelerini bağla"
+          },
+          "objective": {
+            "en": "Use only the standing actions already taught in a04/a05.",
+            "tr": "Yalnız a04/a05’te öğretilen ayakta eylemleri kullan."
+          },
+          "steps": [
+            {
+              "en": "Prepare as planned in a03, then start in the two-foot stance of a04. This is Lissom’s standing adaptation; the floor stations of traditional Sun A are omitted.",
+              "tr": "a03 planına göre hazırlan, a04’ün iki ayaklı duruşunda başla. Bu Lissom’un ayakta uyarlamasıdır; geleneksel Güneşe Selam A’nın yer durakları atlanır."
+            },
+            {
+              "en": "Raise the free arm or both arms within the a04 range, then lower and hinge shallowly as in a05. Keep needed support and breathe freely between actions.",
+              "tr": "Serbest kolu veya iki kolu a04 aralığında kaldır, ardından indir ve a05 gibi sığ eğil. Gereken desteği koru, eylemler arasında serbest nefes al."
+            },
+            {
+              "en": "Come partway up for the a05 halfway lift, make a small return fold if comfortable, then slowly return upright. Do not step or jump back to the floor.",
+              "tr": "a05 yarı doğrulmasına kısmen yüksel, rahatsa küçük dönüş katlanması yap, sonra yavaşça dik duruşa dön. Yere geri adım veya sıçrama yapma."
+            },
+            {
+              "en": "Use a small arm raise and lower to close, then rest upright or in your planned chair. Every transfer may pause; the traditional nine-count pattern is not reproduced.",
+              "tr": "Küçük kol kaldır-indir ile kapat, sonra dik veya planlanan sandalyede dinlen. Her geçiş duraklayabilir; geleneksel dokuz sayılı örüntü yeniden üretilmez."
+            }
+          ],
+          "practice": {
+            "en": "Choose one suitable paused cycle or stop after any familiar station. Explain the omitted floor section before recording participation.",
+            "tr": "Bir uygun duraklı döngü seç veya tanıdık bir durakta bitir. Katılımı kaydetmeden atlanan yer bölümünü açıkla."
+          },
+          "selfCheck": {
+            "en": "Can this standing cycle be called a complete traditional Sun A?",
+            "tr": "Bu ayakta döngü tam geleneksel Güneşe Selam A diye adlandırılabilir mi?"
+          },
+          "answerKey": {
+            "en": "No. It is an explicitly adapted standing route using selected Sun A elements. It does not establish traditional sequence execution.",
+            "tr": "Hayır. Seçilmiş öğeleri kullanan açıkça uyarlanmış ayakta yoldur. Geleneksel dizi uygulamasını göstermez."
+          },
+          "adaptation": {
+            "en": "Keep arms low and folds tiny; use single familiar stations or study the map without movement.",
+            "tr": "Kolları alçak, katlanmayı çok küçük tut; tek tanıdık durak kullan veya hareket etmeden haritayı incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, balance loss or an unfamiliar transfer. A pause or early finish is not a failed score.",
+            "tr": "Ağrı, baş dönmesi, denge kaybı veya tanımadığın geçişte dur. Duraklama veya erken bitiş başarısız puan değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_sun_a",
+            "ayi_arms",
+            "ayi_fold",
+            "ayi_half_lift"
+          ],
+          "prerequisites": [
+            "a08"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a10",
+          "title": {
+            "en": "Read Sun B and its two sides",
+            "tr": "Güneşe Selam B’yi ve iki tarafını oku"
+          },
+          "objective": {
+            "en": "Distinguish the seventeen-count sequence from Sun A and from our adaptation.",
+            "tr": "On yedi sayılı diziyi Güneşe Selam A’dan ve uyarlamamızdan ayır."
+          },
+          "steps": [
+            {
+              "en": "On paper, counts 1–6 are Utkatasana, fold, halfway lift, Chaturanga, upward dog and downward dog. These are names in a traditional map, not a new physical assignment.",
+              "tr": "Kâğıtta 1–6: Utkatasana, katlanma, yarı doğrulma, Chaturanga, yukarı köpek ve aşağı köpektir. Bunlar geleneksel haritadaki adlardır; yeni fiziksel görev değildir."
+            },
+            {
+              "en": "Count 7 places the right foot forward in Warrior A; 8–10 pass through the floor group again. Count 11 places the left foot forward; 12–14 repeat the floor group.",
+              "tr": "7. sayım sağ ayak önde Savaşçı A’dır; 8–10 yeniden yer grubundan geçer. 11. sayım sol ayak öndedir; 12–14 yer grubunu tekrarlar."
+            },
+            {
+              "en": "Counts 15–17 return through halfway lift, fold and Utkatasana; ordinary standing return follows. Keep right and left distinct when drawing the route.",
+              "tr": "15–17 yarı doğrulma, katlanma ve Utkatasana ile döner; ardından normal ayakta dönüş gelir. Haritayı çizerken sağ ve solu ayır."
+            },
+            {
+              "en": "The full floor group, jumps, deep bends, binds, lotus and inversions are not required physical progression tasks here. A fuller series needs separate teaching and review.",
+              "tr": "Tam yer grubu, sıçramalar, derin eğilmeler, bağlamalar, lotus ve ters duruşlar burada zorunlu fiziksel ilerleme görevi değildir. Daha geniş seri ayrı öğretim ve inceleme gerektirir."
+            }
+          ],
+          "practice": {
+            "en": "Write the right/left positions and mark the repeated floor group. Read the linked table to correct your written map only.",
+            "tr": "Sağ/sol konumlarını yaz, yinelenen yer grubunu işaretle. Yalnız yazılı haritayı düzeltmek için bağlantılı tabloyu oku."
+          },
+          "selfCheck": {
+            "en": "Which Warrior side appears first in the source map?",
+            "tr": "Kaynak haritada hangi Savaşçı tarafı önce gelir?"
+          },
+          "answerKey": {
+            "en": "Right foot forward at count 7, left foot forward at count 11. Remembering that order is not physical performance evidence.",
+            "tr": "7. sayımda sağ ayak, 11. sayımda sol ayak öndedir. Sırayı hatırlamak fiziksel uygulama kanıtı değildir."
+          },
+          "adaptation": {
+            "en": "Use a seated paper map, with no floor or standing rehearsal.",
+            "tr": "Yer veya ayakta prova olmadan oturarak kâğıt harita kullan."
+          },
+          "stopSignal": {
+            "en": "Do not attempt an unfamiliar station to confirm its name or count.",
+            "tr": "Adını veya sayımını doğrulamak için tanımadığın durağı deneme."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_sun_b",
+            "ayi_series"
+          ],
+          "prerequisites": [
+            "a09"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a11",
+          "title": {
+            "en": "A standing Sun B adaptation",
+            "tr": "Ayakta Güneşe Selam B uyarlaması"
+          },
+          "objective": {
+            "en": "Link shallow knee bend and separate right/left steps using taught returns.",
+            "tr": "Öğretilen dönüşlerle sığ diz bükmeyi ve ayrı sağ/sol adımları bağla."
+          },
+          "steps": [
+            {
+              "en": "After fresh preparation, start upright and use the small a06 knee bend, then straighten. Add only the shallow fold and halfway lift already taught in a05; return upright.",
+              "tr": "Güncel hazırlıktan sonra dik başla, a06 küçük diz bükmesini yap ve doğrul. Yalnız a05’te öğretilen sığ katlanma/yarı doğrulmayı ekle; dik dön."
+            },
+            {
+              "en": "From neutral, use a07 with the right foot forward and needed wall support. Keep arms low or use the a04 range. Return upright before changing feet.",
+              "tr": "Nötrden, gereken duvar desteğiyle a07’deki sağ ayak önde adımı kullan. Kolları alçakta veya a04 aralığında tut. Ayak değiştirmeden dik dön."
+            },
+            {
+              "en": "Pause, then use the left-forward a07 version if suitable and return upright. No loaded pivot, downward dog to lunge transfer or low push-up is inserted.",
+              "tr": "Durakla, uygunsa a07 sol ayak önde sürümünü kullan, dik dön. Yüklü dönme, aşağı köpekten hamleye geçiş veya alçak şınav eklenmez."
+            },
+            {
+              "en": "Close with one suitable small a06 bend-and-return, or finish at neutral. This standing route omits the traditional floor groups and is not the full seventeen-count Sun B.",
+              "tr": "Bir uygun küçük a06 bük-dön ile kapat veya nötrde bitir. Ayakta yol geleneksel yer gruplarını atlar; tam on yedi sayılı Güneşe Selam B değildir."
+            }
+          ],
+          "practice": {
+            "en": "Choose a suitable paused route, naming the return before each side. End early rather than adding an untaught transfer.",
+            "tr": "Uygun duraklı yol seç, her taraftan önce dönüşü adlandır. Öğretilmemiş geçiş eklemek yerine erken bitir."
+          },
+          "selfCheck": {
+            "en": "Where should you reset before changing sides?",
+            "tr": "Taraf değiştirmeden nerede yeniden başlamalısın?"
+          },
+          "answerKey": {
+            "en": "Return to neutral upright standing and pause. The adaptation separates the sides instead of reproducing the traditional floor transfers.",
+            "tr": "Nötr dik duruşa dön ve durakla. Uyarlama geleneksel yer geçişlerini yinelemek yerine tarafları ayırır."
+          },
+          "adaptation": {
+            "en": "Use only the knee bend or a single short step that is already suitable; choose map study if transfer is uncertain.",
+            "tr": "Yalnız zaten uygun küçük diz bükmesini veya tek kısa adımı kullan; geçiş belirsizse harita incelemesini seç."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, instability or uncertain return. Do not add repetitions to prove readiness.",
+            "tr": "Ağrı, baş dönmesi, dengesizlik veya dönüş belirsizliğinde dur. Hazırlığını kanıtlamak için tekrar ekleme."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_sun_b",
+            "ayi_chair",
+            "ayi_warrior"
+          ],
+          "prerequisites": [
+            "a10"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "a.independent",
+      "title": {
+        "en": "Independent choice and recall",
+        "tr": "Bağımsız seçim ve hatırlama"
+      },
+      "outcome": {
+        "en": "Plan, stop, revisit and state what remains open.",
+        "tr": "Planla, dur, geri dön, açık kalanı belirt."
+      },
+      "lessons": [
+        {
+          "id": "a12",
+          "title": {
+            "en": "Plan an independent beginner route",
+            "tr": "Bağımsız başlangıç yolunu planla"
+          },
+          "objective": {
+            "en": "Write a bounded route, exit and later review before choosing movement.",
+            "tr": "Hareket seçmeden önce sınırlı yolu, çıkışı ve sonraki değerlendirmeyi yaz."
+          },
+          "steps": [
+            {
+              "en": "On paper, choose the standing A adaptation from a09, the standing B adaptation from a11, or written map study. Name the option explicitly.",
+              "tr": "Kâğıtta a09 ayakta A uyarlamasını, a11 ayakta B uyarlamasını veya yazılı harita incelemesini seç. Seçeneği açıkça adlandır."
+            },
+            {
+              "en": "For a later movement session, list only the taught suitable stations, support and neutral returns. Do not join two endpoints with an unexplained transfer.",
+              "tr": "Sonraki hareket oturumu için yalnız öğretilmiş uygun durakları, desteği ve nötr dönüşleri listele. İki uç biçimi açıklanmamış geçişle bağlama."
+            },
+            {
+              "en": "Plan one short exploration with pauses and a familiar stopping station. The lesson minutes are reading/practice estimates, not exercise targets.",
+              "tr": "Duraklı kısa bir inceleme ve tanıdık bitirme durağı planla. Ders dakikaları okuma/çalışma tahminidir; egzersiz hedefi değildir."
+            },
+            {
+              "en": "Write the planned rest, omissions and one teacher question; do not turn a self-report record into a readiness or mastery verdict.",
+              "tr": "Planlanan dinlenmeyi, atlamaları ve tek öğretmen sorusunu yaz; öz kaydı hazırlık veya ustalık kararına çevirme."
+            }
+          ],
+          "practice": {
+            "en": "Write the plan only in this lesson. For physical practice, return to a09 or a11 and prepare for that session.",
+            "tr": "Bu derste yalnız planı yaz. Fiziksel çalışma için a09 veya a11’e dön, o oturum için hazırlan."
+          },
+          "selfCheck": {
+            "en": "What belongs in a plan when a transition is uncertain?",
+            "tr": "Bir geçiş belirsizse plana ne girmeli?"
+          },
+          "answerKey": {
+            "en": "Omit physical execution, mark the uncertainty and ask for instruction and individual review. An earlier record does not solve today’s uncertainty.",
+            "tr": "Fiziksel uygulamayı atla, belirsizliği işaretle, öğretim ve bireysel inceleme iste. Önceki kayıt bugünkü belirsizliği çözmez."
+          },
+          "adaptation": {
+            "en": "Use only written planning; physical execution and more complex sequences remain optional and separately reviewed.",
+            "tr": "Yalnız yazılı planlama kullan; fiziksel uygulama ve daha karmaşık diziler isteğe bağlı ve ayrı incelemelidir."
+          },
+          "stopSignal": {
+            "en": "Stop writing when fatigued. Mark an uncertain transfer as a teaching question rather than adding it.",
+            "tr": "Yorulunca yazmayı bırak. Belirsiz geçişi eklemek yerine öğretim sorusu olarak işaretle."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_sun_a",
+            "ayi_sun_b",
+            "kpj_method"
+          ],
+          "prerequisites": [
+            "a11"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a13",
+          "title": {
+            "en": "Later recall and the next teaching question",
+            "tr": "Sonraki hatırlama ve öğretim sorusu"
+          },
+          "objective": {
+            "en": "Review the beginner map without claiming full-series or physical acceptance.",
+            "tr": "Tam seri veya fiziksel kabul iddiası olmadan başlangıç haritasını değerlendir."
+          },
+          "steps": [
+            {
+              "en": "At a later suitable study session, hide the sources and name the standing return, fold/halfway-lift distinction and right/left order.",
+              "tr": "Sonraki uygun okuma oturumunda kaynakları gizle; ayakta dönüşü, katlanma/yarı doğrulma farkını ve sağ/sol sırayı adlandır."
+            },
+            {
+              "en": "Open the sources and compare one written point at a time. Correct an omission on paper; do not test a physical position to settle a memory question.",
+              "tr": "Kaynakları açıp her seferinde tek yazılı noktayı karşılaştır. Eksiği kâğıtta düzelt; hatırlama sorusunu çözmek için fiziksel poz deneme."
+            },
+            {
+              "en": "Separate the traditional Sun A/B maps from Lissom’s two standing adaptations. The full Primary Series, floor transfers and finishing instruction are outside this beginner course.",
+              "tr": "Geleneksel Güneşe Selam A/B haritalarını Lissom’un iki ayakta uyarlamasından ayır. Tam temel seri, yer geçişleri ve kapanış öğretimi bu başlangıç kursunun dışındadır."
+            },
+            {
+              "en": "Keep one precise question for a trained teacher and decide whether to repeat a taught unit. Completion means participation records reached the end, not certified performance.",
+              "tr": "Eğitimli öğretmen için tek net soru sakla, öğretilmiş birimi tekrara karar ver. Tamamlama katılım kayıtlarının sona ulaşmasıdır; onaylanmış uygulama değildir."
+            }
+          ],
+          "practice": {
+            "en": "Write the boundary and one remaining teaching question. Return to any taught lesson for a fresh self-reported study or practice record.",
+            "tr": "Sınırı ve kalan tek öğretim sorusunu yaz. Yeni öz beyanlı okuma veya çalışma kaydı için öğretilmiş bir derse dön."
+          },
+          "selfCheck": {
+            "en": "What remains open after the last lesson record?",
+            "tr": "Son ders kaydından sonra ne açık kalır?"
+          },
+          "answerKey": {
+            "en": "Individual physical suitability and technique review, accepted demonstration/media and full traditional-series teaching. Camera, medical and mastery certification are not provided.",
+            "tr": "Bireysel fiziksel uygunluk/teknik incelemesi, kabul edilmiş gösterim/medya ve tam geleneksel seri öğretimi. Kamera, sağlık veya ustalık onayı verilmez."
+          },
+          "adaptation": {
+            "en": "Keep the review entirely written and stop when tired.",
+            "tr": "Değerlendirmeyi tümüyle yazılı tut; yorulunca bırak."
+          },
+          "stopSignal": {
+            "en": "Do not raise physical difficulty to prove recall or completion.",
+            "tr": "Hatırlama veya tamamlamayı kanıtlamak için fiziksel zorluğu artırma."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_series",
+            "kpj_method"
+          ],
+          "prerequisites": [
+            "a12"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        }
+      ]
+    }
+  ]
+}
