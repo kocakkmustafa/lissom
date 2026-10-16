@@ -4,20 +4,20 @@ Kanonik repo: `ventures/lissom/app`. Başlangıç: `df434ff1d1bcc1a6ad5b0e68a10e
 
 ## Kapatılan kusurlar
 
-Library'den Hatha, sandalye/ofis, Vinyasa veya Yin açılırken ilerleme deposunun kurulması/okunması hata verirse önceki kod yakalanmamış async hata üretiyordu. Dört giriş artık aynı yerel düğme bileşeninde görünür TR/EN hata ve yeniden deneme sunuyor. Bekleyen aynı girişe çift dokunma tek rota açıyor; giriş ekranından ayrıldıktan sonra biten yükleme rota açmıyor.
+Library'den Hatha, sandalye/ofis, Vinyasa veya Yin açılırken ilerleme deposunun kurulması/okunması hata verirse önceki kod yakalanmamış async hata üretiyordu. Dört giriş artık aynı yerel düğme bileşeninde görünür TR/EN hata ve yeniden deneme sunuyor. Bekleyen aynı girişe çift dokunma tek rota açıyor; giriş ekranından ayrıldıktan sonra biten yükleme rota açmıyor. İki ek RED, geri gezinme animasyonunda sayfa henüz dispose olmadan geç kurs açıldığını gösterdi; hem store kurulumu hem okuma sonrası güncel rota yeniden kontrol edilir.
 
 Ders kaydında bir frame çizilmeden iki dokunma iki `markPracticed` çağrısı başlatabiliyordu (gerçek RED: beklenen 1, gözlenen 2). Kaydetme metodu bekleyen yazıyı ve güncel öz denetim onayını yeniden kontrol ediyor; tek yazma ve tek geri dönüş korunuyor.
 
 ## Doğrulama
 
-- `flutter test --no-pub`: **667 PASS**, skip yok. Kurs, ön koşul, görünür kaynak sınırları, self-report kayıtları, gezinme, TR/EN dar ekran/büyük yazı, izin reddi, hata/retry ve hesap ömrü regresyonlarını içerir.
-- Yeni `course_entry_recovery_test.dart`: **19 widget PASS**. Dört kurs × açma/okuma hatası × TR/EN, 320 × 640 / 2× metin; ayrıca çift giriş, ayrılma sırasında yükleme ve çift kayıt dokunması.
+- `flutter test --no-pub`: son kaynakta **669 PASS**, skip yok. Kurs, ön koşul, görünür kaynak sınırları, self-report kayıtları, gezinme, TR/EN dar ekran/büyük yazı, izin reddi, hata/retry ve hesap ömrü regresyonlarını içerir.
+- Yeni `course_entry_recovery_test.dart`: **21 widget PASS**. Dört kurs × açma/okuma hatası × TR/EN, 320 × 640 / 2× metin; ayrıca çift giriş, ayrılma sırasında yükleme, geri gezinme animasyonu sırasında open/read tamamlanması ve çift kayıt dokunması.
 - Yeni `course_progress_persistence_test.dart`: **1 PASS**. Dört kursun toplam **90** dersi aynı gerçek JSONL dosyasına ön koşul sırasıyla yazılır, her kurs sonunda yeni store ile okunur; başka kurs ilerlemesine sızmaz, kilitli son ders önceden kaydedilemez.
 - `packages/lissom_engine`: **114 unit PASS**; fiziksel sensör veya yoga doğruluğu sonucu değildir.
 - `flutter analyze --no-pub`: **No issues found**. İlk çalıştırmada eski scratch/cache yolları yüzünden 699 çözümleme hatası çıktı. Mevcut engine cache'i `dart pub get --offline --enforce-lockfile` ile çözümlendi; kaynak/lock/pin değişmedi, son analiz temiz. İlk hata logu korundu.
 - Kaynak denetimi: dört course asset'indeki TR/EN öğretim alanları, sıralı ön koşullar ve kaynak ID'leri geçerli. Asset byte'ları değişmedi.
 
-Yeni 20 test, toplam 667'nin içindedir; sayılar toplanmaz. Kanıtlar `scratch/2026-10-16-night-lissom-acceptance/` altındaki `entry-red.log`, `save-red.log`, `recovery-green.log`, `app-suite.log`, `engine-suite.log`, `analyze.log`, `course-inventory.json` ve final SHA bağlı `RESULT.json` içindedir. İlk Türkçe geri düğmesi/test kaydırması fixture hataları ayrı loglarda tutulur; ürün kabulü sayılmaz.
+Yeni 22 test, toplam 669'un içindedir; sayılar toplanmaz. Kanıtlar `scratch/2026-10-16-night-lissom-acceptance/` altındaki `entry-red.log`, `save-red.log`, `departing-route-red.log`, `recovery-final-green.log`, `app-final-suite.log`, `engine-suite.log`, `analyze-final.log`, `course-inventory.json` ve final SHA bağlı `RESULT.json` içindedir. İlk aday `070441b` üzerinde 667 full PASS / 20 focus PASS ayrıca korunur; son rota koruması için full/focus/analyze yeniden çalıştırıldı. İlk Türkçe geri düğmesi/test kaydırması fixture hataları ayrı loglarda tutulur; ürün kabulü sayılmaz.
 
 ## Kurs tamlığı ve açık sınırlar
 

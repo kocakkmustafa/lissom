@@ -355,9 +355,9 @@ class _CourseOpenButtonState extends State<_CourseOpenButton> {
     });
     try {
       final store = await loader();
-      if (!mounted) return;
+      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
       final progress = await store.read();
-      if (!mounted) return;
+      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
       await Navigator.of(context).push<void>(
         MaterialPageRoute<void>(
           builder: (_) => HathaCourseScreen(

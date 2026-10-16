@@ -17,9 +17,11 @@ class _Store implements HathaProgressStore {
   bool failRead = false;
   int writes = 0;
   Completer<void>? saveGate;
+  Completer<void>? readGate;
 
   @override
   Future<HathaProgress> read() async {
+    await readGate?.future;
     if (failRead) throw const FileSystemException('injected read failure');
     return const HathaProgress(records: [], unreadableRecords: 0);
   }
@@ -62,8 +64,9 @@ AppFacts _facts() {
 Future<void> _pump(
   WidgetTester tester,
   String language,
-  Future<HathaProgressStore> Function() loader,
-) async {
+  Future<HathaProgressStore> Function() loader, {
+  bool familyAsRoute = false,
+}) async {
   tester.view.physicalSize = const Size(320, 640);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
@@ -79,14 +82,37 @@ Future<void> _pump(
         data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(2)),
         child: child!,
       ),
-      home: FamilyPage(
-        family: facts.ia.built.firstWhere((f) => f.teachingOnly),
-        facts: facts,
-        hathaStoreLoader: loader,
-      ),
+      home: familyAsRoute
+          ? Builder(
+              builder: (context) => Scaffold(
+                body: TextButton(
+                  onPressed: () => Navigator.of(context).push<void>(
+                    MaterialPageRoute<void>(
+                      builder: (_) => FamilyPage(
+                        family: facts.ia.built.firstWhere(
+                          (f) => f.teachingOnly,
+                        ),
+                        facts: facts,
+                        hathaStoreLoader: loader,
+                      ),
+                    ),
+                  ),
+                  child: const Text('Open library'),
+                ),
+              ),
+            )
+          : FamilyPage(
+              family: facts.ia.built.firstWhere((f) => f.teachingOnly),
+              facts: facts,
+              hathaStoreLoader: loader,
+            ),
     ),
   );
   await tester.pumpAndSettle();
+  if (familyAsRoute) {
+    await tester.tap(find.text('Open library'));
+    await tester.pumpAndSettle();
+  }
 }
 
 Future<Finder> _entry(WidgetTester tester, String label) async {
@@ -184,6 +210,37 @@ void main() {
     expect(find.text('Left library'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  for (final phase in ['open', 'read']) {
+    testWidgets(
+      'back during pending $phase cannot push from a departing route',
+      (tester) async {
+        final gate = Completer<HathaProgressStore>();
+        final store = _Store();
+        if (phase == 'read') store.readGate = Completer<void>();
+        await _pump(
+          tester,
+          'en',
+          () => phase == 'open' ? gate.future : Future.value(store),
+          familyAsRoute: true,
+        );
+        await tester.tap(await _entry(tester, _entries['hatha']!.first));
+        await tester.pump();
+        await tester.tap(find.byType(BackButton));
+        await tester.pump();
+        expect(find.byType(FamilyPage, skipOffstage: false), findsOneWidget);
+        if (phase == 'open') {
+          gate.complete(store);
+        } else {
+          store.readGate!.complete();
+        }
+        await tester.pumpAndSettle();
+        expect(find.byType(HathaCourseScreen), findsNothing);
+        expect(find.text('Open library'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('repeated save taps write once and return to the course', (
     tester,
