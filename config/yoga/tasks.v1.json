@@ -1,0 +1,74 @@
+{
+  "id": "lissom.yoga.tasks",
+  "schemaVersion": 1,
+  "contractVersion": "1.0.0",
+  "coordinateSpace": "image2d.aspectCorrected",
+  "tasks": [
+    {
+      "id": "lissom.hatha.h03.visible-standing.v1",
+      "courseId": "lissom.hatha.foundations",
+      "courseVersion": "1.0.1",
+      "courseSha256": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
+      "lessonId": "h03",
+      "variant": "visible-standing",
+      "views": [
+        "front"
+      ],
+      "sides": [
+        "none"
+      ],
+      "phases": [
+        "entering",
+        "holding",
+        "exiting"
+      ],
+      "requiredLandmarks": [
+        "left_shoulder",
+        "right_shoulder",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle"
+      ],
+      "maxFrameGapUs": 1000000
+    },
+    {
+      "id": "lissom.hatha.h07.visible-standing.v1",
+      "courseId": "lissom.hatha.foundations",
+      "courseVersion": "1.0.1",
+      "courseSha256": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
+      "lessonId": "h07",
+      "variant": "visible-standing",
+      "views": [
+        "front"
+      ],
+      "sides": [
+        "left",
+        "right"
+      ],
+      "phases": [
+        "liftingArm",
+        "sideReach",
+        "centerReturn",
+        "loweringArm"
+      ],
+      "requiredLandmarks": [
+        "left_shoulder",
+        "right_shoulder",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle",
+        "left_elbow",
+        "right_elbow",
+        "left_wrist",
+        "right_wrist"
+      ],
+      "maxFrameGapUs": 1000000
+    }
+  ]
+}

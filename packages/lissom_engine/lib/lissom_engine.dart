@@ -25,3 +25,5 @@ export 'src/assessment_session.dart';
 export 'src/live_evaluator.dart';
 export 'src/live_session_state.dart';
 export 'src/metric_bridge.dart';
+
+export 'src/yoga_observation.dart';

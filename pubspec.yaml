@@ -105,6 +105,7 @@ flutter:
     - config/phases/
     - config/ia/
     - config/courses/
+    - config/yoga/tasks.v1.json
     # Course-byte integrity only; no video, lesson, or model claim.
     - assets/motion_content/manifest.json
     # Code-pinned QA source membership only; production media stays empty.

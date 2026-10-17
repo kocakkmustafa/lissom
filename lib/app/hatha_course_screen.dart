@@ -9,6 +9,7 @@ import 'hatha_session_preparation.dart';
 import 'lesson_media.dart';
 import 'lissom_theme.dart';
 import 'locale_text.dart';
+import 'yoga_observation_status.dart';
 
 String hathaText(BuildContext context, HathaText value) =>
     Localizations.localeOf(context).languageCode == 'tr' ? value.tr : value.en;
@@ -467,6 +468,12 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                 onReadOnly: () => setState(() => _readOnly = true),
                 onStop: () => Navigator.of(context).pop(false),
               ),
+            YogaObservationStatusCard(
+              key: const Key('yoga.lesson.availability'),
+              course: widget.course,
+              lessonId: lesson.id,
+            ),
+            const SizedBox(height: 12),
             if (!needsPreparation) ...<Widget>[
               if (_readOnly)
                 LissomCard(

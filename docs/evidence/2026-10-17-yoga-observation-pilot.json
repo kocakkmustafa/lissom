@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "atUtc": "2026-10-17T17:43:39.337269+00:00",
+  "sourceBefore": "05700c3380819099df29481426e29a212fc2689a",
+  "approval": "User approved the documented h03/h07 local offline pilot in this session.",
+  "implemented": [
+    "Versioned/hash-pinned exact-course task catalog for h03/h07; explicit variant/view/actual side.",
+    "Future phase-provider interface, closed production adapter and separately tagged replay sequence adapter.",
+    "Missing-data/time/order/binding/lifecycle and asynchronous retirement guards.",
+    "TR/EN lesson availability with recoverable config errors and no camera/progress activation."
+  ],
+  "verification": {
+    "engineSyntheticReplay": {
+      "passed": 39,
+      "log": "pilot-engine-final.log"
+    },
+    "hostWidget": {
+      "passed": 56,
+      "scope": "New status widget, Hatha/Ashtanga flow, file progress persistence; five-course status and TR/EN 320px/200% coverage.",
+      "log": "pilot-widget-final.log"
+    },
+    "sharedContractWireOnly": {
+      "passed": 3,
+      "core": "a9b9f2c120024a6822452b1d963ebb6cbe51c302",
+      "consumerPinChanged": false,
+      "log": "pilot-cross-contract.log"
+    },
+    "analysis": "No issues found.",
+    "configGate": "14 JSON files valid and versioned.",
+    "initialFailures": "5 widget failures retained externally: retry setState Future and four prep-card visibility regressions. Fixed by a void retry callback and prioritizing preparation; same 56 tests then PASS."
+  },
+  "scopeLimits": {
+    "productionYogaRecognition": false,
+    "trainedOrCalibrated": false,
+    "physicalDeviceOrExpertAcceptance": false,
+    "realAccountIap": false,
+    "nativeSignedBuild": false,
+    "pushCiDeployStoreUpload": false,
+    "rawVideoOrNewCredentials": false
+  },
+  "remaining": "Training, actual calibration/qualified thresholds, demonstration rights/media, real physical device and account/IAP, published-core adoption, final signed source/package match and release gate remain separate."
+}
