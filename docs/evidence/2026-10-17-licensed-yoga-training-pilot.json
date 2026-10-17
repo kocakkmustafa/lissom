@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "at_utc": "2026-10-17T22:10:08.254414+00:00",
+  "status": "REAL_EXTERNAL_DATA_TRAIN_ONLY_FIT_COMPLETED; HOLDOUT_AND_SOURCE_TERMS_OPEN; NOT_PRODUCT_ACCEPTANCE",
+  "app_runtime_source_sha_before_doc": "9020b87743eff32a23233eaa182ebfeab9183c76",
+  "core_extractor_source_sha": "07ee44b3edf23fa7aed740ec5b5f9745f914842b",
+  "runtime_code_or_app_weights_changed": false,
+  "application_model_activated": false,
+  "dataset": {
+    "doi": "10.6084/m9.figshare.15112320.v1",
+    "version": 1,
+    "license": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "citation": "Saurav, Sumeet; Singh, Sanjay; Saini, Ravi; Jain, Shrajal; Rustagi, Aditya (2021). Yoga Pose Dataset. figshare. Dataset. https://doi.org/10.6084/m9.figshare.15112320.v1",
+    "original_videos": 6,
+    "original_bytes": 74256575,
+    "labels": {
+      "dandasana": 3,
+      "tadasana": 3
+    },
+    "provided_sample_indices": [
+      1,
+      2,
+      3
+    ],
+    "verified_people": null,
+    "participant_or_session_map": null,
+    "individual_release_documents": null,
+    "service_terms": "https://info.figshare.com/terms/ returned403; not retried or bypassed; additional conditions unverified"
+  },
+  "run": {
+    "real_frames": 347,
+    "sdk_pose_outputs": 347,
+    "training_windows": 25,
+    "feature_dimensions": 98,
+    "iterations": 500,
+    "initial_training_objective": 0.6931471805599453,
+    "final_training_objective": 0.06719870255564717,
+    "objective_is_not_accuracy": true,
+    "backbone_frozen": true,
+    "model_sha256": "2cf783b1e90959435d51f19b2dde5052d23cc537471799ed75762883a4158773",
+    "features_sha256": "0afb70de5e0201fceedd455353d54db460388d517df989c8cb8f8ef8ef629b45",
+    "config_sha256": "87eaabe1b03a1ca9ba0646986f8d020ff7394719690d56977e07f399f3ea8602",
+    "driver_sha256": "c2abe0f3a6d598459054b5aa330a75c0d73e3b67a4e803cd95c76d3471a32b8e",
+    "training_registry_sha256": "f184a29728bccef058f2e7b905b6a2ba098689036a2c2756999badb08a1393dd",
+    "attribution_sha256": "ed9b102bf7cbf26c2bc34ccdaa5260ba822ae6f325597098acdfb7ec6b042a4c",
+    "holdout_result": null,
+    "holdout_opened": false,
+    "holdout_reason": "Publisher sample index to person/session mapping not supplied; no identity assumed. All six sources train-only."
+  },
+  "limits": {
+    "rights_or_consent_fabricated": false,
+    "first_party_production_admission": "HOLD",
+    "physical_correctness_or_expert_or_safety_validated": false,
+    "published_or_uploaded": false,
+    "paid_api_gpu_service": false,
+    "shared_core_or_ffmpeg_workflow_changed": false,
+    "new_remote_ci": false
+  },
+  "retained_artifacts": "Task13/training-pilot-yoga (local evidence only; no raw dataset, model weights or per-frame coordinates committed to application repo)",
+  "evidence_files": [
+    "MODEL-CARD.tr.txt",
+    "run-receipt.json",
+    "pilot-plan.json",
+    "run-config.json",
+    "downloaded-media-manifest.json",
+    "seen-training-registry.json",
+    "ATTRIBUTION-AND-RIGHTS.json",
+    "final-integrity.json",
+    "download-ledger.json"
+  ]
+}
