@@ -9,8 +9,8 @@
   "playStore": {
     "shortDescription": "Sıralı Hatha yoga dersleri, destek seçenekleri ve cihazda çalışma kaydı."
   },
-  "description": "Lissom, 10 modülde 60 özgün Türkçe ve İngilizce Hatha yoga dersi sunar. Doğal nefes, hazırlık, destekli pozlar, kontrollü geçişler ve bağımsız çalışma planını öğren. Rahat destek, sandalye veya dinlenme seçeneğini kullan. Her derste hedef, uygulama, öz denetim ve öğretim kaynakları bulunur. Hareket testi kataloğunda Yukarı uzanma, derin çömelme ve düz bacak kaldırma açıklamalarını da inceleyebilirsin.\n\nÖzgün metin derslerini oku, uygulama görevlerini takip et, kendi çalışmanı değerlendir ve cihazdaki ders kaydından devam et. Hesabın olmadan kataloğu gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır. Ders bitirme ustalık belgesi değildir. Bu içerik hazırlığı sürümünde gösterim videosu bulunmaz.\n\nÇalışma ilerlemesi öz kayıttır; poz puanı değildir. Kamera değerlendirmeleri ve abonelik satışı açık değildir. Genel bilgiler ve uyarlamalar kişiye özel rehabilitasyon veya gebelik tedavisi sunmaz. Lissom tıbbi cihaz değildir; tanı veya tedavi yapmaz.",
-  "$sourceOfFacts": "Current course: config/courses/hatha.v1.json; its app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Readback of provider metadata is separate.",
+  "description": "Lissom, 10 modülde 60 özgün Türkçe ve İngilizce Hatha yoga dersi sunar. Doğal nefes, hazırlık, destekli pozlar, kontrollü geçişler ve bağımsız çalışma planını öğren. Rahat destek, sandalye veya dinlenme seçeneğini kullan. Her derste hedef, uygulama, öz denetim ve öğretim kaynakları bulunur. Hareket testi kataloğunda Yukarı uzanma, derin çömelme ve düz bacak kaldırma açıklamalarını da inceleyebilirsin. Ayrıca 4 modülde 13 Ashtanga başlangıç temelleri metin dersi; ayakta uyarlamalar ve geleneksel Güneşe Selam A/B haritaları bulunur. Tam temel seri değildir.\n\nÖzgün metin derslerini oku, uygulama görevlerini takip et, kendi çalışmanı değerlendir ve cihazdaki ders kaydından devam et. Hesabın olmadan kataloğu gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır. Ders bitirme ustalık belgesi değildir. Bu içerik hazırlığı sürümünde gösterim videosu bulunmaz.\n\nÇalışma ilerlemesi öz kayıttır; poz puanı değildir. Kamera değerlendirmeleri ve abonelik satışı açık değildir. Genel bilgiler ve uyarlamalar kişiye özel rehabilitasyon veya gebelik tedavisi sunmaz. Lissom tıbbi cihaz değildir; tanı veya tedavi yapmaz.",
+  "$sourceOfFacts": "Current courses: config/courses/hatha.v1.json and config/courses/ashtanga-foundations.v1.json; app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Provider metadata readback is separate.",
   "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded.",
   "supportUrl": "https://yulalab.com/support",
   "privacyPolicyUrl": "https://yulalab.com/privacy/motion",
@@ -35,6 +35,15 @@
     "lessonCount": 60,
     "moduleCount": 10,
     "mediaIncluded": false,
+    "physicalDeviceAccepted": false
+  },
+  "$ashtangaPreparation20261016": {
+    "status": "local_source_and_scoped_native_acceptance_not_store_or_physical_teaching_acceptance",
+    "asset": "config/courses/ashtanga-foundations.v1.json",
+    "sha256": "dd5004b1760ea460e2ead4d16790239ffb9fbad45407d9ff4cd8fcf08a2b1bf7",
+    "lessonCount": 13,
+    "moduleCount": 4,
+    "fullPrimarySeries": false,
     "physicalDeviceAccepted": false
   }
 }
