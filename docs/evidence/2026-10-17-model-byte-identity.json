@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "atUtc": "2026-10-17T17:15:52.574436+00:00",
+  "sourceBefore": "1eb5e98890f6183e2106fc16b85b7bc2a3eccbdc",
+  "problem": "Same-size cached pose model was returned without checking byte identity.",
+  "change": "Verify bundled and cached bytes against the build-time SHA-256 pin; replace invalid regular cache atomically after stage verification; reject a tampered bundle before returning a cached path.",
+  "model": {
+    "id": "pose_landmarker_full.v1",
+    "sha256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+    "bytes": 9398198,
+    "weightsChanged": false
+  },
+  "dependencyChange": "Existing crypto 3.0.7 changed from direct dev to direct main; no version changes or network resolution.",
+  "verification": {
+    "red": "Original code failed same-size corruption regression with actual SHA eef599a570bfc0f6b4a23c17edcfcc9a190c3dc741446c07407f647f732b6008",
+    "green": {
+      "passed": 63,
+      "files": [
+        "test/pose_model_test.dart",
+        "test/camera_pose_source_test.dart",
+        "test/live_capture_lifecycle_test.dart",
+        "test/live_capture_screen_test.dart"
+      ],
+      "type": "Host/widget tests. Real pinned model bytes and isolated files for materialization; mocked native/permission events for lifecycle."
+    },
+    "analysis": "No issues found in changed Dart files.",
+    "resolution": "flutter pub get --offline --enforce-lockfile: exit 0; existing immutable core pins preserved.",
+    "externalEvidence": "Documents/Codex/2026-10-17/task-13"
+  },
+  "scopeLimits": {
+    "newYogaRecognition": false,
+    "trainedOrCalibrated": false,
+    "realPhysicalCameraAcceptance": false,
+    "realAccountOrIap": false,
+    "nativeOrSignedBuild": false,
+    "storeUploadOrPublication": false,
+    "newCoreContractAdopted": false
+  },
+  "remaining": "Hatha h03/h07 task/phase scope awaits user decision. Shared provider contract v1 is additive in core; app still consumes ef60e346. First-party media, qualified review, real account/IAP, runtime trust and final signed source/package equality remain open."
+}

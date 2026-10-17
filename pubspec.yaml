@@ -7,6 +7,8 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
+  # Runtime verification of the existing pinned model bytes.
+  crypto: ^3.0.6
   supabase_flutter: 2.17.2
   flutter:
     sdk: flutter
@@ -91,13 +93,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lints: ^5.0.0
-
-  # `reference_equivalence_test.dart`in kanıt-zinciri doğrulaması: kod
-  # durumunu bağlayan içerik-hash'i `tools/l031_space_divergence.py`nin
-  # ürettiğiyle AYNI algoritmayla (SHA-256, ham baytlar) yeniden hesaplar
-  # (2026-08-12, M-F-462/474 — zaten `crypto: 3.0.7` transitive çözülüyordu,
-  # doğrudan bağımlılık olarak açık yazıldı).
-  crypto: ^3.0.6
 
 flutter:
   uses-material-design: true
