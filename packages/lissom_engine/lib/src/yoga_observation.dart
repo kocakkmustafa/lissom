@@ -114,9 +114,9 @@ final class YogaTaskCatalog {
         final phases = strings('phases');
         final views = strings('views');
         final sides = strings('sides');
-        final required = strings('requiredLandmarks')
-            .map(Lm.names.indexOf)
-            .toList();
+        final required = strings(
+          'requiredLandmarks',
+        ).map(Lm.names.indexOf).toList();
         final gap = v['maxFrameGapUs'] as int;
         if (!ids.add(id) ||
             sha.length != 64 ||
@@ -152,28 +152,44 @@ final class YogaTaskCatalog {
     }
   }
 
-  /// Wire-compatible with shared Motion provider manifest v1. The app keeps
-  /// its existing immutable Core pin until separate publication/adoption.
-  /// This declaration never provides model/calibration/acceptance artifacts.
-  Map<String, Object?> get deferredManifest => {
-    'schemaVersion': 1,
-    'contractVersion': '1.0.0',
-    'providerId': 'lissom.yoga.deferred',
-    'providerVersion': '1.0.0',
-    'mode': 'production',
-    'runtimeAbi': 'lissom.yoga.phase.v1',
-    'inputSchema': 'body33.image.v1',
-    'coordinateSpace': 'image2d.aspectCorrected',
-    'modelSha256': null,
-    'capabilities': {
+  static const runtimeAbi = 'lissom.yoga.phase.v1';
+  static const inputSchema = 'body33.image.v1';
+  static const coordinateSpace = 'image2d.aspectCorrected';
+
+  /// Published shared contract; no artifact or acceptance receipt is supplied.
+  MotionProviderManifest get deferredProviderManifest => MotionProviderManifest(
+    providerId: 'lissom.yoga.deferred',
+    providerVersion: '1.0.0',
+    mode: MotionProviderMode.production,
+    runtimeAbi: runtimeAbi,
+    inputSchema: inputSchema,
+    coordinateSpace: coordinateSpace,
+    modelSha256: null,
+    capabilities: {
       for (final task in tasks)
-        task.id: {
-          'state': 'calibrationRequired',
-          'calibrationSha256': null,
-          'acceptanceSha256': null,
-        },
+        task.id: const MotionCapability(
+          state: MotionCapabilityState.calibrationRequired,
+        ),
     },
-  };
+  );
+
+  Map<String, Object?> get deferredManifest =>
+      deferredProviderManifest.toJson();
+
+  /// Exact app-owned task binding is checked before the shared readiness gate.
+  /// Null receipts are intentional: training and calibration remain deferred.
+  MotionReadiness productionReadiness(YogaTaskSelection selection) {
+    if (resolve(selection) == null) return MotionReadiness.unsupported;
+    return MotionProviderRequirement(
+      capability: selection.taskId,
+      runtimeAbi: runtimeAbi,
+      inputSchema: inputSchema,
+      coordinateSpace: coordinateSpace,
+      actualModelSha256: null,
+      actualCalibrationSha256: null,
+      reviewedAcceptanceSha256: null,
+    ).inspect(deferredProviderManifest);
+  }
 
   YogaTaskSpec? resolve(YogaTaskSelection selection) {
     for (final task in tasks) {
@@ -248,7 +264,7 @@ final class YogaObservation {
 }
 
 /// Production is intentionally closed until a separately accepted provider,
-/// calibration and immutable shared-Core adoption are available. No production
+/// calibration and reviewed acceptance are available. No production
 /// constructor accepts a replay provider, manifest flag or fixture injection.
 final class YogaObservationAdapter {
   YogaObservationAdapter.production({
@@ -335,7 +351,12 @@ final class YogaObservationAdapter {
     }
     final provider = _provider;
     if (provider == null) {
-      return _result(YogaObservationState.unsupported, 'calibrationRequired');
+      return _result(YogaObservationState.unsupported, switch (catalog
+          .productionReadiness(selection)) {
+        MotionReadiness.calibrationRequired => 'calibrationRequired',
+        MotionReadiness.unsupported => 'unsupportedTask',
+        _ => 'providerUnavailable',
+      });
     }
     if (provider.mode != mode || _providerChanged) {
       interrupt('providerChanged');

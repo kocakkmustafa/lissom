@@ -50,14 +50,23 @@ configuration failure offers retry and keeps the lesson accessible. It neither
 starts capture nor modifies self-recorded practice. Preparation remains before
 the availability card. TR/EN 320px/200% text is covered by widget checks.
 
-The catalog emits the shared provider-manifest v1 wire shape with null
+Lissom now consumes published Motion Core PR #9 / immutable main commit
+`62c105567a9fdfa9d907a8f8a399494c8ae5b598`: motion_core 0.13.0,
+provider contract 1.0.0. App and engine Git declarations/locks share this
+exact revision; camera remains 0.2.0. No local override is used.
+
+The catalog constructs the shared typed `MotionProviderManifest` with null
 model/calibration/acceptance hashes and calibrationRequired capabilities.
-Three local checks parse it against Motion Core a9b9f2c / 0.13.0 and prove
-closed production readiness, replay rejection and ABI incompatibility.
-This is wire compatibility only: the shipping app's existing ef60e346 Git
-pins remain unchanged and resolvable. No local unpublished pin or dependency
-override is committed. Each consumer adopts a published immutable revision
-through its owner after the separate publication/CI scope is agreed.
+`productionReadiness` checks the exact app-owned task selection before the
+shared `MotionProviderRequirement` gate. Both production adapter and lesson
+availability use this gate. Production still has no provider injection, model
+activation, replay fallback or progress write. The wire getter serializes the
+typed declaration for inspection; its fields cannot activate capture.
+
+Focused integration checks cover both task bindings, shared closed readiness,
+wire round-trip, replay/ABI refusal and unchanged production/lifecycle behavior.
+These are synthetic/host checks, not trained recognition or consumer device
+acceptance. Core publication CI is recorded separately from Lissom adoption.
 
 After training: freeze qualified task definitions and validation tolerances,
 use the existing first-party rights/split/one-shot holdout tools, bind exact

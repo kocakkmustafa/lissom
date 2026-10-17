@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart' show sha256;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_core/motion_core.dart' show MotionReadiness;
 
 import 'hatha_course.dart';
 import 'lissom_theme.dart';
@@ -80,7 +81,20 @@ class _YogaObservationStatusCardState extends State<YogaObservationStatusCard> {
             (task) =>
                 task.courseId == widget.course.id &&
                 task.courseVersion == widget.course.version &&
-                task.lessonId == widget.lessonId,
+                task.lessonId == widget.lessonId &&
+                snapshot.data!.productionReadiness(
+                      YogaTaskSelection(
+                        taskId: task.id,
+                        courseId: task.courseId,
+                        courseVersion: task.courseVersion,
+                        courseSha256: task.courseSha256,
+                        lessonId: task.lessonId,
+                        variant: task.variant,
+                        view: task.views.first,
+                        actualSide: task.sides.first,
+                      ),
+                    ) ==
+                    MotionReadiness.calibrationRequired,
           );
       final text = !loaded
           ? localeText(

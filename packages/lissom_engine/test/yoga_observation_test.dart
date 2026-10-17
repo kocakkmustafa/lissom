@@ -129,6 +129,72 @@ void main() {
   tearDown(() => adapter.close());
 
   test(
+    'app deferred manifest uses the published shared contract and stays closed',
+    () {
+      final manifest = catalog.deferredProviderManifest;
+      expect(MotionProviderManifest.contractVersion, '1.0.0');
+      expect(manifest.mode, MotionProviderMode.production);
+      expect(manifest.modelSha256, isNull);
+      expect(manifest.capabilities.keys, catalog.tasks.map((task) => task.id));
+      expect(() => manifest.capabilities.clear(), throwsUnsupportedError);
+      expect(
+        MotionProviderManifest.fromJson(catalog.deferredManifest).toJson(),
+        manifest.toJson(),
+      );
+      for (final task in catalog.tasks) {
+        expect(
+          catalog.productionReadiness(select(task)),
+          MotionReadiness.calibrationRequired,
+        );
+      }
+    },
+  );
+
+  test(
+    'wire mutation cannot relabel the app production declaration or enable it',
+    () {
+      final wire = catalog.deferredManifest..['mode'] = 'replay';
+      final requirement = MotionProviderRequirement(
+        capability: spec.id,
+        runtimeAbi: YogaTaskCatalog.runtimeAbi,
+        inputSchema: YogaTaskCatalog.inputSchema,
+        coordinateSpace: YogaTaskCatalog.coordinateSpace,
+        actualModelSha256: null,
+        actualCalibrationSha256: null,
+        reviewedAcceptanceSha256: null,
+      );
+      expect(
+        requirement.inspect(MotionProviderManifest.fromJson(wire)),
+        MotionReadiness.replayOnly,
+      );
+      expect(
+        catalog.deferredProviderManifest.mode,
+        MotionProviderMode.production,
+      );
+      expect(
+        catalog.productionReadiness(selection),
+        MotionReadiness.calibrationRequired,
+      );
+    },
+  );
+
+  test('app manifest refuses an incompatible phase runtime', () {
+    final requirement = MotionProviderRequirement(
+      capability: spec.id,
+      runtimeAbi: 'other.runtime.v1',
+      inputSchema: YogaTaskCatalog.inputSchema,
+      coordinateSpace: YogaTaskCatalog.coordinateSpace,
+      actualModelSha256: null,
+      actualCalibrationSha256: null,
+      reviewedAcceptanceSha256: null,
+    );
+    expect(
+      requirement.inspect(catalog.deferredProviderManifest),
+      MotionReadiness.incompatible,
+    );
+  });
+
+  test(
     'versioned h03/h07 tasks declare explicit view, real side and phase order',
     () {
       expect(catalog.tasks.map((s) => s.lessonId), ['h03', 'h07']);
@@ -193,6 +259,7 @@ void main() {
         select(spec, sha: 'c' * 64),
       ]) {
         expect(catalog.resolve(task), isNull);
+        expect(catalog.productionReadiness(task), MotionReadiness.unsupported);
       }
     },
   );
@@ -319,8 +386,9 @@ void main() {
       expect((await adapter.process(frame(1))).reason, 'missingLandmarks');
       final calls = provider.calls;
       expect(
-        (await adapter.process(frame(2, missing: spec.requiredLandmarks.first)))
-            .reason,
+        (await adapter.process(
+          frame(2, missing: spec.requiredLandmarks.first),
+        )).reason,
         'missingLandmarks',
       );
       expect(provider.calls, calls);

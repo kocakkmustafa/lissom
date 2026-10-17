@@ -32,12 +32,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// ⛔ MÜHÜRLÜ SABİTLER — kilitten türetilmez, elle beyan edilir.
 ///
-/// Koordinatör paketi (M-F-263): `motion_core-v0.11.0` + `motion_camera-v0.1.2`,
-/// **ikisi tek ref** `f13bdc9`'ten. Ölçüldü: `f13bdc9` = `motion_camera-v0.1.2`
-/// tag'i ve `motion_core-v0.11.0` (`2018469`) commit'inin ARDILI, yani tek pin
-/// ikisini de kapsıyor.
-const String kSealedRef = 'ef60e346934d7e5d45c87deb81583b263575b208';
-const String kSealedCoreVersion = '0.12.0';
+/// Published/reviewed Motion Core PR #9, 2026-10-17. The immutable SHA
+/// resolves motion_core 0.13.0 and motion_camera 0.2.0; all three initial
+/// workflows succeeded. This anchor is independent of the lock under test.
+const String kSealedRef = '62c105567a9fdfa9d907a8f8a399494c8ae5b598';
+const String kSealedCoreVersion = '0.13.0';
 const String kSealedCameraVersion = '0.2.0';
 
 /// Bir git paketinin kilit kaydı.
@@ -83,7 +82,7 @@ _LockEntry _readLock(String lock, String pkg) {
   return _LockEntry(ref, resolved, version, source);
 }
 
-const currentMotionSha = 'ef60e346934d7e5d45c87deb81583b263575b208';
+const currentMotionSha = '62c105567a9fdfa9d907a8f8a399494c8ae5b598';
 
 bool hasLocalMotionOverrides([String? source]) {
   final file = File('pubspec_overrides.yaml');
@@ -270,7 +269,7 @@ void main() {
           '      ref: "$currentMotionSha"\n'
           '      resolved-ref: "$currentMotionSha"\n'
           '      url: "https://github.com/kocakkmustafa/motion-core.git"\n'
-          '    source: git\n    version: "0.12.0"\n';
+          '    source: git\n    version: "0.13.0"\n';
       final uri = Uri.file('/fixture/.dart_tool/package_config.json');
       verifyPublishedMotionGraph(
         config,

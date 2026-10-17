@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "at_utc": "2026-10-17T18:25:16.338088+00:00",
+  "scope": "Local Lissom adoption of already published provider contract; no new remote write/CI/native package.",
+  "source_before": "92b2bbe4aa3ac1f26246eeb781dc8e4956c48139",
+  "shared_core": {
+    "repository": "https://github.com/kocakkmustafa/motion-core.git",
+    "full_sha": "62c105567a9fdfa9d907a8f8a399494c8ae5b598",
+    "motion_core_version": "0.13.0",
+    "motion_camera_version": "0.2.0",
+    "provider_contract_version": "1.0.0",
+    "publication_pr": "https://github.com/kocakkmustafa/motion-core/pull/9",
+    "exact_remote_sha_read_success": true
+  },
+  "implementation": [
+    "All app/engine Motion declarations and locks bind the same full published SHA; no dependency override.",
+    "Typed MotionProviderManifest replaces duplicate wire construction; wire getter serializes it.",
+    "Exact app-owned task binding precedes shared MotionProviderRequirement inspection in production adapter and availability UI.",
+    "Production accepts no model/provider/replay injection; missing training/calibration remains closed; no automatic progress/mastery."
+  ],
+  "verification": {
+    "engine_synthetic_component_tests": 58,
+    "host_widget_and_pin_tests": 74,
+    "analysis": "No issues found",
+    "offline_enforce_lockfile": [
+      "app PASS",
+      "engine PASS"
+    ],
+    "actual_git_package_bindings_verified": 6,
+    "non_motion_lock_blocks_unchanged": true,
+    "test_commands": [
+      {
+        "log": "lissom-adoption-engine-tests.log",
+        "command": [
+          "dart",
+          "test",
+          "--reporter",
+          "expanded",
+          "test/yoga_observation_test.dart",
+          "test/live_evaluator_test.dart",
+          "test/live_session_state_test.dart"
+        ],
+        "cwd": "/Users/mustafakaankocak/Developer/YULAlab-AI/ventures/lissom/app/packages/lissom_engine",
+        "exit_code": 0,
+        "at_utc": "2026-10-17T18:23:19.957654+00:00"
+      },
+      {
+        "log": "lissom-adoption-host-tests.log",
+        "command": [
+          "flutter",
+          "--no-version-check",
+          "test",
+          "--no-pub",
+          "--reporter",
+          "expanded",
+          "test/pin_equality_test.dart",
+          "test/yoga_observation_status_test.dart",
+          "test/camera_pose_source_test.dart",
+          "test/onboarding_camera_gate_test.dart",
+          "test/course_progress_persistence_test.dart"
+        ],
+        "cwd": "/Users/mustafakaankocak/Developer/YULAlab-AI/ventures/lissom/app",
+        "exit_code": 0,
+        "at_utc": "2026-10-17T18:23:42.201912+00:00"
+      },
+      {
+        "log": "lissom-adoption-analysis.log",
+        "command": [
+          "flutter",
+          "--no-version-check",
+          "analyze",
+          "--no-pub",
+          "lib/app/yoga_observation_status.dart",
+          "packages/lissom_engine/lib/src/yoga_observation.dart",
+          "packages/lissom_engine/test/yoga_observation_test.dart",
+          "test/pin_equality_test.dart"
+        ],
+        "cwd": "/Users/mustafakaankocak/Developer/YULAlab-AI/ventures/lissom/app",
+        "exit_code": 0,
+        "at_utc": "2026-10-17T18:23:44.685684+00:00"
+      }
+    ]
+  },
+  "changed_implementation_files": [
+    "pubspec.yaml",
+    "packages/lissom_engine/pubspec.yaml",
+    "pubspec.lock",
+    "packages/lissom_engine/pubspec.lock",
+    "test/pin_equality_test.dart",
+    "packages/lissom_engine/lib/src/yoga_observation.dart",
+    "lib/app/yoga_observation_status.dart",
+    "docs/yoga-observation-v1.md",
+    "packages/lissom_engine/test/yoga_observation_test.dart"
+  ],
+  "evidence_hashes": {
+    "lissom-adoption-engine-tests.log": "c84f6fc68016fc0d174437066128a67bc748497eb27f478bdf7981ff8f9f0156",
+    "lissom-adoption-host-tests.log": "dd303c10af43a675b981b632029061c79787bdb44edf5986219a784083f1aeb1",
+    "lissom-adoption-analysis.log": "68977f52316d1db3bac7606d3f72fb1f5bc30b26a304849565be78a0b25761d1",
+    "lissom-adoption-app-resolution.log": "c7cb190dcf5d435542240fcfeb6d19503cfc0d9903df0525195d1fcf4da226ee",
+    "lissom-adoption-engine-resolution.log": "750dab1fa4863b47f1ca7508835060ee34fcf7462f3094fb946fc8b74a363742",
+    "lissom-adoption-graph.json": "f557409028c5c05334c4e527ede8a3b7890ae5c7d56f5b6977f68d8e1edd7713"
+  },
+  "limits": [
+    "Tests are synthetic/component/host; no physical device or real provider accuracy acceptance.",
+    "Training, calibrated yoga decoder, original demonstrations and expert acceptance remain deferred/pending.",
+    "Real account/IAP/restore, current signed source/package equality and store release gates remain open."
+  ],
+  "new_push_ci_deploy_signed_build": false,
+  "other_products_or_core_written": false
+}
