@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'locale_text.dart';
+import 'course_open_button.dart';
+import 'hatha_course.dart';
+import 'hatha_progress.dart';
 
 import 'study_review_content.dart';
 
@@ -9,7 +12,13 @@ String _text(BuildContext context, String en, String tr) =>
 
 /// Written recall only. Responses never enter a course, sensor or account store.
 class StudyReviewEntry extends StatelessWidget {
-  const StudyReviewEntry({super.key});
+  const StudyReviewEntry({
+    this.courses = const {},
+    this.storeLoader,
+    super.key,
+  });
+  final Map<String, HathaCourse> courses;
+  final Future<HathaProgressStore> Function()? storeLoader;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -25,14 +34,20 @@ class StudyReviewEntry extends StatelessWidget {
         ),
       ),
       onPressed: () => Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(builder: (_) => const StudyReviewPage()),
+        MaterialPageRoute<void>(builder: (_) => StudyReviewPage(courses: courses, storeLoader: storeLoader)),
       ),
     ),
   );
 }
 
 class StudyReviewPage extends StatelessWidget {
-  const StudyReviewPage({super.key});
+  const StudyReviewPage({
+    this.courses = const {},
+    this.storeLoader,
+    super.key,
+  });
+  final Map<String, HathaCourse> courses;
+  final Future<HathaProgressStore> Function()? storeLoader;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -60,6 +75,13 @@ class StudyReviewPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(area.boundary.inContext(context)),
+                if (courses[area.id] case final HathaCourse course)
+                  CourseOpenButton(
+                    key: Key('study-course-${area.id}'),
+                    course: course,
+                    storeLoader: storeLoader,
+                    label: _text(context, 'Open existing written course', 'Mevcut yazılı kursu aç'),
+                  ),
                 for (final RecallLesson lesson in area.lessons)
                   ListTile(
                     key: Key('study-lesson-${lesson.id}'),

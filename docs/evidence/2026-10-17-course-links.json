@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-17",
+  "baseline_sha": "a20f48d17a884fae3a0b75804eb79928d3f4804f",
+  "scope": "Only written-recall to existing course/symbolic-aid navigation. No course content, rules, sensors, Core pins, production media catalog, entitlements or native package changed.",
+  "areas": [
+    {
+      "project": "lissom",
+      "area": "Hatha",
+      "courses": [
+        {
+          "path": "config/courses/hatha.v1.json",
+          "id": "lissom.hatha.foundations",
+          "version": "1.0.1",
+          "units": 60,
+          "sha256": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
+          "bytes": 270935
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/hatha_knowledge_diagrams.dart",
+          "sha256": "65eca74e8889699bbc3c8ca0f384f6c9004ad9d2ac59ed6c26203aede38facc9"
+        }
+      ],
+      "remaining_acceptance": "60 ders; uyarlama ve gerçek öğrenci uygulaması için uzman incelemesi/gösterimler açık. Gerçek gösterim ve yetkin uzman/öğrenci kanıtı gerekir.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "lissom",
+      "area": "Sandalye/ofis",
+      "courses": [
+        {
+          "path": "config/courses/chair-office.v1.json",
+          "id": "lissom.chair-office.beginner",
+          "version": "1.0.0",
+          "units": 12,
+          "sha256": "c32f5d4f05606f2fa0f9c9a1ac48297bc61a917f3793e39ad1dfb377f9f1426c",
+          "bytes": 76934
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/hatha_knowledge_diagrams.dart",
+          "sha256": "65eca74e8889699bbc3c8ca0f384f6c9004ad9d2ac59ed6c26203aede38facc9"
+        }
+      ],
+      "remaining_acceptance": "12 ders; sandalye/alan/ara sonrası yeniden setup ve farklı öğrenci uygunluğu fiziksel doğrulanmadı. Gerçek gösterim ve yetkin uzman/öğrenci kanıtı gerekir.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "lissom",
+      "area": "Vinyasa",
+      "courses": [
+        {
+          "path": "config/courses/vinyasa-standing.v1.json",
+          "id": "lissom.vinyasa.supported-standing.beginner",
+          "version": "1.0.0",
+          "units": 10,
+          "sha256": "815b7a2c7205c0b5e5c32ce096c79ad112d98ca78196184b1ced1414e6953191",
+          "bytes": 68188
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/hatha_knowledge_diagrams.dart",
+          "sha256": "65eca74e8889699bbc3c8ca0f384f6c9004ad9d2ac59ed6c26203aede38facc9"
+        }
+      ],
+      "remaining_acceptance": "10 ders; destekli ayakta yol. Tam floor/full-flow veya bilinmeyen geçişlerin öğretimi değildir. Gerçek gösterim ve yetkin uzman/öğrenci kanıtı gerekir.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "lissom",
+      "area": "Yin",
+      "courses": [
+        {
+          "path": "config/courses/yin-supported.v1.json",
+          "id": "lissom.yin.supported.beginner",
+          "version": "1.0.0",
+          "units": 8,
+          "sha256": "3b5455c6f5b3f459e64e7f3f586f37193dd9b0a8c72b548d621f091b36b570e6",
+          "bytes": 77920
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/hatha_knowledge_diagrams.dart",
+          "sha256": "65eca74e8889699bbc3c8ca0f384f6c9004ad9d2ac59ed6c26203aede38facc9"
+        }
+      ],
+      "remaining_acceptance": "8 ders; destekli uyarlanmış yol. Hold dozu, bireysel uygunluk veya sağlık sonucu kabulü değildir. Gerçek gösterim ve yetkin uzman/öğrenci kanıtı gerekir.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    },
+    {
+      "project": "lissom",
+      "area": "Ashtanga başlangıç",
+      "courses": [
+        {
+          "path": "config/courses/ashtanga-foundations.v1.json",
+          "id": "lissom.ashtanga.foundations.beginner",
+          "version": "1.0.0",
+          "units": 13,
+          "sha256": "dd5004b1760ea460e2ead4d16790239ffb9fbad45407d9ff4cd8fcf08a2b1bf7",
+          "bytes": 59186
+        }
+      ],
+      "dedicated_beginner_course_present": true,
+      "source_native_diagrams": [
+        {
+          "path": "lib/app/hatha_knowledge_diagrams.dart",
+          "sha256": "65eca74e8889699bbc3c8ca0f384f6c9004ad9d2ac59ed6c26203aede38facc9"
+        }
+      ],
+      "remaining_acceptance": "13 ders/4 modül; ayakta uyarlama ve sıra okuma. Tam geleneksel Primary Series değildir; nefes/hareket/gaze ve kişisel uygulama kabulü açık. Gerçek gösterim ve yetkin uzman/öğrenci kanıtı gerekir.",
+      "full_physical_curriculum_acceptance": "NOT_ESTABLISHED",
+      "expert_or_learner_physical_validation_this_run": "UNRUN",
+      "shipping_playable_demonstrations": 0
+    }
+  ],
+  "source_media_rights_or_expert_approval_added": false,
+  "verification": {
+    "new_link_tests": 2,
+    "existing_regression_tests": 39,
+    "passed": 41,
+    "accepted_logs": [
+      "lissom-links-tests-initial.log"
+    ],
+    "analyze": "lissom-analyze-final.log"
+  },
+  "shipping_playable_demonstrations": 0,
+  "release_acceptance": "OPEN",
+  "native_runtime_real_hardware_iap_store": "UNRUN in this change; prior scoped acceptance stays historical.",
+  "changed_behavior": "Recall receives five actually loaded courses from Library and reuses the same guarded progress-loading/retry entry widget; merely opening a course writes no practice.",
+  "evidence_source_manifest": {
+    "lib/app/study_review.dart": "d1ae8ae6481b79d6134d41d149b56bbbd5e79a4475a03714704cef6966176ca4",
+    "lib/app/library_screen.dart": "f2ec8960268d6c499bf367ec7f9d8f8e22f8a969b176d70c597fd8a2a9648e64",
+    "lib/app/course_open_button.dart": "d3ea463d214961fd1e12996b84623c4a49eca4822dfa96035206b62de930328c",
+    "test/study_course_links_test.dart": "fe69164c679cd201c88ecfa5028c0fcbe8a8e590e79a5757df56e65fdb19c8be"
+  }
+}

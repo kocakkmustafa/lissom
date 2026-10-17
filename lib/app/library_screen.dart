@@ -18,6 +18,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'study_review.dart';
+import 'course_open_button.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_account/motion_account.dart'
     show motionPaidFeaturesAvailable;
@@ -75,7 +76,16 @@ class LibraryScreen extends StatelessWidget {
           // yapardı ve eşit-ağırlık kapısı (kart sayısı = aile sayısı)
           // yanlış sayardı. Kapı bunu anında yakaladı.
           CaptureUnavailableNote(measurementAvailable: measurementAvailable),
-          const StudyReviewEntry(),
+          StudyReviewEntry(
+            courses: {
+              if (facts.hatha != null) 'hatha': facts.hatha!,
+              if (facts.chairOffice != null) 'chair': facts.chairOffice!,
+              if (facts.vinyasa != null) 'vinyasa': facts.vinyasa!,
+              if (facts.yin != null) 'yin': facts.yin!,
+              if (facts.ashtanga != null) 'ashtanga': facts.ashtanga!,
+            },
+            storeLoader: hathaStoreLoader,
+          ),
           Column(
             key: builtSectionKey,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,76 +339,6 @@ class _PendingFamilyRow extends StatelessWidget {
   }
 }
 
-class _CourseOpenButton extends StatefulWidget {
-  const _CourseOpenButton({
-    required this.course,
-    required this.storeLoader,
-    required this.label,
-  });
-
-  final HathaCourse course;
-  final Future<HathaProgressStore> Function()? storeLoader;
-  final String label;
-
-  @override
-  State<_CourseOpenButton> createState() => _CourseOpenButtonState();
-}
-
-class _CourseOpenButtonState extends State<_CourseOpenButton> {
-  bool _opening = false;
-  bool _failed = false;
-
-  Future<void> _open() async {
-    final loader = widget.storeLoader;
-    if (_opening || loader == null) return;
-    setState(() {
-      _opening = true;
-      _failed = false;
-    });
-    try {
-      final store = await loader();
-      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
-      final progress = await store.read();
-      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
-      await Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(
-          builder: (_) => HathaCourseScreen(
-            course: widget.course,
-            initialProgress: progress,
-            storeLoader: loader,
-          ),
-        ),
-      );
-    } on Object {
-      if (mounted) setState(() => _failed = true);
-    } finally {
-      if (mounted) setState(() => _opening = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      FilledButton(
-        onPressed: _opening || widget.storeLoader == null ? null : _open,
-        child: Text(widget.label),
-      ),
-      if (_failed) ...[
-        const SizedBox(height: 8),
-        Text(
-          localeText(
-            context,
-            'Your practice record could not be opened. Tap the course button to try again.',
-            'Çalışma kaydın açılamadı. Yeniden denemek için kurs düğmesine dokun.',
-          ),
-          style: TextStyle(color: Theme.of(context).colorScheme.error),
-        ),
-      ],
-    ],
-  );
-}
-
 /// Bir ailenin sayfası — **dürüstlük kutusu ZORUNLU** (opsiyonel değil).
 class FamilyPage extends StatelessWidget {
   const FamilyPage({
@@ -511,7 +451,7 @@ class FamilyPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            _CourseOpenButton(
+            CourseOpenButton(
               course: course,
               storeLoader: hathaStoreLoader,
               label: localeText(
@@ -537,7 +477,7 @@ class FamilyPage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(hathaText(context, chair.intro)),
               const SizedBox(height: 12),
-              _CourseOpenButton(
+              CourseOpenButton(
                 course: chair,
                 storeLoader: hathaStoreLoader,
                 label: localeText(
@@ -564,7 +504,7 @@ class FamilyPage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(hathaText(context, chair.intro)),
               const SizedBox(height: 12),
-              _CourseOpenButton(
+              CourseOpenButton(
                 course: chair,
                 storeLoader: hathaStoreLoader,
                 label: localeText(
@@ -591,7 +531,7 @@ class FamilyPage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(hathaText(context, chair.intro)),
               const SizedBox(height: 12),
-              _CourseOpenButton(
+              CourseOpenButton(
                 course: chair,
                 storeLoader: hathaStoreLoader,
                 label: localeText(
@@ -616,7 +556,7 @@ class FamilyPage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(hathaText(context, ashtanga.intro)),
               const SizedBox(height: 12),
-              _CourseOpenButton(
+              CourseOpenButton(
                 course: ashtanga,
                 storeLoader: hathaStoreLoader,
                 label: localeText(context,
