@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "at_utc": "2026-10-17T22:31:47.682362+00:00",
+  "status": "REAL_SOURCE_FIT_AND_HELD_VIEW_DONE; BASELINE_NOT_BEATEN; NO_PRODUCT_ACCEPTANCE",
+  "app_runtime_source_sha": "9020b87743eff32a23233eaa182ebfeab9183c76",
+  "app_parent_before_doc": "9b7748dbe06b7acae971728ec32f16e28bc8856b",
+  "core_extractor_source_sha": "07ee44b3edf23fa7aed740ec5b5f9745f914842b",
+  "dataset": {
+    "title": "Yoga for all",
+    "doi": "10.5281/zenodo.7818789",
+    "mirror_doi": "10.17632/jc4mmnvcdk.1",
+    "license": "CC BY4.0 official metadata",
+    "pose": "Sarvangasana",
+    "originals": 4,
+    "source_bytes": 296860039,
+    "publisher_declared_people": 1,
+    "independently_verified_identity_or_release": false,
+    "session_mapping": null,
+    "labels": "Publisher video-folder RightSteps/WrongSteps; no expert frame/phase/safety truth"
+  },
+  "split": {
+    "train_view": 3,
+    "held_validation_view": 4,
+    "train_originals": 2,
+    "validation_originals": 2,
+    "same_person": true,
+    "unseen_person_or_independent_session_test": false,
+    "frame_random_split": false,
+    "all_sources_and_derivatives_now_exposed": true
+  },
+  "actual_fit": {
+    "training_objective_initial": 0.6931471805599452,
+    "training_objective_final": 0.1116391604466642,
+    "iterations": 500,
+    "windows": 22,
+    "source_videos": 2,
+    "window_counts": {
+      "correct": 11,
+      "incorrect": 11
+    },
+    "optimization_seconds": 0.005693124956451356,
+    "model_sha256": "49ec70136e9e2a407a183d599bad04b5b83055d2e9774a1632678486bea4f86a",
+    "features_sha256": "a69a8a0506178cbcab7bab09228e9bf9cf6e5b4b9f84660e8565bae14c157a7b",
+    "roundtrip_prediction_equality": true,
+    "training_objective_is_not_accuracy": true
+  },
+  "actual_validation": {
+    "window_count": 22,
+    "observable_windows": 22,
+    "abstained": 0,
+    "majority": {
+      "windows": {
+        "confusion_true_rows_correct_incorrect_pred_columns_correct_incorrect_abstain": [
+          [
+            11,
+            0,
+            0
+          ],
+          [
+            11,
+            0,
+            0
+          ]
+        ],
+        "total": 22,
+        "accepted": 22,
+        "abstained": 0,
+        "coverage": 1.0,
+        "accuracy_all_abstention_as_miss": 0.5,
+        "accuracy_on_accepted": 0.5,
+        "per_class": [
+          {
+            "label": "correct",
+            "support": 11,
+            "precision": 0.5,
+            "recall_including_abstention": 1.0,
+            "f1": 0.6666666666666666
+          },
+          {
+            "label": "incorrect",
+            "support": 11,
+            "precision": null,
+            "recall_including_abstention": 0.0,
+            "f1": 0.0
+          }
+        ]
+      },
+      "source_videos": {
+        "confusion_true_rows_correct_incorrect_pred_columns_correct_incorrect_abstain": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        "total": 2,
+        "accepted": 2,
+        "abstained": 0,
+        "coverage": 1.0,
+        "accuracy_all_abstention_as_miss": 0.5,
+        "accuracy_on_accepted": 0.5,
+        "per_class": [
+          {
+            "label": "correct",
+            "support": 1,
+            "precision": 0.5,
+            "recall_including_abstention": 1.0,
+            "f1": 0.6666666666666666
+          },
+          {
+            "label": "incorrect",
+            "support": 1,
+            "precision": null,
+            "recall_including_abstention": 0.0,
+            "f1": 0.0
+          }
+        ]
+      }
+    },
+    "nearest_centroid": {
+      "windows": {
+        "confusion_true_rows_correct_incorrect_pred_columns_correct_incorrect_abstain": [
+          [
+            11,
+            0,
+            0
+          ],
+          [
+            11,
+            0,
+            0
+          ]
+        ],
+        "total": 22,
+        "accepted": 22,
+        "abstained": 0,
+        "coverage": 1.0,
+        "accuracy_all_abstention_as_miss": 0.5,
+        "accuracy_on_accepted": 0.5,
+        "per_class": [
+          {
+            "label": "correct",
+            "support": 11,
+            "precision": 0.5,
+            "recall_including_abstention": 1.0,
+            "f1": 0.6666666666666666
+          },
+          {
+            "label": "incorrect",
+            "support": 11,
+            "precision": null,
+            "recall_including_abstention": 0.0,
+            "f1": 0.0
+          }
+        ]
+      },
+      "source_videos": {
+        "confusion_true_rows_correct_incorrect_pred_columns_correct_incorrect_abstain": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        "total": 2,
+        "accepted": 2,
+        "abstained": 0,
+        "coverage": 1.0,
+        "accuracy_all_abstention_as_miss": 0.5,
+        "accuracy_on_accepted": 0.5,
+        "per_class": [
+          {
+            "label": "correct",
+            "support": 1,
+            "precision": 0.5,
+            "recall_including_abstention": 1.0,
+            "f1": 0.6666666666666666
+          },
+          {
+            "label": "incorrect",
+            "support": 1,
+            "precision": null,
+            "recall_including_abstention": 0.0,
+            "f1": 0.0
+          }
+        ]
+      }
+    },
+    "logistic": {
+      "windows": {
+        "confusion_true_rows_correct_incorrect_pred_columns_correct_incorrect_abstain": [
+          [
+            11,
+            0,
+            0
+          ],
+          [
+            11,
+            0,
+            0
+          ]
+        ],
+        "total": 22,
+        "accepted": 22,
+        "abstained": 0,
+        "coverage": 1.0,
+        "accuracy_all_abstention_as_miss": 0.5,
+        "accuracy_on_accepted": 0.5,
+        "per_class": [
+          {
+            "label": "correct",
+            "support": 11,
+            "precision": 0.5,
+            "recall_including_abstention": 1.0,
+            "f1": 0.6666666666666666
+          },
+          {
+            "label": "incorrect",
+            "support": 11,
+            "precision": null,
+            "recall_including_abstention": 0.0,
+            "f1": 0.0
+          }
+        ]
+      },
+      "source_videos": {
+        "confusion_true_rows_correct_incorrect_pred_columns_correct_incorrect_abstain": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        "total": 2,
+        "accepted": 2,
+        "abstained": 0,
+        "coverage": 1.0,
+        "accuracy_all_abstention_as_miss": 0.5,
+        "accuracy_on_accepted": 0.5,
+        "per_class": [
+          {
+            "label": "correct",
+            "support": 1,
+            "precision": 0.5,
+            "recall_including_abstention": 1.0,
+            "f1": 0.6666666666666666
+          },
+          {
+            "label": "incorrect",
+            "support": 1,
+            "precision": null,
+            "recall_including_abstention": 0.0,
+            "f1": 0.0
+          }
+        ]
+      }
+    },
+    "all_predictions_correct_class": true,
+    "baseline_beaten": false,
+    "post_validation_tuning": false
+  },
+  "frozen_hashes": {
+    "run-config.json": "7534242bac9c512288ccc0c5238b8c1da1147d310fb3b5bfb5e008558bf964eb",
+    "frozen-candidate.json": "ca89e78ea4ceec02d6dd21e1dfdc89dc0ce5972f791ea5f280690354cd22e4e2",
+    "validation-open.json": "dd79106eb5673b8293417fea1be96d548b1c2f7865f9bbd8369102a0b3ff34d7",
+    "metrics.json": "4465b1fd87a1c76564f3c2dc92e9f710d615b83924670c67c38003ba3b7a21d3",
+    "seen-exposure-registry.json": "1c6a9fbd3ad8b7e2251bb3114ed405f2f15850ba2782d3c82fed8ff6073d4364",
+    "final-integrity.json": "fa05f05fbc107cb906447aa579bdc75227205463205f1c82491aea7f3784436a",
+    "ATTRIBUTION-AND-RIGHTS.json": "4b38cc9daaf06b7f70bd9a4544fa5f6bb06d85765ac4c2c7ed684b30a62fd0f7"
+  },
+  "limits": {
+    "runtime_or_weights_changed": false,
+    "application_model_activated": false,
+    "expert_or_physical_or_safety_validated": false,
+    "new_remote_ci_or_upload_or_paid_call": false,
+    "raw_media_or_learned_weights_committed": false,
+    "first_pilot_model_unchanged": true
+  },
+  "evidence_root": "Task13/training-pilot-yoga/yoga-for-all-correctness; all raw/proxy/landmark/learned artifacts remain local only"
+}
