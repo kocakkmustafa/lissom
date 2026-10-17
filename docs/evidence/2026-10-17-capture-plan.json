@@ -1,0 +1,348 @@
+{
+  "date": "2026-10-17",
+  "full_teaching_goal_preserved": true,
+  "baseline": "8c732ec61a9010d8dbf98163719bcee30a9eeb67",
+  "shared_offline_intake": "ventures/motion-core/lib/tools/fixture_pipeline/first_party_capture.py",
+  "delivery_spec": "ventures/motion-core/lib/tools/fixture_pipeline/FIRST_PARTY_VIDEO_DELIVERY.tr.txt",
+  "areas": [
+    {
+      "app": "lissom",
+      "area": "hatha",
+      "title": "Hatha",
+      "courses": [
+        {
+          "path": "config/courses/hatha.v1.json",
+          "id": "lissom.hatha.foundations",
+          "version": "1.0.1",
+          "units": 60,
+          "sha256": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
+          "bytes": 270935,
+          "lesson_ids": [
+            "h01",
+            "h02",
+            "h03",
+            "h04",
+            "h05",
+            "h06",
+            "h07",
+            "h08",
+            "h09",
+            "h10",
+            "h11",
+            "h12",
+            "h13",
+            "h14",
+            "h15",
+            "h16",
+            "h17",
+            "h18",
+            "h19",
+            "h20",
+            "h21",
+            "h22",
+            "h23",
+            "h24",
+            "h25",
+            "h26",
+            "h27",
+            "h28",
+            "h29",
+            "h30",
+            "h31",
+            "h32",
+            "h33",
+            "h34",
+            "h35",
+            "h36",
+            "h37",
+            "h38",
+            "h39",
+            "h40",
+            "h41",
+            "h42",
+            "h43",
+            "h44",
+            "h45",
+            "h46",
+            "h47",
+            "h48",
+            "h49",
+            "h50",
+            "h51",
+            "h52",
+            "h53",
+            "h54",
+            "h55",
+            "h56",
+            "h57",
+            "h58",
+            "h59",
+            "h60"
+          ]
+        }
+      ],
+      "current_baseline": "8c732ec61a9010d8dbf98163719bcee30a9eeb67",
+      "existing_architecture": "Existing full-pose → metric bridge → ROM/assessment battery. Calibrate visibility, camera-plane and measurement repeatability against human annotations. Five yoga courses are not wired to a yoga-pose classifier; adding course pose/transition assessment needs a separate task/metric/runtime design proposal.",
+      "source_references": [
+        {
+          "path": "lib/app/pose_model.dart",
+          "sha256": "ec93c716c9c3ee14fa51eed5a2ca068b2aa53666798107f66cb7e0fc36078159"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/live_evaluator.dart",
+          "sha256": "90e72fe76d4eddc5649faccf851dd0c2f2b885adfd1089d9aae200e9f0c2b0f9"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/metric_bridge.dart",
+          "sha256": "b79449519dda727e65de1d5b5d26c48290564c70d377db6bb1ab718aa9439693"
+        },
+        {
+          "path": "config/tests/lissom-assessment.v1.json",
+          "sha256": "e272d4a8a5753ff4ae5f30081c3ce32f6a336746b028df7c2e9c77c4eacb36db"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied. Yoga course scoring/runtime binding absent; ROM battery is a different task.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "lissom",
+      "area": "chair",
+      "title": "Sandalye/ofis",
+      "courses": [
+        {
+          "path": "config/courses/chair-office.v1.json",
+          "id": "lissom.chair-office.beginner",
+          "version": "1.0.0",
+          "units": 12,
+          "sha256": "c32f5d4f05606f2fa0f9c9a1ac48297bc61a917f3793e39ad1dfb377f9f1426c",
+          "bytes": 76934,
+          "lesson_ids": [
+            "c01",
+            "c02",
+            "c03",
+            "c04",
+            "c05",
+            "c06",
+            "c07",
+            "c08",
+            "c09",
+            "c10",
+            "c11",
+            "c12"
+          ]
+        }
+      ],
+      "current_baseline": "8c732ec61a9010d8dbf98163719bcee30a9eeb67",
+      "existing_architecture": "Existing full-pose → metric bridge → ROM/assessment battery. Calibrate visibility, camera-plane and measurement repeatability against human annotations. Five yoga courses are not wired to a yoga-pose classifier; adding course pose/transition assessment needs a separate task/metric/runtime design proposal.",
+      "source_references": [
+        {
+          "path": "lib/app/pose_model.dart",
+          "sha256": "ec93c716c9c3ee14fa51eed5a2ca068b2aa53666798107f66cb7e0fc36078159"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/live_evaluator.dart",
+          "sha256": "90e72fe76d4eddc5649faccf851dd0c2f2b885adfd1089d9aae200e9f0c2b0f9"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/metric_bridge.dart",
+          "sha256": "b79449519dda727e65de1d5b5d26c48290564c70d377db6bb1ab718aa9439693"
+        },
+        {
+          "path": "config/tests/lissom-assessment.v1.json",
+          "sha256": "e272d4a8a5753ff4ae5f30081c3ce32f6a336746b028df7c2e9c77c4eacb36db"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied. Yoga course scoring/runtime binding absent; ROM battery is a different task.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "lissom",
+      "area": "vinyasa",
+      "title": "Vinyasa",
+      "courses": [
+        {
+          "path": "config/courses/vinyasa-standing.v1.json",
+          "id": "lissom.vinyasa.supported-standing.beginner",
+          "version": "1.0.0",
+          "units": 10,
+          "sha256": "815b7a2c7205c0b5e5c32ce096c79ad112d98ca78196184b1ced1414e6953191",
+          "bytes": 68188,
+          "lesson_ids": [
+            "v01",
+            "v02",
+            "v03",
+            "v04",
+            "v05",
+            "v06",
+            "v07",
+            "v08",
+            "v09",
+            "v10"
+          ]
+        }
+      ],
+      "current_baseline": "8c732ec61a9010d8dbf98163719bcee30a9eeb67",
+      "existing_architecture": "Existing full-pose → metric bridge → ROM/assessment battery. Calibrate visibility, camera-plane and measurement repeatability against human annotations. Five yoga courses are not wired to a yoga-pose classifier; adding course pose/transition assessment needs a separate task/metric/runtime design proposal.",
+      "source_references": [
+        {
+          "path": "lib/app/pose_model.dart",
+          "sha256": "ec93c716c9c3ee14fa51eed5a2ca068b2aa53666798107f66cb7e0fc36078159"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/live_evaluator.dart",
+          "sha256": "90e72fe76d4eddc5649faccf851dd0c2f2b885adfd1089d9aae200e9f0c2b0f9"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/metric_bridge.dart",
+          "sha256": "b79449519dda727e65de1d5b5d26c48290564c70d377db6bb1ab718aa9439693"
+        },
+        {
+          "path": "config/tests/lissom-assessment.v1.json",
+          "sha256": "e272d4a8a5753ff4ae5f30081c3ce32f6a336746b028df7c2e9c77c4eacb36db"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied. Yoga course scoring/runtime binding absent; ROM battery is a different task.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "lissom",
+      "area": "yin",
+      "title": "Yin",
+      "courses": [
+        {
+          "path": "config/courses/yin-supported.v1.json",
+          "id": "lissom.yin.supported.beginner",
+          "version": "1.0.0",
+          "units": 8,
+          "sha256": "3b5455c6f5b3f459e64e7f3f586f37193dd9b0a8c72b548d621f091b36b570e6",
+          "bytes": 77920,
+          "lesson_ids": [
+            "y01",
+            "y02",
+            "y03",
+            "y04",
+            "y05",
+            "y06",
+            "y07",
+            "y08"
+          ]
+        }
+      ],
+      "current_baseline": "8c732ec61a9010d8dbf98163719bcee30a9eeb67",
+      "existing_architecture": "Existing full-pose → metric bridge → ROM/assessment battery. Calibrate visibility, camera-plane and measurement repeatability against human annotations. Five yoga courses are not wired to a yoga-pose classifier; adding course pose/transition assessment needs a separate task/metric/runtime design proposal.",
+      "source_references": [
+        {
+          "path": "lib/app/pose_model.dart",
+          "sha256": "ec93c716c9c3ee14fa51eed5a2ca068b2aa53666798107f66cb7e0fc36078159"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/live_evaluator.dart",
+          "sha256": "90e72fe76d4eddc5649faccf851dd0c2f2b885adfd1089d9aae200e9f0c2b0f9"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/metric_bridge.dart",
+          "sha256": "b79449519dda727e65de1d5b5d26c48290564c70d377db6bb1ab718aa9439693"
+        },
+        {
+          "path": "config/tests/lissom-assessment.v1.json",
+          "sha256": "e272d4a8a5753ff4ae5f30081c3ce32f6a336746b028df7c2e9c77c4eacb36db"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied. Yoga course scoring/runtime binding absent; ROM battery is a different task.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    },
+    {
+      "app": "lissom",
+      "area": "ashtanga",
+      "title": "Ashtanga başlangıç",
+      "courses": [
+        {
+          "path": "config/courses/ashtanga-foundations.v1.json",
+          "id": "lissom.ashtanga.foundations.beginner",
+          "version": "1.0.0",
+          "units": 13,
+          "sha256": "dd5004b1760ea460e2ead4d16790239ffb9fbad45407d9ff4cd8fcf08a2b1bf7",
+          "bytes": 59186,
+          "lesson_ids": [
+            "a01",
+            "a02",
+            "a03",
+            "a04",
+            "a05",
+            "a06",
+            "a07",
+            "a08",
+            "a09",
+            "a10",
+            "a11",
+            "a12",
+            "a13"
+          ]
+        }
+      ],
+      "current_baseline": "8c732ec61a9010d8dbf98163719bcee30a9eeb67",
+      "existing_architecture": "Existing full-pose → metric bridge → ROM/assessment battery. Calibrate visibility, camera-plane and measurement repeatability against human annotations. Five yoga courses are not wired to a yoga-pose classifier; adding course pose/transition assessment needs a separate task/metric/runtime design proposal.",
+      "source_references": [
+        {
+          "path": "lib/app/pose_model.dart",
+          "sha256": "ec93c716c9c3ee14fa51eed5a2ca068b2aa53666798107f66cb7e0fc36078159"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/live_evaluator.dart",
+          "sha256": "90e72fe76d4eddc5649faccf851dd0c2f2b885adfd1089d9aae200e9f0c2b0f9"
+        },
+        {
+          "path": "packages/lissom_engine/lib/src/metric_bridge.dart",
+          "sha256": "b79449519dda727e65de1d5b5d26c48290564c70d377db6bb1ab718aa9439693"
+        },
+        {
+          "path": "config/tests/lissom-assessment.v1.json",
+          "sha256": "e272d4a8a5753ff4ae5f30081c3ce32f6a336746b028df7c2e9c77c4eacb36db"
+        }
+      ],
+      "next_operation": "Human teaching demonstration and annotation → exact pinned extraction/DSP replay → reference/rule calibration candidate → heldout evaluation → real-device parity. No runtime promotion in this change.",
+      "acceptance_gap": "Physical teaching/rights/learner and device evidence open; no first-party capture supplied. Yoga course scoring/runtime binding absent; ROM battery is a different task.",
+      "first_party_data_received": false,
+      "trained": false,
+      "physical_or_device_validated": false
+    }
+  ],
+  "inference_checks": {
+    "lissom": {
+      "exit_code": 0,
+      "cwd": "/Users/mustafakaankocak/Developer/YULAlab-AI/ventures/lissom/app/packages/lissom_engine",
+      "tests": [
+        "live_evaluator_test.dart",
+        "real_replay_test.dart",
+        "invalidation_test.dart"
+      ],
+      "log": "lissom-inference.log",
+      "dependency_resolution": "existing engine package config; direct VM test runner, no pub command/network",
+      "scope": "logic/recorded fixture replay only; not first-party training, native or physical acceptance"
+    }
+  },
+  "first_party_data_received": false,
+  "new_model_training": false,
+  "device_validation_completed": false,
+  "runtime_model_rules_or_pins_changed": false,
+  "large_changes": [
+    "Gravita three dedicated missing course/variant definitions",
+    "Lissom yoga-course pose/transition assessment",
+    "JabLab other-discipline live recognition",
+    "Ostinato finger/key/contact or broader instrument-specific feedback",
+    "Choreia all-style choreography/physical support recognition",
+    "Existing extract_landmarks.py timestamps are frame-index/fps, not original variable-rate PTS: intake blocks VFR timing calibration until a compatible PTS-preserving extractor proposal is accepted. No timestamp rewrite in this change."
+  ]
+}
