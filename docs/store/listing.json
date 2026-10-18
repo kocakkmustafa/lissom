@@ -2,15 +2,15 @@
   "$doc": "Mağaza liste metni TASLAĞI — makine-okur kaynak. Bu dosya test/store_listing_test.dart tarafından taranır (uzunluk · varlık · $ sözleşmesi · karşılıksız-vaat taraması). Gönderim KURUCU kalemi (M-F-77: store gönderimi) — bu dosya yalnız TASLAK, onay bekliyor.",
   "appStore": {
     "name": "Lissom: Movement Checks",
-    "subtitle": "Your Hatha yoga practice path",
-    "promotionalText": "Explore Hatha from setup and natural breath to standing, seated and floor postures, transitions and an independent practice with support options.",
+    "subtitle": "Five paths for yoga practice",
+    "promotionalText": "Explore Hatha, Ashtanga foundations, supported Yin, standing Vinyasa and chair/office yoga. Read bilingual lessons and keep practice records on your device.",
     "keywords": "mobility,flexibility,movement,wellness,stretching,squat,range of motion"
   },
   "playStore": {
-    "shortDescription": "Progressive Hatha yoga lessons with support options and local practice records."
+    "shortDescription": "103 written lessons across five yoga catalogues, with local practice records."
   },
-  "description": "Lissom offers 60 original English and Turkish Hatha yoga lessons across 10 modules. Learn natural breathing, preparation, supported postures, controlled transitions and independent session planning. Choose comfortable support, chair or rest options. Each lesson includes a learning goal, practice task, self-check and teaching sources. The movement-test catalogue also explains Overhead Reach, Deep Squat and Active Straight Leg Raise. It also includes 13 Ashtanga beginner-foundation text lessons across 4 modules, with standing adaptations and traditional Sun A/B maps. This is not the full Primary Series.\n\nRead original text lessons, follow practice tasks, review your own practice and continue from your local lesson record. You can browse without signing in and use an optional shared Motion account. The account uses your email address, account ID and optional display name; account deletion is available in the app. Course records stay on the device within the current guest or account scope. No lesson completion certifies mastery. Demonstration video is not included in this content preparation version.\n\nPractice progress is self-recorded, not a posture grade. Camera assessments and subscription sales are not open. General information and adaptations do not provide individual rehabilitation or prenatal treatment. Lissom is not a medical device and does not diagnose or treat any condition.",
-  "$sourceOfFacts": "Current courses: config/courses/hatha.v1.json and config/courses/ashtanga-foundations.v1.json; app-local UI and account-scoped practice store. Camera paid-access policy is unchanged. Provider metadata readback is separate.",
+  "description": "Lissom offers 60 original English and Turkish Hatha yoga lessons across 10 modules. Learn natural breathing, preparation, supported postures, controlled transitions and independent session planning. Choose comfortable support, chair or rest options. Each lesson includes a learning goal, practice task, self-check and teaching sources. The movement-test catalogue also explains Overhead Reach, Deep Squat and Active Straight Leg Raise. It also includes 13 Ashtanga beginner-foundation text lessons across 4 modules, with standing adaptations and traditional Sun A/B maps. This is not the full Primary Series. Supported Yin adds 8 written lessons, supported standing Vinyasa 10, and chair/office yoga 12. The five catalogues contain 103 text lessons in total.\n\nRead original text lessons, follow practice tasks, review your own practice and continue from your local lesson record. You can browse without signing in and use an optional shared Motion account. The account uses your email address, account ID and optional display name; account deletion is available in the app. Course records stay on the device within the current guest or account scope. No lesson completion certifies mastery. Demonstration video is not included in this content preparation version.\n\nPractice progress is self-recorded, not a posture grade. Camera assessments and subscription sales are not open. General information and adaptations do not provide individual rehabilitation or prenatal treatment. Lissom is not a medical device and does not diagnose or treat any condition.",
+  "$sourceOfFacts": "Five bundled course JSON assets enumerated in $courseCatalogPreparationCurrent; app-local UI and course-ID/version-aware guest/account practice store. Camera/model and paid-access policy unchanged. No live provider write.",
   "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded.",
   "$ageRating": {
     "expectedTier": "App Store 4+ / Google Play Everyone — TAHMİN, nihai sonuç ASC/Play'in kendi süreci",
@@ -58,5 +58,57 @@
     "moduleCount": 4,
     "fullPrimarySeries": false,
     "physicalDeviceAccepted": false
+  },
+  "$courseCatalogPreparationCurrent": {
+    "measuredDate": "2026-10-18",
+    "status": "local_written_catalog_scope_not_full_teaching_physical_or_store_acceptance",
+    "courseCount": 5,
+    "lessonCount": 103,
+    "courses": [
+      {
+        "asset": "config/courses/ashtanga-foundations.v1.json",
+        "id": "lissom.ashtanga.foundations.beginner",
+        "version": "1.0.0",
+        "sha256": "dd5004b1760ea460e2ead4d16790239ffb9fbad45407d9ff4cd8fcf08a2b1bf7",
+        "lessonCount": 13,
+        "moduleCount": 4
+      },
+      {
+        "asset": "config/courses/chair-office.v1.json",
+        "id": "lissom.chair-office.beginner",
+        "version": "1.0.0",
+        "sha256": "c32f5d4f05606f2fa0f9c9a1ac48297bc61a917f3793e39ad1dfb377f9f1426c",
+        "lessonCount": 12,
+        "moduleCount": 4
+      },
+      {
+        "asset": "config/courses/hatha.v1.json",
+        "id": "lissom.hatha.foundations",
+        "version": "1.0.1",
+        "sha256": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
+        "lessonCount": 60,
+        "moduleCount": 10
+      },
+      {
+        "asset": "config/courses/vinyasa-standing.v1.json",
+        "id": "lissom.vinyasa.supported-standing.beginner",
+        "version": "1.0.0",
+        "sha256": "815b7a2c7205c0b5e5c32ce096c79ad112d98ca78196184b1ced1414e6953191",
+        "lessonCount": 10,
+        "moduleCount": 2
+      },
+      {
+        "asset": "config/courses/yin-supported.v1.json",
+        "id": "lissom.yin.supported.beginner",
+        "version": "1.0.0",
+        "sha256": "3b5455c6f5b3f459e64e7f3f586f37193dd9b0a8c72b548d621f091b36b570e6",
+        "lessonCount": 8,
+        "moduleCount": 2
+      }
+    ],
+    "mediaIncluded": false,
+    "cameraAssessmentAvailable": false,
+    "physicalDeviceAccepted": false,
+    "providerListingUpdated": false
   }
 }

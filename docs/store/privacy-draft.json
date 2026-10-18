@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "draftOnly": true,
+  "formsPublished": false,
+  "reviewedDate": "2026-10-18",
+  "appBundleId": "com.yulalab.lissom",
+  "courseAssets": [
+    "config/courses/ashtanga-foundations.v1.json",
+    "config/courses/chair-office.v1.json",
+    "config/courses/hatha.v1.json",
+    "config/courses/vinyasa-standing.v1.json",
+    "config/courses/yin-supported.v1.json"
+  ],
+  "appleManifestSource": "ios/Runner/PrivacyInfo.xcprivacy",
+  "appleCollectedTypes": [
+    "EmailAddress",
+    "Name",
+    "UserID",
+    "OtherDiagnosticData",
+    "CoarseLocation",
+    "OtherDataTypes"
+  ],
+  "purpose": "AppFunctionality",
+  "linked": true,
+  "tracking": false,
+  "accountUseOptional": true,
+  "localOnly": {
+    "cameraAndLandmarks": true,
+    "courseProgress": {
+      "journal": "hatha_progress.jsonl",
+      "courseIdentityFields": [
+        "courseId",
+        "courseVersion"
+      ],
+      "guestAccountScoped": true,
+      "serverSynced": false
+    },
+    "onboardingAgeBand": true,
+    "sessionHistory": true
+  },
+  "monetization": {
+    "subscriptionSalesAvailable": false,
+    "paidCameraSessionsAvailable": false,
+    "purchaseHistoryCollectedByActiveRelease": false
+  },
+  "accountDeletion": {
+    "inAppAction": "Delete Motion account / Motion hesabını sil",
+    "sharedAcrossFiveMotionApps": true,
+    "serverDeletionLiveAccepted": false,
+    "externalDeletionUrlVerified": false
+  },
+  "remainingEvidence": [
+    "Current signed binary and merged SDK privacy report",
+    "Live account login/recovery/deletion acceptance",
+    "Current provider log retention/deletion policy",
+    "Current public privacy/support and external account-deletion page",
+    "ASC and Play final form answers/publish"
+  ],
+  "statusScope": "Local source draft only; formsPublished=false means this work did not publish a form, not a fresh provider-status assertion",
+  "liveProviderFormStatus": "NOT_FRESHLY_RECHECKED"
+}

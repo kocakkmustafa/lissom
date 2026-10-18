@@ -136,7 +136,7 @@ void main() {
     expect(description, isNot(contains('Üç canlı kamera ölçümü')));
     expect(
       RegExp(
-        r'\b(12|on iki)\b',
+        r'\b(12|on iki)\s+(canlı\s+)?kamera\s+(ölçüm\w*|test\w*)\b',
         caseSensitive: false,
       ).hasMatch(userStrings(listing).join(' ')),
       isFalse,

@@ -42,9 +42,7 @@ oluşan **altı** collected-data kaydı taşır. Hepsinde
 `NSPrivacyCollectedDataTypePurposeAppFunctionality`, `Linked=true` ve
 `Tracking=false` vardır. Bu, davranış analitiği veya reklam amacı eklendiği
 anlamına gelmez. Kamera/kareler, cihazda kalan kurs ilerlemesi ve seans
-geçmişi için collection beyanı eklenmez; Ostinato'nun isteğe bağlı ham sesi
-de yalnız cihazdaki sınırlı RAM'de kalır. Diğer dört uygulama mikrofon
-kullanmaz. Sunucu günlükleri, cihaz içi geçici işleme ile aynı şey değildir.
+geçmişi için collection beyanı eklenmez. Lissom mikrofon/ses kaydı kullanmaz. Sunucu günlükleri, cihaz içi geçici işleme ile aynı şey değildir.
 
 [Apple collection ve kullanım tanımları](https://developer.apple.com/app-store/app-privacy-details/)
 ve [manifest tür/anahtarları](https://developer.apple.com/documentation/bundleresources/describing-data-use-in-privacy-manifests)
@@ -61,7 +59,7 @@ akışı ve son paket/SDK gizlilik raporu ayrı kabul kapılarıdır.
 | Rastgele hesap kimliği | Evet | Oturum ve hesap veri ayrımı | Apple User ID; Play Personal info / User IDs |
 | Satın alma geçmişi | Hayır; ilk sürümde satış ve ücretli oturum kapalı | Kullanılmaz | İlk sürüm formunda beyan edilmez; satış açılırsa yeniden değerlendirilir |
 | Kamera görüntüsü ve eklem noktaları | Hayır | Canlı cihaz içi ölçüm | Sunucuya toplanmaz |
-| Hatha kursu ilerlemesi | Hayır | Görüldü, çalışıldı ve kullanıcı beyanıyla tamamlandı durumları | Konuk/hesap kapsamına ayrılmış yerel `hatha_progress.jsonl`; Motion hesabına senkronize edilmez |
+| Beş katalogdaki kurs ilerlemesi | Hayır | Kullanıcının çalışma kaydı; ustalık/poz notu değildir | Hatha, Ashtanga temelleri, destekli Yin, ayakta Vinyasa ve sandalye/ofis kayıtları aynı yerel `hatha_progress.jsonl` günlüğünde `courseId`/`courseVersion` ile ayrılır; konuk/hesap kapsamı korunur, sunucuya senkronize edilmez |
 | Mikrofon/ses | Kullanılmaz | İlk kurs mikrofon istemez | iOS mikrofon gerekçesi ve Android `RECORD_AUDIO` yoktur |
 | Ölçüm ve seans geçmişi | Hayır | Cihazdaki uygulama geçmişi | Sunucuya toplanmaz |
 
@@ -78,7 +76,7 @@ yalnız cihazda kalan işlem/kaydın collection beyanı gerektirmediğini açık
 Cihaz dışına gönderilen türetilmiş veri veya SDK trafiği ayrı değerlendirilir.
 Hatha öz beyanı poz/ustalık veya sağlık uygunluğu puanı değildir; genel
 uyarlama açıklaması kişisel sağlık verisinin sağlayıcıya gönderimi değildir.
-Ostinato'nun izinli isteğe bağlı mikrofon kararı Lissom'a mikrofon eklemez.
+Lissom için mikrofon veya ses toplama beyanı eklenmez.
 
 Kaynaklar: `lib/main.dart`, `lib/app/hatha_progress.dart`,
 `lib/app/local_account_bridge.dart`, native izin dosyaları ve
@@ -88,3 +86,20 @@ kapsar; konuk verisi ayrı kalır. Çözümlenen `motion_account` paketindeki
 satış/üyelik ve paid-session girişleri kapalıdır. Manifestte e-posta, ad, kullanıcı ID'si ve yukarıdaki üç sağlayıcı veri türü
 collected olarak beyanlıdır; purchase-history türü yoktur. Final paket/SDK raporu, sağlayıcı günlükleri/saklama, uygulama dışı
 hesap silme bağlantısı ve gerçek Apple/Play yanıtları ayrıca doğrulanır.
+
+## Beş katalog ve mevcut yayın kapısı — 2026-10-18
+
+Kaynakta Hatha60, Ashtanga temelleri13, destekli Yin8, ayakta Vinyasa10 ve
+sandalye/ofis12 olmak üzere103 yazılı ders var. Bu sayım tam öğretim,
+gösterim videosu, fiziksel uygunluk veya model başarımı kabulü değildir.
+Yerel ilerleme kayıtları kurs kimliği/sürümüyle ayrılır; yeni cloud sync,
+telemetri, mikrofon veya satın alma veri akışı eklenmedi. Kamera
+değerlendirmesi ve abonelik satışı kapalıdır. Mevcut ortak hesap silme tüm
+Motion hesabını etkiler; guest kaydı ve başka hesap kapsamı ayrı kalır.
+
+`privacy-draft.json`, altı mevcut Apple manifest türü ile yerel/sunucu
+ayrımını otomasyon için taşır. Mağaza formlarının güncel yayını, dış hesap
+silme bağlantısı, sağlayıcı saklama/silme süreleri ve birleşik final paket
+SDK raporu hâlâ doğrulanmalıdır. Eski200URL okumaları güncel canlı kabul
+sayılmaz;18Ekim web aracı privacy/support URL'lerini okuyamadı. Bu erişim
+sınırı başka araçla aşılmadı.
