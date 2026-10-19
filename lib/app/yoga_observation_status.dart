@@ -111,8 +111,8 @@ class _YogaObservationStatusCardState extends State<YogaObservationStatusCard> {
           : pilot
           ? localeText(
               context,
-              'Calibration required. Camera observation for this lesson is not available yet.',
-              'Kalibrasyon gerekli. Bu dersin kamera gözlemi henüz kullanılamıyor.',
+              'Calibration required. Camera observation for this lesson is not available.',
+              'Kalibrasyon gerekli. Bu dersin kamera gözlemi kullanılamıyor.',
             )
           : localeText(
               context,

@@ -43,7 +43,7 @@ Future<void> _expectContext(
     tester.widget<Text>(note).data!,
     contains(
       language == 'tr'
-          ? 'kalibrasyon henüz doğrulanmadı'
+          ? 'kalibrasyon doğrulanmadı'
           : DevicePassClaim.stillNeeds,
     ),
   );

@@ -169,16 +169,16 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
               LissomEyebrow(
                 localeText(
                   context,
-                  'How much of a pose can be scored',
-                  'Bir duruş ne kadar ölçülebilir?',
+                  'Planned pose observation categories',
+                  'Planlanan poz gözlemi kategorileri',
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 localeText(
                   context,
-                  'Not every position is equally readable by one camera. These are the three levels, and what puts a pose in each.',
-                  'Tek kamera her duruşu aynı ölçüde göremez. Üç düzey ve nedenleri aşağıdadır.',
+                  'These categories describe planned scope and camera limits. This release provides no camera pose coaching, pose scores or avatar demonstrations.',
+                  'Bu kategoriler planlanan kapsamı ve kamera sınırlarını açıklar. Bu sürümde kamerayla poz koçluğu, poz puanı veya avatar gösterimi sunulmaz.',
                 ),
                 style: t.textTheme.bodySmall,
               ),
@@ -191,7 +191,9 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 11),
                       child: _BoundaryCard(
-                        title: tier.scope,
+                        title: tier.coaching == 'full'
+                            ? 'Standing, seated and kneeling poses'
+                            : tier.scope,
                         reason: _tierLine(tier),
                         measured: tier.reason,
                         // "Not every position is equally readable by one
@@ -216,11 +218,11 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
   /// Katmanın ne yaptığı — makine değerleri (`full` · `guided` ·
   /// `avatar_demo_only` · `loose`) yüzeye SIZMAZ, cümleye çevrilir.
   static String _tierLine(PoseTier tier) => switch (tier.coaching) {
-    'full' => 'Coached pose by pose, and set against a reference range.',
+    'full' => 'Pose-by-pose coaching and reference scoring are not available.',
     'guided' =>
-      'Guided, but scored loosely — we say less because we can see less.',
-    'avatar_demo_only' => 'Shown by the avatar only. Nothing here is scored.',
-    _ => 'Coaching level not declared.',
+      'Guided camera coaching and scoring are not available.',
+    'avatar_demo_only' => 'Avatar demonstrations and scoring are not available.',
+    _ => 'Pose coaching is not available for this category.',
   };
 
   /// `cervical_rotation` → `Cervical rotation`. Ham id yüzeye SIZMAZ (bu

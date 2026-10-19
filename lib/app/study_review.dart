@@ -15,10 +15,12 @@ class StudyReviewEntry extends StatelessWidget {
   const StudyReviewEntry({
     this.courses = const {},
     this.storeLoader,
+    this.onCourseDone,
     super.key,
   });
   final Map<String, HathaCourse> courses;
   final Future<HathaProgressStore> Function()? storeLoader;
+  final VoidCallback? onCourseDone;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -33,9 +35,22 @@ class StudyReviewEntry extends StatelessWidget {
           'Yazılı hatırlama ve değerlendirme',
         ),
       ),
-      onPressed: () => Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(builder: (_) => StudyReviewPage(courses: courses, storeLoader: storeLoader)),
-      ),
+      onPressed: () async {
+        if (ModalRoute.of(context)?.isCurrent != true) return;
+        await Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => StudyReviewPage(
+              courses: courses,
+              storeLoader: storeLoader,
+            ),
+          ),
+        );
+        // A course opened from recall can persist practice. Refresh the shell
+        // once the whole recall route returns, while its owner is still mounted.
+        if (context.mounted && ModalRoute.of(context)?.isCurrent == true) {
+          onCourseDone?.call();
+        }
+      },
     ),
   );
 }

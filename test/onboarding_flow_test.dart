@@ -77,8 +77,8 @@ void main() {
         expect(
           find.textContaining(
             language == 'tr'
-                ? 'Hatha yoga kursunu hesap veya kamera olmadan'
-                : 'Practise the Hatha yoga course without an account or camera',
+                ? 'Yazılı yoga kurslarını hesap veya kamera olmadan'
+                : 'Study the written yoga courses without an account or camera',
           ),
           findsOneWidget,
         );
@@ -108,8 +108,8 @@ void main() {
         expect(
           find.textContaining(
             language == 'tr'
-                ? 'Hatha yoga kursu kamera olmadan çalışır'
-                : 'The Hatha yoga course works without a camera',
+                ? 'Yazılı yoga kursları kamera olmadan çalışır'
+                : 'Written yoga courses work without a camera',
           ),
           findsOneWidget,
         );

@@ -120,6 +120,7 @@ class HonestyBoxCard extends StatelessWidget {
     this.box, {
     required this.liveness,
     required this.verdictNote,
+    this.isBuilt = true,
     super.key,
   });
 
@@ -127,6 +128,7 @@ class HonestyBoxCard extends StatelessWidget {
   static const Key notMeasuredKey = Key('honesty.notMeasured');
 
   final HonestyBox box;
+  final bool isBuilt;
 
   /// **Kutunun kendisini denetleyen fonksiyon.** L-230'un yüzey tarafı:
   /// iddia canlı değilse SİLİNMEZ (kapsamı saklamak olurdu) — sönük gösterilir
@@ -148,7 +150,13 @@ class HonestyBoxCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           LissomEyebrow(
-            box.measured.isEmpty
+            !isBuilt
+                ? localeText(
+                    context,
+                    'Not available in this build',
+                    'Bu sürümde bulunmuyor',
+                  )
+                : box.measured.isEmpty
                 ? localeText(
                     context,
                     'Camera feedback limits',
@@ -176,7 +184,14 @@ class HonestyBoxCard extends StatelessWidget {
                   style: t.textTheme.bodyMedium,
                 ),
               for (final HonestyClaim c in box.measured)
-                _claimRow(context, t, c, liveness(c), verdictNote(c)),
+                _claimRow(
+                  context,
+                  t,
+                  c,
+                  liveness(c),
+                  verdictNote(c),
+                  isBuilt: isBuilt,
+                ),
             ],
           ),
           const SizedBox(height: 18),
@@ -185,8 +200,12 @@ class HonestyBoxCard extends StatelessWidget {
           LissomEyebrow(
             localeText(
               context,
-              'Outside the measurement engine coverage',
-              'Ölçüm motorunun kapsamı dışında',
+              isBuilt
+                  ? 'Outside the measurement engine coverage'
+                  : 'Not provided by this family',
+              isBuilt
+                  ? 'Ölçüm motorunun kapsamı dışında'
+                  : 'Bu bölümde sunulmayanlar',
             ),
           ),
           const SizedBox(height: 10),
@@ -211,9 +230,10 @@ class HonestyBoxCard extends StatelessWidget {
     ThemeData t,
     HonestyClaim c,
     String? blocker,
-    String? verdict,
-  ) {
-    final bool live = blocker == null;
+    String? verdict, {
+    required bool isBuilt,
+  }) {
+    final bool live = isBuilt && blocker == null;
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
       child: Row(
@@ -249,7 +269,7 @@ class HonestyBoxCard extends StatelessWidget {
                     ),
                   ),
                 ],
-                if (!live) ...<Widget>[
+                if (!live && blocker != null) ...<Widget>[
                   const SizedBox(height: 3),
                   // ⚠️ Ayraç TİRE DEĞİL orta-nokta: engel metni ZATEN
                   // "<özne> — <gerekçe>" biçiminde geliyor, tire kullanmak
@@ -470,7 +490,7 @@ class CaptureUnavailableNote extends StatelessWidget {
                 '${localizedAvailability(context, measurementAvailable: measurementAvailable)} '
                 '${localeText(context, 'Written courses work without a camera. '
                     '${DevicePassClaim.notTried}: ${DevicePassClaim.stillNeeds}.', 'Yazılı kurslar kamera olmadan çalışır. Gerçek cihazda kamera izni, kare '
-                    'kalitesi ve kalibrasyon henüz doğrulanmadı.')}',
+                    'kalitesi ve kalibrasyon doğrulanmadı.')}',
                 style: t.textTheme.bodyMedium,
               ),
             ),
@@ -546,7 +566,7 @@ class MeasurementLimitsFootnote extends StatelessWidget {
   static String localizedAccuracy(BuildContext context) => localeText(
     context,
     accuracyStatement,
-    'Ölçümlerimizin referans bir cihazdan ne kadar saptığını henüz '
+    'Ölçümlerimizin referans bir cihazdan ne kadar saptığını '
     'ölçmedik. Bu nedenle hata payı yazmıyoruz.',
   );
 

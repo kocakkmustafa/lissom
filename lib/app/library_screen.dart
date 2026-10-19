@@ -85,6 +85,7 @@ class LibraryScreen extends StatelessWidget {
               if (facts.ashtanga != null) 'ashtanga': facts.ashtanga!,
             },
             storeLoader: hathaStoreLoader,
+            onCourseDone: onCourseDone,
           ),
           Column(
             key: builtSectionKey,
@@ -402,6 +403,7 @@ class FamilyPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8),
               child: HonestyBoxCard(
                 family.honestyBox,
+                isBuilt: family.isBuilt,
                 liveness: facts.blockerForClaim,
                 verdictNote: facts.verdictNoteFor,
               ),

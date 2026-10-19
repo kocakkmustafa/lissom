@@ -184,7 +184,7 @@
       "title": "Flexibility Goals",
       "status": "coming_soon",
       "wave": 1,
-      "intro": "Long-run paths with a weekly angle trend, not a stack of videos.",
+      "intro": "Flexibility goal paths are listed in the plan. No programme, trend chart or scheduled re-measurement is included in this release.",
       "children": [
         {
           "id": "front_split",
@@ -227,11 +227,11 @@
       "hasTrendChart": true,
       "honestyBox": {
         "measured": [
-          "The joint angle the goal is defined by, re-measured on a fixed cadence"
+          "No goal measurements or scheduled re-tests are available in this build."
         ],
         "notMeasured": [
-          "How close you are in weeks or months — progress rate is individual and we do not predict it",
-          "Changes smaller than our measurement noise: below that threshold we say 'no change', not 'improved'"
+          "No estimate of weeks or months to a goal is available.",
+          "No measurement-noise threshold or progress-change judgement is available."
         ]
       }
     },
@@ -240,7 +240,7 @@
       "title": "For Your Day",
       "status": "coming_soon",
       "wave": 2,
-      "intro": "Programmes shaped around what your body does all day.",
+      "intro": "Day-to-day movement programmes are listed in the plan. This release does not adapt programmes or weight tests to your routine.",
       "children": [
         {
           "id": "desk_worker",
@@ -279,10 +279,10 @@
       ],
       "honestyBox": {
         "measured": [
-          "The same movement tests, weighted toward the areas your routine loads most"
+          "No routine-weighted movement tests or personalised programmes are available in this build."
         ],
         "notMeasured": [
-          "Your occupation's injury risk — we shape content, we do not assess risk"
+          "No occupation-specific injury-risk assessment is available."
         ]
       }
     },
@@ -291,7 +291,7 @@
       "title": "Warm-ups for Other Sports",
       "status": "coming_soon",
       "wave": 3,
-      "intro": "Mobility prep that hands off to the training app you actually use.",
+      "intro": "Warm-ups for other sports are listed in the plan. No warm-up content or handoff to another app is included in this release.",
       "children": [
         {
           "id": "fighter_warmup",
@@ -317,10 +317,10 @@
       ],
       "honestyBox": {
         "measured": [
-          "The mobility prerequisites the partner app's skills depend on"
+          "No partner-app mobility checks or app handoffs are available in this build."
         ],
         "notMeasured": [
-          "Anything about the sport itself — that is the partner app's job"
+          "Sports coaching is not provided by this family in this build."
         ]
       }
     },
@@ -329,10 +329,10 @@
       "title": "Breath & Wind-down",
       "status": "coming_soon",
       "wave": 3,
-      "intro": "No camera and no scoring in this family. Nothing is built behind this name in this build.",
+      "intro": "No breath or wind-down sessions, audio guidance or session timer are included in this release.",
       "honestyBox": {
         "measured": [
-          "Nothing. These sessions are guided by audio and timed — the camera stays off."
+          "No audio-guided or timed sessions are available in this build. The camera is off."
         ],
         "notMeasured": [
           "Breath rate, depth or quality — a phone camera cannot measure breathing and we do not pretend otherwise",
@@ -371,7 +371,7 @@
     "items": [
       {
         "topic": "Programmes for children",
-        "reason": "The pose model is validated on adults, and the youngest reference band we hold is a single 'under 40' group — a nine-year-old and a thirty-nine-year-old would be read against the same line. That is not a measurement, it is an average with a child inside it. Content for minors also carries a duty of care we are not set up to meet.",
+        "reason": "Lissom has no validated camera assessment for children. The youngest reference band is a single under-40 group, not a child-specific reference. This release does not provide programmes for children.",
         "kind": "judgement"
       },
       {

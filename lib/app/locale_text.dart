@@ -114,8 +114,8 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   'Hip internal / external rotation measurement':
       'Kalça iç / dış rotasyon ölçümü',
   'Cervical rotation': 'Boyun rotasyonu',
-  'The pose model is validated on adults, and the youngest reference band we hold is a single \'under 40\' group — a nine-year-old and a thirty-nine-year-old would be read against the same line. That is not a measurement, it is an average with a child inside it. Content for minors also carries a duty of care we are not set up to meet.':
-      'Poz modeli yetişkinlerde doğrulandı. En genç referans grubumuz 40 yaş altının tamamını kapsar; bir çocukla bir yetişkini aynı çizgiye göre okumak doğru olmaz. Çocuklara yönelik içerik için gereken özen ve güvenlik süreçleri de bu üründe kurulmadı.',
+  "Lissom has no validated camera assessment for children. The youngest reference band is a single under-40 group, not a child-specific reference. This release does not provide programmes for children.":
+      "Çocuklar için doğrulanmış Lissom kamera değerlendirmesi yoktur. En genç referans grubu 40 yaş altıdır; çocuklara özgü referans değildir. Bu sürümde çocuklara yönelik program bulunmaz.",
   'Lissom does not measure breathing or meditation with the camera. The Hatha course includes natural-breath practice without a breathing score; guided meditation sessions are not included.':
       'Lissom nefesi veya meditasyonu kamerayla ölçmez. Hatha kursunda nefes puanı vermeyen doğal nefes çalışması vardır; rehberli meditasyon oturumu bulunmaz.',
   'Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking. A movement reading, however carefully taken, is not evidence about your health.':
@@ -128,17 +128,18 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
       'Tek bir iki boyutlu kamera yatay düzlemdeki dönüşü güvenilir biçimde çıkaramaz. Bu yüzden sayı göstermiyoruz.',
   'Pose model facial/neck landmarks are too coarse for the precision neck rotation needs. Excluded rather than shown with a wide meaningless band.':
       'Poz modelinin yüz ve boyun noktaları, boyun dönüşü için gereken hassasiyeti sağlamaz. Anlamsız geniş bir aralık göstermek yerine test çıkarıldı.',
-  'Standing, seated and kneeling poses (~150-250)':
-      'Ayakta, oturarak ve diz çökerek yapılan duruşlar (~150–250)',
+  'Standing, seated and kneeling poses':
+      'Ayakta, oturarak ve diz çökerek yapılan duruşlar',
   'Floor and supine poses': 'Yerde ve sırtüstü duruşlar',
   'Inversions': 'Ters duruşlar',
-  'Coached pose by pose, and set against a reference range.':
-      'Duruş bazında rehberlik ve referans aralığıyla değerlendirme.',
-  'Guided, but scored loosely — we say less because we can see less.':
-      'Rehberlik sunulur; kamera daha az gördüğü için değerlendirme sınırlıdır.',
-  'Shown by the avatar only. Nothing here is scored.':
-      'Yalnızca avatar gösterir; puanlama yapılmaz.',
-  'Coaching level not declared.': 'Rehberlik düzeyi belirtilmedi.',
+  'Pose-by-pose coaching and reference scoring are not available.':
+      'Duruş bazında koçluk ve referans puanlaması sunulmaz.',
+  'Guided camera coaching and scoring are not available.':
+      'Kamerayla rehberlik ve puanlama sunulmaz.',
+  'Avatar demonstrations and scoring are not available.':
+      'Avatar gösterimi ve puanlama sunulmaz.',
+  'Pose coaching is not available for this category.':
+      'Bu kategori için poz koçluğu sunulmaz.',
   'Self-occlusion: lying on the floor hides most landmarks from a side camera':
       'Yerde uzanırken vücut, yan kameradan birçok eklem noktasını örter.',
   'Pose models silently swap limb labels on inverted bodies with high confidence (family finding M-019)':
@@ -175,22 +176,22 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   'Inversions are demonstrated by the avatar only':
       'Ters duruşlar yalnız avatar tarafından gösterilir.',
   'Breath is never measured by the camera': 'Nefes kamera ile ölçülmez.',
-  'The joint angle the goal is defined by, re-measured on a fixed cadence':
-      'Hedefin tanımlandığı eklem açısı, belirli aralıklarla yeniden ölçülür.',
-  'How close you are in weeks or months — progress rate is individual and we do not predict it':
-      'Hedefe kaç hafta veya ay kaldığı tahmin edilmez; ilerleme hızı kişiye özeldir.',
-  "Changes smaller than our measurement noise: below that threshold we say 'no change', not 'improved'":
-      'Ölçüm gürültüsünden küçük farklar gelişme olarak yorumlanmaz.',
-  'The same movement tests, weighted toward the areas your routine loads most':
-      'Aynı hareket testleri, günlük rutininin en çok kullandığı bölgelere odaklanır.',
-  "Your occupation's injury risk — we shape content, we do not assess risk":
-      'Mesleğine bağlı sakatlanma riski değerlendirilmez; içerik uyarlanır, risk puanı verilmez.',
-  "The mobility prerequisites the partner app's skills depend on":
-      'Diğer uygulamadaki becerilerin gerektirdiği hareketlilik temeli',
-  "Anything about the sport itself — that is the partner app's job":
-      'Sporun kendisi bu bölümde değerlendirilmez; ilgili uygulamanın konusudur.',
-  'Nothing. These sessions are guided by audio and timed — the camera stays off.':
-      'Bu bölümde kamera ölçümü yoktur. Sesli oturum içeriği bu sürümde sunulmaz.',
+  "No goal measurements or scheduled re-tests are available in this build.":
+      "Bu sürümde hedef ölçümleri veya zamanlanmış yeniden testler bulunmaz.",
+  "No estimate of weeks or months to a goal is available.":
+      "Bir hedefe kaç hafta veya ay kaldığına ilişkin tahmin sunulmaz.",
+  "No measurement-noise threshold or progress-change judgement is available.":
+      "Ölçüm gürültüsü eşiği veya ilerleme değişikliği değerlendirmesi sunulmaz.",
+  "No routine-weighted movement tests or personalised programmes are available in this build.":
+      "Bu sürümde rutinine göre ağırlıklandırılmış hareket testi veya kişiselleştirilmiş program bulunmaz.",
+  "No occupation-specific injury-risk assessment is available.":
+      "Mesleğe özgü sakatlanma riski değerlendirmesi sunulmaz.",
+  "No partner-app mobility checks or app handoffs are available in this build.":
+      "Bu sürümde diğer uygulamalara yönelik hareketlilik kontrolü veya uygulamaya aktarım bulunmaz.",
+  "Sports coaching is not provided by this family in this build.":
+      "Bu bölüm bu sürümde spor koçluğu sunmaz.",
+  "No audio-guided or timed sessions are available in this build. The camera is off.":
+      "Bu sürümde sesli rehberli veya zamanlayıcılı oturum bulunmaz. Kamera kapalıdır.",
   'Breath rate, depth or quality — a phone camera cannot measure breathing and we do not pretend otherwise':
       'Nefes hızı, derinliği veya kalitesi ölçülmez; telefon kamerası bunu güvenilir biçimde ölçemez.',
   'Meditation state or relaxation of any kind':
@@ -245,14 +246,14 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   'Plank Hold': 'Plank duruşu',
   'Hatha, Vinyasa and Yin are listed here. Classes and course content are not available in this version.':
       'Hatha, Vinyasa ve Yin burada listelenir; ders ve kurs içerikleri bu sürümde yoktur.',
-  'Long-run paths with a weekly angle trend, not a stack of videos.':
-      'Esneklik hedefleri için yollar planlanmıştır; program içeriği henüz yoktur.',
-  'Programmes shaped around what your body does all day.':
-      'Günlük hareket alışkanlıklarına yönelik programlar planlanmıştır; içerikleri henüz yoktur.',
-  'Mobility prep that hands off to the training app you actually use.':
-      'Diğer sporlar için hareket hazırlıkları planlanmıştır; içerikleri henüz yoktur.',
-  'No camera and no scoring in this family. Nothing is built behind this name in this build.':
-      'Bu bölümde kamera ölçümü veya puanlama yoktur. Bu sürümde içerik bulunmaz.',
+  "Flexibility goal paths are listed in the plan. No programme, trend chart or scheduled re-measurement is included in this release.":
+      "Esneklik hedefleri için yollar planda listelenir. Bu sürümde program, eğilim grafiği veya zamanlanmış yeniden ölçüm bulunmaz.",
+  "Day-to-day movement programmes are listed in the plan. This release does not adapt programmes or weight tests to your routine.":
+      "Günlük hareket programları planda listelenir. Bu sürümde programlar veya test ağırlıkları günlük rutinine uyarlanmaz.",
+  "Warm-ups for other sports are listed in the plan. No warm-up content or handoff to another app is included in this release.":
+      "Diğer sporlar için hazırlıklar planda listelenir. Bu sürümde hazırlık içeriği veya başka uygulamaya aktarım bulunmaz.",
+  "No breath or wind-down sessions, audio guidance or session timer are included in this release.":
+      "Bu sürümde nefes veya sakinleşme oturumu, sesli rehberlik veya oturum zamanlayıcısı bulunmaz.",
   'Stand side-on to the camera. Let your arms hang. Slowly raise the arm nearest the camera as high overhead as you can, keep the elbow straight, hold for two seconds, then lower.':
       'Kameraya yan dön. Kollarını serbest bırak. Kameraya yakın kolunu dirseğini düz tutarak yavaşça yukarı kaldır, iki saniye tut ve indir.',
   'Stand side-on to the camera, feet shoulder-width apart, arms forward. Squat as low as you comfortably can, hold for two seconds, then stand back up.':

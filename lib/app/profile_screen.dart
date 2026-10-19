@@ -163,23 +163,25 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       measurementAvailable
                           ? '${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: true)} '
-                                '${localeText(context, 'Subscription sales are closed in this release. The Hatha yoga course works '
-                                    'without a camera. Course progress and self-checks '
-                                    'stay in local app storage. Existing measurement '
-                                    'records also remain on this device.', 'Bu sürümde abonelik satışı kapalıdır. Hatha yoga kursu kamera olmadan çalışır. '
-                                    'Kurs ilerlemesi ve öz denetimler yerel uygulama '
-                                    'alanında kalır. Önceki ölçüm kayıtları da bu cihazda kalır.')}'
+                                '${localeText(context, 'Subscription sales are closed in this release. Written yoga courses work '
+                                    'without a camera. Practice records stay on this device and reflect your own reports. '
+                                    'These records are not synced to your Motion account. '
+                                    'Self-check answers are not saved. Written recall notes are discarded when you leave the page. '
+                                    'Existing measurement records also remain on this device.', 'Bu sürümde abonelik satışı kapalıdır. Yazılı yoga kursları kamera olmadan çalışır. '
+                                    'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir. Bu kayıtlar Motion hesabına eşitlenmez. Öz denetim yanıtları kaydedilmez. '
+                                    'Yazılı hatırlama notları sayfadan çıkınca silinir. Önceki ölçüm kayıtları da bu cihazda kalır.')}'
                           : localeText(
                               context,
                               'Live camera measurements and subscription sales are '
-                                  'closed in this release. The Hatha yoga course works '
-                                  'without a camera. Course progress and self-checks '
-                                  'stay in local app storage. Existing measurement '
-                                  'records also remain on this device.',
+                                  'closed in this release. Written yoga courses work '
+                                  'without a camera. Practice records stay on this device and reflect your own reports. '
+                                  'These records are not synced to your Motion account. '
+                                  'Self-check answers are not saved. Written recall notes are discarded when you leave the page. '
+                                  'Existing measurement records also remain on this device.',
                               'Bu sürümde canlı kamera ölçümleri ve abonelik satışı '
-                                  'kapalıdır. Hatha yoga kursu kamera olmadan çalışır. '
-                                  'Kurs ilerlemesi ve öz denetimler yerel uygulama '
-                                  'alanında kalır. Önceki ölçüm kayıtları da bu cihazda kalır.',
+                                  'kapalıdır. Yazılı yoga kursları kamera olmadan çalışır. '
+                                  'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir. Bu kayıtlar Motion hesabına eşitlenmez. Öz denetim yanıtları kaydedilmez. '
+                                  'Yazılı hatırlama notları sayfadan çıkınca silinir. Önceki ölçüm kayıtları da bu cihazda kalır.',
                             ),
                       style: t.textTheme.bodyMedium,
                     ),

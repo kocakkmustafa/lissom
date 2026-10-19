@@ -194,8 +194,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                         Text(
                           localeText(
                             context,
-                            'Practise the Hatha yoga course without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
-                            'Hatha yoga kursunu hesap veya kamera olmadan çalışabilirsin. Motion hesabı isteğe bağlıdır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.',
+                            'Study the written yoga courses without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
+                            'Yazılı yoga kurslarını hesap veya kamera olmadan çalışabilirsin. Motion hesabı isteğe bağlıdır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.',
                           ),
                           style: t.textTheme.bodySmall,
                         ),
@@ -267,12 +267,12 @@ class _WelcomeStep extends StatelessWidget {
         Text(
           localeText(
             context,
-            'Lissom offers a progressive Hatha yoga course with practice tasks, '
-                'adaptations and self-checks. Course progress stays on this '
-                'device and reflects your own practice record. Live camera '
+            'Lissom offers written yoga courses with practice tasks, '
+                'adaptations and self-checks. Practice records stay on this '
+                'device and reflect your own reports. Live camera '
                 'measurements and subscription sales are closed in this release.',
             'Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren '
-                'sıralı bir Hatha yoga kursu sunar. Kurs ilerlemesi bu cihazda '
+                'yazılı yoga kursları sunar. Çalışma kayıtları bu cihazda '
                 'kalır ve kendi çalışma kaydını gösterir. Bu sürümde canlı '
                 'kamera ölçümleri ve abonelik satışı kapalıdır.',
           ),

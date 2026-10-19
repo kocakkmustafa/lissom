@@ -20,17 +20,79 @@
 /// varlığını ölçmek olurdu (bu deponun tekrar eden dersi: VARLIK ≠ ETKİ).
 library;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/app_facts.dart';
+import 'package:lissom/app/hatha_course_screen.dart';
+import 'package:lissom/app/hatha_progress.dart';
 import 'package:lissom/app/home_screen.dart';
 import 'package:lissom/app/lissom_theme.dart';
+import 'package:lissom/app/local_account_bridge.dart';
+import 'package:lissom/app/local_owner.dart';
+import 'package:lissom/app/progress_screen.dart';
 import 'package:lissom/app/session_history_view.dart';
 import 'package:lissom/app/shell.dart';
+import 'package:lissom/app/study_review.dart';
 import 'package:motion_core/motion_core.dart';
 
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
+
+// These helpers bound animation/IO waits. Real filesystem work is started by
+// runAsync at mount/tap time; a settled animation alone does not prove a save.
+Future<void> _refreshFrames(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 400));
+  await tester.pump();
+}
+
+Future<void> _refreshUntil(
+  WidgetTester tester,
+  bool Function() ready,
+  String stage,
+) async {
+  for (int attempt = 0; attempt < 100; attempt++) {
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump(const Duration(milliseconds: 25));
+    if (ready()) return;
+  }
+  fail('Timed out waiting for $stage');
+}
+
+Future<void> _refreshVisible(WidgetTester tester, Finder target) async {
+  if (target.hitTestable().evaluate().isEmpty) {
+    await tester.scrollUntilVisible(
+      target,
+      300,
+      maxScrolls: 60,
+      scrollable: find.byType(Scrollable).last,
+    );
+  }
+  await tester.ensureVisible(target);
+  await _refreshFrames(tester);
+  expect(target.hitTestable(), findsOneWidget);
+}
+
+Future<void> _refreshTap(WidgetTester tester, Finder target) async {
+  await _refreshVisible(tester, target);
+  await tester.runAsync(() async {
+    await tester.tap(target.hitTestable());
+  });
+  await _refreshFrames(tester);
+}
+
+Future<void> _refreshTab(WidgetTester tester, String label) => _refreshTap(
+  tester,
+  find.descendant(
+    of: find.byType(NavigationBar),
+    matching: find.text(label),
+  ),
+);
 
 void main() {
   testWidgets(
@@ -126,5 +188,207 @@ void main() {
           'yeniden okumak tazelemeyi ANLAMSIZ kılardı (koşulsuz tazeleyen '
           'bir yüzey, yukarıdaki testi de geçerdi — L-258 sınıfı)',
     );
+  });
+
+  for (final String language in <String>['en', 'tr']) {
+    testWidgets(
+      '$language recall course save refreshes actual JSONL progress on return',
+      (WidgetTester tester) async {
+        pinNarrowSurface(tester);
+        final AppFacts base = factsFromDisk();
+        final course = base.hatha!;
+        final Directory support = (await tester.runAsync(
+          () => Directory.systemTemp.createTemp('lissom-recall-refresh-'),
+        ))!;
+        final LissomLocalOwner owner = LissomLocalOwner(
+          userId: null,
+          epoch: 1,
+          supportDirectory: support,
+        );
+        final LissomLocalScope scope = LissomLocalScope.guestWithOwner(owner);
+        int loads = 0;
+        Future<AppFacts> loader() async {
+          loads++;
+          final HathaProgress progress =
+              await (await openHathaProgressStore(scope: scope)).read();
+          return AppFacts(
+            ia: base.ia,
+            battery: base.battery,
+            liveness: base.liveness,
+            history: base.history,
+            hatha: course,
+            hathaProgress: progress,
+          );
+        }
+
+        final String emptyText = language == 'tr'
+            ? '0/60 ders çalışıldı · öz kayıt'
+            : '0/60 lessons practised · self-recorded';
+        final String savedText = language == 'tr'
+            ? '1/60 ders çalışıldı · öz kayıt'
+            : '1/60 lessons practised · self-recorded';
+        final String courseSavedText = language == 'tr'
+            ? '60 dersten 1 tanesi çalışıldı'
+            : '1 of 60 lessons practised';
+        final String library = language == 'tr' ? 'Kütüphane' : 'Library';
+        final String progress = language == 'tr' ? 'İlerleme' : 'Progress';
+
+        try {
+          expect(course.lessons.first.id, 'h01');
+          expect(course.lessons, hasLength(60));
+          // The owner supplies the temporary support directory. The shell and
+          // course therefore use real JSONL IO without path_provider/user data.
+          await tester.runAsync(() async {
+            await tester.pumpWidget(
+              MaterialApp(
+                locale: Locale(language),
+                supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+                localizationsDelegates: GlobalMaterialLocalizations.delegates,
+                theme: buildLissomTheme(),
+                home: LissomShell(
+                  loader: loader,
+                  localScope: scope,
+                  measurementAvailable: false,
+                ),
+              ),
+            );
+          });
+          await _refreshUntil(
+            tester,
+            () => find.byType(NavigationBar).evaluate().isNotEmpty,
+            'initial shell read',
+          );
+          expect(loads, 1);
+          await _refreshTab(tester, progress);
+          await _refreshVisible(tester, find.text(emptyText));
+          await _refreshTab(tester, library);
+          expect(loads, 1, reason: 'Tab changes must not mask a missing callback');
+
+          await _refreshTap(tester, find.byKey(const Key('study-review-entry')));
+          final Finder entry = find.byKey(const Key('study-course-hatha'));
+          await _refreshTap(
+            tester,
+            find.descendant(of: entry, matching: find.byType(FilledButton)),
+          );
+          await _refreshUntil(
+            tester,
+            () => find.byType(HathaCourseScreen).evaluate().isNotEmpty,
+            'actual Hatha course',
+          );
+          await _refreshTap(tester, find.byKey(HathaCourseScreen.continueKey));
+          await _refreshUntil(
+            tester,
+            () => find.byType(HathaLessonScreen).evaluate().isNotEmpty,
+            'actual h01 lesson',
+          );
+          expect(
+            tester.widget<HathaLessonScreen>(find.byType(HathaLessonScreen))
+                .lesson.id,
+            'h01',
+          );
+          await _refreshTap(tester, find.byKey(HathaLessonScreen.reflectionKey));
+          await _refreshTap(tester, find.byKey(HathaLessonScreen.practiceKey));
+          await _refreshUntil(
+            tester,
+            () => find.byType(HathaLessonScreen).evaluate().isEmpty,
+            'completed save returning to the course',
+          );
+          await _refreshVisible(
+            tester,
+            find.byKey(HathaCourseScreen.progressKey),
+          );
+          await _refreshUntil(
+            tester,
+            () => find.text(courseSavedText).hitTestable().evaluate().isNotEmpty,
+            'refreshed visible course count',
+          );
+
+          final HathaProgress disk = (await tester.runAsync(() async =>
+              (await openHathaProgressStore(scope: scope)).read()))!;
+          expect(disk.records, hasLength(1));
+          expect(disk.unreadableRecords, 0);
+          expect(disk.records.single.lessonId, 'h01');
+          expect(disk.records.single.courseId, course.id);
+          expect(disk.records.single.courseVersion, course.version);
+          expect(disk.practicedIn(course), <String>{'h01'});
+          expect(loads, 1, reason: 'A child course must not refresh the shell yet');
+
+          await _refreshTap(tester, find.byType(BackButton));
+          expect(find.byType(StudyReviewPage), findsOneWidget);
+          expect(loads, 1, reason: 'Only the whole recall return refreshes facts');
+          await _refreshTap(tester, find.byType(BackButton));
+          await _refreshUntil(
+            tester,
+            () => loads == 2 &&
+                find.byType(NavigationBar).evaluate().isNotEmpty,
+            'single recall-return reload',
+          );
+          await _refreshTab(tester, progress);
+          await _refreshUntil(
+            tester,
+            () => find.byType(ProgressScreen).evaluate().isNotEmpty &&
+                tester.widget<ProgressScreen>(find.byType(ProgressScreen))
+                    .facts.hathaProgress!.practicedIn(course).length == 1,
+            'fresh Progress facts from the persisted record',
+          );
+          await _refreshVisible(tester, find.text(savedText));
+          expect(find.text(emptyText), findsNothing);
+          expect(loads, 2);
+          expect(tester.takeException(), isNull);
+        } finally {
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.runAsync(() async {
+            await owner.retireAndDrain();
+            await support.delete(recursive: true);
+          });
+        }
+      },
+    );
+  }
+
+  testWidgets('one recall route and callback for rapid repeated entry taps', (
+    WidgetTester tester,
+  ) async {
+    pinNarrowSurface(tester);
+    int returns = 0;
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(body: StudyReviewEntry(onCourseDone: () => returns++)),
+    ));
+    final Finder entry = find.byKey(const Key('study-review-entry'));
+    await tester.tap(entry);
+    await tester.tap(entry);
+    await _refreshFrames(tester);
+    expect(find.byType(StudyReviewPage, skipOffstage: false), findsOneWidget);
+    expect(returns, 0);
+    await _refreshTap(tester, find.byType(BackButton));
+    expect(find.byType(StudyReviewPage, skipOffstage: false), findsNothing);
+    expect(returns, 1);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('disposed recall entry does not call a late return callback', (
+    WidgetTester tester,
+  ) async {
+    pinNarrowSurface(tester);
+    final ValueNotifier<bool> showEntry = ValueNotifier<bool>(true);
+    addTearDown(showEntry.dispose);
+    int returns = 0;
+    await tester.pumpWidget(MaterialApp(
+      home: ValueListenableBuilder<bool>(
+        valueListenable: showEntry,
+        builder: (BuildContext context, bool visible, Widget? child) => Scaffold(
+          body: visible
+              ? StudyReviewEntry(onCourseDone: () => returns++)
+              : const Text('Entry removed'),
+        ),
+      ),
+    ));
+    await _refreshTap(tester, find.byKey(const Key('study-review-entry')));
+    showEntry.value = false;
+    await tester.pump();
+    await _refreshTap(tester, find.byType(BackButton));
+    expect(find.text('Entry removed'), findsOneWidget);
+    expect(returns, 0);
+    expect(tester.takeException(), isNull);
   });
 }
