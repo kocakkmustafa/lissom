@@ -33,6 +33,11 @@ jobs:
         # patlamalı, tahmin etmemeli.
         run: python3 tools/config_check.py
 
+      - name: Sekiz dil katalog sözleşmesi ve negatif kontroller
+        run: |
+          python3 -B -m unittest discover -s tools -p 'test_*localization.py'
+          python3 -B tools/check_content_localization.py
+
       - name: Faz config değişmezleri
         # Timeout'suz bir faz, çıkış koşulunu kaçırdığında sonsuza park eder ve
         # bu dışarıdan "kullanıcı hareketsiz" gibi görünür — çekirdeğin kendi
@@ -59,6 +64,9 @@ jobs:
       - name: Süzgecin kendisi çalışıyor mu (negatif test)
         # Bulmayan bir denetim ile bozuk bir denetim dışarıdan aynı görünür.
         run: python3 tools/lint_selftest.py
+
+      - name: Katalog wellness bağlamının sınırları
+        run: python3 -B -m unittest discover -s tools -p 'test_wellness_catalog.py'
 
   flutter-checks:
     name: Flutter analyze + test + Android release build (L-348/LIS-P0-002)
