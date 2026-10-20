@@ -18,7 +18,15 @@ final class LissomLocalWriteGuard {
   static final Map<String, LissomLocalOwner> _legacyOwners =
       <String, LissomLocalOwner>{};
 
-  Future<T> read<T>(Future<T> Function() operation) => owner.io.run(operation);
+  /// A read admitted after a write observes that write's terminal state.
+  /// Reads do not join the write queue: a writer must use its private reader
+  /// when checking prerequisites, so it cannot wait for its own completion.
+  Future<T> read<T>(Future<T> Function() operation) => owner.io.run(() async {
+    final Future<void>? precedingWrites = _tails[directoryPath];
+    if (precedingWrites != null) await precedingWrites;
+    owner.checkActive();
+    return operation();
+  });
 
   Future<T> write<T>(Future<T> Function() operation) => owner.io.run(
     () => _serialize(directoryPath, () {

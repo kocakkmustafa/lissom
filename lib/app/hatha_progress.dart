@@ -147,7 +147,9 @@ final class JsonlHathaProgressStore implements HathaProgressStore {
     _assertWritable();
     final HathaLesson? lesson = course.lessonById(lessonId);
     if (lesson == null) throw ArgumentError.value(lessonId, 'lessonId');
-    final HathaProgress before = await read();
+    // Already inside the directory's write queue. The public read barrier
+    // waits for admitted writes, including this one; use the private reader.
+    final HathaProgress before = await _read();
     final Set<String> practiced = before.practicedIn(course);
     if (!practiced.containsAll(lesson.prerequisites)) {
       throw StateError('Practice the prerequisite lesson first');
