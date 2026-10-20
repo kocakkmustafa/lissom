@@ -210,7 +210,9 @@ class _PhaseRuntime implements MotionAccountRuntime {
   @override
   final _FixtureAccount account = _FixtureAccount();
   @override
-  final ValueNotifier<MotionIdentityPhase> phase = ValueNotifier(MotionIdentityPhase.signedOut);
+  final ValueNotifier<MotionIdentityPhase> phase = ValueNotifier(
+    MotionIdentityPhase.signedOut,
+  );
   @override
   final ValueNotifier<String?> userId = ValueNotifier<String?>(null);
   @override

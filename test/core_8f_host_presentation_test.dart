@@ -107,7 +107,9 @@ final class _IntentRuntime implements MotionAccountRuntime {
   @override
   final _IntentAccount account;
   @override
-  final ValueNotifier<MotionIdentityPhase> phase = ValueNotifier(MotionIdentityPhase.verified);
+  final ValueNotifier<MotionIdentityPhase> phase = ValueNotifier(
+    MotionIdentityPhase.verified,
+  );
   @override
   final ValueNotifier<String?> userId = ValueNotifier<String?>(_id);
   @override

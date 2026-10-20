@@ -57,10 +57,7 @@ void main() {
         selectedBefore.flagsCollection.isChecked == CheckedState.isTrue,
         isTrue,
       );
-      expect(
-        selectedBefore.flagsCollection.isInMutuallyExclusiveGroup,
-        isTrue,
-      );
+      expect(selectedBefore.flagsCollection.isInMutuallyExclusiveGroup, isTrue);
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
       await tester.pump();
       expect(c.isSaving, isTrue);
@@ -74,7 +71,8 @@ void main() {
         final tile = find.byKey(Key('profile.appearance.option.${mode.name}'));
         expect(tester.widget<RadioListTile<ThemeMode>>(tile).enabled, isFalse);
         expect(
-          tester.getSemantics(tile).flagsCollection.isEnabled == Tristate.isTrue,
+          tester.getSemantics(tile).flagsCollection.isEnabled ==
+              Tristate.isTrue,
           isFalse,
         );
       }
