@@ -189,78 +189,180 @@ void main() {
     },
   );
 
-  test('explicit Chinese script wins over region and preserves device order', () {
-    const hans = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
-    const vectors = <(List<Locale>?, Locale)>[
-      (<Locale>[
-        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'CN'),
-        Locale('ko'),
-      ], Locale('ko')),
-      (<Locale>[
-        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'SG'),
-        Locale('hi'),
-      ], Locale('hi')),
-      (<Locale>[
-        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'TW'),
-      ], hans),
-      (<Locale>[
-        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'HK'),
-      ], hans),
-      (<Locale>[
-        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'MO'),
-      ], hans),
-      (<Locale>[
-        Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Latn', countryCode: 'CN'),
-        Locale('pl'),
-      ], Locale('pl')),
-      (<Locale>[Locale('zh', 'TW'), Locale('zz'), Locale('pt', 'PT'), Locale('ko')],
-        Locale('pt', 'BR')),
-      (<Locale>[Locale('ko'), hans], Locale('ko')),
-      (<Locale>[], Locale('en')),
-      (null, Locale('en')),
-    ];
-    for (final vector in vectors) {
-      expect(resolveLissomLocale(vector.$1, const <Locale>[]), vector.$2,
-        reason: 'Explicit independent expectation for ${vector.$1}');
-    }
-    const rejected = <Locale>[
-      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'CN'),
-      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'SG'),
-      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'),
-      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Latn', countryCode: 'CN'),
-      Locale('zz'),
-    ];
-    for (final locale in rejected) {
-      expect(isLissomLocaleSupported(locale), isFalse);
-      expect(const LissomLocalizationsDelegate().isSupported(locale), isFalse);
-    }
-    for (final region in <String>['TW', 'HK', 'MO']) {
-      final locale = Locale.fromSubtags(languageCode: 'zh',
-        scriptCode: 'Hans', countryCode: region);
-      expect(isLissomLocaleSupported(locale), isTrue);
-      expect(const LissomLocalizationsDelegate().isSupported(locale), isTrue);
-    }
-  });
+  test(
+    'explicit Chinese script wins over region and preserves device order',
+    () {
+      const hans = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
+      const vectors = <(List<Locale>?, Locale)>[
+        (
+          <Locale>[
+            Locale.fromSubtags(
+              languageCode: 'zh',
+              scriptCode: 'Hant',
+              countryCode: 'CN',
+            ),
+            Locale('ko'),
+          ],
+          Locale('ko'),
+        ),
+        (
+          <Locale>[
+            Locale.fromSubtags(
+              languageCode: 'zh',
+              scriptCode: 'Hant',
+              countryCode: 'SG',
+            ),
+            Locale('hi'),
+          ],
+          Locale('hi'),
+        ),
+        (
+          <Locale>[
+            Locale.fromSubtags(
+              languageCode: 'zh',
+              scriptCode: 'Hans',
+              countryCode: 'TW',
+            ),
+          ],
+          hans,
+        ),
+        (
+          <Locale>[
+            Locale.fromSubtags(
+              languageCode: 'zh',
+              scriptCode: 'Hans',
+              countryCode: 'HK',
+            ),
+          ],
+          hans,
+        ),
+        (
+          <Locale>[
+            Locale.fromSubtags(
+              languageCode: 'zh',
+              scriptCode: 'Hans',
+              countryCode: 'MO',
+            ),
+          ],
+          hans,
+        ),
+        (
+          <Locale>[
+            Locale.fromSubtags(
+              languageCode: 'zh',
+              scriptCode: 'Latn',
+              countryCode: 'CN',
+            ),
+            Locale('pl'),
+          ],
+          Locale('pl'),
+        ),
+        (
+          <Locale>[
+            Locale('zh', 'TW'),
+            Locale('zz'),
+            Locale('pt', 'PT'),
+            Locale('ko'),
+          ],
+          Locale('pt', 'BR'),
+        ),
+        (<Locale>[Locale('ko'), hans], Locale('ko')),
+        (<Locale>[], Locale('en')),
+        (null, Locale('en')),
+      ];
+      for (final vector in vectors) {
+        expect(
+          resolveLissomLocale(vector.$1, const <Locale>[]),
+          vector.$2,
+          reason: 'Explicit independent expectation for ${vector.$1}',
+        );
+      }
+      const rejected = <Locale>[
+        Locale.fromSubtags(
+          languageCode: 'zh',
+          scriptCode: 'Hant',
+          countryCode: 'CN',
+        ),
+        Locale.fromSubtags(
+          languageCode: 'zh',
+          scriptCode: 'Hant',
+          countryCode: 'SG',
+        ),
+        Locale.fromSubtags(
+          languageCode: 'zh',
+          scriptCode: 'Hant',
+          countryCode: 'TW',
+        ),
+        Locale.fromSubtags(
+          languageCode: 'zh',
+          scriptCode: 'Latn',
+          countryCode: 'CN',
+        ),
+        Locale('zz'),
+      ];
+      for (final locale in rejected) {
+        expect(isLissomLocaleSupported(locale), isFalse);
+        expect(
+          const LissomLocalizationsDelegate().isSupported(locale),
+          isFalse,
+        );
+      }
+      for (final region in <String>['TW', 'HK', 'MO']) {
+        final locale = Locale.fromSubtags(
+          languageCode: 'zh',
+          scriptCode: 'Hans',
+          countryCode: region,
+        );
+        expect(isLissomLocaleSupported(locale), isTrue);
+        expect(const LissomLocalizationsDelegate().isSupported(locale), isTrue);
+      }
+    },
+  );
 
-  test('Chinese script selection respects the next supported device language', () {
-    const simplified = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
-    const traditional = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');
-    for (final locale in <Locale>[const Locale('zh'), const Locale('zh', 'CN'),
-        const Locale('zh', 'SG'), simplified]) {
-      expect(resolveLissomLocale(<Locale>[locale], const []), simplified);
-      expect(isLissomLocaleSupported(locale), isTrue);
-    }
-    for (final locale in <Locale>[traditional, const Locale('zh', 'TW'),
-        const Locale('zh', 'HK'), const Locale('zh', 'MO')]) {
-      expect(resolveLissomLocale(<Locale>[locale, const Locale('ko')], const []),
-          const Locale('ko'));
-      expect(resolveLissomLocale(<Locale>[locale], const []), const Locale('en'));
-      expect(const LissomLocalizationsDelegate().isSupported(locale), isFalse);
-    }
-    expect(lissomLocaleForTag('zh-Hans'), simplified);
-    expect(lissomLocaleForTag('zh-Hant'), isNull);
-    expect(lissomLocaleForTag('zh'), isNull);
-  });
+  test(
+    'Chinese script selection respects the next supported device language',
+    () {
+      const simplified = Locale.fromSubtags(
+        languageCode: 'zh',
+        scriptCode: 'Hans',
+      );
+      const traditional = Locale.fromSubtags(
+        languageCode: 'zh',
+        scriptCode: 'Hant',
+      );
+      for (final locale in <Locale>[
+        const Locale('zh'),
+        const Locale('zh', 'CN'),
+        const Locale('zh', 'SG'),
+        simplified,
+      ]) {
+        expect(resolveLissomLocale(<Locale>[locale], const []), simplified);
+        expect(isLissomLocaleSupported(locale), isTrue);
+      }
+      for (final locale in <Locale>[
+        traditional,
+        const Locale('zh', 'TW'),
+        const Locale('zh', 'HK'),
+        const Locale('zh', 'MO'),
+      ]) {
+        expect(
+          resolveLissomLocale(<Locale>[locale, const Locale('ko')], const []),
+          const Locale('ko'),
+        );
+        expect(
+          resolveLissomLocale(<Locale>[locale], const []),
+          const Locale('en'),
+        );
+        expect(
+          const LissomLocalizationsDelegate().isSupported(locale),
+          isFalse,
+        );
+      }
+      expect(lissomLocaleForTag('zh-Hans'), simplified);
+      expect(lissomLocaleForTag('zh-Hant'), isNull);
+      expect(lissomLocaleForTag('zh'), isNull);
+    },
+  );
 
   test('new integer cardinal boundaries preserve Polish and Hindi grammar', () {
     for (final n in <int>[0, 5, 11, 12, 14, 21, 25, 101, 112]) {
@@ -587,7 +689,15 @@ void main() {
           expect(date, material.formatFullDate(timestamp.toLocal()));
           final String decimal = localizedDecimal(context, 12.5);
           final String separator =
-              const <String>{'tr', 'pt-BR', 'de', 'fr', 'it', 'id', 'pl'}.contains(tag)
+              const <String>{
+                'tr',
+                'pt-BR',
+                'de',
+                'fr',
+                'it',
+                'id',
+                'pl',
+              }.contains(tag)
               ? ','
               : '.';
           expect(

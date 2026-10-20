@@ -164,25 +164,34 @@ final class LissomPalette extends ThemeExtension<LissomPalette> {
       (theme.brightness == Brightness.dark ? dark : light);
 
   LinearGradient get screenBackground => LinearGradient(
-    begin: Alignment.topLeft, end: Alignment.bottomRight,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     colors: <Color>[screenStart, screenMiddle, screenEnd],
     stops: const <double>[0, .46, 1],
   );
   LinearGradient get warmCardBackground => LinearGradient(
-    begin: Alignment.topLeft, end: Alignment.bottomRight,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     colors: <Color>[card, cardWarmEnd],
   );
   LinearGradient get neutralCardBackground => LinearGradient(
-    begin: Alignment.topLeft, end: Alignment.bottomRight,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     colors: <Color>[card, cardNeutralEnd],
   );
   LinearGradient get declarationBackground => LinearGradient(
-    begin: Alignment.topLeft, end: Alignment.bottomRight,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     colors: <Color>[bannerStart, bannerEnd],
   );
-  List<BoxShadow> get softShadow => <BoxShadow>[BoxShadow(
-    color: shadow, blurRadius: 44, offset: const Offset(0,22), spreadRadius: -18,
-  )];
+  List<BoxShadow> get softShadow => <BoxShadow>[
+    BoxShadow(
+      color: shadow,
+      blurRadius: 44,
+      offset: const Offset(0, 22),
+      spreadRadius: -18,
+    ),
+  ];
 
   @override
   LissomPalette copyWith({
@@ -261,7 +270,9 @@ final class LissomPalette extends ThemeExtension<LissomPalette> {
 
   @override
   LissomPalette lerp(covariant LissomPalette? other, double t) {
-    if (other == null) { return this; }
+    if (other == null) {
+      return this;
+    }
     return LissomPalette(
       canvas: Color.lerp(canvas, other.canvas, t)!,
       card: Color.lerp(card, other.card, t)!,
@@ -279,8 +290,16 @@ final class LissomPalette extends ThemeExtension<LissomPalette> {
       primaryPressed: Color.lerp(primaryPressed, other.primaryPressed, t)!,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t)!,
       secondary: Color.lerp(secondary, other.secondary, t)!,
-      secondaryContainer: Color.lerp(secondaryContainer, other.secondaryContainer, t)!,
-      onSecondaryContainer: Color.lerp(onSecondaryContainer, other.onSecondaryContainer, t)!,
+      secondaryContainer: Color.lerp(
+        secondaryContainer,
+        other.secondaryContainer,
+        t,
+      )!,
+      onSecondaryContainer: Color.lerp(
+        onSecondaryContainer,
+        other.onSecondaryContainer,
+        t,
+      )!,
       bannerStart: Color.lerp(bannerStart, other.bannerStart, t)!,
       bannerEnd: Color.lerp(bannerEnd, other.bannerEnd, t)!,
       onBanner: Color.lerp(onBanner, other.onBanner, t)!,
@@ -288,10 +307,18 @@ final class LissomPalette extends ThemeExtension<LissomPalette> {
       divider: Color.lerp(divider, other.divider, t)!,
       focusRing: Color.lerp(focusRing, other.focusRing, t)!,
       disabledSurface: Color.lerp(disabledSurface, other.disabledSurface, t)!,
-      disabledForeground: Color.lerp(disabledForeground, other.disabledForeground, t)!,
+      disabledForeground: Color.lerp(
+        disabledForeground,
+        other.disabledForeground,
+        t,
+      )!,
       error: Color.lerp(error, other.error, t)!,
       errorContainer: Color.lerp(errorContainer, other.errorContainer, t)!,
-      onErrorContainer: Color.lerp(onErrorContainer, other.onErrorContainer, t)!,
+      onErrorContainer: Color.lerp(
+        onErrorContainer,
+        other.onErrorContainer,
+        t,
+      )!,
       markerFill: Color.lerp(markerFill, other.markerFill, t)!,
       onMarker: Color.lerp(onMarker, other.onMarker, t)!,
       selection: Color.lerp(selection, other.selection, t)!,

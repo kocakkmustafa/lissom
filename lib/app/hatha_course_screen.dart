@@ -61,14 +61,18 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
   Set<String> get _practiced => _progress.practicedIn(widget.course);
 
   Future<void> _open(HathaLesson lesson) async {
-    if (_opening) { return; }
+    if (_opening) {
+      return;
+    }
     setState(() {
       _opening = true;
       _loadFailed = false;
     });
     try {
       final HathaProgressStore store = await widget.storeLoader();
-      if (!mounted) { return; }
+      if (!mounted) {
+        return;
+      }
       await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
           builder: (_) => HathaLessonScreen(
@@ -84,11 +88,17 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
         ),
       );
       final HathaProgress updated = await store.read();
-      if (mounted) { setState(() => _progress = updated); }
+      if (mounted) {
+        setState(() => _progress = updated);
+      }
     } on Object {
-      if (mounted) { setState(() => _loadFailed = true); }
+      if (mounted) {
+        setState(() => _loadFailed = true);
+      }
     } finally {
-      if (mounted) { setState(() => _opening = false); }
+      if (mounted) {
+        setState(() => _opening = false);
+      }
     }
   }
 
@@ -104,7 +114,7 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
@@ -287,47 +297,49 @@ class _ModuleSection extends StatelessWidget {
           for (final HathaLesson lesson in module.lessons)
             Material(
               type: MaterialType.transparency,
-              child: LissomFocusFrame(child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                dense: true,
-                leading: Icon(
-                  practiced.contains(lesson.id)
-                      ? Icons.check_circle_outline
-                      : lesson.prerequisites.every(practiced.contains)
-                      ? Icons.radio_button_unchecked
-                      : Icons.lock_outline,
-                  color: LissomPalette.of(context).accentText,
+              child: LissomFocusFrame(
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  leading: Icon(
+                    practiced.contains(lesson.id)
+                        ? Icons.check_circle_outline
+                        : lesson.prerequisites.every(practiced.contains)
+                        ? Icons.radio_button_unchecked
+                        : Icons.lock_outline,
+                    color: LissomPalette.of(context).accentText,
+                  ),
+                  title: Text(hathaText(context, lesson.title)),
+                  subtitle: Text(
+                    lesson.prerequisites.every(practiced.contains)
+                        ? localeTemplate(
+                            context,
+                            '{minutes} min · guided practice',
+                            '{minutes} dk · rehberli çalışma',
+                            <String, Object>{
+                              'minutes': localizedInteger(
+                                context,
+                                lesson.minutes,
+                              ),
+                            },
+                          )
+                        : localeText(
+                            context,
+                            allowPreview
+                                ? 'Preview only · practise the earlier lesson first'
+                                : 'Practice the earlier lesson first',
+                            allowPreview
+                                ? 'Yalnız inceleme · önce önceki dersi çalış'
+                                : 'Önce önceki dersi çalış',
+                          ),
+                  ),
+                  onTap:
+                      allowPreview ||
+                          lesson.prerequisites.every(practiced.contains)
+                      ? () => onOpen(lesson)
+                      : null,
                 ),
-                title: Text(hathaText(context, lesson.title)),
-                subtitle: Text(
-                  lesson.prerequisites.every(practiced.contains)
-                      ? localeTemplate(
-                          context,
-                          '{minutes} min · guided practice',
-                          '{minutes} dk · rehberli çalışma',
-                          <String, Object>{
-                            'minutes': localizedInteger(
-                              context,
-                              lesson.minutes,
-                            ),
-                          },
-                        )
-                      : localeText(
-                          context,
-                          allowPreview
-                              ? 'Preview only · practise the earlier lesson first'
-                              : 'Practice the earlier lesson first',
-                          allowPreview
-                              ? 'Yalnız inceleme · önce önceki dersi çalış'
-                              : 'Önce önceki dersi çalış',
-                        ),
-                ),
-                onTap:
-                    allowPreview ||
-                        lesson.prerequisites.every(practiced.contains)
-                    ? () => onOpen(lesson)
-                    : null,
-              )),
+              ),
             ),
         ],
       ),
@@ -392,7 +404,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) { return; }
+    if (state == AppLifecycleState.resumed) {
+      return;
+    }
     _dateBoundary?.cancel();
     _preparation.reset();
     if (mounted) {
@@ -406,11 +420,15 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
 
   void _scheduleDateBoundary() {
     _dateBoundary?.cancel();
-    if (!_requiresPreparation || !_preparation.acknowledged) { return; }
+    if (!_requiresPreparation || !_preparation.acknowledged) {
+      return;
+    }
     _dateBoundary = Timer(
       _preparation.untilNextDay() + const Duration(milliseconds: 20),
       () {
-        if (!mounted) { return; }
+        if (!mounted) {
+          return;
+        }
         if (_preparation.acknowledged) {
           _scheduleDateBoundary();
         } else {
@@ -440,9 +458,13 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
       await widget.store.markPracticed(widget.course, widget.lesson.id);
       if (mounted) Navigator.of(context).pop(true);
     } on Object {
-      if (mounted) { setState(() => _saveFailed = true); }
+      if (mounted) {
+        setState(() => _saveFailed = true);
+      }
     } finally {
-      if (mounted) { setState(() => _saving = false); }
+      if (mounted) {
+        setState(() => _saving = false);
+      }
     }
   }
 
@@ -455,7 +477,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
@@ -698,30 +720,32 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                     ),
                   ),
                   for (final String sourceId in lesson.sourceIds)
-                    LissomFocusFrame(child: ListTile(
-                      title: Text(
-                        Uri.parse(widget.course.sources[sourceId]!).host,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SelectableText(widget.course.sources[sourceId]!),
-                          if (widget.course.sourceScopes[sourceId]
-                              case final HathaSourceScope scope) ...<Widget>[
-                            Text(
-                              '${localeText(context, 'Supports only:', 'Yalnız destekler:')} '
-                              '${hathaText(context, scope.supports)}',
-                              key: Key('hatha.sourceScope.$sourceId'),
-                            ),
-                            Text(
-                              '${localeText(context, 'Does not establish:', 'Kanıtlamaz:')} '
-                              '${hathaText(context, scope.doesNotSupport)}',
-                              key: Key('hatha.sourceLimit.$sourceId'),
-                            ),
+                    LissomFocusFrame(
+                      child: ListTile(
+                        title: Text(
+                          Uri.parse(widget.course.sources[sourceId]!).host,
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SelectableText(widget.course.sources[sourceId]!),
+                            if (widget.course.sourceScopes[sourceId]
+                                case final HathaSourceScope scope) ...<Widget>[
+                              Text(
+                                '${localeText(context, 'Supports only:', 'Yalnız destekler:')} '
+                                '${hathaText(context, scope.supports)}',
+                                key: Key('hatha.sourceScope.$sourceId'),
+                              ),
+                              Text(
+                                '${localeText(context, 'Does not establish:', 'Kanıtlamaz:')} '
+                                '${hathaText(context, scope.doesNotSupport)}',
+                                key: Key('hatha.sourceLimit.$sourceId'),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
-                    )),
+                    ),
                 ],
               ),
               if (_saveFailed)
@@ -734,26 +758,28 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   style: TextStyle(color: theme.colorScheme.error),
                 ),
               if (!_readOnly)
-                LissomFocusFrame(child: CheckboxListTile(
-                  key: HathaLessonScreen.reflectionKey,
-                  contentPadding: EdgeInsets.zero,
-                  value: _reflected,
-                  onChanged: _saving
-                      ? null
-                      : (bool? value) =>
-                            setState(() => _reflected = value ?? false),
-                  title: Text(
-                    localeText(
-                      context,
-                      widget.course.recordsParticipation
-                          ? 'I answered the self-check and want to record participation; this is not observed physical skill.'
-                          : 'I answered the self-check and want to record my practice.',
-                      widget.course.recordsParticipation
-                          ? 'Öz denetimi yanıtladım ve katılımı kaydetmek istiyorum; bu gözlenmiş fiziksel beceri değildir.'
-                          : 'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
+                LissomFocusFrame(
+                  child: CheckboxListTile(
+                    key: HathaLessonScreen.reflectionKey,
+                    contentPadding: EdgeInsets.zero,
+                    value: _reflected,
+                    onChanged: _saving
+                        ? null
+                        : (bool? value) =>
+                              setState(() => _reflected = value ?? false),
+                    title: Text(
+                      localeText(
+                        context,
+                        widget.course.recordsParticipation
+                            ? 'I answered the self-check and want to record participation; this is not observed physical skill.'
+                            : 'I answered the self-check and want to record my practice.',
+                        widget.course.recordsParticipation
+                            ? 'Öz denetimi yanıtladım ve katılımı kaydetmek istiyorum; bu gözlenmiş fiziksel beceri değildir.'
+                            : 'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
+                      ),
                     ),
                   ),
-                )),
+                ),
               if (!_readOnly) const SizedBox(height: 14),
               if (!_readOnly)
                 FilledButton(

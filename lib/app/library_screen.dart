@@ -69,7 +69,9 @@ class LibraryScreen extends StatelessWidget {
     final List<LibraryFamily> pending = facts.ia.notBuilt;
 
     return DecoratedBox(
-      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
+      decoration: BoxDecoration(
+        gradient: LissomPalette.of(context).screenBackground,
+      ),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -206,74 +208,76 @@ class _BuiltFamilyCard extends StatelessWidget {
     final ThemeData t = Theme.of(context);
     final int live = facts.live.length;
     final int total = facts.liveness.length;
-    return LissomFocusFrame(child: InkWell(
-      borderRadius: BorderRadius.circular(LissomRadii.card),
-      onTap: () async {
-        await Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => FamilyPage(
-              family: family,
-              facts: facts,
-              attemptValueStoreLoader: attemptValueStoreLoader,
-              hathaStoreLoader: hathaStoreLoader,
-              measurementAvailable: measurementAvailable,
-            ),
-          ),
-        );
-        onCourseDone?.call();
-      },
-      child: LissomCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              configText(context, family.title),
-              style: t.textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              configText(context, family.intro),
-              style: t.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 12),
-            // Sayı TÜRETİLİR (köprüden), yazılmaz. "12 test" demek yeterli
-            // olmazdı: 12'sinden 3'ü ölçülebiliyor ve fark kullanıcının
-            // görmesi gereken şeyin ta kendisi.
-            Text(
-              family.teachingOnly
-                  ? facts.hatha == null
-                        ? localeText(
-                            context,
-                            'Course data unavailable',
-                            'Kurs verisi açılamadı',
-                          )
-                        : _teachingInventory(context)
-                  : localeTemplate(
-                      context,
-                      '{total} tests · {live} camera measurement paths in the engine · {availability}',
-                      '{total} test · motorda {live} kamera ölçüm yolu · {availability}',
-                      <String, Object>{
-                        'total': localizedInteger(context, total),
-                        'live': localizedInteger(context, live),
-                        'availability': localeText(
-                          context,
-                          measurementAvailable
-                              ? 'camera entry on Home for supported tests'
-                              : 'camera closed in this release',
-                          measurementAvailable
-                              ? 'desteklenen testlerde kamera girişi Ana Sayfa’da'
-                              : 'bu sürümde kamera kapalı',
-                        ),
-                      },
-                    ),
-              style: t.textTheme.bodySmall?.copyWith(
-                color: LissomPalette.of(context).accentText,
+    return LissomFocusFrame(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(LissomRadii.card),
+        onTap: () async {
+          await Navigator.of(context).push<void>(
+            MaterialPageRoute<void>(
+              builder: (_) => FamilyPage(
+                family: family,
+                facts: facts,
+                attemptValueStoreLoader: attemptValueStoreLoader,
+                hathaStoreLoader: hathaStoreLoader,
+                measurementAvailable: measurementAvailable,
               ),
             ),
-          ],
+          );
+          onCourseDone?.call();
+        },
+        child: LissomCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                configText(context, family.title),
+                style: t.textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                configText(context, family.intro),
+                style: t.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 12),
+              // Sayı TÜRETİLİR (köprüden), yazılmaz. "12 test" demek yeterli
+              // olmazdı: 12'sinden 3'ü ölçülebiliyor ve fark kullanıcının
+              // görmesi gereken şeyin ta kendisi.
+              Text(
+                family.teachingOnly
+                    ? facts.hatha == null
+                          ? localeText(
+                              context,
+                              'Course data unavailable',
+                              'Kurs verisi açılamadı',
+                            )
+                          : _teachingInventory(context)
+                    : localeTemplate(
+                        context,
+                        '{total} tests · {live} camera measurement paths in the engine · {availability}',
+                        '{total} test · motorda {live} kamera ölçüm yolu · {availability}',
+                        <String, Object>{
+                          'total': localizedInteger(context, total),
+                          'live': localizedInteger(context, live),
+                          'availability': localeText(
+                            context,
+                            measurementAvailable
+                                ? 'camera entry on Home for supported tests'
+                                : 'camera closed in this release',
+                            measurementAvailable
+                                ? 'desteklenen testlerde kamera girişi Ana Sayfa’da'
+                                : 'bu sürümde kamera kapalı',
+                          ),
+                        },
+                      ),
+                style: t.textTheme.bodySmall?.copyWith(
+                  color: LissomPalette.of(context).accentText,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   String _teachingInventory(BuildContext context) => <String>[
@@ -340,53 +344,56 @@ class _PendingFamilyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    return LissomFocusFrame(child: InkWell(
-      borderRadius: BorderRadius.circular(LissomRadii.inner),
-      onTap: () => Navigator.of(context).push<void>(
-        MaterialPageRoute<void>(
-          builder: (_) => FamilyPage(
-            family: family,
-            facts: facts,
-            measurementAvailable: measurementAvailable,
+    return LissomFocusFrame(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(LissomRadii.inner),
+        onTap: () => Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => FamilyPage(
+              family: family,
+              facts: facts,
+              measurementAvailable: measurementAvailable,
+            ),
           ),
         ),
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: LissomPalette.of(context).divider),
-          borderRadius: BorderRadius.circular(LissomRadii.inner),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      configText(context, family.title),
-                      style: t.textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      configText(context, family.inventoryLine),
-                      style: t.textTheme.bodySmall,
-                    ),
-                  ],
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: LissomPalette.of(context).divider),
+            borderRadius: BorderRadius.circular(LissomRadii.inner),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        configText(context, family.title),
+                        style: t.textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        configText(context, family.inventoryLine),
+                        style: t.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-               Icon(
-                Directionality.of(context) == TextDirection.rtl
-                    ? Icons.chevron_left : Icons.chevron_right,
-                size: 18,
-                color: LissomPalette.of(context).textSecondary,
-              ),
-            ],
+                Icon(
+                  Directionality.of(context) == TextDirection.rtl
+                      ? Icons.chevron_left
+                      : Icons.chevron_right,
+                  size: 18,
+                  color: LissomPalette.of(context).textSecondary,
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -424,7 +431,7 @@ class FamilyPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
@@ -835,7 +842,7 @@ class FamilyPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                   Padding(
+                  Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: Icon(
                       Icons.circle_outlined,
@@ -905,11 +912,12 @@ class _TestRow extends StatelessWidget {
           ),
         ),
         if (onTap != null)
-           Padding(
+          Padding(
             padding: const EdgeInsetsDirectional.only(top: 2, start: 6),
             child: Icon(
               Directionality.of(context) == TextDirection.rtl
-                    ? Icons.chevron_left : Icons.chevron_right,
+                  ? Icons.chevron_left
+                  : Icons.chevron_right,
               size: 18,
               color: LissomPalette.of(context).textSecondary,
             ),
@@ -921,13 +929,18 @@ class _TestRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
             child: row,
           )
-        : LissomFocusFrame(child: InkWell(
-            borderRadius: BorderRadius.circular(LissomRadii.card),
-            onTap: onTap,
-            child: LissomCard(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-              child: row,
+        : LissomFocusFrame(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(LissomRadii.card),
+              onTap: onTap,
+              child: LissomCard(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 15,
+                ),
+                child: row,
+              ),
             ),
-          ));
+          );
   }
 }

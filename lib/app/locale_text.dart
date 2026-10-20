@@ -27,118 +27,171 @@ String localeText(BuildContext context, String english, String turkish) {
 // establish medical suitability or physical acceptance. The same EN/TR values
 // are guarded in locale catalogs and tools/data/localization_semantic_review.v1.json.
 const Map<String, ({String english, String turkish})>
-    _reviewedSourceDisplayCopy = <String, ({String english, String turkish})>{
+_reviewedSourceDisplayCopy = <String, ({String english, String turkish})>{
   "A: No symptoms; a person turns their head to see the timer. B: Tingling begins while waiting. Without the text explain your action and whether a retest occurs in each. Do not open the separate answer key before writing your answer. Seconds held do not determine a correct decision.": (
-    english: "A: No symptoms; a person turns their head to see the timer. B: Tingling begins while waiting. Without the text explain your action and whether a retest occurs in each. Do not open the separate answer key before writing your answer. Seconds held do not determine a correct decision.",
-    turkish: "A: Belirti yok; kişi zamanlayıcıya bakmak için başını çeviriyor. B: Kalırken karıncalanma başlıyor. İkisinde de ne yapacağını ve tekrar olup olmayacağını metne bakmadan söyle. Cevabını yazmadan ayrı cevap anahtarını açma. Kaç saniye kaldığın doğru kararı belirlemez.",
+    english:
+        "A: No symptoms; a person turns their head to see the timer. B: Tingling begins while waiting. Without the text explain your action and whether a retest occurs in each. Do not open the separate answer key before writing your answer. Seconds held do not determine a correct decision.",
+    turkish:
+        "A: Belirti yok; kişi zamanlayıcıya bakmak için başını çeviriyor. B: Kalırken karıncalanma başlıyor. İkisinde de ne yapacağını ve tekrar olup olmayacağını metne bakmadan söyle. Cevabını yazmadan ayrı cevap anahtarını açma. Kaç saniye kaldığın doğru kararı belirlemez.",
   ),
   "Before movement write: upright base → optional small free-arm rise/lower → supported shallow hinge OR familiar wall-dog preparation → upright base → optional short staggered stance/right return → neutral → optional left return → neutral rest. Choose only familiar components, keep required support and never remove it to make the route look continuous.": (
-    english: "Before movement write: upright base → optional small free-arm rise/lower → supported shallow hinge OR familiar wall-dog preparation → upright base → optional short staggered stance and return of the right foot to neutral → neutral → optional return of the left foot to neutral → neutral rest. Choose only familiar components, keep required support and never remove it to make the route look continuous.",
-    turkish: "Hareketten önce yaz: dik taban → seçmeli küçük serbest kol kaldır/indir → destekli sığ menteşe VEYA tanıdık duvar köpek hazırlığı → dik taban → seçmeli kısa şaşırtılmış adım/sağ ayağı nötre geri getir → nötr → seçmeli sol ayağı nötre geri getir → nötr dinlenme. Yalnız tanıdık bileşenleri seç; gereken desteği koru, kesintisiz görünmek için kaldırma.",
+    english:
+        "Before movement write: upright base → optional small free-arm rise/lower → supported shallow hinge OR familiar wall-dog preparation → upright base → optional short staggered stance and return of the right foot to neutral → neutral → optional return of the left foot to neutral → neutral rest. Choose only familiar components, keep required support and never remove it to make the route look continuous.",
+    turkish:
+        "Hareketten önce yaz: dik taban → seçmeli küçük serbest kol kaldır/indir → destekli sığ menteşe VEYA tanıdık duvar köpek hazırlığı → dik taban → seçmeli kısa şaşırtılmış adım/sağ ayağı nötre geri getir → nötr → seçmeli sol ayağı nötre geri getir → nötr dinlenme. Yalnız tanıdık bileşenleri seç; gereken desteği koru, kesintisiz görünmek için kaldırma.",
   ),
   "Bend at the hips to lower the seat slowly; only after sitting down release hands and rest the wrists.": (
-    english: "Bend at the hips to lower your pelvis slowly; release your hands and rest your wrists only after sitting down.",
-    turkish: "Kalçadan bükülerek yavaş otur; yalnız oturduktan sonra elleri bırakıp bilekleri dinlendir.",
+    english:
+        "Bend at the hips to lower your pelvis slowly; release your hands and rest your wrists only after sitting down.",
+    turkish:
+        "Kalçadan bükülerek yavaş otur; yalnız oturduktan sonra elleri bırakıp bilekleri dinlendir.",
   ),
   "Choose two standing shapes, two seated/low shapes, one breathing pause and rest.": (
-    english: "Choose two standing shapes, two seated/low shapes, one pause from movement while continuing ordinary comfortable breathing, and rest.",
-    turkish: "Ayakta iki duruş, oturarak ya da alçak konumda iki duruş, doğal ve rahat nefesini sürdürerek harekete vereceğin bir mola ve dinlenme seç.",
+    english:
+        "Choose two standing shapes, two seated/low shapes, one pause from movement while continuing ordinary comfortable breathing, and rest.",
+    turkish:
+        "Ayakta iki duruş, oturarak ya da alçak konumda iki duruş, doğal ve rahat nefesini sürdürerek harekete vereceğin bir mola ve dinlenme seç.",
   ),
   "Did you deepen during the hold or try moving a loaded prop on exit? If symptom-free and you notice a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form. Omit the lesson for symptoms or difficulty controlling the exit. Explain one setup choice and its reason instead of scoring the angle/distance.": (
-    english: "Did you deepen during the hold or try moving a loaded prop on exit? If symptom-free and you notice a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form. Omit the lesson for symptoms or difficulty controlling the exit. Explain one setup choice and its reason instead of scoring the angle/distance.",
-    turkish: "Bekleme sırasında derinliği artırdın mı veya çıkışta yük altındaki bir desteği hareket ettirmeyi denedin mi? Belirtisiz olarak parmaklara uzanma alışkanlığını fark ettiysen çık, eller için yakın yer seç ve daha dik/küçük biçimde tek kısa prova yap. Belirti veya çıkışta kontrol güçlüğü varsa dersi bırak. Açıyı/ulaştığın mesafeyi puanlamak yerine bir kurulum seçimini ve nedenini açıkla.",
+    english:
+        "Did you deepen during the hold or try moving a loaded prop on exit? If symptom-free and you notice a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form. Omit the lesson for symptoms or difficulty controlling the exit. Explain one setup choice and its reason instead of scoring the angle/distance.",
+    turkish:
+        "Bekleme sırasında derinliği artırdın mı veya çıkışta yük altındaki bir desteği hareket ettirmeyi denedin mi? Belirtisiz olarak parmaklara uzanma alışkanlığını fark ettiysen çık, eller için yakın yer seç ve daha dik/küçük biçimde tek kısa prova yap. Belirti veya çıkışta kontrol güçlüğü varsa dersi bırak. Açıyı/ulaştığın mesafeyi puanlamak yerine bir kurulum seçimini ve nedenini açıkla.",
   ),
   "Did you reset the feet before changing direction and keep breathing at your chosen depth?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reset the feet before bending the front knee or changing direction.\n\nNext practice, try this without checking the instructions: Reset the feet before bending the front knee or changing direction. Then review what you missed.": (
-    english: "Did you reset the feet before changing direction and keep breathing naturally at your chosen posture depth?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reset the feet before bending the front knee or changing direction.\n\nNext practice, try this without checking the instructions: Reset the feet before bending the front knee or changing direction. Then review what you missed.",
-    turkish: "Yön değiştirmeden ayakları yeniden kurup seçtiğin duruş derinliğinde doğal nefesi sürdürebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur. Ardından eksiklerini kontrol et.",
+    english:
+        "Did you reset the feet before changing direction and keep breathing naturally at your chosen posture depth?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reset the feet before bending the front knee or changing direction.\n\nNext practice, try this without checking the instructions: Reset the feet before bending the front knee or changing direction. Then review what you missed.",
+    turkish:
+        "Yön değiştirmeden ayakları yeniden kurup seçtiğin duruş derinliğinde doğal nefesi sürdürebildin mi?\n\nİki ayrı rahat çalışmada, seçtiğin biçimde şu odağı koruyabildin mi? Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur.\n\nSonraki çalışmada yönergeye bakmadan dene: Ön dizi bükmeden veya yön değiştirmeden ayakları yeniden kur. Ardından eksiklerini kontrol et.",
   ),
   "Face the wall upright with palms supported, feet hip-width. Check the space behind without turning while a foot is moving; if the path cannot be checked, omit stepping.": (
-    english: "Face the wall upright with palms supported, feet hip-width. Before moving a foot, check the space behind you; do not turn while a foot is moving. If the path cannot be checked, omit stepping.",
-    turkish: "Avuçlar destekli, ayaklar kalça genişliğinde duvara dönük dik dur. Bir ayağını hareket ettirmeden önce arkandaki alanı kontrol et; ayak hareket ederken dönme. Yol kontrol edilemiyorsa adımı atla.",
+    english:
+        "Face the wall upright with palms supported, feet hip-width. Before moving a foot, check the space behind you; do not turn while a foot is moving. If the path cannot be checked, omit stepping.",
+    turkish:
+        "Avuçlar destekli, ayaklar kalça genişliğinde duvara dönük dik dur. Bir ayağını hareket ettirmeden önce arkandaki alanı kontrol et; ayak hareket ederken dönme. Yol kontrol edilemiyorsa adımı atla.",
   ),
   "Keeping both palms in contact and knees soft, move the hips a little back and incline the trunk only a little. Elbows may straighten comfortably, never lock. This limited high wall variation is a preparation related to Downward Dog, not its floor form; no horizontal torso or head-below-hips target.": (
-    english: "Keeping both palms in contact with the wall and knees soft, move the hips a little back and incline the trunk only a little. Elbows may straighten comfortably, never lock. This limited high wall variation is a preparation related to Downward Dog, not its floor form; no horizontal torso or head-below-hips target.",
-    turkish: "Her iki avucu duvarda tutup dizleri yumuşak bırakarak kalçayı az geriye, gövdeyi yalnız biraz öne götür. Dirsekler rahatça açılabilir, kilitlenmez. Bu sınırlı yüksek duvar uyarlaması Köpek ile ilişkili hazırlıktır; yer biçimi değildir. Yatay gövde veya başı kalçanın altına indirme hedefi yoktur.",
+    english:
+        "Keeping both palms in contact with the wall and knees soft, move the hips a little back and incline the trunk only a little. Elbows may straighten comfortably, never lock. This limited high wall variation is a preparation related to Downward Dog, not its floor form; no horizontal torso or head-below-hips target.",
+    turkish:
+        "Her iki avucu duvarda tutup dizleri yumuşak bırakarak kalçayı az geriye, gövdeyi yalnız biraz öne götür. Dirsekler rahatça açılabilir, kilitlenmez. Bu sınırlı yüksek duvar uyarlaması Köpek ile ilişkili hazırlıktır; yer biçimi değildir. Yatay gövde veya başı kalçanın altına indirme hedefi yoktur.",
   ),
   "Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking. A movement reading, however carefully taken, is not evidence about your health.": (
-    english: "Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking. A movement reading, however carefully taken, is not evidence about your health.",
-    turkish: "Lissom genel iyi yaşam uygulamasıdır; tıbbi cihaz değildir. Tarama, tanı veya sakatlanma riski tahmini yapmaz. Bu iddialar, yapmadığımız ve hedeflemediğimiz klinik doğrulama gerektirir. Hareket ölçümü tek başına sağlık durumuna ilişkin kanıt değildir.",
+    english:
+        "Lissom is a general wellness app and is not a medical device, so it does not screen, diagnose or predict injury risk. Those claims require clinical validation we have not done and are not seeking. A movement reading, however carefully taken, is not evidence about your health.",
+    turkish:
+        "Lissom genel iyi yaşam uygulamasıdır; tıbbi cihaz değildir. Tarama, tanı veya sakatlanma riski tahmini yapmaz. Bu iddialar, yapmadığımız ve hedeflemediğimiz klinik doğrulama gerektirir. Hareket ölçümü tek başına sağlık durumuna ilişkin kanıt değildir.",
   ),
   "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. Live camera measurements and subscription sales are closed in this release.": (
-    english: "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. Live camera measurements and subscription sales are closed in this release.",
-    turkish: "Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren yazılı yoga kursları sunar. Çalışma kayıtları bu cihazda kalır ve kendi beyanlarını yansıtır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.",
+    english:
+        "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. Live camera measurements and subscription sales are closed in this release.",
+    turkish:
+        "Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren yazılı yoga kursları sunar. Çalışma kayıtları bu cihazda kalır ve kendi beyanlarını yansıtır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.",
   ),
   "Lower the seat before lifting either hand, then rest wrists without rolling onto them.": (
-    english: "Lower your pelvis back to sitting before lifting either hand, then rest your wrists without rolling onto them.",
-    turkish: "Ellerinden herhangi birini kaldırmadan önce kalçanı indirip otur; ardından bileklerinin üzerine yuvarlanmadan bileklerini dinlendir.",
+    english:
+        "Lower your pelvis back to sitting before lifting either hand, then rest your wrists without rolling onto them.",
+    turkish:
+        "Ellerinden herhangi birini kaldırmadan önce kalçanı indirip otur; ardından bileklerinin üzerine yuvarlanmadan bileklerini dinlendir.",
   ),
   "Lower to a padded kneeling seat using a stable support; place the hands before shifting weight forward.": (
-    english: "Lower to a padded kneeling seat using a stable support; place the hands before shifting weight forward.",
-    turkish: "Sabit destekle minderli diz üstü oturuşa alçal; ağırlığı öne vermeden elleri koy.",
+    english:
+        "Lower to a padded kneeling seat using a stable support; place the hands before shifting weight forward.",
+    turkish:
+        "Sabit destekle minderli diz üstü oturuşa alçal; ağırlığı öne vermeden elleri koy.",
   ),
   "Must feet move toward the wall or both hands release before the torso returns?": (
-    english: "Must feet move toward the wall or both hands release before the torso returns upright?",
-    turkish: "Gövde yeniden dik konuma dönmeden ayaklar duvara yaklaşmalı veya iki el bırakılmalı mı?",
+    english:
+        "Must feet move toward the wall or both hands release before the torso returns upright?",
+    turkish:
+        "Gövde yeniden dik konuma dönmeden ayaklar duvara yaklaşmalı veya iki el bırakılmalı mı?",
   ),
   "Neither is required: feet remain fixed, palm contact stays while hips/trunk return, hands may slide upward; release one then the other only at a stable upright base when support is unnecessary. This is not floor-form evidence.": (
-    english: "Neither is required: feet remain fixed, palm contact stays while hips/trunk return, hands may slide upward; release one then the other only at a stable upright base when support is unnecessary. This is not floor-form evidence.",
-    turkish: "İkisi de gerekmez: ayaklar sabit, kalça yerine gelirken ve gövde doğrulurken avuç teması korunur; eller yukarı kayabilir. Destek gerekmeyen sağlam dik tabanda önce biri sonra diğeri bırakılır. Yer biçimi kanıtı değildir.",
+    english:
+        "Neither is required: feet remain fixed, palm contact stays while hips/trunk return, hands may slide upward; release one then the other only at a stable upright base when support is unnecessary. This is not floor-form evidence.",
+    turkish:
+        "İkisi de gerekmez: ayaklar sabit, kalça yerine gelirken ve gövde doğrulurken avuç teması korunur; eller yukarı kayabilir. Destek gerekmeyen sağlam dik tabanda önce biri sonra diğeri bırakılır. Yer biçimi kanıtı değildir.",
   ),
   "Notice breathing without controlling or holding it.": (
     english: "Notice breathing without controlling or holding it.",
     turkish: "Nefesi kontrol etmeye çalışmadan veya tutmadan fark et.",
   ),
   "Once the familiar upright base and comfortable wall contact are restored, pause, then lower one hand to the thigh, followed by the other only if support is no longer needed. No foot approach occurs within this variation. If you cannot maintain comfortable contact/return at this distance, choose a shallower range or omit; do not improvise a backward/forward walking transition.": (
-    english: "Once the familiar upright base and comfortable wall contact are restored, pause, then lower one hand to the thigh, followed by the other only if support is no longer needed. No foot approach occurs within this variation. If you cannot maintain comfortable contact/return at this distance, choose a shallower range or omit; do not improvise a backward/forward walking transition.",
-    turkish: "Tanıdık dik taban ve rahat duvar teması geri geldiğinde bekle; önce bir eli uyluk yanına indir; ardından yalnız destek artık gerekmiyorsa diğer eli indir. Bu uyarlamada duvara yaklaşma adımı yoktur. Bu mesafede rahat temas/dönüş korunamıyorsa daha sığ aralık seç veya atla; doğaçlama ileri/geri yürüyüş ekleme.",
+    english:
+        "Once the familiar upright base and comfortable wall contact are restored, pause, then lower one hand to the thigh, followed by the other only if support is no longer needed. No foot approach occurs within this variation. If you cannot maintain comfortable contact/return at this distance, choose a shallower range or omit; do not improvise a backward/forward walking transition.",
+    turkish:
+        "Tanıdık dik taban ve rahat duvar teması geri geldiğinde bekle; önce bir eli uyluk yanına indir; ardından yalnız destek artık gerekmiyorsa diğer eli indir. Bu uyarlamada duvara yaklaşma adımı yoktur. Bu mesafede rahat temas/dönüş korunamıyorsa daha sığ aralık seç veya atla; doğaçlama ileri/geri yürüyüş ekleme.",
   ),
   "Place a folded blanket beneath shins or between heels and seat; enter slowly with a wall nearby.": (
-    english: "Place a folded blanket beneath shins or between heels and buttocks; enter slowly with a wall nearby.",
-    turkish: "Kaval kemiklerinin altına veya topuklarınla kalçanın arasına katlı battaniye koy; duvar yakındayken yavaş gir.",
+    english:
+        "Place a folded blanket beneath shins or between heels and buttocks; enter slowly with a wall nearby.",
+    turkish:
+        "Kaval kemiklerinin altına veya topuklarınla kalçanın arasına katlı battaniye koy; duvar yakındayken yavaş gir.",
   ),
   "Put both hands on the thighs and return to unobserved natural breathing if attention becomes tiring.": (
-    english: "Put both hands on your thighs. If focusing on breathing becomes tiring, stop watching it and let breathing continue naturally.",
-    turkish: "İki elini de uyluklarına koy; nefese dikkat etmek yorucu gelirse onu izlemeyi bırak ve solunumun doğal ritminde sürmesine izin ver.",
+    english:
+        "Put both hands on your thighs. If focusing on breathing becomes tiring, stop watching it and let breathing continue naturally.",
+    turkish:
+        "İki elini de uyluklarına koy; nefese dikkat etmek yorucu gelirse onu izlemeyi bırak ve solunumun doğal ritminde sürmesine izin ver.",
   ),
   "Repeat three alternating turns without swinging the arms for momentum.\n\nCommon mistake: Arm swing supplies momentum for the turn. Correction: Turn gently from a stable base; let the feet reset when needed.\n\nCompare a smaller and familiar standing turn with the same comfortable foot placement.": (
-    english: "Repeat three alternating turns without swinging the arms for momentum.\n\nCommon mistake: Arm swing supplies momentum for the turn. Correction: Turn gently from a stable base; let the feet reset when needed.\n\nCompare a smaller and familiar standing turn with the same comfortable foot placement.",
-    turkish: "Kolları savurmadan dönüşümlü üç dönüş yap.\n\nSık hata: Kol savurma dönüşe momentum sağlar. Düzeltme: Sabit tabandan yumuşak dön; gerekirse ayakları yeniden kur.\n\nAynı rahat ayak yerinde küçük ve tanıdık ayakta dönüşü karşılaştır.",
+    english:
+        "Repeat three alternating turns without swinging the arms for momentum.\n\nCommon mistake: Arm swing supplies momentum for the turn. Correction: Turn gently from a stable base; let the feet reset when needed.\n\nCompare a smaller and familiar standing turn with the same comfortable foot placement.",
+    turkish:
+        "Kolları savurmadan dönüşümlü üç dönüş yap.\n\nSık hata: Kol savurma dönüşe momentum sağlar. Düzeltme: Sabit tabandan yumuşak dön; gerekirse ayakları yeniden kur.\n\nAynı rahat ayak yerinde küçük ve tanıdık ayakta dönüşü karşılaştır.",
   ),
   "Select one taught shape already chosen comfortably. Describe support and exit; first rehearse a brief entry/exit.": (
-    english: "Select one taught shape already chosen comfortably. Describe support and exit; first rehearse a brief entry/exit.",
-    turkish: "Daha önce öğretilmiş ve rahat seçtiğin tek biçimi seç. Destek ve çıkışı anlat; önce kısa giriş/çıkış provası yap.",
+    english:
+        "Select one taught shape already chosen comfortably. Describe support and exit; first rehearse a brief entry/exit.",
+    turkish:
+        "Daha önce öğretilmiş ve rahat seçtiğin tek biçimi seç. Destek ve çıkışı anlat; önce kısa giriş/çıkış provası yap.",
   ),
   "Side entry and full lowering, wrist placement close-up and small-height comparison; show no head drop or unsupported straight-leg progression.": (
-    english: "Side entry and full lowering, wrist placement close-up and small-height comparison; show no head drop or unsupported straight-leg progression.",
-    turkish: "Yandan giriş ve tam iniş, bilek yerleşimi yakın planı ve küçük yükseklik karşılaştırması; başı düşürme veya desteksiz düz bacak ilerlemesi yok.",
+    english:
+        "Side entry and full lowering, wrist placement close-up and small-height comparison; show no head drop or unsupported straight-leg progression.",
+    turkish:
+        "Yandan giriş ve tam iniş, bilek yerleşimi yakın planı ve küçük yükseklik karşılaştırması; başı düşürme veya desteksiz düz bacak ilerlemesi yok.",
   ),
   "Side-lying or seated rest as the same posture, a universal duration, pregnancy clearance, personal suitability or camera assessment.": (
-    english: "Side-lying or seated rest as the same posture, a universal duration, pregnancy clearance, personal suitability or camera assessment.",
-    turkish: "Yan yatış veya oturma dinlenmesini aynı poz saymayı, evrensel süreyi, gebelikte bu hareketi yapmaya uygunluk onayını, kişisel uygunluğu veya kamera değerlendirmesini.",
+    english:
+        "Side-lying or seated rest as the same posture, a universal duration, pregnancy clearance, personal suitability or camera assessment.",
+    turkish:
+        "Yan yatış veya oturma dinlenmesini aynı poz saymayı, evrensel süreyi, gebelikte bu hareketi yapmaya uygunluk onayını, kişisel uygunluğu veya kamera değerlendirmesini.",
   ),
   "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.": (
-    english: "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.",
-    turkish: "Bir kişi “Yin'de hiç hareket etmemeliyim” diyor. Kendi sözlerinle çıkma hakkını açıkla. Belirtisiz dikkat dağılmasında yalnız normal nefese dön; bilerek yavaşlatmışsan gözlemi kesip sıradan nefese dön ve kısa gözlemde yeniden kontrol et. “Daha çok his = daha iyi” yorumunu ilerleme ölçütünden çıkar.",
+    english:
+        "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.",
+    turkish:
+        "Bir kişi “Yin'de hiç hareket etmemeliyim” diyor. Kendi sözlerinle çıkma hakkını açıkla. Belirtisiz dikkat dağılmasında yalnız normal nefese dön; bilerek yavaşlatmışsan gözlemi kesip sıradan nefese dön ve kısa gözlemde yeniden kontrol et. “Daha çok his = daha iyi” yorumunu ilerleme ölçütünden çıkar.",
   ),
   "The lesson's full setup or duration, pregnancy clearance, personal suitability or camera assessment.": (
-    english: "The lesson's full setup or duration, pregnancy clearance, personal suitability or camera assessment.",
-    turkish: "Dersin bütün kurulumunu veya süresini, gebelikte bu hareketi yapmaya uygunluk onayını, kişisel uygunluğu ya da kamera değerlendirmesini.",
+    english:
+        "The lesson's full setup or duration, pregnancy clearance, personal suitability or camera assessment.",
+    turkish:
+        "Dersin bütün kurulumunu veya süresini, gebelikte bu hareketi yapmaya uygunluk onayını, kişisel uygunluğu ya da kamera değerlendirmesini.",
   ),
   "The reading itself will not — see above for why.": (
-    english: "The measurement value itself will not appear in this list — see above for why.",
+    english:
+        "The measurement value itself will not appear in this list — see above for why.",
     turkish: "Sayısal değer testin kendi sayfasında gösterilir.",
   ),
   "This lesson's exact chair placement, stance length, two-breath hold, foot reset, safe depth or personal balance judgment.": (
-    english: "This lesson's exact chair placement, stance length, a posture held for two natural breaths, foot reset, safe depth or personal balance judgment.",
-    turkish: "Dersin tam sandalye yerini, duruş uzunluğunu, iki doğal nefes boyunca duruşta kalmayı, ayak sıfırlamasını, güvenli derinliği veya kişisel denge kararını.",
+    english:
+        "This lesson's exact chair placement, stance length, a posture held for two natural breaths, foot reset, safe depth or personal balance judgment.",
+    turkish:
+        "Dersin tam sandalye yerini, duruş uzunluğunu, iki doğal nefes boyunca duruşta kalmayı, ayak sıfırlamasını, güvenli derinliği veya kişisel denge kararını.",
   ),
   "This list is shared with the other apps built on the same measurement core, and that shared record still has no place for the number itself — it can only tell you that a test was measured, not what it came to.": (
-    english: "This list uses the same measurement-record format as the other apps built on the same core. That format records that a test was measured, but does not include the numeric measurement value.",
-    turkish: "Bu liste, aynı ölçüm altyapısını kullanan diğer uygulamalarla ortak kayıt biçimini kullanır. Bu biçim testin yapıldığını kaydeder; sayısal ölçüm değerini içermez.",
+    english:
+        "This list uses the same measurement-record format as the other apps built on the same core. That format records that a test was measured, but does not include the numeric measurement value.",
+    turkish:
+        "Bu liste, aynı ölçüm altyapısını kullanan diğer uygulamalarla ortak kayıt biçimini kullanır. Bu biçim testin yapıldığını kaydeder; sayısal ölçüm değerini içermez.",
   ),
   "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.": (
-    english: "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.",
-    turkish: "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede yalnız belirtisiz bir kurulum/dikkat hatasında ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez.",
+    english:
+        "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.",
+    turkish:
+        "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede yalnız belirtisiz bir kurulum/dikkat hatasında ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez.",
   ),
 };
 
@@ -211,7 +264,8 @@ String configText(BuildContext context, String source) {
     final String? direct = _turkishConfigCopy[source];
     if (direct != null) return direct;
   }
-  final String honestSource = clarified?.english ??
+  final String honestSource =
+      clarified?.english ??
       (source == _assessmentIntro ? _assessmentIntroHonest : source);
   final String? translated = LissomLocalizations.maybeOf(
     context,

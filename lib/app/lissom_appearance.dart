@@ -33,9 +33,12 @@ final class FileAppearancePreferenceStore implements AppearancePreferenceStore {
 
   @override
   Future<ThemeMode> read() async {
-    if (!await file.exists()) { return ThemeMode.system; }
+    if (!await file.exists()) {
+      return ThemeMode.system;
+    }
     final decoded = jsonDecode(await file.readAsString());
-    if (decoded is! Map || decoded['schemaVersion'] != 1 ||
+    if (decoded is! Map ||
+        decoded['schemaVersion'] != 1 ||
         decoded['mode'] is! String) {
       throw const FormatException('Unsupported appearance preference');
     }
@@ -46,9 +49,10 @@ final class FileAppearancePreferenceStore implements AppearancePreferenceStore {
   Future<void> write(ThemeMode mode) async {
     await file.parent.create(recursive: true);
     final pending = File('${file.path}.pending');
-    await pending.writeAsString(jsonEncode(<String, Object>{
-      'schemaVersion': 1, 'mode': mode.name,
-    }), flush: true);
+    await pending.writeAsString(
+      jsonEncode(<String, Object>{'schemaVersion': 1, 'mode': mode.name}),
+      flush: true,
+    );
     await pending.rename(file.path);
   }
 }
@@ -84,12 +88,18 @@ final class LissomAppearanceController extends ChangeNotifier {
   bool get isReading => _reading;
   bool get writePendingLong => _writePendingLong;
 
-  void _changed() { if (!_disposed) { notifyListeners(); } }
+  void _changed() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
 
   Future<void> initialize() => _initialization ??= _load();
 
   Future<void> retryRead() {
-    if (_saving || _reading || _disposed) { return Future<void>.value(); }
+    if (_saving || _reading || _disposed) {
+      return Future<void>.value();
+    }
     return _load();
   }
 
@@ -103,12 +113,16 @@ final class LissomAppearanceController extends ChangeNotifier {
         final mode = await store.read();
         return (store, mode);
       })().timeout(readDeadline);
-      if (_disposed || generation != _readGeneration) { return; }
+      if (_disposed || generation != _readGeneration) {
+        return;
+      }
       _store = result.$1;
       _mode = result.$2;
       _readFailed = false;
     } on Object {
-      if (_disposed || generation != _readGeneration) { return; }
+      if (_disposed || generation != _readGeneration) {
+        return;
+      }
       // Does not delete/replace unreadable preference or inspect owner data.
       // On first boot system is the honest fallback; retry keeps last mode.
       _readFailed = true;
@@ -122,13 +136,17 @@ final class LissomAppearanceController extends ChangeNotifier {
   }
 
   Future<bool> select(ThemeMode mode) async {
-    if (!_ready || _reading || _saving || _disposed) { return false; }
+    if (!_ready || _reading || _saving || _disposed) {
+      return false;
+    }
     ++_readGeneration;
     _saving = true;
     _writeFailed = false;
     _writePendingLong = false;
     _writeNotice = Timer(const Duration(seconds: 3), () {
-      if (_disposed || !_saving) { return; }
+      if (_disposed || !_saving) {
+        return;
+      }
       _writePendingLong = true;
       _changed();
     });
@@ -145,7 +163,9 @@ final class LissomAppearanceController extends ChangeNotifier {
       // newer choice later. A separate bounded-UI/uncertain-write design is
       // an explicit acceptance item, not silently claimed solved here.
       await store.write(mode);
-      if (_disposed) { return false; }
+      if (_disposed) {
+        return false;
+      }
       _mode = mode;
       _readFailed = false;
       return true;
@@ -181,10 +201,12 @@ final class LissomAppearanceScope
   }) : super(notifier: controller);
 
   static LissomAppearanceController of(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<LissomAppearanceScope>()!.notifier!;
+      .dependOnInheritedWidgetOfExactType<LissomAppearanceScope>()!
+      .notifier!;
 
   static LissomAppearanceController? maybeOf(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<LissomAppearanceScope>()?.notifier;
+      .dependOnInheritedWidgetOfExactType<LissomAppearanceScope>()
+      ?.notifier;
 }
 
 // Production preloads the controller before runApp. The gate also makes
@@ -196,7 +218,7 @@ final class LissomAppearanceScope
 // a diagnostic in release/profile too; they never silently transfer ownership.
 final class LissomAppearanceHost extends StatefulWidget {
   const LissomAppearanceHost({required this.child, this.controller, super.key})
-      : createController = null;
+    : createController = null;
 
   // Deterministic ownership tests use a memory store without a native plugin.
   // Production keeps the normal constructor and default file-backed instance.
@@ -223,8 +245,10 @@ final class _LissomAppearanceHostState extends State<LissomAppearanceHost> {
   void initState() {
     super.initState();
     _ownsController = widget.controller == null;
-    _controller = widget.controller ??
-        widget.createController?.call() ?? LissomAppearanceController();
+    _controller =
+        widget.controller ??
+        widget.createController?.call() ??
+        LissomAppearanceController();
     unawaited(_controller.initialize());
   }
 
@@ -236,15 +260,17 @@ final class _LissomAppearanceHostState extends State<LissomAppearanceHost> {
       // This diagnostic is not behind assert: profile/release must not silently
       // imply a rebind. No controller value, raw storage error or account data
       // is included, and the diagnostic is never rendered as product UI.
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: StateError(
-          'LissomAppearanceHost controller lifetime is immutable. '
-          'The initial controller remains active. Use a new host Key to '
-          'replace it intentionally.',
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: StateError(
+            'LissomAppearanceHost controller lifetime is immutable. '
+            'The initial controller remains active. Use a new host Key to '
+            'replace it intentionally.',
+          ),
+          library: 'Lissom appearance',
+          context: ErrorDescription('while updating an appearance host'),
         ),
-        library: 'Lissom appearance',
-        context: ErrorDescription('while updating an appearance host'),
-      ));
+      );
     }
   }
 

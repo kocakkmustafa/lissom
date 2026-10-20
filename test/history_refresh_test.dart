@@ -429,7 +429,10 @@ void main() {
     await _refreshUntil(
       tester,
       () =>
-          find.byType(StudyReviewPage, skipOffstage: false).evaluate().isEmpty &&
+          find
+              .byType(StudyReviewPage, skipOffstage: false)
+              .evaluate()
+              .isEmpty &&
           returns == 1,
       'recall route disposal and exactly one return callback',
     );

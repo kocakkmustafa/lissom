@@ -52,7 +52,9 @@ class ProfileScreen extends StatelessWidget {
       context,
     );
     return DecoratedBox(
-      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
+      decoration: BoxDecoration(
+        gradient: LissomPalette.of(context).screenBackground,
+      ),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -266,33 +268,35 @@ class _EntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    return LissomFocusFrame(child: InkWell(
-      borderRadius: BorderRadius.circular(LissomRadii.card),
-      onTap: onTap,
-      child: LissomCard(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(title, style: t.textTheme.headlineSmall),
-                  const SizedBox(height: 6),
-                  Text(subtitle, style: t.textTheme.bodyMedium),
-                ],
+    return LissomFocusFrame(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(LissomRadii.card),
+        onTap: onTap,
+        child: LissomCard(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(title, style: t.textTheme.headlineSmall),
+                    const SizedBox(height: 6),
+                    Text(subtitle, style: t.textTheme.bodyMedium),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Icon(
-              Directionality.of(context) == TextDirection.rtl
-                  ? Icons.chevron_left
-                  : Icons.chevron_right,
-              color: LissomPalette.of(context).textSecondary,
-            ),
-          ],
+              const SizedBox(width: 12),
+              Icon(
+                Directionality.of(context) == TextDirection.rtl
+                    ? Icons.chevron_left
+                    : Icons.chevron_right,
+                color: LissomPalette.of(context).textSecondary,
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -400,26 +404,35 @@ class _LanguageCard extends StatelessWidget {
                 RadioGroup<String>(
                   groupValue: controller.tag ?? 'system',
                   onChanged: (tag) async {
-                    if (tag == null || !controller.isReady || controller.isSaving) { return; }
-                    final saved = await controller.select(tag == 'system' ? null : tag);
+                    if (tag == null ||
+                        !controller.isReady ||
+                        controller.isSaving) {
+                      return;
+                    }
+                    final saved = await controller.select(
+                      tag == 'system' ? null : tag,
+                    );
                     if (saved && dialogContext.mounted) {
                       Navigator.of(dialogContext).pop();
                     }
                   },
-                  child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                _option(
-                  context,
-                  null,
-                  localeText(
-                    context,
-                    'Use system language',
-                    'Sistem dilini kullan',
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      _option(
+                        context,
+                        null,
+                        localeText(
+                          context,
+                          'Use system language',
+                          'Sistem dilini kullan',
+                        ),
+                      ),
+                      for (final MapEntry<String, String> language
+                          in kLissomLanguageNames.entries)
+                        _option(context, language.key, language.value),
+                    ],
                   ),
-                ),
-                for (final MapEntry<String, String> language
-                    in kLissomLanguageNames.entries)
-                  _option(context, language.key, language.value),
-                  ]),
                 ),
               ],
             ),
@@ -438,10 +451,12 @@ class _LanguageCard extends StatelessWidget {
   );
 
   Widget _option(BuildContext context, String? tag, String label) =>
-      LissomFocusFrame(child: RadioListTile<String>(
-        key: Key('profile.language.option.${tag ?? 'system'}'),
-        value: tag ?? 'system',
-        enabled: controller.isReady && !controller.isSaving,
-        title: Text(label),
-      ));
+      LissomFocusFrame(
+        child: RadioListTile<String>(
+          key: Key('profile.language.option.${tag ?? 'system'}'),
+          value: tag ?? 'system',
+          enabled: controller.isReady && !controller.isSaving,
+          title: Text(label),
+        ),
+      );
 }

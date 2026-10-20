@@ -128,7 +128,9 @@ void main() {
         loadDeadline: const Duration(milliseconds: 20),
       );
       LissomLocalizations? firstResult;
-      final Future<LissomLocalizations> first = delegate.load(const Locale('ko'));
+      final Future<LissomLocalizations> first = delegate.load(
+        const Locale('ko'),
+      );
       unawaited(
         first.then((LissomLocalizations value) {
           firstResult = value;
@@ -150,17 +152,16 @@ void main() {
 
       // No automatic retry is promised. An explicit later load may use the
       // completed real CachingAssetBundle string future.
-      final Future<LissomLocalizations> retry = delegate.load(const Locale('ko'));
+      final Future<LissomLocalizations> retry = delegate.load(
+        const Locale('ko'),
+      );
       await tester.pump();
       final LissomLocalizations available = await retry;
       expect(available, isNot(same(unavailable)));
       expect(available.tag, 'ko');
       expect(available.catalogAvailable, isTrue);
       expect(available.lookup('Hello'), '안녕하세요');
-      expect(
-        available.lookup('Value {value} on {date}'),
-        '{date}의 값 {value}',
-      );
+      expect(available.lookup('Value {value} on {date}'), '{date}의 값 {value}');
       expect(
         available.lookup('Repeat {value} then {value}'),
         '{value} 이후 다시 {value}',
@@ -202,10 +203,11 @@ void main() {
       expect(assetFailure.messages, isEmpty);
 
       final _PendingCatalogBundle invalidUtf8 = _PendingCatalogBundle();
-      final Future<LissomLocalizations> decodeLoad = LissomLocalizationsDelegate(
-        bundle: invalidUtf8,
-        loadDeadline: const Duration(seconds: 30),
-      ).load(const Locale('id'));
+      final Future<LissomLocalizations> decodeLoad =
+          LissomLocalizationsDelegate(
+            bundle: invalidUtf8,
+            loadDeadline: const Duration(seconds: 30),
+          ).load(const Locale('id'));
       invalidUtf8.completeBytes(<int>[0xC3, 0x28]);
       await tester.pump();
       final LissomLocalizations decodeFailure = await decodeLoad;

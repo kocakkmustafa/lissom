@@ -33,10 +33,16 @@ Future<bool> waitForActiveThemeCatalog(
       if (elements.length == 1) {
         final context = elements.single;
         final active = LissomLocalizations.maybeOf(context);
-        if (active != null && active.catalogAvailable && active.tag == tag &&
+        if (active != null &&
+            active.catalogAvailable &&
+            active.tag == tag &&
             canonicalLocaleTag(Localizations.localeOf(context)) == tag &&
-            requiredKeys.every((key) => active.lookup(key) != null &&
-              (expected == null || active.lookup(key) == expected.lookup(key)))) {
+            requiredKeys.every(
+              (key) =>
+                  active.lookup(key) != null &&
+                  (expected == null ||
+                      active.lookup(key) == expected.lookup(key)),
+            )) {
           return true;
         }
       }
@@ -49,7 +55,13 @@ Future<bool> waitForActiveThemeCatalog(
 
 Future<void> pumpThemeWidget(WidgetTester tester, Widget widget) async {
   await tester.pumpWidget(widget);
-  expect(await waitForActiveThemeCatalog(tester,
-    anchor: find.byKey(themeCatalogAnchor), tag: 'en'), isTrue,
-    reason: 'The actual mounted English delegate and body must be ready.');
+  expect(
+    await waitForActiveThemeCatalog(
+      tester,
+      anchor: find.byKey(themeCatalogAnchor),
+      tag: 'en',
+    ),
+    isTrue,
+    reason: 'The actual mounted English delegate and body must be ready.',
+  );
 }

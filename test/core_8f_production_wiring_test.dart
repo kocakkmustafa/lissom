@@ -44,8 +44,9 @@ class _NoNetworkSupabase implements SupabaseClient {
   @override
   GoTrueClient get auth => const _NoNetworkAuth();
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnsupportedError('Unexpected fixture call: ${invocation.memberName}');
+  dynamic noSuchMethod(Invocation invocation) => throw UnsupportedError(
+    'Unexpected fixture call: ${invocation.memberName}',
+  );
 }
 
 class _NoNetworkAuth implements GoTrueClient {
@@ -57,8 +58,9 @@ class _NoNetworkAuth implements GoTrueClient {
   @override
   Stream<AuthState> get onAuthStateChange => const Stream.empty();
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnsupportedError('Unexpected fixture call: ${invocation.memberName}');
+  dynamic noSuchMethod(Invocation invocation) => throw UnsupportedError(
+    'Unexpected fixture call: ${invocation.memberName}',
+  );
 }
 
 class _ProfileAccount implements MotionAccountClient {
@@ -72,8 +74,11 @@ class _ProfileAccount implements MotionAccountClient {
   String get emailRedirectTo => production.kLissomAuthRedirect;
   @override
   User? get currentUser => const User(
-    id: _ownerId, appMetadata: {}, userMetadata: null,
-    aud: 'authenticated', createdAt: '2026-10-20T00:00:00Z',
+    id: _ownerId,
+    appMetadata: {},
+    userMetadata: null,
+    aud: 'authenticated',
+    createdAt: '2026-10-20T00:00:00Z',
   );
   @override
   Stream<AuthState> get authChanges => const Stream.empty();
@@ -82,13 +87,16 @@ class _ProfileAccount implements MotionAccountClient {
     profileReads++;
     return <String, dynamic>{'display_name': 'Initial fixture name'};
   }
+
   @override
   Future<void> saveDisplayName(String name) async {
     savedNames.add(name);
   }
+
   @override
-  dynamic noSuchMethod(Invocation invocation) =>
-      throw UnsupportedError('Unexpected fixture call: ${invocation.memberName}');
+  dynamic noSuchMethod(Invocation invocation) => throw UnsupportedError(
+    'Unexpected fixture call: ${invocation.memberName}',
+  );
 }
 
 class _OwnerProbe extends StatefulWidget {
@@ -109,7 +117,9 @@ class _OwnerProbeState extends State<_OwnerProbe> {
 }
 
 Future<void> _waitForProductionCatalogs(
-  WidgetTester tester, String tag, String expectedProfile,
+  WidgetTester tester,
+  String tag,
+  String expectedProfile,
 ) async {
   final ready = await tester.runAsync(() async {
     final elapsed = Stopwatch()..start();
@@ -119,13 +129,17 @@ Future<void> _waitForProductionCatalogs(
       if (elements.length == 1) {
         final context = elements.single;
         final core = Localizations.of<MotionAccountLocalizations>(
-          context, MotionAccountLocalizations);
+          context,
+          MotionAccountLocalizations,
+        );
         final app = LissomLocalizations.maybeOf(context);
         if (core != null &&
             identical(MotionAccountLocalizations.of(context), core) &&
             core.locale.toLanguageTag() == tag &&
             Localizations.localeOf(context).toLanguageTag() == tag &&
-            app != null && app.catalogAvailable && app.tag == tag &&
+            app != null &&
+            app.catalogAvailable &&
+            app.tag == tag &&
             app.lookup('Profile') == expectedProfile &&
             find.text(_copy[tag]!.$1).evaluate().length == 1) {
           return true;
@@ -135,97 +149,164 @@ Future<void> _waitForProductionCatalogs(
     }
     return false;
   });
-  expect(ready, isTrue,
-    reason: 'Production LissomApp must actually register both mounted catalogs for $tag; of fallback alone is insufficient.');
+  expect(
+    ready,
+    isTrue,
+    reason:
+        'Production LissomApp must actually register both mounted catalogs for $tag; of fallback alone is insufficient.',
+  );
 }
 
 void main() {
-  testWidgets('production LissomApp registers Core catalog and preserves owner/account draft EN TR AR', (tester) async {
-    final preference = LissomLocaleController(store: _MemoryPreference());
-    final account = _ProfileAccount();
-    final owner = LissomLocalOwner(userId: _ownerId, epoch: _ownerEpoch);
-    final scope = LissomLocalScope.account(_ownerId, owner: owner);
-    expect(motionPaidFeaturesAvailable, isFalse);
-    await preference.initialize();
-    addTearDown(() async {
-      await tester.pumpWidget(const SizedBox.shrink());
-      preference.dispose();
-      await owner.retireAndDrain();
-    });
-    final expectedProfile = <String, String>{};
-    for (final tag in _copy.keys) {
-      // Same real rootBundle/preload pattern as owner_session_contract_test.
-      // Actual production delegates still mount below; this parse is no proof.
-      final raw = await tester.runAsync(() => rootBundle
-        .loadString('config/l10n/$tag.json').timeout(const Duration(seconds: 10)));
-      expect(raw, isNotNull);
-      final parsed = LissomLocalizations.parse(raw!, tag);
-      expect(parsed.catalogAvailable, isTrue);
-      expectedProfile[tag] = parsed.lookup('Profile')!;
-    }
-    await tester.pumpWidget(LissomLocaleHost(
-      controller: preference,
-      // No test-authored MaterialApp or test localizationsDelegates here.
-      child: production.LissomApp(localScope: scope,
-        forcedAccountPage: _OwnerProbe(key: _ownerProbeKey,
-          child: MotionAccountPage(key: _accountPageKey, account: account))),
-    ));
-    await _waitForProductionCatalogs(tester, 'en', expectedProfile['en']!);
-    final appState = tester.state(find.byType(MaterialApp));
-    final accountState = tester.state(find.byType(MotionAccountPage));
-    final ownerState = tester.state<_OwnerProbeState>(find.byKey(_ownerProbeKey));
-    final appKey = tester.widget<MaterialApp>(find.byType(MaterialApp)).key;
-    expect(appKey, ValueKey<String>('lissom:${scope.lifetimeKey}:account'));
-    final field = find.descendant(of: find.byType(MotionAccountPage), matching: find.byType(TextField));
-    expect(field, findsOneWidget);
-    await tester.ensureVisible(field);
-    await tester.pump();
-    await tester.enterText(field, _draftName);
-    await tester.pump();
-    for (final tag in _copy.keys) {
-      expect(await preference.select(tag), isTrue);
-      await _waitForProductionCatalogs(tester, tag, expectedProfile[tag]!);
-      final context = tester.element(find.byType(MotionAccountPage));
-      final registered = Localizations.of<MotionAccountLocalizations>(
-        context, MotionAccountLocalizations);
-      expect(registered, isNotNull);
-      expect(MotionAccountLocalizations.of(context), same(registered));
-      expect(registered!.membershipForApp('Lissom'), _copy[tag]!.$3);
-      expect(find.text(_copy[tag]!.$1), findsOneWidget);
-      expect(tester.widget<TextField>(field).decoration!.labelText, _copy[tag]!.$2);
-      expect(tester.widget<TextField>(field).controller!.text, _draftName);
-      expect(Directionality.of(context), tag == 'ar' ? TextDirection.rtl : TextDirection.ltr);
-      expect(tester.state(find.byType(MaterialApp)), same(appState));
-      expect(tester.widget<MaterialApp>(find.byType(MaterialApp)).key, appKey);
-      expect(tester.state(find.byType(MotionAccountPage)), same(accountState));
-      expect(tester.state(find.byKey(_ownerProbeKey)), same(ownerState));
-      expect(ownerState.observedOwner, same(owner));
-      expect(scope.owner, same(owner));
-      expect(owner.epoch, _ownerEpoch);
-      expect(owner.isActive, isTrue);
-      final delegates = tester.widget<MaterialApp>(find.byType(MaterialApp)).localizationsDelegates!.toList();
-      expect(delegates.where((item) => identical(item, MotionAccountLocalizations.delegate)), hasLength(1));
-      expect(delegates.where((item) => identical(item, GlobalMaterialLocalizations.delegate)), hasLength(1));
-      expect(delegates.where((item) => identical(item, GlobalWidgetsLocalizations.delegate)), hasLength(1));
-      expect(delegates.where((item) => identical(item, GlobalCupertinoLocalizations.delegate)), hasLength(1));
-      expect(account.savedNames, isEmpty, reason: 'Locale changes must not submit profile drafts.');
-    }
-    final save = find.widgetWithText(FilledButton, 'حفظ الملف الشخصي');
-    await tester.ensureVisible(save);
-    await tester.pump();
-    expect(save.hitTestable(), findsOneWidget);
-    await tester.tap(save);
-    for (var frame = 0; frame < 50; frame++) {
-      await tester.pump(const Duration(milliseconds: 20));
-      if (account.savedNames.length == 1 &&
-          find.text('تم حفظ الملف الشخصي.').evaluate().length == 1) {
-        break;
+  testWidgets(
+    'production LissomApp registers Core catalog and preserves owner/account draft EN TR AR',
+    (tester) async {
+      final preference = LissomLocaleController(store: _MemoryPreference());
+      final account = _ProfileAccount();
+      final owner = LissomLocalOwner(userId: _ownerId, epoch: _ownerEpoch);
+      final scope = LissomLocalScope.account(_ownerId, owner: owner);
+      expect(motionPaidFeaturesAvailable, isFalse);
+      await preference.initialize();
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        preference.dispose();
+        await owner.retireAndDrain();
+      });
+      final expectedProfile = <String, String>{};
+      for (final tag in _copy.keys) {
+        // Same real rootBundle/preload pattern as owner_session_contract_test.
+        // Actual production delegates still mount below; this parse is no proof.
+        final raw = await tester.runAsync(
+          () => rootBundle
+              .loadString('config/l10n/$tag.json')
+              .timeout(const Duration(seconds: 10)),
+        );
+        expect(raw, isNotNull);
+        final parsed = LissomLocalizations.parse(raw!, tag);
+        expect(parsed.catalogAvailable, isTrue);
+        expectedProfile[tag] = parsed.lookup('Profile')!;
       }
-    }
-    expect(account.savedNames, <String>[_draftName]);
-    expect(account.profileReads, 1, reason: 'Locale selection must not recreate account State/read lifecycle.');
-    expect(find.text('تم حفظ الملف الشخصي.'), findsOneWidget);
-    expect(tester.state(find.byType(MotionAccountPage)), same(accountState));
-    expect(tester.takeException(), isNull);
-  });
+      await tester.pumpWidget(
+        LissomLocaleHost(
+          controller: preference,
+          // No test-authored MaterialApp or test localizationsDelegates here.
+          child: production.LissomApp(
+            localScope: scope,
+            forcedAccountPage: _OwnerProbe(
+              key: _ownerProbeKey,
+              child: MotionAccountPage(key: _accountPageKey, account: account),
+            ),
+          ),
+        ),
+      );
+      await _waitForProductionCatalogs(tester, 'en', expectedProfile['en']!);
+      final appState = tester.state(find.byType(MaterialApp));
+      final accountState = tester.state(find.byType(MotionAccountPage));
+      final ownerState = tester.state<_OwnerProbeState>(
+        find.byKey(_ownerProbeKey),
+      );
+      final appKey = tester.widget<MaterialApp>(find.byType(MaterialApp)).key;
+      expect(appKey, ValueKey<String>('lissom:${scope.lifetimeKey}:account'));
+      final field = find.descendant(
+        of: find.byType(MotionAccountPage),
+        matching: find.byType(TextField),
+      );
+      expect(field, findsOneWidget);
+      await tester.ensureVisible(field);
+      await tester.pump();
+      await tester.enterText(field, _draftName);
+      await tester.pump();
+      for (final tag in _copy.keys) {
+        expect(await preference.select(tag), isTrue);
+        await _waitForProductionCatalogs(tester, tag, expectedProfile[tag]!);
+        final context = tester.element(find.byType(MotionAccountPage));
+        final registered = Localizations.of<MotionAccountLocalizations>(
+          context,
+          MotionAccountLocalizations,
+        );
+        expect(registered, isNotNull);
+        expect(MotionAccountLocalizations.of(context), same(registered));
+        expect(registered!.membershipForApp('Lissom'), _copy[tag]!.$3);
+        expect(find.text(_copy[tag]!.$1), findsOneWidget);
+        expect(
+          tester.widget<TextField>(field).decoration!.labelText,
+          _copy[tag]!.$2,
+        );
+        expect(tester.widget<TextField>(field).controller!.text, _draftName);
+        expect(
+          Directionality.of(context),
+          tag == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+        );
+        expect(tester.state(find.byType(MaterialApp)), same(appState));
+        expect(
+          tester.widget<MaterialApp>(find.byType(MaterialApp)).key,
+          appKey,
+        );
+        expect(
+          tester.state(find.byType(MotionAccountPage)),
+          same(accountState),
+        );
+        expect(tester.state(find.byKey(_ownerProbeKey)), same(ownerState));
+        expect(ownerState.observedOwner, same(owner));
+        expect(scope.owner, same(owner));
+        expect(owner.epoch, _ownerEpoch);
+        expect(owner.isActive, isTrue);
+        final delegates = tester
+            .widget<MaterialApp>(find.byType(MaterialApp))
+            .localizationsDelegates!
+            .toList();
+        expect(
+          delegates.where(
+            (item) => identical(item, MotionAccountLocalizations.delegate),
+          ),
+          hasLength(1),
+        );
+        expect(
+          delegates.where(
+            (item) => identical(item, GlobalMaterialLocalizations.delegate),
+          ),
+          hasLength(1),
+        );
+        expect(
+          delegates.where(
+            (item) => identical(item, GlobalWidgetsLocalizations.delegate),
+          ),
+          hasLength(1),
+        );
+        expect(
+          delegates.where(
+            (item) => identical(item, GlobalCupertinoLocalizations.delegate),
+          ),
+          hasLength(1),
+        );
+        expect(
+          account.savedNames,
+          isEmpty,
+          reason: 'Locale changes must not submit profile drafts.',
+        );
+      }
+      final save = find.widgetWithText(FilledButton, 'حفظ الملف الشخصي');
+      await tester.ensureVisible(save);
+      await tester.pump();
+      expect(save.hitTestable(), findsOneWidget);
+      await tester.tap(save);
+      for (var frame = 0; frame < 50; frame++) {
+        await tester.pump(const Duration(milliseconds: 20));
+        if (account.savedNames.length == 1 &&
+            find.text('تم حفظ الملف الشخصي.').evaluate().length == 1) {
+          break;
+        }
+      }
+      expect(account.savedNames, <String>[_draftName]);
+      expect(
+        account.profileReads,
+        1,
+        reason:
+            'Locale selection must not recreate account State/read lifecycle.',
+      );
+      expect(find.text('تم حفظ الملف الشخصي.'), findsOneWidget);
+      expect(tester.state(find.byType(MotionAccountPage)), same(accountState));
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

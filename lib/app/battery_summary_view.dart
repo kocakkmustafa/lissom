@@ -46,15 +46,19 @@ class BatterySummaryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
+      decoration: BoxDecoration(
+        gradient: LissomPalette.of(context).screenBackground,
+      ),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
           Padding(
             key: headerKey,
             padding: const EdgeInsets.only(bottom: 22),
-            child: LissomEyebrow(SummaryStrings.header,
-                color: LissomPalette.of(context).accentText),
+            child: LissomEyebrow(
+              SummaryStrings.header,
+              color: LissomPalette.of(context).accentText,
+            ),
           ),
           if (summary.scored.isNotEmpty)
             _section(
@@ -73,8 +77,10 @@ class BatterySummaryView extends StatelessWidget {
               title: SummaryStrings.belowRangeSection,
               subtitle: SummaryStrings.belowRangeSubtitle,
               children: summary.belowRange
-                  .map((SummaryRow r) =>
-                      _valueOnlyRow(context, 'belowRange', r, coached: true))
+                  .map(
+                    (SummaryRow r) =>
+                        _valueOnlyRow(context, 'belowRange', r, coached: true),
+                  )
                   .toList(growable: false),
             ),
           if (summary.noBands.isNotEmpty)
@@ -84,8 +90,10 @@ class BatterySummaryView extends StatelessWidget {
               title: SummaryStrings.noBandsSection,
               subtitle: SummaryStrings.noBandsSubtitle,
               children: summary.noBands
-                  .map((SummaryRow r) =>
-                      _valueOnlyRow(context, 'noBands', r, coached: false))
+                  .map(
+                    (SummaryRow r) =>
+                        _valueOnlyRow(context, 'noBands', r, coached: false),
+                  )
                   .toList(growable: false),
             ),
           if (summary.notCompared.isNotEmpty)
@@ -116,20 +124,20 @@ class BatterySummaryView extends StatelessWidget {
   /// Görsel sarmalayıcı — [content] KENDİSİ zaten anahtarlı `Column`dur, bu
   /// yalnız etrafına kart/gölge/boşluk ekler. Yeni bir `Column` YARATMAZ.
   static Widget _wrapCard(Widget content, {Gradient? gradient}) => Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: LissomCard(gradient: gradient, child: content),
-      );
+    padding: const EdgeInsets.only(bottom: 10),
+    child: LissomCard(gradient: gradient, child: content),
+  );
 
   static Widget _pill(String text, ThemeData t) => DecoratedBox(
-        decoration: BoxDecoration(
-          color: LissomPalette.fromTheme(t).canvas,
-          borderRadius: BorderRadius.circular(LissomRadii.pill),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          child: Text(text, style: t.textTheme.titleSmall),
-        ),
-      );
+    decoration: BoxDecoration(
+      color: LissomPalette.fromTheme(t).canvas,
+      borderRadius: BorderRadius.circular(LissomRadii.pill),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Text(text, style: t.textTheme.titleSmall),
+    ),
+  );
 
   Widget _scoredRow(BuildContext context, SummaryRow r) {
     final ThemeData t = Theme.of(context);
@@ -145,8 +153,10 @@ class BatterySummaryView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
-                child: Text(SummaryStrings.value(r.value!, r.unit),
-                    style: t.textTheme.displaySmall),
+                child: Text(
+                  SummaryStrings.value(r.value!, r.unit),
+                  style: t.textTheme.displaySmall,
+                ),
               ),
               const SizedBox(width: 12),
               _pill(r.bandLabel ?? SummaryStrings.noJudgement, t),
@@ -164,8 +174,12 @@ class BatterySummaryView extends StatelessWidget {
   ///
   /// SIRA SABİT: [ad, değer, tire] — belowRange sabotaj testi `texts[1]` ve
   /// `texts[2]`'yi İNDEKSE göre okuyor, görsel gruplamaya göre değil.
-  Widget _valueOnlyRow(BuildContext context, String section, SummaryRow r,
-      {required bool coached}) {
+  Widget _valueOnlyRow(
+    BuildContext context,
+    String section,
+    SummaryRow r, {
+    required bool coached,
+  }) {
     final ThemeData t = Theme.of(context);
     return _wrapCard(
       Column(
@@ -175,19 +189,27 @@ class BatterySummaryView extends StatelessWidget {
         children: <Widget>[
           Text(r.testName, style: t.textTheme.titleMedium),
           const SizedBox(height: 8),
-          Text(SummaryStrings.value(r.value!, r.unit),
-              style: t.textTheme.displaySmall),
+          Text(
+            SummaryStrings.value(r.value!, r.unit),
+            style: t.textTheme.displaySmall,
+          ),
           const SizedBox(height: 4),
-          Text(SummaryStrings.noJudgement,
-              style: t.textTheme.bodyMedium
-                  ?.copyWith(color: LissomPalette.of(context).textSecondary)),
+          Text(
+            SummaryStrings.noJudgement,
+            style: t.textTheme.bodyMedium?.copyWith(
+              color: LissomPalette.of(context).textSecondary,
+            ),
+          ),
         ],
       ),
       gradient: coached
-          ?  LinearGradient(
+          ? LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[LissomPalette.of(context).card, LissomPalette.of(context).cardWarmEnd],
+              colors: <Color>[
+                LissomPalette.of(context).card,
+                LissomPalette.of(context).cardWarmEnd,
+              ],
             )
           : null,
     );
@@ -205,28 +227,39 @@ class BatterySummaryView extends StatelessWidget {
         children: <Widget>[
           Text(r.testName, style: t.textTheme.titleMedium),
           const SizedBox(height: 8),
-          Text(SummaryStrings.value(r.value!, r.unit),
-              style: t.textTheme.displaySmall),
+          Text(
+            SummaryStrings.value(r.value!, r.unit),
+            style: t.textTheme.displaySmall,
+          ),
           const SizedBox(height: 4),
-          Text(SummaryStrings.noJudgement,
-              style: t.textTheme.bodyMedium
-                  ?.copyWith(color: LissomPalette.of(context).textSecondary)),
+          Text(
+            SummaryStrings.noJudgement,
+            style: t.textTheme.bodyMedium?.copyWith(
+              color: LissomPalette.of(context).textSecondary,
+            ),
+          ),
           if (r.userNote != null) ...<Widget>[
             const SizedBox(height: 10),
             Text(r.userNote!, style: t.textTheme.bodyMedium),
           ],
           if (r.promotionNote != null) ...<Widget>[
             const SizedBox(height: 6),
-            Text(r.promotionNote!,
-                style: t.textTheme.bodySmall
-                    ?.copyWith(color: LissomPalette.of(context).accentText)),
+            Text(
+              r.promotionNote!,
+              style: t.textTheme.bodySmall?.copyWith(
+                color: LissomPalette.of(context).accentText,
+              ),
+            ),
           ],
         ],
       ),
-      gradient:  LinearGradient(
+      gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: <Color>[LissomPalette.of(context).card, LissomPalette.of(context).cardNeutralEnd],
+        colors: <Color>[
+          LissomPalette.of(context).card,
+          LissomPalette.of(context).cardNeutralEnd,
+        ],
       ),
     );
   }
@@ -241,12 +274,17 @@ class BatterySummaryView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(r.testName,
-              style: t.textTheme.labelLarge
-                  ?.copyWith(color: LissomPalette.of(context).textSecondary)),
+          Text(
+            r.testName,
+            style: t.textTheme.labelLarge?.copyWith(
+              color: LissomPalette.of(context).textSecondary,
+            ),
+          ),
           const SizedBox(height: 8),
-          Text(SummaryStrings.reason(r.reasonCode ?? 'unknown'),
-              style: t.textTheme.headlineSmall),
+          Text(
+            SummaryStrings.reason(r.reasonCode ?? 'unknown'),
+            style: t.textTheme.headlineSmall,
+          ),
         ],
       ),
     );

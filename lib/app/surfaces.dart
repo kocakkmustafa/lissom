@@ -245,7 +245,9 @@ class HonestyBoxCard extends StatelessWidget {
             child: Icon(
               live ? Icons.videocam_outlined : Icons.videocam_off_outlined,
               size: 15,
-              color: live ? t.colorScheme.primary : LissomPalette.of(context).textSecondary,
+              color: live
+                  ? t.colorScheme.primary
+                  : LissomPalette.of(context).textSecondary,
             ),
           ),
           const SizedBox(width: 10),
@@ -349,10 +351,13 @@ class DeclarationBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     return LissomCard(
-      gradient:  LinearGradient(
+      gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: <Color>[LissomPalette.of(context).bannerStart, LissomPalette.of(context).bannerEnd],
+        colors: <Color>[
+          LissomPalette.of(context).bannerStart,
+          LissomPalette.of(context).bannerEnd,
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,7 +371,9 @@ class DeclarationBanner extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             body,
-            style: t.textTheme.bodyMedium?.copyWith(color: LissomPalette.of(context).onBanner),
+            style: t.textTheme.bodyMedium?.copyWith(
+              color: LissomPalette.of(context).onBanner,
+            ),
           ),
         ],
       ),

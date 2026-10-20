@@ -180,7 +180,9 @@ class _LissomShellState extends State<LissomShell> {
         : chairOffice
         ? facts.chairOffice
         : facts.hatha;
-    if (course == null) { return; }
+    if (course == null) {
+      return;
+    }
     final Future<HathaProgressStore> Function() storeLoader =
         _hathaStoreLoader();
     await Navigator.of(context).push<void>(
@@ -211,8 +213,12 @@ class _LissomShellState extends State<LissomShell> {
       if (s.connectionState != ConnectionState.done) {
         return const _LoadingScreen();
       }
-      if (s.hasError) { return _LoadFailureScreen(onRetry: _reloadFacts); }
-      if (!s.hasData) { return const _LoadingScreen(); }
+      if (s.hasError) {
+        return _LoadFailureScreen(onRetry: _reloadFacts);
+      }
+      if (!s.hasData) {
+        return const _LoadingScreen();
+      }
 
       final AppFacts facts = s.data!;
       if (!_tabsMatch(facts)) {
@@ -228,12 +234,14 @@ class _LissomShellState extends State<LissomShell> {
           surfaceTintColor: Colors.transparent,
           destinations: <Widget>[
             for (final String id in facts.ia.tabs)
-              LissomFocusFrame(child: NavigationDestination(
-                icon: Icon(_icons[id]),
-                // Etiket id'den TÜRETİLİR — ikinci bir ad listesi
-                // tutmuyoruz, çünkü iki liste ayrışır.
-                label: _label(context, id),
-              )),
+              LissomFocusFrame(
+                child: NavigationDestination(
+                  icon: Icon(_icons[id]),
+                  // Etiket id'den TÜRETİLİR — ikinci bir ad listesi
+                  // tutmuyoruz, çünkü iki liste ayrışır.
+                  label: _label(context, id),
+                ),
+              ),
           ],
         ),
       );
@@ -242,9 +250,13 @@ class _LissomShellState extends State<LissomShell> {
 
   static bool _tabsMatch(AppFacts facts) {
     final List<String> declared = facts.ia.tabs;
-    if (declared.length != kImplementedTabs.length) { return false; }
+    if (declared.length != kImplementedTabs.length) {
+      return false;
+    }
     for (int i = 0; i < declared.length; i++) {
-      if (declared[i] != kImplementedTabs[i]) { return false; }
+      if (declared[i] != kImplementedTabs[i]) {
+        return false;
+      }
     }
     return true;
   }
@@ -311,11 +323,16 @@ class _LoadingScreen extends StatelessWidget {
   const _LoadingScreen();
 
   @override
-  Widget build(BuildContext context) =>  Scaffold(
+  Widget build(BuildContext context) => Scaffold(
     body: DecoratedBox(
-      decoration: BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
-      child: Center(child: LissomLoadingIndicator(
-        label: localeText(context, 'Loading…', 'Yükleniyor…'))),
+      decoration: BoxDecoration(
+        gradient: LissomPalette.of(context).screenBackground,
+      ),
+      child: Center(
+        child: LissomLoadingIndicator(
+          label: localeText(context, 'Loading…', 'Yükleniyor…'),
+        ),
+      ),
     ),
   );
 }
@@ -332,7 +349,7 @@ class _LoadFailureScreen extends StatelessWidget {
     return Scaffold(
       key: key_,
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: Center(
@@ -390,7 +407,7 @@ class _TabMismatchScreen extends StatelessWidget {
     return Scaffold(
       key: key_,
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: Center(

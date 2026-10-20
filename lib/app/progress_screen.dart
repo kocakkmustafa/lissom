@@ -104,7 +104,9 @@ class ProgressScreen extends StatelessWidget {
     final SessionHistoryView h = facts.history;
 
     return DecoratedBox(
-      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
+      decoration: BoxDecoration(
+        gradient: LissomPalette.of(context).screenBackground,
+      ),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[

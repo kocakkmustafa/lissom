@@ -91,7 +91,7 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(configText(context, widget.test.name))),
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: SafeArea(
@@ -99,8 +99,11 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
             future: _history,
             builder: (BuildContext context, AsyncSnapshot<_History> snap) {
               if (!snap.hasData) {
-                return Center(child: LissomLoadingIndicator(
-                  label: localeText(context, 'Loading…', 'Yükleniyor…')));
+                return Center(
+                  child: LissomLoadingIndicator(
+                    label: localeText(context, 'Loading…', 'Yükleniyor…'),
+                  ),
+                );
               }
               final _History h = snap.data!;
               final bool anyData = h.bySide.values.any(

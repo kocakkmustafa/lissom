@@ -122,7 +122,9 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final panels = _panels[lessonId];
-    if (panels == null) { return const SizedBox.shrink(); }
+    if (panels == null) {
+      return const SizedBox.shrink();
+    }
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -196,8 +198,13 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
 }
 
 class _PosePainter extends CustomPainter {
-  const _PosePainter(this.pose, this.labelStyle, this.palette,
-      this.numberOne, this.numberTwo);
+  const _PosePainter(
+    this.pose,
+    this.labelStyle,
+    this.palette,
+    this.numberOne,
+    this.numberTwo,
+  );
   final _Pose pose;
   final TextStyle labelStyle;
   final LissomPalette palette;
@@ -343,7 +350,9 @@ class _PosePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _PosePainter oldDelegate) =>
-      oldDelegate.pose != pose || oldDelegate.labelStyle != labelStyle ||
-      oldDelegate.palette != palette || oldDelegate.numberOne != numberOne ||
+      oldDelegate.pose != pose ||
+      oldDelegate.labelStyle != labelStyle ||
+      oldDelegate.palette != palette ||
+      oldDelegate.numberOne != numberOne ||
       oldDelegate.numberTwo != numberTwo;
 }

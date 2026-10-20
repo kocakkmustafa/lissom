@@ -4,7 +4,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart' show CupertinoThemeData, CupertinoTextThemeData;
+import 'package:flutter/cupertino.dart'
+    show CupertinoThemeData, CupertinoTextThemeData;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,6 +17,7 @@ abstract final class LissomColors {
   static const Color mist = Color(0xFFBACDDE);
   static const Color cream = Color(0xFFF5E6D0);
   static const Color roseDeep = Color(0xFFB0748F);
+
   /// **Vurgu METNİ tonu.** #8E5A73'ten #86556D'ye koyulaştırıldı (L-234):
   /// eskisi ekranın en koyu gradyan durağında **4,18:1** veriyordu, eşik 4.5.
   /// Ton (331°) ve doygunluk (0,224) AYNEN korundu — yalnız açıklık düştü,
@@ -133,9 +135,16 @@ ThemeData buildLissomTheme({
   Brightness brightness = Brightness.light,
   Locale? locale,
 }) {
-  final bool joinedOrDenseScript = <String>{'ar', 'hi', 'ja', 'ko', 'zh'}.contains(locale?.languageCode);
+  final bool joinedOrDenseScript = <String>{
+    'ar',
+    'hi',
+    'ja',
+    'ko',
+    'zh',
+  }.contains(locale?.languageCode);
   final LissomPalette p = brightness == Brightness.dark
-      ? LissomPalette.dark : LissomPalette.light;
+      ? LissomPalette.dark
+      : LissomPalette.light;
   final TextTheme sans = GoogleFonts.nunitoSansTextTheme();
   final TextTheme serif = GoogleFonts.newsreaderTextTheme();
 
@@ -149,12 +158,12 @@ ThemeData buildLissomTheme({
       );
 
   TextStyle label(double size, Color color) => sans.labelLarge!.copyWith(
-        fontSize: size,
-        fontWeight: FontWeight.w600,
-        letterSpacing: joinedOrDenseScript ? 0 : 0.16 * size,
-        color: color,
-        height: joinedOrDenseScript ? 1.3 : 1,
-      );
+    fontSize: size,
+    fontWeight: FontWeight.w600,
+    letterSpacing: joinedOrDenseScript ? 0 : 0.16 * size,
+    color: color,
+    height: joinedOrDenseScript ? 1.3 : 1,
+  );
 
   final TextTheme textTheme = TextTheme(
     displayLarge: display(56),
@@ -164,17 +173,35 @@ ThemeData buildLissomTheme({
     headlineMedium: display(26, weight: FontWeight.w400),
     headlineSmall: display(22, weight: FontWeight.w400),
     titleLarge: sans.titleLarge!.copyWith(
-        fontSize: 17, fontWeight: FontWeight.w600, color: p.textPrimary),
+      fontSize: 17,
+      fontWeight: FontWeight.w600,
+      color: p.textPrimary,
+    ),
     titleMedium: sans.titleMedium!.copyWith(
-        fontSize: 15, fontWeight: FontWeight.w600, color: p.textPrimary),
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color: p.textPrimary,
+    ),
     titleSmall: sans.titleSmall!.copyWith(
-        fontSize: 13.5, fontWeight: FontWeight.w600, color: p.textPrimary),
+      fontSize: 13.5,
+      fontWeight: FontWeight.w600,
+      color: p.textPrimary,
+    ),
     bodyLarge: sans.bodyLarge!.copyWith(
-        fontSize: 17, height: 1.65, color: p.textPrimary),
+      fontSize: 17,
+      height: 1.65,
+      color: p.textPrimary,
+    ),
     bodyMedium: sans.bodyMedium!.copyWith(
-        fontSize: 14, height: 1.6, color: p.textSecondary),
+      fontSize: 14,
+      height: 1.6,
+      color: p.textSecondary,
+    ),
     bodySmall: sans.bodySmall!.copyWith(
-        fontSize: 12.5, height: 1.5, color: p.textSecondary),
+      fontSize: 12.5,
+      height: 1.5,
+      color: p.textSecondary,
+    ),
     labelLarge: label(11, p.textSecondary),
     labelMedium: label(11, p.accentText),
     labelSmall: label(10.5, p.textSecondary),
@@ -183,26 +210,46 @@ ThemeData buildLissomTheme({
   final TextStyle buttonLabel = TextStyle(
     fontFamily: textTheme.titleSmall?.fontFamily,
     fontFamilyFallback: textTheme.titleSmall?.fontFamilyFallback,
-    fontSize: 13.5, fontWeight: FontWeight.w600,
+    fontSize: 13.5,
+    fontWeight: FontWeight.w600,
     height: joinedOrDenseScript ? 1.4 : null,
   );
   Color filledBackground(Set<WidgetState> states) {
-    if (states.contains(WidgetState.disabled)) { return p.disabledSurface; }
-    if (states.contains(WidgetState.pressed)) { return p.primaryPressed; }
-    if (states.contains(WidgetState.hovered)) { return p.primaryHover; }
+    if (states.contains(WidgetState.disabled)) {
+      return p.disabledSurface;
+    }
+    if (states.contains(WidgetState.pressed)) {
+      return p.primaryPressed;
+    }
+    if (states.contains(WidgetState.hovered)) {
+      return p.primaryHover;
+    }
     return p.primaryFill;
   }
+
   Color filledForeground(Set<WidgetState> states) =>
-      states.contains(WidgetState.disabled) ? p.disabledForeground : p.onPrimary;
+      states.contains(WidgetState.disabled)
+      ? p.disabledForeground
+      : p.onPrimary;
   Color actionForeground(Set<WidgetState> states) =>
-      states.contains(WidgetState.disabled) ? p.disabledForeground : p.accentText;
+      states.contains(WidgetState.disabled)
+      ? p.disabledForeground
+      : p.accentText;
   Color actionBackground(Set<WidgetState> states) {
-    if (states.contains(WidgetState.disabled)) { return p.disabledSurface; }
-    if (states.contains(WidgetState.hovered) || states.contains(WidgetState.pressed)) { return p.card; }
+    if (states.contains(WidgetState.disabled)) {
+      return p.disabledSurface;
+    }
+    if (states.contains(WidgetState.hovered) ||
+        states.contains(WidgetState.pressed)) {
+      return p.card;
+    }
     return Colors.transparent;
   }
+
   BorderSide actionSide(Set<WidgetState> states) => BorderSide(
-    color: states.contains(WidgetState.disabled) ? p.disabledForeground : p.focusRing,
+    color: states.contains(WidgetState.disabled)
+        ? p.disabledForeground
+        : p.focusRing,
     width: states.contains(WidgetState.focused) ? 3 : 1,
   );
   final ButtonStyle actionStyle = ButtonStyle(
@@ -210,43 +257,47 @@ ThemeData buildLissomTheme({
     backgroundColor: WidgetStateProperty.resolveWith(actionBackground),
     overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
     textStyle: WidgetStatePropertyAll<TextStyle>(buttonLabel),
-    side: WidgetStateProperty.resolveWith<BorderSide?>((states) =>
-      states.contains(WidgetState.focused) ? actionSide(states) : BorderSide.none),
+    side: WidgetStateProperty.resolveWith<BorderSide?>(
+      (states) => states.contains(WidgetState.focused)
+          ? actionSide(states)
+          : BorderSide.none,
+    ),
   );
 
-  final ColorScheme scheme = ColorScheme.fromSeed(
-    seedColor: p.brandSeed,
-    brightness: brightness,
-  ).copyWith(
-    primary: p.accentText,
-    onPrimary: p.onPrimary,
-    primaryContainer: p.selection,
-    onPrimaryContainer: p.onSelection,
-    secondary: p.secondary,
-    onSecondary: p.onPrimary,
-    tertiary: p.secondary,
-    onTertiary: p.onPrimary,
-    tertiaryContainer: p.secondaryContainer,
-    onTertiaryContainer: p.onSecondaryContainer,
-    surface: p.card,
-    onSurface: p.textPrimary,
-    surfaceContainerLowest: p.canvas,
-    surfaceContainerLow: p.card,
-    surfaceContainer: p.card,
-    surfaceContainerHigh: p.cardNeutralEnd,
-    surfaceContainerHighest: p.disabledSurface,
-    secondaryContainer: p.secondaryContainer,
-    onSecondaryContainer: p.onSecondaryContainer,
-    onSurfaceVariant: p.textSecondary,
-    outline: p.outline,
-    outlineVariant: p.divider,
-    surfaceTint: Colors.transparent,
-    shadow: p.shadow,
-    error: p.error,
-    onError: p.onError,
-    errorContainer: p.errorContainer,
-    onErrorContainer: p.onErrorContainer,
-  );
+  final ColorScheme scheme =
+      ColorScheme.fromSeed(
+        seedColor: p.brandSeed,
+        brightness: brightness,
+      ).copyWith(
+        primary: p.accentText,
+        onPrimary: p.onPrimary,
+        primaryContainer: p.selection,
+        onPrimaryContainer: p.onSelection,
+        secondary: p.secondary,
+        onSecondary: p.onPrimary,
+        tertiary: p.secondary,
+        onTertiary: p.onPrimary,
+        tertiaryContainer: p.secondaryContainer,
+        onTertiaryContainer: p.onSecondaryContainer,
+        surface: p.card,
+        onSurface: p.textPrimary,
+        surfaceContainerLowest: p.canvas,
+        surfaceContainerLow: p.card,
+        surfaceContainer: p.card,
+        surfaceContainerHigh: p.cardNeutralEnd,
+        surfaceContainerHighest: p.disabledSurface,
+        secondaryContainer: p.secondaryContainer,
+        onSecondaryContainer: p.onSecondaryContainer,
+        onSurfaceVariant: p.textSecondary,
+        outline: p.outline,
+        outlineVariant: p.divider,
+        surfaceTint: Colors.transparent,
+        shadow: p.shadow,
+        error: p.error,
+        onError: p.onError,
+        errorContainer: p.errorContainer,
+        onErrorContainer: p.onErrorContainer,
+      );
 
   return ThemeData(
     useMaterial3: true,
@@ -259,7 +310,8 @@ ThemeData buildLissomTheme({
     highlightColor: Colors.transparent,
     iconTheme: IconThemeData(color: p.textSecondary),
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: p.accentText, selectionColor: p.selection,
+      cursorColor: p.accentText,
+      selectionColor: p.selection,
       selectionHandleColor: p.accentText,
     ),
     colorScheme: scheme,
@@ -272,7 +324,8 @@ ThemeData buildLissomTheme({
       surfaceTintColor: Colors.transparent,
       foregroundColor: p.textPrimary,
       systemOverlayStyle: brightness == Brightness.dark
-          ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       titleTextStyle: textTheme.titleLarge,
     ),
     filledButtonTheme: FilledButtonThemeData(
@@ -282,11 +335,16 @@ ThemeData buildLissomTheme({
         overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
         textStyle: WidgetStatePropertyAll<TextStyle>(buttonLabel),
         padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-          EdgeInsets.symmetric(horizontal: 30, vertical: 16)),
+          EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+        ),
         shape: const WidgetStatePropertyAll<OutlinedBorder>(StadiumBorder()),
-        side: WidgetStateProperty.resolveWith<BorderSide?>((states) =>
-          states.contains(WidgetState.focused) && !states.contains(WidgetState.disabled)
-            ? BorderSide(color: p.onPrimary, width: 3) : BorderSide.none),
+        side: WidgetStateProperty.resolveWith<BorderSide?>(
+          (states) =>
+              states.contains(WidgetState.focused) &&
+                  !states.contains(WidgetState.disabled)
+              ? BorderSide(color: p.onPrimary, width: 3)
+              : BorderSide.none,
+        ),
       ),
     ),
     // 2026-08-12 EKLENDİ (kamera-kabuğu sevki): `OutlinedButton` üç yeni
@@ -300,93 +358,158 @@ ThemeData buildLissomTheme({
       style: actionStyle.copyWith(
         side: WidgetStateProperty.resolveWith(actionSide),
         padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
-          EdgeInsets.symmetric(horizontal: 26, vertical: 14)),
+          EdgeInsets.symmetric(horizontal: 26, vertical: 14),
+        ),
         shape: const WidgetStatePropertyAll<OutlinedBorder>(StadiumBorder()),
       ),
     ),
     textButtonTheme: TextButtonThemeData(style: actionStyle),
     iconButtonTheme: IconButtonThemeData(style: actionStyle),
     navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: p.card, surfaceTintColor: Colors.transparent,
+      backgroundColor: p.card,
+      surfaceTintColor: Colors.transparent,
       indicatorColor: p.selection,
       overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
-      labelTextStyle: WidgetStateProperty.resolveWith((states) => buttonLabel.copyWith(
-        color: states.contains(WidgetState.selected) ? p.onSelection : p.textSecondary)),
-      iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
-        color: states.contains(WidgetState.selected) ? p.onSelection : p.textSecondary)),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (states) => buttonLabel.copyWith(
+          color: states.contains(WidgetState.selected)
+              ? p.onSelection
+              : p.textSecondary,
+        ),
+      ),
+      iconTheme: WidgetStateProperty.resolveWith(
+        (states) => IconThemeData(
+          color: states.contains(WidgetState.selected)
+              ? p.onSelection
+              : p.textSecondary,
+        ),
+      ),
     ),
     listTileTheme: ListTileThemeData(
-      textColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledForeground :
-        states.contains(WidgetState.selected) ? p.onSelection : p.textPrimary),
-      iconColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledForeground :
-        states.contains(WidgetState.selected) ? p.onSelection : p.textSecondary),
-      selectedColor: p.onSelection, selectedTileColor: p.selection,
+      textColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledForeground
+            : states.contains(WidgetState.selected)
+            ? p.onSelection
+            : p.textPrimary,
+      ),
+      iconColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledForeground
+            : states.contains(WidgetState.selected)
+            ? p.onSelection
+            : p.textSecondary,
+      ),
+      selectedColor: p.onSelection,
+      selectedTileColor: p.selection,
     ),
     radioTheme: RadioThemeData(
-      fillColor: WidgetStateProperty.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledForeground :
-        states.contains(WidgetState.selected) ? p.accentText : p.outline),
+      fillColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledForeground
+            : states.contains(WidgetState.selected)
+            ? p.accentText
+            : p.outline,
+      ),
       overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledSurface :
-        states.contains(WidgetState.selected) ? p.primaryFill : p.card),
-      checkColor: WidgetStateProperty.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledForeground : p.onPrimary),
-      side: WidgetStateBorderSide.resolveWith((states) => BorderSide(
-        color: states.contains(WidgetState.disabled) ? p.disabledForeground :
-          states.contains(WidgetState.focused) ? p.focusRing : p.outline,
-        width: states.contains(WidgetState.focused) ? 3 : 1.5)),
+      fillColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledSurface
+            : states.contains(WidgetState.selected)
+            ? p.primaryFill
+            : p.card,
+      ),
+      checkColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledForeground
+            : p.onPrimary,
+      ),
+      side: WidgetStateBorderSide.resolveWith(
+        (states) => BorderSide(
+          color: states.contains(WidgetState.disabled)
+              ? p.disabledForeground
+              : states.contains(WidgetState.focused)
+              ? p.focusRing
+              : p.outline,
+          width: states.contains(WidgetState.focused) ? 3 : 1.5,
+        ),
+      ),
       overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
     ),
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
-      fillColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledSurface : p.card),
-      labelStyle: WidgetStateTextStyle.resolveWith((states) => TextStyle(
-        color: states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary)),
-      hintStyle: WidgetStateTextStyle.resolveWith((states) => TextStyle(
-        color: states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary)),
+      fillColor: WidgetStateColor.resolveWith(
+        (states) =>
+            states.contains(WidgetState.disabled) ? p.disabledSurface : p.card,
+      ),
+      labelStyle: WidgetStateTextStyle.resolveWith(
+        (states) => TextStyle(
+          color: states.contains(WidgetState.disabled)
+              ? p.disabledForeground
+              : p.textSecondary,
+        ),
+      ),
+      hintStyle: WidgetStateTextStyle.resolveWith(
+        (states) => TextStyle(
+          color: states.contains(WidgetState.disabled)
+              ? p.disabledForeground
+              : p.textSecondary,
+        ),
+      ),
       helperStyle: TextStyle(color: p.textSecondary),
       errorStyle: TextStyle(color: p.error),
-      prefixIconColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary),
-      suffixIconColor: WidgetStateColor.resolveWith((states) =>
-        states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary),
-      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: p.outline)),
+      prefixIconColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledForeground
+            : p.textSecondary,
+      ),
+      suffixIconColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? p.disabledForeground
+            : p.textSecondary,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: p.outline),
+      ),
       border: OutlineInputBorder(borderSide: BorderSide(color: p.outline)),
-      disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: p.disabledForeground)),
-      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: p.focusRing, width: 3)),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: p.disabledForeground),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: p.focusRing, width: 3),
+      ),
       errorBorder: OutlineInputBorder(borderSide: BorderSide(color: p.error)),
-      focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: p.error, width: 3)),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: p.error, width: 3),
+      ),
     ),
     dialogTheme: DialogThemeData(
-      backgroundColor: p.card, surfaceTintColor: Colors.transparent,
+      backgroundColor: p.card,
+      surfaceTintColor: Colors.transparent,
       titleTextStyle: textTheme.headlineSmall,
       contentTextStyle: textTheme.bodyMedium,
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: p.card, contentTextStyle: textTheme.bodyMedium,
-      actionTextColor: p.accentText, disabledActionTextColor: p.disabledForeground,
+      backgroundColor: p.card,
+      contentTextStyle: textTheme.bodyMedium,
+      actionTextColor: p.accentText,
+      disabledActionTextColor: p.disabledForeground,
       closeIconColor: p.textSecondary,
     ),
     cupertinoOverrideTheme: CupertinoThemeData(
-      brightness: brightness, primaryColor: p.accentText,
+      brightness: brightness,
+      primaryColor: p.accentText,
       primaryContrastingColor: p.onPrimary,
-      scaffoldBackgroundColor: p.canvas, barBackgroundColor: p.card,
+      scaffoldBackgroundColor: p.canvas,
+      barBackgroundColor: p.card,
       textTheme: CupertinoTextThemeData(
         textStyle: TextStyle(color: p.textPrimary, fontSize: 17),
         actionTextStyle: TextStyle(color: p.accentText, fontSize: 17),
       ),
     ),
-    dividerTheme: DividerThemeData(
-      color: p.divider,
-      thickness: 1,
-      space: 1,
-    ),
+    dividerTheme: DividerThemeData(color: p.divider, thickness: 1, space: 1),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.iOS: _LissomGlideTransitionsBuilder(),
@@ -414,7 +537,9 @@ class _LissomGlideTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    if (MediaQuery.disableAnimationsOf(context)) { return child; }
+    if (MediaQuery.disableAnimationsOf(context)) {
+      return child;
+    }
     final Animation<double> curved = CurvedAnimation(
       parent: animation,
       curve: Curves.easeOutCubic,
@@ -452,14 +577,14 @@ class LissomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = LissomPalette.of(context);
     return DecoratedBox(
-        decoration: BoxDecoration(
-          color: gradient == null ? (color ?? p.card) : null,
-          gradient: gradient,
-          borderRadius: BorderRadius.circular(LissomRadii.card),
-          boxShadow: p.softShadow,
-        ),
-        child: Padding(padding: padding, child: child),
-      );
+      decoration: BoxDecoration(
+        color: gradient == null ? (color ?? p.card) : null,
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(LissomRadii.card),
+        boxShadow: p.softShadow,
+      ),
+      child: Padding(padding: padding, child: child),
+    );
   }
 }
 
@@ -472,14 +597,12 @@ class LissomEyebrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        text.toUpperCase(),
-        style: Theme.of(context)
-            .textTheme
-            .labelLarge
-            ?.copyWith(color: color ?? LissomPalette.of(context).textSecondary),
-      );
+    text.toUpperCase(),
+    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+      color: color ?? LissomPalette.of(context).textSecondary,
+    ),
+  );
 }
-
 
 /// Visible focus for custom tappable cards. The Focus node does not add a tab
 /// stop; descendant InkWell retains its existing activation and semantics.
@@ -489,32 +612,47 @@ class LissomFocusFrame extends StatefulWidget {
   @override
   State<LissomFocusFrame> createState() => _LissomFocusFrameState();
 }
+
 class _LissomFocusFrameState extends State<LissomFocusFrame> {
   bool _focused = false;
   @override
   Widget build(BuildContext context) => Focus(
-    canRequestFocus: false, skipTraversal: true,
-    onFocusChange: (value) { if (mounted) { setState(() => _focused = value); } },
+    canRequestFocus: false,
+    skipTraversal: true,
+    onFocusChange: (value) {
+      if (mounted) {
+        setState(() => _focused = value);
+      }
+    },
     child: DecoratedBox(
       position: DecorationPosition.foreground,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(LissomRadii.card),
-        border: _focused ? Border.all(color: LissomPalette.of(context).focusRing, width: 3) : null,
+        border: _focused
+            ? Border.all(color: LissomPalette.of(context).focusRing, width: 3)
+            : null,
       ),
       child: widget.child,
     ),
   );
 }
 
-
 class LissomLoadingIndicator extends StatelessWidget {
   const LissomLoadingIndicator({required this.label, super.key});
   final String label;
   @override
   Widget build(BuildContext context) => Semantics(
-    label: label, liveRegion: true,
-    child: ExcludeSemantics(child: MediaQuery.disableAnimationsOf(context)
-      ? Icon(Icons.hourglass_empty, color: LissomPalette.of(context).textSecondary)
-      : CircularProgressIndicator(color: LissomPalette.of(context).accentText)),
+    label: label,
+    liveRegion: true,
+    child: ExcludeSemantics(
+      child: MediaQuery.disableAnimationsOf(context)
+          ? Icon(
+              Icons.hourglass_empty,
+              color: LissomPalette.of(context).textSecondary,
+            )
+          : CircularProgressIndicator(
+              color: LissomPalette.of(context).accentText,
+            ),
+    ),
   );
 }

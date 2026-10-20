@@ -78,7 +78,7 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
       // kez söylerdi.
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(

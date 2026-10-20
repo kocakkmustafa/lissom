@@ -37,13 +37,13 @@ class StudyReviewEntry extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        if (ModalRoute.of(context)?.isCurrent != true) { return; }
+        if (ModalRoute.of(context)?.isCurrent != true) {
+          return;
+        }
         await Navigator.of(context).push<void>(
           MaterialPageRoute<void>(
-            builder: (_) => StudyReviewPage(
-              courses: courses,
-              storeLoader: storeLoader,
-            ),
+            builder: (_) =>
+                StudyReviewPage(courses: courses, storeLoader: storeLoader),
           ),
         );
         // A course opened from recall can persist practice. Refresh the shell
@@ -57,11 +57,7 @@ class StudyReviewEntry extends StatelessWidget {
 }
 
 class StudyReviewPage extends StatelessWidget {
-  const StudyReviewPage({
-    this.courses = const {},
-    this.storeLoader,
-    super.key,
-  });
+  const StudyReviewPage({this.courses = const {}, this.storeLoader, super.key});
   final Map<String, HathaCourse> courses;
   final Future<HathaProgressStore> Function()? storeLoader;
 
@@ -96,22 +92,31 @@ class StudyReviewPage extends StatelessWidget {
                     key: Key('study-course-${area.id}'),
                     course: course,
                     storeLoader: storeLoader,
-                    label: _text(context, 'Open existing written course', 'Mevcut yazılı kursu aç'),
+                    label: _text(
+                      context,
+                      'Open existing written course',
+                      'Mevcut yazılı kursu aç',
+                    ),
                   ),
                 for (final RecallLesson lesson in area.lessons)
-                  LissomFocusFrame(child: ListTile(
-                    key: Key('study-lesson-${lesson.id}'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(lesson.title.inContext(context)),
-                    trailing: Icon(Directionality.of(context) == TextDirection.rtl
-                      ? Icons.chevron_left : Icons.chevron_right),
-                    onTap: () => Navigator.of(context).push<void>(
-                      MaterialPageRoute<void>(
-                        builder: (_) =>
-                            RecallLessonPage(area: area, lesson: lesson),
+                  LissomFocusFrame(
+                    child: ListTile(
+                      key: Key('study-lesson-${lesson.id}'),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(lesson.title.inContext(context)),
+                      trailing: Icon(
+                        Directionality.of(context) == TextDirection.rtl
+                            ? Icons.chevron_left
+                            : Icons.chevron_right,
+                      ),
+                      onTap: () => Navigator.of(context).push<void>(
+                        MaterialPageRoute<void>(
+                          builder: (_) =>
+                              RecallLessonPage(area: area, lesson: lesson),
+                        ),
                       ),
                     ),
-                  )),
+                  ),
               ],
             ),
           ),

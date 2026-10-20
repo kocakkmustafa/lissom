@@ -58,8 +58,17 @@ Locale? _supportedDeviceLocale(Locale locale) {
   return switch (language) {
     'es' => const Locale('es', '419'),
     'pt' => const Locale('pt', 'BR'),
-    'en' || 'tr' || 'de' || 'fr' || 'ja' || 'ar' ||
-    'it' || 'ko' || 'id' || 'pl' || 'hi' => Locale(language),
+    'en' ||
+    'tr' ||
+    'de' ||
+    'fr' ||
+    'ja' ||
+    'ar' ||
+    'it' ||
+    'ko' ||
+    'id' ||
+    'pl' ||
+    'hi' => Locale(language),
     _ => null,
   };
 }
@@ -278,7 +287,7 @@ class LissomLocaleScope extends InheritedNotifier<LissomLocaleController> {
 /// in profile/release too. A caller-provided controller stays caller-owned.
 class LissomLocaleHost extends StatefulWidget {
   const LissomLocaleHost({required this.child, this.controller, super.key})
-      : createController = null;
+    : createController = null;
 
   @visibleForTesting
   const LissomLocaleHost.owned({
@@ -303,8 +312,10 @@ class _LissomLocaleHostState extends State<LissomLocaleHost> {
   void initState() {
     super.initState();
     _ownsController = widget.controller == null;
-    _controller = widget.controller ??
-        widget.createController?.call() ?? LissomLocaleController();
+    _controller =
+        widget.controller ??
+        widget.createController?.call() ??
+        LissomLocaleController();
     unawaited(_controller.initialize());
   }
 
@@ -315,15 +326,19 @@ class _LissomLocaleHostState extends State<LissomLocaleHost> {
         !identical(oldWidget.createController, widget.createController)) {
       // This is an integration diagnostic, not a localized product error.
       // It contains no raw IO, preference value or account information.
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: StateError(
-          'LissomLocaleHost controller lifetime is immutable. '
-          'The initial controller remains active. Use a new host Key to '
-          'replace it intentionally.',
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: StateError(
+            'LissomLocaleHost controller lifetime is immutable. '
+            'The initial controller remains active. Use a new host Key to '
+            'replace it intentionally.',
+          ),
+          library: 'Lissom language',
+          context: ErrorDescription(
+            'while updating an installation locale host',
+          ),
         ),
-        library: 'Lissom language',
-        context: ErrorDescription('while updating an installation locale host'),
-      ));
+      );
     }
   }
 
