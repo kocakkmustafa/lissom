@@ -498,7 +498,7 @@ void main() {
           expect(
             configNumber,
             '${material.formatDecimal(10)}$separator'
-                '${material.formatDecimal(2)}${material.formatDecimal(5)}',
+            '${material.formatDecimal(2)}${material.formatDecimal(5)}',
             reason: 'configuration tolerances must not round to whole degrees',
           );
           if (tag == 'ar') {
@@ -586,10 +586,12 @@ void main() {
       await _tapRevealed(
         tester,
         find.byKey(const Key('profile.language.choose')),
-        find.descendant(
-          of: find.byType(ProfileScreen),
-          matching: find.byType(Scrollable),
-        ).first,
+        find
+            .descendant(
+              of: find.byType(ProfileScreen),
+              matching: find.byType(Scrollable),
+            )
+            .first,
       );
       final Finder dialog = find.byKey(const Key('profile.language.dialog'));
       expect(dialog, findsOneWidget);
@@ -622,17 +624,18 @@ void main() {
       await _tapRevealed(
         tester,
         find.byKey(const Key('profile.language.choose')),
-        find.descendant(
-          of: find.byType(ProfileScreen),
-          matching: find.byType(Scrollable),
-        ).first,
+        find
+            .descendant(
+              of: find.byType(ProfileScreen),
+              matching: find.byType(Scrollable),
+            )
+            .first,
       );
       final Finder dialog = find.byKey(const Key('profile.language.dialog'));
       expect(dialog, findsOneWidget);
-      final Finder dialogScroll = find.descendant(
-        of: dialog,
-        matching: find.byType(Scrollable),
-      ).first;
+      final Finder dialogScroll = find
+          .descendant(of: dialog, matching: find.byType(Scrollable))
+          .first;
       await _tapRevealed(
         tester,
         find.byKey(const Key('profile.language.option.tr')),

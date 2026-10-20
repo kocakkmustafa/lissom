@@ -599,7 +599,8 @@ void main() {
         expect((await reopened.read()).practicedIn(course), <String>{'c01'});
       },
     );
-  }  for (final saving in <bool>[false, true]) {
+  }
+  for (final saving in <bool>[false, true]) {
     test(
       'Vinyasa owner retires during awaited ${saving ? "save" : "read"}',
       () async {

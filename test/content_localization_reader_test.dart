@@ -37,9 +37,7 @@ Future<_ActualCatalogBundle> _readyCatalog(
   // Await that exact cached Future outside the fake clock before mounting;
   // pumpAndSettle only waits for frames, not an outstanding isolate decode.
   final raw = await tester.runAsync(
-    () => bundle.loadString(
-      'config/l10n/${canonicalLocaleTag(locale)}.json',
-    ),
+    () => bundle.loadString('config/l10n/${canonicalLocaleTag(locale)}.json'),
   );
   expect(raw, isNotNull, reason: 'The actual catalog must finish loading.');
   expect(raw, isNotEmpty);

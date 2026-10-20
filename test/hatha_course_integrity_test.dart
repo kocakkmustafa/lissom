@@ -129,11 +129,7 @@ void main() {
       }
     }
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: LissomShell(loader: loader),
-      ),
-    );
+    await tester.pumpWidget(MaterialApp(home: LissomShell(loader: loader)));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);

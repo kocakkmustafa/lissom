@@ -74,13 +74,19 @@ Future<void> _refreshVisible(WidgetTester tester, Finder target) async {
   await _refreshFrames(tester);
   if (target.evaluate().isEmpty) {
     final Finder scrollable = find.byType(Scrollable).hitTestable().last;
-    expect(scrollable, findsOneWidget, reason: 'An active scroll route is needed');
+    expect(
+      scrollable,
+      findsOneWidget,
+      reason: 'An active scroll route is needed',
+    );
     final ScrollableState state = tester.state<ScrollableState>(scrollable);
     // The progress card precedes Continue. On return it can be lazily unbuilt
     // above the saved scroll offset, so a down-only search would never find it.
-    for (int attempt = 0;
-        attempt < 60 && state.position.pixels > state.position.minScrollExtent;
-        attempt++) {
+    for (
+      int attempt = 0;
+      attempt < 60 && state.position.pixels > state.position.minScrollExtent;
+      attempt++
+    ) {
       await tester.drag(scrollable, const Offset(0, 500));
       await _refreshFrames(tester);
     }
@@ -111,10 +117,7 @@ Future<void> _refreshTap(WidgetTester tester, Finder target) async {
 
 Future<void> _refreshTab(WidgetTester tester, String label) => _refreshTap(
   tester,
-  find.descendant(
-    of: find.byType(NavigationBar),
-    matching: find.text(label),
-  ),
+  find.descendant(of: find.byType(NavigationBar), matching: find.text(label)),
 );
 
 void main() {
@@ -232,8 +235,9 @@ void main() {
         int loads = 0;
         Future<AppFacts> loader() async {
           loads++;
-          final HathaProgress progress =
-              await (await openHathaProgressStore(scope: scope)).read();
+          final HathaProgress progress = await (await openHathaProgressStore(
+            scope: scope,
+          )).read();
           return AppFacts(
             ia: base.ia,
             battery: base.battery,
@@ -285,9 +289,16 @@ void main() {
           await _refreshTab(tester, progress);
           await _refreshVisible(tester, find.text(emptyText));
           await _refreshTab(tester, library);
-          expect(loads, 1, reason: 'Tab changes must not mask a missing callback');
+          expect(
+            loads,
+            1,
+            reason: 'Tab changes must not mask a missing callback',
+          );
 
-          await _refreshTap(tester, find.byKey(const Key('study-review-entry')));
+          await _refreshTap(
+            tester,
+            find.byKey(const Key('study-review-entry')),
+          );
           final Finder entry = find.byKey(const Key('study-course-hatha'));
           await _refreshTap(
             tester,
@@ -305,11 +316,16 @@ void main() {
             'actual h01 lesson',
           );
           expect(
-            tester.widget<HathaLessonScreen>(find.byType(HathaLessonScreen))
-                .lesson.id,
+            tester
+                .widget<HathaLessonScreen>(find.byType(HathaLessonScreen))
+                .lesson
+                .id,
             'h01',
           );
-          await _refreshTap(tester, find.byKey(HathaLessonScreen.reflectionKey));
+          await _refreshTap(
+            tester,
+            find.byKey(HathaLessonScreen.reflectionKey),
+          );
           await _refreshTap(tester, find.byKey(HathaLessonScreen.practiceKey));
           await _refreshUntil(
             tester,
@@ -322,36 +338,52 @@ void main() {
           );
           await _refreshUntil(
             tester,
-            () => find.text(courseSavedText).hitTestable().evaluate().isNotEmpty,
+            () =>
+                find.text(courseSavedText).hitTestable().evaluate().isNotEmpty,
             'refreshed visible course count',
           );
 
-          final HathaProgress disk = (await tester.runAsync(() async =>
-              (await openHathaProgressStore(scope: scope)).read()))!;
+          final HathaProgress disk = (await tester.runAsync(
+            () async => (await openHathaProgressStore(scope: scope)).read(),
+          ))!;
           expect(disk.records, hasLength(1));
           expect(disk.unreadableRecords, 0);
           expect(disk.records.single.lessonId, 'h01');
           expect(disk.records.single.courseId, course.id);
           expect(disk.records.single.courseVersion, course.version);
           expect(disk.practicedIn(course), <String>{'h01'});
-          expect(loads, 1, reason: 'A child course must not refresh the shell yet');
+          expect(
+            loads,
+            1,
+            reason: 'A child course must not refresh the shell yet',
+          );
 
           await _refreshTap(tester, find.byType(BackButton));
           expect(find.byType(StudyReviewPage), findsOneWidget);
-          expect(loads, 1, reason: 'Only the whole recall return refreshes facts');
+          expect(
+            loads,
+            1,
+            reason: 'Only the whole recall return refreshes facts',
+          );
           await _refreshTap(tester, find.byType(BackButton));
           await _refreshUntil(
             tester,
-            () => loads == 2 &&
-                find.byType(NavigationBar).evaluate().isNotEmpty,
+            () =>
+                loads == 2 && find.byType(NavigationBar).evaluate().isNotEmpty,
             'single recall-return reload',
           );
           await _refreshTab(tester, progress);
           await _refreshUntil(
             tester,
-            () => find.byType(ProgressScreen).evaluate().isNotEmpty &&
-                tester.widget<ProgressScreen>(find.byType(ProgressScreen))
-                    .facts.hathaProgress!.practicedIn(course).length == 1,
+            () =>
+                find.byType(ProgressScreen).evaluate().isNotEmpty &&
+                tester
+                        .widget<ProgressScreen>(find.byType(ProgressScreen))
+                        .facts
+                        .hathaProgress!
+                        .practicedIn(course)
+                        .length ==
+                    1,
             'fresh Progress facts from the persisted record',
           );
           await _refreshVisible(tester, find.text(savedText));
@@ -374,9 +406,11 @@ void main() {
   ) async {
     pinNarrowSurface(tester);
     int returns = 0;
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(body: StudyReviewEntry(onCourseDone: () => returns++)),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: StudyReviewEntry(onCourseDone: () => returns++)),
+      ),
+    );
     final Finder entry = find.byKey(const Key('study-review-entry'));
     await _refreshVisible(tester, entry);
     final Offset entryPoint = tester.getCenter(entry.hitTestable());
@@ -400,16 +434,19 @@ void main() {
     final ValueNotifier<bool> showEntry = ValueNotifier<bool>(true);
     addTearDown(showEntry.dispose);
     int returns = 0;
-    await tester.pumpWidget(MaterialApp(
-      home: ValueListenableBuilder<bool>(
-        valueListenable: showEntry,
-        builder: (BuildContext context, bool visible, Widget? child) => Scaffold(
-          body: visible
-              ? StudyReviewEntry(onCourseDone: () => returns++)
-              : const Text('Entry removed'),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ValueListenableBuilder<bool>(
+          valueListenable: showEntry,
+          builder: (BuildContext context, bool visible, Widget? child) =>
+              Scaffold(
+                body: visible
+                    ? StudyReviewEntry(onCourseDone: () => returns++)
+                    : const Text('Entry removed'),
+              ),
         ),
       ),
-    ));
+    );
     await _refreshTap(tester, find.byKey(const Key('study-review-entry')));
     showEntry.value = false;
     await tester.pump();

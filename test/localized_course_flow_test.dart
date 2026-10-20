@@ -47,9 +47,7 @@ Future<_ActualCatalogBundle> _readyCatalog(
   // Keep the real >50 KiB AssetBundle isolate decode, but await its cached
   // Future outside the fake clock instead of treating settled frames as ready.
   final raw = await tester.runAsync(
-    () => bundle.loadString(
-      'config/l10n/${canonicalLocaleTag(locale)}.json',
-    ),
+    () => bundle.loadString('config/l10n/${canonicalLocaleTag(locale)}.json'),
   );
   expect(raw, isNotNull, reason: 'The actual catalog must finish loading.');
   expect(raw, isNotEmpty);
