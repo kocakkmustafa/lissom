@@ -75,12 +75,16 @@ final class _NativeCameraBackend {
 
   void _checkCanBegin() {
     if (_phase == 'closed') return;
-    throw PlatformException(code: _phase == 'closing' || _phase == 'uncertain'
-        ? 'close-uncertain' : 'already-running');
+    throw PlatformException(
+      code: _phase == 'closing' || _phase == 'uncertain'
+          ? 'close-uncertain'
+          : 'already-running',
+    );
   }
 
   Future<void> _closePhysical(String owner) {
-    if (_nativeOwner != owner || _phase == 'closed') return Future<void>.value();
+    if (_nativeOwner != owner || _phase == 'closed')
+      return Future<void>.value();
     if (_phase == 'closing') return _physicalClosing!;
     _phase = 'closing';
     return _physicalClosing = () async {
@@ -109,6 +113,7 @@ final class _NativeCameraBackend {
           _phase = 'opening';
           generations[owner] = ++_generation;
         }
+
         if (!delayNativeBegin) begin();
         await startGate?.future;
         if (startFailure != null) throw startFailure!;
@@ -160,7 +165,9 @@ final class _NativeCameraBackend {
       final generation = args?['generation'] as int?;
       if (call.method == 'listen') {
         if (!listenEntered.isCompleted) listenEntered.complete();
-        if (owner != _nativeOwner || generation != _generation || _phase != 'running') {
+        if (owner != _nativeOwner ||
+            generation != _generation ||
+            _phase != 'running') {
           throw PlatformException(code: 'session-interrupted');
         }
         listenerOwner = owner;
@@ -194,7 +201,11 @@ final class _NativeCameraBackend {
     messenger.setMockMethodCallHandler(frames, null);
   }
 
-  Future<void> emitFrame({bool person = true, String? owner, int? generation}) => _emit(
+  Future<void> emitFrame({
+    bool person = true,
+    String? owner,
+    int? generation,
+  }) => _emit(
     const StandardMethodCodec().encodeSuccessEnvelope(<String, Object?>{
       'ownerId': owner ?? activeOwner,
       'generation': generation ?? generations[owner ?? activeOwner],
@@ -219,7 +230,8 @@ final class _NativeCameraBackend {
 
   Future<void> emitMalformed() => _emit(
     const StandardMethodCodec().encodeSuccessEnvelope(<String, Object>{
-      'ownerId': activeOwner!, 'generation': _generation,
+      'ownerId': activeOwner!,
+      'generation': _generation,
     }),
   );
 
@@ -236,15 +248,20 @@ final class _NativeCameraBackend {
   }
 }
 
-CameraPoseSource _fixtureSource(MotionCameraController controller) => CameraPoseSource(
-  controller: controller,
-  requestPermission: () async => PermissionStatus.granted,
-  prepareModel: () async => '/fixture/model.task',
-);
+CameraPoseSource _fixtureSource(MotionCameraController controller) =>
+    CameraPoseSource(
+      controller: controller,
+      requestPermission: () async => PermissionStatus.granted,
+      prepareModel: () async => '/fixture/model.task',
+    );
 
-Matcher get _uncertainClose => throwsA(isA<CameraException>().having(
-  (error) => error.failure, 'failure', CameraFailure.closeUncertain,
-));
+Matcher get _uncertainClose => throwsA(
+  isA<CameraException>().having(
+    (error) => error.failure,
+    'failure',
+    CameraFailure.closeUncertain,
+  ),
+);
 
 final class _TrackingController extends MotionCameraController {
   _TrackingController(this.order);
@@ -271,24 +288,27 @@ void main() {
     });
     tearDown(() => native.uninstall());
 
-    test('capture lease is created synchronously before permission and model', () async {
-      final order = <String>[];
-      final source = CameraPoseSource(
-        controller: _TrackingController(order),
-        requestPermission: () async {
-          order.add('permission');
-          return PermissionStatus.granted;
-        },
-        prepareModel: () async {
-          order.add('model');
-          return '/fixture/model.task';
-        },
-      );
-      expect(order, <String>['lease']);
-      await source.start();
-      expect(order, <String>['lease', 'permission', 'model']);
-      await source.dispose();
-    });
+    test(
+      'capture lease is created synchronously before permission and model',
+      () async {
+        final order = <String>[];
+        final source = CameraPoseSource(
+          controller: _TrackingController(order),
+          requestPermission: () async {
+            order.add('permission');
+            return PermissionStatus.granted;
+          },
+          prepareModel: () async {
+            order.add('model');
+            return '/fixture/model.task';
+          },
+        );
+        expect(order, <String>['lease']);
+        await source.start();
+        expect(order, <String>['lease', 'permission', 'model']);
+        await source.dispose();
+      },
+    );
 
     test(
       'dispose during delayed permission never prepares or starts native',
@@ -318,7 +338,11 @@ void main() {
         unawaited(retiring.then((_) => disposed = true));
         try {
           await Future<void>.delayed(Duration.zero);
-          expect(disposed, isTrue, reason: 'Permission preparation owns no native work');
+          expect(
+            disposed,
+            isTrue,
+            reason: 'Permission preparation owns no native work',
+          );
         } finally {
           permission.complete(PermissionStatus.granted);
           await starting;
@@ -380,7 +404,11 @@ void main() {
       unawaited(retiring.then((_) => disposed = true));
       try {
         await Future<void>.delayed(Duration.zero);
-        expect(disposed, isTrue, reason: 'Model preparation owns no native work');
+        expect(
+          disposed,
+          isTrue,
+          reason: 'Model preparation owns no native work',
+        );
       } finally {
         model.complete('/fixture/model.task');
         await starting;
@@ -532,54 +560,68 @@ void main() {
       expect(native.calls, <String>['startOwned', 'stopOwned', 'readback']);
     });
 
-    test('busy-rejected B disposal preserves active A and its frame owner', () async {
-      final a = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final b = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final aEvents = <PoseSourceEvent>[];
-      final bEvents = <PoseSourceEvent>[];
-      final aSub = a.events().listen(aEvents.add);
-      final bSub = b.events().listen(bEvents.add);
-      try {
-        await a.start();
-        final aOwner = native.activeOwner!;
-        await native.emitFrame();
-        expect(aEvents.whereType<SourceFrameEvent>(), hasLength(1));
-        await b.start();
-        await Future<void>.delayed(Duration.zero);
-        expect(
-          bEvents.whereType<SourceStateEvent>().map((event) => event.state)
-              .whereType<SetupFailed>().single.code,
-          'already-running',
+    test(
+      'busy-rejected B disposal preserves active A and its frame owner',
+      () async {
+        final a = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
         );
-        await b.dispose();
-        expect(native.activeOwner, aOwner);
-        await native.emitFrame();
-        expect(aEvents.whereType<SourceFrameEvent>(), hasLength(2));
-        final bStart = native.controlCalls.where((call) => call.method == 'startOwned').last;
-        final bOwner = (bStart.arguments! as Map<Object?, Object?>)['ownerId'];
-        expect(bOwner, isNot(aOwner));
-        expect(
-          native.controlCalls.where((call) => call.method == 'stopOwned')
-              .map((call) => (call.arguments! as Map<Object?, Object?>)['ownerId']),
-          <Object?>[bOwner],
+        final b = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
         );
-        expect(native.frameCalls, <String>['listen']);
-        expect(native.calls, isNot(contains('stop')));
-      } finally {
-        await b.dispose();
-        await a.dispose();
-        await aSub.cancel();
-        await bSub.cancel();
-      }
-    });
+        final aEvents = <PoseSourceEvent>[];
+        final bEvents = <PoseSourceEvent>[];
+        final aSub = a.events().listen(aEvents.add);
+        final bSub = b.events().listen(bEvents.add);
+        try {
+          await a.start();
+          final aOwner = native.activeOwner!;
+          await native.emitFrame();
+          expect(aEvents.whereType<SourceFrameEvent>(), hasLength(1));
+          await b.start();
+          await Future<void>.delayed(Duration.zero);
+          expect(
+            bEvents
+                .whereType<SourceStateEvent>()
+                .map((event) => event.state)
+                .whereType<SetupFailed>()
+                .single
+                .code,
+            'already-running',
+          );
+          await b.dispose();
+          expect(native.activeOwner, aOwner);
+          await native.emitFrame();
+          expect(aEvents.whereType<SourceFrameEvent>(), hasLength(2));
+          final bStart = native.controlCalls
+              .where((call) => call.method == 'startOwned')
+              .last;
+          final bOwner =
+              (bStart.arguments! as Map<Object?, Object?>)['ownerId'];
+          expect(bOwner, isNot(aOwner));
+          expect(
+            native.controlCalls
+                .where((call) => call.method == 'stopOwned')
+                .map(
+                  (call) =>
+                      (call.arguments! as Map<Object?, Object?>)['ownerId'],
+                ),
+            <Object?>[bOwner],
+          );
+          expect(native.frameCalls, <String>['listen']);
+          expect(native.calls, isNot(contains('stop')));
+        } finally {
+          await b.dispose();
+          await a.dispose();
+          await aSub.cancel();
+          await bSub.cancel();
+        }
+      },
+    );
 
     for (final permission in <PermissionStatus>[
       PermissionStatus.denied,
@@ -594,7 +636,8 @@ void main() {
         final b = CameraPoseSource(
           controller: controller,
           requestPermission: () async => permission,
-          prepareModel: () async => throw StateError('Denied B must not prepare'),
+          prepareModel: () async =>
+              throw StateError('Denied B must not prepare'),
         );
         final aEvents = <PoseSourceEvent>[];
         final bEvents = <PoseSourceEvent>[];
@@ -606,10 +649,17 @@ void main() {
           await native.emitFrame();
           await b.start();
           await Future<void>.delayed(Duration.zero);
-          final denial = bEvents.whereType<SourceStateEvent>()
-              .map((event) => event.state).whereType<PermissionDenied>().single;
-          expect(denial.kind, permission == PermissionStatus.permanentlyDenied
-              ? PermissionDenialKind.permanent : PermissionDenialKind.transient);
+          final denial = bEvents
+              .whereType<SourceStateEvent>()
+              .map((event) => event.state)
+              .whereType<PermissionDenied>()
+              .single;
+          expect(
+            denial.kind,
+            permission == PermissionStatus.permanentlyDenied
+                ? PermissionDenialKind.permanent
+                : PermissionDenialKind.transient,
+          );
           await b.dispose();
           expect(native.activeOwner, owner);
           expect(native.calls, <String>['startOwned']);
@@ -624,186 +674,240 @@ void main() {
       });
     }
 
-    test('paused A close drains before B; late A cancel and dispose preserve B', () async {
-      final a = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final aEvents = <PoseSourceEvent>[];
-      final aSub = a.events().listen(aEvents.add);
-      await a.start();
-      final aOwner = native.activeOwner!;
-      final aGeneration = native.generations[aOwner]!;
-      await native.emitFrame();
-      final beforePause = aEvents.length;
-      aSub.pause();
-      await native.emitFrame();
-      await native.emitFrame(person: false);
-      final retiring = a.dispose();
-      await retiring.timeout(const Duration(seconds: 1));
-      expect(native.frameCalls, <String>['listen', 'cancel']);
-      final aCancel = native.streamCalls.last.arguments! as Map<Object?, Object?>;
-      expect(aCancel, <String, Object>{'ownerId': aOwner, 'generation': aGeneration});
-      final b = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final bEvents = <PoseSourceEvent>[];
-      final bSub = b.events().listen(bEvents.add);
-      try {
-        await b.start();
-        final bOwner = native.activeOwner!;
-        await native.emitFrame();
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
-        aSub.resume();
-        await Future<void>.delayed(Duration.zero);
-        expect(aEvents, hasLength(beforePause),
-            reason: 'Paused old frame/state events are filtered when resumed after retirement');
-        final beforeCancel = native.streamCalls.length;
-        final beforeDispose = native.controlCalls.length;
-        await aSub.cancel();
-        expect(identical(a.dispose(), retiring), isTrue);
-        await a.dispose();
-        expect(native.streamCalls, hasLength(beforeCancel));
-        expect(native.controlCalls, hasLength(beforeDispose));
-        expect(native.activeOwner, bOwner);
-        await native.emitFrame(owner: aOwner, generation: aGeneration);
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
-        await native.emitFrame();
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
-      } finally {
-        await aSub.cancel();
-        await b.dispose();
-        await bSub.cancel();
-      }
-    });
-
-    test('held raw cancel reply keeps close pending before caller admits B', () async {
-      native.cancelGate = Completer<void>();
-      final a = _fixtureSource(controller);
-      final b = _fixtureSource(controller);
-      final aSub = a.events().listen((_) {});
-      final bEvents = <PoseSourceEvent>[];
-      final bSub = b.events().listen(bEvents.add);
-      await a.start();
-      final aOwner = native.activeOwner!;
-      final aGeneration = native.generations[aOwner]!;
-      aSub.pause();
-      final closing = a.dispose();
-      var closed = false;
-      var bAdmitted = false;
-      unawaited(closing.then((_) => closed = true));
-      final successor = closing.then((_) async {
-        bAdmitted = true;
-        await b.start();
-      });
-      try {
-        await native.cancelEntered.future;
-        await Future<void>.delayed(Duration.zero);
-        expect(native.phase, 'closed', reason: 'Native stop ACK may precede the raw cancel RPC reply');
-        expect(closed, isFalse);
-        expect(bAdmitted, isFalse, reason: 'The caller waits the complete close barrier');
-        expect(native.readbacks, isEmpty);
-        expect(native.calls.where((method) => method == 'readback'), isEmpty);
-        expect(native.calls.where((method) => method == 'startOwned'), hasLength(1));
-        expect(native.frameCalls, <String>['listen', 'cancel']);
-        expect(identical(a.dispose(), closing), isTrue);
-        native.cancelGate!.complete();
-        await closing;
-        await successor;
-        expect(closed, isTrue);
-        expect(bAdmitted, isTrue);
-        expect(native.readbacks, hasLength(1));
-        final bOwner = native.activeOwner!;
-        await native.emitFrame();
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
-        final beforeLateCancel = native.streamCalls.length;
-        final beforeLateDispose = native.controlCalls.length;
-        aSub.resume();
-        await aSub.cancel();
-        await a.dispose();
-        expect(native.streamCalls, hasLength(beforeLateCancel));
-        expect(native.controlCalls, hasLength(beforeLateDispose));
-        expect(native.activeOwner, bOwner);
-        await native.emitFrame(owner: aOwner, generation: aGeneration);
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
-        await native.emitFrame();
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
-      } finally {
-        if (!native.cancelGate!.isCompleted) native.cancelGate!.complete();
-        await closing;
-        await successor;
-        await aSub.cancel();
-        await b.dispose();
-        await bSub.cancel();
-      }
-    });
-
-    test('held raw listen reply drains before cancel RPC and fresh readback', () async {
-      native.listenGate = Completer<void>();
-      final source = _fixtureSource(controller);
-      await source.start();
-      await native.listenEntered.future;
-      final closing = source.dispose();
-      var closed = false;
-      unawaited(closing.then((_) => closed = true));
-      try {
-        await Future<void>.delayed(Duration.zero);
-        expect(native.phase, 'closed');
-        expect(closed, isFalse);
-        expect(native.cancelEntered.isCompleted, isFalse);
-        expect(native.frameCalls, <String>['listen']);
-        expect(native.calls.where((method) => method == 'readback'), isEmpty);
-        native.listenGate!.complete();
-        await closing;
-        expect(closed, isTrue);
-        expect(native.frameCalls, <String>['listen', 'cancel']);
-        expect(native.calls, <String>['startOwned', 'stopOwned', 'readback']);
-      } finally {
-        if (!native.listenGate!.isCompleted) native.listenGate!.complete();
-        await closing;
-      }
-    });
-
-    for (final rpc in <String>['listen', 'cancel']) {
-      test('raw $rpc RPC error preserves failed close and shared quarantine', () async {
-        if (rpc == 'listen') {
-          native.listenFailure = PlatformException(code: 'fixture-listen-error');
-        } else {
-          native.cancelFailure = PlatformException(code: 'fixture-cancel-error');
-        }
-        final a = _fixtureSource(controller);
+    test(
+      'paused A close drains before B; late A cancel and dispose preserve B',
+      () async {
+        final a = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
+        );
         final aEvents = <PoseSourceEvent>[];
         final aSub = a.events().listen(aEvents.add);
         await a.start();
-        if (rpc == 'listen') {
-          await native.cancelEntered.future;
-          await Future<void>.delayed(Duration.zero);
-          expect(aEvents.whereType<SourceStateEvent>().map((event) => event.state)
-              .whereType<SetupFailed>().single.code, 'close-uncertain');
-        }
-        final closing = a.dispose();
-        await expectLater(closing, _uncertainClose);
-        expect(identical(closing, a.dispose()), isTrue);
+        final aOwner = native.activeOwner!;
+        final aGeneration = native.generations[aOwner]!;
+        await native.emitFrame();
+        final beforePause = aEvents.length;
+        aSub.pause();
+        await native.emitFrame();
+        await native.emitFrame(person: false);
+        final retiring = a.dispose();
+        await retiring.timeout(const Duration(seconds: 1));
         expect(native.frameCalls, <String>['listen', 'cancel']);
-        expect(native.calls.where((method) => method == 'readback'), isEmpty);
-        expect(native.running, isFalse);
-        final b = _fixtureSource(controller);
+        final aCancel =
+            native.streamCalls.last.arguments! as Map<Object?, Object?>;
+        expect(aCancel, <String, Object>{
+          'ownerId': aOwner,
+          'generation': aGeneration,
+        });
+        final b = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
+        );
         final bEvents = <PoseSourceEvent>[];
         final bSub = b.events().listen(bEvents.add);
-        await b.start();
-        await Future<void>.delayed(Duration.zero);
-        expect(bEvents.whereType<SourceStateEvent>().map((event) => event.state)
-            .whereType<SetupFailed>().single.code, 'close-uncertain');
-        expect(native.calls.where((method) => method == 'startOwned'), hasLength(1));
-        await b.dispose();
-        await aSub.cancel();
-        await bSub.cancel();
-      });
+        try {
+          await b.start();
+          final bOwner = native.activeOwner!;
+          await native.emitFrame();
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
+          aSub.resume();
+          await Future<void>.delayed(Duration.zero);
+          expect(
+            aEvents,
+            hasLength(beforePause),
+            reason:
+                'Paused old frame/state events are filtered when resumed after retirement',
+          );
+          final beforeCancel = native.streamCalls.length;
+          final beforeDispose = native.controlCalls.length;
+          await aSub.cancel();
+          expect(identical(a.dispose(), retiring), isTrue);
+          await a.dispose();
+          expect(native.streamCalls, hasLength(beforeCancel));
+          expect(native.controlCalls, hasLength(beforeDispose));
+          expect(native.activeOwner, bOwner);
+          await native.emitFrame(owner: aOwner, generation: aGeneration);
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
+          await native.emitFrame();
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
+        } finally {
+          await aSub.cancel();
+          await b.dispose();
+          await bSub.cancel();
+        }
+      },
+    );
 
-      testWidgets('raw $rpc reply timeout cannot be escaped by another source', (tester) async {
+    test(
+      'held raw cancel reply keeps close pending before caller admits B',
+      () async {
+        native.cancelGate = Completer<void>();
+        final a = _fixtureSource(controller);
+        final b = _fixtureSource(controller);
+        final aSub = a.events().listen((_) {});
+        final bEvents = <PoseSourceEvent>[];
+        final bSub = b.events().listen(bEvents.add);
+        await a.start();
+        final aOwner = native.activeOwner!;
+        final aGeneration = native.generations[aOwner]!;
+        aSub.pause();
+        final closing = a.dispose();
+        var closed = false;
+        var bAdmitted = false;
+        unawaited(closing.then((_) => closed = true));
+        final successor = closing.then((_) async {
+          bAdmitted = true;
+          await b.start();
+        });
+        try {
+          await native.cancelEntered.future;
+          await Future<void>.delayed(Duration.zero);
+          expect(
+            native.phase,
+            'closed',
+            reason: 'Native stop ACK may precede the raw cancel RPC reply',
+          );
+          expect(closed, isFalse);
+          expect(
+            bAdmitted,
+            isFalse,
+            reason: 'The caller waits the complete close barrier',
+          );
+          expect(native.readbacks, isEmpty);
+          expect(native.calls.where((method) => method == 'readback'), isEmpty);
+          expect(
+            native.calls.where((method) => method == 'startOwned'),
+            hasLength(1),
+          );
+          expect(native.frameCalls, <String>['listen', 'cancel']);
+          expect(identical(a.dispose(), closing), isTrue);
+          native.cancelGate!.complete();
+          await closing;
+          await successor;
+          expect(closed, isTrue);
+          expect(bAdmitted, isTrue);
+          expect(native.readbacks, hasLength(1));
+          final bOwner = native.activeOwner!;
+          await native.emitFrame();
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
+          final beforeLateCancel = native.streamCalls.length;
+          final beforeLateDispose = native.controlCalls.length;
+          aSub.resume();
+          await aSub.cancel();
+          await a.dispose();
+          expect(native.streamCalls, hasLength(beforeLateCancel));
+          expect(native.controlCalls, hasLength(beforeLateDispose));
+          expect(native.activeOwner, bOwner);
+          await native.emitFrame(owner: aOwner, generation: aGeneration);
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
+          await native.emitFrame();
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
+        } finally {
+          if (!native.cancelGate!.isCompleted) native.cancelGate!.complete();
+          await closing;
+          await successor;
+          await aSub.cancel();
+          await b.dispose();
+          await bSub.cancel();
+        }
+      },
+    );
+
+    test(
+      'held raw listen reply drains before cancel RPC and fresh readback',
+      () async {
+        native.listenGate = Completer<void>();
+        final source = _fixtureSource(controller);
+        await source.start();
+        await native.listenEntered.future;
+        final closing = source.dispose();
+        var closed = false;
+        unawaited(closing.then((_) => closed = true));
+        try {
+          await Future<void>.delayed(Duration.zero);
+          expect(native.phase, 'closed');
+          expect(closed, isFalse);
+          expect(native.cancelEntered.isCompleted, isFalse);
+          expect(native.frameCalls, <String>['listen']);
+          expect(native.calls.where((method) => method == 'readback'), isEmpty);
+          native.listenGate!.complete();
+          await closing;
+          expect(closed, isTrue);
+          expect(native.frameCalls, <String>['listen', 'cancel']);
+          expect(native.calls, <String>['startOwned', 'stopOwned', 'readback']);
+        } finally {
+          if (!native.listenGate!.isCompleted) native.listenGate!.complete();
+          await closing;
+        }
+      },
+    );
+
+    for (final rpc in <String>['listen', 'cancel']) {
+      test(
+        'raw $rpc RPC error preserves failed close and shared quarantine',
+        () async {
+          if (rpc == 'listen') {
+            native.listenFailure = PlatformException(
+              code: 'fixture-listen-error',
+            );
+          } else {
+            native.cancelFailure = PlatformException(
+              code: 'fixture-cancel-error',
+            );
+          }
+          final a = _fixtureSource(controller);
+          final aEvents = <PoseSourceEvent>[];
+          final aSub = a.events().listen(aEvents.add);
+          await a.start();
+          if (rpc == 'listen') {
+            await native.cancelEntered.future;
+            await Future<void>.delayed(Duration.zero);
+            expect(
+              aEvents
+                  .whereType<SourceStateEvent>()
+                  .map((event) => event.state)
+                  .whereType<SetupFailed>()
+                  .single
+                  .code,
+              'close-uncertain',
+            );
+          }
+          final closing = a.dispose();
+          await expectLater(closing, _uncertainClose);
+          expect(identical(closing, a.dispose()), isTrue);
+          expect(native.frameCalls, <String>['listen', 'cancel']);
+          expect(native.calls.where((method) => method == 'readback'), isEmpty);
+          expect(native.running, isFalse);
+          final b = _fixtureSource(controller);
+          final bEvents = <PoseSourceEvent>[];
+          final bSub = b.events().listen(bEvents.add);
+          await b.start();
+          await Future<void>.delayed(Duration.zero);
+          expect(
+            bEvents
+                .whereType<SourceStateEvent>()
+                .map((event) => event.state)
+                .whereType<SetupFailed>()
+                .single
+                .code,
+            'close-uncertain',
+          );
+          expect(
+            native.calls.where((method) => method == 'startOwned'),
+            hasLength(1),
+          );
+          await b.dispose();
+          await aSub.cancel();
+          await bSub.cancel();
+        },
+      );
+
+      testWidgets('raw $rpc reply timeout cannot be escaped by another source', (
+        tester,
+      ) async {
         final gate = Completer<void>();
         if (rpc == 'listen') native.listenGate = gate;
         if (rpc == 'cancel') native.cancelGate = gate;
@@ -824,13 +928,22 @@ void main() {
         }
         final closing = a.dispose();
         var closeSettled = false;
-        final failure = expectLater(closing, _uncertainClose)
-            .whenComplete(() => closeSettled = true);
+        final failure = expectLater(
+          closing,
+          _uncertainClose,
+        ).whenComplete(() => closeSettled = true);
         for (var i = 0; i < 40 && !closeSettled; i++) {
           await tester.pump(const Duration(milliseconds: 25));
-          await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 5)));
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 5)),
+          );
         }
-        expect(closeSettled, isTrue, reason: 'Every uncertain close timeout must settle within the bounded clock drain.');
+        expect(
+          closeSettled,
+          isTrue,
+          reason:
+              'Every uncertain close timeout must settle within the bounded clock drain.',
+        );
         await failure;
         await tester.pump();
         expect(identical(closing, a.dispose()), isTrue);
@@ -838,20 +951,31 @@ void main() {
         expect(native.calls.where((method) => method == 'readback'), isEmpty);
         final b = _fixtureSource(controller);
         await tester.runAsync(b.start);
-        expect(native.calls.where((method) => method == 'startOwned'), hasLength(1));
+        expect(
+          native.calls.where((method) => method == 'startOwned'),
+          hasLength(1),
+        );
         gate.complete();
         await tester.pump();
         if (starting != null) {
           for (var i = 0; i < 40 && !startSettled; i++) {
             await tester.pump(const Duration(milliseconds: 1));
           }
-          expect(startSettled, isTrue, reason: 'Original start must join after the held reply.');
+          expect(
+            startSettled,
+            isTrue,
+            reason: 'Original start must join after the held reply.',
+          );
           await starting;
         }
         final c = _fixtureSource(controller);
         await tester.runAsync(c.start);
-        expect(native.calls.where((method) => method == 'startOwned'), hasLength(1),
-            reason: 'A late transport reply does not clear the shared controller quarantine');
+        expect(
+          native.calls.where((method) => method == 'startOwned'),
+          hasLength(1),
+          reason:
+              'A late transport reply does not clear the shared controller quarantine',
+        );
         await tester.runAsync(b.dispose);
         await tester.runAsync(c.dispose);
       });
@@ -872,191 +996,266 @@ void main() {
         }
         await native.cancelEntered.future;
         await Future<void>.delayed(Duration.zero);
-        expect(events.whereType<SourceStateEvent>().map((event) => event.state)
-            .whereType<SetupFailed>().single.code, 'close-uncertain');
+        expect(
+          events
+              .whereType<SourceStateEvent>()
+              .map((event) => event.state)
+              .whereType<SetupFailed>()
+              .single
+              .code,
+          'close-uncertain',
+        );
         await expectLater(a.dispose(), _uncertainClose);
         expect(native.calls.where((method) => method == 'readback'), isEmpty);
         await native.emitFrame();
         expect(events.whereType<SourceFrameEvent>(), hasLength(1));
         final b = _fixtureSource(controller);
         await b.start();
-        expect(native.calls.where((method) => method == 'startOwned'), hasLength(1));
+        expect(
+          native.calls.where((method) => method == 'startOwned'),
+          hasLength(1),
+        );
         await b.dispose();
         await sub.cancel();
       });
     }
 
-    test('physical A close then B begin makes late A readback absent generation zero', () async {
-      final a = _fixtureSource(controller);
-      final b = _fixtureSource(controller);
-      final aSub = a.events().listen((_) {});
-      final bEvents = <PoseSourceEvent>[];
-      final bSub = b.events().listen(bEvents.add);
-      await a.start();
-      final aOwner = native.activeOwner!;
-      final aGeneration = native.generations[aOwner]!;
-      native.heldReadbackOwner = aOwner;
-      native.readbackGate = Completer<void>();
-      final closing = a.dispose();
-      try {
-        await native.readbackEntered.future;
-        expect(native.phase, 'closed');
-        expect(native.acknowledgements.single['generation'], aGeneration);
-        // Intentional protocol race, not host admission: Core does not impose
-        // a global lease barrier. The normal host waits retireAndDrain first.
-        await b.start();
-        final bOwner = native.activeOwner!;
-        expect(bOwner, isNot(aOwner));
-        await native.emitFrame();
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
-        native.readbackGate!.complete();
-        await closing;
-        final late = native.readbacks.single;
-        expect(late['ownerId'], aOwner);
-        expect(late['generation'], 0);
-        expect(late['state'], 'closed');
-        expect(late['closeSequence'], native.acknowledgements.single['closeSequence']);
-        final beforeLateCancel = native.streamCalls.length;
-        final beforeLateDispose = native.controlCalls.length;
-        await aSub.cancel();
-        await a.dispose();
-        expect(native.streamCalls, hasLength(beforeLateCancel));
-        expect(native.controlCalls, hasLength(beforeLateDispose));
-        expect(native.activeOwner, bOwner);
-        await native.emitFrame();
-        expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
-      } finally {
-        if (!native.readbackGate!.isCompleted) native.readbackGate!.complete();
-        await closing;
-        await aSub.cancel();
-        await b.dispose();
-        await bSub.cancel();
-      }
-    });
+    test(
+      'physical A close then B begin makes late A readback absent generation zero',
+      () async {
+        final a = _fixtureSource(controller);
+        final b = _fixtureSource(controller);
+        final aSub = a.events().listen((_) {});
+        final bEvents = <PoseSourceEvent>[];
+        final bSub = b.events().listen(bEvents.add);
+        await a.start();
+        final aOwner = native.activeOwner!;
+        final aGeneration = native.generations[aOwner]!;
+        native.heldReadbackOwner = aOwner;
+        native.readbackGate = Completer<void>();
+        final closing = a.dispose();
+        try {
+          await native.readbackEntered.future;
+          expect(native.phase, 'closed');
+          expect(native.acknowledgements.single['generation'], aGeneration);
+          // Intentional protocol race, not host admission: Core does not impose
+          // a global lease barrier. The normal host waits retireAndDrain first.
+          await b.start();
+          final bOwner = native.activeOwner!;
+          expect(bOwner, isNot(aOwner));
+          await native.emitFrame();
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(1));
+          native.readbackGate!.complete();
+          await closing;
+          final late = native.readbacks.single;
+          expect(late['ownerId'], aOwner);
+          expect(late['generation'], 0);
+          expect(late['state'], 'closed');
+          expect(
+            late['closeSequence'],
+            native.acknowledgements.single['closeSequence'],
+          );
+          final beforeLateCancel = native.streamCalls.length;
+          final beforeLateDispose = native.controlCalls.length;
+          await aSub.cancel();
+          await a.dispose();
+          expect(native.streamCalls, hasLength(beforeLateCancel));
+          expect(native.controlCalls, hasLength(beforeLateDispose));
+          expect(native.activeOwner, bOwner);
+          await native.emitFrame();
+          expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
+        } finally {
+          if (!native.readbackGate!.isCompleted)
+            native.readbackGate!.complete();
+          await closing;
+          await aSub.cancel();
+          await b.dispose();
+          await bSub.cancel();
+        }
+      },
+    );
 
-    test('native begin refuses B while A physical close is still pending', () async {
-      native.stopGate = Completer<void>();
-      final a = _fixtureSource(controller);
-      final b = _fixtureSource(controller);
-      final bEvents = <PoseSourceEvent>[];
-      final bSub = b.events().listen(bEvents.add);
-      await a.start();
-      final aOwner = native.activeOwner!;
-      final closing = a.dispose();
-      try {
+    test(
+      'native begin refuses B while A physical close is still pending',
+      () async {
+        native.stopGate = Completer<void>();
+        final a = _fixtureSource(controller);
+        final b = _fixtureSource(controller);
+        final bEvents = <PoseSourceEvent>[];
+        final bSub = b.events().listen(bEvents.add);
+        await a.start();
+        final aOwner = native.activeOwner!;
+        final closing = a.dispose();
+        try {
+          await native.stopEntered.future;
+          expect(native.phase, 'closing');
+          await b.start();
+          await Future<void>.delayed(Duration.zero);
+          expect(
+            bEvents
+                .whereType<SourceStateEvent>()
+                .map((event) => event.state)
+                .whereType<SetupFailed>()
+                .single
+                .code,
+            'close-uncertain',
+          );
+          await b.dispose();
+          expect(native.phase, 'closing');
+          expect(native.activeOwner, aOwner);
+          expect(
+            native.readbacks.single['generation'],
+            0,
+            reason: 'Busy B never owned A native session',
+          );
+          native.stopGate!.complete();
+          await closing;
+          final c = _fixtureSource(controller);
+          await c.start();
+          expect(native.activeOwner, isNot(aOwner));
+          await c.dispose();
+        } finally {
+          if (!native.stopGate!.isCompleted) native.stopGate!.complete();
+          await closing;
+          await b.dispose();
+          await bSub.cancel();
+        }
+      },
+    );
+
+    test(
+      'absent-owner ACK drains late native start then closes exact owner again',
+      () async {
+        native.delayNativeBegin = true;
+        native.startGate = Completer<void>();
+        final source = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
+        );
+        final starting = source.start();
+        await native.startEntered.future;
+        final retiring = source.dispose();
         await native.stopEntered.future;
-        expect(native.phase, 'closing');
+        final owner =
+            (native.controlCalls.first.arguments!
+                as Map<Object?, Object?>)['ownerId'];
+        var disposed = false;
+        unawaited(retiring.then((_) => disposed = true));
+        await Future<void>.delayed(Duration.zero);
+        expect(disposed, isFalse);
+        expect(native.acknowledgements.single['generation'], 0);
+        native.startGate!.complete();
+        await starting;
+        await retiring;
+        expect(native.calls, <String>[
+          'startOwned',
+          'stopOwned',
+          'stopOwned',
+          'readback',
+        ]);
+        expect(
+          native.acknowledgements.last['generation'],
+          native.generations[owner],
+        );
+        expect(
+          native.controlCalls.map(
+            (call) => (call.arguments! as Map<Object?, Object?>)['ownerId'],
+          ),
+          everyElement(owner),
+        );
+        final nonce =
+            (native.controlCalls.last.arguments!
+                as Map<Object?, Object?>)['nonce'];
+        expect(nonce, isA<int>());
+        expect(nonce! as int, greaterThan(0));
+        expect(native.running, isFalse);
+        expect(native.frameCalls, isEmpty);
+      },
+    );
+
+    test(
+      'active start is idempotent and does not reprepare or subscribe twice',
+      () async {
+        var permissionCalls = 0;
+        var modelCalls = 0;
+        final source = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async {
+            permissionCalls++;
+            return PermissionStatus.granted;
+          },
+          prepareModel: () async {
+            modelCalls++;
+            return '/fixture/model.task';
+          },
+        );
+        await Future.wait(<Future<void>>[source.start(), source.start()]);
+        await source.start();
+        expect(permissionCalls, 1);
+        expect(modelCalls, 1);
+        expect(native.calls, <String>['startOwned']);
+        expect(native.frameCalls, <String>['listen']);
+        await source.dispose();
+      },
+    );
+
+    test(
+      'foreign close ACK preserves failure and quarantines the shared controller',
+      () async {
+        native.corruptAck = (facts) => <String, Object>{
+          ...facts,
+          'ownerId': 'foreign-owner',
+        };
+        final a = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
+        );
+        await a.start();
+        final first = a.dispose();
+        expect(identical(first, a.dispose()), isTrue);
+        await expectLater(
+          first,
+          throwsA(
+            isA<CameraException>().having(
+              (error) => error.failure,
+              'failure',
+              CameraFailure.closeUncertain,
+            ),
+          ),
+        );
+        final b = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
+        );
+        final events = <PoseSourceEvent>[];
+        final sub = b.events().listen(events.add);
         await b.start();
         await Future<void>.delayed(Duration.zero);
-        expect(bEvents.whereType<SourceStateEvent>().map((event) => event.state)
-            .whereType<SetupFailed>().single.code, 'close-uncertain');
+        expect(
+          native.calls.where((method) => method == 'startOwned'),
+          hasLength(1),
+        );
+        expect(
+          events
+              .whereType<SourceStateEvent>()
+              .map((event) => event.state)
+              .whereType<SetupFailed>()
+              .single
+              .code,
+          'close-uncertain',
+        );
         await b.dispose();
-        expect(native.phase, 'closing');
-        expect(native.activeOwner, aOwner);
-        expect(native.readbacks.single['generation'], 0, reason: 'Busy B never owned A native session');
-        native.stopGate!.complete();
-        await closing;
-        final c = _fixtureSource(controller);
-        await c.start();
-        expect(native.activeOwner, isNot(aOwner));
-        await c.dispose();
-      } finally {
-        if (!native.stopGate!.isCompleted) native.stopGate!.complete();
-        await closing;
-        await b.dispose();
-        await bSub.cancel();
-      }
-    });
-
-    test('absent-owner ACK drains late native start then closes exact owner again', () async {
-      native.delayNativeBegin = true;
-      native.startGate = Completer<void>();
-      final source = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final starting = source.start();
-      await native.startEntered.future;
-      final retiring = source.dispose();
-      await native.stopEntered.future;
-      final owner = (native.controlCalls.first.arguments! as Map<Object?, Object?>)['ownerId'];
-      var disposed = false;
-      unawaited(retiring.then((_) => disposed = true));
-      await Future<void>.delayed(Duration.zero);
-      expect(disposed, isFalse);
-      expect(native.acknowledgements.single['generation'], 0);
-      native.startGate!.complete();
-      await starting;
-      await retiring;
-      expect(native.calls, <String>['startOwned', 'stopOwned', 'stopOwned', 'readback']);
-      expect(native.acknowledgements.last['generation'], native.generations[owner]);
-      expect(
-        native.controlCalls.map((call) => (call.arguments! as Map<Object?, Object?>)['ownerId']),
-        everyElement(owner),
-      );
-      final nonce = (native.controlCalls.last.arguments! as Map<Object?, Object?>)['nonce'];
-      expect(nonce, isA<int>());
-      expect(nonce! as int, greaterThan(0));
-      expect(native.running, isFalse);
-      expect(native.frameCalls, isEmpty);
-    });
-
-    test('active start is idempotent and does not reprepare or subscribe twice', () async {
-      var permissionCalls = 0;
-      var modelCalls = 0;
-      final source = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async {
-          permissionCalls++;
-          return PermissionStatus.granted;
-        },
-        prepareModel: () async {
-          modelCalls++;
-          return '/fixture/model.task';
-        },
-      );
-      await Future.wait(<Future<void>>[source.start(), source.start()]);
-      await source.start();
-      expect(permissionCalls, 1);
-      expect(modelCalls, 1);
-      expect(native.calls, <String>['startOwned']);
-      expect(native.frameCalls, <String>['listen']);
-      await source.dispose();
-    });
-
-    test('foreign close ACK preserves failure and quarantines the shared controller', () async {
-      native.corruptAck = (facts) => <String, Object>{...facts, 'ownerId': 'foreign-owner'};
-      final a = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      await a.start();
-      final first = a.dispose();
-      expect(identical(first, a.dispose()), isTrue);
-      await expectLater(first, throwsA(isA<CameraException>().having(
-        (error) => error.failure, 'failure', CameraFailure.closeUncertain,
-      )));
-      final b = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final events = <PoseSourceEvent>[];
-      final sub = b.events().listen(events.add);
-      await b.start();
-      await Future<void>.delayed(Duration.zero);
-      expect(native.calls.where((method) => method == 'startOwned'), hasLength(1));
-      expect(events.whereType<SourceStateEvent>().map((event) => event.state)
-          .whereType<SetupFailed>().single.code, 'close-uncertain');
-      await b.dispose();
-      await sub.cancel();
-    });
+        await sub.cancel();
+      },
+    );
 
     test('close ACK generation mismatch preserves closure failure', () async {
       native.corruptAck = (facts) => <String, Object>{
-        ...facts, 'generation': (facts['generation']! as int) + 1,
+        ...facts,
+        'generation': (facts['generation']! as int) + 1,
       };
       final source = CameraPoseSource(
         controller: controller,
@@ -1064,12 +1263,24 @@ void main() {
         prepareModel: () async => '/fixture/model.task',
       );
       await source.start();
-      await expectLater(source.dispose(), throwsA(isA<CameraException>().having(
-        (error) => error.failure, 'failure', CameraFailure.closeUncertain,
-      )));
+      await expectLater(
+        source.dispose(),
+        throwsA(
+          isA<CameraException>().having(
+            (error) => error.failure,
+            'failure',
+            CameraFailure.closeUncertain,
+          ),
+        ),
+      );
     });
 
-    for (final field in <String>['nonce', 'generation', 'modelsClosed', 'closeSequence']) {
+    for (final field in <String>[
+      'nonce',
+      'generation',
+      'modelsClosed',
+      'closeSequence',
+    ]) {
       test('fresh readback $field mismatch fails closure', () async {
         native.corruptReadback = (facts) => <String, Object>{
           ...facts,
@@ -1086,58 +1297,100 @@ void main() {
           prepareModel: () async => '/fixture/model.task',
         );
         await source.start();
-        await expectLater(source.dispose(), throwsA(isA<CameraException>().having(
-          (error) => error.failure, 'failure', CameraFailure.closeUncertain,
-        )));
+        await expectLater(
+          source.dispose(),
+          throwsA(
+            isA<CameraException>().having(
+              (error) => error.failure,
+              'failure',
+              CameraFailure.closeUncertain,
+            ),
+          ),
+        );
       });
     }
 
-    test('unsupported owned plugin has a named failure and no legacy fallback', () async {
-      native.ownedUnavailable = true;
-      final source = CameraPoseSource(
-        controller: controller,
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final events = <PoseSourceEvent>[];
-      final sub = source.events().listen(events.add);
-      await source.start();
-      await Future<void>.delayed(Duration.zero);
-      expect(events.whereType<SourceStateEvent>().map((event) => event.state)
-          .whereType<SetupFailed>().single.code, 'owned-protocol-unavailable');
-      await expectLater(source.dispose(), throwsA(isA<CameraException>().having(
-        (error) => error.failure, 'failure', CameraFailure.closeUncertain,
-      )));
-      expect(native.calls, isNot(contains('start')));
-      expect(native.calls, isNot(contains('stop')));
-      await sub.cancel();
-    });
+    test(
+      'unsupported owned plugin has a named failure and no legacy fallback',
+      () async {
+        native.ownedUnavailable = true;
+        final source = CameraPoseSource(
+          controller: controller,
+          requestPermission: () async => PermissionStatus.granted,
+          prepareModel: () async => '/fixture/model.task',
+        );
+        final events = <PoseSourceEvent>[];
+        final sub = source.events().listen(events.add);
+        await source.start();
+        await Future<void>.delayed(Duration.zero);
+        expect(
+          events
+              .whereType<SourceStateEvent>()
+              .map((event) => event.state)
+              .whereType<SetupFailed>()
+              .single
+              .code,
+          'owned-protocol-unavailable',
+        );
+        await expectLater(
+          source.dispose(),
+          throwsA(
+            isA<CameraException>().having(
+              (error) => error.failure,
+              'failure',
+              CameraFailure.closeUncertain,
+            ),
+          ),
+        );
+        expect(native.calls, isNot(contains('start')));
+        expect(native.calls, isNot(contains('stop')));
+        await sub.cancel();
+      },
+    );
 
-    testWidgets('default route controller retains timeout quarantine after late ACK', (tester) async {
-      await tester.runAsync(() async {
-      native.stopGate = Completer<void>();
-      CameraPoseSource defaultSource() => CameraPoseSource(
-        requestPermission: () async => PermissionStatus.granted,
-        prepareModel: () async => '/fixture/model.task',
-      );
-      final a = defaultSource();
-      await a.start();
-      await expectLater(a.dispose().timeout(const Duration(seconds: 40)),
-          throwsA(isA<CameraException>().having(
-            (error) => error.failure, 'failure', CameraFailure.closeUncertain)));
-      final b = defaultSource();
-      await b.start();
-      expect(native.calls.where((method) => method == 'startOwned'), hasLength(1));
-      native.stopGate!.complete();
-      await Future<void>.delayed(Duration.zero);
-      final c = defaultSource();
-      await c.start();
-      expect(native.calls.where((method) => method == 'startOwned'), hasLength(1),
-          reason: 'Late ACK and a fresh route must not create a new default controller');
-      await b.dispose();
-      await c.dispose();
-      });
-    }, timeout: const Timeout(Duration(seconds: 60)));
+    testWidgets(
+      'default route controller retains timeout quarantine after late ACK',
+      (tester) async {
+        await tester.runAsync(() async {
+          native.stopGate = Completer<void>();
+          CameraPoseSource defaultSource() => CameraPoseSource(
+            requestPermission: () async => PermissionStatus.granted,
+            prepareModel: () async => '/fixture/model.task',
+          );
+          final a = defaultSource();
+          await a.start();
+          await expectLater(
+            a.dispose().timeout(const Duration(seconds: 40)),
+            throwsA(
+              isA<CameraException>().having(
+                (error) => error.failure,
+                'failure',
+                CameraFailure.closeUncertain,
+              ),
+            ),
+          );
+          final b = defaultSource();
+          await b.start();
+          expect(
+            native.calls.where((method) => method == 'startOwned'),
+            hasLength(1),
+          );
+          native.stopGate!.complete();
+          await Future<void>.delayed(Duration.zero);
+          final c = defaultSource();
+          await c.start();
+          expect(
+            native.calls.where((method) => method == 'startOwned'),
+            hasLength(1),
+            reason:
+                'Late ACK and a fresh route must not create a new default controller',
+          );
+          await b.dispose();
+          await c.dispose();
+        });
+      },
+      timeout: const Timeout(Duration(seconds: 60)),
+    );
 
     for (final pendingStage in <String>['permission', 'model']) {
       test(

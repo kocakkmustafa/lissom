@@ -91,9 +91,8 @@ final class CameraPoseSource implements StartablePoseSource {
   Stream<PoseSourceEvent> events() => _events.stream.where((_) => !_retired);
 
   @override
-  Future<void> start() => _retired || _capture.isRetired
-      ? Future<void>.value()
-      : _enqueue(_start);
+  Future<void> start() =>
+      _retired || _capture.isRetired ? Future<void>.value() : _enqueue(_start);
 
   void _emit(PoseSourceEvent event) {
     if (!_retired && !_events.isClosed) _events.add(event);
@@ -171,7 +170,9 @@ final class CameraPoseSource implements StartablePoseSource {
     _disposeFuture = closing;
     // Preserve the failing Future for callers while observing fire-and-forget
     // route teardown. Uncertain closure must never be reported as success.
-    unawaited(closing.then<void>((_) {}, onError: (Object _, StackTrace __) {}));
+    unawaited(
+      closing.then<void>((_) {}, onError: (Object _, StackTrace __) {}),
+    );
     return closing;
   }
 }
@@ -227,6 +228,7 @@ LiveSessionState failureState(Object err) {
   }
   return SetupFailed(
     code: 'unexpected',
-    userText: 'Something unexpected happened while starting the camera. Try again.',
+    userText:
+        'Something unexpected happened while starting the camera. Try again.',
   );
 }

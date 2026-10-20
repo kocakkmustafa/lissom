@@ -144,17 +144,28 @@ class HomeScreen extends StatelessWidget {
             AshtangaEntry(
               key: const Key('home.ashtangaCourse'),
               course: course,
-              participation: facts.hathaProgress?.practicedIn(course).length ?? 0,
+              participation:
+                  facts.hathaProgress?.practicedIn(course).length ?? 0,
               onOpen: onOpenAshtanga ?? onOpenLibrary,
             ),
             const SizedBox(height: 18),
           ],
           if (facts.yin case final HathaCourse course) ...<Widget>[
-            YinEntry(key: const Key('home.yinCourse'), course: course, onOpen: onOpenYin, onOpenFoundations: onOpenHatha),
+            YinEntry(
+              key: const Key('home.yinCourse'),
+              course: course,
+              onOpen: onOpenYin,
+              onOpenFoundations: onOpenHatha,
+            ),
             const SizedBox(height: 18),
           ],
           if (facts.vinyasa case final HathaCourse course) ...<Widget>[
-            VinyasaEntry(key: const Key('home.vinyasaCourse'), course: course, onOpen: onOpenVinyasa, onOpenFoundations: onOpenHatha),
+            VinyasaEntry(
+              key: const Key('home.vinyasaCourse'),
+              course: course,
+              onOpen: onOpenVinyasa,
+              onOpenFoundations: onOpenHatha,
+            ),
             const SizedBox(height: 18),
           ],
           if (facts.chairOffice case final HathaCourse course) ...<Widget>[
@@ -193,11 +204,13 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          LissomEyebrow(localeText(
-            context,
-            chairOffice ? 'YOUR SEATED PATH' : 'YOUR HATHA PATH',
-            chairOffice ? 'OTURARAK ÇALIŞMA YOLUN' : 'HATHA YOLUN',
-          )),
+          LissomEyebrow(
+            localeText(
+              context,
+              chairOffice ? 'YOUR SEATED PATH' : 'YOUR HATHA PATH',
+              chairOffice ? 'OTURARAK ÇALIŞMA YOLUN' : 'HATHA YOLUN',
+            ),
+          ),
           const SizedBox(height: 8),
           Text(
             hathaText(context, course.title),
@@ -228,7 +241,8 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           FilledButton.icon(
-            onPressed: (chairOffice ? onOpenChairOffice : onOpenHatha) ??
+            onPressed:
+                (chairOffice ? onOpenChairOffice : onOpenHatha) ??
                 onOpenLibrary,
             icon: const Icon(Icons.play_arrow_rounded),
             label: Text(
@@ -236,18 +250,18 @@ class HomeScreen extends StatelessWidget {
                 context,
                 chairOffice
                     ? (practiced == 0
-                        ? 'Start chair / office path'
-                        : 'Continue chair / office path')
+                          ? 'Start chair / office path'
+                          : 'Continue chair / office path')
                     : (practiced == 0
-                        ? 'Start Hatha course'
-                        : 'Continue Hatha course'),
+                          ? 'Start Hatha course'
+                          : 'Continue Hatha course'),
                 chairOffice
                     ? (practiced == 0
-                        ? 'Sandalye / ofis yoluna başla'
-                        : 'Sandalye / ofis yoluna devam et')
+                          ? 'Sandalye / ofis yoluna başla'
+                          : 'Sandalye / ofis yoluna devam et')
                     : (practiced == 0
-                        ? 'Hatha kursuna başla'
-                        : 'Hatha kursuna devam et'),
+                          ? 'Hatha kursuna başla'
+                          : 'Hatha kursuna devam et'),
               ),
             ),
           ),
@@ -400,7 +414,9 @@ class HomeScreen extends StatelessWidget {
                     context,
                     'Last measurement on this device: {date}.',
                     'Bu cihazdaki son ölçüm: {date}.',
-                    <String, Object>{'date': localizedDate(context, last.completedAt)},
+                    <String, Object>{
+                      'date': localizedDate(context, last.completedAt),
+                    },
                   ),
             style: t.textTheme.bodyMedium,
           ),
@@ -488,16 +504,20 @@ class HomeScreen extends StatelessWidget {
         children: <Widget>[
           Text(
             live.isEmpty
-                ? localeText(context,
+                ? localeText(
+                    context,
                     'The measurement engine can read none of the twelve tests',
-                    'Ölçüm motoru listelenen testlerin hiçbirini okuyamıyor')
-                : localeTemplate(context,
+                    'Ölçüm motoru listelenen testlerin hiçbirini okuyamıyor',
+                  )
+                : localeTemplate(
+                    context,
                     'The measurement engine can read {live} of {total} tests',
                     'Ölçüm motoru {total} testin {live} tanesini okuyabiliyor',
                     <String, Object>{
                       'live': localizedInteger(context, live.length),
                       'total': localizedInteger(context, facts.liveness.length),
-                    }),
+                    },
+                  ),
             style: t.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -570,20 +590,22 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  static Widget _floorNote(BuildContext context, ThemeData t, int unreadable) =>
-      Text(
-        localePlural(
-          context,
-          '{count} stored records could not be read, so anything counted here is a floor, not a total.',
-          '{count} kayıt okunamadı. Burada gösterilen sayı toplam değil, '
-              'okunabilen en az kayıt sayısıdır.',
-          unreadable,
-          englishOne: '{count} stored record could not be read, so anything counted here is a floor, not a total.',
-        ),
-        style: t.textTheme.bodySmall?.copyWith(
-          color: LissomColors.roseDeepHover,
-        ),
-      );
+  static Widget _floorNote(
+    BuildContext context,
+    ThemeData t,
+    int unreadable,
+  ) => Text(
+    localePlural(
+      context,
+      '{count} stored records could not be read, so anything counted here is a floor, not a total.',
+      '{count} kayıt okunamadı. Burada gösterilen sayı toplam değil, '
+          'okunabilen en az kayıt sayısıdır.',
+      unreadable,
+      englishOne:
+          '{count} stored record could not be read, so anything counted here is a floor, not a total.',
+    ),
+    style: t.textTheme.bodySmall?.copyWith(color: LissomColors.roseDeepHover),
+  );
 
   /// Kaydın SINIFI kullanıcı diliyle. `lessonClass` yazım anında damgalanır —
   /// sonradan TÜRETİLMEZ, çünkü sonradan hesaplanan bir sınıf geçmişi sessizce
@@ -598,5 +620,4 @@ class HomeScreen extends StatelessWidget {
     // daha AZ iddia et.
     _ => 'recorded',
   };
-
 }

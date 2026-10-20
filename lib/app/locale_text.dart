@@ -4,7 +4,11 @@ import 'lissom_locales.dart';
 import 'lissom_localizations.dart';
 
 export 'lissom_localizations.dart'
-    show localizedConfigNumber, localizedDate, localizedDecimal, localizedInteger;
+    show
+        localizedConfigNumber,
+        localizedDate,
+        localizedDecimal,
+        localizedInteger;
 
 /// Existing EN/TR copy stays authoritative. The other product locales use
 /// source-English keys, shared with immutable bundled course/config content.
@@ -53,9 +57,10 @@ String localePlural(
   final String template = tag == 'tr' || tag == 'en'
       ? fallback
       : LissomLocalizations.maybeOf(context)?.lookup(
-          englishOther,
-          pluralCategory: lissomPluralCategory(tag, count),
-        ) ?? fallback;
+              englishOther,
+              pluralCategory: lissomPluralCategory(tag, count),
+            ) ??
+            fallback;
   return _renderTemplate(template, <String, Object>{
     ...arguments,
     'count': localizedInteger(context, count),
@@ -81,10 +86,12 @@ String configText(BuildContext context, String source) {
     final String? direct = _turkishConfigCopy[source];
     if (direct != null) return direct;
   }
-  final String honestSource =
-      source == _assessmentIntro ? _assessmentIntroHonest : source;
-  final String? translated =
-      LissomLocalizations.maybeOf(context)?.lookup(honestSource);
+  final String honestSource = source == _assessmentIntro
+      ? _assessmentIntroHonest
+      : source;
+  final String? translated = LissomLocalizations.maybeOf(
+    context,
+  )?.lookup(honestSource);
   if (tag != 'en' && translated != null) return translated;
 
   // These bounded formats come from the app's typed config/engine readers.
@@ -92,70 +99,93 @@ String configText(BuildContext context, String source) {
   final RegExpMatch? sidedTest = RegExp(
     r'^(.+) · (right|left)$',
   ).firstMatch(source);
-  if (sidedTest != null &&
-      _turkishConfigCopy.containsKey(sidedTest.group(1))) {
-    return localeTemplate(context, '{name} · {side}', '{name} · {side}',
+  if (sidedTest != null && _turkishConfigCopy.containsKey(sidedTest.group(1))) {
+    return localeTemplate(
+      context,
+      '{name} · {side}',
+      '{name} · {side}',
       <String, Object>{
         'name': configText(context, sidedTest.group(1)!),
         'side': sidedTest.group(2) == 'right'
             ? localeText(context, 'right', 'sağ')
             : localeText(context, 'left', 'sol'),
-      });
+      },
+    );
   }
   final RegExpMatch? mixedVerdict = RegExp(
     r'^Of the (\d+) tests behind this line, (\d+) is compared against a reference range and (\d+) are reported without one — the second kind carries no verdict\.$',
   ).firstMatch(source);
   if (mixedVerdict != null) {
-    return localeTemplate(context,
+    return localeTemplate(
+      context,
       'Of the {total} tests behind this line, {compared} is compared against a reference range and {uncompared} are reported without one — the second kind carries no verdict.',
       'Bu satırın dayandığı {total} testin {compared} tanesi referans aralığıyla karşılaştırılır; {uncompared} tanesi karşılaştırılmadan bildirilir. İkinci gruba ilişkin bir hüküm verilmez.',
       <String, Object>{
         'total': localizedInteger(context, int.parse(mixedVerdict.group(1)!)),
-        'compared': localizedInteger(context, int.parse(mixedVerdict.group(2)!)),
-        'uncompared': localizedInteger(context, int.parse(mixedVerdict.group(3)!)),
-      });
+        'compared': localizedInteger(
+          context,
+          int.parse(mixedVerdict.group(2)!),
+        ),
+        'uncompared': localizedInteger(
+          context,
+          int.parse(mixedVerdict.group(3)!),
+        ),
+      },
+    );
   }
   final RegExpMatch? namedCount = RegExp(
     r'^(\d+) named · none in this build\.$',
   ).firstMatch(source);
   if (namedCount != null) {
-    return localeTemplate(context,
+    return localeTemplate(
+      context,
       '{count} named · none in this build.',
       '{count} başlık var · bu sürümde içerik yok.',
-      <String, Object>{'count': localizedInteger(context, int.parse(namedCount.group(1)!))});
+      <String, Object>{
+        'count': localizedInteger(context, int.parse(namedCount.group(1)!)),
+      },
+    );
   }
   final RegExpMatch? cameraDistance = RegExp(
     r'^Stand about (\d+)–(\d+) cm from the camera\.$',
   ).firstMatch(source);
   if (cameraDistance != null) {
-    return localeTemplate(context,
+    return localeTemplate(
+      context,
       'Stand about {min}–{max} cm from the camera.',
       'Kameradan yaklaşık {min}–{max} cm uzakta dur.',
       <String, Object>{
         'min': localizedInteger(context, int.parse(cameraDistance.group(1)!)),
         'max': localizedInteger(context, int.parse(cameraDistance.group(2)!)),
-      });
+      },
+    );
   }
   final RegExpMatch? cameraHeight = RegExp(
     r'^Put the phone (\d+)–(\d+) cm off the floor\.$',
   ).firstMatch(source);
   if (cameraHeight != null) {
-    return localeTemplate(context,
+    return localeTemplate(
+      context,
       'Put the phone {min}–{max} cm off the floor.',
       'Telefonu yerden {min}–{max} cm yüksekliğe koy.',
       <String, Object>{
         'min': localizedInteger(context, int.parse(cameraHeight.group(1)!)),
         'max': localizedInteger(context, int.parse(cameraHeight.group(2)!)),
-      });
+      },
+    );
   }
   final RegExpMatch? yaw = RegExp(
     r'^Face the camera square-on — more than (\d+)° of turn and the reading is not used\.$',
   ).firstMatch(source);
   if (yaw != null) {
-    return localeTemplate(context,
+    return localeTemplate(
+      context,
       'Face the camera square-on — more than {degrees}° of turn and the reading is not used.',
       'Kameraya düz dön; {degrees}° üzerindeki dönüşlerde ölçüm kullanılmaz.',
-      <String, Object>{'degrees': localizedInteger(context, int.parse(yaw.group(1)!))});
+      <String, Object>{
+        'degrees': localizedInteger(context, int.parse(yaw.group(1)!)),
+      },
+    );
   }
   return _knownBlockerText(context, source) ?? honestSource;
 }
@@ -163,9 +193,15 @@ String configText(BuildContext context, String source) {
 // Metric subjects are named by the engine's finite bridge vocabulary. Do not
 // partially rewrite an unrecognised ID, user string or unknown blocker reason.
 const Set<String> _knownBlockerSubjects = <String>{
-  'Forward trunk lean', 'Sideways trunk tilt', 'Shin angle', 'Heel lift',
-  'Knee height', 'Reach depth', 'Shoulder-line width',
-  'Hip line in the plank', 'Hold time',
+  'Forward trunk lean',
+  'Sideways trunk tilt',
+  'Shin angle',
+  'Heel lift',
+  'Knee height',
+  'Reach depth',
+  'Shoulder-line width',
+  'Hip line in the plank',
+  'Hold time',
 };
 
 String? _knownBlockerText(BuildContext context, String source) {
@@ -192,17 +228,32 @@ String? _knownBlockerText(BuildContext context, String source) {
     translatedSubject = configText(context, subject);
   } else {
     final List<String> subjects = subject.replaceAll(' and ', ', ').split(', ');
-    if (subjects.isEmpty || !subjects.every(_knownBlockerSubjects.contains)) return null;
-    final List<String> names = subjects.map((String name) =>
-      localeText(context, name, _turkishBlockerParts[name]!)).toList();
-    translatedSubject = names.length == 1 ? names.single : localeTemplate(context,
-      '{first} and {last}', '{first} ve {last}', <String, Object>{
-        'first': names.sublist(0, names.length - 1).join(', '),
-        'last': names.last,
-      });
+    if (subjects.isEmpty || !subjects.every(_knownBlockerSubjects.contains))
+      return null;
+    final List<String> names = subjects
+        .map(
+          (String name) =>
+              localeText(context, name, _turkishBlockerParts[name]!),
+        )
+        .toList();
+    translatedSubject = names.length == 1
+        ? names.single
+        : localeTemplate(
+            context,
+            '{first} and {last}',
+            '{first} ve {last}',
+            <String, Object>{
+              'first': names.sublist(0, names.length - 1).join(', '),
+              'last': names.last,
+            },
+          );
   }
-  return localeTemplate(context, '{subject} — {reason}', '{subject} — {reason}',
-    <String, Object>{'subject': translatedSubject, 'reason': translatedReason});
+  return localeTemplate(
+    context,
+    '{subject} — {reason}',
+    '{subject} — {reason}',
+    <String, Object>{'subject': translatedSubject, 'reason': translatedReason},
+  );
 }
 
 const String _assessmentIntro =
@@ -234,8 +285,10 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   'Named, with the reason. We would rather tell you than leave a blank.':
       'Nedeniyle birlikte adlandırıldı. Boş bırakmak yerine açıklıyoruz.',
   'Ashtanga beginner foundations': 'Ashtanga başlangıç temelleri',
-  'Written Hatha, chair/office, supported standing Vinyasa, adapted supported Yin and Ashtanga beginner foundations are included. Ashtanga uses standing adaptations and sequence reading, not the full Primary Series. Demonstration and physical acceptance remain separate. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa, uyarlanmış destekli Yin ve Ashtanga başlangıç temelleri içerilir. Ashtanga ayakta uyarlamalar ve sıra okumayı kullanır; tam temel seri değildir. Gösterim ve fiziksel kabul ayrıdır. Yoga duruşları kamerayla puanlanmaz.',
-  'Written Hatha, chair/office, supported standing Vinyasa and adapted supported Yin beginner paths are included. Demonstration and physical acceptance remain separate; the beginner Ashtanga course remains pending. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa ve uyarlanmış destekli Yin başlangıç yolları içerilir. Gösterim ve fiziksel kabul ayrı; başlangıç Ashtanga kursu bekliyor. Yoga duruşları kamerayla puanlanmaz.',
+  'Written Hatha, chair/office, supported standing Vinyasa, adapted supported Yin and Ashtanga beginner foundations are included. Ashtanga uses standing adaptations and sequence reading, not the full Primary Series. Demonstration and physical acceptance remain separate. Yoga postures are not camera-scored.':
+      'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa, uyarlanmış destekli Yin ve Ashtanga başlangıç temelleri içerilir. Ashtanga ayakta uyarlamalar ve sıra okumayı kullanır; tam temel seri değildir. Gösterim ve fiziksel kabul ayrıdır. Yoga duruşları kamerayla puanlanmaz.',
+  'Written Hatha, chair/office, supported standing Vinyasa and adapted supported Yin beginner paths are included. Demonstration and physical acceptance remain separate; the beginner Ashtanga course remains pending. Yoga postures are not camera-scored.':
+      'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa ve uyarlanmış destekli Yin başlangıç yolları içerilir. Gösterim ve fiziksel kabul ayrı; başlangıç Ashtanga kursu bekliyor. Yoga duruşları kamerayla puanlanmaz.',
   "Today's plan": 'Bugünün planı',
   'Measuring again': 'Yeniden ölçüm',
   'Continue': 'Devam et',

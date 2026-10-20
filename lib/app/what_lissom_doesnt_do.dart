@@ -132,7 +132,9 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
                   context,
                   'Tests we took out of the battery ({count})',
                   'Değerlendirmeden çıkarılan testler ({count})',
-                  <String, Object>{'count': localizedInteger(context, loose.length)},
+                  <String, Object>{
+                    'count': localizedInteger(context, loose.length),
+                  },
                 ),
               ),
               const SizedBox(height: 4),
@@ -220,9 +222,9 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
   /// `avatar_demo_only` · `loose`) yüzeye SIZMAZ, cümleye çevrilir.
   static String _tierLine(PoseTier tier) => switch (tier.coaching) {
     'full' => 'Pose-by-pose coaching and reference scoring are not available.',
-    'guided' =>
-      'Guided camera coaching and scoring are not available.',
-    'avatar_demo_only' => 'Avatar demonstrations and scoring are not available.',
+    'guided' => 'Guided camera coaching and scoring are not available.',
+    'avatar_demo_only' =>
+      'Avatar demonstrations and scoring are not available.',
     _ => 'Pose coaching is not available for this category.',
   };
 

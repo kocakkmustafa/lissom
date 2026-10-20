@@ -39,9 +39,8 @@ final class _ActualCatalogBundle extends CachingAssetBundle {
       ByteData.sublistView(File(key).readAsBytesSync());
 }
 
-HathaCourse _course(String file) => HathaCourse.parse(
-  File('config/courses/$file.v1.json').readAsStringSync(),
-);
+HathaCourse _course(String file) =>
+    HathaCourse.parse(File('config/courses/$file.v1.json').readAsStringSync());
 
 /// Reconstructs records from the actual v1 serialization on every read. It has
 /// no File, owner, path-provider, queue or native-platform implementation.
@@ -58,7 +57,9 @@ final class _MemoryJournalStore implements HathaProgressStore {
 
   HathaProgress get snapshot => HathaProgress(
     records: List<HathaPracticeRecord>.unmodifiable(
-      _rows.map((row) => HathaPracticeRecord.parse(Map<String, dynamic>.from(row))),
+      _rows.map(
+        (row) => HathaPracticeRecord.parse(Map<String, dynamic>.from(row)),
+      ),
     ),
     unreadableRecords: 0,
   );
@@ -82,12 +83,16 @@ final class _MemoryJournalStore implements HathaProgressStore {
       throw StateError('Synthetic journal requires the lesson prerequisites');
     }
     if (practiced.contains(lessonId)) return;
-    _rows.add(Map<String, dynamic>.from(HathaPracticeRecord(
-      lessonId: lessonId,
-      courseId: course.id,
-      courseVersion: course.version,
-      practicedAt: DateTime.utc(2026, 10, 20, 12),
-    ).toJson()));
+    _rows.add(
+      Map<String, dynamic>.from(
+        HathaPracticeRecord(
+          lessonId: lessonId,
+          courseId: course.id,
+          courseVersion: course.version,
+          practicedAt: DateTime.utc(2026, 10, 20, 12),
+        ).toJson(),
+      ),
+    );
     writes++;
   }
 }
@@ -117,27 +122,30 @@ String _render(String template, Map<String, String> arguments) =>
       (match) => arguments[match.group(1)]!,
     );
 
-String _progressText(BuildContext context, HathaCourse course, int done) =>
-    _render(
-      _phrase(
-        context,
-        course.recordsParticipation
-            ? '{done} participation records across {total} units; physical skill is not established.'
-            : '{done} of {total} lessons practised',
-        course.recordsParticipation
-            ? '{total} birimde {done} katılım kaydı; fiziksel beceri gösterilmez.'
-            : '{total} dersten {done} tanesi çalışıldı',
-      ),
-      <String, String>{
-        'done': MaterialLocalizations.of(context).formatDecimal(done),
-        'total': MaterialLocalizations.of(context).formatDecimal(course.lessons.length),
-      },
-    );
+String _progressText(
+  BuildContext context,
+  HathaCourse course,
+  int done,
+) => _render(
+  _phrase(
+    context,
+    course.recordsParticipation
+        ? '{done} participation records across {total} units; physical skill is not established.'
+        : '{done} of {total} lessons practised',
+    course.recordsParticipation
+        ? '{total} birimde {done} katılım kaydı; fiziksel beceri gösterilmez.'
+        : '{total} dersten {done} tanesi çalışıldı',
+  ),
+  <String, String>{
+    'done': MaterialLocalizations.of(context).formatDecimal(done),
+    'total': MaterialLocalizations.of(
+      context,
+    ).formatDecimal(course.lessons.length),
+  },
+);
 
-Finder _scrollableWithin(Finder screen) => find.descendant(
-  of: screen,
-  matching: find.byType(Scrollable),
-).first;
+Finder _scrollableWithin(Finder screen) =>
+    find.descendant(of: screen, matching: find.byType(Scrollable)).first;
 
 Future<void> _reveal(
   WidgetTester tester,
@@ -174,7 +182,9 @@ void main() {
         final first = course.lessons.first;
         final second = course.lessons[1];
         expect(first.prerequisites, isEmpty);
-        final unrelated = _course(scenario.courseFile == 'hatha' ? 'chair-office' : 'hatha');
+        final unrelated = _course(
+          scenario.courseFile == 'hatha' ? 'chair-office' : 'hatha',
+        );
         final original = <HathaPracticeRecord>[
           HathaPracticeRecord(
             lessonId: unrelated.lessons.first.id,
@@ -192,41 +202,56 @@ void main() {
         final store = _MemoryJournalStore(original);
         final before = store.copiedRows;
         var storeOpens = 0;
-        await tester.pumpWidget(MaterialApp(
-          locale: lissomLocaleForTag(scenario.tag),
-          supportedLocales: kLissomSupportedLocales,
-          localeListResolutionCallback: resolveLissomLocale,
-          localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-            LissomLocalizationsDelegate(bundle: _ActualCatalogBundle()),
-            ...GlobalMaterialLocalizations.delegates,
-          ],
-          theme: buildLissomTheme(),
-          builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(2)),
-            child: child!,
+        await tester.pumpWidget(
+          MaterialApp(
+            locale: lissomLocaleForTag(scenario.tag),
+            supportedLocales: kLissomSupportedLocales,
+            localeListResolutionCallback: resolveLissomLocale,
+            localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+              LissomLocalizationsDelegate(bundle: _ActualCatalogBundle()),
+              ...GlobalMaterialLocalizations.delegates,
+            ],
+            theme: buildLissomTheme(),
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: const TextScaler.linear(2)),
+              child: child!,
+            ),
+            home: HathaCourseScreen(
+              course: course,
+              initialProgress: store.snapshot,
+              storeLoader: () async {
+                storeOpens++;
+                return store;
+              },
+            ),
           ),
-          home: HathaCourseScreen(
-            course: course,
-            initialProgress: store.snapshot,
-            storeLoader: () async {
-              storeOpens++;
-              return store;
-            },
-          ),
-        ));
+        );
         await tester.pumpAndSettle();
 
         final courseScreen = find.byType(HathaCourseScreen);
         var context = tester.element(courseScreen);
-        expect(canonicalLocaleTag(Localizations.localeOf(context)), scenario.tag);
+        expect(
+          canonicalLocaleTag(Localizations.localeOf(context)),
+          scenario.tag,
+        );
         expect(MediaQuery.sizeOf(context).width, 320);
         expect(MediaQuery.textScalerOf(context).scale(1), 2);
-        final direction = scenario.tag == 'ar' ? TextDirection.rtl : TextDirection.ltr;
+        final direction = scenario.tag == 'ar'
+            ? TextDirection.rtl
+            : TextDirection.ltr;
         expect(Directionality.of(context), direction);
         expect(find.text(_text(context, course.title)), findsOneWidget);
         final progressCard = find.byKey(HathaCourseScreen.progressKey);
         await _reveal(tester, progressCard, courseScreen);
-        expect(find.descendant(of: progressCard, matching: find.text(_progressText(context, course, 0))), findsOneWidget);
+        expect(
+          find.descendant(
+            of: progressCard,
+            matching: find.text(_progressText(context, course, 0)),
+          ),
+          findsOneWidget,
+        );
 
         final continueButton = find.byKey(HathaCourseScreen.continueKey);
         await _reveal(tester, continueButton, courseScreen);
@@ -234,7 +259,10 @@ void main() {
           _phrase(context, 'Continue: {title}', 'Devam et: {title}'),
           <String, String>{'title': _text(context, first.title)},
         );
-        expect(find.descendant(of: continueButton, matching: find.text(firstLabel)), findsOneWidget);
+        expect(
+          find.descendant(of: continueButton, matching: find.text(firstLabel)),
+          findsOneWidget,
+        );
         await tester.tap(continueButton);
         await tester.pumpAndSettle();
 
@@ -281,7 +309,12 @@ void main() {
         expect(courseScreen, findsOneWidget);
         expect(storeOpens, 1);
         expect(store.writes, 1);
-        expect(store.reads, 1, reason: 'The real course must read the store after the lesson route returns.');
+        expect(
+          store.reads,
+          1,
+          reason:
+              'The real course must read the store after the lesson route returns.',
+        );
         expect(store.copiedRows.take(before.length).toList(), before);
         expect(store.copiedRows, hasLength(3));
         expect(store.copiedRows.last['evidence'], 'self_report');
@@ -290,22 +323,41 @@ void main() {
         expect(store.copiedRows.last['lessonId'], first.id);
         final reopenedMemorySnapshot = await store.read();
         expect(reopenedMemorySnapshot.practicedIn(course), <String>{first.id});
-        expect(reopenedMemorySnapshot.practicedIn(unrelated), <String>{unrelated.lessons.first.id});
+        expect(reopenedMemorySnapshot.practicedIn(unrelated), <String>{
+          unrelated.lessons.first.id,
+        });
         expect(reopenedMemorySnapshot.oldVersionCount(course), 1);
 
         context = tester.element(courseScreen);
         await _reveal(tester, progressCard, courseScreen, delta: -280);
-        expect(find.descendant(of: progressCard, matching: find.text(_progressText(context, course, 1))), findsOneWidget);
-        expect(find.descendant(of: progressCard, matching: find.text(_progressText(context, course, 0))), findsNothing);
+        expect(
+          find.descendant(
+            of: progressCard,
+            matching: find.text(_progressText(context, course, 1)),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: progressCard,
+            matching: find.text(_progressText(context, course, 0)),
+          ),
+          findsNothing,
+        );
         await _reveal(tester, continueButton, courseScreen);
         final secondLabel = _render(
           _phrase(context, 'Continue: {title}', 'Devam et: {title}'),
           <String, String>{'title': _text(context, second.title)},
         );
-        expect(find.descendant(of: continueButton, matching: find.text(secondLabel)), findsOneWidget);
+        expect(
+          find.descendant(of: continueButton, matching: find.text(secondLabel)),
+          findsOneWidget,
+        );
 
         if (scenario.tag == 'tr') {
-          final standing = course.modules.singleWhere((module) => module.title.en == 'Standing foundations');
+          final standing = course.modules.singleWhere(
+            (module) => module.title.en == 'Standing foundations',
+          );
           await _reveal(tester, find.text(standing.title.tr), courseScreen);
           expect(standing.title.tr, 'Ayakta temeller');
           expect(find.text(standing.title.tr), findsOneWidget);

@@ -634,31 +634,60 @@ class _LiveView extends StatelessWidget {
     );
   }
 
-  String _stateText(BuildContext context, LiveSessionState state) => switch (state) {
-    LiveIdle() => localeText(context, 'Getting the camera ready.', 'Kamera hazırlanıyor.'),
-    PermissionDenied() => localeText(context, state.userText,
-        'Lissom ölçüm yapmak için kamera erişimine ihtiyaç duyar.'),
-    NoPersonDetected() => localeText(context,
-        'No one is in frame. Step into the camera view.',
-        'Kadrajda kimse yok. Kamera görüşüne geç.'),
+  String _stateText(
+    BuildContext context,
+    LiveSessionState state,
+  ) => switch (state) {
+    LiveIdle() => localeText(
+      context,
+      'Getting the camera ready.',
+      'Kamera hazırlanıyor.',
+    ),
+    PermissionDenied() => localeText(
+      context,
+      state.userText,
+      'Lissom ölçüm yapmak için kamera erişimine ihtiyaç duyar.',
+    ),
+    NoPersonDetected() => localeText(
+      context,
+      'No one is in frame. Step into the camera view.',
+      'Kadrajda kimse yok. Kamera görüşüne geç.',
+    ),
     JointsOutOfFrame(:final String missingGroup) => switch (missingGroup) {
-      'lower-body' => localeText(context,
-          'The lower-body joints this measurement needs are out of frame.',
-          'Alt beden eklemleri kadraj dışında.'),
-      'upper-body' => localeText(context,
-          'The upper-body joints this measurement needs are out of frame.',
-          'Üst beden eklemleri kadraj dışında.'),
-      _ => localeText(context,
-          'The joints this measurement needs are out of frame.',
-          'Gerekli eklemler kadraj dışında.'),
+      'lower-body' => localeText(
+        context,
+        'The lower-body joints this measurement needs are out of frame.',
+        'Alt beden eklemleri kadraj dışında.',
+      ),
+      'upper-body' => localeText(
+        context,
+        'The upper-body joints this measurement needs are out of frame.',
+        'Üst beden eklemleri kadraj dışında.',
+      ),
+      _ => localeText(
+        context,
+        'The joints this measurement needs are out of frame.',
+        'Gerekli eklemler kadraj dışında.',
+      ),
     },
-    Measuring(:final LiveReading reading) => reading.hasMeasurement
-        ? localeTemplate(context, 'Measuring: {reading}', 'Ölçülüyor: {reading}',
-            <String, Object>{'reading': '${localizedDecimal(context, reading.degrees!, fractionDigits: 0)}°'})
-        : configText(context, reading.narrative!),
-    SetupFailed() => localeText(context, state.userText, 'Kamera başlatılamadı. Yeniden dene.'),
+    Measuring(:final LiveReading reading) =>
+      reading.hasMeasurement
+          ? localeTemplate(
+              context,
+              'Measuring: {reading}',
+              'Ölçülüyor: {reading}',
+              <String, Object>{
+                'reading':
+                    '${localizedDecimal(context, reading.degrees!, fractionDigits: 0)}°',
+              },
+            )
+          : configText(context, reading.narrative!),
+    SetupFailed() => localeText(
+      context,
+      state.userText,
+      'Kamera başlatılamadı. Yeniden dene.',
+    ),
   };
-
 }
 
 class _ResultView extends StatelessWidget {
@@ -696,8 +725,13 @@ class _ResultView extends StatelessWidget {
         context,
         'Reason: {reason}.',
         'Neden: {reason}.',
-        <String, Object>{'reason': localeText(context,
-          _resultReason(r.code.name), _resultReasonTr(r.code.name))},
+        <String, Object>{
+          'reason': localeText(
+            context,
+            _resultReason(r.code.name),
+            _resultReasonTr(r.code.name),
+          ),
+        },
       ),
       (true, true) => localeText(
         context,
@@ -804,13 +838,15 @@ class _CameraSetupCard extends StatelessWidget {
     final List<String> lines = <String>[
       if (test.instruction.trim().isNotEmpty) test.instruction,
       if (setup.distanceCm != null)
-        localeTemplate(context,
-            'Stand about {min}–{max} cm from the camera.',
-            'Kameradan yaklaşık {min}–{max} cm uzakta dur.',
-            <String, Object>{
-              'min': localizedInteger(context, setup.distanceCm![0]),
-              'max': localizedInteger(context, setup.distanceCm![1]),
-            }),
+        localeTemplate(
+          context,
+          'Stand about {min}–{max} cm from the camera.',
+          'Kameradan yaklaşık {min}–{max} cm uzakta dur.',
+          <String, Object>{
+            'min': localizedInteger(context, setup.distanceCm![0]),
+            'max': localizedInteger(context, setup.distanceCm![1]),
+          },
+        ),
       if (_floorTests.contains(test.id))
         localeText(
           context,
@@ -818,20 +854,24 @@ class _CameraSetupCard extends StatelessWidget {
           'Bu test için telefonu yere yakın bir yüksekliğe indir.',
         )
       else if (setup.heightCm != null)
-        localeTemplate(context,
-            'Put the phone {min}–{max} cm off the floor.',
-            'Telefonu yerden {min}–{max} cm yüksekliğe koy.',
-            <String, Object>{
-              'min': localizedInteger(context, setup.heightCm![0]),
-              'max': localizedInteger(context, setup.heightCm![1]),
-            }),
+        localeTemplate(
+          context,
+          'Put the phone {min}–{max} cm off the floor.',
+          'Telefonu yerden {min}–{max} cm yüksekliğe koy.',
+          <String, Object>{
+            'min': localizedInteger(context, setup.heightCm![0]),
+            'max': localizedInteger(context, setup.heightCm![1]),
+          },
+        ),
       if (setup.framingRule != null) setup.framingRule!,
       if (setup.yawToleranceDeg != null)
         localeTemplate(
           context,
           'Keep the angle described for this test; more than {degrees}° of turn and the reading is not used.',
           'Bu testte tarif edilen kamera açısını koru; {degrees}° üzerindeki dönüşlerde ölçüm kullanılmaz.',
-          <String, Object>{'degrees': localizedConfigNumber(context, setup.yawToleranceDeg!)},
+          <String, Object>{
+            'degrees': localizedConfigNumber(context, setup.yawToleranceDeg!),
+          },
         ),
     ];
     return LissomCard(

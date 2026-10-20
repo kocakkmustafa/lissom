@@ -7,10 +7,12 @@ import 'local_owner.dart';
 /// recreate its directory after the account host has removed local data.
 final class LissomLocalWriteGuard {
   LissomLocalWriteGuard(this.directoryPath, {LissomLocalOwner? owner})
-    : owner = owner ?? _legacyOwners.putIfAbsent(
-        directoryPath,
-        () => LissomLocalOwner(userId: null, epoch: 0),
-      );
+    : owner =
+          owner ??
+          _legacyOwners.putIfAbsent(
+            directoryPath,
+            () => LissomLocalOwner(userId: null, epoch: 0),
+          );
 
   final String directoryPath;
   final LissomLocalOwner owner;

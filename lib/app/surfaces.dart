@@ -586,7 +586,10 @@ class MeasurementLimitsFootnote extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 12),
           Text(
-            localizedContext(context, measurementAvailable: measurementAvailable),
+            localizedContext(
+              context,
+              measurementAvailable: measurementAvailable,
+            ),
             style: small,
           ),
           const SizedBox(height: 8),

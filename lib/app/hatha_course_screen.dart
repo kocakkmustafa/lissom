@@ -169,7 +169,8 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                         '{count} practice records could not be read.',
                         '{count} çalışma kaydı okunamadı.',
                         _progress.unreadableRecords,
-                        englishOne: '{count} practice record could not be read.',
+                        englishOne:
+                            '{count} practice record could not be read.',
                       ),
                       style: theme.textTheme.bodySmall,
                     ),
@@ -220,8 +221,7 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                 module: module,
                 practiced: practiced,
                 onOpen: _open,
-                allowPreview:
-                    widget.course.allowsLessonPreview,
+                allowPreview: widget.course.allowsLessonPreview,
               ),
               const SizedBox(height: 18),
             ],
@@ -305,7 +305,10 @@ class _ModuleSection extends StatelessWidget {
                           '{minutes} min · guided practice',
                           '{minutes} dk · rehberli çalışma',
                           <String, Object>{
-                            'minutes': localizedInteger(context, lesson.minutes),
+                            'minutes': localizedInteger(
+                              context,
+                              lesson.minutes,
+                            ),
                           },
                         )
                       : localeText(
@@ -481,7 +484,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
             if (needsPreparation)
               HathaSessionPreparationCard(
                 chairOnly: widget.course.id == 'lissom.chair-office.beginner',
-                vinyasaOnly: widget.course.id == 'lissom.vinyasa.supported-standing.beginner',
+                vinyasaOnly:
+                    widget.course.id ==
+                    'lissom.vinyasa.supported-standing.beginner',
                 yinOnly: widget.course.id == 'lissom.yin.supported.beginner',
                 ashtangaOnly: widget.course.isAshtanga,
                 onPrepared: () => setState(() {
@@ -739,8 +744,12 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   title: Text(
                     localeText(
                       context,
-                      widget.course.recordsParticipation ? 'I answered the self-check and want to record participation; this is not observed physical skill.' : 'I answered the self-check and want to record my practice.',
-                      widget.course.recordsParticipation ? 'Öz denetimi yanıtladım ve katılımı kaydetmek istiyorum; bu gözlenmiş fiziksel beceri değildir.' : 'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
+                      widget.course.recordsParticipation
+                          ? 'I answered the self-check and want to record participation; this is not observed physical skill.'
+                          : 'I answered the self-check and want to record my practice.',
+                      widget.course.recordsParticipation
+                          ? 'Öz denetimi yanıtladım ve katılımı kaydetmek istiyorum; bu gözlenmiş fiziksel beceri değildir.'
+                          : 'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
                     ),
                   ),
                 ),
@@ -753,17 +762,35 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                     widget.isRepeat
                         ? localeText(
                             context,
-                            widget.course.recordsParticipation ? 'Record another participation' : 'Record another practice',
-                            widget.course.recordsParticipation ? 'Bir katılım daha kaydet' : 'Bir çalışma daha kaydet',
+                            widget.course.recordsParticipation
+                                ? 'Record another participation'
+                                : 'Record another practice',
+                            widget.course.recordsParticipation
+                                ? 'Bir katılım daha kaydet'
+                                : 'Bir çalışma daha kaydet',
                           )
                         : localeText(
                             context,
-                            lesson.id == 'c11' ? 'Record my written planning' : (lesson.id == 'v01' || lesson.id == 'v07' || lesson.id == 'y01' || widget.course.isWrittenStudy(lesson.id))
+                            lesson.id == 'c11'
+                                ? 'Record my written planning'
+                                : (lesson.id == 'v01' ||
+                                      lesson.id == 'v07' ||
+                                      lesson.id == 'y01' ||
+                                      widget.course.isWrittenStudy(lesson.id))
                                 ? 'Record my written study'
-                                : widget.course.recordsParticipation ? 'Record my participation' : 'I practised this lesson',
-                            lesson.id == 'c11' ? 'Yazılı planlamamı kaydet' : (lesson.id == 'v01' || lesson.id == 'v07' || lesson.id == 'y01' || widget.course.isWrittenStudy(lesson.id))
+                                : widget.course.recordsParticipation
+                                ? 'Record my participation'
+                                : 'I practised this lesson',
+                            lesson.id == 'c11'
+                                ? 'Yazılı planlamamı kaydet'
+                                : (lesson.id == 'v01' ||
+                                      lesson.id == 'v07' ||
+                                      lesson.id == 'y01' ||
+                                      widget.course.isWrittenStudy(lesson.id))
                                 ? 'Yazılı çalışmamı kaydet'
-                                : widget.course.recordsParticipation ? 'Katılımımı kaydet' : 'Bu dersi çalıştım',
+                                : widget.course.recordsParticipation
+                                ? 'Katılımımı kaydet'
+                                : 'Bu dersi çalıştım',
                           ),
                   ),
                 ),

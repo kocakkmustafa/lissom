@@ -252,7 +252,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       ageBand: _ageBand,
       onAgeBand: (String v) => setState(() => _ageBand = v),
     ),
-    _Step.limits => _LimitsStep(measurementAvailable: widget.measurementAvailable),
+    _Step.limits => _LimitsStep(
+      measurementAvailable: widget.measurementAvailable,
+    ),
   };
 }
 
@@ -548,12 +550,12 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
               _requestFailed
                   ? localeText(context, 'Try again', 'Yeniden dene')
                   : _status == null
-                      ? localeText(
-                          context,
-                          'Allow camera access',
-                          'Kamera izni ver',
-                        )
-                      : localeText(context, 'Check again', 'Yeniden denetle'),
+                  ? localeText(
+                      context,
+                      'Allow camera access',
+                      'Kamera izni ver',
+                    )
+                  : localeText(context, 'Check again', 'Yeniden denetle'),
             ),
           ),
         ),
@@ -568,7 +570,9 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
                 'Camera access could not be checked. Try again, or continue without the camera.',
                 'Kamera erişimi denetlenemedi. Yeniden dene veya kamera olmadan devam et.',
               ),
-              style: t.textTheme.bodySmall?.copyWith(color: t.colorScheme.error),
+              style: t.textTheme.bodySmall?.copyWith(
+                color: t.colorScheme.error,
+              ),
             ),
           ),
         ],
@@ -607,7 +611,9 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
                 'Settings could not be opened. Try again, or open your device settings yourself. You can also continue without the camera.',
                 'Ayarlar açılamadı. Yeniden dene veya cihaz ayarlarını kendin aç. Kamera olmadan da devam edebilirsin.',
               ),
-              style: t.textTheme.bodySmall?.copyWith(color: t.colorScheme.error),
+              style: t.textTheme.bodySmall?.copyWith(
+                color: t.colorScheme.error,
+              ),
             ),
           ),
         ],
@@ -675,14 +681,16 @@ class _ProfileStep extends StatelessWidget {
             for (final String band in kOfferedAgeBands)
               ChoiceChip(
                 key: Key('onboarding.ageBand.$band'),
-                label: Text(
-                  switch (band) {
-                    'u40' => localeText(context, 'Under 40', '40 yaş altı'),
-                    '40-59' => localeText(context, '40–59', '40–59 yaş'),
-                    '60plus' => localeText(context, '60 or over', '60 yaş ve üzeri'),
-                    _ => band,
-                  },
-                ),
+                label: Text(switch (band) {
+                  'u40' => localeText(context, 'Under 40', '40 yaş altı'),
+                  '40-59' => localeText(context, '40–59', '40–59 yaş'),
+                  '60plus' => localeText(
+                    context,
+                    '60 or over',
+                    '60 yaş ve üzeri',
+                  ),
+                  _ => band,
+                }),
                 selected: ageBand == band,
                 onSelected: (_) => onAgeBand(band),
               ),

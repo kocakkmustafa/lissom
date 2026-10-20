@@ -82,9 +82,11 @@ Future<void> main() async {
         supportDirectory: () async => owners.supportDirectory,
       ),
     );
-    runApp(LissomLocaleHost(
-      child: LissomAccountHost(runtime: runtime, owners: owners),
-    ));
+    runApp(
+      LissomLocaleHost(
+        child: LissomAccountHost(runtime: runtime, owners: owners),
+      ),
+    );
   } on Object {
     owners.dispose();
     runApp(const LissomLocaleHost(child: _AccountSetupFailureApp()));
@@ -140,15 +142,17 @@ class LissomApp extends StatelessWidget {
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
     ],
-    home: forcedAccountPage ?? OnboardingGate(
-      localScope: localScope,
-      accountRouteBuilder: accountRouteBuilder,
-      beforeMeasurement: beforeMeasurement,
-      shellLoader: factsLoader,
-      poseSourceLoader: poseSourceLoader,
-      measurementAvailable: measurementAvailable,
-      storeLoader: onboardingLoader,
-    ),
+    home:
+        forcedAccountPage ??
+        OnboardingGate(
+          localScope: localScope,
+          accountRouteBuilder: accountRouteBuilder,
+          beforeMeasurement: beforeMeasurement,
+          shellLoader: factsLoader,
+          poseSourceLoader: poseSourceLoader,
+          measurementAvailable: measurementAvailable,
+          storeLoader: onboardingLoader,
+        ),
   );
 }
 
@@ -216,38 +220,51 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     );
   }
 
-  void _attachRuntime(MotionAccountRuntime runtime, {bool preserveSessionFence = false}) {
+  void _attachRuntime(
+    MotionAccountRuntime runtime, {
+    bool preserveSessionFence = false,
+  }) {
     runtime.userId.addListener(_changed);
     runtime.passwordRecovery.addListener(_changed);
     runtime.identityVerification.addListener(_verificationChanged);
     if (!preserveSessionFence) {
-      _sessionFence = LissomAuthSessionFence(runtime.account.supabase.auth.currentSession);
+      _sessionFence = LissomAuthSessionFence(
+        runtime.account.supabase.auth.currentSession,
+      );
       _sessionReplacementPending = false;
     }
-    _authSubscription = runtime.account.authChanges.listen((state) {
-      if (!mounted || !identical(widget.runtime, runtime)) return;
-      // The actual public Session reference distinguishes a replay from a
-      // replacement. Only a matching tokenRefreshed event keeps storage E.
-      final LissomSessionChange change = _sessionFence.observe(
-        runtime.account.supabase.auth.currentSession, event: state,
-      );
-      _observeSessionChange(runtime, change);
-      if (change != LissomSessionChange.none) _changed();
-    }, onError: (Object _, StackTrace __) {
-      // Consume this subscription's error and stop resources immediately.
-      // Identity/recovery routing still follows the canonical runtime.
-      if (!mounted || !identical(widget.runtime, runtime)) return;
-      // Signed-out/null is already canonical guest admission, and Core may
-      // report the same values without notifying. Reopen only after successful
-      // drain; _closing/_closeError still block pending or failed closure.
-      _mayOpen = runtime.phase.value == MotionIdentityPhase.signedOut &&
-          runtime.userId.value == null;
-      _retireScope();
-      setState(() {});
-    });
+    _authSubscription = runtime.account.authChanges.listen(
+      (state) {
+        if (!mounted || !identical(widget.runtime, runtime)) return;
+        // The actual public Session reference distinguishes a replay from a
+        // replacement. Only a matching tokenRefreshed event keeps storage E.
+        final LissomSessionChange change = _sessionFence.observe(
+          runtime.account.supabase.auth.currentSession,
+          event: state,
+        );
+        _observeSessionChange(runtime, change);
+        if (change != LissomSessionChange.none) _changed();
+      },
+      onError: (Object _, StackTrace __) {
+        // Consume this subscription's error and stop resources immediately.
+        // Identity/recovery routing still follows the canonical runtime.
+        if (!mounted || !identical(widget.runtime, runtime)) return;
+        // Signed-out/null is already canonical guest admission, and Core may
+        // report the same values without notifying. Reopen only after successful
+        // drain; _closing/_closeError still block pending or failed closure.
+        _mayOpen =
+            runtime.phase.value == MotionIdentityPhase.signedOut &&
+            runtime.userId.value == null;
+        _retireScope();
+        setState(() {});
+      },
+    );
   }
 
-  void _observeSessionChange(MotionAccountRuntime runtime, LissomSessionChange change) {
+  void _observeSessionChange(
+    MotionAccountRuntime runtime,
+    LissomSessionChange change,
+  ) {
     if (change == LissomSessionChange.none) return;
     _credentialRefreshPending = change == LissomSessionChange.credentialRefresh;
     if (change == LissomSessionChange.replacement) {
@@ -260,16 +277,20 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     // Keep canonical identity verification; do not infer success from this void
     // Future and cached phase/userId. The credential fence deliberately stays
     // closed until a public Session-bound verification proof is available.
-    unawaited(runtime.refreshIdentity().then<void>((_) {},
-      onError: (Object _, StackTrace __) {},
-    ));
+    unawaited(
+      runtime.refreshIdentity().then<void>(
+        (_) {},
+        onError: (Object _, StackTrace __) {},
+      ),
+    );
   }
 
   void _reconcileActualSession() {
     final MotionAccountRuntime runtime = widget.runtime;
-    _observeSessionChange(runtime, _sessionFence.observe(
-      runtime.account.supabase.auth.currentSession,
-    ));
+    _observeSessionChange(
+      runtime,
+      _sessionFence.observe(runtime.account.supabase.auth.currentSession),
+    );
   }
 
   void _detachRuntime(MotionAccountRuntime runtime) {
@@ -283,7 +304,9 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
   @override
   void didUpdateWidget(covariant LissomAccountHost oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.runtime == widget.runtime && oldWidget.owners == widget.owners) return;
+    if (oldWidget.runtime == widget.runtime &&
+        oldWidget.owners == widget.owners)
+      return;
     _detachRuntime(oldWidget.runtime);
     _retireScope();
     if (oldWidget.owners != widget.owners) {
@@ -297,7 +320,8 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     _runtimeRevision++;
     _ownerEvent = true;
     _lastPhase = null;
-    _attachRuntime(widget.runtime,
+    _attachRuntime(
+      widget.runtime,
       preserveSessionFence: identical(oldWidget.runtime, widget.runtime),
     );
     _synchronize();
@@ -309,7 +333,9 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
       if (!mounted) return;
       final runtime = widget.runtime;
       if (runtime.isCurrentSessionVerified) {
-        _sessionFence.bindVerified(runtime.account.supabase.auth.currentSession);
+        _sessionFence.bindVerified(
+          runtime.account.supabase.auth.currentSession,
+        );
         _sessionReplacementPending = false;
         _credentialRefreshPending = false;
         _mayOpen = true;
@@ -351,29 +377,45 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     final MotionIdentityPhase phase = widget.runtime.phase.value;
     final String? id = widget.runtime.userId.value;
     final bool recovery = widget.runtime.passwordRecovery.value;
-    final bool admitted = !widget.runtime.isDisposed &&
+    final bool admitted =
+        !widget.runtime.isDisposed &&
         ((phase == MotionIdentityPhase.signedOut &&
-        id == null && widget.runtime.account.supabase.auth.currentSession == null) ||
-        (phase == MotionIdentityPhase.verified && id != null &&
-            widget.runtime.isCurrentSessionVerified));
-    final bool changed = _ownerEvent || id != _lastUserId ||
-        phase != _lastPhase || recovery != _recovering;
+                id == null &&
+                widget.runtime.account.supabase.auth.currentSession == null) ||
+            (phase == MotionIdentityPhase.verified &&
+                id != null &&
+                widget.runtime.isCurrentSessionVerified));
+    final bool changed =
+        _ownerEvent ||
+        id != _lastUserId ||
+        phase != _lastPhase ||
+        recovery != _recovering;
     if (changed) _mayOpen = true;
     _lastUserId = id;
     _lastPhase = phase;
     _recovering = recovery;
     _ownerEvent = false;
-    final bool preserveRefresh = _credentialRefreshPending &&
-        !_sessionReplacementPending && _scope != null &&
+    final bool preserveRefresh =
+        _credentialRefreshPending &&
+        !_sessionReplacementPending &&
+        _scope != null &&
         widget.runtime.account.supabase.auth.currentSession?.user.id == id &&
         phase != MotionIdentityPhase.signedOut &&
-        phase != MotionIdentityPhase.unavailable && !widget.runtime.isDisposed;
-    if ((!admitted && !preserveRefresh) || recovery || (changed && !preserveRefresh) ||
+        phase != MotionIdentityPhase.unavailable &&
+        !widget.runtime.isDisposed;
+    if ((!admitted && !preserveRefresh) ||
+        recovery ||
+        (changed && !preserveRefresh) ||
         (_scope?.owner?.isActive == false)) {
       _retireScope();
     }
-    if (!admitted || recovery || _scope != null || _closing != null ||
-        _closeError != null || !_mayOpen || _sessionReplacementPending ||
+    if (!admitted ||
+        recovery ||
+        _scope != null ||
+        _closing != null ||
+        _closeError != null ||
+        !_mayOpen ||
+        _sessionReplacementPending ||
         !_owners.isInitialized ||
         (id != null && _owners.isFenced(id))) {
       return;
@@ -391,21 +433,31 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     final LissomAuthSessionFence pageSessionFence = _sessionFence;
     final LissomOwnerRegistry pageOwners = _owners;
     final String? id = account.currentUser?.id;
-    final LissomDeletionTicket? ticket = id == null ? null : pageOwners.captureTicket(id);
-    final MotionAccountClient pageAccount = ticket == null ? account :
-        LissomEpochAccountClient(
-          account: account, registry: pageOwners, ticket: ticket,
-          canInitiate: () => widget.runtime.isCurrentSessionVerified &&
-              pageSessionFence.canInitiate(account.supabase.auth.currentSession),
-        );
+    final LissomDeletionTicket? ticket = id == null
+        ? null
+        : pageOwners.captureTicket(id);
+    final MotionAccountClient pageAccount = ticket == null
+        ? account
+        : LissomEpochAccountClient(
+            account: account,
+            registry: pageOwners,
+            ticket: ticket,
+            canInitiate: () =>
+                widget.runtime.isCurrentSessionVerified &&
+                pageSessionFence.canInitiate(
+                  account.supabase.auth.currentSession,
+                ),
+          );
     return ValueListenableBuilder<bool>(
       valueListenable: widget.runtime.passwordRecovery,
       builder: (BuildContext context, bool recovering, Widget? child) =>
           MotionAccountPage(
             account: pageAccount,
             initialPasswordRecovery: recovering,
-            clearLocalData: ticket == null ? null :
-                (String confirmedId) => pageOwners.eraseWithTicket(ticket, confirmedId),
+            clearLocalData: ticket == null
+                ? null
+                : (String confirmedId) =>
+                      pageOwners.eraseWithTicket(ticket, confirmedId),
             onRetryIdentity: widget.runtime.refreshIdentity,
           ),
     );
@@ -428,24 +480,38 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
       runtime: widget.runtime,
       child: _recovering && _owners.isInitialized
           ? LissomApp(
-              key: ValueKey<String>('recovery:$_runtimeRevision:${widget.runtime.userId.value}'),
+              key: ValueKey<String>(
+                'recovery:$_runtimeRevision:${widget.runtime.userId.value}',
+              ),
               forcedAccountPage: _accountPage(context, MotionApp.lissom.name),
             )
           : scope == null
           ? LissomApp(
               key: ValueKey<String>('closed:$_runtimeRevision'),
-              forcedAccountPage: Builder(builder: (BuildContext context) =>
-                Scaffold(
+              forcedAccountPage: Builder(
+                builder: (BuildContext context) => Scaffold(
                   key: const Key('lissom.owner.closed'),
-                  body: Center(child: Text(_closeError == null
-                      ? _sessionReplacementPending
-                          ? localeText(context, 'Your account session changed. Reopen Lissom.',
-                              'Hesap oturumun değişti. Lissom’u yeniden aç.')
-                          : localeText(context, 'Account resources are closing.',
-                              'Hesap kaynakları kapatılıyor.')
-                      : localeText(context,
-                          'Account resources could not close. Reopen Lissom.',
-                          'Hesap kaynakları kapatılamadı. Lissom’u yeniden aç.'))),
+                  body: Center(
+                    child: Text(
+                      _closeError == null
+                          ? _sessionReplacementPending
+                                ? localeText(
+                                    context,
+                                    'Your account session changed. Reopen Lissom.',
+                                    'Hesap oturumun değişti. Lissom’u yeniden aç.',
+                                  )
+                                : localeText(
+                                    context,
+                                    'Account resources are closing.',
+                                    'Hesap kaynakları kapatılıyor.',
+                                  )
+                          : localeText(
+                              context,
+                              'Account resources could not close. Reopen Lissom.',
+                              'Hesap kaynakları kapatılamadı. Lissom’u yeniden aç.',
+                            ),
+                    ),
+                  ),
                 ),
               ),
             )
@@ -457,14 +523,16 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
               factsLoader: widget.factsLoader,
               poseSourceLoader: widget.poseSourceLoader,
               measurementAvailable: widget.measurementAvailable,
-              onboardingLoader: widget.onboardingLoader == null ? null :
-                  () => widget.onboardingLoader!(scope),
-              beforeMeasurement: (measurementContext) => requireMotionPaidAccess(
-                measurementContext,
-                account: widget.runtime.account,
-                accountPageBuilder: (pageContext) =>
-                    _accountPage(pageContext, MotionApp.lissom.name),
-              ),
+              onboardingLoader: widget.onboardingLoader == null
+                  ? null
+                  : () => widget.onboardingLoader!(scope),
+              beforeMeasurement: (measurementContext) =>
+                  requireMotionPaidAccess(
+                    measurementContext,
+                    account: widget.runtime.account,
+                    accountPageBuilder: (pageContext) =>
+                        _accountPage(pageContext, MotionApp.lissom.name),
+                  ),
             ),
     );
   }

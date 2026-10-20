@@ -134,7 +134,9 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
                         context,
                         'When you measure {test}, the value and date appear here.',
                         '{test} ölçüldüğünde değer ve tarih burada görünür.',
-                        <String, Object>{'test': configText(context, widget.test.name)},
+                        <String, Object>{
+                          'test': configText(context, widget.test.name),
+                        },
                       ),
                     )
                   else ...<Widget>[
@@ -147,7 +149,8 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
                             '{count} recorded readings on this device could not be read by this version of Lissom. They are still on this phone.',
                             '{count} kayıt bu sürümde okunamadı. Kayıtlar hâlâ bu telefonda.',
                             h.unreadable,
-                            englishOne: '{count} recorded reading on this device could not be read by this version of Lissom. They are still on this phone.',
+                            englishOne:
+                                '{count} recorded reading on this device could not be read by this version of Lissom. They are still on this phone.',
                           ),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
@@ -206,7 +209,9 @@ class _SideHistory extends StatelessWidget {
                 context,
                 '{side} — no readings',
                 '{side} — ölçüm yok',
-                <String, Object>{'side': localeText(context, _label(side), _labelTr(side))},
+                <String, Object>{
+                  'side': localeText(context, _label(side), _labelTr(side)),
+                },
               )
             : localeText(context, 'No readings', 'Ölçüm yok'),
         reason: localeText(
@@ -235,7 +240,9 @@ class _SideHistory extends StatelessWidget {
               context,
               'Last measured {date}',
               'Son ölçüm {date}',
-              <String, Object>{'date': localizedDate(context, last.completedAt)},
+              <String, Object>{
+                'date': localizedDate(context, last.completedAt),
+              },
             ),
             style: t.textTheme.bodySmall,
           ),
@@ -263,7 +270,9 @@ class _SideHistory extends StatelessWidget {
                 context,
                 'Every reading ({count})',
                 'Tüm ölçümler ({count})',
-                <String, Object>{'count': localizedInteger(context, values.length)},
+                <String, Object>{
+                  'count': localizedInteger(context, values.length),
+                },
               ),
             ),
             const SizedBox(height: 8),
@@ -302,5 +311,4 @@ class _SideHistory extends StatelessWidget {
     'bilateral' => 'İki taraf',
     _ => side,
   };
-
 }

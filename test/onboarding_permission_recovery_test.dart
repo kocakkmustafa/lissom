@@ -143,63 +143,66 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('pending request admits one action and keeps exit in $language', (
-      WidgetTester tester,
-    ) async {
-      pinNarrowSurface(tester);
-      final Completer<PermissionStatus> pending = Completer<PermissionStatus>();
-      int requests = 0;
-      await _pumpToCamera(
-        tester,
-        language: language,
-        request: () {
-          requests++;
-          return pending.future;
-        },
-        openSettings: () async => true,
-      );
-      await tester.ensureVisible(find.byKey(_requestKey));
-      await tester.tap(find.byKey(_requestKey));
-      await tester.tap(find.byKey(_requestKey));
-      await tester.pump();
-      expect(requests, 1);
-      expect(
-        tester.widget<OutlinedButton>(find.byKey(_requestKey)).onPressed,
-        isNull,
-      );
-      _expectContinueEnabled(tester);
-      await _tap(tester, _continueKey);
-      expect(find.byKey(_requestKey), findsNothing);
-      pending.complete(PermissionStatus.granted);
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-    });
-
-    for (final bool throws in <bool>[false, true]) {
-      testWidgets('request completes after dispose, throws=$throws, $language', (
-        WidgetTester tester,
-      ) async {
+    testWidgets(
+      'pending request admits one action and keeps exit in $language',
+      (WidgetTester tester) async {
         pinNarrowSurface(tester);
         final Completer<PermissionStatus> pending =
             Completer<PermissionStatus>();
+        int requests = 0;
         await _pumpToCamera(
           tester,
           language: language,
-          request: () => pending.future,
+          request: () {
+            requests++;
+            return pending.future;
+          },
           openSettings: () async => true,
         );
-        await _tap(tester, _requestKey);
-        await tester.pumpWidget(const SizedBox.shrink());
-        if (throws) {
-          pending.completeError(
-            PlatformException(code: 'test', message: _privateDetail),
-          );
-        } else {
-          pending.complete(PermissionStatus.granted);
-        }
+        await tester.ensureVisible(find.byKey(_requestKey));
+        await tester.tap(find.byKey(_requestKey));
+        await tester.tap(find.byKey(_requestKey));
+        await tester.pump();
+        expect(requests, 1);
+        expect(
+          tester.widget<OutlinedButton>(find.byKey(_requestKey)).onPressed,
+          isNull,
+        );
+        _expectContinueEnabled(tester);
+        await _tap(tester, _continueKey);
+        expect(find.byKey(_requestKey), findsNothing);
+        pending.complete(PermissionStatus.granted);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-      });
+      },
+    );
+
+    for (final bool throws in <bool>[false, true]) {
+      testWidgets(
+        'request completes after dispose, throws=$throws, $language',
+        (WidgetTester tester) async {
+          pinNarrowSurface(tester);
+          final Completer<PermissionStatus> pending =
+              Completer<PermissionStatus>();
+          await _pumpToCamera(
+            tester,
+            language: language,
+            request: () => pending.future,
+            openSettings: () async => true,
+          );
+          await _tap(tester, _requestKey);
+          await tester.pumpWidget(const SizedBox.shrink());
+          if (throws) {
+            pending.completeError(
+              PlatformException(code: 'test', message: _privateDetail),
+            );
+          } else {
+            pending.complete(PermissionStatus.granted);
+          }
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+        },
+      );
 
       testWidgets('Settings failure retries, throws=$throws, $language', (
         WidgetTester tester,
@@ -235,40 +238,47 @@ void main() {
         _expectContinueEnabled(tester);
         await _tap(tester, _settingsKey);
         expect(settingsCalls, 2);
-        expect(requests, 1, reason: 'Opening Settings does not grant permission');
+        expect(
+          requests,
+          1,
+          reason: 'Opening Settings does not grant permission',
+        );
         expect(find.byKey(_settingsErrorKey), findsNothing);
         expect(
-          find.text(turkish ? 'Kamera izni verildi.' : 'Camera access granted.'),
+          find.text(
+            turkish ? 'Kamera izni verildi.' : 'Camera access granted.',
+          ),
           findsNothing,
         );
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('Settings completes after dispose, throws=$throws, $language', (
-        WidgetTester tester,
-      ) async {
-        pinNarrowSurface(tester);
-        final Completer<bool> pending = Completer<bool>();
-        await _pumpToCamera(
-          tester,
-          language: language,
-          request: () async => PermissionStatus.permanentlyDenied,
-          openSettings: () => pending.future,
-        );
-        await _tap(tester, _requestKey);
-        await _tap(tester, _settingsKey);
-        _expectContinueEnabled(tester);
-        await tester.pumpWidget(const SizedBox.shrink());
-        if (throws) {
-          pending.completeError(
-            PlatformException(code: 'test', message: _privateDetail),
+      testWidgets(
+        'Settings completes after dispose, throws=$throws, $language',
+        (WidgetTester tester) async {
+          pinNarrowSurface(tester);
+          final Completer<bool> pending = Completer<bool>();
+          await _pumpToCamera(
+            tester,
+            language: language,
+            request: () async => PermissionStatus.permanentlyDenied,
+            openSettings: () => pending.future,
           );
-        } else {
-          pending.complete(false);
-        }
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
-      });
+          await _tap(tester, _requestKey);
+          await _tap(tester, _settingsKey);
+          _expectContinueEnabled(tester);
+          await tester.pumpWidget(const SizedBox.shrink());
+          if (throws) {
+            pending.completeError(
+              PlatformException(code: 'test', message: _privateDetail),
+            );
+          } else {
+            pending.complete(false);
+          }
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+        },
+      );
     }
 
     testWidgets('pending Settings serializes camera actions in $language', (
@@ -312,42 +322,43 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('closed camera has no permission or Settings action in $language', (
-      WidgetTester tester,
-    ) async {
-      pinNarrowSurface(tester);
-      int requests = 0;
-      int settingsCalls = 0;
-      await _pumpToCamera(
-        tester,
-        language: language,
-        measurementAvailable: false,
-        request: () async {
-          requests++;
-          throw PlatformException(code: 'test', message: _privateDetail);
-        },
-        openSettings: () async {
-          settingsCalls++;
-          throw PlatformException(code: 'test', message: _privateDetail);
-        },
-      );
-      expect(
-        find.textContaining(
-          turkish
-              ? 'yazılı yoga kursları kamera olmadan çalışır'
-              : 'the written yoga courses work without it',
-        ),
-        findsOneWidget,
-      );
-      expect(find.byKey(_requestKey), findsNothing);
-      expect(find.byKey(_settingsKey), findsNothing);
-      expect(find.byKey(_requestErrorKey), findsNothing);
-      expect(find.byKey(_settingsErrorKey), findsNothing);
-      _expectContinueEnabled(tester);
-      await _tap(tester, _continueKey);
-      expect(requests, 0);
-      expect(settingsCalls, 0);
-      expect(tester.takeException(), isNull);
-    });
+    testWidgets(
+      'closed camera has no permission or Settings action in $language',
+      (WidgetTester tester) async {
+        pinNarrowSurface(tester);
+        int requests = 0;
+        int settingsCalls = 0;
+        await _pumpToCamera(
+          tester,
+          language: language,
+          measurementAvailable: false,
+          request: () async {
+            requests++;
+            throw PlatformException(code: 'test', message: _privateDetail);
+          },
+          openSettings: () async {
+            settingsCalls++;
+            throw PlatformException(code: 'test', message: _privateDetail);
+          },
+        );
+        expect(
+          find.textContaining(
+            turkish
+                ? 'yazılı yoga kursları kamera olmadan çalışır'
+                : 'the written yoga courses work without it',
+          ),
+          findsOneWidget,
+        );
+        expect(find.byKey(_requestKey), findsNothing);
+        expect(find.byKey(_settingsKey), findsNothing);
+        expect(find.byKey(_requestErrorKey), findsNothing);
+        expect(find.byKey(_settingsErrorKey), findsNothing);
+        _expectContinueEnabled(tester);
+        await _tap(tester, _continueKey);
+        expect(requests, 0);
+        expect(settingsCalls, 0);
+        expect(tester.takeException(), isNull);
+      },
+    );
   }
 }

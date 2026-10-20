@@ -270,19 +270,30 @@ class ProgressScreen extends StatelessWidget {
             const SizedBox(height: 18),
           ],
 
-          if (facts.ashtanga != null && facts.hathaProgress != null) ...<Widget>[
-            _HathaProgressCard(course: facts.ashtanga!, progress: facts.hathaProgress!),
+          if (facts.ashtanga != null &&
+              facts.hathaProgress != null) ...<Widget>[
+            _HathaProgressCard(
+              course: facts.ashtanga!,
+              progress: facts.hathaProgress!,
+            ),
             const SizedBox(height: 18),
           ],
           if (facts.yin != null && facts.hathaProgress != null) ...<Widget>[
-            _HathaProgressCard(course: facts.yin!, progress: facts.hathaProgress!),
+            _HathaProgressCard(
+              course: facts.yin!,
+              progress: facts.hathaProgress!,
+            ),
             const SizedBox(height: 18),
           ],
           if (facts.vinyasa != null && facts.hathaProgress != null) ...<Widget>[
-            _HathaProgressCard(course: facts.vinyasa!, progress: facts.hathaProgress!),
+            _HathaProgressCard(
+              course: facts.vinyasa!,
+              progress: facts.hathaProgress!,
+            ),
             const SizedBox(height: 18),
           ],
-          if (facts.chairOffice != null && facts.hathaProgress != null) ...<Widget>[
+          if (facts.chairOffice != null &&
+              facts.hathaProgress != null) ...<Widget>[
             _HathaProgressCard(
               course: facts.chairOffice!,
               progress: facts.hathaProgress!,
@@ -351,7 +362,8 @@ class ProgressScreen extends StatelessWidget {
                 '{count} recorded readings could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
                 '{count} kayıt bu Lissom sürümünde okunamadı. Kayıtlar hâlâ bu telefonda; listeyi boş saymıyoruz.',
                 h.unreadable,
-                englishOne: '{count} recorded reading could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
+                englishOne:
+                    '{count} recorded reading could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
               ),
               detail: localeText(
                 context,
@@ -397,7 +409,9 @@ class ProgressScreen extends StatelessWidget {
                 context,
                 'Recorded readings ({count})',
                 'Kayıtlı ölçümler ({count})',
-                <String, Object>{'count': localizedInteger(context, h.records.length)},
+                <String, Object>{
+                  'count': localizedInteger(context, h.records.length),
+                },
               ),
             ),
             const SizedBox(height: 10),
@@ -492,7 +506,8 @@ class ProgressScreen extends StatelessWidget {
         '{count} stored records on this device could not be read. The list below is what we could read — a floor, not a total.',
         '{count} kayıt okunamadı. Aşağıdaki liste toplam değil, okunabilen kayıtlardır.',
         unreadable,
-        englishOne: '{count} stored record on this device could not be read. The list below is what we could read — a floor, not a total.',
+        englishOne:
+            '{count} stored record on this device could not be read. The list below is what we could read — a floor, not a total.',
       ),
       style: t.textTheme.bodyMedium?.copyWith(
         color: LissomColors.roseDeepHover,
@@ -519,9 +534,23 @@ class _HathaProgressCard extends StatelessWidget {
             localeText(
               context,
               course.id == 'lissom.chair-office.beginner'
-                  ? 'Chair / office practice' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa participation' : course.id == 'lissom.yin.supported.beginner' ? 'Yin participation' : course.isAshtanga ? 'Ashtanga participation' : 'Hatha practice',
+                  ? 'Chair / office practice'
+                  : course.id == 'lissom.vinyasa.supported-standing.beginner'
+                  ? 'Vinyasa participation'
+                  : course.id == 'lissom.yin.supported.beginner'
+                  ? 'Yin participation'
+                  : course.isAshtanga
+                  ? 'Ashtanga participation'
+                  : 'Hatha practice',
               course.id == 'lissom.chair-office.beginner'
-                  ? 'Sandalye / ofis çalışması' : course.id == 'lissom.vinyasa.supported-standing.beginner' ? 'Vinyasa katılımı' : course.id == 'lissom.yin.supported.beginner' ? 'Yin katılımı' : course.isAshtanga ? 'Ashtanga katılımı' : 'Hatha çalışması',
+                  ? 'Sandalye / ofis çalışması'
+                  : course.id == 'lissom.vinyasa.supported-standing.beginner'
+                  ? 'Vinyasa katılımı'
+                  : course.id == 'lissom.yin.supported.beginner'
+                  ? 'Yin katılımı'
+                  : course.isAshtanga
+                  ? 'Ashtanga katılımı'
+                  : 'Hatha çalışması',
             ),
             style: theme.textTheme.titleLarge,
           ),
@@ -655,7 +684,9 @@ class _LedgerRow extends StatelessWidget {
                 record.unmeasuredUnits,
                 englishOne: '{count} attempt could not be read{reason}',
                 arguments: <String, Object>{
-                  'reason': record.unmeasuredReason == null ? '' : ' · ${localeText(context, _reasonText(record.unmeasuredReason!), _reasonTextTr(record.unmeasuredReason!))}',
+                  'reason': record.unmeasuredReason == null
+                      ? ''
+                      : ' · ${localeText(context, _reasonText(record.unmeasuredReason!), _reasonTextTr(record.unmeasuredReason!))}',
                 },
               ),
               style: t.textTheme.bodySmall?.copyWith(
@@ -719,5 +750,4 @@ class _LedgerRow extends StatelessWidget {
     'lowConfidence' => 'ölçüm güvenilir bulunmadı',
     _ => 'neden kaydedilmedi',
   };
-
 }

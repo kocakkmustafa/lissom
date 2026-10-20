@@ -86,7 +86,7 @@ final class JsonlHathaProgressStore implements HathaProgressStore {
     bool Function()? canWrite,
     LissomLocalOwner? owner,
   }) : _writeGuard = LissomLocalWriteGuard(_file.parent.path, owner: owner),
-      _canWrite = canWrite;
+       _canWrite = canWrite;
 
   final File _file;
   final LissomLocalWriteGuard _writeGuard;
@@ -187,8 +187,8 @@ Future<HathaProgressStore> openHathaProgressStore({
   bool Function()? canWrite,
 }) async {
   scope.owner?.checkActive();
-  final Directory support = scope.owner?.supportDirectory ??
-      await getApplicationSupportDirectory();
+  final Directory support =
+      scope.owner?.supportDirectory ?? await getApplicationSupportDirectory();
   scope.owner?.checkActive();
   return JsonlHathaProgressStore(
     scope.file(support, LissomLocalFile.hathaProgress),

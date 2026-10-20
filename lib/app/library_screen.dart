@@ -147,7 +147,9 @@ class LibraryScreen extends StatelessWidget {
                     context,
                     'Planned, not in this build ({count})',
                     'Bu sürümde bulunmayan bölümler ({count})',
-                    <String, Object>{'count': localizedInteger(context, pending.length)},
+                    <String, Object>{
+                      'count': localizedInteger(context, pending.length),
+                    },
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -252,9 +254,15 @@ class _BuiltFamilyCard extends StatelessWidget {
                       <String, Object>{
                         'total': localizedInteger(context, total),
                         'live': localizedInteger(context, live),
-                        'availability': localeText(context,
-                          measurementAvailable ? 'camera entry on Home for supported tests' : 'camera closed in this release',
-                          measurementAvailable ? 'desteklenen testlerde kamera girişi Ana Sayfa’da' : 'bu sürümde kamera kapalı'),
+                        'availability': localeText(
+                          context,
+                          measurementAvailable
+                              ? 'camera entry on Home for supported tests'
+                              : 'camera closed in this release',
+                          measurementAvailable
+                              ? 'desteklenen testlerde kamera girişi Ana Sayfa’da'
+                              : 'bu sürümde kamera kapalı',
+                        ),
                       },
                     ),
               style: t.textTheme.bodySmall?.copyWith(
@@ -268,25 +276,51 @@ class _BuiltFamilyCard extends StatelessWidget {
   }
 
   String _teachingInventory(BuildContext context) => <String>[
-    localeTemplate(context,
-        '{modules} modules · {lessons} Hatha lessons',
-        '{modules} modül · {lessons} Hatha dersi',
-        <String, Object>{
-          'modules': localizedInteger(context, facts.hatha!.modules.length),
-          'lessons': localizedInteger(context, facts.hatha!.lessons.length),
-        }),
+    localeTemplate(
+      context,
+      '{modules} modules · {lessons} Hatha lessons',
+      '{modules} modül · {lessons} Hatha dersi',
+      <String, Object>{
+        'modules': localizedInteger(context, facts.hatha!.modules.length),
+        'lessons': localizedInteger(context, facts.hatha!.lessons.length),
+      },
+    ),
     if (facts.chairOffice case final HathaCourse chair)
-      localeTemplate(context, '{count} chair / office lessons', '{count} sandalye / ofis dersi',
-          <String, Object>{'count': localizedInteger(context, chair.lessons.length)}),
+      localeTemplate(
+        context,
+        '{count} chair / office lessons',
+        '{count} sandalye / ofis dersi',
+        <String, Object>{
+          'count': localizedInteger(context, chair.lessons.length),
+        },
+      ),
     if (facts.vinyasa case final HathaCourse vinyasa)
-      localeTemplate(context, '{count} Vinyasa lessons', '{count} Vinyasa dersi',
-          <String, Object>{'count': localizedInteger(context, vinyasa.lessons.length)}),
+      localeTemplate(
+        context,
+        '{count} Vinyasa lessons',
+        '{count} Vinyasa dersi',
+        <String, Object>{
+          'count': localizedInteger(context, vinyasa.lessons.length),
+        },
+      ),
     if (facts.yin case final HathaCourse yin)
-      localeTemplate(context, '{count} Yin lessons', '{count} Yin dersi',
-          <String, Object>{'count': localizedInteger(context, yin.lessons.length)}),
+      localeTemplate(
+        context,
+        '{count} Yin lessons',
+        '{count} Yin dersi',
+        <String, Object>{
+          'count': localizedInteger(context, yin.lessons.length),
+        },
+      ),
     if (facts.ashtanga case final HathaCourse ashtanga)
-      localeTemplate(context, '{count} Ashtanga foundations lessons', '{count} Ashtanga temelleri dersi',
-          <String, Object>{'count': localizedInteger(context, ashtanga.lessons.length)}),
+      localeTemplate(
+        context,
+        '{count} Ashtanga foundations lessons',
+        '{count} Ashtanga temelleri dersi',
+        <String, Object>{
+          'count': localizedInteger(context, ashtanga.lessons.length),
+        },
+      ),
   ].join(' · ');
 }
 
@@ -571,16 +605,21 @@ class FamilyPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(hathaText(context, ashtanga.title),
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                hathaText(context, ashtanga.title),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
               Text(hathaText(context, ashtanga.intro)),
               const SizedBox(height: 12),
               CourseOpenButton(
                 course: ashtanga,
                 storeLoader: hathaStoreLoader,
-                label: localeText(context,
-                    'Open Ashtanga foundations', 'Ashtanga temellerini aç'),
+                label: localeText(
+                  context,
+                  'Open Ashtanga foundations',
+                  'Ashtanga temellerini aç',
+                ),
               ),
             ],
           ),
@@ -639,7 +678,9 @@ class FamilyPage extends StatelessWidget {
           ),
         )
       else ...<Widget>[
-        LissomEyebrow('$liveHeading (${localizedInteger(context, live.length)})'),
+        LissomEyebrow(
+          '$liveHeading (${localizedInteger(context, live.length)})',
+        ),
         const SizedBox(height: 10),
         Column(
           key: liveListKey,
@@ -706,7 +747,9 @@ class FamilyPage extends StatelessWidget {
           style: t.textTheme.bodyMedium,
         )
       else ...<Widget>[
-        LissomEyebrow('$blockedHeading (${localizedInteger(context, blocked.length)})'),
+        LissomEyebrow(
+          '$blockedHeading (${localizedInteger(context, blocked.length)})',
+        ),
         const SizedBox(height: 4),
         Text(
           localeText(
@@ -767,7 +810,9 @@ class FamilyPage extends StatelessWidget {
       ];
     }
     return <Widget>[
-      LissomEyebrow('$namedHeading (${localizedInteger(context, family.children.length)})'),
+      LissomEyebrow(
+        '$namedHeading (${localizedInteger(context, family.children.length)})',
+      ),
       const SizedBox(height: 4),
       Text(
         localeText(

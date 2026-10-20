@@ -193,9 +193,8 @@ class LissomLocaleScope extends InheritedNotifier<LissomLocaleController> {
     super.key,
   }) : super(notifier: controller);
 
-  static LissomLocaleController? maybeOf(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<LissomLocaleScope>()
-      ?.notifier;
+  static LissomLocaleController? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<LissomLocaleScope>()?.notifier;
 }
 
 /// Above account gates and keyed owner navigators: switching users does not
@@ -227,8 +226,6 @@ class _LissomLocaleHostState extends State<LissomLocaleHost> {
   }
 
   @override
-  Widget build(BuildContext context) => LissomLocaleScope(
-    controller: _controller,
-    child: widget.child,
-  );
+  Widget build(BuildContext context) =>
+      LissomLocaleScope(controller: _controller, child: widget.child);
 }

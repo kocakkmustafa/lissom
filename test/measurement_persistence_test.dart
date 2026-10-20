@@ -87,9 +87,9 @@ TestSpec _overheadReach() => Battery.parseJson('''
 ''').tests['overhead_reach']!;
 
 List<PoseSourceEvent> _fullAttempt() => <PoseSourceEvent>[
-      for (int i = 0; i <= 12; i++)
-        SourceFrameEvent(_armFrame(elbowY: 0.15, tUs: i * 100000), size: _size),
-    ];
+  for (int i = 0; i <= 12; i++)
+    SourceFrameEvent(_armFrame(elbowY: 0.15, tUs: i * 100000), size: _size),
+];
 
 /// **L-355 — GERÇEKTEN düşük-güven bir kare, `SourceStateEvent` değil.**
 ///
@@ -118,9 +118,9 @@ PoseFrame _lowConfidenceArmFrame({int tUs = 0}) {
 /// `_fullAttempt()`le AYNI uzunluk/zamanlama — tek fark kare KALİTESİ,
 /// böylece iki senaryo yalnız güven ekseninde ayrışır.
 List<PoseSourceEvent> _lowConfidenceAttempt() => <PoseSourceEvent>[
-      for (int i = 0; i <= 12; i++)
-        SourceFrameEvent(_lowConfidenceArmFrame(tUs: i * 100000), size: _size),
-    ];
+  for (int i = 0; i <= 12; i++)
+    SourceFrameEvent(_lowConfidenceArmFrame(tUs: i * 100000), size: _size),
+];
 
 /// Yazmayı REDDEDEN depo — çekirdeğin arayüzünü uygular, `append` patlar.
 final class _FailingStore implements SessionStore {
@@ -172,26 +172,28 @@ Future<void> _run(
   List<PoseSourceEvent>? script,
   Locale? locale,
 }) async {
-  await tester.pumpWidget(MaterialApp(
-    locale: locale,
-    supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
-    localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-      GlobalMaterialLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-    ],
-    theme: buildLissomTheme(),
-    home: LiveCaptureScreen(
-      test: _overheadReach(),
-      batteryVersion: 'test',
-      ageBand: 'u40',
-      storeLoader: loader,
-      attemptValueStoreLoader:
-          attemptLoader ?? (() async => _RecordingAttemptValueStore()),
-      clock: () => DateTime.utc(2026, 8, 12, 9, 30),
-      sourceOverride: FakePoseSource(script ?? _fullAttempt()),
+  await tester.pumpWidget(
+    MaterialApp(
+      locale: locale,
+      supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      theme: buildLissomTheme(),
+      home: LiveCaptureScreen(
+        test: _overheadReach(),
+        batteryVersion: 'test',
+        ageBand: 'u40',
+        storeLoader: loader,
+        attemptValueStoreLoader:
+            attemptLoader ?? (() async => _RecordingAttemptValueStore()),
+        clock: () => DateTime.utc(2026, 8, 12, 9, 30),
+        sourceOverride: FakePoseSource(script ?? _fullAttempt()),
+      ),
     ),
-  ));
+  );
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 50));
   await tester.pump(const Duration(milliseconds: 50));
@@ -205,68 +207,98 @@ void main() {
   tearDown(() => tmp.deleteSync(recursive: true));
 
   // ══ ① GERÇEK YAZICI — saf `test()`, FakeAsync YOK, gerçek dosya ══
-  test('ekranın ürettiği kayıt GERÇEK JsonlSessionStore ile diske iniyor',
-      () async {
-    final File f = File('${tmp.path}/sessions.jsonl');
-    final SessionStore store = JsonlSessionStore(f);
+  test(
+    'ekranın ürettiği kayıt GERÇEK JsonlSessionStore ile diske iniyor',
+    () async {
+      final File f = File('${tmp.path}/sessions.jsonl');
+      final SessionStore store = JsonlSessionStore(f);
 
-    // Ekranın kullandığı ÇEVİRİCİNİN AYNISI — ikinci bir kopya kurulsaydı
-    // "gerçek yazıcı ekranın kaydını kabul ediyor mu" sorusu cevapsız kalırdı.
-    final AssessmentResult r = AssessmentResult.measured(
-      testId: 'overhead_reach',
-      side: 'right',
-      value: 168,
-      unit: 'deg',
-      provenance: <String, String>{'ageBand': 'u40'},
-      bandFloors: const <String, double>{'low': 100},
-      attemptMicros: 1200000,
-    );
-    await store.append(recordFor(
-      test: _overheadReach(),
-      result: r,
-      completedAt: DateTime.utc(2026, 8, 12, 9, 30),
-    ));
+      // Ekranın kullandığı ÇEVİRİCİNİN AYNISI — ikinci bir kopya kurulsaydı
+      // "gerçek yazıcı ekranın kaydını kabul ediyor mu" sorusu cevapsız kalırdı.
+      final AssessmentResult r = AssessmentResult.measured(
+        testId: 'overhead_reach',
+        side: 'right',
+        value: 168,
+        unit: 'deg',
+        provenance: <String, String>{'ageBand': 'u40'},
+        bandFloors: const <String, double>{'low': 100},
+        attemptMicros: 1200000,
+      );
+      await store.append(
+        recordFor(
+          test: _overheadReach(),
+          result: r,
+          completedAt: DateTime.utc(2026, 8, 12, 9, 30),
+        ),
+      );
 
-    expect(f.existsSync(), isTrue, reason: 'geçmiş dosyası HİÇ oluşmadı');
-    final List<SessionRecord> saved = await store.recent();
-    expect(saved, hasLength(1));
-    expect(saved.single.lessonId, 'overhead_reach:right',
-        reason: '`historyKeyFor` taraf dahil anahtar üretir');
-    expect(saved.single.completedAt, DateTime.utc(2026, 8, 12, 9, 30),
-        reason: 'kayıt zamanı ÇAĞIRANDAN gelir (enjekte edilebilir saat)');
-    expect(saved.single.unitsCompleted, 1);
-    expect(await store.unreadableRecords(), 0,
-        reason: 'yazdığımız satırı KENDİ okuyucusu okuyamıyorsa kayıt '
-            'kaybolmuş demektir (ek-yalnız depo, M-F-228 sınıfı)');
-  });
+      expect(f.existsSync(), isTrue, reason: 'geçmiş dosyası HİÇ oluşmadı');
+      final List<SessionRecord> saved = await store.recent();
+      expect(saved, hasLength(1));
+      expect(
+        saved.single.lessonId,
+        'overhead_reach:right',
+        reason: '`historyKeyFor` taraf dahil anahtar üretir',
+      );
+      expect(
+        saved.single.completedAt,
+        DateTime.utc(2026, 8, 12, 9, 30),
+        reason: 'kayıt zamanı ÇAĞIRANDAN gelir (enjekte edilebilir saat)',
+      );
+      expect(saved.single.unitsCompleted, 1);
+      expect(
+        await store.unreadableRecords(),
+        0,
+        reason:
+            'yazdığımız satırı KENDİ okuyucusu okuyamıyorsa kayıt '
+            'kaybolmuş demektir (ek-yalnız depo, M-F-228 sınıfı)',
+      );
+    },
+  );
 
   // ══ ② EKRAN GERÇEKTEN ÇAĞIRIYOR MU ══
-  testWidgets('ekran ölçümü depoya YAZIYOR ve takip sözünü veriyor',
-      (WidgetTester tester) async {
+  testWidgets('ekran ölçümü depoya YAZIYOR ve takip sözünü veriyor', (
+    WidgetTester tester,
+  ) async {
     pinNarrowSurface(tester);
     final _RecordingStore store = _RecordingStore();
     final _RecordingAttemptValueStore values = _RecordingAttemptValueStore();
 
-    await _run(tester,
-        loader: () async => store, attemptLoader: () async => values);
+    await _run(
+      tester,
+      loader: () async => store,
+      attemptLoader: () async => values,
+    );
 
-    expect(store.written, hasLength(1),
-        reason: 'kullanıcı bir ölçüm yaptı — ekran `append`i ÇAĞIRMALI. '
-            'Bu çağrı 2026-08-12 öncesinde HİÇ YOKTU: `recordFor` yazılmış '
-            'ama SIFIR çağıranı olan bir yoldu.');
+    expect(
+      store.written,
+      hasLength(1),
+      reason:
+          'kullanıcı bir ölçüm yaptı — ekran `append`i ÇAĞIRMALI. '
+          'Bu çağrı 2026-08-12 öncesinde HİÇ YOKTU: `recordFor` yazılmış '
+          'ama SIFIR çağıranı olan bir yoldu.',
+    );
     expect(store.written.single.lessonId, 'overhead_reach:right');
     expect(store.written.single.completedAt, DateTime.utc(2026, 8, 12, 9, 30));
 
     // D13 — İKİNCİ yazma da GERÇEKTEN çağrılıyor mu, yoksa yalnız birinci mi
     // çalışıyor? Bu satır olmadan bir regresyon (attempt-value yazması
     // sessizce atlanır) bu testte GÖRÜNMEZ kalırdı.
-    expect(values.written, hasLength(1),
-        reason: 'ölçülen DEĞER de yazılmalı (D13) — yalnız oturum kaydı '
-            'değil');
+    expect(
+      values.written,
+      hasLength(1),
+      reason:
+          'ölçülen DEĞER de yazılmalı (D13) — yalnız oturum kaydı '
+          'değil',
+    );
     expect(values.written.single.lessonId, 'overhead_reach:right');
-    expect(values.written.single.value, greaterThan(0),
-        reason: 'gerçek motor bir açı üretti — sıfır/negatif sahte bir '
-            'değer olurdu');
+    expect(
+      values.written.single.value,
+      greaterThan(0),
+      reason:
+          'gerçek motor bir açı üretti — sıfır/negatif sahte bir '
+          'değer olurdu',
+    );
     // Sabit bir sayı VARSAYMAK yerine EKRANLA çapraz doğrula: depoya
     // yazılan ve kullanıcının gördüğü sayı AYNI olmalı — ayrışırlarsa
     // kullanıcı gördüğü sayıyı bir daha hiç göremez (L-316'nın tam
@@ -277,42 +309,66 @@ void main() {
       reason: 'depoya yazılan sayı ekranda gösterilenle UYUŞMUYOR',
     );
 
-    expect(find.text('Measurement saved. You can see earlier values on the test page.'),
-        findsOneWidget,
-        reason: 'yazma BAŞARILI — kaydedildi bilgisi gösterilir');
+    expect(
+      find.text(
+        'Measurement saved. You can see earlier values on the test page.',
+      ),
+      findsOneWidget,
+      reason: 'yazma BAŞARILI — kaydedildi bilgisi gösterilir',
+    );
   });
 
   testWidgets(
-      'yazma BAŞARISIZ → takip sözü VERİLMEZ, ekran çökmez, sebep söylenir',
-      (WidgetTester tester) async {
+    'yazma BAŞARISIZ → takip sözü VERİLMEZ, ekran çökmez, sebep söylenir',
+    (WidgetTester tester) async {
+      pinNarrowSurface(tester);
+      await _run(tester, loader: () async => _FailingStore());
+
+      // ÇIKMAZ SOKAK YASAĞI: ölçüm yine görünür.
+      // 🪤 Birim `deg` — `°` DEĞİL (config'ten gelir); ilk iddiam yanlış
+      // dizgeyi arıyordu ve testi ürün kusuru sanacaktım.
+      expect(
+        find.byKey(const Key('liveCapture.tryAgain')),
+        findsOneWidget,
+        reason: 'POZİTİF ÇAPA — sonuç ekranı yine açık, çökme yok',
+      );
+
+      expect(
+        find.textContaining('Measurement saved.'),
+        findsNothing,
+        reason:
+            'KAYIT YOKKEN takip sözü vermek, kusuru bir katman derine '
+            'taşımak olurdu — söz OLGUYA bağlıdır',
+      );
+      expect(
+        find.textContaining('could not be saved'),
+        findsOneWidget,
+        reason: 'sessizce yutmak yasak — kullanıcı kaydın düştüğünü bilmeli',
+      );
+      expect(find.text('Saving failed. Try again.'), findsOneWidget);
+      expect(
+        find.textContaining('disk dolu'),
+        findsNothing,
+        reason: 'ham OS hatası yerel yol veya tanımlayıcı içerebilir',
+      );
+    },
+  );
+
+  testWidgets('Türkçe kayıt hatası ham işletim sistemi metnini göstermiyor', (
+    WidgetTester tester,
+  ) async {
     pinNarrowSurface(tester);
-    await _run(tester, loader: () async => _FailingStore());
-
-    // ÇIKMAZ SOKAK YASAĞI: ölçüm yine görünür.
-    // 🪤 Birim `deg` — `°` DEĞİL (config'ten gelir); ilk iddiam yanlış
-    // dizgeyi arıyordu ve testi ürün kusuru sanacaktım.
-    expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,
-        reason: 'POZİTİF ÇAPA — sonuç ekranı yine açık, çökme yok');
-
-    expect(find.textContaining('Measurement saved.'), findsNothing,
-        reason: 'KAYIT YOKKEN takip sözü vermek, kusuru bir katman derine '
-            'taşımak olurdu — söz OLGUYA bağlıdır');
-    expect(find.textContaining('could not be saved'), findsOneWidget,
-        reason: 'sessizce yutmak yasak — kullanıcı kaydın düştüğünü bilmeli');
-    expect(find.text('Saving failed. Try again.'), findsOneWidget);
-    expect(find.textContaining('disk dolu'), findsNothing,
-        reason: 'ham OS hatası yerel yol veya tanımlayıcı içerebilir');
-  });
-
-  testWidgets('Türkçe kayıt hatası ham işletim sistemi metnini göstermiyor',
-      (WidgetTester tester) async {
-    pinNarrowSurface(tester);
-    await _run(tester,
-        loader: () async => _FailingStore(), locale: const Locale('tr'));
+    await _run(
+      tester,
+      loader: () async => _FailingStore(),
+      locale: const Locale('tr'),
+    );
 
     expect(find.textContaining('geçmişe kaydedilemedi'), findsOneWidget);
-    expect(find.textContaining('Kaydetme sırasında hata oluştu'),
-        findsOneWidget);
+    expect(
+      find.textContaining('Kaydetme sırasında hata oluştu'),
+      findsOneWidget,
+    );
     expect(find.textContaining('disk dolu'), findsNothing);
     expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget);
   });
@@ -325,17 +381,24 @@ void main() {
     // (bu dosyanın kendi tuzağı, sınıf dokümanında).
     final _RecordingStore store = _RecordingStore();
     await _run(tester, loader: () async => store);
-    expect(find.textContaining('Measurement saved.'), findsOneWidget,
-        reason: 'POZİTİF ÇAPA — ilk deneme kaydedildi');
+    expect(
+      find.textContaining('Measurement saved.'),
+      findsOneWidget,
+      reason: 'POZİTİF ÇAPA — ilk deneme kaydedildi',
+    );
 
     await tester.tap(find.byKey(const Key('liveCapture.tryAgain')));
     await tester.pump();
 
     // Yeni deneme HENÜZ bitmedi → sonuç ekranı yok, dolayısıyla eski
     // "kaydedildi" cümlesi de EKRANDA OLMAMALI.
-    expect(find.textContaining('Measurement saved.'), findsNothing,
-        reason: 'kayıt bir OLAY, durum değil — depo ek-yalnız; önceki '
-            'denemenin hâli yeni denemenin ekranında yaşayamaz');
+    expect(
+      find.textContaining('Measurement saved.'),
+      findsNothing,
+      reason:
+          'kayıt bir OLAY, durum değil — depo ek-yalnız; önceki '
+          'denemenin hâli yeni denemenin ekranında yaşayamaz',
+    );
   });
 
   // ══ ③ DÜŞÜK GÜVEN — roadmap LIS-P0-003 Step 4, L-355 ══
@@ -348,48 +411,74 @@ void main() {
   // test/` ölçümü). Bu boşluk roadmap'in kendi Step 4'üydü: "invalid
   // trial'ın ölçüm yazmadığını ve retry reason taşıdığını doğrula."
   testWidgets(
-      'düşük güven → DEĞER yazılmaz, oturum kaydı yazılır, sebep İSİMLİ '
-      '(L-355)', (WidgetTester tester) async {
-    pinNarrowSurface(tester);
-    final _RecordingStore store = _RecordingStore();
-    final _RecordingAttemptValueStore values = _RecordingAttemptValueStore();
+    'düşük güven → DEĞER yazılmaz, oturum kaydı yazılır, sebep İSİMLİ '
+    '(L-355)',
+    (WidgetTester tester) async {
+      pinNarrowSurface(tester);
+      final _RecordingStore store = _RecordingStore();
+      final _RecordingAttemptValueStore values = _RecordingAttemptValueStore();
 
-    await _run(tester,
+      await _run(
+        tester,
         loader: () async => store,
         attemptLoader: () async => values,
-        script: _lowConfidenceAttempt());
+        script: _lowConfidenceAttempt(),
+      );
 
-    // Oturum kaydı: düşük-güven deneme de bir OLAYDIR, YAZILIR (L-285'in
-    // hükmü — sessizce atlanırsa yarının yüzeyi "0 deneme" der, bu yalandır).
-    expect(store.written, hasLength(1),
-        reason: 'düşük-güven deneme de gerçekten oldu — kaydı düşerse '
-            'geçmiş "hiç denemedin" der, ki denedi');
+      // Oturum kaydı: düşük-güven deneme de bir OLAYDIR, YAZILIR (L-285'in
+      // hükmü — sessizce atlanırsa yarının yüzeyi "0 deneme" der, bu yalandır).
+      expect(
+        store.written,
+        hasLength(1),
+        reason:
+            'düşük-güven deneme de gerçekten oldu — kaydı düşerse '
+            'geçmiş "hiç denemedin" der, ki denedi',
+      );
 
-    // AMA değer YAZILMAZ — `AssessmentResult.notMeasured`in `value`si zaten
-    // null, `_persist`teki `if (r.value != null)` kapısı ikinci yazmayı hiç
-    // ÇAĞIRMAMALI. Bu satır olmadan bir regresyon (sahte bir sayının ikinci
-    // depoya sızması) GÖRÜNMEZ kalırdı.
-    expect(values.written, isEmpty,
-        reason: 'ölçülemeyen bir denemenin DEĞERİ yoktur — yazılırsa '
-            'fabrikasyon bir sayı geçmişe/trend\'e karışır');
+      // AMA değer YAZILMAZ — `AssessmentResult.notMeasured`in `value`si zaten
+      // null, `_persist`teki `if (r.value != null)` kapısı ikinci yazmayı hiç
+      // ÇAĞIRMAMALI. Bu satır olmadan bir regresyon (sahte bir sayının ikinci
+      // depoya sızması) GÖRÜNMEZ kalırdı.
+      expect(
+        values.written,
+        isEmpty,
+        reason:
+            'ölçülemeyen bir denemenin DEĞERİ yoktur — yazılırsa '
+            'fabrikasyon bir sayı geçmişe/trend\'e karışır',
+      );
 
-    // Ekran sahte bir açı GÖSTERMEZ — başlık literal "Not measured".
-    expect(find.text('Not measured'), findsOneWidget,
-        reason: 'düşük güvenden türetilmiş bir sayı ekranda GÖRÜNMEMELİ');
+      // Ekran sahte bir açı GÖSTERMEZ — başlık literal "Not measured".
+      expect(
+        find.text('Not measured'),
+        findsOneWidget,
+        reason: 'düşük güvenden türetilmiş bir sayı ekranda GÖRÜNMEMELİ',
+      );
 
-    // Sebep İSİMLİ gider — roadmap'in "retry reason"ı.
-    expect(find.text('Reason: the reading was not confident enough to keep.'), findsOneWidget,
-        reason: 'kullanıcı NEDEN ölçülemediğini görmeli — isimsiz "tekrar '
-            'dene" yeterli değil (ResultCode.lowConfidence.name)');
+      // Sebep İSİMLİ gider — roadmap'in "retry reason"ı.
+      expect(
+        find.text('Reason: the reading was not confident enough to keep.'),
+        findsOneWidget,
+        reason:
+            'kullanıcı NEDEN ölçülemediğini görmeli — isimsiz "tekrar '
+            'dene" yeterli değil (ResultCode.lowConfidence.name)',
+      );
 
-    // Takip sözü yalnız GERÇEK ölçüm için — bkz. yukarıdaki "yazma
-    // BAŞARISIZ" testinin AYNI ilkesi, burada NEDENİ farklı (yazma değil
-    // ölçüm başarısız).
-    expect(find.textContaining('Measurement saved.'), findsNothing,
-        reason: 'ölçülmedi — "izleyeceğiz" sözü tutulamayan bir vaat olurdu');
+      // Takip sözü yalnız GERÇEK ölçüm için — bkz. yukarıdaki "yazma
+      // BAŞARISIZ" testinin AYNI ilkesi, burada NEDENİ farklı (yazma değil
+      // ölçüm başarısız).
+      expect(
+        find.textContaining('Measurement saved.'),
+        findsNothing,
+        reason: 'ölçülmedi — "izleyeceğiz" sözü tutulamayan bir vaat olurdu',
+      );
 
-    expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,
-        reason: 'retry yolu düşük-güvende de açık olmalı — çıkmaz sokak '
-            'yasağı (M-F-267)');
-  });
+      expect(
+        find.byKey(const Key('liveCapture.tryAgain')),
+        findsOneWidget,
+        reason:
+            'retry yolu düşük-güvende de açık olmalı — çıkmaz sokak '
+            'yasağı (M-F-267)',
+      );
+    },
+  );
 }

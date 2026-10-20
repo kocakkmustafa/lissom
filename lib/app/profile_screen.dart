@@ -44,8 +44,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    final LissomLocaleController? localeController =
-        LissomLocaleScope.maybeOf(context);
+    final LissomLocaleController? localeController = LissomLocaleScope.maybeOf(
+      context,
+    );
     return DecoratedBox(
       decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
       child: ListView(
@@ -276,7 +277,8 @@ class _EntryCard extends StatelessWidget {
             const SizedBox(width: 12),
             Icon(
               Directionality.of(context) == TextDirection.rtl
-                  ? Icons.chevron_left : Icons.chevron_right,
+                  ? Icons.chevron_left
+                  : Icons.chevron_right,
               color: LissomColors.bodySecondary,
             ),
           ],
@@ -294,50 +296,71 @@ class _LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LissomLocalizations? catalog = LissomLocalizations.maybeOf(context);
-    final String currentTag =
-        canonicalLocaleTag(Localizations.localeOf(context));
+    final String currentTag = canonicalLocaleTag(
+      Localizations.localeOf(context),
+    );
     return LissomCard(
       key: const Key('profile.language'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(localeText(context, 'App language', 'Uygulama dili'),
-            style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            localeText(context, 'App language', 'Uygulama dili'),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
-          Text(localeText(
-            context,
-            'Language is saved on this installation and does not change your account or practice records.',
-            'Dil bu kurulumda saklanır; hesabını veya çalışma kayıtlarını değiştirmez.',
-          )),
+          Text(
+            localeText(
+              context,
+              'Language is saved on this installation and does not change your account or practice records.',
+              'Dil bu kurulumda saklanır; hesabını veya çalışma kayıtlarını değiştirmez.',
+            ),
+          ),
           const SizedBox(height: 8),
-          Text(localeText(
-            context,
-            'Text without an available translation is shown in English.',
-            'Çevirisi bulunmayan metinler İngilizce gösterilir.',
-          )),
+          Text(
+            localeText(
+              context,
+              'Text without an available translation is shown in English.',
+              'Çevirisi bulunmayan metinler İngilizce gösterilir.',
+            ),
+          ),
           const SizedBox(height: 8),
           if (controller.readFailed)
-            Text(localeText(
-              context,
-              'The saved language could not be read. The system language is being used. Choose a language to save a new preference.',
-              'Kayıtlı dil okunamadı. Sistem dili kullanılıyor. Yeni tercih kaydetmek için bir dil seç.',
-            ), key: const Key('profile.language.readFailure')),
+            Text(
+              localeText(
+                context,
+                'The saved language could not be read. The system language is being used. Choose a language to save a new preference.',
+                'Kayıtlı dil okunamadı. Sistem dili kullanılıyor. Yeni tercih kaydetmek için bir dil seç.',
+              ),
+              key: const Key('profile.language.readFailure'),
+            ),
           if (catalog != null && !catalog.catalogAvailable)
-            Text(localeText(
-              context,
-              'This language catalog could not be loaded. Missing text is shown in English.',
-              'Bu dilin kataloğu yüklenemedi. Eksik metinler İngilizce gösterilir.',
-            ), key: const Key('profile.language.catalogFailure')),
+            Text(
+              localeText(
+                context,
+                'This language catalog could not be loaded. Missing text is shown in English.',
+                'Bu dilin kataloğu yüklenemedi. Eksik metinler İngilizce gösterilir.',
+              ),
+              key: const Key('profile.language.catalogFailure'),
+            ),
           FilledButton.tonalIcon(
             key: const Key('profile.language.choose'),
             icon: const Icon(Icons.language),
             onPressed: !controller.isReady || controller.isSaving
-                ? null : () => _choose(context),
-            label: Text(controller.tag == null
-                ? localeTemplate(context,
-                    'System language ({language})', 'Sistem dili ({language})',
-                    <String, Object>{'language': kLissomLanguageNames[currentTag]!})
-                : kLissomLanguageNames[controller.tag]!),
+                ? null
+                : () => _choose(context),
+            label: Text(
+              controller.tag == null
+                  ? localeTemplate(
+                      context,
+                      'System language ({language})',
+                      'Sistem dili ({language})',
+                      <String, Object>{
+                        'language': kLissomLanguageNames[currentTag]!,
+                      },
+                    )
+                  : kLissomLanguageNames[controller.tag]!,
+            ),
           ),
         ],
       ),
@@ -358,13 +381,23 @@ class _LanguageCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (controller.writeFailed)
-                  Text(localeText(
+                  Text(
+                    localeText(
+                      context,
+                      'The language could not be saved. Your previous language is unchanged. Try again.',
+                      'Dil kaydedilemedi. Önceki dilin değişmedi. Yeniden dene.',
+                    ),
+                    key: const Key('profile.language.writeFailure'),
+                  ),
+                _option(
+                  context,
+                  null,
+                  localeText(
                     context,
-                    'The language could not be saved. Your previous language is unchanged. Try again.',
-                    'Dil kaydedilemedi. Önceki dilin değişmedi. Yeniden dene.',
-                  ), key: const Key('profile.language.writeFailure')),
-                _option(context, null,
-                  localeText(context, 'Use system language', 'Sistem dilini kullan')),
+                    'Use system language',
+                    'Sistem dilini kullan',
+                  ),
+                ),
                 for (final MapEntry<String, String> language
                     in kLissomLanguageNames.entries)
                   _option(context, language.key, language.value),
@@ -374,7 +407,9 @@ class _LanguageCard extends StatelessWidget {
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: controller.isSaving ? null : () => Navigator.of(context).pop(),
+            onPressed: controller.isSaving
+                ? null
+                : () => Navigator.of(context).pop(),
             child: Text(localeText(context, 'Cancel', 'Vazgeç')),
           ),
         ],
@@ -388,9 +423,11 @@ class _LanguageCard extends StatelessWidget {
         value: tag ?? 'system',
         groupValue: controller.tag ?? 'system',
         title: Text(label),
-        onChanged: controller.isSaving ? null : (String? _) async {
-          final bool saved = await controller.select(tag);
-          if (context.mounted && saved) Navigator.of(context).pop();
-        },
+        onChanged: controller.isSaving
+            ? null
+            : (String? _) async {
+                final bool saved = await controller.select(tag);
+                if (context.mounted && saved) Navigator.of(context).pop();
+              },
       );
 }

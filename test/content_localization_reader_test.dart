@@ -74,47 +74,77 @@ Widget _app({
 );
 
 void main() {
-  test('all existing course text frames are read without schema/data migration', () {
-    final courses = _courses();
-    expect(courses.length, 5);
-    expect(courses.expand((course) => course.lessons).length, 103);
-    expect(courses.expand(_texts).length, 1303);
-    expect(courses.expand(_texts).map((text) => text.en).toSet().length, 1127);
-  });
+  test(
+    'all existing course text frames are read without schema/data migration',
+    () {
+      final courses = _courses();
+      expect(courses.length, 5);
+      expect(courses.expand((course) => course.lessons).length, 103);
+      expect(courses.expand(_texts).length, 1303);
+      expect(
+        courses.expand(_texts).map((text) => text.en).toSet().length,
+        1127,
+      );
+    },
+  );
 
   for (final locale in kLissomSupportedLocales) {
     final tag = canonicalLocaleTag(locale);
-    testWidgets('actual parsed course reader and catalog coverage ($tag)', (tester) async {
+    testWidgets('actual parsed course reader and catalog coverage ($tag)', (
+      tester,
+    ) async {
       final courses = _courses();
       var checked = 0;
-      await tester.pumpWidget(_app(
-        locale: locale,
-        home: Builder(builder: (context) {
-          checked = 0;
-          final catalog = LissomLocalizations.maybeOf(context)!;
-          expect(catalog.catalogAvailable, isTrue);
-          for (final course in courses) {
-            for (final text in _texts(course)) {
-              expect(catalog.lookup(text.en), isNotNull,
-                  reason: '$tag: ${course.id} reader key missing: ${text.en}');
-              final expected = tag == 'tr'
-                  ? text.tr
-                  : tag == 'en' ? text.en : catalog.lookup(text.en)!;
-              expect(hathaText(context, text), expected);
-              checked++;
-            }
-          }
-          return Scaffold(body: SingleChildScrollView(child: Column(children: <Widget>[
-            for (final course in courses) ...<Widget>[
-              Text(hathaText(context, course.title), key: Key('reader.${course.id}.title')),
-              Text(hathaText(context, course.lessons.first.stopSignal),
-                  key: Key('reader.${course.id}.stop')),
-              Text(hathaText(context, course.lessons.last.selfCheck),
-                  key: Key('reader.${course.id}.last.selfCheck')),
-            ],
-          ])));
-        }),
-      ));
+      await tester.pumpWidget(
+        _app(
+          locale: locale,
+          home: Builder(
+            builder: (context) {
+              checked = 0;
+              final catalog = LissomLocalizations.maybeOf(context)!;
+              expect(catalog.catalogAvailable, isTrue);
+              for (final course in courses) {
+                for (final text in _texts(course)) {
+                  expect(
+                    catalog.lookup(text.en),
+                    isNotNull,
+                    reason: '$tag: ${course.id} reader key missing: ${text.en}',
+                  );
+                  final expected = tag == 'tr'
+                      ? text.tr
+                      : tag == 'en'
+                      ? text.en
+                      : catalog.lookup(text.en)!;
+                  expect(hathaText(context, text), expected);
+                  checked++;
+                }
+              }
+              return Scaffold(
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      for (final course in courses) ...<Widget>[
+                        Text(
+                          hathaText(context, course.title),
+                          key: Key('reader.${course.id}.title'),
+                        ),
+                        Text(
+                          hathaText(context, course.lessons.first.stopSignal),
+                          key: Key('reader.${course.id}.stop'),
+                        ),
+                        Text(
+                          hathaText(context, course.lessons.last.selfCheck),
+                          key: Key('reader.${course.id}.last.selfCheck'),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(checked, 1303);
       for (final course in courses) {
@@ -123,42 +153,64 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('diagram title and labels use actual locale catalog ($tag)', (tester) async {
-      await tester.pumpWidget(_app(
-        locale: locale,
-        home: const Scaffold(body: SingleChildScrollView(
-          child: HathaKnowledgeDiagrams(lessonId: 'h54'),
-        )),
-      ));
+    testWidgets('diagram title and labels use actual locale catalog ($tag)', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(
+          locale: locale,
+          home: const Scaffold(
+            body: SingleChildScrollView(
+              child: HathaKnowledgeDiagrams(lessonId: 'h54'),
+            ),
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
       final context = tester.element(find.byType(HathaKnowledgeDiagrams));
       final catalog = LissomLocalizations.maybeOf(context)!;
       expect(catalog.catalogAvailable, isTrue);
       final expectedTitle = tag == 'tr'
           ? 'Tek bacak hazırlığı'
-          : tag == 'en' ? 'One-leg preparation' : catalog.lookup('One-leg preparation');
+          : tag == 'en'
+          ? 'One-leg preparation'
+          : catalog.lookup('One-leg preparation');
       final expectedLabel = tag == 'tr'
           ? 'Baş ve omuzlar yerde kalır.'
-          : tag == 'en' ? 'Head and shoulders remain on the floor.'
-              : catalog.lookup('Head and shoulders remain on the floor.');
+          : tag == 'en'
+          ? 'Head and shoulders remain on the floor.'
+          : catalog.lookup('Head and shoulders remain on the floor.');
       expect(expectedTitle, isNotNull);
       expect(expectedLabel, isNotNull);
       expect(find.text(expectedTitle!), findsOneWidget);
       expect(find.textContaining(expectedLabel!), findsOneWidget);
-      expect(Directionality.of(context), tag == 'ar' ? TextDirection.rtl : TextDirection.ltr);
+      expect(
+        Directionality.of(context),
+        tag == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+      );
       expect(tester.takeException(), isNull);
     });
   }
 
-  testWidgets('Turkish course context variants survive global-key collisions', (tester) async {
+  testWidgets('Turkish course context variants survive global-key collisions', (
+    tester,
+  ) async {
     final courses = _courses();
-    await tester.pumpWidget(_app(
-      locale: const Locale('tr'),
-      home: Builder(builder: (context) => Scaffold(body: Column(children: <Widget>[
-        Text(hathaText(context, courses.first.modules[1].title)),
-        Text(hathaText(context, courses.last.modules[1].title)),
-      ]))),
-    ));
+    await tester.pumpWidget(
+      _app(
+        locale: const Locale('tr'),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Column(
+              children: <Widget>[
+                Text(hathaText(context, courses.first.modules[1].title)),
+                Text(hathaText(context, courses.last.modules[1].title)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Ayakta temel duruşlar'), findsOneWidget);
     expect(find.text('Ayakta temeller'), findsOneWidget);

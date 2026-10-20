@@ -14,9 +14,11 @@ final class LissomLocalizations {
 
   factory LissomLocalizations.parse(String raw, String tag) {
     final Object? decoded = jsonDecode(raw);
-    if (decoded is! Map || decoded['schemaVersion'] != 1 ||
+    if (decoded is! Map ||
+        decoded['schemaVersion'] != 1 ||
         decoded['id'] != 'lissom.l10n.$tag' ||
-        decoded['locale'] != tag || decoded['messages'] is! Map) {
+        decoded['locale'] != tag ||
+        decoded['messages'] is! Map) {
       throw const FormatException('Invalid localization catalog');
     }
     final Map<String, Object> messages = <String, Object>{};
@@ -33,9 +35,16 @@ final class LissomLocalizations {
       } else if (translation is Map && translation['other'] is String) {
         final Map<String, String> forms = <String, String>{};
         for (final MapEntry<dynamic, dynamic> form in translation.entries) {
-          if (!const <String>{'zero', 'one', 'two', 'few', 'many', 'other'}
-                  .contains(form.key) ||
-              form.value is! String || (form.value as String).trim().isEmpty) {
+          if (!const <String>{
+                'zero',
+                'one',
+                'two',
+                'few',
+                'many',
+                'other',
+              }.contains(form.key) ||
+              form.value is! String ||
+              (form.value as String).trim().isEmpty) {
             throw const FormatException('Invalid plural localization');
           }
           _checkArguments(source, form.value as String);
@@ -79,12 +88,18 @@ final class LissomLocalizations {
   static void _checkArguments(String source, String translation) {
     Map<String, int> counts(String template) {
       final Map<String, int> result = <String, int>{};
-      for (final RegExpMatch match in RegExp(r'\{([A-Za-z][A-Za-z0-9_]*)\}')
-          .allMatches(template)) {
-        result.update(match.group(1)!, (int value) => value + 1, ifAbsent: () => 1);
+      for (final RegExpMatch match in RegExp(
+        r'\{([A-Za-z][A-Za-z0-9_]*)\}',
+      ).allMatches(template)) {
+        result.update(
+          match.group(1)!,
+          (int value) => value + 1,
+          ifAbsent: () => 1,
+        );
       }
       return result;
     }
+
     if (!mapEquals(counts(source), counts(translation))) {
       throw const FormatException('Localization placeholders differ');
     }
@@ -139,16 +154,22 @@ String localizedDecimal(
   // Native int.parse has an int64 ceiling. A corrupt/legacy finite value
   // must remain displayable instead of throwing while opening its history.
   if (number.abs() >= 1e18) return localizedConfigNumber(context, number);
-  final List<String> parts = number.abs().toStringAsFixed(fractionDigits).split('.');
+  final List<String> parts = number
+      .abs()
+      .toStringAsFixed(fractionDigits)
+      .split('.');
   final String integer = localizedInteger(context, int.parse(parts[0]));
   final String one = localizedInteger(context, 1);
   final String negativeOne = localizedInteger(context, -1);
   final String minus = negativeOne.endsWith(one)
-      ? negativeOne.substring(0, negativeOne.length - one.length) : '-';
+      ? negativeOne.substring(0, negativeOne.length - one.length)
+      : '-';
   final String sign = number < 0 ? minus : '';
   if (parts.length == 1) return '$sign$integer';
-  final String fraction = parts[1].split('').map((String digit) =>
-      localizedInteger(context, int.parse(digit))).join();
+  final String fraction = parts[1]
+      .split('')
+      .map((String digit) => localizedInteger(context, int.parse(digit)))
+      .join();
   final String tag = canonicalLocaleTag(Localizations.localeOf(context));
   final String separator = switch (tag) {
     'tr' || 'pt-BR' || 'de' || 'fr' => ',',
@@ -198,7 +219,9 @@ String lissomPluralCategory(String tag, int count) {
     return 'other';
   }
   if ((tag == 'es-419' || tag == 'fr' || tag == 'pt-BR') &&
-      n != 0 && n % 1000000 == 0) return 'many';
+      n != 0 &&
+      n % 1000000 == 0)
+    return 'many';
   if (tag == 'fr' || tag == 'pt-BR') return n <= 1 ? 'one' : 'other';
   return n == 1 ? 'one' : 'other';
 }

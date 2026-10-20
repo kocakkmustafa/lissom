@@ -138,7 +138,8 @@ class _LissomShellState extends State<LissomShell> {
     final LissomLocalScope scope = widget.localScope;
     return () => openHathaProgressStore(
       scope: scope,
-      canWrite: () => mounted &&
+      canWrite: () =>
+          mounted &&
           (scope.owner?.isActive ?? true) &&
           widget.localScope.lifetimeKey == scope.lifetimeKey,
     );
@@ -162,7 +163,15 @@ class _LissomShellState extends State<LissomShell> {
     bool yin = false,
     bool ashtanga = false,
   }) async {
-    final course = ashtanga ? facts.ashtanga : yin ? facts.yin : vinyasa ? facts.vinyasa : chairOffice ? facts.chairOffice : facts.hatha;
+    final course = ashtanga
+        ? facts.ashtanga
+        : yin
+        ? facts.yin
+        : vinyasa
+        ? facts.vinyasa
+        : chairOffice
+        ? facts.chairOffice
+        : facts.hatha;
     if (course == null) return;
     final Future<HathaProgressStore> Function() storeLoader =
         _hathaStoreLoader();
@@ -341,7 +350,9 @@ class _LoadFailureScreen extends StatelessWidget {
                   FilledButton(
                     key: const Key('shell.retryLoad'),
                     onPressed: onRetry,
-                    child: Text(localeText(context, 'Try again', 'Yeniden dene')),
+                    child: Text(
+                      localeText(context, 'Try again', 'Yeniden dene'),
+                    ),
                   ),
                 ],
               ),
