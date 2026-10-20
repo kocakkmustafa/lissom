@@ -115,7 +115,6 @@ class _OnboardingGateState extends State<OnboardingGate> {
     builder: (BuildContext c, AsyncSnapshot<_Loaded> s) {
       if (s.hasError) {
         return _GateFailureScreen(
-          error: '${s.error}',
           onRetry: () => setState(() {
             _loaded = _load();
           }),
@@ -173,9 +172,8 @@ class _GateLoadingScreen extends StatelessWidget {
 }
 
 class _GateFailureScreen extends StatelessWidget {
-  const _GateFailureScreen({required this.error, required this.onRetry});
+  const _GateFailureScreen({required this.onRetry});
   static const Key key_ = Key('onboarding.gate.loadFailure');
-  final String error;
   final VoidCallback onRetry;
 
   @override
@@ -196,8 +194,8 @@ class _GateFailureScreen extends StatelessWidget {
                 Text(
                   localeText(
                     context,
-                    "Lissom couldn't check your setup: $error",
-                    'Lissom kurulumunu denetleyemedi: $error',
+                    "Lissom couldn't check your setup. Try again.",
+                    'Lissom kurulumunu denetleyemedi. Yeniden dene.',
                   ),
                   style: t.textTheme.bodyMedium,
                   textAlign: TextAlign.center,

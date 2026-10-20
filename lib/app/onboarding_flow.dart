@@ -21,8 +21,6 @@
 /// ve kamera bağlandığı gün kullanıcı ikinci bir onboarding turu görmemeli.
 library;
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:motion_account/motion_account.dart'
     show motionPaidFeaturesAvailable;
@@ -37,6 +35,7 @@ class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({
     required this.store,
     required this.onDone,
+    this.onRequestPermission,
     this.onOpenSettings,
     this.onOpenAccount,
     this.measurementAvailable = motionPaidFeaturesAvailable,
@@ -44,6 +43,9 @@ class OnboardingFlow extends StatefulWidget {
   });
 
   final OnboardingStore store;
+
+  /// Testable permission request; production uses the existing camera channel.
+  final Future<PermissionStatus> Function()? onRequestPermission;
 
   /// OS ayarlarını açar; testte enjekte edilir (platform kanalı widget
   /// testinde doğrulanamaz). Bkz. O3 — [_CameraInfoStep].
@@ -148,12 +150,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(22, 12, 22, 0),
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: LissomEyebrow(
-                    localeText(
+                    localeTemplate(
                       context,
-                      'Step ${_index + 1} of ${_order.length}',
-                      '${_order.length} adımın ${_index + 1}. adımı',
+                      'Step {step} of {total}',
+                      '{total} adımın {step}. adımı',
+                      <String, Object>{
+                        'step': localizedInteger(context, _index + 1),
+                        'total': localizedInteger(context, _order.length),
+                      },
                     ),
                   ),
                 ),
@@ -187,7 +193,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22),
                   child: Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -211,7 +217,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: FilledButton(
                     key: const Key('onboarding.continue'),
                     onPressed: (_canContinue && !_saving) ? _next : null,
@@ -237,6 +243,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       onChanged: (bool v) => setState(() => _disclaimerAcked = v),
     ),
     _Step.camera => _CameraInfoStep(
+      onRequestPermission:
+          widget.onRequestPermission ?? Permission.camera.request,
       onOpenSettings: widget.onOpenSettings ?? openAppSettings,
       measurementAvailable: widget.measurementAvailable,
     ),
@@ -368,10 +376,12 @@ class _DisclaimerStep extends StatelessWidget {
 /// için (bkz. `onboarding_flow_test.dart`, düğmeye hiç dokunmuyor).
 class _CameraInfoStep extends StatefulWidget {
   const _CameraInfoStep({
+    required this.onRequestPermission,
     required this.onOpenSettings,
     required this.measurementAvailable,
   });
 
+  final Future<PermissionStatus> Function() onRequestPermission;
   final Future<bool> Function() onOpenSettings;
   final bool measurementAvailable;
 
@@ -382,16 +392,48 @@ class _CameraInfoStep extends StatefulWidget {
 class _CameraInfoStepState extends State<_CameraInfoStep> {
   PermissionStatus? _status;
   bool _requesting = false;
+  bool _openingSettings = false;
+  bool _requestFailed = false;
+  bool _settingsFailed = false;
+
+  bool get _busy => _requesting || _openingSettings;
 
   Future<void> _requestPermission() async {
-    if (!widget.measurementAvailable || _requesting) return;
-    setState(() => _requesting = true);
-    final PermissionStatus status = await Permission.camera.request();
-    if (!mounted) return;
+    if (!widget.measurementAvailable || _busy) return;
     setState(() {
-      _status = status;
-      _requesting = false;
+      _requesting = true;
+      _requestFailed = false;
+      _settingsFailed = false;
     });
+    try {
+      final PermissionStatus status = await widget.onRequestPermission();
+      if (mounted) setState(() => _status = status);
+    } on Object {
+      if (mounted) {
+        setState(() {
+          _status = null;
+          _requestFailed = true;
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _requesting = false);
+    }
+  }
+
+  Future<void> _openSettings() async {
+    if (!widget.measurementAvailable || _busy) return;
+    setState(() {
+      _openingSettings = true;
+      _settingsFailed = false;
+    });
+    try {
+      final bool opened = await widget.onOpenSettings();
+      if (mounted && !opened) setState(() => _settingsFailed = true);
+    } on Object {
+      if (mounted) setState(() => _settingsFailed = true);
+    } finally {
+      if (mounted) setState(() => _openingSettings = false);
+    }
   }
 
   /// Sistem bir daha SORMAYACAK — tek yol OS ayarları.
@@ -446,10 +488,10 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
             localeText(
               context,
               'Camera measurements are closed in this release. '
-                  'We do not request camera access; the Hatha course works '
+                  'We do not request camera access; the written yoga courses work '
                   'without it.',
               'Bu sürümde kamera ölçümleri kapalıdır. Kamera izni istemiyoruz; '
-                  'Hatha kursu kamera olmadan çalışır.',
+                  'yazılı yoga kursları kamera olmadan çalışır.',
             ),
             style: t.textTheme.bodyMedium,
           ),
@@ -498,21 +540,38 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
         ),
         const SizedBox(height: 18),
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: OutlinedButton(
             key: const Key('onboarding.camera.requestPermission'),
-            onPressed: _requesting ? null : _requestPermission,
+            onPressed: _busy ? null : _requestPermission,
             child: Text(
-              _status == null
-                  ? localeText(
-                      context,
-                      'Allow camera access',
-                      'Kamera izni ver',
-                    )
-                  : localeText(context, 'Check again', 'Yeniden denetle'),
+              _requestFailed
+                  ? localeText(context, 'Try again', 'Yeniden dene')
+                  : _status == null
+                      ? localeText(
+                          context,
+                          'Allow camera access',
+                          'Kamera izni ver',
+                        )
+                      : localeText(context, 'Check again', 'Yeniden denetle'),
             ),
           ),
         ),
+        if (_requestFailed) ...<Widget>[
+          const SizedBox(height: 10),
+          Semantics(
+            key: const Key('onboarding.camera.requestError'),
+            liveRegion: true,
+            child: Text(
+              localeText(
+                context,
+                'Camera access could not be checked. Try again, or continue without the camera.',
+                'Kamera erişimi denetlenemedi. Yeniden dene veya kamera olmadan devam et.',
+              ),
+              style: t.textTheme.bodySmall?.copyWith(color: t.colorScheme.error),
+            ),
+          ),
+        ],
         if (_status != null) ...<Widget>[
           const SizedBox(height: 10),
           Text(_statusText(context), style: t.textTheme.bodySmall),
@@ -529,11 +588,26 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
         if (_isPermanentlyDenied) ...<Widget>[
           const SizedBox(height: 12),
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: FilledButton(
               key: const Key('onboarding.camera.openSettings'),
-              onPressed: () => unawaited(widget.onOpenSettings()),
+              onPressed: _busy ? null : _openSettings,
               child: Text(localeText(context, 'Open Settings', 'Ayarları aç')),
+            ),
+          ),
+        ],
+        if (_settingsFailed) ...<Widget>[
+          const SizedBox(height: 10),
+          Semantics(
+            key: const Key('onboarding.camera.settingsError'),
+            liveRegion: true,
+            child: Text(
+              localeText(
+                context,
+                'Settings could not be opened. Try again, or open your device settings yourself. You can also continue without the camera.',
+                'Ayarlar açılamadı. Yeniden dene veya cihaz ayarlarını kendin aç. Kamera olmadan da devam edebilirsin.',
+              ),
+              style: t.textTheme.bodySmall?.copyWith(color: t.colorScheme.error),
             ),
           ),
         ],
@@ -602,14 +676,12 @@ class _ProfileStep extends StatelessWidget {
               ChoiceChip(
                 key: Key('onboarding.ageBand.$band'),
                 label: Text(
-                  Localizations.localeOf(context).languageCode == 'tr'
-                      ? switch (band) {
-                          'u40' => '40 yaş altı',
-                          '40-59' => '40–59 yaş',
-                          '60plus' => '60 yaş ve üzeri',
-                          _ => band,
-                        }
-                      : (kAgeBandLabels[band] ?? band),
+                  switch (band) {
+                    'u40' => localeText(context, 'Under 40', '40 yaş altı'),
+                    '40-59' => localeText(context, '40–59', '40–59 yaş'),
+                    '60plus' => localeText(context, '60 or over', '60 yaş ve üzeri'),
+                    _ => band,
+                  },
                 ),
                 selected: ageBand == band,
                 onSelected: (_) => onAgeBand(band),

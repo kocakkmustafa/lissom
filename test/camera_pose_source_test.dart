@@ -1328,10 +1328,10 @@ void main() {
       expect((s as SetupFailed).code, 'unexpected');
       expect(
         s.userText,
-        contains('beklenmeyen'),
+        isNot(contains('beklenmeyen')),
         reason:
-            'ham hata metni yutulmamalı, kullanıcı diline karışmasa '
-            'bile İZ olarak kalmalı',
+            'raw exception details may contain private local paths; the '
+            'stable diagnostic code remains available separately',
       );
     });
   });

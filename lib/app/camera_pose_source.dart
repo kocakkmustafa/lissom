@@ -124,14 +124,13 @@ final class CameraPoseSource implements StartablePoseSource {
       );
     } on CameraException catch (e) {
       _emit(SourceStateEvent(failureState(e)));
-    } on Object catch (e) {
+    } on Object {
       _emit(
         SourceStateEvent(
           SetupFailed(
             code: 'unexpected',
             userText:
-                'Something unexpected '
-                'happened while starting the camera ($e). Try again.',
+                'Something unexpected happened while starting the camera. Try again.',
           ),
         ),
       );
@@ -223,11 +222,11 @@ LiveSessionState failureState(Object err) {
     }
     return SetupFailed(
       code: err.failure.code,
-      userText: 'The camera could not start (${err.failure.code}). Try again.',
+      userText: 'The camera could not start. Try again.',
     );
   }
   return SetupFailed(
     code: 'unexpected',
-    userText: 'Something unexpected happened ($err). Try again.',
+    userText: 'Something unexpected happened while starting the camera. Try again.',
   );
 }
