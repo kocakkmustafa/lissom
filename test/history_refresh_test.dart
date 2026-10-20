@@ -426,6 +426,13 @@ void main() {
     expect(find.byType(StudyReviewPage, skipOffstage: false), findsOneWidget);
     expect(returns, 0);
     await _refreshTap(tester, find.byType(BackButton));
+    await _refreshUntil(
+      tester,
+      () =>
+          find.byType(StudyReviewPage, skipOffstage: false).evaluate().isEmpty &&
+          returns == 1,
+      'recall route disposal and exactly one return callback',
+    );
     expect(find.byType(StudyReviewPage, skipOffstage: false), findsNothing);
     expect(returns, 1);
     expect(tester.takeException(), isNull);
