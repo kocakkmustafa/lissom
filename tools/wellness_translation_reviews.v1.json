@@ -345,6 +345,34 @@
       "translationSha256": "2d8f2165af1f5764ba059ba45d7dd9d2a9337f43321e57fef32f31e76f5bfeaf",
       "leaf": "text",
       "matchedWord": "diagnosis"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "06c894ddd11ea8531db4ec288c42b09af52c405b897115b4d29cf706c56d9740",
+      "translationSha256": "927fc468a9bf9688ba97df4d9c1e618b3291309b579be44c26d91603bbc9cd0c",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "12b7550b167585156046252ee5578eba2c3f197c22668a71ba9d3775963ab276",
+      "translationSha256": "8f404c604a80cfcfd80458fa7e205ca58dc0cb6598d8ba734283337cde21ca8b",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "088cf2afc671797481bb9d5d309620f3ebec9a96e5d006e2c0f9352383b62bf9",
+      "translationSha256": "88eebb31e5945204d6a07467e29c05920c4570a197a29559a703cb497f2b927d",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "fea8fd58a445fbf6f7aa2d91b8995832ecee39bb2d261655198155f2552b9caf",
+      "translationSha256": "d097bbafcfc52c34ccb71da90a62e739c3ef25c1337a91360c0355e075810d15",
+      "leaf": "text",
+      "matchedWord": "Symptom"
     }
   ]
 }

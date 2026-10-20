@@ -15,9 +15,9 @@ import wellness_lint
 class ContentLocalizationControls(unittest.TestCase):
     def test_actual_reader_inventory_has_non_vacuous_expected_scope(self):
         rows = check.content_source()
-        self.assertEqual(len(rows), 1374)
-        self.assertEqual(len({row["english"] for row in rows}), 1195)
-        self.assertEqual(sum(row["displayed"] for row in rows), 1271)
+        self.assertEqual(len(rows), 1381)
+        self.assertEqual(len({row["english"] for row in rows}), 1210)
+        self.assertEqual(sum(row["displayed"] for row in rows), 1278)
         self.assertEqual(len({row["file"] for row in rows}), 7)
 
     def test_duplicate_json_key_is_rejected_even_if_values_match(self):
@@ -67,7 +67,7 @@ class ContentLocalizationControls(unittest.TestCase):
             result = check.run(Path(directory))
         self.assertTrue(result["errors"])
         self.assertEqual(len(result["catalogs"]), 14)
-        self.assertTrue(all(len(catalog["missingContentKeys"]) == 1195 for catalog in result["catalogs"].values()))
+        self.assertTrue(all(len(catalog["missingContentKeys"]) == 1210 for catalog in result["catalogs"].values()))
 
     def test_semantic_review_is_called_with_all_locales_and_errors_propagate(self):
         with tempfile.TemporaryDirectory(prefix="lissom-semantic-hook-") as directory:

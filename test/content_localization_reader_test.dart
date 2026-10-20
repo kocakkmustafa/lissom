@@ -130,10 +130,10 @@ void main() {
       final courses = _courses();
       expect(courses.length, 5);
       expect(courses.expand((course) => course.lessons).length, 103);
-      expect(courses.expand(_texts).length, 1303);
+      expect(courses.expand(_texts).length, 1310);
       expect(
         courses.expand(_texts).map((text) => text.en).toSet().length,
-        1127,
+        1142,
       );
     },
   );
@@ -199,7 +199,7 @@ void main() {
         ),
       );
       await _waitForCatalogTree(tester, readerReady: () => checked > 0);
-      expect(checked, 1303);
+      expect(checked, 1310);
       for (final course in courses) {
         expect(find.byKey(Key('reader.${course.id}.title')), findsOneWidget);
       }

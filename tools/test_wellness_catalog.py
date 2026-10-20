@@ -84,10 +84,10 @@ class WellnessCatalogControls(unittest.TestCase):
         path.write_text(json.dumps(catalog, ensure_ascii=False), encoding="utf-8")
         return lint.scan_file(path)
 
-    def test_exact_sixteen_shipped_fields_and_only_their_reviewed_words_pass(self):
+    def test_exact_twenty_five_shipped_fields_and_only_their_reviewed_words_pass(self):
         self.assertEqual(len(lint.REVIEWED_HATHA_COPY), 5)
-        self.assertEqual(len(lint.REVIEWED_CONTEXT_COPY), 11)
-        self.assertEqual(len(self.fields), 16)
+        self.assertEqual(len(lint.REVIEWED_CONTEXT_COPY), 20)
+        self.assertEqual(len(self.fields), 25)
         for where, text, words in self.fields:
             with self.subTest(where=where):
                 self.assertEqual(lint.scan_text(where, text), [])

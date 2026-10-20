@@ -193,6 +193,78 @@ _reviewedSourceDisplayCopy = <String, ({String english, String turkish})>{
     turkish:
         "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede yalnız belirtisiz bir kurulum/dikkat hatasında ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez.",
   ),
+  "A trained teacher remains necessary for individual physical instruction. Recording these lessons is self-reported participation, not observed Ashtanga skill.": (
+    english:
+        "These instructions teach the small written route, not personal physical eligibility. If setup, an action or a personal limit is uncertain, choose written study and name what needs clarification. A lesson record is self-reported participation, not observed Ashtanga skill.",
+    turkish:
+        "Bu yönergeler küçük yazılı yolu öğretir; kişisel fiziksel uygunluğu belirlemez. Kurulum, eylem veya kişisel sınır belirsizse yazılı incelemeyi seç, neyin açıklığa kavuşması gerektiğini adlandır. Ders kaydı öz beyanlı katılımdır; gözlenmiş Ashtanga becerisi değildir.",
+  ),
+  "Name the actions that are already familiar and suitable for you. Unknown setup or personal suitability belongs in a teacher question, not a completion tick.": (
+    english:
+        "For the optional standing route, identify the already taught h01/h02 boundaries and ordinary breathing, h03 supported standing and h05 small joint preparation, or those same familiar components you already know. This planning card is not the preparation itself. If any entry or return is new or unclear today, study it first and keep this route written; a completion mark is not permission.",
+    turkish:
+        "Seçmeli ayakta yol için önceden öğretilen h01/h02 sınır ve doğal nefes, h03 destekli duruş, h05 küçük eklem hazırlığını veya zaten bildiğin aynı tanıdık bileşenleri belirle. Bu plan kartı hazırlığın kendisi değildir. Giriş veya dönüş bugün yeni ya da belirsizse önce öğretimini incele, bu yolu yazılı tut; tamamlama işareti izin değildir.",
+  ),
+  "After suitable familiar preparation, stand with a comfortable space between the feet, knees unlocked and arms down. Use your planned wall support if needed.": (
+    english:
+        "Use the current a03 setup and the familiar small preparation identified there before optional movement. Then start as taught: feet comfortably apart, knees unlocked and arms down; keep the planned wall support if needed. If reaching this starting base is unfamiliar, remain with written study rather than trying a new transfer.",
+    turkish:
+        "Seçmeli hareketten önce güncel a03 kurulumunu ve orada belirlenen tanıdık küçük hazırlığı kullan. Sonra öğretildiği gibi ayaklar rahat aralıklı, dizler kilitsiz ve kollar aşağıda başla; gerekliyse planlı duvar desteğini koru. Bu başlangıç tabanına erişim tanıdık değilse yeni transfer denemek yerine yazılı incelemede kal.",
+  ),
+  "Keep one precise question for a trained teacher and decide whether to repeat a taught unit. Completion means participation records reached the end, not certified performance.": (
+    english:
+        "Keep one specific unresolved teaching question and return to its named lesson before deciding on another taught unit. Compare the written explanation first. Completion means participation records reached the end; it is not an observed assessment of practice.",
+    turkish:
+        "Tek somut çözülmemiş öğretim sorusu sakla; başka öğretilmiş birimi seçmeden adı verilen dersine dön. Önce yazılı açıklamayı karşılaştır. Tamamlama, katılım kayıtlarının sona ulaşmasıdır; uygulamanın gözlenmiş değerlendirmesi değildir.",
+  ),
+  "Pause at your own comfortable depth, then press through the feet to stand.": (
+    english:
+        "Pause at your own comfortable depth with both hands supported and breathe normally. Begin the return only in the next step; do not stand first and then try to approach the chair.",
+    turkish:
+        "İki el destekliyken kendi rahat derinliğinde bekle ve doğal nefes al. Dönüşe yalnız sonraki adımda başla; önce doğrulup sonra sandalyeye yaklaşmaya çalışma.",
+  ),
+  "Rehearse only the unfamiliar transitions once, then revise the written plan before h60; seek instruction for unresolved problems.": (
+    english:
+        "Rehearse once only a transition taught in an earlier lesson whose entry, support and exit you know and have used comfortably. Do not physically test a first-time or unresolved transition: keep it on paper, replace it with a familiar taught route or observation, then revise the plan before h60.",
+    turkish:
+        "Yalnız önceki bir derste öğretilmiş, girişini, desteğini ve çıkışını bildiğin ve rahat uyguladığın bir geçişi bir kez prova et. İlk kez karşılaşılan veya çözülmemiş bir geçişi fiziksel olarak sınama: kâğıtta tut, tanıdık öğretilmiş bir yol veya gözlemle değiştir; h60 öncesi planı düzelt.",
+  ),
+  "To return, keep feet fixed and bring hips forward over the feet as the trunk rises. Keep palms at their original height if comfortable; if needed, slide palms a little upward on the wall while returning, one short adjustment at a time without releasing both contacts. Stop at the highest comfortable supported trunk position; do not reach for an inaccessible upright position.": (
+    english:
+        "To return, keep feet fixed and bring hips forward over the feet as the trunk rises. Keep both palms continuously against the wall. Leave them at their original height if comfortable; if needed, make small upward slides without taking either palm off the wall. Stop at the highest comfortable supported trunk position; do not reach for an inaccessible upright position.",
+    turkish:
+        "Dönüşte ayaklar sabitken kalçayı ayakların üzerine öne getir ve gövdeyi yükselt. Her iki avucun duvarla teması dönüş boyunca kesilmesin. Rahatsa avuçlar başlangıç yüksekliğinde kalsın; gerekiyorsa avuçlardan hiçbirini duvardan kaldırmadan küçük yukarı kaydırmalar yap. En yüksek rahat destekli gövde konumunda dur; erişilemeyen dikliğe uzanma.",
+  ),
+  "From mountain, place one hand at the hip and raise the other arm only as far as comfortable.": (
+    english:
+        "Keep any needed lower-hand support on the wall. Start the free hand at the hip and raise only that arm as far as comfortable. If no hand is free without losing needed support, omit the arm lift or choose the seated option.",
+    turkish:
+        "Gereken alt el desteğini duvarda koru. Serbest eli kalçaya getirip yalnız o kolu rahat aralıkta kaldır. Gereken desteği kaybetmeden serbest el kalmıyorsa kol kaldırmayı atla veya oturarak seçeneği kullan.",
+  ),
+  "Finish upright, hands low, then use the familiar rest chair if chosen. End the route whenever attention, contact or breathing becomes uncertain; no timer or compulsory second round.": (
+    english:
+        "Finish at the familiar supported upright base. Let only free arms rest low and keep any hand support you still need. Then use the familiar rest chair if chosen. End the route whenever attention, contact or breathing becomes uncertain; no timer or compulsory second round.",
+    turkish:
+        "Tanıdık destekli dik tabanda bitir. Yalnız serbest kolları aşağıda dinlendir; hâlâ gereken el desteğini koru. Seçtiysen ardından tanıdık dinlenme sandalyesini kullan. Dikkat, temas veya nefes belirsizleşirse rotayı bitir; süre hedefi veya zorunlu ikinci tur yok.",
+  ),
+  "Walk closer to the chair before standing and raise the torso gradually. If light-headed, stop rising and use the stable support.": (
+    english:
+        "Before starting, choose the taught seated alternative if the chair setup or return is uncertain. To leave this familiar chair-supported fold, keep both palms supported, take small comfortable steps closer to the chair, then raise the torso gradually. Keep any hand support you still need. If light-headed, stop rising and keep stable support; do not repeat the attempt.",
+    turkish:
+        "Başlamadan önce sandalye kurulumu veya dönüş belirsizse öğretilen oturarak seçeneği seç. Bu tanıdık sandalye destekli katlanmadan çıkarken iki avucu destekli tut, sandalyeye doğru küçük rahat adımlar at, sonra gövdeyi yavaşça yükselt. Hâlâ gereken el desteğini koru. Sersemlik veya baş dönmesi hissedersen yükselmeyi durdur ve sağlam desteği koru; denemeyi yineleme.",
+  ),
+  "Bring the raised arm down after returning upright; pause before lifting the other arm.": (
+    english:
+        "After returning upright, lower the raised free arm and pause. Keep any needed hand support. Do not lift the supporting hand to change sides; omit the other side or choose an already familiar seated option if the next reach would remove needed support.",
+    turkish:
+        "Dik konuma döndükten sonra kaldırdığın serbest kolu indir ve bekle. Gereken el desteğini koru. Taraf değiştirmek için destek elini kaldırma; sonraki uzanma gereken desteği bırakmayı gerektiriyorsa o tarafı atla veya zaten tanıdık oturarak seçeneği seç.",
+  ),
+  "Do three slow reaches each way with a normal breath.\n\nCommon mistake: The side reach compresses one point instead of spreading the movement. Correction: Reach upward first, then lean a little without jamming one side.\n\nCompare the standing reach with a supported seated reach.": (
+    english:
+        "Choose only a reach with a free arm while needed hand support remains in place. One slow comfortable reach and return is optional; neither three repetitions nor both sides are required. Keep breathing naturally. Do not lift a supporting hand or add a new support transfer to complete the other side.\n\nCommon mistake: The side reach compresses one point instead of spreading the movement. Correction: Keep needed support, reach upward first with the free arm, then lean only a little without jamming one side; return upright before lowering that arm.\n\nAn already taught, familiar supported seated reach may be chosen instead. Compare your chosen smaller version in words; a second physical version is not required.",
+    turkish:
+        "Yalnız gereken el desteği yerinde kalırken serbest kolla yapılabilen uzanmayı seç. Tek yavaş, rahat uzanma ve dönüş seçmelidir; üç tekrar veya iki taraf zorunlu değildir. Doğal nefesi sürdür. Öteki tarafı tamamlamak için destek elini kaldırma veya yeni bir destek geçişi ekleme.\n\nSık hata: Yana uzanma hareketi yaymak yerine tek noktayı sıkıştırır. Düzeltme: Gereken desteği koru; serbest kolla önce yukarı uzan, sonra tek tarafı sıkıştırmadan yalnız az yana eğil; kolu indirmeden dik konuma dön.\n\nYerine önceden öğretilmiş, tanıdık ve destekli oturarak uzanmayı seçebilirsin. Seçtiğin küçük biçimi sözle karşılaştır; ikinci fiziksel biçim zorunlu değildir.",
+  ),
 };
 
 /// Translate a stable template before substituting arguments. Callers never

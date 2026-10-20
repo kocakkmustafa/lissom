@@ -4,6 +4,7 @@ import 'package:lissom/app/app_facts.dart';
 import 'package:lissom/app/library_screen.dart';
 import 'package:lissom/app/shell.dart';
 import 'support/facts_from_disk.dart';
+import 'support/education_authoring_oracle.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -201,8 +202,12 @@ void main() {
       find.byKey(const Key('hatha.session.prepareToPractice')),
       findsNothing,
     );
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump();
     expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
@@ -248,8 +253,24 @@ void main() {
           tester.view.devicePixelRatio = 1;
           addTearDown(tester.view.resetPhysicalSize);
           addTearDown(tester.view.resetDevicePixelRatio);
-          final course = _yin();
+          final course = await loadVerifiedYinCourse(
+            _OffsetBundle(File(kYinCourseAssetPath).readAsBytesSync()),
+          );
           final lesson = course.lessonById(id)!;
+          final practice = authoredEducationText(course.id, id, locale, 'practice');
+          final question = authoredEducationText(course.id, id, locale, 'selfCheck');
+          final answer = authoredEducationText(course.id, id, locale, 'answerKey');
+          expect(locale == 'tr' ? lesson.practice.tr : lesson.practice.en, practice);
+          expect(locale == 'tr' ? lesson.selfCheck.tr : lesson.selfCheck.en, question);
+          expect(lesson.answerKey, isNotNull);
+          expect(locale == 'tr' ? lesson.answerKey!.tr : lesson.answerKey!.en, answer);
+          expect(question, isNot(practice));
+          expect(answer, isNot(question));
+          final displayedPractice = displayedEducationText(course.id, id, locale, 'practice');
+          final displayedQuestion = displayedEducationText(course.id, id, locale, 'selfCheck');
+          final displayedAnswer = displayedEducationText(course.id, id, locale, 'answerKey');
+          expect(displayedQuestion, isNot(displayedPractice));
+          expect(displayedAnswer, isNot(displayedQuestion));
           final store = _CountingStore();
           Future<void> open() async {
             await tester.pumpWidget(
@@ -277,16 +298,16 @@ void main() {
 
           await open();
           final reveal = find.byKey(Key('course.answer.$id'));
-          final answer = lesson.answerKey == null ? null
-              : locale == 'tr' ? lesson.answerKey!.tr : lesson.answerKey!.en;
-          if (answer != null) {
-            await tester.scrollUntilVisible(reveal, 300, maxScrolls: 100);
-            expect(find.text(answer), findsNothing);
-            await _tap(tester, reveal);
-            expect(find.text(answer), findsOneWidget);
-          } else {
-            expect(reveal, findsNothing);
-          }
+          await tester.scrollUntilVisible(find.text(displayedPractice), 300, maxScrolls: 100);
+          expect(find.text(displayedPractice), findsOneWidget);
+          await tester.scrollUntilVisible(find.text(displayedQuestion), 300, maxScrolls: 100);
+          expect(find.text(displayedQuestion), findsOneWidget);
+          expect(store.writes, 0);
+          await tester.scrollUntilVisible(reveal, 300, maxScrolls: 100);
+          expect(find.text(displayedAnswer), findsNothing);
+          await _tap(tester, reveal);
+          expect(find.text(displayedAnswer), findsOneWidget);
+          expect(store.writes, 0);
           await tester.scrollUntilVisible(
             find.byKey(HathaLessonScreen.reflectionKey),
             300,
@@ -310,20 +331,24 @@ void main() {
             ),
           );
           expect(tester.takeException(), isNull);
+          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
           tester.binding.handleAppLifecycleStateChanged(
             AppLifecycleState.paused,
           );
           await tester.pump();
+          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
           tester.binding.handleAppLifecycleStateChanged(
             AppLifecycleState.resumed,
           );
           await tester.pump();
           expect(store.writes, 0);
-          if (answer != null) expect(find.text(answer), findsNothing);
+          expect(find.text(displayedAnswer), findsNothing);
           await tester.pumpWidget(const SizedBox.shrink());
           await open();
-          if (answer != null) await tester.scrollUntilVisible(reveal, 300, maxScrolls: 100);
-          if (answer != null) expect(find.text(answer), findsNothing);
+          await tester.scrollUntilVisible(reveal, 300, maxScrolls: 100);
+          expect(find.text(displayedAnswer), findsNothing);
           expect(store.writes, 0);
           await tester.scrollUntilVisible(
             find.byKey(HathaLessonScreen.reflectionKey),

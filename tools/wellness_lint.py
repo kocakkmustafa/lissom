@@ -178,6 +178,36 @@ REVIEWED_CONTEXT_COPY = {
     ("hatha.v1.json :: sourceScopes.cc_wall_legs.doesNotSupport.en",
      "103bb5aac2171ba8e6cb2fba37c67ba793a6157a959d8cddcb28bbfd33d84555"):
         frozenset({"symptom", "treatment"}),
+    # First-release editorial stop/refusal wording; independently reviewed
+    # complete field + literal word only (education-release-01, 2026-10-20).
+    ("ashtanga-foundations.v1.json :: modules[1].lessons[1].practice.en",
+     "12b7550b167585156046252ee5578eba2c3f197c22668a71ba9d3775963ab276"):
+        frozenset({"symptom"}),
+    ("ashtanga-foundations.v1.json :: modules[1].lessons[2].practice.en",
+     "088cf2afc671797481bb9d5d309620f3ebec9a96e5d006e2c0f9352383b62bf9"):
+        frozenset({"symptom"}),
+    ("ashtanga-foundations.v1.json :: modules[1].lessons[3].practice.en",
+     "0c75aa778a5f31309a4ee8aa1208a49336351a2e1a2c4bb9b8e1036ca82d8e0d"):
+        frozenset({"symptom"}),
+    ("ashtanga-foundations.v1.json :: modules[2].lessons[1].practice.en",
+     "e0c9c1ef1a567a95119f08ababcbefbf6e3062a73494992c3d437e0e7a123242"):
+        frozenset({"symptoms"}),
+    ("ashtanga-foundations.v1.json :: modules[2].lessons[3].practice.en",
+     "fea8fd58a445fbf6f7aa2d91b8995832ecee39bb2d261655198155f2552b9caf"):
+        frozenset({"symptom"}),
+    ("yin-supported.v1.json :: modules[1].lessons[1].selfCheck.en",
+     "83bd5cb349baedebae4dff5c071ccb76490c76a579f10e7bd1c134259bd07cb7"):
+        frozenset({"symptom"}),
+    ("yin-supported.v1.json :: modules[0].lessons[0].answerKey.en",
+     "232bdcbdd1c146488416293f3256727a884704379845ecf355e09777669f085b"):
+        frozenset({"symptoms"}),
+    ("yin-supported.v1.json :: modules[0].lessons[4].answerKey.en",
+     "42e9919f348aa881782b38d9695d7996ebe40e5b6ecffed73073351b0f754f2b"):
+        frozenset({"treat"}),
+    ("yin-supported.v1.json :: modules[1].lessons[1].answerKey.en",
+     "fc8c3541e0c4a024bb641a61bcd957cba059e68f70012f9eea7b8b0727183488"):
+        frozenset({"symptom"}),
+
 }
 _REVIEWED_COPY = {**REVIEWED_HATHA_COPY, **REVIEWED_CONTEXT_COPY}
 _REVIEWED_COURSE_PATHS = frozenset(

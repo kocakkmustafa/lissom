@@ -18,6 +18,7 @@ import 'package:lissom/app/progress_screen.dart';
 import 'package:lissom/app/shell.dart';
 
 import 'support/facts_from_disk.dart';
+import 'support/education_authoring_oracle.dart';
 
 HathaCourse _course() =>
     HathaCourse.parse(File(kAshtangaCourseAssetPath).readAsStringSync());
@@ -189,10 +190,12 @@ void main() {
       }
       expect(course.intro.en, contains('not the full Primary Series'));
       expect(course.intro.tr, contains('Tam temel seri değildir'));
-      expect(
-        course.lessonById('a08')!.practice.en,
-        contains('without physical rehearsal'),
-      );
+      for (final lesson in course.lessons) {
+        expect(lesson.practice.en,
+            authoredEducationText(course.id, lesson.id, 'en', 'practice'));
+        expect(lesson.practice.tr,
+            authoredEducationText(course.id, lesson.id, 'tr', 'practice'));
+      }
       expect(
         course.lessonById('a10')!.steps.last.en,
         contains('not required physical progression'),
@@ -303,6 +306,13 @@ void main() {
           await _tap(tester, find.byKey(const Key('hatha.session.prepared')));
         }
         final lesson = _course().lessonById(id)!;
+        final practice = displayedEducationText(kAshtangaCourseId, id, language, 'practice');
+        await tester.scrollUntilVisible(
+          find.text(practice), 250,
+          scrollable: find.byType(Scrollable).last, maxScrolls: 80,
+        );
+        expect(find.text(practice), findsOneWidget);
+        expect(store.writes, 0);
         final answer = tr ? lesson.answerKey!.tr : lesson.answerKey!.en;
         expect(find.text(answer), findsNothing);
         await _tap(tester, find.byKey(Key('course.answer.$id')));
@@ -339,8 +349,12 @@ void main() {
         delta: -250,
       );
       await _tap(tester, find.byKey(const Key('hatha.session.prepared')));
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
       await tester.pump();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pump();
       await tester.scrollUntilVisible(

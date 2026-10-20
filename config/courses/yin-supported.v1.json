@@ -147,8 +147,8 @@
             "tr": "Bir kişi “Yin'de hiç hareket etmemeliyim” diyor. Kendi sözlerinle çıkma hakkını açıkla. Belirtisiz dikkat dağılmasında yalnız normal nefese dön; zorla yavaşlatmışsan gözlemi kesip sıradan nefese dön ve kısa gözlemde yeniden kontrol et. “Daha çok his = daha iyi” yorumunu ilerleme ölçütünden çıkar."
           },
           "selfCheck": {
-            "en": "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.\n",
-            "tr": "Bir kişi “Yin'de hiç hareket etmemeliyim” diyor. Kendi sözlerinle çıkma hakkını açıkla. Belirtisiz dikkat dağılmasında yalnız normal nefese dön; zorla yavaşlatmışsan gözlemi kesip sıradan nefese dön ve kısa gözlemde yeniden kontrol et. “Daha çok his = daha iyi” yorumunu ilerleme ölçütünden çıkar."
+            "en": "Close the page. A learner says, “I must stay still until the timer ends, and a stronger sensation proves progress.” Which two ideas need correction? State your chosen floor-or-knowledge route and one reason to end early. Answer in words; do not create a sensation to test it.",
+            "tr": "Sayfayı kapat. Bir öğrenci “Zamanlayıcı bitene kadar hareketsiz kalmalıyım; daha güçlü his ilerlemeyi kanıtlar” diyor. Hangi iki düşünce düzeltilmeli? Seçtiğin yer veya bilgi yolunu ve erken bitirmek için tek nedeni yaz. Sözle yanıtla; sınamak için bir his üretme."
           },
           "adaptation": {
             "en": "Existing Hatha h01 (boundaries), h02 (natural breath), h04 (supported seat), h19/h20/h23 (supported floor sitting/bound angle/forward reach), h29 (rest) and h35 (unhurried transitions) provide relevant foundations. Review the concepts; completing all Hatha or buying external lessons is not required. h35 alone does not teach a detailed floor transfer. Getting down/up, sitting and, where needed, side/back lying must be familiar movements the person can already perform comfortably that day. Do not attempt a first floor transfer from this text. If uncertain, choose chair observation/the knowledge task and resolve the gap with appropriate teaching support; app ticks cannot grant permission. This general pathway cannot decide suitability where personal limits, recent injury, pregnancy or health circumstances are uncertain. Pregnancy may require changes to prolonged stillness and back lying; a reclining lesson is not an automatic alternative. Discuss individual needs with a health professional and a suitably experienced yoga teacher. This proposal requires no fee, purchased certificate or particular provider. Prepare a mat on a level nonslip floor, a low firm folded blanket, a firm cushion/bolster, thigh supports if needed and a thin head support. A soft bed/sofa does not replace the floor surface. Props must not wobble, tip or slide; avoid tall loose stacks. Try the arrangement outside the pose. Keep the phone and optional timer accessible without reaching; do not fix your gaze on a screen. Select a familiar neutral rest and way off the floor beforehand. For chair observation use a sound four-legged non-wheeled chair; do not imitate floor poses on it. Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Only for a symptom-free setup/attention error: leave the pose; pause in neutral; choose one change; make a brief entry/exit rehearsal in a smaller form; compare support, ordinary breathing and exit before/after. One retest is enough; if unresolved, omit movement and record the uncertainty. If a prop moved, leave fully before resetting it; do not pull a loaded cushion away. Symptoms are not a correction drill. The learner can explain this introduction's Yin approach in their own words; plan support, entry, exit and an early stop; and select a short practice using at least two different taught shapes whose suitability has separately been established. In a new case they distinguish stopping for symptoms from an ordinary setup error. In a later separate session they recall the plan without the text and correct omissions. A physical skill claim additionally requires appropriate observation of actual entry, waiting and exit in those two shapes. Someone completing explanation alone records the knowledge outcome, not a completed physical outcome. Lesson ticks, long holds or large angles do not prove this endpoint.",
@@ -171,7 +171,11 @@
           ],
           "prerequisites": [],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "Stillness does not forbid an adjustment or early exit, and stronger sensation or longer time does not prove progress. Choose only the familiar accessible route; a knowledge route remains knowledge. Use the existing stop rules and leave early when needed, without waiting for the timer or creating symptoms.",
+            "tr": "Hareketsizlik düzeltme veya erken çıkışı yasaklamaz; güçlü his ya da uzun süre ilerlemeyi kanıtlamaz. Yalnız tanıdık erişilebilir yolu seç; bilgi yolu bilgi olarak kalır. Mevcut dur kurallarını kullan, gerektiğinde zamanlayıcıyı beklemeden çık; belirti üretme."
+          }
         },
         {
           "id": "y02",
@@ -206,8 +210,8 @@
             "tr": "Hareketten önce her kullanılacak biçimin nötr arası ve son çıkışını sırayla anlat. Bir destek erişim dışındaysa pozun dışında yakına yerleştir; yalnız rahat nötr kurulumda bir kez erişim kontrolü yap. Belirtisiz prova bile rahat değilse yer yolunu bugün bırak. Transfer yeterliliğini “h35 okundu” diye varsayma."
           },
           "selfCheck": {
-            "en": "Before moving, describe each selected shape's neutral interval and final exit in order. If a prop is out of reach, arrange it nearer outside the pose and check access once in comfortable neutral. If even a symptom-free rehearsal is not comfortable, omit today's floor route. Do not infer transfer ability from “h35 read.”\n",
-            "tr": "Hareketten önce her kullanılacak biçimin nötr arası ve son çıkışını sırayla anlat. Bir destek erişim dışındaysa pozun dışında yakına yerleştir; yalnız rahat nötr kurulumda bir kez erişim kontrolü yap. Belirtisiz prova bile rahat değilse yer yolunu bugün bırak. Transfer yeterliliğini “h35 okundu” diye varsayma."
+            "en": "Without the steps, consider this plan: sitting is familiar, but the side/back-lying transfer for y05 is not; the learner wants to try it because h35 was read. What must remain unresolved, which already accessible option can be chosen, and when may supports be moved? Give a written decision, not a transfer demonstration.",
+            "tr": "Adımlar kapalıyken şu planı değerlendir: oturuş tanıdık fakat y05 için yan/sırt yatış transferi değil; öğrenci h35 okunduğu için denemek istiyor. Ne çözülmemiş kalmalı, zaten erişilebilir hangi seçenek seçilebilir ve destekler ne zaman taşınabilir? Transfer göstermeden yazılı karar ver."
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -228,7 +232,11 @@
             "y01"
           ],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "Reading h35 does not teach the unfamiliar transfer. Leave y05 unresolved and choose only an already accessible taught seated option, chair knowledge/observation or postponement. Arrange supports outside the shape and move them only when unloaded. The paper plan cannot establish transfer ability or personal suitability.",
+            "tr": "h35 okumak tanıdık olmayan transferi öğretmez. y05’i çözülmemiş bırak; yalnız zaten erişilebilir öğretilmiş oturarak seçeneği, sandalye bilgi/gözlemini veya ertelemeyi seç. Destekleri biçimin dışında kur ve yalnız yüksüzken taşı. Kâğıt plan transfer becerisi veya kişisel uygunluk göstermez."
+          }
         },
         {
           "id": "y03",
@@ -263,8 +271,8 @@
             "tr": "Dizleri zorlamadan açıp kapatabildin mi; destekler yerinde kaldı mı? Bir tarafa daha çok açılmak hedef değil. Belirtisiz ve yalnız “daha iyi görünmek” için ayakları fazla yaklaştırdığını fark edersen çık; ayakları biraz uzaklaştır ve yalnız daha küçük giriş/çıkışı bir kez dene. Diz/kalça/belde belirti olduysa yeniden deneme yok. Sonra seçtiğin ayak uzaklığını ve çıkış sırasını kendi sözlerinle yaz."
           },
           "selfCheck": {
-            "en": "Could you open/close without forcing knees, with props staying in place? Opening one side further is not a goal. If symptom-free and you notice pulling feet close just to “look better,” leave, set feet slightly farther away and retest only a smaller entry/exit once. Any knee/hip/back symptoms mean no retest. Write your chosen foot distance and exit order in your own words.\n",
-            "tr": "Dizleri zorlamadan açıp kapatabildin mi; destekler yerinde kaldı mı? Bir tarafa daha çok açılmak hedef değil. Belirtisiz ve yalnız “daha iyi görünmek” için ayakları fazla yaklaştırdığını fark edersen çık; ayakları biraz uzaklaştır ve yalnız daha küçük giriş/çıkışı bir kez dene. Diz/kalça/belde belirti olduysa yeniden deneme yok. Sonra seçtiğin ayak uzaklığını ve çıkış sırasını kendi sözlerinle yaz."
+            "en": "Keep the lesson closed. In the chosen supported Butterfly version, what stays in place while the knees are still supported out to the sides? Explain the order for becoming upright, unloading the optional forearm bolster and returning the thighs toward centre. If that order is not familiar, what should the learner choose instead of improvising?",
+            "tr": "Ders kapalıyken yanıtla. Seçilen destekli Kelebek biçiminde dizler iki yanda destekliyken ne yerinde kalır? Dikleşme, seçmeli önkol bolsterını yüksüz bırakma ve uylukları merkeze getirme sırasını açıkla. Bu sıra tanıdık değilse öğrenci doğaçlama yerine ne seçmeli?"
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -288,7 +296,11 @@
             "y02"
           ],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "The outer-thigh supports stay in place while carrying load. Follow the taught exit: become upright, take the forearms off the optional bolster, and move that unloaded bolster aside only if any floor-hand support you need can stay in place. Bring each thigh toward centre with the taught support; move thigh props only after load is removed. If this is unfamiliar, omit the movement and study the sequence; do not improvise or pull a loaded support.",
+            "tr": "Dış uyluk destekleri yük taşırken yerinde kalır. Öğretilen çıkışı izle: dikleş, önkolları seçmeli bolsterdan kaldır; ancak gereken zemin el desteği korunabiliyorsa bu yüksüz bolsterı yana al. Öğretilen destekle her uyluğu merkeze getir; uyluk desteği ancak yük kalkınca taşınır. Sıra tanıdık değilse hareketi atlayıp sırayı incele; doğaçlama yapma veya yüklü desteği çekme."
+          }
         },
         {
           "id": "y04",
@@ -323,8 +335,8 @@
             "tr": "Bekleme sırasında derinliği artırdın mı; çıkışta destek yük altında mıydı? Belirtisiz olarak parmaklara uzanma alışkanlığını fark ettiysen çık, eller için yakın yer seç ve daha dik/küçük biçimde tek kısa prova yap. Belirti veya çıkışta kontrol güçlüğü varsa dersi bırak. Açıyı/ulaştığın mesafeyi puanlamak yerine bir kurulum seçimini ve nedenini açıkla."
           },
           "selfCheck": {
-            "en": "Did you deepen during the hold or try moving a loaded prop on exit? If symptom-free and you notice a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form. Omit the lesson for symptoms or difficulty controlling the exit. Explain one setup choice and its reason instead of scoring the angle/distance.\n",
-            "tr": "Bekleme sırasında derinliği artırdın mı; çıkışta destek yük altında mıydı? Belirtisiz olarak parmaklara uzanma alışkanlığını fark ettiysen çık, eller için yakın yer seç ve daha dik/küçük biçimde tek kısa prova yap. Belirti veya çıkışta kontrol güçlüğü varsa dersi bırak. Açıyı/ulaştığın mesafeyi puanlamak yerine bir kurulum seçimini ve nedenini açıkla."
+            "en": "Before reopening the lesson, answer: does bending both knees prove that the support underneath is unloaded? What must be true before it is moved, and what is the choice if load or control is uncertain? Do not move a support or add a counterpose to demonstrate an answer.",
+            "tr": "Dersi yeniden açmadan yanıtla: iki dizi bükmek alttaki desteğin yüksüz olduğunu kanıtlar mı? Destek taşınmadan ne doğru olmalı, yük veya kontrol belirsizse ne seçilir? Yanıt göstermek için destek taşıma veya karşı poz ekleme."
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -348,7 +360,11 @@
             "y02"
           ],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "No. Both legs must no longer be putting weight on the support; bent knees alone do not establish that. If load or control is uncertain, leave the support in place and do not pull it out. Use the taught neutral rest or omit the shape; this lesson adds no deep counterpose. A written answer is not a physical test.",
+            "tr": "Hayır. İki bacak da artık desteğe ağırlık vermemeli; yalnız dizlerin bükülmesi bunu göstermez. Yük veya kontrol belirsizse desteği yerinde bırak, çekip çıkarma. Öğretilen nötr dinlenmeyi seç veya biçimi atla; bu ders derin karşı poz eklemez. Yazılı yanıt fiziksel test değildir."
+          }
         },
         {
           "id": "y05",
@@ -383,8 +399,8 @@
             "tr": "Merkeze dönüş bilinen ve kontrollü müydü; ayağı sabit tutup dizleri çevirdin mi? Belirtisiz olarak görsel simetriyi zorladığını fark edersen çık; daha küçük aralığı seç ve tek kısa giriş/merkeze dönüş provası yap. Uyuşma/karıncalanma veya başka belirtiyi kol pozuyla “tedavi” edip yeniden deneme. Hangi tarafı atladığını ve nedenini kaydet."
           },
           "selfCheck": {
-            "en": "Was return to centre familiar and controlled, or did knees turn against fixed feet? If symptom-free and you notice forcing visual symmetry, leave, choose less range and retest one brief entry/centre return. Do not “treat” tingling/numbness by changing arm position and retrying. Record any omitted side and why.\n",
-            "tr": "Merkeze dönüş bilinen ve kontrollü müydü; ayağı sabit tutup dizleri çevirdin mi? Belirtisiz olarak görsel simetriyi zorladığını fark edersen çık; daha küçük aralığı seç ve tek kısa giriş/merkeze dönüş provası yap. Uyuşma/karıncalanma veya başka belirtiyi kol pozuyla “tedavi” edip yeniden deneme. Hangi tarafı atladığını ve nedenini kaydet."
+            "en": "Hide the instructions. One side needs a smaller range than the other, and a learner wants matching knee positions while keeping the feet fixed. What should be changed or omitted? Name the return point and explain why tingling is not a reason to adjust and retry in the same session.",
+            "tr": "Yönergeyi kapat. Bir taraf ötekinden küçük aralık istiyor; öğrenci ayakları sabit tutarak diz konumlarını eşitlemek istiyor. Ne değiştirilmeli veya atlanmalı? Dönüş noktasını adlandır; karıncalanmanın neden aynı oturumda düzeltip yeniden deneme gerekçesi olmadığını açıkla."
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -408,7 +424,11 @@
             "y02"
           ],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "Use the already taught smaller range or omit a side; matching depth is not required. Do not force fixed feet while turning the knees. The taught return is knees to centre with comfortable foot contact and neutral rest. Tingling ends the attempt; do not adjust an arm or another feature to treat it and retry that pose in the same session.",
+            "tr": "Önceden öğretilen küçük aralığı kullan veya bir tarafı atla; eşit derinlik gerekmez. Dizler dönerken ayakları zorla sabitleme. Öğretilen dönüş, rahat ayak temasıyla dizlerin merkeze gelmesi ve nötr dinlenmedir. Karıncalanma denemeyi bitirir; kolu veya başka özelliği “tedavi” için değiştirip pozu aynı oturumda yeniden deneme."
+          }
         }
       ]
     },
@@ -456,8 +476,8 @@
             "tr": "A: Ağrı yok; kişi zamanlayıcıya bakmak için başını çeviriyor. B: Kalırken karıncalanma başlıyor. İkisinde de ne yapacağını ve tekrar olup olmayacağını metne bakmadan söyle. Cevabını yazmadan ayrı cevap anahtarını açma. Kaç saniye kaldığın doğru kararı belirlemez."
           },
           "selfCheck": {
-            "en": "A: No symptoms; a person turns their head to see the timer. B: Tingling begins while waiting. Without the text explain your action and whether a retest occurs in each. Do not open the separate answer key before writing your answer. Seconds held do not determine a correct decision.\n",
-            "tr": "A: Ağrı yok; kişi zamanlayıcıya bakmak için başını çeviriyor. B: Kalırken karıncalanma başlıyor. İkisinde de ne yapacağını ve tekrar olup olmayacağını metne bakmadan söyle. Cevabını yazmadan ayrı cevap anahtarını açma. Kaç saniye kaldığın doğru kararı belirlemez."
+            "en": "Write before revealing the answer: A) no symptoms, but the learner turns the head to see the timer; B) tingling begins while waiting. For each, state the next decision and whether a physical retry is permitted. Does remaining time change either decision? Use words only; do not reproduce either problem.",
+            "tr": "Cevabı açmadan yaz: A) Belirti yok fakat öğrenci zamanlayıcıyı görmek için başını çeviriyor; B) beklerken karıncalanma başlıyor. Her biri için sonraki kararı ve fiziksel yeniden deneme olup olmayacağını söyle. Kalan süre bu kararlardan birini değiştirir mi? Yalnız sözle yanıtla; sorunu yeniden üretme."
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -521,8 +541,8 @@
             "tr": "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede sorun olursa ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez."
           },
           "selfCheck": {
-            "en": "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.\n",
-            "tr": "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede sorun olursa ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez."
+            "en": "Close your draft plan. Today only one taught shape has a familiar entry and exit. Is a two-shape route compulsory? Explain what remains unverified, where neutral rest belongs, and the different decisions for a slipping support and a stop symptom. Reopen the plan only after answering.",
+            "tr": "Plan taslağını kapat. Bugün yalnız bir öğretilmiş biçimin giriş/çıkışı tanıdık. İki biçimli yol zorunlu mu? Neyin doğrulanmamış kaldığını, nötr dinlenmenin yerini ve kayan destek ile dur belirtisindeki farklı kararları açıkla. Planı ancak yanıtladıktan sonra aç."
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -546,7 +566,11 @@
             "y06"
           ],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "A single accessible shape may form the chosen limited route; the two-shape physical endpoint remains open. Keep each taught entry, neutral pause and exit rather than linking them as an uninterrupted flow. A slipped support requires leaving the shape before any unloaded setup change; a stop symptom ends the attempt without a same-session retest. Record omissions honestly.",
+            "tr": "Erişilebilir tek biçim seçilen sınırlı yolu oluşturabilir; iki biçimli fiziksel son nokta açık kalır. Kesintisiz akışa bağlamak yerine öğretilen her girişi, nötr arayı ve çıkışı koru. Kayan destekte yüksüz kurulum değişiminden önce biçimden çıkılır; dur belirtisi aynı oturumda yeniden deneme olmadan girişimi bitirir. Atlamaları dürüst kaydet."
+          }
         },
         {
           "id": "y08",
@@ -581,8 +605,8 @@
             "tr": "Planı bağımsız açıklayabiliyor ve yeni vakada uygun durma/düzeltme seçebiliyorsan yazılı öğrenme sonucu gösterilebilir. Hareketin gözlenmemişse “öz beyan/gözlenmedi” yaz. Sonraki hedef daha derin veya uzun bekleme değil, bulunan belirsizliği çözmektir. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır."
           },
           "selfCheck": {
-            "en": "Independent explanation and an appropriate stop/correction choice in a new case can demonstrate the written learning outcome. If movement has not been observed, record “self-report/not observed.” The next goal is resolving the identified uncertainty, not deeper or longer waiting. Unsupported, advanced or prolonged Yin remains outside this pathway.\n",
-            "tr": "Planı bağımsız açıklayabiliyor ve yeni vakada uygun durma/düzeltme seçebiliyorsan yazılı öğrenme sonucu gösterilebilir. Hareketin gözlenmemişse “öz beyan/gözlenmedi” yaz. Sonraki hedef daha derin veya uzun bekleme değil, bulunan belirsizliği çözmektir. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır."
+            "en": "At a separate later session, keep the old plan closed. Recall the chosen entry, supports, neutral pause, exit and stop-versus-correction decisions. If today’s setup differs, does remembering the plan permit movement? After answering, identify one missing written point to correct and state which outcome is knowledge, self-report or unobserved movement.",
+            "tr": "Daha sonraki ayrı oturumda eski planı kapalı tut. Seçilen girişi, destekleri, nötr arayı, çıkışı ve durma–düzeltme kararlarını hatırla. Bugünkü kurulum farklıysa planı hatırlamak hareket izni verir mi? Yanıttan sonra düzeltilecek tek eksik yazılı noktayı bul; hangi sonucun bilgi, öz beyan veya gözlenmemiş hareket olduğunu söyle."
           },
           "adaptation": {
             "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
@@ -606,7 +630,11 @@
             "y07"
           ],
           "minutes": 6,
-          "evidenceMode": "self_report"
+          "evidenceMode": "self_report",
+          "answerKey": {
+            "en": "No. Check today’s setup and limits again; the old plan is not permission. Compare one written point, correct it and explain it again before optional familiar movement is considered. Recalled explanations are knowledge, reported participation is self-report, and movement not observed remains unobserved. No duration, deeper range or lesson tick closes that distinction.",
+            "tr": "Hayır. Bugünkü kurulum ve sınırları yeniden kontrol et; eski plan izin değildir. Seçmeli tanıdık hareket düşünülmeden önce tek yazılı noktayı karşılaştır, düzelt ve yeniden açıkla. Hatırlanan açıklama bilgidir, bildirilen katılım öz beyandır; gözlenmeyen hareket gözlenmemiş kalır. Süre, derin aralık veya ders tiki bu ayrımı kapatmaz."
+          }
         }
       ]
     }

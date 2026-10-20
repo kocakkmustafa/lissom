@@ -1,0 +1,423 @@
+{
+  "schemaVersion": 1,
+  "reviewedAuthoringManifestSha256": "ced3a6ae4f73938096b7273c14ab3f04d14802665ad029950bbdaa139bc4500e",
+  "sourceHeadBefore": "ddde9794a13a6354ffea4b34fa050ed33c78455b",
+  "courses": {
+    "lissom.ashtanga.foundations.beginner": {
+      "a01": {
+        "en": {
+          "practice": "Without opening the text, label three examples on paper: the traditional series map, a Lissom standing adaptation and an unresolved teaching question. Open the lesson and correct one label. Naming an action does not ask you to perform it; record written participation only."
+        },
+        "tr": {
+          "practice": "Metni açmadan üç örneği kâğıtta adlandır: geleneksel seri haritası, Lissom ayakta uyarlaması ve çözülmemiş öğretim sorusu. Dersi açıp tek etiketi düzelt. Bir eylemi adlandırmak onu yapma görevi değildir; yalnız yazılı katılımı kaydet."
+        }
+      },
+      "a02": {
+        "en": {
+          "practice": "Hide the source table. Explain movement, breath and gaze as three labels, then say what you would do if a count made you rush or hold your breath. Reopen the lesson and correct one written point. Do not change your breathing or demonstrate a movement to answer."
+        },
+        "tr": {
+          "practice": "Kaynak tabloyu kapat. Hareket, nefes ve bakışı üç ayrı etiket olarak açıkla; sayım seni aceleye veya nefes tutmaya yöneltirse ne yapacağını söyle. Dersi açıp tek yazılı noktayı düzelt. Yanıt için nefesini değiştirme veya hareket gösterme."
+        }
+      },
+      "a03": {
+        "en": {
+          "practice": "Write your selected preparation, stable wall, familiar upright return and optional rest. Review h01/h02 boundaries and ordinary breathing, h03 supported standing and h05 small joint preparation if those components are unfamiliar; reading this plan is not doing that preparation. If an entry, support or return remains unclear today, keep the route on paper. Recheck the written route before a04; no new transfer is rehearsed here."
+        },
+        "tr": {
+          "practice": "Seçtiğin hazırlığı, sabit duvarı, tanıdık dik dönüşü ve seçmeli dinlenmeyi yaz. Bu bileşenler tanıdık değilse h01/h02 sınır ve doğal nefes, h03 destekli duruş ve h05 küçük eklem hazırlığı öğretimini incele; bu planı okumak hazırlığı yapmak değildir. Giriş, destek veya dönüş bugün hâlâ belirsizse yolu kâğıtta tut. a04 öncesi yazılı yolu yeniden kontrol et; burada yeni transfer prova edilmez."
+        }
+      },
+      "a04": {
+        "en": {
+          "practice": "Use the prepared a03 route and only the small arm range taught here. If already back at your familiar upright base, with no stop signal, you notice a rushed lowering, pause and keep needed wall support. Choose a lower taught arm range for one small raise-and-lower; compare the controlled return, not height. If it remains unclear, omit it and write the question. Do not repeat a symptom. Later, explain the entry and return without the page."
+        },
+        "tr": {
+          "practice": "Hazırlanmış a03 yolunu ve yalnız burada öğretilen küçük kol aralığını kullan. Tanıdık dik tabana zaten dönmüşken, hiçbir dur belirtisi olmadan acele indirmeyi fark edersen bekle ve gereken duvar desteğini koru. Tek küçük kaldır-indir için öğretilen daha alçak aralığı seç; yüksekliği değil kontrollü dönüşü karşılaştır. Hâlâ belirsizse atla, soruyu yaz. Belirtiyi yeniden sınama. Daha sonra giriş ve dönüşü sayfasız açıkla."
+        }
+      },
+      "a05": {
+        "en": {
+          "practice": "Name a04 standing, the shallow fold, partial rise and upright return before optional movement. If you have returned comfortably and only forgot the order, correct it on paper, then optionally try one smaller already-taught sequence with needed support. Compare the distinction between partial rise and upright return. Uncertain return or any stop symptom ends movement; do not test it again. Explain the two stops without the page."
+        },
+        "tr": {
+          "practice": "Seçmeli hareketten önce a04 duruşunu, sığ katlanmayı, kısmi yükselmeyi ve dik dönüşü adlandır. Rahatça dönmüşken yalnız sırayı unuttuysan önce kâğıtta düzelt; sonra gereken destekle önceden öğretilen daha küçük sırayı bir kez denemeyi seçebilirsin. Kısmi yükselme ile dik dönüşün ayrımını karşılaştır. Belirsiz dönüş veya herhangi bir dur belirtisi hareketi bitirir; yeniden sınama. İki durağı sayfasız açıkla."
+        }
+      },
+      "a06": {
+        "en": {
+          "practice": "After current preparation, start from the a04 upright base and choose only the small bend and return taught in this a06 lesson. If comfortably upright again with no stop signal, and you only tried to match a deep shape, choose a shallower taught bend for one optional bend-and-return. Compare ordinary breathing and a controlled return, not thigh angle. If either is uncertain, omit the movement. A symptom is a stop, not a retest task. Explain the simpler option without the page."
+        },
+        "tr": {
+          "practice": "Güncel hazırlıktan sonra a04 dik tabanından başla; yalnız bu a06 dersinde öğretilen küçük bükülme ve dönüşü seç. Dur belirtisi olmadan yeniden rahat dik konumdaysan ve yalnız derin bir şekle uymaya çalıştıysan, seçmeli tek bük-dön için öğretilen daha sığ aralığı seç. Uyluk açısını değil doğal nefesi ve kontrollü dönüşü karşılaştır. Nefes veya dönüşten biri bile belirsizse hareketi atla. Belirti, yeniden deneme görevi değil dur nedenidir. Kolay seçeneği sayfasız açıkla."
+        }
+      },
+      "a07": {
+        "en": {
+          "practice": "On paper name the front foot and the upright pause for each side. Optional movement uses only the familiar short step and return taught here. If back at the stable upright base with no stop signal, a forgotten side may be corrected on paper before one smaller familiar step-and-return. Compare the named foot and neutral pause; never turn a loaded foot to change sides. Uncertainty or a stop symptom ends movement."
+        },
+        "tr": {
+          "practice": "Kâğıtta her tarafın öndeki ayağını ve dik molasını adlandır. Seçmeli harekette yalnız burada öğretilen tanıdık kısa adım ve dönüş kullanılır. Dur belirtisi olmadan sağlam dik tabana dönmüşsen, unutulan tarafı tek küçük tanıdık adım-dönüşten önce kâğıtta düzeltebilirsin. Adlandırılan ayağı ve nötr molayı karşılaştır; taraf değiştirmek için yüklü ayağı döndürme. Belirsizlik veya dur belirtisi hareketi bitirir."
+        }
+      },
+      "a08": {
+        "en": {
+          "practice": "With the source closed, draw the nine-count written map and mark the floor group as not taught for physical practice here. Reopen the linked table and correct one name or position on paper. Close it and explain that correction again. Do not demonstrate a floor station to answer; a remembered map is knowledge evidence only."
+        },
+        "tr": {
+          "practice": "Kaynak kapalıyken dokuz sayılı yazılı haritayı çiz; yer grubunu burada fiziksel uygulaması öğretilmeyen bölüm olarak işaretle. Bağlantılı tabloyu açıp tek ad veya sırayı kâğıtta düzelt. Kapatıp düzeltmeyi yeniden açıkla. Yanıt için yer durağı gösterme; hatırlanan harita yalnız bilgi kanıtıdır."
+        }
+      },
+      "a09": {
+        "en": {
+          "practice": "Explain the selected a04 and a05 stations, pauses and planned rest before optional practice. If only the order was forgotten and you are already comfortably upright without a stop signal, correct the written route first. You may then choose one smaller familiar part with needed support, rather than repeat the whole cycle. Compare its planned pause and return. Do not add a floor station or repeat through symptoms. Name the omitted traditional group afterwards."
+        },
+        "tr": {
+          "practice": "Seçmeli çalışmadan önce seçilen a04/a05 duraklarını, molaları ve planlı dinlenmeyi açıkla. Yalnız sıra unutulduysa ve dur belirtisi olmadan zaten rahat dik konumdaysan önce yazılı yolu düzelt. Bütün döngüyü yinelemek yerine gereken destekle tek küçük tanıdık bölümü seçebilirsin. Planlı mola ve dönüşünü karşılaştır. Yer durağı ekleme veya belirtinin içinden tekrar etme. Sonra atlanan geleneksel grubu adlandır."
+        }
+      },
+      "a10": {
+        "en": {
+          "practice": "Keep this a written task. With the source closed, mark the right/left front-foot positions and the repeated floor group in the seventeen-count map. Reopen the table to correct one written position, then close it and recall that position again. No movement, jump or floor transition is required to check the answer."
+        },
+        "tr": {
+          "practice": "Bu görev yazılı kalsın. Kaynak kapalıyken on yedi sayılı haritada sağ/sol öndeki ayak konumlarını ve yinelenen yer grubunu işaretle. Tek yazılı konumu düzeltmek için tabloyu aç; sonra kapatıp konumu yeniden hatırla. Yanıtı kontrol etmek için hareket, sıçrama veya yer geçişi gerekmez."
+        }
+      },
+      "a11": {
+        "en": {
+          "practice": "Write the taught a06, a05 and separate a07 sides with a neutral upright pause between them. If comfortably upright with no stop signal and you only forgot a pause, correct the plan first. Optionally repeat one smaller familiar part with needed support, then compare whether the pause and upright return were retained. No loaded pivot or new floor link is added. An unclear return or symptom ends the attempt, without a physical retest."
+        },
+        "tr": {
+          "practice": "Öğretilen a06, a05 ve ayrı a07 taraflarını aralarında nötr dik mola olacak şekilde yaz. Dur belirtisi olmadan rahat dik konumdaysan ve yalnız molayı unuttuysan önce planı düzelt. Gereken destekle tek küçük tanıdık bölümü seçmeli yinele; sonra mola ve dik dönüşün korunup korunmadığını karşılaştır. Yüklü dönme veya yeni yer bağlantısı eklenmez. Belirsiz dönüş veya belirti, fiziksel yeniden deneme olmadan girişimi bitirir."
+        }
+      },
+      "a12": {
+        "en": {
+          "practice": "Make two paper versions of your chosen a09 or a11 route: the intended route and a shorter route ending at a taught familiar rest. Label the preparation from a03 and the a04/a05/a06/a07 components actually selected. If an entry or exit has no taught reference, leave it out and write the question. Hide the plan, explain its start and end, then correct one missing written point. Physical practice belongs in the relevant prepared lesson, not this planning task."
+        },
+        "tr": {
+          "practice": "Seçtiğin a09 veya a11 yolunun iki kâğıt sürümünü yap: amaçlanan yol ve öğretilmiş tanıdık dinlenmede biten kısa yol. a03 hazırlığını ve gerçekten seçilen a04/a05/a06/a07 bileşenlerini etiketle. Giriş veya çıkışın öğretilen karşılığı yoksa ekleme, soruyu yaz. Planı kapatıp başlangıç/bitişi açıkla; eksik tek yazılı noktayı düzelt. Fiziksel çalışma bu planlama görevine değil ilgili hazırlanmış derse aittir."
+        }
+      },
+      "a13": {
+        "en": {
+          "practice": "At a later reading session, keep your plan and sources closed. Recall the upright return, fold/partial-rise difference, side order and one stop-versus-written-correction decision. Open the lesson and compare one point at a time. Correct one omission on paper, close the source and explain it again. Record what was recalled and what remains unresolved; do not demonstrate a posture or call this observed physical skill."
+        },
+        "tr": {
+          "practice": "Sonraki okuma oturumunda planı ve kaynakları kapalı tut. Dik dönüşü, katlanma/kısmi yükselme ayrımını, taraf sırasını ve tek durma–yazılı düzeltme kararını hatırla. Dersi açıp her seferinde tek noktayı karşılaştır. Bir eksiği kâğıtta düzelt, kaynağı kapatıp yeniden açıkla. Hatırlananı ve çözülmeyeni kaydet; poz gösterme veya bunu gözlenmiş fiziksel beceri sayma."
+        }
+      }
+    },
+    "lissom.yin.supported.beginner": {
+      "y01": {
+        "en": {
+          "practice": "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.",
+          "selfCheck": "Close the page. A learner says, “I must stay still until the timer ends, and a stronger sensation proves progress.” Which two ideas need correction? State your chosen floor-or-knowledge route and one reason to end early. Answer in words; do not create a sensation to test it.",
+          "answerKey": "Stillness does not forbid an adjustment or early exit, and stronger sensation or longer time does not prove progress. Choose only the familiar accessible route; a knowledge route remains knowledge. Use the existing stop rules and leave early when needed, without waiting for the timer or creating symptoms."
+        },
+        "tr": {
+          "practice": "Bir kişi “Yin'de hiç hareket etmemeliyim” diyor. Kendi sözlerinle çıkma hakkını açıkla. Belirtisiz dikkat dağılmasında yalnız normal nefese dön; zorla yavaşlatmışsan gözlemi kesip sıradan nefese dön ve kısa gözlemde yeniden kontrol et. “Daha çok his = daha iyi” yorumunu ilerleme ölçütünden çıkar.",
+          "selfCheck": "Sayfayı kapat. Bir öğrenci “Zamanlayıcı bitene kadar hareketsiz kalmalıyım; daha güçlü his ilerlemeyi kanıtlar” diyor. Hangi iki düşünce düzeltilmeli? Seçtiğin yer veya bilgi yolunu ve erken bitirmek için tek nedeni yaz. Sözle yanıtla; sınamak için bir his üretme.",
+          "answerKey": "Hareketsizlik düzeltme veya erken çıkışı yasaklamaz; güçlü his ya da uzun süre ilerlemeyi kanıtlamaz. Yalnız tanıdık erişilebilir yolu seç; bilgi yolu bilgi olarak kalır. Mevcut dur kurallarını kullan, gerektiğinde zamanlayıcıyı beklemeden çık; belirti üretme."
+        }
+      },
+      "y02": {
+        "en": {
+          "practice": "Before moving, describe each selected shape's neutral interval and final exit in order. If a prop is out of reach, arrange it nearer outside the pose and check access once in comfortable neutral. If even a symptom-free rehearsal is not comfortable, omit today's floor route. Do not infer transfer ability from “h35 read.”",
+          "selfCheck": "Without the steps, consider this plan: sitting is familiar, but the side/back-lying transfer for y05 is not; the learner wants to try it because h35 was read. What must remain unresolved, which already accessible option can be chosen, and when may supports be moved? Give a written decision, not a transfer demonstration.",
+          "answerKey": "Reading h35 does not teach the unfamiliar transfer. Leave y05 unresolved and choose only an already accessible taught seated option, chair knowledge/observation or postponement. Arrange supports outside the shape and move them only when unloaded. The paper plan cannot establish transfer ability or personal suitability."
+        },
+        "tr": {
+          "practice": "Hareketten önce her kullanılacak biçimin nötr arası ve son çıkışını sırayla anlat. Bir destek erişim dışındaysa pozun dışında yakına yerleştir; yalnız rahat nötr kurulumda bir kez erişim kontrolü yap. Belirtisiz prova bile rahat değilse yer yolunu bugün bırak. Transfer yeterliliğini “h35 okundu” diye varsayma.",
+          "selfCheck": "Adımlar kapalıyken şu planı değerlendir: oturuş tanıdık fakat y05 için yan/sırt yatış transferi değil; öğrenci h35 okunduğu için denemek istiyor. Ne çözülmemiş kalmalı, zaten erişilebilir hangi seçenek seçilebilir ve destekler ne zaman taşınabilir? Transfer göstermeden yazılı karar ver.",
+          "answerKey": "h35 okumak tanıdık olmayan transferi öğretmez. y05’i çözülmemiş bırak; yalnız zaten erişilebilir öğretilmiş oturarak seçeneği, sandalye bilgi/gözlemini veya ertelemeyi seç. Destekleri biçimin dışında kur ve yalnız yüksüzken taşı. Kâğıt plan transfer becerisi veya kişisel uygunluk göstermez."
+        }
+      },
+      "y03": {
+        "en": {
+          "practice": "Could you open/close without forcing knees, with props staying in place? Opening one side further is not a goal. If symptom-free and you notice pulling feet close just to “look better,” leave, set feet slightly farther away and retest only a smaller entry/exit once. Any knee/hip/back symptoms mean no retest. Write your chosen foot distance and exit order in your own words.",
+          "selfCheck": "Keep the lesson closed. In the chosen supported Butterfly version, what stays in place while the knees are still supported out to the sides? Explain the order for becoming upright, unloading the optional forearm bolster and returning the thighs toward centre. If that order is not familiar, what should the learner choose instead of improvising?",
+          "answerKey": "The outer-thigh supports stay in place while carrying load. Follow the taught exit: become upright, take the forearms off the optional bolster, and move that unloaded bolster aside only if any floor-hand support you need can stay in place. Bring each thigh toward centre with the taught support; move thigh props only after load is removed. If this is unfamiliar, omit the movement and study the sequence; do not improvise or pull a loaded support."
+        },
+        "tr": {
+          "practice": "Dizleri zorlamadan açıp kapatabildin mi; destekler yerinde kaldı mı? Bir tarafa daha çok açılmak hedef değil. Belirtisiz ve yalnız “daha iyi görünmek” için ayakları fazla yaklaştırdığını fark edersen çık; ayakları biraz uzaklaştır ve yalnız daha küçük giriş/çıkışı bir kez dene. Diz/kalça/belde belirti olduysa yeniden deneme yok. Sonra seçtiğin ayak uzaklığını ve çıkış sırasını kendi sözlerinle yaz.",
+          "selfCheck": "Ders kapalıyken yanıtla. Seçilen destekli Kelebek biçiminde dizler iki yanda destekliyken ne yerinde kalır? Dikleşme, seçmeli önkol bolsterını yüksüz bırakma ve uylukları merkeze getirme sırasını açıkla. Bu sıra tanıdık değilse öğrenci doğaçlama yerine ne seçmeli?",
+          "answerKey": "Dış uyluk destekleri yük taşırken yerinde kalır. Öğretilen çıkışı izle: dikleş, önkolları seçmeli bolsterdan kaldır; ancak gereken zemin el desteği korunabiliyorsa bu yüksüz bolsterı yana al. Öğretilen destekle her uyluğu merkeze getir; uyluk desteği ancak yük kalkınca taşınır. Sıra tanıdık değilse hareketi atlayıp sırayı incele; doğaçlama yapma veya yüklü desteği çekme."
+        }
+      },
+      "y04": {
+        "en": {
+          "practice": "Did you deepen during the hold or try moving a loaded prop on exit? If symptom-free and you notice a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form. Omit the lesson for symptoms or difficulty controlling the exit. Explain one setup choice and its reason instead of scoring the angle/distance.",
+          "selfCheck": "Before reopening the lesson, answer: does bending both knees prove that the support underneath is unloaded? What must be true before it is moved, and what is the choice if load or control is uncertain? Do not move a support or add a counterpose to demonstrate an answer.",
+          "answerKey": "No. Both legs must no longer be putting weight on the support; bent knees alone do not establish that. If load or control is uncertain, leave the support in place and do not pull it out. Use the taught neutral rest or omit the shape; this lesson adds no deep counterpose. A written answer is not a physical test."
+        },
+        "tr": {
+          "practice": "Bekleme sırasında derinliği artırdın mı; çıkışta destek yük altında mıydı? Belirtisiz olarak parmaklara uzanma alışkanlığını fark ettiysen çık, eller için yakın yer seç ve daha dik/küçük biçimde tek kısa prova yap. Belirti veya çıkışta kontrol güçlüğü varsa dersi bırak. Açıyı/ulaştığın mesafeyi puanlamak yerine bir kurulum seçimini ve nedenini açıkla.",
+          "selfCheck": "Dersi yeniden açmadan yanıtla: iki dizi bükmek alttaki desteğin yüksüz olduğunu kanıtlar mı? Destek taşınmadan ne doğru olmalı, yük veya kontrol belirsizse ne seçilir? Yanıt göstermek için destek taşıma veya karşı poz ekleme.",
+          "answerKey": "Hayır. İki bacak da artık desteğe ağırlık vermemeli; yalnız dizlerin bükülmesi bunu göstermez. Yük veya kontrol belirsizse desteği yerinde bırak, çekip çıkarma. Öğretilen nötr dinlenmeyi seç veya biçimi atla; bu ders derin karşı poz eklemez. Yazılı yanıt fiziksel test değildir."
+        }
+      },
+      "y05": {
+        "en": {
+          "practice": "Was return to centre familiar and controlled, or did knees turn against fixed feet? If symptom-free and you notice forcing visual symmetry, leave, choose less range and retest one brief entry/centre return. Do not “treat” tingling/numbness by changing arm position and retrying. Record any omitted side and why.",
+          "selfCheck": "Hide the instructions. One side needs a smaller range than the other, and a learner wants matching knee positions while keeping the feet fixed. What should be changed or omitted? Name the return point and explain why tingling is not a reason to adjust and retry in the same session.",
+          "answerKey": "Use the already taught smaller range or omit a side; matching depth is not required. Do not force fixed feet while turning the knees. The taught return is knees to centre with comfortable foot contact and neutral rest. Tingling ends the attempt; do not adjust an arm or another feature to treat it and retry that pose in the same session."
+        },
+        "tr": {
+          "practice": "Merkeze dönüş bilinen ve kontrollü müydü; ayağı sabit tutup dizleri çevirdin mi? Belirtisiz olarak görsel simetriyi zorladığını fark edersen çık; daha küçük aralığı seç ve tek kısa giriş/merkeze dönüş provası yap. Uyuşma/karıncalanma veya başka belirtiyi kol pozuyla “tedavi” edip yeniden deneme. Hangi tarafı atladığını ve nedenini kaydet.",
+          "selfCheck": "Yönergeyi kapat. Bir taraf ötekinden küçük aralık istiyor; öğrenci ayakları sabit tutarak diz konumlarını eşitlemek istiyor. Ne değiştirilmeli veya atlanmalı? Dönüş noktasını adlandır; karıncalanmanın neden aynı oturumda düzeltip yeniden deneme gerekçesi olmadığını açıkla.",
+          "answerKey": "Önceden öğretilen küçük aralığı kullan veya bir tarafı atla; eşit derinlik gerekmez. Dizler dönerken ayakları zorla sabitleme. Öğretilen dönüş, rahat ayak temasıyla dizlerin merkeze gelmesi ve nötr dinlenmedir. Karıncalanma denemeyi bitirir; kolu veya başka özelliği “tedavi” için değiştirip pozu aynı oturumda yeniden deneme."
+        }
+      },
+      "y06": {
+        "en": {
+          "practice": "A: No symptoms; a person turns their head to see the timer. B: Tingling begins while waiting. Without the text explain your action and whether a retest occurs in each. Do not open the separate answer key before writing your answer. Seconds held do not determine a correct decision.",
+          "selfCheck": "Write before revealing the answer: A) no symptoms, but the learner turns the head to see the timer; B) tingling begins while waiting. For each, state the next decision and whether a physical retry is permitted. Does remaining time change either decision? Use words only; do not reproduce either problem.",
+          "answerKey": "A: Leave under control; reposition the phone outside the pose within easy reach/view. If symptom-free, one smaller brief entry/exit rehearsal may be appropriate. B: End waiting, leave under control and use familiar rest; do not retry that pose in the session. Do not await the timer or diagnose the tingling's cause."
+        },
+        "tr": {
+          "practice": "A: Ağrı yok; kişi zamanlayıcıya bakmak için başını çeviriyor. B: Kalırken karıncalanma başlıyor. İkisinde de ne yapacağını ve tekrar olup olmayacağını metne bakmadan söyle. Cevabını yazmadan ayrı cevap anahtarını açma. Kaç saniye kaldığın doğru kararı belirlemez.",
+          "selfCheck": "Cevabı açmadan yaz: A) Belirti yok fakat öğrenci zamanlayıcıyı görmek için başını çeviriyor; B) beklerken karıncalanma başlıyor. Her biri için sonraki kararı ve fiziksel yeniden deneme olup olmayacağını söyle. Kalan süre bu kararlardan birini değiştirir mi? Yalnız sözle yanıtla; sorunu yeniden üretme.",
+          "answerKey": "A: Pozdan kontrollü çık; telefonu poz dışında erişilebilir/görülebilir yere al. Belirti yoksa yalnız daha küçük kısa giriş/çıkış için tek yeniden prova yapılabilir. B: Beklemeyi bitirip kontrollü çık ve tanıdık dinlenmeye geç; o oturumda bu pozu yeniden deneme. Süre dolması beklenmez; karıncalanmanın nedenini teşhis etme."
+        }
+      },
+      "y07": {
+        "en": {
+          "practice": "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.",
+          "selfCheck": "Close your draft plan. Today only one taught shape has a familiar entry and exit. Is a two-shape route compulsory? Explain what remains unverified, where neutral rest belongs, and the different decisions for a slipping support and a stop symptom. Reopen the plan only after answering.",
+          "answerKey": "A single accessible shape may form the chosen limited route; the two-shape physical endpoint remains open. Keep each taught entry, neutral pause and exit rather than linking them as an uninterrupted flow. A slipped support requires leaving the shape before any unloaded setup change; a stop symptom ends the attempt without a same-session retest. Record omissions honestly."
+        },
+        "tr": {
+          "practice": "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede sorun olursa ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez.",
+          "selfCheck": "Plan taslağını kapat. Bugün yalnız bir öğretilmiş biçimin giriş/çıkışı tanıdık. İki biçimli yol zorunlu mu? Neyin doğrulanmamış kaldığını, nötr dinlenmenin yerini ve kayan destek ile dur belirtisindeki farklı kararları açıkla. Planı ancak yanıtladıktan sonra aç.",
+          "answerKey": "Erişilebilir tek biçim seçilen sınırlı yolu oluşturabilir; iki biçimli fiziksel son nokta açık kalır. Kesintisiz akışa bağlamak yerine öğretilen her girişi, nötr arayı ve çıkışı koru. Kayan destekte yüksüz kurulum değişiminden önce biçimden çıkılır; dur belirtisi aynı oturumda yeniden deneme olmadan girişimi bitirir. Atlamaları dürüst kaydet."
+        }
+      },
+      "y08": {
+        "en": {
+          "practice": "Independent explanation and an appropriate stop/correction choice in a new case can demonstrate the written learning outcome. If movement has not been observed, record “self-report/not observed.” The next goal is resolving the identified uncertainty, not deeper or longer waiting. Unsupported, advanced or prolonged Yin remains outside this pathway.",
+          "selfCheck": "At a separate later session, keep the old plan closed. Recall the chosen entry, supports, neutral pause, exit and stop-versus-correction decisions. If today’s setup differs, does remembering the plan permit movement? After answering, identify one missing written point to correct and state which outcome is knowledge, self-report or unobserved movement.",
+          "answerKey": "No. Check today’s setup and limits again; the old plan is not permission. Compare one written point, correct it and explain it again before optional familiar movement is considered. Recalled explanations are knowledge, reported participation is self-report, and movement not observed remains unobserved. No duration, deeper range or lesson tick closes that distinction."
+        },
+        "tr": {
+          "practice": "Planı bağımsız açıklayabiliyor ve yeni vakada uygun durma/düzeltme seçebiliyorsan yazılı öğrenme sonucu gösterilebilir. Hareketin gözlenmemişse “öz beyan/gözlenmedi” yaz. Sonraki hedef daha derin veya uzun bekleme değil, bulunan belirsizliği çözmektir. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır.",
+          "selfCheck": "Daha sonraki ayrı oturumda eski planı kapalı tut. Seçilen girişi, destekleri, nötr arayı, çıkışı ve durma–düzeltme kararlarını hatırla. Bugünkü kurulum farklıysa planı hatırlamak hareket izni verir mi? Yanıttan sonra düzeltilecek tek eksik yazılı noktayı bul; hangi sonucun bilgi, öz beyan veya gözlenmemiş hareket olduğunu söyle.",
+          "answerKey": "Hayır. Bugünkü kurulum ve sınırları yeniden kontrol et; eski plan izin değildir. Seçmeli tanıdık hareket düşünülmeden önce tek yazılı noktayı karşılaştır, düzelt ve yeniden açıkla. Hatırlanan açıklama bilgidir, bildirilen katılım öz beyandır; gözlenmeyen hareket gözlenmemiş kalır. Süre, derin aralık veya ders tiki bu ayrımı kapatmaz."
+        }
+      }
+    }
+  },
+  "displayedOracleProvenance": {
+    "baselineHead": "ddde9794a13a6354ffea4b34fa050ed33c78455b",
+    "baselineLocaleTextSha256": "f5c2934b43860837530ab97e0b0168a30ac3ec9dcd92910ea51b9a0574995afc",
+    "acceptedFinalManifestSha256": "ced3a6ae4f73938096b7273c14ab3f04d14802665ad029950bbdaa139bc4500e",
+    "policy": "Frozen authored parsed values and separately reviewed display literals. Never derive expected values from live assets or helpers at test runtime."
+  },
+  "displayedCourses": {
+    "lissom.ashtanga.foundations.beginner": {
+      "a01": {
+        "en": {
+          "practice": "Without opening the text, label three examples on paper: the traditional series map, a Lissom standing adaptation and an unresolved teaching question. Open the lesson and correct one label. Naming an action does not ask you to perform it; record written participation only."
+        },
+        "tr": {
+          "practice": "Metni açmadan üç örneği kâğıtta adlandır: geleneksel seri haritası, Lissom ayakta uyarlaması ve çözülmemiş öğretim sorusu. Dersi açıp tek etiketi düzelt. Bir eylemi adlandırmak onu yapma görevi değildir; yalnız yazılı katılımı kaydet."
+        }
+      },
+      "a02": {
+        "en": {
+          "practice": "Hide the source table. Explain movement, breath and gaze as three labels, then say what you would do if a count made you rush or hold your breath. Reopen the lesson and correct one written point. Do not change your breathing or demonstrate a movement to answer."
+        },
+        "tr": {
+          "practice": "Kaynak tabloyu kapat. Hareket, nefes ve bakışı üç ayrı etiket olarak açıkla; sayım seni aceleye veya nefes tutmaya yöneltirse ne yapacağını söyle. Dersi açıp tek yazılı noktayı düzelt. Yanıt için nefesini değiştirme veya hareket gösterme."
+        }
+      },
+      "a03": {
+        "en": {
+          "practice": "Write your selected preparation, stable wall, familiar upright return and optional rest. Review h01/h02 boundaries and ordinary breathing, h03 supported standing and h05 small joint preparation if those components are unfamiliar; reading this plan is not doing that preparation. If an entry, support or return remains unclear today, keep the route on paper. Recheck the written route before a04; no new transfer is rehearsed here."
+        },
+        "tr": {
+          "practice": "Seçtiğin hazırlığı, sabit duvarı, tanıdık dik dönüşü ve seçmeli dinlenmeyi yaz. Bu bileşenler tanıdık değilse h01/h02 sınır ve doğal nefes, h03 destekli duruş ve h05 küçük eklem hazırlığı öğretimini incele; bu planı okumak hazırlığı yapmak değildir. Giriş, destek veya dönüş bugün hâlâ belirsizse yolu kâğıtta tut. a04 öncesi yazılı yolu yeniden kontrol et; burada yeni transfer prova edilmez."
+        }
+      },
+      "a04": {
+        "en": {
+          "practice": "Use the prepared a03 route and only the small arm range taught here. If already back at your familiar upright base, with no stop signal, you notice a rushed lowering, pause and keep needed wall support. Choose a lower taught arm range for one small raise-and-lower; compare the controlled return, not height. If it remains unclear, omit it and write the question. Do not repeat a symptom. Later, explain the entry and return without the page."
+        },
+        "tr": {
+          "practice": "Hazırlanmış a03 yolunu ve yalnız burada öğretilen küçük kol aralığını kullan. Tanıdık dik tabana zaten dönmüşken, hiçbir dur belirtisi olmadan acele indirmeyi fark edersen bekle ve gereken duvar desteğini koru. Tek küçük kaldır-indir için öğretilen daha alçak aralığı seç; yüksekliği değil kontrollü dönüşü karşılaştır. Hâlâ belirsizse atla, soruyu yaz. Belirtiyi yeniden sınama. Daha sonra giriş ve dönüşü sayfasız açıkla."
+        }
+      },
+      "a05": {
+        "en": {
+          "practice": "Name a04 standing, the shallow fold, partial rise and upright return before optional movement. If you have returned comfortably and only forgot the order, correct it on paper, then optionally try one smaller already-taught sequence with needed support. Compare the distinction between partial rise and upright return. Uncertain return or any stop symptom ends movement; do not test it again. Explain the two stops without the page."
+        },
+        "tr": {
+          "practice": "Seçmeli hareketten önce a04 duruşunu, sığ katlanmayı, kısmi yükselmeyi ve dik dönüşü adlandır. Rahatça dönmüşken yalnız sırayı unuttuysan önce kâğıtta düzelt; sonra gereken destekle önceden öğretilen daha küçük sırayı bir kez denemeyi seçebilirsin. Kısmi yükselme ile dik dönüşün ayrımını karşılaştır. Belirsiz dönüş veya herhangi bir dur belirtisi hareketi bitirir; yeniden sınama. İki durağı sayfasız açıkla."
+        }
+      },
+      "a06": {
+        "en": {
+          "practice": "After current preparation, start from the a04 upright base and choose only the small bend and return taught in this a06 lesson. If comfortably upright again with no stop signal, and you only tried to match a deep shape, choose a shallower taught bend for one optional bend-and-return. Compare ordinary breathing and a controlled return, not thigh angle. If either is uncertain, omit the movement. A symptom is a stop, not a retest task. Explain the simpler option without the page."
+        },
+        "tr": {
+          "practice": "Güncel hazırlıktan sonra a04 dik tabanından başla; yalnız bu a06 dersinde öğretilen küçük bükülme ve dönüşü seç. Dur belirtisi olmadan yeniden rahat dik konumdaysan ve yalnız derin bir şekle uymaya çalıştıysan, seçmeli tek bük-dön için öğretilen daha sığ aralığı seç. Uyluk açısını değil doğal nefesi ve kontrollü dönüşü karşılaştır. Nefes veya dönüşten biri bile belirsizse hareketi atla. Belirti, yeniden deneme görevi değil dur nedenidir. Kolay seçeneği sayfasız açıkla."
+        }
+      },
+      "a07": {
+        "en": {
+          "practice": "On paper name the front foot and the upright pause for each side. Optional movement uses only the familiar short step and return taught here. If back at the stable upright base with no stop signal, a forgotten side may be corrected on paper before one smaller familiar step-and-return. Compare the named foot and neutral pause; never turn a loaded foot to change sides. Uncertainty or a stop symptom ends movement."
+        },
+        "tr": {
+          "practice": "Kâğıtta her tarafın öndeki ayağını ve dik molasını adlandır. Seçmeli harekette yalnız burada öğretilen tanıdık kısa adım ve dönüş kullanılır. Dur belirtisi olmadan sağlam dik tabana dönmüşsen, unutulan tarafı tek küçük tanıdık adım-dönüşten önce kâğıtta düzeltebilirsin. Adlandırılan ayağı ve nötr molayı karşılaştır; taraf değiştirmek için yüklü ayağı döndürme. Belirsizlik veya dur belirtisi hareketi bitirir."
+        }
+      },
+      "a08": {
+        "en": {
+          "practice": "With the source closed, draw the nine-count written map and mark the floor group as not taught for physical practice here. Reopen the linked table and correct one name or position on paper. Close it and explain that correction again. Do not demonstrate a floor station to answer; a remembered map is knowledge evidence only."
+        },
+        "tr": {
+          "practice": "Kaynak kapalıyken dokuz sayılı yazılı haritayı çiz; yer grubunu burada fiziksel uygulaması öğretilmeyen bölüm olarak işaretle. Bağlantılı tabloyu açıp tek ad veya sırayı kâğıtta düzelt. Kapatıp düzeltmeyi yeniden açıkla. Yanıt için yer durağı gösterme; hatırlanan harita yalnız bilgi kanıtıdır."
+        }
+      },
+      "a09": {
+        "en": {
+          "practice": "Explain the selected a04 and a05 stations, pauses and planned rest before optional practice. If only the order was forgotten and you are already comfortably upright without a stop signal, correct the written route first. You may then choose one smaller familiar part with needed support, rather than repeat the whole cycle. Compare its planned pause and return. Do not add a floor station or repeat through symptoms. Name the omitted traditional group afterwards."
+        },
+        "tr": {
+          "practice": "Seçmeli çalışmadan önce seçilen a04/a05 duraklarını, molaları ve planlı dinlenmeyi açıkla. Yalnız sıra unutulduysa ve dur belirtisi olmadan zaten rahat dik konumdaysan önce yazılı yolu düzelt. Bütün döngüyü yinelemek yerine gereken destekle tek küçük tanıdık bölümü seçebilirsin. Planlı mola ve dönüşünü karşılaştır. Yer durağı ekleme veya belirtinin içinden tekrar etme. Sonra atlanan geleneksel grubu adlandır."
+        }
+      },
+      "a10": {
+        "en": {
+          "practice": "Keep this a written task. With the source closed, mark the right/left front-foot positions and the repeated floor group in the seventeen-count map. Reopen the table to correct one written position, then close it and recall that position again. No movement, jump or floor transition is required to check the answer."
+        },
+        "tr": {
+          "practice": "Bu görev yazılı kalsın. Kaynak kapalıyken on yedi sayılı haritada sağ/sol öndeki ayak konumlarını ve yinelenen yer grubunu işaretle. Tek yazılı konumu düzeltmek için tabloyu aç; sonra kapatıp konumu yeniden hatırla. Yanıtı kontrol etmek için hareket, sıçrama veya yer geçişi gerekmez."
+        }
+      },
+      "a11": {
+        "en": {
+          "practice": "Write the taught a06, a05 and separate a07 sides with a neutral upright pause between them. If comfortably upright with no stop signal and you only forgot a pause, correct the plan first. Optionally repeat one smaller familiar part with needed support, then compare whether the pause and upright return were retained. No loaded pivot or new floor link is added. An unclear return or symptom ends the attempt, without a physical retest."
+        },
+        "tr": {
+          "practice": "Öğretilen a06, a05 ve ayrı a07 taraflarını aralarında nötr dik mola olacak şekilde yaz. Dur belirtisi olmadan rahat dik konumdaysan ve yalnız molayı unuttuysan önce planı düzelt. Gereken destekle tek küçük tanıdık bölümü seçmeli yinele; sonra mola ve dik dönüşün korunup korunmadığını karşılaştır. Yüklü dönme veya yeni yer bağlantısı eklenmez. Belirsiz dönüş veya belirti, fiziksel yeniden deneme olmadan girişimi bitirir."
+        }
+      },
+      "a12": {
+        "en": {
+          "practice": "Make two paper versions of your chosen a09 or a11 route: the intended route and a shorter route ending at a taught familiar rest. Label the preparation from a03 and the a04/a05/a06/a07 components actually selected. If an entry or exit has no taught reference, leave it out and write the question. Hide the plan, explain its start and end, then correct one missing written point. Physical practice belongs in the relevant prepared lesson, not this planning task."
+        },
+        "tr": {
+          "practice": "Seçtiğin a09 veya a11 yolunun iki kâğıt sürümünü yap: amaçlanan yol ve öğretilmiş tanıdık dinlenmede biten kısa yol. a03 hazırlığını ve gerçekten seçilen a04/a05/a06/a07 bileşenlerini etiketle. Giriş veya çıkışın öğretilen karşılığı yoksa ekleme, soruyu yaz. Planı kapatıp başlangıç/bitişi açıkla; eksik tek yazılı noktayı düzelt. Fiziksel çalışma bu planlama görevine değil ilgili hazırlanmış derse aittir."
+        }
+      },
+      "a13": {
+        "en": {
+          "practice": "At a later reading session, keep your plan and sources closed. Recall the upright return, fold/partial-rise difference, side order and one stop-versus-written-correction decision. Open the lesson and compare one point at a time. Correct one omission on paper, close the source and explain it again. Record what was recalled and what remains unresolved; do not demonstrate a posture or call this observed physical skill."
+        },
+        "tr": {
+          "practice": "Sonraki okuma oturumunda planı ve kaynakları kapalı tut. Dik dönüşü, katlanma/kısmi yükselme ayrımını, taraf sırasını ve tek durma–yazılı düzeltme kararını hatırla. Dersi açıp her seferinde tek noktayı karşılaştır. Bir eksiği kâğıtta düzelt, kaynağı kapatıp yeniden açıkla. Hatırlananı ve çözülmeyeni kaydet; poz gösterme veya bunu gözlenmiş fiziksel beceri sayma."
+        }
+      }
+    },
+    "lissom.yin.supported.beginner": {
+      "y01": {
+        "en": {
+          "practice": "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.",
+          "selfCheck": "Close the page. A learner says, “I must stay still until the timer ends, and a stronger sensation proves progress.” Which two ideas need correction? State your chosen floor-or-knowledge route and one reason to end early. Answer in words; do not create a sensation to test it.",
+          "answerKey": "Stillness does not forbid an adjustment or early exit, and stronger sensation or longer time does not prove progress. Choose only the familiar accessible route; a knowledge route remains knowledge. Use the existing stop rules and leave early when needed, without waiting for the timer or creating symptoms."
+        },
+        "tr": {
+          "practice": "Bir kişi “Yin'de hiç hareket etmemeliyim” diyor. Kendi sözlerinle çıkma hakkını açıkla. Belirtisiz dikkat dağılmasında yalnız normal nefese dön; bilerek yavaşlatmışsan gözlemi kesip sıradan nefese dön ve kısa gözlemde yeniden kontrol et. “Daha çok his = daha iyi” yorumunu ilerleme ölçütünden çıkar.",
+          "selfCheck": "Sayfayı kapat. Bir öğrenci “Zamanlayıcı bitene kadar hareketsiz kalmalıyım; daha güçlü his ilerlemeyi kanıtlar” diyor. Hangi iki düşünce düzeltilmeli? Seçtiğin yer veya bilgi yolunu ve erken bitirmek için tek nedeni yaz. Sözle yanıtla; sınamak için bir his üretme.",
+          "answerKey": "Hareketsizlik düzeltme veya erken çıkışı yasaklamaz; güçlü his ya da uzun süre ilerlemeyi kanıtlamaz. Yalnız tanıdık erişilebilir yolu seç; bilgi yolu bilgi olarak kalır. Mevcut dur kurallarını kullan, gerektiğinde zamanlayıcıyı beklemeden çık; belirti üretme."
+        }
+      },
+      "y02": {
+        "en": {
+          "practice": "Before moving, describe each selected shape's neutral interval and final exit in order. If a prop is out of reach, arrange it nearer outside the pose and check access once in comfortable neutral. If even a symptom-free rehearsal is not comfortable, omit today's floor route. Do not infer transfer ability from “h35 read.”",
+          "selfCheck": "Without the steps, consider this plan: sitting is familiar, but the side/back-lying transfer for y05 is not; the learner wants to try it because h35 was read. What must remain unresolved, which already accessible option can be chosen, and when may supports be moved? Give a written decision, not a transfer demonstration.",
+          "answerKey": "Reading h35 does not teach the unfamiliar transfer. Leave y05 unresolved and choose only an already accessible taught seated option, chair knowledge/observation or postponement. Arrange supports outside the shape and move them only when unloaded. The paper plan cannot establish transfer ability or personal suitability."
+        },
+        "tr": {
+          "practice": "Hareketten önce her kullanılacak biçimin nötr arası ve son çıkışını sırayla anlat. Bir destek erişim dışındaysa pozun dışında yakına yerleştir; yalnız rahat nötr kurulumda bir kez erişim kontrolü yap. Belirtisiz prova bile rahat değilse yer yolunu bugün bırak. Transfer yeterliliğini “h35 okundu” diye varsayma.",
+          "selfCheck": "Adımlar kapalıyken şu planı değerlendir: oturuş tanıdık fakat y05 için yan/sırt yatış transferi değil; öğrenci h35 okunduğu için denemek istiyor. Ne çözülmemiş kalmalı, zaten erişilebilir hangi seçenek seçilebilir ve destekler ne zaman taşınabilir? Transfer göstermeden yazılı karar ver.",
+          "answerKey": "h35 okumak tanıdık olmayan transferi öğretmez. y05’i çözülmemiş bırak; yalnız zaten erişilebilir öğretilmiş oturarak seçeneği, sandalye bilgi/gözlemini veya ertelemeyi seç. Destekleri biçimin dışında kur ve yalnız yüksüzken taşı. Kâğıt plan transfer becerisi veya kişisel uygunluk göstermez."
+        }
+      },
+      "y03": {
+        "en": {
+          "practice": "Could you open/close without forcing knees, with props staying in place? Opening one side further is not a goal. If symptom-free and you notice pulling feet close just to “look better,” leave, set feet slightly farther away and retest only a smaller entry/exit once. Any knee/hip/back symptoms mean no retest. Write your chosen foot distance and exit order in your own words.",
+          "selfCheck": "Keep the lesson closed. In the chosen supported Butterfly version, what stays in place while the knees are still supported out to the sides? Explain the order for becoming upright, unloading the optional forearm bolster and returning the thighs toward centre. If that order is not familiar, what should the learner choose instead of improvising?",
+          "answerKey": "The outer-thigh supports stay in place while carrying load. Follow the taught exit: become upright, take the forearms off the optional bolster, and move that unloaded bolster aside only if any floor-hand support you need can stay in place. Bring each thigh toward centre with the taught support; move thigh props only after load is removed. If this is unfamiliar, omit the movement and study the sequence; do not improvise or pull a loaded support."
+        },
+        "tr": {
+          "practice": "Dizleri zorlamadan açıp kapatabildin mi; destekler yerinde kaldı mı? Bir tarafa daha çok açılmak hedef değil. Belirtisiz ve yalnız “daha iyi görünmek” için ayakları fazla yaklaştırdığını fark edersen çık; ayakları biraz uzaklaştır ve yalnız daha küçük giriş/çıkışı bir kez dene. Diz/kalça/belde belirti olduysa yeniden deneme yok. Sonra seçtiğin ayak uzaklığını ve çıkış sırasını kendi sözlerinle yaz.",
+          "selfCheck": "Ders kapalıyken yanıtla. Seçilen destekli Kelebek biçiminde dizler iki yanda destekliyken ne yerinde kalır? Dikleşme, seçmeli önkol bolsterını yüksüz bırakma ve uylukları merkeze getirme sırasını açıkla. Bu sıra tanıdık değilse öğrenci doğaçlama yerine ne seçmeli?",
+          "answerKey": "Dış uyluk destekleri yük taşırken yerinde kalır. Öğretilen çıkışı izle: dikleş, önkolları seçmeli bolsterdan kaldır; ancak gereken zemin el desteği korunabiliyorsa bu yüksüz bolsterı yana al. Öğretilen destekle her uyluğu merkeze getir; uyluk desteği ancak yük kalkınca taşınır. Sıra tanıdık değilse hareketi atlayıp sırayı incele; doğaçlama yapma veya yüklü desteği çekme."
+        }
+      },
+      "y04": {
+        "en": {
+          "practice": "Did you deepen during the hold or try moving a loaded prop on exit? If symptom-free and you notice a habit of reaching for toes, leave, choose a closer hand location and make one brief rehearsal in a more upright/smaller form. Omit the lesson for symptoms or difficulty controlling the exit. Explain one setup choice and its reason instead of scoring the angle/distance.",
+          "selfCheck": "Before reopening the lesson, answer: does bending both knees prove that the support underneath is unloaded? What must be true before it is moved, and what is the choice if load or control is uncertain? Do not move a support or add a counterpose to demonstrate an answer.",
+          "answerKey": "No. Both legs must no longer be putting weight on the support; bent knees alone do not establish that. If load or control is uncertain, leave the support in place and do not pull it out. Use the taught neutral rest or omit the shape; this lesson adds no deep counterpose. A written answer is not a physical test."
+        },
+        "tr": {
+          "practice": "Bekleme sırasında derinliği artırdın mı veya çıkışta yük altındaki bir desteği hareket ettirmeyi denedin mi? Belirtisiz olarak parmaklara uzanma alışkanlığını fark ettiysen çık, eller için yakın yer seç ve daha dik/küçük biçimde tek kısa prova yap. Belirti veya çıkışta kontrol güçlüğü varsa dersi bırak. Açıyı/ulaştığın mesafeyi puanlamak yerine bir kurulum seçimini ve nedenini açıkla.",
+          "selfCheck": "Dersi yeniden açmadan yanıtla: iki dizi bükmek alttaki desteğin yüksüz olduğunu kanıtlar mı? Destek taşınmadan ne doğru olmalı, yük veya kontrol belirsizse ne seçilir? Yanıt göstermek için destek taşıma veya karşı poz ekleme.",
+          "answerKey": "Hayır. İki bacak da artık desteğe ağırlık vermemeli; yalnız dizlerin bükülmesi bunu göstermez. Yük veya kontrol belirsizse desteği yerinde bırak, çekip çıkarma. Öğretilen nötr dinlenmeyi seç veya biçimi atla; bu ders derin karşı poz eklemez. Yazılı yanıt fiziksel test değildir."
+        }
+      },
+      "y05": {
+        "en": {
+          "practice": "Was return to centre familiar and controlled, or did knees turn against fixed feet? If symptom-free and you notice forcing visual symmetry, leave, choose less range and retest one brief entry/centre return. Do not “treat” tingling/numbness by changing arm position and retrying. Record any omitted side and why.",
+          "selfCheck": "Hide the instructions. One side needs a smaller range than the other, and a learner wants matching knee positions while keeping the feet fixed. What should be changed or omitted? Name the return point and explain why tingling is not a reason to adjust and retry in the same session.",
+          "answerKey": "Use the already taught smaller range or omit a side; matching depth is not required. Do not force fixed feet while turning the knees. The taught return is knees to centre with comfortable foot contact and neutral rest. Tingling ends the attempt; do not adjust an arm or another feature to treat it and retry that pose in the same session."
+        },
+        "tr": {
+          "practice": "Merkeze dönüş bilinen ve kontrollü müydü; ayağı sabit tutup dizleri çevirdin mi? Belirtisiz olarak görsel simetriyi zorladığını fark edersen çık; daha küçük aralığı seç ve tek kısa giriş/merkeze dönüş provası yap. Uyuşma/karıncalanma veya başka belirtiyi kol pozuyla “tedavi” edip yeniden deneme. Hangi tarafı atladığını ve nedenini kaydet.",
+          "selfCheck": "Yönergeyi kapat. Bir taraf ötekinden küçük aralık istiyor; öğrenci ayakları sabit tutarak diz konumlarını eşitlemek istiyor. Ne değiştirilmeli veya atlanmalı? Dönüş noktasını adlandır; karıncalanmanın neden aynı oturumda düzeltip yeniden deneme gerekçesi olmadığını açıkla.",
+          "answerKey": "Önceden öğretilen küçük aralığı kullan veya bir tarafı atla; eşit derinlik gerekmez. Dizler dönerken ayakları zorla sabitleme. Öğretilen dönüş, rahat ayak temasıyla dizlerin merkeze gelmesi ve nötr dinlenmedir. Karıncalanma denemeyi bitirir; kolu veya başka özelliği “tedavi” için değiştirip pozu aynı oturumda yeniden deneme."
+        }
+      },
+      "y06": {
+        "en": {
+          "practice": "A: No symptoms; a person turns their head to see the timer. B: Tingling begins while waiting. Without the text explain your action and whether a retest occurs in each. Do not open the separate answer key before writing your answer. Seconds held do not determine a correct decision.",
+          "selfCheck": "Write before revealing the answer: A) no symptoms, but the learner turns the head to see the timer; B) tingling begins while waiting. For each, state the next decision and whether a physical retry is permitted. Does remaining time change either decision? Use words only; do not reproduce either problem.",
+          "answerKey": "A: Leave under control; reposition the phone outside the pose within easy reach/view. If symptom-free, one smaller brief entry/exit rehearsal may be appropriate. B: End waiting, leave under control and use familiar rest; do not retry that pose in the session. Do not await the timer or diagnose the tingling's cause."
+        },
+        "tr": {
+          "practice": "A: Belirti yok; kişi zamanlayıcıya bakmak için başını çeviriyor. B: Kalırken karıncalanma başlıyor. İkisinde de ne yapacağını ve tekrar olup olmayacağını metne bakmadan söyle. Cevabını yazmadan ayrı cevap anahtarını açma. Kaç saniye kaldığın doğru kararı belirlemez.",
+          "selfCheck": "Cevabı açmadan yaz: A) Belirti yok fakat öğrenci zamanlayıcıyı görmek için başını çeviriyor; B) beklerken karıncalanma başlıyor. Her biri için sonraki kararı ve fiziksel yeniden deneme olup olmayacağını söyle. Kalan süre bu kararlardan birini değiştirir mi? Yalnız sözle yanıtla; sorunu yeniden üretme.",
+          "answerKey": "A: Pozdan kontrollü çık; telefonu poz dışında erişilebilir/görülebilir yere al. Belirti yoksa yalnız daha küçük kısa giriş/çıkış için tek yeniden prova yapılabilir. B: Beklemeyi bitirip kontrollü çık ve tanıdık dinlenmeye geç; o oturumda bu pozu yeniden deneme. Süre dolması beklenmez; karıncalanmanın nedenini teşhis etme."
+        }
+      },
+      "y07": {
+        "en": {
+          "practice": "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.",
+          "selfCheck": "Close your draft plan. Today only one taught shape has a familiar entry and exit. Is a two-shape route compulsory? Explain what remains unverified, where neutral rest belongs, and the different decisions for a slipping support and a stop symptom. Reopen the plan only after answering.",
+          "answerKey": "A single accessible shape may form the chosen limited route; the two-shape physical endpoint remains open. Keep each taught entry, neutral pause and exit rather than linking them as an uninterrupted flow. A slipped support requires leaving the shape before any unloaded setup change; a stop symptom ends the attempt without a same-session retest. Record omissions honestly."
+        },
+        "tr": {
+          "practice": "Planın “destek kayarsa” ve “belirti olursa” dallarını ayrı yaz. Belirtisiz planda nötr arayı unuttuysan hareketten önce arayı ekle ve iki giriş/çıkış sırasını sözlü tekrar kontrol et; bütün çalışmayı tekrar etmek gerekmez. Fiziksel denemede yalnız belirtisiz bir kurulum/dikkat hatasında ortak tek küçük yeniden prova kuralını uygula. Hiçbir kayıt fiziksel gözlem yerine geçmez.",
+          "selfCheck": "Plan taslağını kapat. Bugün yalnız bir öğretilmiş biçimin giriş/çıkışı tanıdık. İki biçimli yol zorunlu mu? Neyin doğrulanmamış kaldığını, nötr dinlenmenin yerini ve kayan destek ile dur belirtisindeki farklı kararları açıkla. Planı ancak yanıtladıktan sonra aç.",
+          "answerKey": "Erişilebilir tek biçim seçilen sınırlı yolu oluşturabilir; iki biçimli fiziksel son nokta açık kalır. Kesintisiz akışa bağlamak yerine öğretilen her girişi, nötr arayı ve çıkışı koru. Kayan destekte yüksüz kurulum değişiminden önce biçimden çıkılır; dur belirtisi aynı oturumda yeniden deneme olmadan girişimi bitirir. Atlamaları dürüst kaydet."
+        }
+      },
+      "y08": {
+        "en": {
+          "practice": "Independent explanation and an appropriate stop/correction choice in a new case can demonstrate the written learning outcome. If movement has not been observed, record “self-report/not observed.” The next goal is resolving the identified uncertainty, not deeper or longer waiting. Unsupported, advanced or prolonged Yin remains outside this pathway.",
+          "selfCheck": "At a separate later session, keep the old plan closed. Recall the chosen entry, supports, neutral pause, exit and stop-versus-correction decisions. If today’s setup differs, does remembering the plan permit movement? After answering, identify one missing written point to correct and state which outcome is knowledge, self-report or unobserved movement.",
+          "answerKey": "No. Check today’s setup and limits again; the old plan is not permission. Compare one written point, correct it and explain it again before optional familiar movement is considered. Recalled explanations are knowledge, reported participation is self-report, and movement not observed remains unobserved. No duration, deeper range or lesson tick closes that distinction."
+        },
+        "tr": {
+          "practice": "Planı bağımsız açıklayabiliyor ve yeni vakada uygun durma/düzeltme seçebiliyorsan yazılı öğrenme sonucu gösterilebilir. Hareketin gözlenmemişse “öz beyan/gözlenmedi” yaz. Sonraki hedef daha derin veya uzun bekleme değil, bulunan belirsizliği çözmektir. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır.",
+          "selfCheck": "Daha sonraki ayrı oturumda eski planı kapalı tut. Seçilen girişi, destekleri, nötr arayı, çıkışı ve durma–düzeltme kararlarını hatırla. Bugünkü kurulum farklıysa planı hatırlamak hareket izni verir mi? Yanıttan sonra düzeltilecek tek eksik yazılı noktayı bul; hangi sonucun bilgi, öz beyan veya gözlenmemiş hareket olduğunu söyle.",
+          "answerKey": "Hayır. Bugünkü kurulum ve sınırları yeniden kontrol et; eski plan izin değildir. Seçmeli tanıdık hareket düşünülmeden önce tek yazılı noktayı karşılaştır, düzelt ve yeniden açıkla. Hatırlanan açıklama bilgidir, bildirilen katılım öz beyandır; gözlenmeyen hareket gözlenmemiş kalır. Süre, derin aralık veya ders tiki bu ayrımı kapatmaz."
+        }
+      }
+    }
+  }
+}

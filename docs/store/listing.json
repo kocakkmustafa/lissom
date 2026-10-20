@@ -60,7 +60,7 @@
     "physicalDeviceAccepted": false
   },
   "$courseCatalogPreparationCurrent": {
-    "measuredDate": "2026-10-18",
+    "measuredDate": "2026-10-20",
     "status": "local_written_catalog_scope_not_full_teaching_physical_or_store_acceptance",
     "courseCount": 5,
     "lessonCount": 103,
@@ -69,7 +69,7 @@
         "asset": "config/courses/ashtanga-foundations.v1.json",
         "id": "lissom.ashtanga.foundations.beginner",
         "version": "1.0.0",
-        "sha256": "dd5004b1760ea460e2ead4d16790239ffb9fbad45407d9ff4cd8fcf08a2b1bf7",
+        "sha256": "913fe8864c0e71a77567e17a14983e334273c02158662413133a6755cafe8c07",
         "lessonCount": 13,
         "moduleCount": 4
       },
@@ -101,7 +101,7 @@
         "asset": "config/courses/yin-supported.v1.json",
         "id": "lissom.yin.supported.beginner",
         "version": "1.0.0",
-        "sha256": "3b5455c6f5b3f459e64e7f3f586f37193dd9b0a8c72b548d621f091b36b570e6",
+        "sha256": "ed346669025d106fcd255093adb89983925ddc46750d80730c7998f7cc2f5770",
         "lessonCount": 8,
         "moduleCount": 2
       }
