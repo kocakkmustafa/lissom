@@ -140,9 +140,135 @@ REVIEWED_HATHA_COPY = {
 }
 
 
-def _reviewed_word(where: str, text: str, word: str) -> bool:
+# Newly displayed answer keys and source-scope lists. These are stop/retest
+# instructions or explicit limits on what a cited source supports, not claims
+# that Lissom diagnoses or treats a condition. Review binds the complete field,
+# its exact source location and only the matched words listed here.
+REVIEWED_CONTEXT_COPY = {
+    ("chair-office.v1.json :: modules[0].lessons[2].answerKey.en",
+     "18dc690d14dafca96ce60d1333b5133bd7108839c277abc83200b78469e11e29"):
+        frozenset({"symptom"}),
+    ("chair-office.v1.json :: modules[1].lessons[1].answerKey.en",
+     "4bea07b34ae4ecd798379c158cf08bc6c2ea37a67afbb0115614db3922b7ed91"):
+        frozenset({"symptoms"}),
+    ("chair-office.v1.json :: modules[3].lessons[0].answerKey.en",
+     "c536f189ab76da6d94dc96438fc6fab44084ff8fb9810494804d5f0320f3386b"):
+        frozenset({"medical grade"}),
+    ("vinyasa-standing.v1.json :: modules[0].lessons[4].answerKey.en",
+     "d902cb9016f7c13cf62804804110a8666c468a2d30b815e13a5b1b13777988c2"):
+        frozenset({"symptom"}),
+    ("vinyasa-standing.v1.json :: modules[1].lessons[2].answerKey.en",
+     "3f52a68832d9973f3e76930bad4d56c11d31b76bea64695e65378241ac885ddb"):
+        frozenset({"diagnosing", "symptom"}),
+    ("yin-supported.v1.json :: modules[1].lessons[0].answerKey.en",
+     "0620cee2dc877ed29e2d2c1a55c0dc05a6e305240e7de3944e82d937b13245bd"):
+        frozenset({"symptom"}),
+    ("hatha.v1.json :: sourceScopes.ace_bent_knee_reverse_table.doesNotSupport.en",
+     "7419215ac13cdd592a2e4bbad710cd8fb73beec299624a2efdeee8c3a787dc0d"):
+        frozenset({"diagnosis"}),
+    ("hatha.v1.json :: sourceScopes.nhs_pregnancy.doesNotSupport.en",
+     "f3fe0cd947426cb6294384994eae577a65ca81cd682f22761bf03c3ce27b05ea"):
+        frozenset({"diagnosis"}),
+    ("hatha.v1.json :: sourceScopes.yj_locust_combined.doesNotSupport.en",
+     "c0ad3e9aa18949b3dcddb9b0e14c589f831e76d6bf0e952a2363b2fae91be4ad"):
+        frozenset({"diagnosis"}),
+    ("hatha.v1.json :: sourceScopes.cc_wall_legs.supports.en",
+     "12aadcc700eb755ac519b5a37b7dc8bfddfdb7a5b67c18e37e896501d111ab71"):
+        frozenset({"blood pressure"}),
+    ("hatha.v1.json :: sourceScopes.cc_wall_legs.doesNotSupport.en",
+     "103bb5aac2171ba8e6cb2fba37c67ba793a6157a959d8cddcb28bbfd33d84555"):
+        frozenset({"symptom", "treatment"}),
+}
+_REVIEWED_COPY = {**REVIEWED_HATHA_COPY, **REVIEWED_CONTEXT_COPY}
+_REVIEWED_COURSE_PATHS = frozenset(
+    "config/courses/" + where.split(" :: ", 1)[0]
+    for where, _ in _REVIEWED_COPY
+)
+_CATALOG_LOCALES = frozenset({"tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar"})
+_CATALOG_REVIEW_LOCATION = re.compile(
+    r"config/l10n/(?P<locale>tr|en|es-419|pt-BR|de|fr|ja|ar)\.json :: "
+    r"messages\[\d+\]\.(?P<leaf>source|text|zero|one|two|few|many|other)\Z"
+)
+
+
+def _load_translation_reviews(path: Path) -> frozenset[tuple[str, str, str, str, str]]:
+    """A missing or malformed review artifact fails closed, never as no reviews."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if (not isinstance(data, dict)
+            or set(data) != {"schemaVersion", "id", "scope", "reviews"}
+            or type(data.get("schemaVersion")) is not int or data["schemaVersion"] != 1
+            or data.get("id") != "lissom.wellness.translation-reviews.v1"
+            or not isinstance(data.get("scope"), str) or not data["scope"]
+            or not isinstance(data.get("reviews"), list) or not data["reviews"]):
+        raise ValueError(f"Invalid wellness translation review artifact: {path}")
+    reviews: set[tuple[str, str, str, str, str]] = set()
+    fields = ("locale", "sourceEnglishSha256", "translationSha256", "leaf", "matchedWord")
+    for row in data["reviews"]:
+        if (not isinstance(row, dict) or set(row) != set(fields)
+                or any(not isinstance(row.get(field), str) for field in fields)
+                or row["locale"] not in _CATALOG_LOCALES or row["leaf"] != "text"
+                or not row["matchedWord"] or row["matchedWord"] != row["matchedWord"].strip()
+                or any(re.fullmatch(r"[0-9a-f]{64}", row[field]) is None
+                       for field in ("sourceEnglishSha256", "translationSha256"))):
+            raise ValueError(f"Invalid wellness translation review record: {path}")
+        key = tuple(row[field] for field in fields)
+        if key in reviews:
+            raise ValueError(f"Duplicate wellness translation review record: {path}")
+        reviews.add(key)
+    return frozenset(reviews)
+
+
+_REVIEWED_TRANSLATION_WORDS = _load_translation_reviews(
+    Path(__file__).with_name("wellness_translation_reviews.v1.json")
+)
+
+
+def _reviewed_word(where: str, text: str, word: str, *, catalog_alias: bool = False,
+                   catalog_source: str | None = None) -> bool:
     digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
-    return word.lower() in REVIEWED_HATHA_COPY.get((where, digest), ())
+    if word.lower() in _REVIEWED_COPY.get((where, digest), ()):
+        return True
+    # scan_file supplies this permission only for an approved catalog identity
+    # at its exact app path. Index changes do not change the English sentence;
+    # a changed sentence/hash or a different matched word is never authorized.
+    location = _CATALOG_REVIEW_LOCATION.fullmatch(where) if catalog_alias else None
+    if location is None:
+        return False
+    if any(sha == digest and word.lower() in words
+           for (_, sha), words in _REVIEWED_COPY.items()):
+        return True
+    # Foreign-language cognates can match an English pattern. Only the exact
+    # reviewed locale/source/value/leaf/word tuple may pass: no translated
+    # negation grammar, language exemption or medical acceptance is implied.
+    return isinstance(catalog_source, str) and (
+        location["locale"], hashlib.sha256(catalog_source.encode("utf-8")).hexdigest(),
+        digest, location["leaf"], word,
+    ) in _REVIEWED_TRANSLATION_WORDS
+
+
+def _json_location(path: Path) -> str:
+    """Keep legacy reviewed labels only for the exact shipped course paths."""
+    try:
+        relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        return str(path.resolve())
+    return path.name if relative in _REVIEWED_COURSE_PATHS else relative
+
+
+def _approved_catalog(path: Path, data: object) -> bool:
+    if not isinstance(data, dict):
+        return False
+    locale = data.get("locale")
+    if not isinstance(locale, str) or locale not in _CATALOG_LOCALES:
+        return False
+    return (
+        _json_location(path) == f"config/l10n/{locale}.json"
+        and set(data) == {"schemaVersion", "id", "locale", "messages"}
+        and type(data.get("schemaVersion")) is int
+        and data["schemaVersion"] == 1
+        and data.get("id") == f"lissom.l10n.{locale}"
+        and isinstance(data.get("messages"), dict)
+    )
 
 #: JSON içinde kullanıcıya GÖRÜNEN alanlar. Diğer alanlar (açıklama, kaynak,
 #: not) iç dokümandır ve taranmaz — yoksa her literatür atıfı false-positive olur.
@@ -172,7 +298,7 @@ USER_FACING_KEYS = {
     "claim",
     # Guided-course copy is bilingual and includes step arrays.
     "outcome", "objective", "steps", "practice", "selfCheck",
-    "adaptation", "stopSignal",
+    "adaptation", "stopSignal", "answerKey", "supports", "doesNotSupport",
 }
 
 #: Kullanıcıya görünen metin TAŞIMASI BEKLENEN dizinler. Buradaki bir dosyadan
@@ -230,6 +356,22 @@ def _walk_json(node: object, path: str = "") -> list[tuple[str, str]]:
     """JSON ağacından yalnız kullanıcıya görünen string alanları topla."""
     out: list[tuple[str, str]] = []
     if isinstance(node, dict):
+        # App catalogs use arbitrary source-English keys rather than named
+        # copy fields. Scan their English fallback and every displayed value,
+        # including plural forms. The pattern policy remains English-only;
+        # passing it does not certify the meaning of a translated sentence.
+        if (not path and str(node.get("id", "")).startswith("lissom.l10n.")
+                and isinstance(node.get("messages"), dict)):
+            for index, (source, translation) in enumerate(node["messages"].items()):
+                if isinstance(source, str):
+                    out.append((f"messages[{index}].source", source))
+                if isinstance(translation, str) and translation != source:
+                    out.append((f"messages[{index}].text", translation))
+                elif isinstance(translation, dict):
+                    for category, text in translation.items():
+                        if isinstance(text, str):
+                            out.append((f"messages[{index}].{category}", text))
+            return out
         # English-only policy: scan the displayed English translation, while
         # the course parser separately requires both languages. Internal
         # media briefs remain outside user-facing copy.
@@ -344,11 +486,14 @@ def _contextual_use(text: str, match: re.Match[str]) -> bool:
     return False
 
 
-def scan_text(where: str, text: str) -> list[str]:
+def scan_text(where: str, text: str, *, catalog_alias: bool = False,
+              catalog_source: str | None = None) -> list[str]:
     problems: list[str] = []
     for pat in HARD:
         for m in re.finditer(pat, text, re.IGNORECASE):
-            if _reviewed_word(where, text, m.group(0)) or _contextual_use(text, m):
+            if (_reviewed_word(where, text, m.group(0), catalog_alias=catalog_alias,
+                               catalog_source=catalog_source)
+                    or _contextual_use(text, m)):
                 continue
             problems.append(f"{where}: HARD  «{m.group(0)}»  — {text[:90]}…")
     for pat in PROMISE:
@@ -375,7 +520,9 @@ def scan_text(where: str, text: str) -> list[str]:
                     f"koşula bağlanmamış gelecek zaman  — {text[:90]}…")
     for pat in SOFT:
         for m in re.finditer(pat, text, re.IGNORECASE):
-            if _reviewed_word(where, text, m.group(0)) or _contextual_use(text, m):
+            if (_reviewed_word(where, text, m.group(0), catalog_alias=catalog_alias,
+                               catalog_source=catalog_source)
+                    or _contextual_use(text, m)):
                 continue
             if not _is_negated(text, m.start()):
                 problems.append(
@@ -399,9 +546,17 @@ def scan_file(path: Path) -> tuple[list[str], int]:
             data = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
             return [f"{path.name}: JSON okunamadı — {exc}"], 0
+        location = _json_location(path)
+        catalog_alias = _approved_catalog(path, data)
+        catalog_sources = {
+            f"messages[{index}]": source for index, source in enumerate(data["messages"])
+        } if catalog_alias else {}
         for key, value in _walk_json(data):
             scanned += 1
-            problems += scan_text(f"{path.name} :: {key}", value)
+            problems += scan_text(
+                f"{location} :: {key}", value, catalog_alias=catalog_alias,
+                catalog_source=catalog_sources.get(key.rsplit(".", 1)[0]),
+            )
     elif path.suffix == ".plist":
         # OS katmanı (L-273): izin metinleri kullanıcıya iOS'un KENDİ
         # diyaloğunda gösterilir. Yalnız `*UsageDescription` taranır.

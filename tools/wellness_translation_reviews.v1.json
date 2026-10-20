@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "id": "lissom.wellness.translation-reviews.v1",
+  "scope": "Exact static copy-gate context review only; no medical, linguistic or teaching acceptance.",
+  "reviews": [
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "213264a726ac18053b21af81a370bea6ce429d0e607cd4bd308f50e6dcce96f0",
+      "translationSha256": "3805abc8420e45350555b8ce8613c0f429729aefe82275621fde698b996ffd78",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "feee4b069c9c07ae5737e61c0a80ee21ae7dcb6693730eeaa10a0c4e18a61efd",
+      "translationSha256": "7b7fcc5aba5f979e43aaad2463924a77725addafa2653b2fd6afddd72971c848",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "20c9ab4aa1cd56bd1ed2c938e58cc834ef79c6555a6c7a6d68b69d803331f878",
+      "translationSha256": "22a805bf1d6327b057a5116af47db81bb565d3adda557003c7c17c98d96521fa",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "7419215ac13cdd592a2e4bbad710cd8fb73beec299624a2efdeee8c3a787dc0d",
+      "translationSha256": "01ef5a92ead5b5aab12bf8f43e087e783bc5acf820752874122d642f9269eee8",
+      "leaf": "text",
+      "matchedWord": "diagnosespezifische"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "c0ad3e9aa18949b3dcddb9b0e14c589f831e76d6bf0e952a2363b2fae91be4ad",
+      "translationSha256": "2929fc5f32d9166b730cffa9b2450771e6c974a197702fd1b9c2e2089877a61c",
+      "leaf": "text",
+      "matchedWord": "Diagnose"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "096e786c560dea07b413e4cd77c3c83e78bb3a6723eaaf3ba641012654cc755f",
+      "translationSha256": "3e4dd3ff9e5ae484f8bc48f48383ab323ae49650f8e5aeb381c758e6aed6611e",
+      "leaf": "text",
+      "matchedWord": "Diagnosewerkzeug"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "096e786c560dea07b413e4cd77c3c83e78bb3a6723eaaf3ba641012654cc755f",
+      "translationSha256": "3e4dd3ff9e5ae484f8bc48f48383ab323ae49650f8e5aeb381c758e6aed6611e",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "93e31134642414a8b02d519d04b6ede2719a0320c6c3d95fad8c44a2ef55d18b",
+      "translationSha256": "e32ce13640e8efcb063e26c4d62602c38290149de9ce962b47c78105d94829c3",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "6425f8a034e68643daa58f5717469a08c0db8e26f965c561974039d815b9d21b",
+      "translationSha256": "fb307ee775685608de5ef241241f9a386eb707915da3c8f189571be3497e2c2d",
+      "leaf": "text",
+      "matchedWord": "Diagnosezuordnung"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "3f52a68832d9973f3e76930bad4d56c11d31b76bea64695e65378241ac885ddb",
+      "translationSha256": "afb250aa681ec3494acd1286b32f162a055f4d79e801e46ec9cbc980d892d050",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "fa610d7c4ee7e7693863284e40f79b04a7dc2fcf3f5ebc11fbaefa012cfc6579",
+      "translationSha256": "d1edeeb3352d13b2a4d95b1ed444c4cb516b32f8cdb537246b947dce2e573d1d",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "e01561108169089eaee27ddda91e6db362c22049c934d6238d11434bacdd142f",
+      "translationSha256": "0361cfbe6cf08da90b77e1717ecd7e8dcfedd15845de654a7ce7ea0c1335afbf",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "1d1f7bfc680feed6f368a1a9c389f4b383b3f57c70fd25d1ae24e786557d16ff",
+      "translationSha256": "e6608b3f9f28b680dffd5e454dcd725b3d5ccd0b0560286e80f40fb2fedd2e3d",
+      "leaf": "text",
+      "matchedWord": "Symptom"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "0620cee2dc877ed29e2d2c1a55c0dc05a6e305240e7de3944e82d937b13245bd",
+      "translationSha256": "a436b37aa44399102ad2c5487e3118ceee5ac5c27feb96117b7a6a449ee669ae",
+      "leaf": "text",
+      "matchedWord": "diagnostizieren"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "4fa815c72505dfe0c7e25db33c76b3a4903339b58e3ec98aa6ecf9cf4352dce9",
+      "translationSha256": "4c2febc05bdcf4a07f5281dc1f926c60b5f4a058bb30ab86109c23ec9624c1a8",
+      "leaf": "text",
+      "matchedWord": "Diagnose"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "eb1b14b72b1e9b05d22d69945069aafd9e2835f36e59af8cf4e39cf1b536d462",
+      "translationSha256": "cfc199366d217877bba330cd522d10aab7ef030f8d9e5ef47aee94656ccf876d",
+      "leaf": "text",
+      "matchedWord": "Diagnose"
+    },
+    {
+      "locale": "de",
+      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
+      "translationSha256": "dc3e72101b98a103f7b634206b55c204229e0e81e0affe4887a726afe6733603",
+      "leaf": "text",
+      "matchedWord": "diagnostiziert"
+    },
+    {
+      "locale": "es-419",
+      "sourceEnglishSha256": "80cfdadfcac8cd9c21ea634f4db658bb8b8bba9fcc1bd52679baef1e66d825a2",
+      "translationSha256": "c357596f22f2399a3da3c45a431587e46195645803ca5c52b75ddadcb6eb4a1a",
+      "leaf": "text",
+      "matchedWord": "diagnosticarte"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "0620cee2dc877ed29e2d2c1a55c0dc05a6e305240e7de3944e82d937b13245bd",
+      "translationSha256": "9e73fba9a6f6cf6fe3b9bea9572ebc24164c91c54239347d36928479d479388f",
+      "leaf": "text",
+      "matchedWord": "diagnostiquer"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "7419215ac13cdd592a2e4bbad710cd8fb73beec299624a2efdeee8c3a787dc0d",
+      "translationSha256": "928e0c9dba08f672d7e0a83ffc76baa03cf5fe42b8c71055e88a4cc9159c9230",
+      "leaf": "text",
+      "matchedWord": "diagnostic"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "f3fe0cd947426cb6294384994eae577a65ca81cd682f22761bf03c3ce27b05ea",
+      "translationSha256": "a7f46c4226c81c2414ea4c9dfc30a9df7d55a1937dc68756a0fe177e6d9424aa",
+      "leaf": "text",
+      "matchedWord": "diagnostic"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "c0ad3e9aa18949b3dcddb9b0e14c589f831e76d6bf0e952a2363b2fae91be4ad",
+      "translationSha256": "0dfb8b4db9dd81a8ab087c0ee791f8ae7fafd5328c07f47b3f1af5c692bc262e",
+      "leaf": "text",
+      "matchedWord": "diagnostic"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "096e786c560dea07b413e4cd77c3c83e78bb3a6723eaaf3ba641012654cc755f",
+      "translationSha256": "6363db8d55ea29bda7e6af0a0140891ffc606f46f3fa50c64a43a8514a0101aa",
+      "leaf": "text",
+      "matchedWord": "diagnostique"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "80cfdadfcac8cd9c21ea634f4db658bb8b8bba9fcc1bd52679baef1e66d825a2",
+      "translationSha256": "643fe9dc7acbfabda0b223fd8805d4e7e896bc3d45a6319c9f3b5d205806ddb4",
+      "leaf": "text",
+      "matchedWord": "diagnostic"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "6425f8a034e68643daa58f5717469a08c0db8e26f965c561974039d815b9d21b",
+      "translationSha256": "530e3c257e31d314bdf601af0644997522ef66357412a2d96fb37677395e073c",
+      "leaf": "text",
+      "matchedWord": "diagnostic"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "3f52a68832d9973f3e76930bad4d56c11d31b76bea64695e65378241ac885ddb",
+      "translationSha256": "6a21ebd8b7291681b61a444349c27ef4122f040032bff3665c0fff22fb99f63d",
+      "leaf": "text",
+      "matchedWord": "diagnostiquer"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "4fa815c72505dfe0c7e25db33c76b3a4903339b58e3ec98aa6ecf9cf4352dce9",
+      "translationSha256": "ae2d2e242ff1a648439cd82fc09262c1ecd308f3efa34172959b324eb3c8bf7b",
+      "leaf": "text",
+      "matchedWord": "diagnostic"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "eb1b14b72b1e9b05d22d69945069aafd9e2835f36e59af8cf4e39cf1b536d462",
+      "translationSha256": "423eade0551cf9918871faa02bc7f595c98788270f548b396eac5f9e37bd8314",
+      "leaf": "text",
+      "matchedWord": "diagnostique"
+    },
+    {
+      "locale": "fr",
+      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
+      "translationSha256": "c39eaf2391e1e35d5a2c4d5680453426b72f36877d95c2212ea3e8addaefff18",
+      "leaf": "text",
+      "matchedWord": "diagnostique"
+    },
+    {
+      "locale": "pt-BR",
+      "sourceEnglishSha256": "80cfdadfcac8cd9c21ea634f4db658bb8b8bba9fcc1bd52679baef1e66d825a2",
+      "translationSha256": "4699512f2675149b01bb51d734198d3b9a76f4772ae6c081eb0340e6634ac2df",
+      "leaf": "text",
+      "matchedWord": "diagnosticar"
+    },
+    {
+      "locale": "pt-BR",
+      "sourceEnglishSha256": "3f52a68832d9973f3e76930bad4d56c11d31b76bea64695e65378241ac885ddb",
+      "translationSha256": "df7530dafa6f7eb09723a7a2e31047f0114f997ccc9dd15752a1dfa38bea5253",
+      "leaf": "text",
+      "matchedWord": "diagnosticar"
+    },
+    {
+      "locale": "pt-BR",
+      "sourceEnglishSha256": "0620cee2dc877ed29e2d2c1a55c0dc05a6e305240e7de3944e82d937b13245bd",
+      "translationSha256": "dd320950071c5dce6960d738037e75182b882d4ba0614ca7683230b50b870406",
+      "leaf": "text",
+      "matchedWord": "diagnostique"
+    },
+    {
+      "locale": "pt-BR",
+      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
+      "translationSha256": "6ce951b79c6de407846809e7e1ef2f2529233ad7f2398a7aaea624f0d1bc1b60",
+      "leaf": "text",
+      "matchedWord": "diagnostica"
+    }
+  ]
+}

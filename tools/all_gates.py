@@ -42,6 +42,9 @@ NOT_GATES = {
     "harvest_prescreen.py", "landmark_quality.py", "reclassify_pool.py",
     "targeted_search.py", "cut_presence_window.py", "identity_review.py",
     "l031_space_divergence.py", "two_mode_report.py", "vmr_baseline.py",
+    # Source inventory generation requires an explicit report output path.
+    # Catalog admission is checked separately by check_content_localization.
+    "extract_ui_localization.py",
     # `mutation_reference_equivalence.py`: argümansız KOŞAR ama BİLEREK
     # buraya alınmadı — gerçek kaynak dosyaları GEÇİCİ mutasyona uğratıp
     # geri yükler (MutationRun ile güvenli, ama her commit'te koşmak hem
