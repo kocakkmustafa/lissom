@@ -1,0 +1,2 @@
+/* Camera permission purpose. Feature availability is unchanged. */
+"NSCameraUsageDescription" = "Lissomは動作テストにカメラを使用します。カメラの映像はリアルタイムで処理され、動画は録画もアップロードもされません。";

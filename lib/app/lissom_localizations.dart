@@ -108,30 +108,34 @@ final class LissomLocalizations {
 
 class LissomLocalizationsDelegate
     extends LocalizationsDelegate<LissomLocalizations> {
-  const LissomLocalizationsDelegate({this.bundle});
+  const LissomLocalizationsDelegate({
+    this.bundle,
+    this.loadDeadline = const Duration(seconds: 5),
+  });
 
   final AssetBundle? bundle;
+  final Duration loadDeadline;
 
   @override
-  bool isSupported(Locale locale) => kLissomSupportedLocales.any(
-    (Locale supported) => supported.languageCode == locale.languageCode,
-  );
+  bool isSupported(Locale locale) => isLissomLocaleSupported(locale);
 
   @override
   Future<LissomLocalizations> load(Locale locale) async {
     final String tag = canonicalLocaleTag(locale);
     try {
-      return LissomLocalizations.parse(
-        await (bundle ?? rootBundle).loadString('config/l10n/$tag.json'),
-        tag,
-      );
+      // Bounds asynchronous asset loading/UTF-8 decoding, not JSON parsing.
+      final String raw = await (bundle ?? rootBundle)
+          .loadString('config/l10n/$tag.json')
+          .timeout(loadDeadline);
+      return LissomLocalizations.parse(raw, tag);
     } on Object {
       return LissomLocalizations.unavailable(tag);
     }
   }
 
   @override
-  bool shouldReload(LissomLocalizationsDelegate old) => old.bundle != bundle;
+  bool shouldReload(LissomLocalizationsDelegate old) =>
+      old.bundle != bundle || old.loadDeadline != loadDeadline;
 }
 
 String localizedInteger(BuildContext context, int number) {
@@ -172,7 +176,7 @@ String localizedDecimal(
       .join();
   final String tag = canonicalLocaleTag(Localizations.localeOf(context));
   final String separator = switch (tag) {
-    'tr' || 'pt-BR' || 'de' || 'fr' => ',',
+    'tr' || 'pt-BR' || 'de' || 'fr' || 'it' || 'id' || 'pl' => ',',
     _ => '.',
   };
   return '$sign$integer$separator$fraction';
@@ -184,7 +188,7 @@ String localizedConfigNumber(BuildContext context, num number) {
   if (!number.isFinite) return '—';
   final String tag = canonicalLocaleTag(Localizations.localeOf(context));
   final String separator = switch (tag) {
-    'tr' || 'pt-BR' || 'de' || 'fr' => ',',
+    'tr' || 'pt-BR' || 'de' || 'fr' || 'it' || 'id' || 'pl' => ',',
     _ => '.',
   };
   return number.toString().split('').map((String character) {
@@ -205,11 +209,23 @@ String localizedDate(BuildContext context, DateTime date) {
           '${local.day.toString().padLeft(2, '0')}';
 }
 
-/// Integer count categories for the eight fixed product locales. Non-integer
+/// Integer cardinal categories for the fourteen approved product locales. Non-integer
 /// measurements never use grammatical count/plural selection.
 String lissomPluralCategory(String tag, int count) {
   final int n = count.abs();
-  if (tag == 'ja') return 'other';
+  if (const <String>{'ja', 'ko', 'id', 'zh-Hans'}.contains(tag)) {
+    return 'other';
+  }
+  if (tag == 'hi') return n <= 1 ? 'one' : 'other';
+  if (tag == 'pl') {
+    if (n == 1) return 'one';
+    final int last = n % 10;
+    final int lastTwo = n % 100;
+    if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) {
+      return 'few';
+    }
+    return 'many';
+  }
   if (tag == 'ar') {
     if (n == 0) return 'zero';
     if (n == 1) return 'one';
@@ -218,7 +234,7 @@ String lissomPluralCategory(String tag, int count) {
     if (n % 100 >= 11 && n % 100 <= 99) return 'many';
     return 'other';
   }
-  if ((tag == 'es-419' || tag == 'fr' || tag == 'pt-BR') &&
+  if ((tag == 'es-419' || tag == 'fr' || tag == 'pt-BR' || tag == 'it') &&
       n != 0 &&
       n % 1000000 == 0) {
     return 'many';

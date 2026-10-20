@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 
 enum _Pose { oneLeg, halfPlough, lotus, frog, uprightFrog, fish, seated }
@@ -121,7 +122,7 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final panels = _panels[lessonId];
-    if (panels == null) return const SizedBox.shrink();
+    if (panels == null) { return const SizedBox.shrink(); }
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -159,6 +160,9 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
                     painter: _PosePainter(
                       panels[i].pose,
                       theme.textTheme.bodyMedium!,
+                      LissomPalette.of(context),
+                      localizedInteger(context, 1),
+                      localizedInteger(context, 2),
                     ),
                   ),
                 ),
@@ -192,16 +196,20 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
 }
 
 class _PosePainter extends CustomPainter {
-  const _PosePainter(this.pose, this.labelStyle);
+  const _PosePainter(this.pose, this.labelStyle, this.palette,
+      this.numberOne, this.numberTwo);
   final _Pose pose;
   final TextStyle labelStyle;
+  final LissomPalette palette;
+  final String numberOne;
+  final String numberTwo;
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.save();
     canvas.scale(size.width / 300, size.height / 180);
     final body = Paint()
-      ..color = LissomColors.ink
+      ..color = palette.textPrimary
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
@@ -209,12 +217,12 @@ class _PosePainter extends CustomPainter {
         canvas.drawLine(Offset(x1, y1), Offset(x2, y2), body);
     void head(double x, double y) => canvas.drawCircle(Offset(x, y), 12, body);
     void mark(int number, double x, double y) {
-      canvas.drawCircle(Offset(x, y), 11, Paint()..color = LissomColors.ink);
+      canvas.drawCircle(Offset(x, y), 11, Paint()..color = palette.markerFill);
       final text = TextPainter(
         text: TextSpan(
-          text: '$number',
+          text: number == 1 ? numberOne : numberTwo,
           style: labelStyle.copyWith(
-            color: Colors.white,
+            color: palette.onMarker,
             fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
@@ -314,7 +322,7 @@ class _PosePainter extends CustomPainter {
         line(127, 66, 105, 97);
         line(105, 97, 133, 103);
         final chair = Paint()
-          ..color = LissomColors.bodySecondary
+          ..color = palette.textSecondary
           ..strokeWidth = 2
           ..style = PaintingStyle.stroke;
         canvas.drawPath(
@@ -335,5 +343,7 @@ class _PosePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _PosePainter oldDelegate) =>
-      oldDelegate.pose != pose || oldDelegate.labelStyle != labelStyle;
+      oldDelegate.pose != pose || oldDelegate.labelStyle != labelStyle ||
+      oldDelegate.palette != palette || oldDelegate.numberOne != numberOne ||
+      oldDelegate.numberTwo != numberTwo;
 }

@@ -21,6 +21,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 import 'assessment_history.dart';
 import 'attempt_values.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'surfaces.dart';
 
@@ -90,15 +91,16 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(configText(context, widget.test.name))),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: SafeArea(
           child: FutureBuilder<_History>(
             future: _history,
             builder: (BuildContext context, AsyncSnapshot<_History> snap) {
               if (!snap.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(child: LissomLoadingIndicator(
+                  label: localeText(context, 'Loading…', 'Yükleniyor…')));
               }
               final _History h = snap.data!;
               final bool anyData = h.bySide.values.any(
@@ -260,7 +262,7 @@ class _SideHistory extends StatelessWidget {
               'Ölçüldüğü gibi gösterilir; değerler karşılaştırılmaz veya yorumlanmaz.',
             ),
             style: t.textTheme.bodySmall?.copyWith(
-              color: LissomColors.bodySecondary,
+              color: LissomPalette.of(context).textSecondary,
             ),
           ),
           if (values.length > 1) ...<Widget>[

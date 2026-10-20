@@ -45,6 +45,7 @@ import 'hatha_course.dart';
 import 'hatha_course_screen.dart';
 import 'hatha_progress.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'session_history_view.dart';
 import 'surfaces.dart';
@@ -103,7 +104,7 @@ class ProgressScreen extends StatelessWidget {
     final SessionHistoryView h = facts.history;
 
     return DecoratedBox(
-      decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -208,7 +209,7 @@ class ProgressScreen extends StatelessWidget {
                       'No comparison is made here',
                       'Burada karşılaştırma yapılmaz',
                     ),
-                    color: LissomColors.roseDeepHover,
+                    color: LissomPalette.of(context).accentText,
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -510,7 +511,7 @@ class ProgressScreen extends StatelessWidget {
             '{count} stored record on this device could not be read. The list below is what we could read — a floor, not a total.',
       ),
       style: t.textTheme.bodyMedium?.copyWith(
-        color: LissomColors.roseDeepHover,
+        color: LissomPalette.of(context).accentText,
       ),
     ),
   );
@@ -643,7 +644,7 @@ class _SittingHeader extends StatelessWidget {
         arguments: <String, Object>{'date': localizedDate(context, at)},
       ),
       style: t.textTheme.titleSmall?.copyWith(
-        color: LissomColors.bodySecondary,
+        color: LissomPalette.of(context).textSecondary,
       ),
     );
   }
@@ -690,7 +691,7 @@ class _LedgerRow extends StatelessWidget {
                 },
               ),
               style: t.textTheme.bodySmall?.copyWith(
-                color: LissomColors.bodySecondary,
+                color: LissomPalette.of(context).textSecondary,
               ),
             ),
           ],

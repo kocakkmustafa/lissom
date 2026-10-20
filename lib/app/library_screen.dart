@@ -30,6 +30,7 @@ import 'hatha_course_screen.dart';
 import 'hatha_progress.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'surfaces.dart';
 import 'test_detail_screen.dart';
@@ -68,7 +69,7 @@ class LibraryScreen extends StatelessWidget {
     final List<LibraryFamily> pending = facts.ia.notBuilt;
 
     return DecoratedBox(
-      decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -205,7 +206,7 @@ class _BuiltFamilyCard extends StatelessWidget {
     final ThemeData t = Theme.of(context);
     final int live = facts.live.length;
     final int total = facts.liveness.length;
-    return InkWell(
+    return LissomFocusFrame(child: InkWell(
       borderRadius: BorderRadius.circular(LissomRadii.card),
       onTap: () async {
         await Navigator.of(context).push<void>(
@@ -266,13 +267,13 @@ class _BuiltFamilyCard extends StatelessWidget {
                       },
                     ),
               style: t.textTheme.bodySmall?.copyWith(
-                color: LissomColors.roseDeepHover,
+                color: LissomPalette.of(context).accentText,
               ),
             ),
           ],
         ),
       ),
-    );
+    ));
   }
 
   String _teachingInventory(BuildContext context) => <String>[
@@ -339,7 +340,7 @@ class _PendingFamilyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    return InkWell(
+    return LissomFocusFrame(child: InkWell(
       borderRadius: BorderRadius.circular(LissomRadii.inner),
       onTap: () => Navigator.of(context).push<void>(
         MaterialPageRoute<void>(
@@ -352,7 +353,7 @@ class _PendingFamilyRow extends StatelessWidget {
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: LissomColors.hairline),
+          border: Border.all(color: LissomPalette.of(context).divider),
           borderRadius: BorderRadius.circular(LissomRadii.inner),
         ),
         child: Padding(
@@ -375,16 +376,17 @@ class _PendingFamilyRow extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(
-                Icons.chevron_right,
+               Icon(
+                Directionality.of(context) == TextDirection.rtl
+                    ? Icons.chevron_left : Icons.chevron_right,
                 size: 18,
-                color: LissomColors.bodySecondary,
+                color: LissomPalette.of(context).textSecondary,
               ),
             ],
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -422,8 +424,8 @@ class FamilyPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
@@ -770,7 +772,7 @@ class FamilyPage extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: _TestRow(
                   icon: Icons.block_outlined,
-                  iconColor: LissomColors.bodySecondary,
+                  iconColor: LissomPalette.of(context).textSecondary,
                   title: x.name,
                   subtitle: x.blocker!,
                 ),
@@ -833,12 +835,12 @@ class FamilyPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: Icon(
                       Icons.circle_outlined,
                       size: 9,
-                      color: LissomColors.bodySecondary,
+                      color: LissomPalette.of(context).textSecondary,
                     ),
                   ),
                   const SizedBox(width: 11),
@@ -903,12 +905,13 @@ class _TestRow extends StatelessWidget {
           ),
         ),
         if (onTap != null)
-          const Padding(
-            padding: EdgeInsets.only(top: 2, left: 6),
+           Padding(
+            padding: const EdgeInsetsDirectional.only(top: 2, start: 6),
             child: Icon(
-              Icons.chevron_right,
+              Directionality.of(context) == TextDirection.rtl
+                    ? Icons.chevron_left : Icons.chevron_right,
               size: 18,
-              color: LissomColors.bodySecondary,
+              color: LissomPalette.of(context).textSecondary,
             ),
           ),
       ],
@@ -918,13 +921,13 @@ class _TestRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
             child: row,
           )
-        : InkWell(
+        : LissomFocusFrame(child: InkWell(
             borderRadius: BorderRadius.circular(LissomRadii.card),
             onTap: onTap,
             child: LissomCard(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
               child: row,
             ),
-          );
+          ));
   }
 }

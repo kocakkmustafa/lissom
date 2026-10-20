@@ -1,0 +1,2 @@
+/* Camera permission purpose. Feature availability is unchanged. */
+"NSCameraUsageDescription" = "Lissom utilise la caméra pour les tests de mouvement. Les images de la caméra sont traitées en temps réel ; la vidéo n’est ni enregistrée ni téléversée.";

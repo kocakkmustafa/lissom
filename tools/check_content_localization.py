@@ -18,8 +18,11 @@ import sys
 import unicodedata
 from pathlib import Path
 
+from localization_semantic_review import semantic_review_errors
+
 ROOT = Path(__file__).resolve().parent.parent
-LOCALES = ("tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar")
+LOCALES = ("tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar",
+           "it", "ko", "id", "pl", "hi", "zh-Hans")
 PLURAL_CATEGORIES = frozenset({"zero", "one", "two", "few", "many", "other"})
 PLACEHOLDER = re.compile(r"\{([A-Za-z_][A-Za-z_0-9]*)\}")
 LITERAL = re.compile(r'''(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')''', re.S)
@@ -264,6 +267,10 @@ def run(catalog_dir: Path, source_catalog: Path | None = None, inventory_only: b
         result["catalogs"][locale].update({"missingVsEnglish": missing, "extraVsEnglish": extra})
         if missing or extra:
             problems.append(f"{locale}: catalog key parity mismatch ({len(missing)} missing, {len(extra)} extra)")
+    problems.extend(semantic_review_errors(
+        loaded, ROOT / "tools/data/localization_semantic_review.v1.json",
+        locales=LOCALES,
+    ))
     return result
 
 

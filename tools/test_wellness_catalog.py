@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """English-pattern catalog controls; no medical or translated-copy acceptance.
 
-The 16 reviewed English fields and 33 reviewed translated matches are read
+The 16 reviewed English fields and exact reviewed translated matches are read
 from shipped sources, never rewritten.
 Temporary catalogs exercise exact identity/path/hash/word admission and attacks.
 This suite uses Python stdlib only; it does not invoke Flutter, SDKs or a network.
@@ -34,7 +34,8 @@ ATTACKS = (
     "Camera coaching is not available yet.",
 )
 PLURAL_FORMS = ("zero", "one", "two", "few", "many", "other")
-LOCALES = ("tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar")
+LOCALES = ("tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar",
+           "it", "ko", "id", "pl", "hi", "zh-Hans")
 
 
 class WellnessCatalogControls(unittest.TestCase):
@@ -157,7 +158,7 @@ class WellnessCatalogControls(unittest.TestCase):
             for relative in ("config/copy/en.json", "other/config/l10n/en.json", "en.json"):
                 with self.subTest(where=where, relative=relative):
                     self.assertTrue(self.scan_catalog({text: "Neutral text"}, relative=relative)[0])
-            self.assertTrue(self.scan_catalog({text: "Neutral text"}, locale="it")[0])
+            self.assertTrue(self.scan_catalog({text: "Neutral text"}, locale="xx")[0])
 
     def test_catalog_identity_cannot_turn_nested_fields_into_aliases(self):
         for where, text, _ in self.fields:
@@ -204,8 +205,9 @@ class WellnessCatalogControls(unittest.TestCase):
                     self.assertGreater(scanned, 0)
                     self.assertEqual(problems, [])
 
-    def test_exact_thirty_three_translation_matches_pass_only_with_catalog_context(self):
-        self.assertEqual(len(self.translation_fields), 33)
+    def test_exact_translation_matches_pass_only_with_catalog_context(self):
+        self.assertGreater(len(self.translation_fields), 0)
+        self.assertEqual(len(self.translation_fields), len(lint._REVIEWED_TRANSLATION_WORDS))
         for locale, source, text, word in self.translation_fields:
             with self.subTest(locale=locale, source=source, word=word):
                 problems, scanned = self.scan_catalog({source: text}, locale)
@@ -222,6 +224,28 @@ class WellnessCatalogControls(unittest.TestCase):
                 # English keys, rather than mutable catalog indices, bind review.
                 self.assertEqual(self.scan_catalog({"Neutral preceding key": "Neutral preceding value",
                                                     source: text}, locale)[0], [])
+
+    def test_italian_and_indonesian_exact_review_tuples_remain_bounded(self):
+        # These rows come from the final independently reviewed artifact.
+        # No hash is regenerated and no language-wide negation rule is used.
+        for locale in ("it", "id"):
+            reviewed = [row for row in self.translation_fields if row[0] == locale]
+            self.assertTrue(reviewed, f"Missing exact reviewed tuples for {locale}")
+            for _, source, text, word in reviewed:
+                with self.subTest(locale=locale, source=source, word=word):
+                    self.assertEqual(self.scan_catalog({source: text}, locale)[0], [])
+                    where = f"config/l10n/{locale}.json :: messages[0].text"
+                    self.assertTrue(lint._reviewed_word(
+                        where, text, word, catalog_alias=True, catalog_source=source))
+                    self.assertFalse(lint._reviewed_word(
+                        where, text, word + "x", catalog_alias=True, catalog_source=source))
+                    self.assertTrue(self.scan_catalog({source: text + " "}, locale)[0])
+                    self.assertTrue(self.scan_catalog(
+                        {source: text}, locale, relative=f"other/config/l10n/{locale}.json")[0])
+                    self.assertFalse(lint._reviewed_word(
+                        f"other/config/l10n/{locale}.json :: messages[0].text",
+                        text, word, catalog_alias=True, catalog_source=source))
+                    self.assertTrue(self.scan_catalog({source: text}, locale="xx")[0])
 
     def test_translation_review_cannot_move_to_a_different_source_locale_path_or_leaf(self):
         for locale, source, text, word in self.translation_fields:
@@ -259,7 +283,7 @@ class WellnessCatalogControls(unittest.TestCase):
         row = actual["reviews"][0]
         invalid = (
             dict(actual, schemaVersion=True), dict(actual, id="other"), dict(actual, reviews=[]),
-            dict(actual, reviews=[dict(row, locale="it")]),
+            dict(actual, reviews=[dict(row, locale="xx")]),
             dict(actual, reviews=[dict(row, sourceEnglishSha256="0")]),
             dict(actual, reviews=[dict(row, translationSha256="*")]),
             dict(actual, reviews=[dict(row, leaf="other")]),

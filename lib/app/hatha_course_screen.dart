@@ -8,6 +8,7 @@ import 'hatha_progress.dart';
 import 'hatha_session_preparation.dart';
 import 'lesson_media.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'yoga_observation_status.dart';
 
@@ -60,14 +61,14 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
   Set<String> get _practiced => _progress.practicedIn(widget.course);
 
   Future<void> _open(HathaLesson lesson) async {
-    if (_opening) return;
+    if (_opening) { return; }
     setState(() {
       _opening = true;
       _loadFailed = false;
     });
     try {
       final HathaProgressStore store = await widget.storeLoader();
-      if (!mounted) return;
+      if (!mounted) { return; }
       await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
           builder: (_) => HathaLessonScreen(
@@ -83,11 +84,11 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
         ),
       );
       final HathaProgress updated = await store.read();
-      if (mounted) setState(() => _progress = updated);
+      if (mounted) { setState(() => _progress = updated); }
     } on Object {
-      if (mounted) setState(() => _loadFailed = true);
+      if (mounted) { setState(() => _loadFailed = true); }
     } finally {
-      if (mounted) setState(() => _opening = false);
+      if (mounted) { setState(() => _opening = false); }
     }
   }
 
@@ -103,8 +104,8 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 36),
@@ -286,7 +287,7 @@ class _ModuleSection extends StatelessWidget {
           for (final HathaLesson lesson in module.lessons)
             Material(
               type: MaterialType.transparency,
-              child: ListTile(
+              child: LissomFocusFrame(child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 dense: true,
                 leading: Icon(
@@ -295,7 +296,7 @@ class _ModuleSection extends StatelessWidget {
                       : lesson.prerequisites.every(practiced.contains)
                       ? Icons.radio_button_unchecked
                       : Icons.lock_outline,
-                  color: LissomColors.roseDeepHover,
+                  color: LissomPalette.of(context).accentText,
                 ),
                 title: Text(hathaText(context, lesson.title)),
                 subtitle: Text(
@@ -326,7 +327,7 @@ class _ModuleSection extends StatelessWidget {
                         lesson.prerequisites.every(practiced.contains)
                     ? () => onOpen(lesson)
                     : null,
-              ),
+              )),
             ),
         ],
       ),
@@ -391,7 +392,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) return;
+    if (state == AppLifecycleState.resumed) { return; }
     _dateBoundary?.cancel();
     _preparation.reset();
     if (mounted) {
@@ -405,11 +406,11 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
 
   void _scheduleDateBoundary() {
     _dateBoundary?.cancel();
-    if (!_requiresPreparation || !_preparation.acknowledged) return;
+    if (!_requiresPreparation || !_preparation.acknowledged) { return; }
     _dateBoundary = Timer(
       _preparation.untilNextDay() + const Duration(milliseconds: 20),
       () {
-        if (!mounted) return;
+        if (!mounted) { return; }
         if (_preparation.acknowledged) {
           _scheduleDateBoundary();
         } else {
@@ -439,9 +440,9 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
       await widget.store.markPracticed(widget.course, widget.lesson.id);
       if (mounted) Navigator.of(context).pop(true);
     } on Object {
-      if (mounted) setState(() => _saveFailed = true);
+      if (mounted) { setState(() => _saveFailed = true); }
     } finally {
-      if (mounted) setState(() => _saving = false);
+      if (mounted) { setState(() => _saving = false); }
     }
   }
 
@@ -454,8 +455,8 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
     return Scaffold(
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 36),
@@ -697,7 +698,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                     ),
                   ),
                   for (final String sourceId in lesson.sourceIds)
-                    ListTile(
+                    LissomFocusFrame(child: ListTile(
                       title: Text(
                         Uri.parse(widget.course.sources[sourceId]!).host,
                       ),
@@ -720,7 +721,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                           ],
                         ],
                       ),
-                    ),
+                    )),
                 ],
               ),
               if (_saveFailed)
@@ -733,7 +734,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                   style: TextStyle(color: theme.colorScheme.error),
                 ),
               if (!_readOnly)
-                CheckboxListTile(
+                LissomFocusFrame(child: CheckboxListTile(
                   key: HathaLessonScreen.reflectionKey,
                   contentPadding: EdgeInsets.zero,
                   value: _reflected,
@@ -752,7 +753,7 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                           : 'Öz denetim sorusunu yanıtladım ve çalışmamı kaydetmek istiyorum.',
                     ),
                   ),
-                ),
+                )),
               if (!_readOnly) const SizedBox(height: 14),
               if (!_readOnly)
                 FilledButton(

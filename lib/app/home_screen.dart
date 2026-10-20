@@ -41,6 +41,7 @@ import 'hatha_course.dart';
 import 'hatha_course_screen.dart';
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'live_capture_screen.dart';
 import 'session_history_view.dart';
@@ -132,7 +133,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -293,7 +294,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _section(BuildContext context, HomeSection s) {
     final Key? k = _keys[s.id];
-    if (k == null) return _unknownSection(context, s);
+    if (k == null) { return _unknownSection(context, s); }
     return Column(
       key: k,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,8 +547,8 @@ class HomeScreen extends StatelessWidget {
                   // ama yüzeyde GÖRÜNMEZ bırakırdı (L-287).
                   onPressed: () async {
                     final guard = beforeMeasurement;
-                    if (guard != null && !await guard(context)) return;
-                    if (!context.mounted) return;
+                    if (guard != null && !await guard(context)) { return; }
+                    if (!context.mounted) { return; }
                     await Navigator.of(context).push(
                       MaterialPageRoute<void>(
                         builder: (_) => LiveCaptureScreen(
@@ -604,7 +605,7 @@ class HomeScreen extends StatelessWidget {
       englishOne:
           '{count} stored record could not be read, so anything counted here is a floor, not a total.',
     ),
-    style: t.textTheme.bodySmall?.copyWith(color: LissomColors.roseDeepHover),
+    style: t.textTheme.bodySmall?.copyWith(color: LissomPalette.of(context).accentText),
   );
 
   /// Kaydın SINIFI kullanıcı diliyle. `lessonClass` yazım anında damgalanır —

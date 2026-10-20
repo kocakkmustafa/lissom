@@ -184,9 +184,12 @@ _REVIEWED_COURSE_PATHS = frozenset(
     "config/courses/" + where.split(" :: ", 1)[0]
     for where, _ in _REVIEWED_COPY
 )
-_CATALOG_LOCALES = frozenset({"tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar"})
+_CATALOG_LOCALES = frozenset({
+    "tr", "en", "es-419", "pt-BR", "de", "fr", "ja", "ar",
+    "it", "ko", "id", "pl", "hi", "zh-Hans",
+})
 _CATALOG_REVIEW_LOCATION = re.compile(
-    r"config/l10n/(?P<locale>tr|en|es-419|pt-BR|de|fr|ja|ar)\.json :: "
+    r"config/l10n/(?P<locale>tr|en|es-419|pt-BR|de|fr|ja|ar|it|ko|id|pl|hi|zh-Hans)\.json :: "
     r"messages\[\d+\]\.(?P<leaf>source|text|zero|one|two|few|many|other)\Z"
 )
 

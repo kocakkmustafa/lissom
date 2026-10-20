@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'summary_strings.dart';
 
 /// A5 batarya özetinin yapısı + görsel katmanı.
@@ -45,7 +46,7 @@ class BatterySummaryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -53,7 +54,7 @@ class BatterySummaryView extends StatelessWidget {
             key: headerKey,
             padding: const EdgeInsets.only(bottom: 22),
             child: LissomEyebrow(SummaryStrings.header,
-                color: LissomColors.roseDeepHover),
+                color: LissomPalette.of(context).accentText),
           ),
           if (summary.scored.isNotEmpty)
             _section(
@@ -121,7 +122,7 @@ class BatterySummaryView extends StatelessWidget {
 
   static Widget _pill(String text, ThemeData t) => DecoratedBox(
         decoration: BoxDecoration(
-          color: LissomColors.canvas,
+          color: LissomPalette.fromTheme(t).canvas,
           borderRadius: BorderRadius.circular(LissomRadii.pill),
         ),
         child: Padding(
@@ -179,14 +180,14 @@ class BatterySummaryView extends StatelessWidget {
           const SizedBox(height: 4),
           Text(SummaryStrings.noJudgement,
               style: t.textTheme.bodyMedium
-                  ?.copyWith(color: LissomColors.bodySecondary)),
+                  ?.copyWith(color: LissomPalette.of(context).textSecondary)),
         ],
       ),
       gradient: coached
-          ? const LinearGradient(
+          ?  LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[LissomColors.card, LissomColors.cardWarmEnd],
+              colors: <Color>[LissomPalette.of(context).card, LissomPalette.of(context).cardWarmEnd],
             )
           : null,
     );
@@ -209,7 +210,7 @@ class BatterySummaryView extends StatelessWidget {
           const SizedBox(height: 4),
           Text(SummaryStrings.noJudgement,
               style: t.textTheme.bodyMedium
-                  ?.copyWith(color: LissomColors.bodySecondary)),
+                  ?.copyWith(color: LissomPalette.of(context).textSecondary)),
           if (r.userNote != null) ...<Widget>[
             const SizedBox(height: 10),
             Text(r.userNote!, style: t.textTheme.bodyMedium),
@@ -218,14 +219,14 @@ class BatterySummaryView extends StatelessWidget {
             const SizedBox(height: 6),
             Text(r.promotionNote!,
                 style: t.textTheme.bodySmall
-                    ?.copyWith(color: LissomColors.roseDeepHover)),
+                    ?.copyWith(color: LissomPalette.of(context).accentText)),
           ],
         ],
       ),
-      gradient: const LinearGradient(
+      gradient:  LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: <Color>[LissomColors.card, LissomColors.cardNeutralEnd],
+        colors: <Color>[LissomPalette.of(context).card, LissomPalette.of(context).cardNeutralEnd],
       ),
     );
   }
@@ -242,7 +243,7 @@ class BatterySummaryView extends StatelessWidget {
         children: <Widget>[
           Text(r.testName,
               style: t.textTheme.labelLarge
-                  ?.copyWith(color: LissomColors.bodySecondary)),
+                  ?.copyWith(color: LissomPalette.of(context).textSecondary)),
           const SizedBox(height: 8),
           Text(SummaryStrings.reason(r.reasonCode ?? 'unknown'),
               style: t.textTheme.headlineSmall),

@@ -6,6 +6,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import check_content_localization as check
 import wellness_lint
@@ -65,8 +66,24 @@ class ContentLocalizationControls(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="lissom-l10n-control-") as directory:
             result = check.run(Path(directory))
         self.assertTrue(result["errors"])
-        self.assertEqual(len(result["catalogs"]), 8)
+        self.assertEqual(len(result["catalogs"]), 14)
         self.assertTrue(all(len(catalog["missingContentKeys"]) == 1195 for catalog in result["catalogs"].values()))
+
+    def test_semantic_review_is_called_with_all_locales_and_errors_propagate(self):
+        with tempfile.TemporaryDirectory(prefix="lissom-semantic-hook-") as directory:
+            with patch.object(check, "semantic_review_errors", return_value=["critical-copy-drift"]) as review:
+                result = check.run(Path(directory))
+            review.assert_called_once()
+            catalogs, path = review.call_args.args
+            self.assertEqual(tuple(catalogs), check.LOCALES)
+            self.assertEqual(len(catalogs), 14)
+            self.assertEqual(path, check.ROOT / "tools/data/localization_semantic_review.v1.json")
+            self.assertEqual(review.call_args.kwargs, {"locales": check.LOCALES})
+            self.assertIn("critical-copy-drift", result["errors"])
+        with patch.object(check, "semantic_review_errors") as review:
+            inventory = check.run(Path("unused"), inventory_only=True)
+        review.assert_not_called()
+        self.assertEqual(inventory["mode"], "INVENTORY_ONLY_NO_TRANSLATION_ACCEPTANCE")
 
     def test_catalog_copy_gate_reads_fallback_translation_and_every_plural_form(self):
         catalog = {'id': 'lissom.l10n.fr', 'messages': {

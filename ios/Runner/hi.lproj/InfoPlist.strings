@@ -1,0 +1,2 @@
+/* Camera permission purpose. Feature availability is unchanged. */
+"NSCameraUsageDescription" = "Lissom गतिविधि परीक्षणों में कैमरे का उपयोग करता है। कैमरे की छवियाँ वास्तविक समय में संसाधित की जाती हैं; वीडियो रिकॉर्ड या अपलोड नहीं किया जाता।";

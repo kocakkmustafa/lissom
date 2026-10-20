@@ -162,10 +162,11 @@ void main() {
                     isNotNull,
                     reason: '$tag: ${course.id} reader key missing: ${text.en}',
                   );
-                  final expected = tag == 'tr'
+                  // Reviewed catalog values may clarify immutable source copy.
+                  // This known Turkish title retains its authored context.
+                  final expected =
+                      tag == 'tr' && text.en == 'Standing foundations'
                       ? text.tr
-                      : tag == 'en'
-                      ? text.en
                       : catalog.lookup(text.en)!;
                   expect(hathaText(context, text), expected);
                   checked++;

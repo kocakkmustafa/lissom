@@ -12,6 +12,7 @@ import 'package:motion_core/motion_core.dart';
 import 'app_facts.dart';
 import 'attempt_values.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'local_account_bridge.dart';
 import 'locale_text.dart';
 import 'onboarding_flow.dart';
@@ -109,7 +110,7 @@ class _OnboardingGateState extends State<OnboardingGate> {
 
   void _openAccount() {
     final LissomAccountRouteBuilder? builder = widget.accountRouteBuilder;
-    if (builder == null) return;
+    if (builder == null) { return; }
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => builder(context, kLissomMotionAppId),
@@ -133,7 +134,7 @@ class _OnboardingGateState extends State<OnboardingGate> {
           }),
         );
       }
-      if (!s.hasData) return const _GateLoadingScreen();
+      if (!s.hasData) { return const _GateLoadingScreen(); }
 
       if (_completed || s.data!.profile.completed) {
         // Onboarding'de BEYAN EDİLEN yaş bandı buradan aşağı akar
@@ -176,10 +177,11 @@ class _GateLoadingScreen extends StatelessWidget {
   const _GateLoadingScreen();
 
   @override
-  Widget build(BuildContext context) => const Scaffold(
+  Widget build(BuildContext context) =>  Scaffold(
     body: DecoratedBox(
-      decoration: BoxDecoration(gradient: LissomColors.screenBackground),
-      child: Center(child: CircularProgressIndicator()),
+      decoration: BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
+      child: Center(child: LissomLoadingIndicator(
+        label: localeText(context, 'Loading…', 'Yükleniyor…'))),
     ),
   );
 }
@@ -195,8 +197,8 @@ class _GateFailureScreen extends StatelessWidget {
     return Scaffold(
       key: key_,
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: Center(
           child: Padding(

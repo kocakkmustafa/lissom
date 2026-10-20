@@ -1,0 +1,1682 @@
+{
+  "schemaVersion": 1,
+  "kind": "LISSOM_CRITICAL_COPY_REVIEW_V1",
+  "locales": [
+    "tr",
+    "en",
+    "es-419",
+    "pt-BR",
+    "de",
+    "fr",
+    "ja",
+    "ar",
+    "it",
+    "ko",
+    "id",
+    "pl",
+    "hi",
+    "zh-Hans"
+  ],
+  "anchors": [
+    {
+      "id": "h41_breathing_pause",
+      "english_key": "Choose two standing shapes, two seated/low shapes, one breathing pause and rest.",
+      "source_sha256": "b66667225b4dbd06a13df558715dc4342f3632620317b28374b1987c4750856b",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "811287adfe56f0db4a8422d8e5d7ad04c38267d37d37292da41dc43bdf484fe0",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "8648521b6a1a678cb22381f8cbf5f4c3d894c90712cbe93240a141968c39f548",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "70a141ae9ecb20b24c8c686a6c9cc35a5161073bace74031d9d1c60d102012f3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "b412fb45cbc1860956047f0fbdd262b00b5f42fd865b9465ccfa383d4f3c23e3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "2afb16cdea7a8c6b6315f3600b82e92a680fa41288c24969b57bfbd52f3cce40",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "fffacac56e46b546f291a645e16847982ca00bf3ec59293d9ddf82ff32b0e849",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "6f4b0db53c3e07dc716c8bd655fdf36d5ea628c235bed7ffacecd90e4bae5764",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "6413b97189bee749a4a3e260938b4122c6c3ae1aaf57dacc5f3b4e249a3fbc31",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "4cf6f3305255d59d0e5e0b80ffaaa4b06bdac25e06811fa5828061b2b7ffbfad",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "f445459328f4f10936e55a64c2db9c571d51ababbfbb5a8b8edcd98323c8e2e1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "82e9b76095488469a9178d97ebc79d2135ca7cc5d952ee0a39345c476c43d3bf",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "ce8b26d11416423d14cefce23432a59ade7906c4921ded8735a3eb08f2a68084",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "fd174d48f8694abc8a1d9d42c9de913be0858c3dc3967aed06731db164833351",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "21c741eba502e743ec131eba383e783c5448b5784c37871641421f96c14b8ba4",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "h39_lower_seat",
+      "english_key": "Lower the seat before lifting either hand, then rest wrists without rolling onto them.",
+      "source_sha256": "e4b2c440884a1a5f10d6d97f23cc52587c8a637819f857dd00dc64be78834f56",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "cb366b74e2c93037f08b31f9ca0b4bfcb8d73260abc4eff3c5d74e93d3e0d253",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "a65c3d8ae1735fdefcc7b2aceb3e2350d0bb2a58f390da5475f32930c22f595a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "2fffa07f792be6e112d1b48407518bf9d22614de392fe01fb27f3ca9cd5de9be",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "0a4b464637cab2e6d7cadc1f2b8c33fdff2d560b9ec53e738af073d658282bc8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "26a4673253004b9ac58d6ae7b62c01f7b07e44858140932df9c89f9977bf55d9",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "8702ecb60433db4209f900251673e407c0c5f9ce8ae9035c6145024cb4888619",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "693850ddf09b989bf069b9ee2289ba7a5f1d66c5d8a30514e4a60fed5ceca98a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "3ad47d4104f3f6f7d75391db29ae8804c138d93f119bc2dd50c4045d69d2d207",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "9296db82377598eeac3c629898258a1b40f193e4a42ea02fa591a869e2a1d1ad",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "f21e1417ad8fc87de23603799e1dad1fef86426db2f9dd2c35adb54e18fc26e4",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "6d29544d2d1f10a2f17dfc8518617b793b9137af8555d23d8e8a79552b9643db",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "b8c80586c58050878736a1b45fd33236490ac5ea61ad1c8202a5f470adb68468",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "6a4dc00eeaa3b2396e0301c58323eb1cabd5e3eff3aaa4077fe6b280d05d0974",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "b3913923cd7213a04ace9a195b38c513443f349527a2251a5c9c8604333fd4c7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "h52_lower_seat",
+      "english_key": "Bend at the hips to lower the seat slowly; only after sitting down release hands and rest the wrists.",
+      "source_sha256": "36f85b29d4129c231a5333fb4915e7c87168bf50a4f4f020017c18e03501b948",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "d63c1a2ef5e55fa735b3cf4eb8f2911f7cd3013049661593939452a2667f4845",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "0454185ee7d17a2ada26b8c1cc83a8e7726b78f52ff57182769b504c45affddd",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "987b0796e7457963c2dbd9b5bb0fca4772c690b7de68c8db34bb667d13cf6299",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "2d65a6bef2257a9ea20122c45f942058d67754b7e284ae80b1c104c68b93c4bf",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "d58aa09c08ef5b7b42941cd5a0f091792959595ca4f2cfcfa6e280eaf95e8f50",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "037fd3c0a6386b72f11f07797b7c3260b522597e7aabe4408442ecb4c3b9dd94",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "e70ce296ecab0cb144168c9002984f3d385896f97a5cc2c3b578274efd7b07ee",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "022200a0c66260f5327a5ece988cefaeb1d259becd2536b8541fa2023cb09fc7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "9b2b146dcd8d5811942566c841553874425a749c6d2471efc42e582d0ca9e660",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "27c8ef57f913c45d988a65d8acec74b70dfaf39b095ff4673cadb5d44d8ec441",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "acd0be3e205f0f78d07f07d00341028734e475126eb34a3f0bdba63cec5aa94c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "5ccac517546142412436d09e8ece9725d14ea766997c6a3167ba3e978aad11d1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "53c5e861166cf228f576715826376b881e56e0bd4968b470f8beed0dc60f63e1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "e3315543c3c0c00fa918f68c9043765af00460b16ce5fe9a78d205dd439a7da5",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "wall_both_palms",
+      "english_key": "Keeping both palms in contact and knees soft, move the hips a little back and incline the trunk only a little. Elbows may straighten comfortably, never lock. This limited high wall variation is a preparation related to Downward Dog, not its floor form; no horizontal torso or head-below-hips target.",
+      "source_sha256": "18ec230a51958713abd8fa66efea7281c5dbe85b0fadf454e09b9dd5e21dfeb9",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "89fbb12c38bb2638d10826149915c98bc0e189ff8ffe654a445547779f5cfba2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "ddb51db9b2d8125a9e9f2390cb519cc898cbc5765aae6c3caaf2f23cbd4e1591",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "9534b38d300af37408ee0a2be57fc9eb146561bb2cdd672c1c011a940e1dabcd",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "b49ad1962e40c894d06b670756e5d175851a00d00a5425244e995db69be72e88",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "9c7d1f0da7f180a6fab7ce8d8c94af1cd8b27b26659431e5efce3524e81e5ac9",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "2dff1293cd7d3144cce052ee4928541e7f8b5ef4865c43860a3d7fe495016c44",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "076967897d22e70ee04a727e57f0e4917b10d558486478acbc3e5b8130188df8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "0463d2992de8457fc99a8301b96ac3cf4aa879b075bebaeab226ca2f33d843cb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "25612457fd0d5e0ba6da33231d57c855135a942b3aff5a7d4b96df0d55d0495a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "6eae58d0bb917df80235179e7430849881a01648eb10ad0031c78ca298d96561",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "a6ee4eb67089452f46a130de68ab22dfb3d012b8348b00820ec92b95f489187d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "d808f450356a45b273c21c0b4ed076f029a1c17587524e2f4b071350733bfb14",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "c3e21251fcc9062bb0e0399179c3415b29c05a130df6debccec0edfce5b9e1a7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "de7c2f025aee76b3441f003138b50550baf73129136d05d300934e6ec9e5db1d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "progress_reading_list_ellipsis",
+      "english_key": "The reading itself will not — see above for why.",
+      "source_sha256": "d1fee972f70f8fb81acbd400ed64950ac06bcf7136b2c79d71379aaa2e9ee122",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "3f54ea15692868a722699785f858bffce3142ba49db7d7d57b5bc92fda586a0b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "be5cedfe3670dc75380b469b370f55290d213dcd8da686112bd6bd8266fc593d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "4d2235176f99192e6ed7d4bbdc0a0c250160ca137e88e0047d048c65ad3fe843",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "62edf0d33924398269447c8166bd431cb3bae712e12743328978c6da3c5836ad",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "19fe5ecab0b1c859476a9468fd14749c0ecfab40b0cf457b7381613857526cd2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "b88741f51054eea80bb1981754e9372af9b8e9544c01b26185150dc143863e24",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "308e9dbc8cdae33fc5e0dfc6ae1d819e1986cd779bc88440747ea446e6333ff0",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "2cbef726809558ec8eefd4953d0e6df0a1d64434e1df4298cfbb8532872b2f8e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "7f1e5f0b315a51e86ecea4dc0ac773b948cf9adf96641acd4d255cfbb668b40c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "ccfaa3927f12ecb575c52ffce0e51862757b68488ca18456cf3f2e9a14a2cc21",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "0e863e4366e4d8c968c36e5fd3304e9e6894fe9afb1a6a082ce56d32addcb14a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "3609a30ffbf35fe614b9a0617e923c84e1439fc271b90fb2e54b12e2a8fb8ad1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "e3a8b1d26fb5b0ce9ae7b09656c1b085a0fb197bfc5818b0eaac3b06eb8863ff",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "ad7050b51e7c47c886f8b815799cd60e80837cbc476a07b915dafba142c58145",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "v04_second_hand_support_condition",
+      "english_key": "Once the familiar upright base and comfortable wall contact are restored, pause, then lower one hand to the thigh, followed by the other only if support is no longer needed. No foot approach occurs within this variation. If you cannot maintain comfortable contact/return at this distance, choose a shallower range or omit; do not improvise a backward/forward walking transition.",
+      "source_sha256": "61cd26041f07896a6104d043051217e36da26f457b19990df6916cb1f33d0add",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "109794ff6a2510a50afe40e60d0e70d9a18b4aeb5379ad0828ae6b2383e2b378",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "61cd26041f07896a6104d043051217e36da26f457b19990df6916cb1f33d0add",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "2d536e2563c7dd435e613ef136b53ad532792918bdcf17c4cd131e82c3d0488b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "fa0ed17f44f29ee4f1418fff6630b0742c5e012676323a0a068e786a56894fec",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "06a2b34907dbe71c92bad1f1f014dece67e381e7263007f890afb59defd22cf4",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "c330d0370e9fcbd9fee26da5fa06d2c51398438549eb422cb183192cd3b568ef",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "d758bd89709f4e62067822dab340490f0e28bca97b508eeae8591c172124e392",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "6eca6e92eff08705f19a2043e7d058aaad5e645e8a1c3245dc1a316b9493c005",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "3985eb364e52bd8f38b07939804f08eeae73c68aa262d98315acc7d1a65ef8b2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "4260b705d29d53d699ed430e17fb5a8dac8a6535eca8d40bb485c90c10093f51",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "5e1e38e7918255e501ceb452e92ca9fa8d56c702f13bab3d1f040b0c0642b915",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "37a0b34f28ae62dfca1d85866a691131377ae51ad4b32cf848d5795b0095f847",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "aaea41d592ae880999c9cc1b7835ad240a121d028b96229705495223a267d70b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "3c8a561924d6a89caf3b2cf043f394102ba5ded71513dfdf407db648ba386b52",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "shared_record_format_not_data_sharing",
+      "english_key": "This list is shared with the other apps built on the same measurement core, and that shared record still has no place for the number itself — it can only tell you that a test was measured, not what it came to.",
+      "source_sha256": "a63b3afaca49871811a821609fd3ed06539b857b588722ae084c616dafeb79b3",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "206c16adb3c343e46c6519e1c7145724323735e4df5bf36029a98a778debad89",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "8db83b70d5c7073fd56e82ee9e73800fb8dec56e93415c7d40252b9b3346aeb7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "700a3b471e7d096e3038c698c54e173783c75e20e78cc4570d43c11d15091de7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "4cd861455dafe66ee5d01fedac78ce1f2c72b6f776475ae55683354e07b1312c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "5212d3125c4e8746c6816e6f32be2218862dacd760e72e00a588584ef925cebb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "f5a76a75e9187b4870ddae4ce998e2a4827e93d521f035d5f4ec4beff9eb4e04",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "6eabf9b8f7bedcdc5a7168b7a2441c767dc2f08c441082ffc4c59dfc4959b7f3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "827ec610bd30445b34808fab28f0201b72b2da9cf0e0819d5ad26099af8c9909",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "3d73146b7cdd7287b0985310be225500de5f5e22d3999729618f633af1a21b0b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "5b1aabac37b45641f96c6a776bf79a840f32c6956e4d606c613a20ddd905b90c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "a9e7bdf0c6b22cae24336aa482a54523778e129698c5edb6e5040d8323cf7a0b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "7e79837e2cb9c6ff311f89584427d3a9384653816ee8ae8083bc61ca4b49bd1a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "77afefa15cb0c960ba7933bff9b0410e0fdbe7a23add3847f55503f9a94ea88d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "84cec7c2ea4a51e08f52abc44fef6a6f98f8e29ad52f45edef44b2a91f93a318",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "pose_depth_not_breath_depth",
+      "english_key": "Did you reset the feet before changing direction and keep breathing at your chosen depth?\n\nOn two separate comfortable practices, can you keep this focus in the chosen variant? Reset the feet before bending the front knee or changing direction.\n\nNext practice, try this without checking the instructions: Reset the feet before bending the front knee or changing direction. Then review what you missed.",
+      "source_sha256": "a3338be8d92e2a611f73a74f69645423a5176fd969f0b426ede6218a8bc270b6",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "b05dbe296ccd46a192e6d4fe6b6c4caa0852410a6f926142f4b46751ddc1910c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "af1a60857d993a8bc0eeef6bfbd115b6d63265cdcb6244c27a4941a53f07d85b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "2121c6d4c66e89c02009cfdc2df6ae2c75e3bf7b2e5d6bd6ebdbfb1e0b5b1acb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "6ace605b11555bf5631bddc3df44dc847661982fb7881da3d6a57e9d5d100adf",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "aee0f2678ae28062a9197c7bb5761cba9d9f6a4f922a6adb729fbc36d7a3f52b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "3e48571a387b289103ed7f0c84bd800e1a0d6cde878894d243e18ff506ffd551",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "f81a38b478b44499f4f0f7799e86897db417177d12a7a3e5f8248b56afc8924e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "f4d54ebe62c6f71ee11e7978e9539edbf5f4ebecba46097652ecdef433a3eb39",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "3f548efbd4dd8f545f7d3ed34e04ca279440b837a2f68fb8b62466252c7568f7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "a94c131cf5b29c1e875d78a920c4325f08428fa2590ee6dab2dcf8c2ed351336",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "40ffd9e50010648e816170ae3798ac7622273cb7260a88715a5be2abcc888575",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "4a879b3a62793689c30b09ee2f13065d22c97e3a5287e4555831d8a877290332",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "1d5cdad329fa7352a53ecb6ae87046c9db636ee5c8f24402e241784caa238496",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "e2b8bdb4eee50e15907ac385f663761d47664f1d3b01211e987eea5d45835380",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "pose_hold_not_breath_hold",
+      "english_key": "This lesson's exact chair placement, stance length, two-breath hold, foot reset, safe depth or personal balance judgment.",
+      "source_sha256": "95bda5fd145f46738b8944bf3f07bcc3107435546df4ed919c239d6f77b51786",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "62c3fc4310447d8f95410d800ee0a31c8bd9969d8a1282d1462c0a6dee256287",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "6ce39f8739921a77a51a656262364b2ddd28eff5be5e920b8f7a5b9f423e46f6",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "d68f4e2e6ad1931d63f938e34d3db052a1b27623d6472923740a46c2666ca93a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "3e947f733ab1b4a9676444e85c9c9fa4ee34d6b1cca3ecb89158922b0478c7b8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "cf0f6e31ae39b56eb2f77107b537395b585b41f44fa19a21396acbc7f33b60dc",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "7f899823a0e3fc754b51c0b7832a67844b49da1536ebcf2e65f1874195cbcb3f",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "54bb58294337cdabf80d8012ee507b5b4047b50063676e2da8a06b7a65ba85ec",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "b1ff7e59ff54b3190b4a20e4919a361aba835ccb6c749e18fb1b70fdc6b38348",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "44612eecdc03ac27551cb252df51da12b6b1abd4b136f19f76a61c18b465088a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "ba8ba3ae266fb3eaf3639b496090ca8951f29ed81163447998a59cdd156dde50",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "d265df4ed423606724f1edc0876582db25b67ca631ec4e492c5b2cd7a62131bb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "7afb067d9170a24fd6dd47f856d0c3002bd7f4b3d2c5be1d2beb22f4c61d476e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "ccae4b0a00272957c73aa97385b7d10ea8e42f2e8e06f08c689fede1d55e67ab",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "93d22b20c3aa1d96354e4edf3982b8925b60c90e808c0005e0a6e76d2a28e37b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "right_left_foot_return",
+      "english_key": "Before movement write: upright base → optional small free-arm rise/lower → supported shallow hinge OR familiar wall-dog preparation → upright base → optional short staggered stance/right return → neutral → optional left return → neutral rest. Choose only familiar components, keep required support and never remove it to make the route look continuous.",
+      "source_sha256": "4d78fda8dd9eda15c1f26440fd83f7bab1f4d84eb3cc3db14983a82a6fa927db",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "bae21ea439ca4716ecf6e81070ecee4b1aea4b0928fca16aa3308c577f2fae0f",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "08d2aa6fb137e1963f229749530230e0c79108623bb95c1f94083016261cd576",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "40b4e5b4df8d02b97dab639b83bad61958cb00f13cca8400742f8b347cf32bfa",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "c314c9e73bf5a19b6edbb0008291e5a97adab8be2f92caec4b78062b3d811dc0",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "84bf067c7b2c613eaf3d7f43f2bf57e0c91d534f4a3ca9aaf602515965f41db1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "b7e2f1be963e78a4223d0d8cf527d1c11318d14e137f0fed4279adc3e91d0c46",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "062678cb695e01d138f1894cc1b3c57113e843a872d4c19868187b485ced817d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "8ddb144414339154d74252d057c984d0f0bfac35f70d5ef3b73a405e37fa8cbd",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "582f2655f601680cc57d1a9bb97cd430090e9f6da9b98c3031a2e172efd3e079",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "fdbbceb603be9fe36ea8a2ea2beee964064a77fb20c96cecccc07e9baa0a1bcb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "a1924df3a444827badeaff08336f20d2df605911f5630f6c5789e6bc57c798c5",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "e8c37257edd97028ab97d28c34047d6180769510d998b2c9e7e048c46ca238e5",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "602b5a13d2d0123d2e1c29c25422dd9dc184bb8820c19953d484166e95f124ae",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "b84a5a50b8eb7252da2d70e39fe11669682a751d052f3e9180cd1f3854bc8111",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "space_check_before_foot_moves",
+      "english_key": "Face the wall upright with palms supported, feet hip-width. Check the space behind without turning while a foot is moving; if the path cannot be checked, omit stepping.",
+      "source_sha256": "444e43a17330cd658d26e3ed98dec7d91de5592ae3a5d224849ba953b74045bd",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "541e7217edb79ed34b589a2d4bd8d81fd7a39516358a867d153590784356dd30",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "700fae44f190835190fdbd3c25a26540694bf6e381cdbfc099ac2cd5e914573a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "219a9cd9e9ac212b2c9892beee90e64893d34b5afac92aa91032b5ebd914fd04",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "0402572a3497e058b4fc245d3d62aed25b3d7746f8c748abe81bc308c5e9055e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "54b3cf5bd51a1a3a70ecd238d4811d11e250b6367f6847f9315022f14655df1b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "b29abb12ac8bf624e2a987ad8730293c1c618acefb56172f88f69dcc8d51b42c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "497470ba5659f8c5f4b36b200847e0cb2335754579672d5d2546675f9b92ebe5",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "f186dcff2d0a691eb343e3850bd8caca17f4b20d2cfbf70bf8ef506b26a191e3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "31f74fbf594a134132deb51c618c13d300926dbf4216c9d854017b4bfd37bb39",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "5a666b454446660aac13fbd6b064d148323f5f24c19decd31645d0264f1d4ac2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "8f97973431e7865a4c8f7d21e6bc2a295146bb336430926de597b1b454c40504",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "8e699dfe26f8156108d651d745e58ed6be8f3c56ddbe747319bb3b7dd3e077be",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "ce580fba11f64b7846dece19e6ba6be385ce5aedfcc1a9222ea543a0024e38f8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "52daa197726ae21894b2394f9d275fefe83da5f31b3aed39003e98501109d531",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "torso_return_upright",
+      "english_key": "Must feet move toward the wall or both hands release before the torso returns?",
+      "source_sha256": "f7e988f0bb420b7440401b875c8d3a8c95bd077190f4b9eceaf17169f80cf184",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "90e52f2bee76c24f3cd8991af1113dd0d0cd4b2f3f3a7e0f01446e76d52eab6c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "3c66bbe6aa2c553918a74a6b9f875073dfb5cd5f7e5565cb5137218dc8570a08",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "f316501281ea7057fbe36794f36bb951efe1ef57bdfa9796e8688c48f55bd2c1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "a8d72163d740757500bd141ea6767660830be1f3564b187741668d283d5ef16c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "57f67d58f570e202cfe22953554525d5dc86485ad03564d3918cfe005bfb0685",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "5b35229050df27b29a0b4cdc05a5fbb24e75e0b3f7629844509d3171a4ef8580",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "2f491813d32dc8dd00fa7221a962d0f62d3bea2e76113b78d9ec056ad0b2c67d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "cbdccf032ab44ca9c2976d0c98ed033da75205515443e89d189f90b7670e60c6",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "6ac69cedf7f896deeb8b54560db7ef4296a6b66a2a5375d3e0043308ee0dd6c7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "f4153ebfc6c79cf72875826bf8bc6db2300a86864f67c547e78c19c79ff4650a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "63239cea97dc213b10d5645b2f32e57f75998f531be2e3609827e7d4fa23ee80",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "ca44f6b57b3dd158ee9059b8bb3c7a19cce91759bde8c03387036759cd58f496",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "e6ec2f4a3de904fe785db7d13ed397aaf05d4917cbf3d379e6eba1aec2f99df3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "00e3cab72b53158f32b2e7d3f8591904b836813bb3d312fcc99776ed8b681b18",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "blanket_heels_to_buttocks",
+      "english_key": "Place a folded blanket beneath shins or between heels and seat; enter slowly with a wall nearby.",
+      "source_sha256": "bdfbcff4fb441b0bb7d3c708513b8e0a3d0b589df327337c4c7a761b8e502f1a",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "6ee6cd96dd1fef26b6d4233e15f67c59e89a08066e94fe84f021f045588b4db8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "0c18db6e2132857e1495dc42c726c65af0c3aa5a17e170f72bfc5d0a452d1850",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "fe566cd400e420c998e6e7634622cccd78289a6e795753fe752cd2a8b1574eee",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "12d7d2700457d652ea2f3e8634ee3c4508b52f460c7b5462f06334c287a7f2af",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "3cf8a16619bf936d144dfe1d83365dcddb208b7708a69ea37836ffd131af9820",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "9a896ca9865fdab7d29bebe2ba2e3a2bce20dc74835594b6844609ea21a46b54",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "f9875effb5f6031c3ca58c02d7fda5a03ea9269f901af2710dd9b8daa0e54312",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "7e5be8d2f4ae855b552e3c299d959f44fb119ebba4e838ccf9296f99841d73a1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "d11611922dfe54e259d37497cb16c32bced5ce7f10a8a4e788e83f38827599a8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "127e4fb0583c48b74b691f9b2138fa592b0b376505d982b9d83831737b090ced",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "6ca5744d8f01851c0a4485aa355cdcc1754478295110c6809dc1343a995ece75",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "eb50b5e4e45bb33d19044e79f5eae4acaadea9eb6667b08962c607b5244a17a6",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "10ee9c05307347518ea2564c39a865911fea1872a96a7c54d7719b599164d316",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "48fb43a53991cc089d5fe0390f35b64eb55236976db726bffd30b31b68d994c0",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "stop_breath_observation_not_breathing",
+      "english_key": "Put both hands on the thighs and return to unobserved natural breathing if attention becomes tiring.",
+      "source_sha256": "fda3ecaaf108ca8660865b04cd27bbadedd98e6920cf43dda6956e3f84ce809a",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "a9b69fca939c1002bf72b6969218b2cda0a01198394784e6dc19509774fa7b61",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "cc840b9081987f304e5e6f50e6d766a55b6b6168669683933d79d65c49d3ceab",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "b7bb6c12cef6d78fc5cbf2301789f9f53fd1a86e1e524df45d7ff3586f1a3555",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "8561807caf80ee3ec559b5517da37298cd12a12b7b660591a4cae1703bb53584",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "8bfad8745a499ee17ff2f8e1fb4c666a341e8983c97ba2ebd791da7435644bdd",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "3469f3d0631c2db155a36f7d53db6d3a570a5f4a7ad1ca2f90df93823e323a7b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "901574a48624e4ef82be11c37b5e36bf9c7fc65c21183b8af2af4d6dafdaf088",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "e37c3c162ce15bb30a92e293385ccf0ebd80674d6393ca76e4754ca82f31f4ae",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "877fe9dd20426c8e05bffa0b47e7d456464d86fd51486939c602532dabb02e6c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "a634c834474998ac97f31182249977099e6303ed2c18b82812d88ffca7e77915",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "95def3cc76959482247fc584f82d98832ca5e193842fa2f503eafc6ea59a82f1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "d5bfc82270404fbc6bcd8503c8004b07caccc26fb78df4912eb9671ad411de2a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "46eb856d7e42887b88a59219ff28a4344c09ed393f614a081148842f18f1ed9d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "eea829390499075b0a17fe55054e597c6adff419d3743272cd5d6285ebd2aa65",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "three_alternating_turns_not_three_pairs",
+      "english_key": "Repeat three alternating turns without swinging the arms for momentum.\n\nCommon mistake: Arm swing supplies momentum for the turn. Correction: Turn gently from a stable base; let the feet reset when needed.\n\nCompare a smaller and familiar standing turn with the same comfortable foot placement.",
+      "source_sha256": "4c8b700afc0566f450d6b95ad9ca764071e809de15cbc0b116c717ff2a1e0960",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "ad1e1d2616626dba628967524ba48af47e117569819c1473388259fa065e8f9b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "4c8b700afc0566f450d6b95ad9ca764071e809de15cbc0b116c717ff2a1e0960",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "f27cf234df55c2ec7afce1848cee0113123e40ab4ea425e79d80f031ccc8e27f",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "75225b5733fa37db311202a1edf1b2ab7187cd7bee5ec7fc5ed152d18070290b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "4cbf5875c222546428903a17c7427600f5c7e2995dfc27728467994c8723114d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "6c49c3e1a236a9dbde44de0978dbabcb8de8932331ca15e165fdf4bb4a415788",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "35a7ece9beae34e69046ff7b556cc7656865d71d912612317eb365c54a2059fc",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "19b7c0b077b3f79cd92b4d65b5f6d5a84a549502c28601171f5ad46b62bec079",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "c5e9a65f1ebdd7d4723f589b172b7b736d52eb3feddfe6f4ddd2b502f47497ad",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "15f57c34dfc21e971797127c1da20573580ea7074fcbfd1685da24520fa91f7e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "e3bf55024582bd48852bf163ca49f7bf2933550c3d04f4979dcde174b85513e2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "79c9cbb273f415429a833bd6ee75a48e949680ec3cdfde67ac81578d943349ad",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "09cb0d3255dcefb5913fad6fb99716e0a32ea5136e54c307862df713f3c432cc",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "382c512e43b3d146f320d2536611457b5f9d6e37c195d828341ace28c036b8d8",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "ordinary_breath_no_control_or_hold",
+      "english_key": "Notice breathing without controlling or holding it.",
+      "source_sha256": "549330437849f892933a0bf2beab9eb91907d93e6b1025140600c76daaac62c6",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "524762f7c195ab948332b30fab60a264004b4176b68d759dfa0e2ba120ae4aa9",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "549330437849f892933a0bf2beab9eb91907d93e6b1025140600c76daaac62c6",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "ae11705d7829d6587e5cf2a45f326a4011b44e754ec0a3f64278b127d85ce1e3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "e162426d1a4bd42953d2158ea62f53d228337f0d35c9a9bf906ed29a5fd9b53d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "5f4b7d59b4e6724fad43eabc94ba9be53e34968161ca5a997be23093f6395aa7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "e44072b11eec18906780c6737cbeced6e48b5ad1b50e6a8e4d610d321b5f4356",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "db2470e516f50fcbf9d440085c64d98b7b447a27f663b239cdc907db9cdfd585",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "f12d86936cb3d7c8dd3abd59714f3099ff93649f3425d87c8d4861c586122f82",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "7c38067a1c45a25a5117ae8ab65d3a6eb2890be2bcc274cd193075ecbae0633f",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "6879aedf0118be1dc2943c0236c1b5bd90c1bd2a11d0adade15d638d83414e99",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "dea7aa736facd39e2f0527badd64ff42f86daf868b40103655aef423a2b8931e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "72810fe0e99ff7228ce656c3b09b2a9cd7b97379332a014c36a5258e91e6059d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "f7410411711d9690388b45abc3e160b7c6abdbc03783379ffbe6f22641283723",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "f3ec7de12cab165b932553d270e18057be78f94e35084b4663870045130574a3",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "ordinary_error_symptom_free_retest",
+      "english_key": "Write distinct branches for “prop slips” and “symptoms occur.” If a symptom-free written plan omitted neutral, add it before movement and verbally recheck the two entry/exit orders; repeating the whole practice is unnecessary. For an ordinary error during physical practice use the shared single smaller-rehearsal rule. No record replaces physical observation.",
+      "source_sha256": "65d88c43d8af87d80c55bd936a60bbb1b5addd6183b7c1c2193a464c3bbc89d2",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "critical-cross-language-02/REPORT.tr.md + followup-five/REPORT.tr.md; ROOT-66-REVIEW.json"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "65677529f064c989dc4579de6dc9a1d0aab7a377e51d86589d9c69468249c599",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "65d88c43d8af87d80c55bd936a60bbb1b5addd6183b7c1c2193a464c3bbc89d2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "7303aa89f61106af9fa29179f4899e8272e92b6b345a7b3971b2672937a6dd1f",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "f9a2f76324cdb02208142e9b40f7575477f377c2278066fad296c5b389348256",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "f9eb2b97ae671db57642ad3ea09d2928c9e6129035e8ee94fee2840d50a84d5c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "b8b10c9523de37b3976a9c756079497232620d62132d87537b2a9a3f83285d0d",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "fdf48523ac6372958aa86da6fcdf38b71dd9e98ba1dfe8e07f046ee9958aaaf4",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "bc921e1354fb3eb4ab3b274eb0251d98a454834346d1255ab1818fd4d5fc381e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "6aa6d8fbd3fb385096e308016b1b311b1e895a09dbc1279eb75fa3daec2c9b91",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "8a295016ddd63f92d4f4cc5cbf163be692e075cf4e87115207592dc342e57262",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "f7b84b886de88d5666da5feccba1158b5f5a09b2153c75d10b8e5a81f25bf03c",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "d66580cd58c0eedd099af8d4408405cfa5c7e9ba1584842636719fa61198b2e2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "bb4d012b6d15585298da9307a086841c3a17d8a1fa8ef2940dcc36daa8a85e38",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "13ba9285a149cbf0c18a9e665a83207f8048a0d080431732d0f951951b9bdc9b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "deliberate_breath_not_forced_breath",
+      "english_key": "Someone says, “I must never move in Yin.” Explain the right to leave in your own words. For symptom-free distraction return to ordinary breathing; if you deliberately slowed it, end observation, return to ordinary breathing and check a brief observation again. Remove “more sensation = better” from your progress criteria.",
+      "source_sha256": "75401c1e9e861fc91fe99a942d9a9948e9416d23d2fd53f83eaaf961de321932",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "cf062fc77ba79dfeec322db51d24163022105f778242c10ab1f771b1e526555f",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "75401c1e9e861fc91fe99a942d9a9948e9416d23d2fd53f83eaaf961de321932",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "6e7eef34f621309b2812b723c8e1fe894102bdbbddc7b73e7cddd4372b010217",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "7342541908eca00017209e10120bbc5bc5b26880dcaab728f58854892bb7e892",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "d424da5d5716d69050ff3c2926010950c8645daa9c6039c7a0f57a0fb24d5fcb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "2db2a8bf80ef5828a4f9ff1f65071c15f0fb8d2b8608e5b97c010f39a8c1ad56",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "b03d16b7c678f6992c61946db73918cb869d340116ecfcce951279c0b026aad7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "fdb8747cb57fbf2a52ff09b542524621f5290ca8d1a861b9738c3d12f663ae92",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "e74d035ddbbade80581c38b5a18c5d0809e71168ec24ccab09049930597f925a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "3d2a055c1cdc49586ba67df7dada5446a873328cf5ac0b67650335697523c529",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "097623acc38ed66208ee3400c5046590539619698d209fccf21f2b4920813da1",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "b0c6f1aa5c34f7cb7ce90bbd0067bcf8409fb9fa97589562b62a68d854b13ddf",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "500b6da2872a4df9f6f168bac9dbe00b1a605820589d47adf07b79cc9db47a44",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "103c70fc64c27bec042b73096893ab6321c64584a78b41bed7bcc3ce281a2472",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "previously_taught_transition_scope",
+      "english_key": "Select one taught shape already chosen comfortably. Describe support and exit; first rehearse a brief entry/exit.",
+      "source_sha256": "6ae698a609ab000c3f903cdfcc0451d78f3221946bede7a3375f4723974a32ce",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "85121403470ddb01ef358912f713c7774b1af9c2700f30855857280426439dda",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "6ae698a609ab000c3f903cdfcc0451d78f3221946bede7a3375f4723974a32ce",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "feb94606eec837df8754762d762a1801b3e17c82620ad5a42ad4b1821711deb5",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "2e3c31dc68a5e84cfca9935646781692de0fb58f8e52265eb76f709388a31310",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "c192740d1d75dd5e94388dfebffa51ff37c5b9ce917f4aaf554ef9d4e6e8fd52",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "7d5a4a70430ecbc27ba2ace1617fe939c419ddfdc065850e3a2eafa1b93e99ed",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "ef802b92e3e9e4b46305e957e77e086909123353282d95dbf170f78cada8abaf",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "540243e59f7fb12466607b5b9dce15a63b4cd1b7f865b7ccb08b5ea4bfd524ce",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "d834f2c7fd6db86ab576f1c9bc75ade0868b7b86eb7ae9d9360c15df0e8f8dca",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "c4226894445c4db1328f923b05fad899d752654acd44afdc238146a2fb15b3aa",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "0dfd895b27f2a7e3f849a8b10f07055d7a11ce02dc2196d92ae163111bced4a7",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "37b13938b280f5bd5f0b4df2a74db9647b9a19dea4129fe129f7e38a00fb2571",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "53fc8f4b75d23878e174800f911e5958bcedd3fb2ee5ce788702dee3f015670a",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "1de761f1a2d7b5362e876c5361734b4d6ef4af05cb169198881b632b56bd130b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    },
+    {
+      "id": "untaught_not_unsupported_scope",
+      "english_key": "Side entry and full lowering, wrist placement close-up and small-height comparison; show no head drop or unsupported straight-leg progression.",
+      "source_sha256": "e927c37e37cbf074e856eda4b393ab31b49714af08cad874267fe62bdd1a554e",
+      "source_refs": [
+        "immutable English source key; no course JSON/key/schema migration",
+        "lib/app/locale_text.dart reviewed finite EN/TR display table where applicable",
+        "YULAlab workspace fixes/2026-10-20-continuation/expanded-quality: source-display-independent-review, second-review-en-tr, catalog-integration-01 revisions03+04",
+        "second-review-en-tr completed source review; selected28 independent table/context review; each target locale full second review"
+      ],
+      "targets": {
+        "tr": {
+          "value_sha256": "3099e7640eb794da79605d91a3e35f00c8474c99e6aaf8361a83cb5cd5aea31b",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "en": {
+          "value_sha256": "e927c37e37cbf074e856eda4b393ab31b49714af08cad874267fe62bdd1a554e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-en-tr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "es-419": {
+          "value_sha256": "62a2ae70218d6ba0ea6470d1f5830065a24db9d6a7bb7dea28bc96952587b8d0",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-es-419/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pt-BR": {
+          "value_sha256": "90f869d280f2804548186b9afc12f2db92bd292c39a16ebfd34996aa5c9c3feb",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pt-BR/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "de": {
+          "value_sha256": "ce353c1c4edc8ee49fa791055608e64f58380d9dbd949b7e3ad6bff15bb97eb2",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-de/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "fr": {
+          "value_sha256": "02bde8ed6bb0b7612d6c443a95f060fd7a04227b9f17bafb2ea79d4da6071d1e",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-fr/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ja": {
+          "value_sha256": "c437b39634cf0a0bb811c74d21ba28e2398f2d6d2c8db4804d2ed38e6a27ba35",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ja/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ar": {
+          "value_sha256": "7ec6b5148fcd9007700988fa1b4616a9e04cadab0b919597491c5fe6011c32af",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ar/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "it": {
+          "value_sha256": "4c23b90b163e6d26a779afe0d4c21d0fa83f1e9bf1fe7ae001efca5abf110b04",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-it/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "ko": {
+          "value_sha256": "a6c84aeda66f43dab08e4666a997c2c185d53447aab2379bdde61a98eb9ad114",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-ko/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "id": {
+          "value_sha256": "f46baedf266b9dbfed2e9049e722c5ed5ac8e285f4368b22b8bc5ffed26b0961",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-id/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "pl": {
+          "value_sha256": "fbcacc7f45514c811aafc69b3c386f8185634feb37eaa74e2b88ae482fe5eb73",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-pl/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "hi": {
+          "value_sha256": "ce3dd85d8402a35dbc6a84991eb739c5f3e0a40a582b43bd7987a5a32bc9fa54",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-hi/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        },
+        "zh-Hans": {
+          "value_sha256": "a26841078a6a22a0ddbb2dad62d8bd521ae6bfb5241d343cff80d2ffaf2ac3cc",
+          "reviewer": "Lissom owner /root; model source/context review with independent second pass; no human/native/clinical certification",
+          "review_ref": "YULAlab Lissom expanded-quality/second-review-zh-Hans/REPORT.tr.md; catalog-integration-01 guarded lineage; critical-cross-language-02 root decisions"
+        }
+      }
+    }
+  ]
+}

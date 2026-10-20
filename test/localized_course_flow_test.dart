@@ -31,6 +31,12 @@ const _cases = <_CourseFlowCase>[
   _CourseFlowCase('fr', 'hatha'),
   _CourseFlowCase('ja', 'chair-office'),
   _CourseFlowCase('ar', 'ashtanga-foundations'),
+  _CourseFlowCase('it', 'hatha'),
+  _CourseFlowCase('ko', 'yin-supported'),
+  _CourseFlowCase('id', 'vinyasa-standing'),
+  _CourseFlowCase('pl', 'chair-office'),
+  _CourseFlowCase('hi', 'hatha'),
+  _CourseFlowCase('zh-Hans', 'ashtanga-foundations'),
 ];
 
 final class _ActualCatalogBundle extends CachingAssetBundle {

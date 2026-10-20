@@ -23,6 +23,7 @@ import 'package:lissom_engine/lissom_engine.dart';
 
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 
 class WhatLissomDoesntDoScreen extends StatelessWidget {
@@ -77,8 +78,8 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
       // kez söylerdi.
       appBar: AppBar(),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
@@ -278,7 +279,7 @@ class _BoundaryCard extends StatelessWidget {
             configText(context, kind.userText),
             key: WhatLissomDoesntDoScreen.kindKey,
             style: t.textTheme.bodySmall?.copyWith(
-              color: LissomColors.bodySecondary,
+              color: LissomPalette.of(context).textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -287,7 +288,7 @@ class _BoundaryCard extends StatelessWidget {
             Text(
               configText(context, measured!),
               style: t.textTheme.bodySmall?.copyWith(
-                color: LissomColors.bodySecondary,
+                color: LissomPalette.of(context).textSecondary,
               ),
             ),
           ],

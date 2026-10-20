@@ -36,6 +36,7 @@ import 'assessment_history.dart';
 import 'attempt_values.dart';
 import 'camera_pose_source.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'local_owner.dart';
 import 'local_owner_context.dart';
@@ -119,10 +120,10 @@ class LiveCaptureScreen extends StatefulWidget {
 /// provenance'a `ageBandDeclaredButUnknown` olarak İSİMLE yazılır.
 @visibleForTesting
 String? effectiveAgeBand(TestSpec test, String? declared) {
-  if (declared == null) return null;
+  if (declared == null) { return null; }
   final Map<String, Map<String, double>> bands = test.scoring.bandFloorsByAge;
   // Nitel test — bandı hiç yok, `floorsFor` zaten null döner.
-  if (bands.isEmpty) return null;
+  if (bands.isEmpty) { return null; }
   return bands.containsKey(declared) ? declared : null;
 }
 
@@ -199,7 +200,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
 
   double? _readMetric(PoseFrame frame, String metricName) {
     final FrameSize? size = _latestSize;
-    if (size == null) return null;
+    if (size == null) { return null; }
     return CoreMetricReader(frameSize: size).read(frame, metricName);
   }
 
@@ -214,7 +215,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
     }
     _resource = _owner?.registerResource(_closeSource);
     _stateSub = _evaluator.states().listen((LiveSessionState s) {
-      if (mounted && !_sourceRetired) setState(() => _state = s);
+      if (mounted && !_sourceRetired) { setState(() => _state = s); }
     });
     _rawSub = _source.events().listen(_onRawEvent);
     final PoseSource s = _source;
@@ -224,7 +225,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
   }
 
   void _onRawEvent(PoseSourceEvent e) {
-    if (_sourceRetired || _result != null) return;
+    if (_sourceRetired || _result != null) { return; }
     if (e is SourceFrameEvent) {
       _latestSize = e.size;
       _engine.process(e.frame);
@@ -238,7 +239,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
   String? _saveError;
 
   Future<void> _finish() async {
-    if (_sourceRetired || _result != null || !_state.canMeasure) return;
+    if (_sourceRetired || _result != null || !_state.canMeasure) { return; }
     final AssessmentResult r = _engine.finish();
     setState(() => _result = r);
     await _persist(r);
@@ -316,7 +317,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
       Navigator.of(context).maybePop();
       return;
     }
-    if (_saved == null) return;
+    if (_saved == null) { return; }
     setState(() {
       _result = null;
       // Kayıt hâli DENEME BAŞINADIR — sıfırlanmazsa yeni denemenin ekranı
@@ -339,7 +340,7 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden ||
         state == AppLifecycleState.detached) {
-      if (_sourceRetired) return;
+      if (_sourceRetired) { return; }
       setState(_retireSource);
     }
   }
@@ -370,8 +371,8 @@ class _LiveCaptureScreenState extends State<LiveCaptureScreen>
     return Scaffold(
       appBar: AppBar(title: Text(configText(context, widget.test.name))),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: SafeArea(
           child: Padding(
@@ -575,7 +576,7 @@ class _LiveView extends StatelessWidget {
                               'Lissom için kamera erişimini Ayarlar’dan aç.',
                             ),
                       style: t.textTheme.bodySmall?.copyWith(
-                        color: LissomColors.bodySecondary,
+                        color: LissomPalette.of(context).textSecondary,
                       ),
                     ),
                   ),
@@ -771,7 +772,7 @@ class _ResultView extends StatelessWidget {
               'Kaydetme sırasında hata oluştu. Yeniden dene.',
             ),
             style: t.textTheme.bodySmall?.copyWith(
-              color: LissomColors.bodySecondary,
+              color: LissomPalette.of(context).textSecondary,
             ),
           ),
         ],

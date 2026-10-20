@@ -16,6 +16,7 @@ import 'package:motion_account/motion_account.dart'
 
 import 'ia.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 
 /// Bölüm başlığı — serif başlık + sönük alt satır.
@@ -73,7 +74,7 @@ class NamedGapCard extends StatelessWidget {
           Text(
             configText(context, title),
             style: t.textTheme.labelLarge?.copyWith(
-              color: LissomColors.bodySecondary,
+              color: LissomPalette.of(context).textSecondary,
             ),
           ),
           const SizedBox(height: 8),
@@ -83,7 +84,7 @@ class NamedGapCard extends StatelessWidget {
             Text(
               configText(context, detail!),
               style: t.textTheme.bodySmall?.copyWith(
-                color: LissomColors.bodySecondary,
+                color: LissomPalette.of(context).textSecondary,
               ),
             ),
           ],
@@ -167,7 +168,7 @@ class HonestyBoxCard extends StatelessWidget {
                     'Measurement engine coverage',
                     'Ölçüm motorunun kapsamı',
                   ),
-            color: LissomColors.roseDeepHover,
+            color: LissomPalette.of(context).accentText,
           ),
           const SizedBox(height: 10),
           Column(
@@ -215,7 +216,7 @@ class HonestyBoxCard extends StatelessWidget {
             notMeasuredKey,
             box.notMeasured.map((NotMeasuredLine l) => l.claim).toList(),
             Icons.remove_circle_outline,
-            LissomColors.bodySecondary,
+            LissomPalette.of(context).textSecondary,
           ),
         ],
       ),
@@ -244,7 +245,7 @@ class HonestyBoxCard extends StatelessWidget {
             child: Icon(
               live ? Icons.videocam_outlined : Icons.videocam_off_outlined,
               size: 15,
-              color: live ? t.colorScheme.primary : LissomColors.bodySecondary,
+              color: live ? t.colorScheme.primary : LissomPalette.of(context).textSecondary,
             ),
           ),
           const SizedBox(width: 10),
@@ -257,7 +258,7 @@ class HonestyBoxCard extends StatelessWidget {
                   style: live
                       ? t.textTheme.bodyMedium
                       : t.textTheme.bodyMedium?.copyWith(
-                          color: LissomColors.bodySecondary,
+                          color: LissomPalette.of(context).textSecondary,
                         ),
                 ),
                 if (live && verdict != null) ...<Widget>[
@@ -265,7 +266,7 @@ class HonestyBoxCard extends StatelessWidget {
                   Text(
                     configText(context, verdict),
                     style: t.textTheme.bodySmall?.copyWith(
-                      color: LissomColors.bodySecondary,
+                      color: LissomPalette.of(context).textSecondary,
                     ),
                   ),
                 ],
@@ -284,7 +285,7 @@ class HonestyBoxCard extends StatelessWidget {
                       <String, Object>{'reason': configText(context, blocker)},
                     ),
                     style: t.textTheme.bodySmall?.copyWith(
-                      color: LissomColors.bodySecondary,
+                      color: LissomPalette.of(context).textSecondary,
                     ),
                   ),
                 ],
@@ -348,10 +349,10 @@ class DeclarationBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     return LissomCard(
-      gradient: const LinearGradient(
+      gradient:  LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: <Color>[LissomColors.cream, LissomColors.peach],
+        colors: <Color>[LissomPalette.of(context).bannerStart, LissomPalette.of(context).bannerEnd],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,11 +362,11 @@ class DeclarationBanner extends StatelessWidget {
           // ucunda durduğunu varsayıp geçmek, KONUMA dayalı bir iddia olurdu
           // — kart yeniden düzenlenince sessizce yanlışlaşır. `ink` bu kartın
           // her noktasında geçiyor (7,89:1).
-          LissomEyebrow(eyebrow, color: LissomColors.ink),
+          LissomEyebrow(eyebrow, color: LissomPalette.of(context).onBanner),
           const SizedBox(height: 8),
           Text(
             body,
-            style: t.textTheme.bodyMedium?.copyWith(color: LissomColors.ink),
+            style: t.textTheme.bodyMedium?.copyWith(color: LissomPalette.of(context).onBanner),
           ),
         ],
       ),
@@ -482,7 +483,7 @@ class CaptureUnavailableNote extends StatelessWidget {
                     ? Icons.videocam_outlined
                     : Icons.videocam_off_outlined,
                 size: 17,
-                color: LissomColors.bodySecondary,
+                color: LissomPalette.of(context).textSecondary,
               ),
             ),
             const SizedBox(width: 11),
@@ -575,7 +576,7 @@ class MeasurementLimitsFootnote extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     final TextStyle? small = t.textTheme.bodySmall?.copyWith(
-      color: LissomColors.bodySecondary,
+      color: LissomPalette.of(context).textSecondary,
     );
     return Padding(
       key: key_,

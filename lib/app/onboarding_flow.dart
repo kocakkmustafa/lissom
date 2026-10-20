@@ -27,6 +27,7 @@ import 'package:motion_account/motion_account.dart'
 import 'package:permission_handler/permission_handler.dart';
 
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'locale_text.dart';
 import 'onboarding_store.dart';
 import 'surfaces.dart';
@@ -100,7 +101,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   };
 
   void _next() {
-    if (!_canContinue) return;
+    if (!_canContinue) { return; }
     final int i = _index;
     if (i == _order.length - 1) {
       _finish();
@@ -110,7 +111,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Future<void> _finish() async {
-    if (_saving) return;
+    if (_saving) { return; }
     setState(() {
       _saving = true;
       _saveFailed = false;
@@ -125,12 +126,12 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     try {
       await widget.store.write(profile);
     } on Object {
-      if (mounted) setState(() => _saveFailed = true);
+      if (mounted) { setState(() => _saveFailed = true); }
       return;
     } finally {
-      if (mounted) setState(() => _saving = false);
+      if (mounted) { setState(() => _saving = false); }
     }
-    if (!mounted) return;
+    if (!mounted) { return; }
     // Diske YAZILAN nesnenin AYNISI geçiyor — ikinci bir kopya kurulsaydı
     // iki kaynak tek olgu olurdu (L-272) ve sessizce ayrışabilirdi.
     widget.onDone(profile);
@@ -141,8 +142,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     final ThemeData t = Theme.of(context);
     return Scaffold(
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LissomColors.screenBackground,
+        decoration:  BoxDecoration(
+          gradient: LissomPalette.of(context).screenBackground,
         ),
         child: SafeArea(
           child: Column(
@@ -336,7 +337,7 @@ class _DisclaimerStep extends StatelessWidget {
           style: t.textTheme.bodyMedium,
         ),
         const SizedBox(height: 18),
-        InkWell(
+        LissomFocusFrame(child: InkWell(
           key: const Key('onboarding.disclaimer.ack'),
           onTap: () => onChanged(!acked),
           child: Row(
@@ -358,7 +359,7 @@ class _DisclaimerStep extends StatelessWidget {
               ),
             ],
           ),
-        ),
+        )),
       ],
     );
   }
@@ -401,7 +402,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   bool get _busy => _requesting || _openingSettings;
 
   Future<void> _requestPermission() async {
-    if (!widget.measurementAvailable || _busy) return;
+    if (!widget.measurementAvailable || _busy) { return; }
     setState(() {
       _requesting = true;
       _requestFailed = false;
@@ -409,7 +410,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
     });
     try {
       final PermissionStatus status = await widget.onRequestPermission();
-      if (mounted) setState(() => _status = status);
+      if (mounted) { setState(() => _status = status); }
     } on Object {
       if (mounted) {
         setState(() {
@@ -418,23 +419,23 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
         });
       }
     } finally {
-      if (mounted) setState(() => _requesting = false);
+      if (mounted) { setState(() => _requesting = false); }
     }
   }
 
   Future<void> _openSettings() async {
-    if (!widget.measurementAvailable || _busy) return;
+    if (!widget.measurementAvailable || _busy) { return; }
     setState(() {
       _openingSettings = true;
       _settingsFailed = false;
     });
     try {
       final bool opened = await widget.onOpenSettings();
-      if (mounted && !opened) setState(() => _settingsFailed = true);
+      if (mounted && !opened) { setState(() => _settingsFailed = true); }
     } on Object {
-      if (mounted) setState(() => _settingsFailed = true);
+      if (mounted) { setState(() => _settingsFailed = true); }
     } finally {
-      if (mounted) setState(() => _openingSettings = false);
+      if (mounted) { setState(() => _openingSettings = false); }
     }
   }
 
@@ -448,7 +449,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
 
   String _statusText(BuildContext context) {
     final PermissionStatus? s = _status;
-    if (s == null) return '';
+    if (s == null) { return ''; }
     if (s.isGranted) {
       return localeText(
         context,
@@ -663,7 +664,7 @@ class _ProfileStep extends StatelessWidget {
                 'yaş aralığını seç; Lissom buna uygun aralığı kullansın.',
           ),
           style: t.textTheme.bodySmall?.copyWith(
-            color: LissomColors.bodySecondary,
+            color: LissomPalette.of(context).textSecondary,
           ),
         ),
         const SizedBox(height: 16),

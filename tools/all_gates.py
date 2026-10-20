@@ -45,6 +45,9 @@ NOT_GATES = {
     # Source inventory generation requires an explicit report output path.
     # Catalog admission is checked separately by check_content_localization.
     "extract_ui_localization.py",
+    # Import-only guard helper; check_content_localization executes it.
+    # Running the module directly would do no validation and inflate green gates.
+    "localization_semantic_review.py",
     # `mutation_reference_equivalence.py`: argümansız KOŞAR ama BİLEREK
     # buraya alınmadı — gerçek kaynak dosyaları GEÇİCİ mutasyona uğratıp
     # geri yükler (MutationRun ile güvenli, ama her commit'te koşmak hem

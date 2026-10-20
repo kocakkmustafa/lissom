@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'locale_text.dart';
+import 'lissom_theme.dart';
 import 'course_open_button.dart';
 import 'hatha_course.dart';
 import 'hatha_progress.dart';
@@ -36,7 +37,7 @@ class StudyReviewEntry extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        if (ModalRoute.of(context)?.isCurrent != true) return;
+        if (ModalRoute.of(context)?.isCurrent != true) { return; }
         await Navigator.of(context).push<void>(
           MaterialPageRoute<void>(
             builder: (_) => StudyReviewPage(
@@ -98,18 +99,19 @@ class StudyReviewPage extends StatelessWidget {
                     label: _text(context, 'Open existing written course', 'Mevcut yazılı kursu aç'),
                   ),
                 for (final RecallLesson lesson in area.lessons)
-                  ListTile(
+                  LissomFocusFrame(child: ListTile(
                     key: Key('study-lesson-${lesson.id}'),
                     contentPadding: EdgeInsets.zero,
                     title: Text(lesson.title.inContext(context)),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: Icon(Directionality.of(context) == TextDirection.rtl
+                      ? Icons.chevron_left : Icons.chevron_right),
                     onTap: () => Navigator.of(context).push<void>(
                       MaterialPageRoute<void>(
                         builder: (_) =>
                             RecallLessonPage(area: area, lesson: lesson),
                       ),
                     ),
-                  ),
+                  )),
               ],
             ),
           ),

@@ -1,13 +1,14 @@
-/// Lissom görsel dili — claude.ai/design paneli çıktısının Flutter kod hâli.
-///
-/// Kaynak: `claude.ai/design` projesi `28cd0df6…` → `Lissom.dc.html`,
-/// Foundations bölümü (palet · tip ölçeği · biçim/gölge · hareket). Değerler
-/// tasarımdan BİREBİR — bu dosya icat etmez, TAŞIR.
+/// Lissom visual language. Runtime colors resolve through an immutable
+/// context ThemeExtension. The legacy light constants below preserve existing
+/// public/test contracts during migration; product UI no longer reads them.
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoThemeData, CupertinoTextThemeData;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'lissom_palette.dart';
 
 abstract final class LissomColors {
   static const Color peach = Color(0xFFF0C4A8);
@@ -128,7 +129,13 @@ abstract final class LissomMotion {
 // indirmesine yol açardı (L-222). Tasarımın mono token'ı gerekirse geri
 // gelir — ama okunabilir bir renkle ve gömülü bir yazı tipiyle.
 
-ThemeData buildLissomTheme() {
+ThemeData buildLissomTheme({
+  Brightness brightness = Brightness.light,
+  Locale? locale,
+}) {
+  final bool joinedOrDenseScript = <String>{'ar', 'hi', 'ja', 'ko', 'zh'}.contains(locale?.languageCode);
+  final LissomPalette p = brightness == Brightness.dark
+      ? LissomPalette.dark : LissomPalette.light;
   final TextTheme sans = GoogleFonts.nunitoSansTextTheme();
   final TextTheme serif = GoogleFonts.newsreaderTextTheme();
 
@@ -136,17 +143,17 @@ ThemeData buildLissomTheme() {
       serif.displayLarge!.copyWith(
         fontSize: size,
         fontWeight: weight,
-        color: LissomColors.ink,
-        letterSpacing: -0.015 * size,
-        height: 1.06,
+        color: p.textPrimary,
+        letterSpacing: joinedOrDenseScript ? 0 : -0.015 * size,
+        height: joinedOrDenseScript ? 1.24 : 1.06,
       );
 
   TextStyle label(double size, Color color) => sans.labelLarge!.copyWith(
         fontSize: size,
         fontWeight: FontWeight.w600,
-        letterSpacing: 0.16 * size,
+        letterSpacing: joinedOrDenseScript ? 0 : 0.16 * size,
         color: color,
-        height: 1,
+        height: joinedOrDenseScript ? 1.3 : 1,
       );
 
   final TextTheme textTheme = TextTheme(
@@ -157,53 +164,129 @@ ThemeData buildLissomTheme() {
     headlineMedium: display(26, weight: FontWeight.w400),
     headlineSmall: display(22, weight: FontWeight.w400),
     titleLarge: sans.titleLarge!.copyWith(
-        fontSize: 17, fontWeight: FontWeight.w600, color: LissomColors.ink),
+        fontSize: 17, fontWeight: FontWeight.w600, color: p.textPrimary),
     titleMedium: sans.titleMedium!.copyWith(
-        fontSize: 15, fontWeight: FontWeight.w600, color: LissomColors.ink),
+        fontSize: 15, fontWeight: FontWeight.w600, color: p.textPrimary),
     titleSmall: sans.titleSmall!.copyWith(
-        fontSize: 13.5, fontWeight: FontWeight.w600, color: LissomColors.ink),
+        fontSize: 13.5, fontWeight: FontWeight.w600, color: p.textPrimary),
     bodyLarge: sans.bodyLarge!.copyWith(
-        fontSize: 17, height: 1.65, color: LissomColors.ink),
+        fontSize: 17, height: 1.65, color: p.textPrimary),
     bodyMedium: sans.bodyMedium!.copyWith(
-        fontSize: 14, height: 1.6, color: LissomColors.bodySecondary),
+        fontSize: 14, height: 1.6, color: p.textSecondary),
     bodySmall: sans.bodySmall!.copyWith(
-        fontSize: 12.5, height: 1.5, color: LissomColors.bodySecondary),
-    labelLarge: label(11, LissomColors.bodySecondary),
-    labelMedium: label(11, LissomColors.roseDeepHover),
-    labelSmall: label(10.5, LissomColors.bodySecondary),
+        fontSize: 12.5, height: 1.5, color: p.textSecondary),
+    labelLarge: label(11, p.textSecondary),
+    labelMedium: label(11, p.accentText),
+    labelSmall: label(10.5, p.textSecondary),
+  );
+
+  final TextStyle buttonLabel = TextStyle(
+    fontFamily: textTheme.titleSmall?.fontFamily,
+    fontFamilyFallback: textTheme.titleSmall?.fontFamilyFallback,
+    fontSize: 13.5, fontWeight: FontWeight.w600,
+    height: joinedOrDenseScript ? 1.4 : null,
+  );
+  Color filledBackground(Set<WidgetState> states) {
+    if (states.contains(WidgetState.disabled)) { return p.disabledSurface; }
+    if (states.contains(WidgetState.pressed)) { return p.primaryPressed; }
+    if (states.contains(WidgetState.hovered)) { return p.primaryHover; }
+    return p.primaryFill;
+  }
+  Color filledForeground(Set<WidgetState> states) =>
+      states.contains(WidgetState.disabled) ? p.disabledForeground : p.onPrimary;
+  Color actionForeground(Set<WidgetState> states) =>
+      states.contains(WidgetState.disabled) ? p.disabledForeground : p.accentText;
+  Color actionBackground(Set<WidgetState> states) {
+    if (states.contains(WidgetState.disabled)) { return p.disabledSurface; }
+    if (states.contains(WidgetState.hovered) || states.contains(WidgetState.pressed)) { return p.card; }
+    return Colors.transparent;
+  }
+  BorderSide actionSide(Set<WidgetState> states) => BorderSide(
+    color: states.contains(WidgetState.disabled) ? p.disabledForeground : p.focusRing,
+    width: states.contains(WidgetState.focused) ? 3 : 1,
+  );
+  final ButtonStyle actionStyle = ButtonStyle(
+    foregroundColor: WidgetStateProperty.resolveWith(actionForeground),
+    backgroundColor: WidgetStateProperty.resolveWith(actionBackground),
+    overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+    textStyle: WidgetStatePropertyAll<TextStyle>(buttonLabel),
+    side: WidgetStateProperty.resolveWith<BorderSide?>((states) =>
+      states.contains(WidgetState.focused) ? actionSide(states) : BorderSide.none),
   );
 
   final ColorScheme scheme = ColorScheme.fromSeed(
-    seedColor: LissomColors.roseDeep,
-    brightness: Brightness.light,
+    seedColor: p.brandSeed,
+    brightness: brightness,
   ).copyWith(
-    primary: LissomColors.roseDeep,
-    onPrimary: Colors.white,
-    secondary: LissomColors.mistDeep,
-    surface: LissomColors.card,
-    onSurface: LissomColors.ink,
-    surfaceContainerHighest: LissomColors.canvas,
+    primary: p.accentText,
+    onPrimary: p.onPrimary,
+    primaryContainer: p.selection,
+    onPrimaryContainer: p.onSelection,
+    secondary: p.secondary,
+    onSecondary: p.onPrimary,
+    tertiary: p.secondary,
+    onTertiary: p.onPrimary,
+    tertiaryContainer: p.secondaryContainer,
+    onTertiaryContainer: p.onSecondaryContainer,
+    surface: p.card,
+    onSurface: p.textPrimary,
+    surfaceContainerLowest: p.canvas,
+    surfaceContainerLow: p.card,
+    surfaceContainer: p.card,
+    surfaceContainerHigh: p.cardNeutralEnd,
+    surfaceContainerHighest: p.disabledSurface,
+    secondaryContainer: p.secondaryContainer,
+    onSecondaryContainer: p.onSecondaryContainer,
+    onSurfaceVariant: p.textSecondary,
+    outline: p.outline,
+    outlineVariant: p.divider,
+    surfaceTint: Colors.transparent,
+    shadow: p.shadow,
+    error: p.error,
+    onError: p.onError,
+    errorContainer: p.errorContainer,
+    onErrorContainer: p.onErrorContainer,
   );
 
   return ThemeData(
     useMaterial3: true,
+    brightness: brightness,
+    extensions: <ThemeExtension<dynamic>>[p],
+    disabledColor: p.disabledForeground,
+    focusColor: Colors.transparent,
+    hoverColor: Colors.transparent,
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+    iconTheme: IconThemeData(color: p.textSecondary),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: p.accentText, selectionColor: p.selection,
+      selectionHandleColor: p.accentText,
+    ),
     colorScheme: scheme,
-    scaffoldBackgroundColor: LissomColors.canvas,
+    scaffoldBackgroundColor: p.canvas,
     textTheme: textTheme,
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      foregroundColor: LissomColors.ink,
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+      foregroundColor: p.textPrimary,
+      systemOverlayStyle: brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       titleTextStyle: textTheme.titleLarge,
     ),
     filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        backgroundColor: LissomColors.fillForWhiteText,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-        shape: const StadiumBorder(),
-        textStyle: textTheme.titleSmall?.copyWith(color: Colors.white),
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith(filledBackground),
+        foregroundColor: WidgetStateProperty.resolveWith(filledForeground),
+        overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+        textStyle: WidgetStatePropertyAll<TextStyle>(buttonLabel),
+        padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(horizontal: 30, vertical: 16)),
+        shape: const WidgetStatePropertyAll<OutlinedBorder>(StadiumBorder()),
+        side: WidgetStateProperty.resolveWith<BorderSide?>((states) =>
+          states.contains(WidgetState.focused) && !states.contains(WidgetState.disabled)
+            ? BorderSide(color: p.onPrimary, width: 3) : BorderSide.none),
       ),
     ),
     // 2026-08-12 EKLENDİ (kamera-kabuğu sevki): `OutlinedButton` üç yeni
@@ -214,17 +297,93 @@ ThemeData buildLissomTheme() {
     // için doğrulanmış vurgu-metni tonu (L-234, 4,565:1 marjlı), ikinci bir
     // renk İCAT EDİLMEDİ.
     outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: LissomColors.roseDeepHover,
-        side: const BorderSide(color: LissomColors.roseDeepHover),
-        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 14),
-        shape: const StadiumBorder(),
-        textStyle: textTheme.titleSmall
-            ?.copyWith(color: LissomColors.roseDeepHover),
+      style: actionStyle.copyWith(
+        side: WidgetStateProperty.resolveWith(actionSide),
+        padding: const WidgetStatePropertyAll<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(horizontal: 26, vertical: 14)),
+        shape: const WidgetStatePropertyAll<OutlinedBorder>(StadiumBorder()),
       ),
     ),
-    dividerTheme: const DividerThemeData(
-      color: LissomColors.hairline,
+    textButtonTheme: TextButtonThemeData(style: actionStyle),
+    iconButtonTheme: IconButtonThemeData(style: actionStyle),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: p.card, surfaceTintColor: Colors.transparent,
+      indicatorColor: p.selection,
+      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) => buttonLabel.copyWith(
+        color: states.contains(WidgetState.selected) ? p.onSelection : p.textSecondary)),
+      iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
+        color: states.contains(WidgetState.selected) ? p.onSelection : p.textSecondary)),
+    ),
+    listTileTheme: ListTileThemeData(
+      textColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledForeground :
+        states.contains(WidgetState.selected) ? p.onSelection : p.textPrimary),
+      iconColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledForeground :
+        states.contains(WidgetState.selected) ? p.onSelection : p.textSecondary),
+      selectedColor: p.onSelection, selectedTileColor: p.selection,
+    ),
+    radioTheme: RadioThemeData(
+      fillColor: WidgetStateProperty.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledForeground :
+        states.contains(WidgetState.selected) ? p.accentText : p.outline),
+      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledSurface :
+        states.contains(WidgetState.selected) ? p.primaryFill : p.card),
+      checkColor: WidgetStateProperty.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledForeground : p.onPrimary),
+      side: WidgetStateBorderSide.resolveWith((states) => BorderSide(
+        color: states.contains(WidgetState.disabled) ? p.disabledForeground :
+          states.contains(WidgetState.focused) ? p.focusRing : p.outline,
+        width: states.contains(WidgetState.focused) ? 3 : 1.5)),
+      overlayColor: const WidgetStatePropertyAll<Color>(Colors.transparent),
+    ),
+    inputDecorationTheme: InputDecorationThemeData(
+      filled: true,
+      fillColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledSurface : p.card),
+      labelStyle: WidgetStateTextStyle.resolveWith((states) => TextStyle(
+        color: states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary)),
+      hintStyle: WidgetStateTextStyle.resolveWith((states) => TextStyle(
+        color: states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary)),
+      helperStyle: TextStyle(color: p.textSecondary),
+      errorStyle: TextStyle(color: p.error),
+      prefixIconColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary),
+      suffixIconColor: WidgetStateColor.resolveWith((states) =>
+        states.contains(WidgetState.disabled) ? p.disabledForeground : p.textSecondary),
+      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: p.outline)),
+      border: OutlineInputBorder(borderSide: BorderSide(color: p.outline)),
+      disabledBorder: OutlineInputBorder(borderSide: BorderSide(color: p.disabledForeground)),
+      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: p.focusRing, width: 3)),
+      errorBorder: OutlineInputBorder(borderSide: BorderSide(color: p.error)),
+      focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: p.error, width: 3)),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: p.card, surfaceTintColor: Colors.transparent,
+      titleTextStyle: textTheme.headlineSmall,
+      contentTextStyle: textTheme.bodyMedium,
+    ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: p.card, contentTextStyle: textTheme.bodyMedium,
+      actionTextColor: p.accentText, disabledActionTextColor: p.disabledForeground,
+      closeIconColor: p.textSecondary,
+    ),
+    cupertinoOverrideTheme: CupertinoThemeData(
+      brightness: brightness, primaryColor: p.accentText,
+      primaryContrastingColor: p.onPrimary,
+      scaffoldBackgroundColor: p.canvas, barBackgroundColor: p.card,
+      textTheme: CupertinoTextThemeData(
+        textStyle: TextStyle(color: p.textPrimary, fontSize: 17),
+        actionTextStyle: TextStyle(color: p.accentText, fontSize: 17),
+      ),
+    ),
+    dividerTheme: DividerThemeData(
+      color: p.divider,
       thickness: 1,
       space: 1,
     ),
@@ -232,12 +391,17 @@ ThemeData buildLissomTheme() {
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.iOS: _LissomGlideTransitionsBuilder(),
         TargetPlatform.android: _LissomGlideTransitionsBuilder(),
+        TargetPlatform.fuchsia: _LissomGlideTransitionsBuilder(),
+        TargetPlatform.linux: _LissomGlideTransitionsBuilder(),
+        TargetPlatform.macOS: _LissomGlideTransitionsBuilder(),
+        TargetPlatform.windows: _LissomGlideTransitionsBuilder(),
       },
     ),
   );
 }
 
-/// 12px dikey kayma + cross-fade, 520ms — Foundations · Motion "glide".
+/// Küçük oransal dikey kayma ve cross-fade. Süre PageRoute tarafından belirlenir.
+/// Reduced motion görsel geçişi doğrudan atlar; 12px/520ms kabulü iddia edilmez.
 /// Kenardan kaydırma YOK: bu ailenin keskin/hızlı JabLab diline karşıt kararı.
 class _LissomGlideTransitionsBuilder extends PageTransitionsBuilder {
   const _LissomGlideTransitionsBuilder();
@@ -250,6 +414,7 @@ class _LissomGlideTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
+    if (MediaQuery.disableAnimationsOf(context)) { return child; }
     final Animation<double> curved = CurvedAnimation(
       parent: animation,
       curve: Curves.easeOutCubic,
@@ -284,15 +449,18 @@ class LissomCard extends StatelessWidget {
   final Gradient? gradient;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
+  Widget build(BuildContext context) {
+    final p = LissomPalette.of(context);
+    return DecoratedBox(
         decoration: BoxDecoration(
-          color: gradient == null ? (color ?? LissomColors.card) : null,
+          color: gradient == null ? (color ?? p.card) : null,
           gradient: gradient,
           borderRadius: BorderRadius.circular(LissomRadii.card),
-          boxShadow: LissomShadows.soft,
+          boxShadow: p.softShadow,
         ),
         child: Padding(padding: padding, child: child),
       );
+  }
 }
 
 /// Eyebrow etiket — 11px, geniş harf aralığı, büyük harf. Bölüm başlıkları ve
@@ -308,6 +476,45 @@ class LissomEyebrow extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .labelLarge
-            ?.copyWith(color: color ?? LissomColors.bodySecondary),
+            ?.copyWith(color: color ?? LissomPalette.of(context).textSecondary),
       );
+}
+
+
+/// Visible focus for custom tappable cards. The Focus node does not add a tab
+/// stop; descendant InkWell retains its existing activation and semantics.
+class LissomFocusFrame extends StatefulWidget {
+  const LissomFocusFrame({required this.child, super.key});
+  final Widget child;
+  @override
+  State<LissomFocusFrame> createState() => _LissomFocusFrameState();
+}
+class _LissomFocusFrameState extends State<LissomFocusFrame> {
+  bool _focused = false;
+  @override
+  Widget build(BuildContext context) => Focus(
+    canRequestFocus: false, skipTraversal: true,
+    onFocusChange: (value) { if (mounted) { setState(() => _focused = value); } },
+    child: DecoratedBox(
+      position: DecorationPosition.foreground,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(LissomRadii.card),
+        border: _focused ? Border.all(color: LissomPalette.of(context).focusRing, width: 3) : null,
+      ),
+      child: widget.child,
+    ),
+  );
+}
+
+
+class LissomLoadingIndicator extends StatelessWidget {
+  const LissomLoadingIndicator({required this.label, super.key});
+  final String label;
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: label, liveRegion: true,
+    child: ExcludeSemantics(child: MediaQuery.disableAnimationsOf(context)
+      ? Icon(Icons.hourglass_empty, color: LissomPalette.of(context).textSecondary)
+      : CircularProgressIndicator(color: LissomPalette.of(context).accentText)),
+  );
 }

@@ -31,6 +31,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_account/motion_account.dart';
 
 import 'app/lissom_theme.dart';
+import 'app/lissom_appearance.dart';
+import 'app/lissom_presentation_host.dart';
 import 'app/account_epoch_client.dart';
 import 'app/auth_session_fence.dart';
 import 'app/app_facts.dart';
@@ -56,17 +58,29 @@ const String kLissomAuthRedirect = 'com.yulalab.lissom://auth/callback';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+  final appearance = LissomAppearanceController();
+  final locale = LissomLocaleController();
+  // Independent installation reads run together before the first Flutter app.
+  // Each has its own bounded read deadline and visible failure fallback.
+  await Future.wait<void>(<Future<void>>[
+    appearance.initialize(),
+    locale.initialize(),
+  ]);
+  void launch(Widget child) => runApp(LissomAppearanceHost(
+    controller: appearance, child: LissomLocaleHost(controller: locale,
+      child: LissomPresentationHost(child: child))));
+
   const String url = String.fromEnvironment('MOTION_SUPABASE_URL');
   const String publishableKey = String.fromEnvironment(
     'MOTION_SUPABASE_PUBLISHABLE_KEY',
   );
 
   if (url.isEmpty && publishableKey.isEmpty && !kReleaseMode) {
-    runApp(const LissomLocaleHost(child: LissomApp()));
+    launch(const LissomApp());
     return;
   }
   if (url.isEmpty || publishableKey.isEmpty) {
-    runApp(const LissomLocaleHost(child: _AccountSetupFailureApp()));
+    launch(const _AccountSetupFailureApp());
     return;
   }
   final LissomOwnerRegistry owners = LissomOwnerRegistry();
@@ -82,14 +96,10 @@ Future<void> main() async {
         supportDirectory: () async => owners.supportDirectory,
       ),
     );
-    runApp(
-      LissomLocaleHost(
-        child: LissomAccountHost(runtime: runtime, owners: owners),
-      ),
-    );
+    launch(LissomAccountHost(runtime: runtime, owners: owners));
   } on Object {
     owners.dispose();
-    runApp(const LissomLocaleHost(child: _AccountSetupFailureApp()));
+    launch(const _AccountSetupFailureApp());
   }
 }
 
@@ -122,10 +132,14 @@ class LissomApp extends StatelessWidget {
       'lissom:${localScope.lifetimeKey}:${forcedAccountPage == null ? 'course' : 'account'}',
     ),
     title: 'Lissom',
-    theme: buildLissomTheme(),
+    theme: buildLissomTheme(locale: _lissomAppearanceLocale(context)),
+    darkTheme: buildLissomTheme(brightness: Brightness.dark,
+      locale: _lissomAppearanceLocale(context)),
+    themeMode: LissomAppearanceScope.maybeOf(context)?.mode ?? ThemeMode.system,
+    themeAnimationDuration: Duration.zero,
     builder: (BuildContext context, Widget? child) {
       final Widget content = AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
+        value: lissomSystemOverlayStyle(context),
         child: child ?? const SizedBox.shrink(),
       );
       final LissomLocalOwner? owner = localScope.owner;
@@ -213,7 +227,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
         if (mounted && identical(_owners, owners)) _changed();
       },
       onError: (Object error, StackTrace _) {
-        if (!mounted || !identical(_owners, owners)) return;
+        if (!mounted || !identical(_owners, owners)) { return; }
         _closeError = error;
         _changed();
       },
@@ -235,7 +249,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     }
     _authSubscription = runtime.account.authChanges.listen(
       (state) {
-        if (!mounted || !identical(widget.runtime, runtime)) return;
+        if (!mounted || !identical(widget.runtime, runtime)) { return; }
         // The actual public Session reference distinguishes a replay from a
         // replacement. Only a matching tokenRefreshed event keeps storage E.
         final LissomSessionChange change = _sessionFence.observe(
@@ -248,7 +262,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
       onError: (Object _, StackTrace __) {
         // Consume this subscription's error and stop resources immediately.
         // Identity/recovery routing still follows the canonical runtime.
-        if (!mounted || !identical(widget.runtime, runtime)) return;
+        if (!mounted || !identical(widget.runtime, runtime)) { return; }
         // Signed-out/null is already canonical guest admission, and Core may
         // report the same values without notifying. Reopen only after successful
         // drain; _closing/_closeError still block pending or failed closure.
@@ -265,7 +279,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
     MotionAccountRuntime runtime,
     LissomSessionChange change,
   ) {
-    if (change == LissomSessionChange.none) return;
+    if (change == LissomSessionChange.none) { return; }
     _credentialRefreshPending = change == LissomSessionChange.credentialRefresh;
     if (change == LissomSessionChange.replacement) {
       final String? id = runtime.account.supabase.auth.currentSession?.user.id;
@@ -331,7 +345,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
   void _verificationChanged() {
     // Let the matching SDK event classify refresh before reconciling a pulse.
     scheduleMicrotask(() {
-      if (!mounted) return;
+      if (!mounted) { return; }
       final runtime = widget.runtime;
       if (runtime.isCurrentSessionVerified) {
         _sessionFence.bindVerified(
@@ -347,23 +361,23 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
 
   void _changed() {
     _synchronize();
-    if (mounted) setState(() {});
+    if (mounted) { setState(() {}); }
   }
 
   void _retireScope() {
     final LissomLocalScope? old = _scope;
-    if (old == null) return;
+    if (old == null) { return; }
     _scope = null;
     final Future<void> closing = old.owner!.retireAndDrain();
     _closing = closing;
     closing.then<void>(
       (_) {
-        if (!mounted || !identical(_closing, closing)) return;
+        if (!mounted || !identical(_closing, closing)) { return; }
         _closing = null;
         _changed();
       },
       onError: (Object error, StackTrace _) {
-        if (!mounted || !identical(_closing, closing)) return;
+        if (!mounted || !identical(_closing, closing)) { return; }
         _closing = null;
         _closeError = error;
         _changed();
@@ -545,6 +559,15 @@ class _AccountSetupFailureApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
+    theme: buildLissomTheme(locale: _lissomAppearanceLocale(context)),
+    darkTheme: buildLissomTheme(brightness: Brightness.dark,
+      locale: _lissomAppearanceLocale(context)),
+    themeMode: LissomAppearanceScope.maybeOf(context)?.mode ?? ThemeMode.system,
+    themeAnimationDuration: Duration.zero,
+    builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+      value: lissomSystemOverlayStyle(context),
+      child: child ?? const SizedBox.shrink(),
+    ),
     locale: LissomLocaleScope.maybeOf(context)?.locale,
     supportedLocales: kLissomSupportedLocales,
     localeListResolutionCallback: resolveLissomLocale,
@@ -574,3 +597,18 @@ class _AccountSetupFailureApp extends StatelessWidget {
     ),
   );
 }
+
+
+Locale _lissomAppearanceLocale(BuildContext context) =>
+    LissomLocaleScope.maybeOf(context)?.locale ??
+    Localizations.maybeLocaleOf(context) ?? resolveLissomLocale(
+      WidgetsBinding.instance.platformDispatcher.locales,
+      kLissomSupportedLocales,
+    );
+
+SystemUiOverlayStyle lissomSystemOverlayStyle(BuildContext context) =>
+    (Theme.of(context).brightness == Brightness.dark
+      ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark).copyWith(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      );

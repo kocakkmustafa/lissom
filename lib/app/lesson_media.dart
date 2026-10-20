@@ -8,6 +8,7 @@ import 'package:motion_content/motion_content.dart';
 import 'package:video_player/video_player.dart';
 
 import 'hatha_course.dart';
+import 'lissom_palette.dart';
 import 'flutter_bundle_content_asset_reader.dart';
 import 'lissom_source_projection_pin.dart';
 import 'local_owner.dart';
@@ -46,7 +47,7 @@ Future<Completer<void>?> _takeNativeSlot() async {
 }
 
 void _releaseNativeSlot(Completer<void> owner) {
-  if (!identical(_nativeSlotOwner, owner)) return;
+  if (!identical(_nativeSlotOwner, owner)) { return; }
   _nativeSlotOwner = null;
   owner.complete();
 }
@@ -169,7 +170,7 @@ final class LessonMediaCatalog {
           c.sceneId == sceneId &&
           c.variantStem == variantStem,
     );
-    if (matches.length != 1 || !_catalogBudgetIsSafe()) return null;
+    if (matches.length != 1 || !_catalogBudgetIsSafe()) { return null; }
     final c = matches.single;
     if (!course.lessons.any((lesson) => lesson.id == lessonId) ||
         c.courseVersion != course.version ||
@@ -232,7 +233,7 @@ final class LessonMediaCatalog {
       String? selectedCaption;
       for (final entry in c.captions.entries) {
         final captionBytes = await reader.read(entry.value.path);
-        if (!_bytesMatch(captionBytes, entry.value)) return null;
+        if (!_bytesMatch(captionBytes, entry.value)) { return null; }
         final text = utf8.decode(captionBytes, allowMalformed: false);
         if (!text.startsWith('WEBVTT - Motion locale=${entry.key}\n') ||
             !text.contains(' --> ') ||
@@ -241,7 +242,7 @@ final class LessonMediaCatalog {
         }
         if (entry.key == locale) selectedCaption = text;
       }
-      if (selectedCaption == null) return null;
+      if (selectedCaption == null) { return null; }
       return InspectedLessonMedia(c, selectedCaption);
     } on Object {
       // Missing or altered packaged bytes leave the written lesson available.
@@ -352,7 +353,7 @@ Future<_SourcePin?> _pinnedSource(
   LessonMediaCandidate c,
 ) async {
   final bytes = await reader.read(_sourceCatalogPath);
-  if (computeSha256Hex(bytes) != lissomMediaSourceCatalogSha256) return null;
+  if (computeSha256Hex(bytes) != lissomMediaSourceCatalogSha256) { return null; }
   final value = jsonDecode(utf8.decode(bytes));
   if (value is! Map<String, dynamic> ||
       value['schemaVersion'] != 1 ||
@@ -391,7 +392,7 @@ Future<_SourcePin?> _pinnedSource(
   final lessons = (value['lessons'] as List)
       .whereType<Map<String, dynamic>>()
       .where((row) => row['app'] == 'lissom' && row['lessonId'] == c.lessonId);
-  if (lessons.length != 1) return null;
+  if (lessons.length != 1) { return null; }
   final lesson = lessons.single;
   if (lesson['membershipStatus'] != 'SOURCE_PINNED_TEST_ONLY' ||
       lesson['scenes'] is! List) {
@@ -400,7 +401,7 @@ Future<_SourcePin?> _pinnedSource(
   final scenes = (lesson['scenes'] as List)
       .whereType<Map<String, dynamic>>()
       .where((row) => row['sceneId'] == c.sceneId);
-  if (scenes.length != 1) return null;
+  if (scenes.length != 1) { return null; }
   final scene = scenes.single;
   if (scene['productionState'] != 'PREPRODUCTION_UNGENERATED' ||
       scene['variants'] is! List) {
@@ -409,7 +410,7 @@ Future<_SourcePin?> _pinnedSource(
   final variants = (scene['variants'] as List)
       .whereType<Map<String, dynamic>>()
       .where((row) => row['stem'] == c.variantStem);
-  if (variants.length != 1) return null;
+  if (variants.length != 1) { return null; }
   final variant = variants.single;
   return _SourcePin(
     app: lesson['app'] as String,
@@ -463,9 +464,9 @@ bool _captionTrackFitsDuration(String text, String locale, int durationMs) {
     return false;
   }
   final header = 'WEBVTT - Motion locale=$locale\n\n';
-  if (!text.startsWith(header)) return false;
+  if (!text.startsWith(header)) { return false; }
   final body = text.substring(header.length).replaceFirst(RegExp(r'\n+$'), '');
-  if (body.isEmpty) return false;
+  if (body.isEmpty) { return false; }
   var previousEnd = 0;
   var count = 0;
   for (final block in body.split('\n\n')) {
@@ -474,7 +475,7 @@ bool _captionTrackFitsDuration(String text, String locale, int durationMs) {
       return false;
     }
     final match = _cueTime.firstMatch(lines.first);
-    if (match == null) return false;
+    if (match == null) { return false; }
     int milliseconds(int at) =>
         ((int.parse(match.group(at)!) * 60 + int.parse(match.group(at + 1)!)) *
                     60 +
@@ -483,7 +484,7 @@ bool _captionTrackFitsDuration(String text, String locale, int durationMs) {
         int.parse(match.group(at + 3)!);
     final start = milliseconds(1);
     final end = milliseconds(5);
-    if (start < previousEnd || end <= start || end > durationMs) return false;
+    if (start < previousEnd || end <= start || end > durationMs) { return false; }
     for (final line in lines.skip(1)) {
       if (line.contains('<') ||
           line.contains('>') ||
@@ -711,7 +712,7 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       return;
     }
     final slot = await _takeNativeSlot();
-    if (slot == null) return;
+    if (slot == null) { return; }
     if (!_ownerActive ||
         !mounted || _closed || _nativePlaybackUnconfirmed || turn != _epoch) {
       _releaseNativeSlot(slot);
@@ -796,7 +797,7 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
   }
 
   void _rebuild() {
-    if (mounted && _ownerActive && !_closed) setState(() {});
+    if (mounted && _ownerActive && !_closed) { setState(() {}); }
   }
 
   Future<void> _retire(VideoPlayerController controller) async {
@@ -840,12 +841,12 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
       old.removeListener(_rebuild);
       _queueRetire(old, slot!);
     }
-    if (mounted && !_disposing) setState(() {});
+    if (mounted && !_disposing) { setState(() {}); }
     return _retiring;
   }
 
   void _queueRetire(VideoPlayerController controller, Completer<void> slot) {
-    if (_retirementQueued[controller] == true) return;
+    if (_retirementQueued[controller] == true) { return; }
     _retirementQueued[controller] = true;
     _retiring = _retiring.then((_) async {
       try {
@@ -895,7 +896,13 @@ class _LessonMediaSlotState extends State<LessonMediaSlot>
               children: <Widget>[
                 widget.videoBuilder?.call(controller) ??
                     VideoPlayer(controller),
-                ClosedCaption(text: controller.value.caption.text),
+                ClosedCaption(
+                  text: controller.value.caption.text,
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: LissomPalette.of(context).textPrimary,
+                    backgroundColor: LissomPalette.of(context).card,
+                  ),
+                ),
               ],
             ),
           ),

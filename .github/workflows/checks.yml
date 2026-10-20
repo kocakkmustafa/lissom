@@ -33,9 +33,10 @@ jobs:
         # patlamalı, tahmin etmemeli.
         run: python3 tools/config_check.py
 
-      - name: Sekiz dil katalog sözleşmesi ve negatif kontroller
+      - name: On dört dil katalog sözleşmesi ve kritik metin drift kontrolleri
         run: |
           python3 -B -m unittest discover -s tools -p 'test_*localization.py'
+          python3 -B -m unittest discover -s tools -p 'test_localization_semantic_review.py'
           python3 -B tools/check_content_localization.py
 
       - name: Faz config değişmezleri

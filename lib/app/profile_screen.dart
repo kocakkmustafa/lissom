@@ -16,7 +16,10 @@ import 'package:motion_account/motion_account.dart'
     show motionPaidFeaturesAvailable;
 
 import 'app_facts.dart';
+import 'lissom_appearance.dart';
+import 'appearance_settings_card.dart';
 import 'lissom_theme.dart';
+import 'lissom_palette.dart';
 import 'local_account_bridge.dart';
 import 'locale_text.dart';
 import 'lissom_locales.dart';
@@ -44,11 +47,12 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
+    final appearanceController = LissomAppearanceScope.maybeOf(context);
     final LissomLocaleController? localeController = LissomLocaleScope.maybeOf(
       context,
     );
     return DecoratedBox(
-      decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
+      decoration:  BoxDecoration(gradient: LissomPalette.of(context).screenBackground),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
         children: <Widget>[
@@ -200,6 +204,10 @@ class ProfileScreen extends StatelessWidget {
             _LanguageCard(controller: localeController),
             const SizedBox(height: 22),
           ],
+          if (appearanceController != null) ...<Widget>[
+            AppearanceSettingsCard(controller: appearanceController),
+            const SizedBox(height: 22),
+          ],
           // Measurement settings remain absent, with the reason visible.
           Column(
             key: noSettingsKey,
@@ -258,7 +266,7 @@ class _EntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    return InkWell(
+    return LissomFocusFrame(child: InkWell(
       borderRadius: BorderRadius.circular(LissomRadii.card),
       onTap: onTap,
       child: LissomCard(
@@ -279,12 +287,12 @@ class _EntryCard extends StatelessWidget {
               Directionality.of(context) == TextDirection.rtl
                   ? Icons.chevron_left
                   : Icons.chevron_right,
-              color: LissomColors.bodySecondary,
+              color: LissomPalette.of(context).textSecondary,
             ),
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -389,6 +397,16 @@ class _LanguageCard extends StatelessWidget {
                     ),
                     key: const Key('profile.language.writeFailure'),
                   ),
+                RadioGroup<String>(
+                  groupValue: controller.tag ?? 'system',
+                  onChanged: (tag) async {
+                    if (tag == null || !controller.isReady || controller.isSaving) { return; }
+                    final saved = await controller.select(tag == 'system' ? null : tag);
+                    if (saved && dialogContext.mounted) {
+                      Navigator.of(dialogContext).pop();
+                    }
+                  },
+                  child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 _option(
                   context,
                   null,
@@ -401,6 +419,8 @@ class _LanguageCard extends StatelessWidget {
                 for (final MapEntry<String, String> language
                     in kLissomLanguageNames.entries)
                   _option(context, language.key, language.value),
+                  ]),
+                ),
               ],
             ),
           ),
@@ -418,16 +438,10 @@ class _LanguageCard extends StatelessWidget {
   );
 
   Widget _option(BuildContext context, String? tag, String label) =>
-      RadioListTile<String>(
+      LissomFocusFrame(child: RadioListTile<String>(
         key: Key('profile.language.option.${tag ?? 'system'}'),
         value: tag ?? 'system',
-        groupValue: controller.tag ?? 'system',
+        enabled: controller.isReady && !controller.isSaving,
         title: Text(label),
-        onChanged: controller.isSaving
-            ? null
-            : (String? _) async {
-                final bool saved = await controller.select(tag);
-                if (context.mounted && saved) Navigator.of(context).pop();
-              },
-      );
+      ));
 }
