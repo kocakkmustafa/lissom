@@ -198,6 +198,11 @@ class _LissomShellState extends State<LissomShell> {
     builder: (BuildContext c, AsyncSnapshot<AppFacts> s) {
       // ÇIKMAZ-SOKAK YASAĞI (M-F-267): config okunamazsa ekran yine AÇILIR
       // ve sebebi SÖYLER. Sessiz boş ekran / sonsuz spinner yasak.
+      // A replacement future retains the previous snapshot's error/data while
+      // waiting. Show the new request's state before inspecting that snapshot.
+      if (s.connectionState != ConnectionState.done) {
+        return const _LoadingScreen();
+      }
       if (s.hasError) return _LoadFailureScreen(onRetry: _reloadFacts);
       if (!s.hasData) return const _LoadingScreen();
 

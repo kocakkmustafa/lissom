@@ -116,16 +116,49 @@ void main() {
     final _CourseOverlayBundle bundle = _CourseOverlayBundle(
       courseBytes: changed,
     );
+    const String privateDetail = 'PRIVATE fixture course integrity detail';
+    int loads = 0;
+    final List<ContentErrorCode> failures = <ContentErrorCode>[];
+    Future<AppFacts> loader() async {
+      loads++;
+      try {
+        return await AppFacts.load(bundle: bundle);
+      } on ContentException catch (error) {
+        failures.add(error.error.code);
+        throw StateError('$privateDetail: $error');
+      }
+    }
 
     await tester.pumpWidget(
       MaterialApp(
-        home: LissomShell(loader: () => AppFacts.load(bundle: bundle)),
+        home: LissomShell(loader: loader),
       ),
     );
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);
-    expect(find.textContaining('hashMismatch'), findsOneWidget);
+    expect(failures, <ContentErrorCode>[ContentErrorCode.hashMismatch]);
+    expect(find.text("Lissom couldn't start"), findsOneWidget);
+    expect(
+      find.text(
+        'The files that describe the tests and the app layout could not be read.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.textContaining(privateDetail), findsNothing);
+    expect(find.textContaining('hashMismatch'), findsNothing);
     expect(bundle.requestedPaths, contains(_manifestPath));
+    final Finder retry = find.byKey(const Key('shell.retryLoad'));
+    expect(retry.hitTestable(), findsOneWidget);
+    await tester.tap(retry.hitTestable());
+    await tester.pumpAndSettle();
+    expect(loads, 2);
+    expect(failures, <ContentErrorCode>[
+      ContentErrorCode.hashMismatch,
+      ContentErrorCode.hashMismatch,
+    ]);
+    expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);
+    expect(find.textContaining(privateDetail), findsNothing);
+    expect(find.textContaining('hashMismatch'), findsNothing);
   });
 }

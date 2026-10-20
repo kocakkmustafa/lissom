@@ -305,8 +305,9 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
   void didUpdateWidget(covariant LissomAccountHost oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.runtime == widget.runtime &&
-        oldWidget.owners == widget.owners)
+        oldWidget.owners == widget.owners) {
       return;
+    }
     _detachRuntime(oldWidget.runtime);
     _retireScope();
     if (oldWidget.owners != widget.owners) {

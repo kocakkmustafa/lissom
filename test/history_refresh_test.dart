@@ -46,7 +46,11 @@ import 'support/narrow_surface.dart';
 Future<void> _refreshFrames(WidgetTester tester) async {
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 400));
-  await tester.pump();
+  await tester.pumpAndSettle(
+    const Duration(milliseconds: 20),
+    EnginePhase.sendSemanticsUpdate,
+    const Duration(seconds: 3),
+  );
 }
 
 Future<void> _refreshUntil(
@@ -65,12 +69,31 @@ Future<void> _refreshUntil(
 }
 
 Future<void> _refreshVisible(WidgetTester tester, Finder target) async {
-  if (target.hitTestable().evaluate().isEmpty) {
+  // A popped lesson can disappear before its course's reverse transition has
+  // finished. Only inspect the active route after those frames are complete.
+  await _refreshFrames(tester);
+  if (target.evaluate().isEmpty) {
+    final Finder scrollable = find.byType(Scrollable).hitTestable().last;
+    expect(scrollable, findsOneWidget, reason: 'An active scroll route is needed');
+    final ScrollableState state = tester.state<ScrollableState>(scrollable);
+    // The progress card precedes Continue. On return it can be lazily unbuilt
+    // above the saved scroll offset, so a down-only search would never find it.
+    for (int attempt = 0;
+        attempt < 60 && state.position.pixels > state.position.minScrollExtent;
+        attempt++) {
+      await tester.drag(scrollable, const Offset(0, 500));
+      await _refreshFrames(tester);
+    }
+    expect(
+      state.position.pixels,
+      lessThanOrEqualTo(state.position.minScrollExtent),
+      reason: 'The actual route must scroll back to its start before searching',
+    );
     await tester.scrollUntilVisible(
       target,
       300,
       maxScrolls: 60,
-      scrollable: find.byType(Scrollable).last,
+      scrollable: scrollable,
     );
   }
   await tester.ensureVisible(target);
@@ -355,8 +378,12 @@ void main() {
       home: Scaffold(body: StudyReviewEntry(onCourseDone: () => returns++)),
     ));
     final Finder entry = find.byKey(const Key('study-review-entry'));
-    await tester.tap(entry);
-    await tester.tap(entry);
+    await _refreshVisible(tester, entry);
+    final Offset entryPoint = tester.getCenter(entry.hitTestable());
+    // Repeat the real pointer location. After the first push the old button is
+    // covered, so re-finding and tapping that widget would be a missed tap.
+    await tester.tapAt(entryPoint);
+    await tester.tapAt(entryPoint);
     await _refreshFrames(tester);
     expect(find.byType(StudyReviewPage, skipOffstage: false), findsOneWidget);
     expect(returns, 0);

@@ -69,14 +69,14 @@ Future<_Store> _pumpToCamera(
   );
   await tester.pumpAndSettle();
   expect(
-    find.text(language == 'tr' ? '5 adımın 1. adımı' : 'Step 1 of 5'),
+    find.text(language == 'tr' ? '5 ADIMIN 1. ADIMI' : 'STEP 1 OF 5'),
     findsOneWidget,
   );
   await _tap(tester, _continueKey);
   await _tap(tester, const Key('onboarding.disclaimer.ack'));
   await _tap(tester, _continueKey);
   expect(
-    find.text(language == 'tr' ? '5 adımın 3. adımı' : 'Step 3 of 5'),
+    find.text(language == 'tr' ? '5 ADIMIN 3. ADIMI' : 'STEP 3 OF 5'),
     findsOneWidget,
   );
   return store;

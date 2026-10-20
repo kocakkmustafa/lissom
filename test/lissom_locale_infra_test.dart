@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -120,6 +119,30 @@ Widget _profileHost(
     ),
   ),
 );
+
+Future<void> _reveal(
+  WidgetTester tester,
+  Finder target,
+  Finder scrollable,
+) async {
+  await tester.scrollUntilVisible(target, 200, scrollable: scrollable);
+  // A cached ListView child can be found before it is on screen. The final
+  // ensureVisible jump needs a layout frame before its hit-test position is used.
+  await tester.pumpAndSettle();
+  await Scrollable.ensureVisible(tester.element(target), alignment: 0.5);
+  await tester.pumpAndSettle();
+  expect(target.hitTestable(), findsOneWidget);
+}
+
+Future<void> _tapRevealed(
+  WidgetTester tester,
+  Finder target,
+  Finder scrollable,
+) async {
+  await _reveal(tester, target, scrollable);
+  await tester.tap(target);
+  await tester.pumpAndSettle();
+}
 
 void main() {
   test(
@@ -373,43 +396,48 @@ void main() {
                   data: MediaQuery.of(
                     context,
                   ).copyWith(textScaler: const TextScaler.linear(2)),
-                  child: ListView(
-                    children: <Widget>[
-                      Text(localeText(context, 'Hello', 'Merhaba')),
-                      Text(
-                        localeTemplate(
-                          context,
-                          'Value {value} on {date}',
-                          '{date} tarihinde {value}',
-                          <String, Object>{
-                            'value': localizedDecimal(context, 1234.5),
-                            'date': localizedDate(
-                              context,
-                              DateTime(2026, 10, 19),
-                            ),
-                          },
+                  // These are formatter probes, so eagerly mount each one.
+                  // A ListView can omit the final LTR probe behind long dates.
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Text(localeText(context, 'Hello', 'Merhaba')),
+                        Text(
+                          localeTemplate(
+                            context,
+                            'Value {value} on {date}',
+                            '{date} tarihinde {value}',
+                            <String, Object>{
+                              'value': localizedDecimal(context, 1234.5),
+                              'date': localizedDate(
+                                context,
+                                DateTime(2026, 10, 19),
+                              ),
+                            },
+                          ),
                         ),
-                      ),
-                      Text(
-                        localeText(
-                          context,
-                          'Unknown source stays visible',
-                          'Bilinmeyen kaynak görünür kalır',
+                        Text(
+                          localeText(
+                            context,
+                            'Unknown source stays visible',
+                            'Bilinmeyen kaynak görünür kalır',
+                          ),
                         ),
-                      ),
-                      Text(
-                        localizedDate(
-                          context,
-                          DateTime.utc(2026, 10, 19, 23, 58),
+                        Text(
+                          localizedDate(
+                            context,
+                            DateTime.utc(2026, 10, 19, 23, 58),
+                          ),
+                          key: const Key('locale.fixture.date'),
                         ),
-                        key: const Key('locale.fixture.date'),
-                      ),
-                      Text(
-                        Directionality.of(context) == TextDirection.rtl
-                            ? 'rtl'
-                            : 'ltr',
-                      ),
-                    ],
+                        Text(
+                          Directionality.of(context) == TextDirection.rtl
+                              ? 'rtl'
+                              : 'ltr',
+                          key: const Key('locale.fixture.direction'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -426,6 +454,12 @@ void main() {
             ),
             findsOneWidget,
           );
+          final Finder direction = find.byKey(
+            const Key('locale.fixture.direction'),
+          );
+          await tester.ensureVisible(direction);
+          await tester.pumpAndSettle();
+          expect(direction.hitTestable(), findsOneWidget);
           expect(find.text(tag == 'ar' ? 'rtl' : 'ltr'), findsOneWidget);
           expect(
             find.text(
@@ -442,27 +476,35 @@ void main() {
           final String date = tester
               .widget<Text>(find.byKey(const Key('locale.fixture.date')))
               .data!;
-          expect(date, contains('2026'));
-          expect(
-            date,
-            MaterialLocalizations.of(
-              context,
-            ).formatFullDate(timestamp.toLocal()),
+          final MaterialLocalizations material = MaterialLocalizations.of(
+            context,
           );
+          final String year = material.formatYear(timestamp.toLocal());
+          expect(date, contains(year));
+          if (tag == 'ar') {
+            expect(year, '٢٠٢٦');
+          }
+          expect(date, material.formatFullDate(timestamp.toLocal()));
           final String decimal = localizedDecimal(context, 12.5);
+          final String separator =
+              tag == 'tr' || tag == 'pt-BR' || tag == 'de' || tag == 'fr'
+              ? ','
+              : '.';
           expect(
             decimal,
-            tag == 'tr' || tag == 'pt-BR' || tag == 'de' || tag == 'fr'
-                ? '12,5'
-                : '12.5',
+            '${material.formatDecimal(12)}$separator${material.formatDecimal(5)}',
           );
+          final String configNumber = localizedConfigNumber(context, 10.25);
           expect(
-            localizedConfigNumber(context, 10.25),
-            tag == 'tr' || tag == 'pt-BR' || tag == 'de' || tag == 'fr'
-                ? '10,25'
-                : '10.25',
+            configNumber,
+            '${material.formatDecimal(10)}$separator'
+                '${material.formatDecimal(2)}${material.formatDecimal(5)}',
             reason: 'configuration tolerances must not round to whole degrees',
           );
+          if (tag == 'ar') {
+            expect(decimal, '١٢.٥');
+            expect(configNumber, '١٠.٢٥');
+          }
           expect(() => localizedDecimal(context, 1e20), returnsNormally);
           expect(() => localizedDecimal(context, -1e20), returnsNormally);
           expect(localizedDecimal(context, double.nan), '—');
@@ -478,8 +520,9 @@ void main() {
           for (final String source in typedConfig) {
             final String translated = configText(context, source);
             expect(translated, tag == 'en' ? source : isNot(source));
-            if (tag != 'tr' && tag != 'en')
+            if (tag != 'tr' && tag != 'en') {
               expect(translated, contains('[$tag]'));
+            }
           }
           expect(
             configText(context, 'unknown-user-id · right'),
@@ -507,6 +550,7 @@ void main() {
             throwsArgumentError,
           );
           for (final int count in <int>[0, 1, 2, 3, 11, 100]) {
+            final String digits = material.formatDecimal(count);
             final String plural = localePlural(
               context,
               '{count} readings',
@@ -515,11 +559,11 @@ void main() {
               englishOne: '{count} reading',
             );
             if (tag == 'en') {
-              expect(plural, '$count ${count == 1 ? 'reading' : 'readings'}');
+              expect(plural, '$digits ${count == 1 ? 'reading' : 'readings'}');
             } else if (tag == 'tr') {
-              expect(plural, '$count ölçüm');
+              expect(plural, '$digits ölçüm');
             } else {
-              expect(plural, '${lissomPluralCategory(tag, count)} $count');
+              expect(plural, '${lissomPluralCategory(tag, count)} $digits');
             }
           }
           expect(tester.takeException(), isNull);
@@ -539,20 +583,24 @@ void main() {
       await controller.initialize();
       await tester.pumpWidget(_profileHost(controller));
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(
+      await _tapRevealed(
+        tester,
         find.byKey(const Key('profile.language.choose')),
-        200,
-        scrollable: find.byType(Scrollable).first,
+        find.descendant(
+          of: find.byType(ProfileScreen),
+          matching: find.byType(Scrollable),
+        ).first,
       );
-      await tester.tap(find.byKey(const Key('profile.language.choose')));
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(
+      final Finder dialog = find.byKey(const Key('profile.language.dialog'));
+      expect(dialog, findsOneWidget);
+      await _tapRevealed(
+        tester,
         find.byKey(const Key('profile.language.option.ar')),
+        find.descendant(of: dialog, matching: find.byType(Scrollable)).first,
       );
-      await tester.tap(find.byKey(const Key('profile.language.option.ar')));
-      await tester.pumpAndSettle();
       expect(controller.tag, 'ar');
       expect(store.value, 'ar');
+      expect(store.writes, 1);
       expect(find.byKey(const Key('profile.language.dialog')), findsNothing);
       final BuildContext context = tester.element(find.byType(ProfileScreen));
       expect(Directionality.of(context), TextDirection.rtl);
@@ -571,21 +619,34 @@ void main() {
       await controller.initialize();
       await tester.pumpWidget(_profileHost(controller));
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(
+      await _tapRevealed(
+        tester,
         find.byKey(const Key('profile.language.choose')),
-        200,
-        scrollable: find.byType(Scrollable).first,
+        find.descendant(
+          of: find.byType(ProfileScreen),
+          matching: find.byType(Scrollable),
+        ).first,
       );
-      await tester.tap(find.byKey(const Key('profile.language.choose')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('profile.language.option.tr')));
-      await tester.pumpAndSettle();
+      final Finder dialog = find.byKey(const Key('profile.language.dialog'));
+      expect(dialog, findsOneWidget);
+      final Finder dialogScroll = find.descendant(
+        of: dialog,
+        matching: find.byType(Scrollable),
+      ).first;
+      await _tapRevealed(
+        tester,
+        find.byKey(const Key('profile.language.option.tr')),
+        dialogScroll,
+      );
       expect(controller.tag, 'en');
+      expect(store.value, 'en');
+      expect(store.writes, 1);
       expect(find.byKey(const Key('profile.language.dialog')), findsOneWidget);
-      expect(
-        find.byKey(const Key('profile.language.writeFailure')),
-        findsOneWidget,
+      final Finder failure = find.byKey(
+        const Key('profile.language.writeFailure'),
       );
+      await _reveal(tester, failure, dialogScroll);
+      expect(failure, findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );

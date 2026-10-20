@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -10,6 +11,8 @@ import 'package:lissom/app/account_epoch_client.dart';
 import 'package:lissom/app/camera_pose_source.dart';
 import 'package:lissom/app/home_screen.dart';
 import 'package:lissom/app/live_capture_screen.dart';
+import 'package:lissom/app/lissom_locales.dart';
+import 'package:lissom/app/lissom_localizations.dart';
 import 'package:lissom/app/local_account_bridge.dart';
 import 'package:lissom/app/local_owner.dart';
 import 'package:lissom/app/onboarding_gate.dart';
@@ -57,9 +60,11 @@ final class _Account extends MotionAccountClient {
     app: MotionApp.lissom,
     emailRedirectTo: kLissomAuthRedirect,
   ) {
-    unawaited(supabase.auth.setInitialSession(jsonEncode(_fixtureSession(_alice))));
+    initialSessionReady =
+        supabase.auth.setInitialSession(jsonEncode(_fixtureSession(_alice)));
   }
 
+  late final Future<void> initialSessionReady;
   final StreamController<AuthState> changes =
       StreamController<AuthState>.broadcast(sync: true);
   User? user = _user(_alice);
@@ -212,19 +217,60 @@ final class _Source implements StartablePoseSource {
 }
 
 Future<void> _mount(WidgetTester tester, _Runtime runtime, LissomOwnerRegistry owners) async {
-  if (runtime.phase.value == MotionIdentityPhase.signedOut) {
-    await tester.runAsync(() async {
+  await tester.runAsync(() async {
+    await runtime.account.initialSessionReady.timeout(const Duration(seconds: 5));
+    if (runtime.phase.value == MotionIdentityPhase.signedOut) {
       // A signed-out fixture must also have a genuinely null public Session.
-      await Future<void>.delayed(Duration.zero);
       await runtime.account.supabase.auth.signOut(scope: SignOutScope.local);
-    });
-  }
+    }
+  });
+  expect(
+    runtime.account.supabase.auth.currentSession?.user.id,
+    runtime.userId.value,
+  );
+  final String tag = canonicalLocaleTag(
+    resolveLissomLocale(
+      tester.platformDispatcher.locales,
+      kLissomSupportedLocales,
+    ),
+  );
+  // Complete the real rootBundle >50KiB decode outside the fake clock. The
+  // production delegate then awaits this same cached Future; no catalog fake.
+  final String? raw = await tester.runAsync(
+    () => rootBundle
+        .loadString('config/l10n/$tag.json')
+        .timeout(const Duration(seconds: 5)),
+  );
+  expect(raw, isNotNull);
+  expect(LissomLocalizations.parse(raw!, tag).catalogAvailable, isTrue);
+  // A deliberately held immutable-root Future must remain held. Wait only for
+  // the appropriate visible host surface, never initialize/complete its root.
+  final Finder ready = !owners.isInitialized
+      ? find.byKey(const Key('lissom.owner.closed'))
+      : runtime.isPasswordRecovery
+          ? find.text('Save password')
+          : find.byType(HomeScreen);
   await tester.pumpWidget(LissomAccountHost(
     runtime: runtime,
     owners: owners,
     factsLoader: () async => factsFromDisk(),
     onboardingLoader: (LissomLocalScope scope) async => _Onboarding(scope.owner!),
   ));
+  for (int attempt = 0; attempt < 100 && ready.evaluate().isEmpty; attempt++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 20)),
+    );
+    await tester.pump(const Duration(milliseconds: 20));
+  }
+  expect(
+    ready,
+    findsOneWidget,
+    reason: 'The actual host must be ready before its lifecycle is exercised',
+  );
+  expect(
+    LissomLocalizations.maybeOf(tester.element(ready))?.catalogAvailable,
+    isTrue,
+  );
   await tester.pumpAndSettle();
 }
 

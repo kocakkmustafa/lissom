@@ -18,8 +18,9 @@ void main() {
       int loads = 0;
       Future<AppFacts> loader() {
         loads++;
-        if (loads == 1)
+        if (loads == 1) {
           return Future<AppFacts>.error(StateError('PRIVATE_PATH_MARKER'));
+        }
         return pending.future;
       }
 
@@ -37,6 +38,8 @@ void main() {
       await tester.pump();
       expect(loads, 2);
       expect(find.byKey(const Key('shell.retryLoad')), findsNothing);
+      expect(find.byKey(const Key('shell.loadFailure')), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
       pending.complete(factsFromDisk());
       await tester.pumpAndSettle();
       expect(find.byType(NavigationBar), findsOneWidget);

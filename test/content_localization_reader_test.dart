@@ -28,6 +28,24 @@ final class _ActualCatalogBundle extends CachingAssetBundle {
   }
 }
 
+Future<_ActualCatalogBundle> _readyCatalog(
+  WidgetTester tester,
+  Locale locale,
+) async {
+  final bundle = _ActualCatalogBundle();
+  // Real catalogs exceed AssetBundle.loadString's 50 KiB isolate threshold.
+  // Await that exact cached Future outside the fake clock before mounting;
+  // pumpAndSettle only waits for frames, not an outstanding isolate decode.
+  final raw = await tester.runAsync(
+    () => bundle.loadString(
+      'config/l10n/${canonicalLocaleTag(locale)}.json',
+    ),
+  );
+  expect(raw, isNotNull, reason: 'The actual catalog must finish loading.');
+  expect(raw, isNotEmpty);
+  return bundle;
+}
+
 List<HathaCourse> _courses() => <HathaCourse>[
   for (final name in _courseNames)
     HathaCourse.parse(File('config/courses/$name.v1.json').readAsStringSync()),
@@ -61,13 +79,13 @@ Iterable<HathaText> _texts(HathaCourse course) sync* {
 Widget _app({
   required Locale locale,
   required Widget home,
-  AssetBundle? bundle,
+  required AssetBundle bundle,
 }) => MaterialApp(
   locale: locale,
   supportedLocales: kLissomSupportedLocales,
   localeListResolutionCallback: resolveLissomLocale,
   localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-    LissomLocalizationsDelegate(bundle: bundle ?? _ActualCatalogBundle()),
+    LissomLocalizationsDelegate(bundle: bundle),
     ...GlobalMaterialLocalizations.delegates,
   ],
   home: home,
@@ -94,10 +112,12 @@ void main() {
       tester,
     ) async {
       final courses = _courses();
+      final bundle = await _readyCatalog(tester, locale);
       var checked = 0;
       await tester.pumpWidget(
         _app(
           locale: locale,
+          bundle: bundle,
           home: Builder(
             builder: (context) {
               checked = 0;
@@ -156,9 +176,11 @@ void main() {
     testWidgets('diagram title and labels use actual locale catalog ($tag)', (
       tester,
     ) async {
+      final bundle = await _readyCatalog(tester, locale);
       await tester.pumpWidget(
         _app(
           locale: locale,
+          bundle: bundle,
           home: const Scaffold(
             body: SingleChildScrollView(
               child: HathaKnowledgeDiagrams(lessonId: 'h54'),
@@ -196,9 +218,11 @@ void main() {
     tester,
   ) async {
     final courses = _courses();
+    final bundle = await _readyCatalog(tester, const Locale('tr'));
     await tester.pumpWidget(
       _app(
         locale: const Locale('tr'),
+        bundle: bundle,
         home: Builder(
           builder: (context) => Scaffold(
             body: Column(

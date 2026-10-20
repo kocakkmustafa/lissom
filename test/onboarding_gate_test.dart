@@ -4,6 +4,8 @@
 /// ekranı, sonsuz spinner değil.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lissom/app/lissom_theme.dart';
@@ -59,10 +61,32 @@ void main() {
 
   testWidgets('okuma PATLARSA sonsuz spinner değil, isimli hata ekranı',
       (WidgetTester tester) async {
-    await _pump(tester, () async => throw StateError('disk dolu'));
+    const String privateDetail = 'PRIVATE fixture onboarding disk detail';
+    final Completer<OnboardingStore> retryRead = Completer<OnboardingStore>();
+    int loads = 0;
+    await _pump(tester, () async {
+      loads++;
+      if (loads == 1) throw StateError(privateDetail);
+      return retryRead.future;
+    });
     expect(find.byKey(const Key('onboarding.gate.loadFailure')), findsOneWidget);
-    expect(find.textContaining('disk dolu'), findsOneWidget,
-        reason: 'hatanın SEBEBİ yutulmamalı — M-F-267');
+    expect(
+      find.text("Lissom couldn't check your setup. Try again."),
+      findsOneWidget,
+    );
+    expect(find.textContaining(privateDetail), findsNothing);
+    final Finder retry = find.byKey(const Key('onboarding.gate.retry'));
+    expect(retry.hitTestable(), findsOneWidget);
+    await tester.tap(retry.hitTestable());
+    await tester.pump();
+    expect(loads, 2);
+    expect(find.byKey(const Key('onboarding.gate.loadFailure')), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(OnboardingFlow), findsNothing);
+    retryRead.complete(_FakeStore(const OnboardingProfile.notStarted()));
+    await tester.pumpAndSettle();
+    expect(find.byType(OnboardingFlow), findsOneWidget);
+    expect(find.textContaining(privateDetail), findsNothing);
   });
 
   testWidgets(

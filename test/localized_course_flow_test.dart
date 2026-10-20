@@ -39,6 +39,23 @@ final class _ActualCatalogBundle extends CachingAssetBundle {
       ByteData.sublistView(File(key).readAsBytesSync());
 }
 
+Future<_ActualCatalogBundle> _readyCatalog(
+  WidgetTester tester,
+  Locale locale,
+) async {
+  final bundle = _ActualCatalogBundle();
+  // Keep the real >50 KiB AssetBundle isolate decode, but await its cached
+  // Future outside the fake clock instead of treating settled frames as ready.
+  final raw = await tester.runAsync(
+    () => bundle.loadString(
+      'config/l10n/${canonicalLocaleTag(locale)}.json',
+    ),
+  );
+  expect(raw, isNotNull, reason: 'The actual catalog must finish loading.');
+  expect(raw, isNotEmpty);
+  return bundle;
+}
+
 HathaCourse _course(String file) =>
     HathaCourse.parse(File('config/courses/$file.v1.json').readAsStringSync());
 
@@ -201,14 +218,16 @@ void main() {
         ];
         final store = _MemoryJournalStore(original);
         final before = store.copiedRows;
+        final locale = lissomLocaleForTag(scenario.tag)!;
+        final bundle = await _readyCatalog(tester, locale);
         var storeOpens = 0;
         await tester.pumpWidget(
           MaterialApp(
-            locale: lissomLocaleForTag(scenario.tag),
+            locale: locale,
             supportedLocales: kLissomSupportedLocales,
             localeListResolutionCallback: resolveLissomLocale,
             localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-              LissomLocalizationsDelegate(bundle: _ActualCatalogBundle()),
+              LissomLocalizationsDelegate(bundle: bundle),
               ...GlobalMaterialLocalizations.delegates,
             ],
             theme: buildLissomTheme(),

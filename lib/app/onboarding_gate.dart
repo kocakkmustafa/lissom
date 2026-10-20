@@ -113,6 +113,11 @@ class _OnboardingGateState extends State<OnboardingGate> {
   Widget build(BuildContext context) => FutureBuilder<_Loaded>(
     future: _loaded,
     builder: (BuildContext c, AsyncSnapshot<_Loaded> s) {
+      // A new load retains the old error/data until it settles. Never expose
+      // the previous owner's setup or a clickable stale Retry while waiting.
+      if (s.connectionState != ConnectionState.done) {
+        return const _GateLoadingScreen();
+      }
       if (s.hasError) {
         return _GateFailureScreen(
           onRetry: () => setState(() {

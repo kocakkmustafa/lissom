@@ -220,8 +220,9 @@ String lissomPluralCategory(String tag, int count) {
   }
   if ((tag == 'es-419' || tag == 'fr' || tag == 'pt-BR') &&
       n != 0 &&
-      n % 1000000 == 0)
+      n % 1000000 == 0) {
     return 'many';
+  }
   if (tag == 'fr' || tag == 'pt-BR') return n <= 1 ? 'one' : 'other';
   return n == 1 ? 'one' : 'other';
 }

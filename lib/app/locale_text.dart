@@ -228,8 +228,9 @@ String? _knownBlockerText(BuildContext context, String source) {
     translatedSubject = configText(context, subject);
   } else {
     final List<String> subjects = subject.replaceAll(' and ', ', ').split(', ');
-    if (subjects.isEmpty || !subjects.every(_knownBlockerSubjects.contains))
+    if (subjects.isEmpty || !subjects.every(_knownBlockerSubjects.contains)) {
       return null;
+    }
     final List<String> names = subjects
         .map(
           (String name) =>

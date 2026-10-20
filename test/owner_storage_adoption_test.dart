@@ -31,7 +31,7 @@ final class _DelayedReadFile implements File {
   Future<bool> exists() => file.exists();
   @override
   Future<String> readAsString({Encoding encoding = utf8}) async {
-    entered.complete();
+    if (!entered.isCompleted) entered.complete();
     await release.future;
     return file.readAsString(encoding: encoding);
   }

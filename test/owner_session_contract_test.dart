@@ -4,12 +4,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lissom/app/account_epoch_client.dart';
 import 'package:lissom/app/auth_session_fence.dart';
+import 'package:lissom/app/lissom_locales.dart';
+import 'package:lissom/app/lissom_localizations.dart';
 import 'package:lissom/app/local_account_bridge.dart';
 import 'package:lissom/app/local_owner.dart';
 import 'package:lissom/app/onboarding_gate.dart';
@@ -132,11 +135,40 @@ Future<void> _settleSdk() async {
 
 Future<void> _mount(WidgetTester tester, MotionAccountRuntime runtime,
     LissomOwnerRegistry owners) async {
+  final String tag = canonicalLocaleTag(
+    resolveLissomLocale(
+      tester.platformDispatcher.locales,
+      kLissomSupportedLocales,
+    ),
+  );
+  final String? raw = await tester.runAsync(
+    () => rootBundle
+        .loadString('config/l10n/$tag.json')
+        .timeout(const Duration(seconds: 5)),
+  );
+  expect(raw, isNotNull);
+  expect(LissomLocalizations.parse(raw!, tag).catalogAvailable, isTrue);
   await tester.pumpWidget(LissomAccountHost(
     runtime: runtime, owners: owners,
     factsLoader: () async => factsFromDisk(),
     onboardingLoader: (scope) async => _Onboarding(scope.owner!),
   ));
+  final Finder ready = find.byType(OnboardingGate);
+  for (int attempt = 0; attempt < 100 && ready.evaluate().isEmpty; attempt++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 20)),
+    );
+    await tester.pump(const Duration(milliseconds: 20));
+  }
+  expect(
+    ready,
+    findsOneWidget,
+    reason: 'The real verified host must mount before Session replacement',
+  );
+  expect(
+    LissomLocalizations.maybeOf(tester.element(ready))?.catalogAvailable,
+    isTrue,
+  );
   await tester.pumpAndSettle();
 }
 
