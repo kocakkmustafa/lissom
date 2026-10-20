@@ -321,121 +321,127 @@ final class _MemoryAppearancePreference implements AppearancePreferenceStore {
   @override
   Future<ThemeMode> read() async => value;
   @override
-  Future<void> write(ThemeMode mode) async { value = mode; }
+  Future<void> write(ThemeMode mode) async {
+    value = mode;
+  }
 }
 
 void main() {
-  testWidgets('public d69 delegates follow actual Lissom installation selection', (
-    tester,
-  ) async {
-    final controller = LissomLocaleController(store: _MemoryPreference('en'));
-    await controller.initialize();
-    addTearDown(() async {
-      await tester.pumpWidget(const SizedBox.shrink());
-      controller.dispose();
-    });
-    expect(MotionAccountLocalizations.supportedLocales, hasLength(14));
-    expect(
-      MotionAccountLocalizations.delegates,
-      contains(MotionAccountLocalizations.delegate),
-    );
-    expect(
-      MotionAccountLocalizations.localeFor(const Locale('es', 'MX')),
-      const Locale('es', '419'),
-    );
-    expect(
-      MotionAccountLocalizations.localeFor(const Locale('pt', 'PT')),
-      const Locale('pt', 'BR'),
-    );
-    expect(
-      MotionAccountLocalizations.localeFor(const Locale('it')),
-      const Locale('it'),
-      reason: 'Published d69 includes the six additional approved locales.',
-    );
-    expect(
-      MotionAccountLocalizations.localeFor(const Locale('xx')),
-      const Locale('en'),
-      reason: 'Unsupported-language fallback stays explicit.',
-    );
-    const hans = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
-    const hant = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');
-    expect(MotionAccountLocalizations.localeFor(hans), hans);
-    expect(MotionAccountLocalizations.localeFor(hant), const Locale('en'));
-    expect(
-      MotionAccountLocalizations.localeFor(const Locale('zh', 'TW')),
-      const Locale('en'),
-    );
-    expect(
-      MotionAccountLocalizations.localeListResolutionCallback(
-        const <Locale>[hant, Locale('fr')],
-        MotionAccountLocalizations.supportedLocales,
-      ),
-      const Locale('fr'),
-      reason: 'Traditional Chinese must not silently choose Simplified Chinese.',
-    );
-    expect(
-      MotionAccountLocalizations.localeListResolutionCallback(
-        const <Locale>[Locale('xx'), Locale('fr')],
-        MotionAccountLocalizations.supportedLocales,
-      ),
-      const Locale('fr'),
-    );
-    expect(
-      MotionAccountLocalizations.localeResolutionCallback(
-        const Locale('ar'),
-        const <Locale>[Locale('tr'), Locale('en')],
-      ),
-      const Locale('en'),
-    );
-    await tester.pumpWidget(
-      _installationApp(controller, const _PublicProbe(key: _probeKey)),
-    );
-    _PublicProbeState? first;
-    for (final tag in _copy.keys) {
-      expect(await controller.select(tag), isTrue);
-      final expectedLocale = lissomLocaleForTag(tag)!;
-      final expected = _copy[tag]!;
-      await _pumpUntil(
-        tester,
-        () {
-          final elements = find.byKey(_probeKey).evaluate();
-          if (elements.length != 1) {
-            return false;
-          }
-          final state = tester.state<_PublicProbeState>(find.byKey(_probeKey));
-          return state.registered != null &&
-              identical(state.registered, state.selected) &&
-              state.selected!.locale == expectedLocale &&
-              state.materialLocale == expectedLocale &&
-              state.selected!.text(MotionAccountString.accountTitle) ==
-                  expected.$1;
-        },
-        'Actual mounted Core delegate must match saved installation locale $tag',
-      );
-      final state = tester.state<_PublicProbeState>(find.byKey(_probeKey));
-      first ??= state;
+  testWidgets(
+    'public d69 delegates follow actual Lissom installation selection',
+    (tester) async {
+      final controller = LissomLocaleController(store: _MemoryPreference('en'));
+      await controller.initialize();
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        controller.dispose();
+      });
+      expect(MotionAccountLocalizations.supportedLocales, hasLength(14));
       expect(
-        state,
-        same(first),
-        reason: 'Changing language keeps child State.',
+        MotionAccountLocalizations.delegates,
+        contains(MotionAccountLocalizations.delegate),
       );
       expect(
-        state.direction,
-        tag == 'ar' ? TextDirection.rtl : TextDirection.ltr,
-      );
-      expect(find.text(expected.$1), findsOneWidget);
-      expect(find.text(expected.$2), findsOneWidget);
-      expect(
-        state.selected!.membershipForApp('Lissom{appName}'),
-        expected.$2.replaceAll('Lissom', 'Lissom{appName}'),
+        MotionAccountLocalizations.localeFor(const Locale('es', 'MX')),
+        const Locale('es', '419'),
       );
       expect(
-        () => state.selected!.text(MotionAccountString.appMembership),
-        throwsArgumentError,
+        MotionAccountLocalizations.localeFor(const Locale('pt', 'PT')),
+        const Locale('pt', 'BR'),
       );
-    }
-    expect(tester.takeException(), isNull);
-  });
+      expect(
+        MotionAccountLocalizations.localeFor(const Locale('it')),
+        const Locale('it'),
+        reason: 'Published d69 includes the six additional approved locales.',
+      );
+      expect(
+        MotionAccountLocalizations.localeFor(const Locale('xx')),
+        const Locale('en'),
+        reason: 'Unsupported-language fallback stays explicit.',
+      );
+      const hans = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
+      const hant = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');
+      expect(MotionAccountLocalizations.localeFor(hans), hans);
+      expect(MotionAccountLocalizations.localeFor(hant), const Locale('en'));
+      expect(
+        MotionAccountLocalizations.localeFor(const Locale('zh', 'TW')),
+        const Locale('en'),
+      );
+      expect(
+        MotionAccountLocalizations.localeListResolutionCallback(const <Locale>[
+          hant,
+          Locale('fr'),
+        ], MotionAccountLocalizations.supportedLocales),
+        const Locale('fr'),
+        reason:
+            'Traditional Chinese must not silently choose Simplified Chinese.',
+      );
+      expect(
+        MotionAccountLocalizations.localeListResolutionCallback(const <Locale>[
+          Locale('xx'),
+          Locale('fr'),
+        ], MotionAccountLocalizations.supportedLocales),
+        const Locale('fr'),
+      );
+      expect(
+        MotionAccountLocalizations.localeResolutionCallback(
+          const Locale('ar'),
+          const <Locale>[Locale('tr'), Locale('en')],
+        ),
+        const Locale('en'),
+      );
+      await tester.pumpWidget(
+        _installationApp(controller, const _PublicProbe(key: _probeKey)),
+      );
+      _PublicProbeState? first;
+      for (final tag in _copy.keys) {
+        expect(await controller.select(tag), isTrue);
+        final expectedLocale = lissomLocaleForTag(tag)!;
+        final expected = _copy[tag]!;
+        await _pumpUntil(
+          tester,
+          () {
+            final elements = find.byKey(_probeKey).evaluate();
+            if (elements.length != 1) {
+              return false;
+            }
+            final state = tester.state<_PublicProbeState>(
+              find.byKey(_probeKey),
+            );
+            return state.registered != null &&
+                identical(state.registered, state.selected) &&
+                state.selected!.locale == expectedLocale &&
+                state.materialLocale == expectedLocale &&
+                state.selected!.text(MotionAccountString.accountTitle) ==
+                    expected.$1;
+          },
+          'Actual mounted Core delegate must match saved installation locale $tag',
+        );
+        final state = tester.state<_PublicProbeState>(find.byKey(_probeKey));
+        first ??= state;
+        expect(
+          state,
+          same(first),
+          reason: 'Changing language keeps child State.',
+        );
+        expect(
+          state.direction,
+          tag == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+        );
+        expect(find.text(expected.$1), findsOneWidget);
+        expect(find.text(expected.$2), findsOneWidget);
+        expect(
+          state.selected!.membershipForApp('Lissom{appName}'),
+          expected.$2.replaceAll('Lissom', 'Lissom{appName}'),
+        );
+        expect(
+          () => state.selected!.text(MotionAccountString.appMembership),
+          throwsArgumentError,
+        );
+      }
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'real d69 nested gate inherits selection and retains guest State while blocked',
@@ -643,7 +649,8 @@ void main() {
       final appearance = LissomAppearanceController(store: appearanceStore);
       final runtime = _PhaseRuntime();
       await Future.wait<void>(<Future<void>>[
-        locale.initialize(), appearance.initialize(),
+        locale.initialize(),
+        appearance.initialize(),
       ]);
       addTearDown(() async {
         await tester.pumpWidget(const SizedBox.shrink());
@@ -652,33 +659,54 @@ void main() {
         appearance.dispose();
       });
       expect(motionPaidFeaturesAvailable, isFalse);
-      await tester.pumpWidget(LissomAppearanceHost(controller: appearance,
-        child: LissomLocaleHost(controller: locale,
-          child: LissomPresentationHost(child: MotionIdentityGate(
-            runtime: runtime, child: const _GuestProbe(key: _ownerKey),
-          )))));
-      await _pumpUntil(tester,
+      await tester.pumpWidget(
+        LissomAppearanceHost(
+          controller: appearance,
+          child: LissomLocaleHost(
+            controller: locale,
+            child: LissomPresentationHost(
+              child: MotionIdentityGate(
+                runtime: runtime,
+                child: const _GuestProbe(key: _ownerKey),
+              ),
+            ),
+          ),
+        ),
+      );
+      await _pumpUntil(
+        tester,
         () => find.text('SMOKE_GUEST_CONTENT').evaluate().length == 1,
-        'The existing guest must be admitted through the actual presentation bridge.');
+        'The existing guest must be admitted through the actual presentation bridge.',
+      );
       final guest = tester.state<_GuestProbeState>(find.byKey(_ownerKey));
       final gateElement = tester.element(find.byType(MotionIdentityGate));
-      final presentationState = tester.state(find.byType(LissomPresentationHost));
+      final presentationState = tester.state(
+        find.byType(LissomPresentationHost),
+      );
       runtime.phase.value = MotionIdentityPhase.verifying;
       Object? blockerState;
       for (final entry in _checkingPublic14.entries) {
         expect(await locale.select(entry.key), isTrue);
-        await _pumpUntil(tester, () {
-          final elements = find.text(entry.value).evaluate();
-          if (elements.length != 1) { return false; }
-          final context = elements.single;
-          final registered = Localizations.of<MotionAccountLocalizations>(
-            context, MotionAccountLocalizations);
-          return registered != null &&
-            identical(registered, MotionAccountLocalizations.of(context)) &&
-            registered.locale.toLanguageTag() == entry.key &&
-            Localizations.localeOf(context).toLanguageTag() == entry.key &&
-            Theme.of(context).brightness == Brightness.dark;
-        }, 'The actual nested blocker must mount ${entry.key} under manual dark despite a light device.');
+        await _pumpUntil(
+          tester,
+          () {
+            final elements = find.text(entry.value).evaluate();
+            if (elements.length != 1) {
+              return false;
+            }
+            final context = elements.single;
+            final registered = Localizations.of<MotionAccountLocalizations>(
+              context,
+              MotionAccountLocalizations,
+            );
+            return registered != null &&
+                identical(registered, MotionAccountLocalizations.of(context)) &&
+                registered.locale.toLanguageTag() == entry.key &&
+                Localizations.localeOf(context).toLanguageTag() == entry.key &&
+                Theme.of(context).brightness == Brightness.dark;
+          },
+          'The actual nested blocker must mount ${entry.key} under manual dark despite a light device.',
+        );
         final checking = tester.element(find.text(entry.value));
         final nested = tester.widget<MaterialApp>(find.byType(MaterialApp));
         final currentBlockerState = tester.state(find.byType(MaterialApp));
@@ -687,46 +715,79 @@ void main() {
         expect(nested.locale!.toLanguageTag(), entry.key);
         expect(nested.theme, isNotNull);
         expect(nested.theme!.brightness, Brightness.dark);
-        expect(Theme.of(checking).scaffoldBackgroundColor,
-          Theme.of(gateElement).scaffoldBackgroundColor);
-        expect(Theme.of(checking).colorScheme.primary,
-          Theme.of(gateElement).colorScheme.primary);
-        expect(Directionality.of(checking),
-          entry.key == 'ar' ? TextDirection.rtl : TextDirection.ltr);
+        expect(
+          Theme.of(checking).scaffoldBackgroundColor,
+          Theme.of(gateElement).scaffoldBackgroundColor,
+        );
+        expect(
+          Theme.of(checking).colorScheme.primary,
+          Theme.of(gateElement).colorScheme.primary,
+        );
+        expect(
+          Directionality.of(checking),
+          entry.key == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+        );
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         expect(find.text('SMOKE_GUEST_CONTENT'), findsNothing);
-        expect(tester.state(find.byKey(_ownerKey, skipOffstage: false)), same(guest));
-        expect(tester.element(find.byType(MotionIdentityGate)), same(gateElement));
-        expect(tester.state(find.byType(LissomPresentationHost)), same(presentationState));
+        expect(
+          tester.state(find.byKey(_ownerKey, skipOffstage: false)),
+          same(guest),
+        );
+        expect(
+          tester.element(find.byType(MotionIdentityGate)),
+          same(gateElement),
+        );
+        expect(
+          tester.state(find.byType(LissomPresentationHost)),
+          same(presentationState),
+        );
       }
       expect(await appearance.select(ThemeMode.light), isTrue);
-      await _pumpUntil(tester, () {
-        final elements = find.text(_checkingPublic14['zh-Hans']!).evaluate();
-        return elements.length == 1 &&
-          Theme.of(elements.single).brightness == Brightness.light &&
-          Theme.of(elements.single).scaffoldBackgroundColor ==
-            Theme.of(gateElement).scaffoldBackgroundColor &&
-          Theme.of(elements.single).colorScheme.primary ==
-            Theme.of(gateElement).colorScheme.primary;
-      }, 'An already-open blocker must follow a successfully stored manual light selection.');
+      await _pumpUntil(
+        tester,
+        () {
+          final elements = find.text(_checkingPublic14['zh-Hans']!).evaluate();
+          return elements.length == 1 &&
+              Theme.of(elements.single).brightness == Brightness.light &&
+              Theme.of(elements.single).scaffoldBackgroundColor ==
+                  Theme.of(gateElement).scaffoldBackgroundColor &&
+              Theme.of(elements.single).colorScheme.primary ==
+                  Theme.of(gateElement).colorScheme.primary;
+        },
+        'An already-open blocker must follow a successfully stored manual light selection.',
+      );
       expect(appearanceStore.value, ThemeMode.light);
       expect(tester.state(find.byType(MaterialApp)), same(blockerState));
-      final lightChecking = tester.element(find.text(_checkingPublic14['zh-Hans']!));
-      expect(Theme.of(lightChecking).scaffoldBackgroundColor,
-        Theme.of(gateElement).scaffoldBackgroundColor);
-      expect(tester.state(find.byKey(_ownerKey, skipOffstage: false)), same(guest));
+      final lightChecking = tester.element(
+        find.text(_checkingPublic14['zh-Hans']!),
+      );
+      expect(
+        Theme.of(lightChecking).scaffoldBackgroundColor,
+        Theme.of(gateElement).scaffoldBackgroundColor,
+      );
+      expect(
+        tester.state(find.byKey(_ownerKey, skipOffstage: false)),
+        same(guest),
+      );
       runtime.phase.value = MotionIdentityPhase.signedOut;
-      await _pumpUntil(tester,
+      await _pumpUntil(
+        tester,
         () => find.text('SMOKE_GUEST_CONTENT').evaluate().length == 1,
-        'The existing guest must reappear after the synthetic phase returns to signedOut.');
+        'The existing guest must reappear after the synthetic phase returns to signedOut.',
+      );
       expect(tester.state(find.byKey(_ownerKey)), same(guest));
-      expect(tester.element(find.byType(MotionIdentityGate)), same(gateElement));
-      expect(tester.state(find.byType(LissomPresentationHost)), same(presentationState));
+      expect(
+        tester.element(find.byType(MotionIdentityGate)),
+        same(gateElement),
+      );
+      expect(
+        tester.state(find.byType(LissomPresentationHost)),
+        same(presentationState),
+      );
       expect(runtime.account.userReads, 0);
       expect(runtime.account.membershipReads, 0);
       expect(runtime.account.deleteCalls, 0);
       expect(tester.takeException(), isNull);
     },
   );
-
 }
