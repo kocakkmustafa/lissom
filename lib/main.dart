@@ -38,6 +38,8 @@ import 'app/local_account_bridge.dart';
 import 'app/local_owner.dart';
 import 'app/local_owner_context.dart';
 import 'app/locale_text.dart';
+import 'app/lissom_locales.dart';
+import 'app/lissom_localizations.dart';
 import 'app/onboarding_gate.dart';
 import 'app/onboarding_store.dart';
 import 'package:lissom_engine/lissom_engine.dart' show PoseSource;
@@ -60,11 +62,11 @@ Future<void> main() async {
   );
 
   if (url.isEmpty && publishableKey.isEmpty && !kReleaseMode) {
-    runApp(const LissomApp());
+    runApp(const LissomLocaleHost(child: LissomApp()));
     return;
   }
   if (url.isEmpty || publishableKey.isEmpty) {
-    runApp(const _AccountSetupFailureApp());
+    runApp(const LissomLocaleHost(child: _AccountSetupFailureApp()));
     return;
   }
   final LissomOwnerRegistry owners = LissomOwnerRegistry();
@@ -80,10 +82,12 @@ Future<void> main() async {
         supportDirectory: () async => owners.supportDirectory,
       ),
     );
-    runApp(LissomAccountHost(runtime: runtime, owners: owners));
+    runApp(LissomLocaleHost(
+      child: LissomAccountHost(runtime: runtime, owners: owners),
+    ));
   } on Object {
     owners.dispose();
-    runApp(const _AccountSetupFailureApp());
+    runApp(const LissomLocaleHost(child: _AccountSetupFailureApp()));
   }
 }
 
@@ -127,8 +131,11 @@ class LissomApp extends StatelessWidget {
           ? content
           : LissomOwnerContext(owner: owner, child: content);
     },
-    supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+    locale: LissomLocaleScope.maybeOf(context)?.locale,
+    supportedLocales: kLissomSupportedLocales,
+    localeListResolutionCallback: resolveLissomLocale,
     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+      LissomLocalizationsDelegate(),
       GlobalMaterialLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
@@ -469,23 +476,27 @@ class _AccountSetupFailureApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    supportedLocales: const <Locale>[Locale('en'), Locale('tr')],
+    locale: LissomLocaleScope.maybeOf(context)?.locale,
+    supportedLocales: kLissomSupportedLocales,
+    localeListResolutionCallback: resolveLissomLocale,
     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+      LissomLocalizationsDelegate(),
       GlobalMaterialLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
     ],
     home: Builder(
       builder: (BuildContext context) {
-        final bool tr = Localizations.localeOf(context).languageCode == 'tr';
         return Scaffold(
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Text(
-                tr
-                    ? 'Lissom hesap hizmeti başlatılamadı. Uygulamayı yeniden açmayı dene.'
-                    : 'Lissom account service could not start. Try opening the app again.',
+                localeText(
+                  context,
+                  'Lissom account service could not start. Try opening the app again.',
+                  'Lissom hesap hizmeti başlatılamadı. Uygulamayı yeniden açmayı dene.',
+                ),
               ),
             ),
           ),

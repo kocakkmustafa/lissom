@@ -104,6 +104,7 @@ flutter:
     - config/metrics/
     - config/phases/
     - config/ia/
+    - config/l10n/
     - config/courses/
     - config/yoga/tasks.v1.json
     # Course-byte integrity only; no video, lesson, or model claim.

@@ -1,16 +1,74 @@
 import 'package:flutter/widgets.dart';
 
-/// Display copy follows the device language; stable config identifiers remain unchanged.
-String localeText(BuildContext context, String english, String turkish) =>
-    Localizations.localeOf(context).languageCode == 'tr' ? turkish : english;
+import 'lissom_locales.dart';
+import 'lissom_localizations.dart';
 
-/// OS exception messages are not localized and may include paths. The named
-/// gap above this detail already says what failed; give a next step in Turkish.
+export 'lissom_localizations.dart'
+    show localizedConfigNumber, localizedDate, localizedDecimal, localizedInteger;
+
+/// Existing EN/TR copy stays authoritative. The other product locales use
+/// source-English keys, shared with immutable bundled course/config content.
+String localeText(BuildContext context, String english, String turkish) {
+  final String tag = canonicalLocaleTag(Localizations.localeOf(context));
+  if (tag == 'tr') return turkish;
+  if (tag == 'en') return english;
+  return LissomLocalizations.maybeOf(context)?.lookup(english) ?? english;
+}
+
+/// Translate a stable template before substituting arguments. Callers never
+/// translate a rendered English sentence or match user text with a regex.
+String localeTemplate(
+  BuildContext context,
+  String english,
+  String turkish,
+  Map<String, Object> arguments,
+) => _renderTemplate(localeText(context, english, turkish), arguments);
+
+String _renderTemplate(String template, Map<String, Object> arguments) {
+  final Set<String> expected = LissomLocalizations.argumentsOf(template);
+  if (expected.length != arguments.length ||
+      !expected.every(arguments.containsKey)) {
+    throw ArgumentError('Localization template arguments differ');
+  }
+  return template.replaceAllMapped(
+    RegExp(r'\{([A-Za-z][A-Za-z0-9_]*)\}'),
+    (Match match) => arguments[match.group(1)]!.toString(),
+  );
+}
+
+/// Catalogs may supply zero/one/two/few/many/other maps under the English
+/// plural template. A plain translated string supports count-neutral copy.
+String localePlural(
+  BuildContext context,
+  String englishOther,
+  String turkish,
+  int count, {
+  required String englishOne,
+  Map<String, Object> arguments = const <String, Object>{},
+}) {
+  final String tag = canonicalLocaleTag(Localizations.localeOf(context));
+  final String fallback = tag == 'tr'
+      ? turkish
+      : (count.abs() == 1 ? englishOne : englishOther);
+  final String template = tag == 'tr' || tag == 'en'
+      ? fallback
+      : LissomLocalizations.maybeOf(context)?.lookup(
+          englishOther,
+          pluralCategory: lissomPluralCategory(tag, count),
+        ) ?? fallback;
+  return _renderTemplate(template, <String, Object>{
+    ...arguments,
+    'count': localizedInteger(context, count),
+  });
+}
+
+/// The named gap already says what failed. OS exception text can include
+/// paths or identifiers, so this detail gives a fixed translated next step.
 String? localizedHistoryFailureDetail(BuildContext context, String? failure) {
   if (failure == null) return null;
   return localeText(
     context,
-    failure,
+    'Reopen Lissom and check your records again.',
     'Uygulamayı yeniden açıp kayıtlarını tekrar kontrol et.',
   );
 }
@@ -18,60 +76,133 @@ String? localizedHistoryFailureDetail(BuildContext context, String? failure) {
 /// Translate display copy loaded from versioned IA and assessment JSON.
 /// Unknown values remain visible in their source language rather than vanishing.
 String configText(BuildContext context, String source) {
-  if (Localizations.localeOf(context).languageCode != 'tr') {
-    if (source == _assessmentIntro) return _assessmentIntroHonest;
-    return source;
+  final String tag = canonicalLocaleTag(Localizations.localeOf(context));
+  if (tag == 'tr') {
+    final String? direct = _turkishConfigCopy[source];
+    if (direct != null) return direct;
   }
-  final String? direct = _turkishConfigCopy[source];
-  if (direct != null) return direct;
-  // History adds a side to a known test name; keep unknown record IDs visible.
+  final String honestSource =
+      source == _assessmentIntro ? _assessmentIntroHonest : source;
+  final String? translated =
+      LissomLocalizations.maybeOf(context)?.lookup(honestSource);
+  if (tag != 'en' && translated != null) return translated;
+
+  // These bounded formats come from the app's typed config/engine readers.
+  // They are not a general translator for rendered English or user input.
   final RegExpMatch? sidedTest = RegExp(
     r'^(.+) · (right|left)$',
   ).firstMatch(source);
-  if (sidedTest != null) {
-    final String? name = _turkishConfigCopy[sidedTest.group(1)];
-    if (name != null) {
-      return '$name · ${sidedTest.group(2) == 'right' ? 'sağ' : 'sol'}';
-    }
+  if (sidedTest != null &&
+      _turkishConfigCopy.containsKey(sidedTest.group(1))) {
+    return localeTemplate(context, '{name} · {side}', '{name} · {side}',
+      <String, Object>{
+        'name': configText(context, sidedTest.group(1)!),
+        'side': sidedTest.group(2) == 'right'
+            ? localeText(context, 'right', 'sağ')
+            : localeText(context, 'left', 'sol'),
+      });
   }
   final RegExpMatch? mixedVerdict = RegExp(
     r'^Of the (\d+) tests behind this line, (\d+) is compared against a reference range and (\d+) are reported without one — the second kind carries no verdict\.$',
   ).firstMatch(source);
   if (mixedVerdict != null) {
-    return 'Bu satırın dayandığı ${mixedVerdict.group(1)} testin '
-        '${mixedVerdict.group(2)} tanesi referans aralığıyla karşılaştırılır; '
-        '${mixedVerdict.group(3)} tanesi karşılaştırılmadan bildirilir. '
-        'İkinci gruba ilişkin bir hüküm verilmez.';
+    return localeTemplate(context,
+      'Of the {total} tests behind this line, {compared} is compared against a reference range and {uncompared} are reported without one — the second kind carries no verdict.',
+      'Bu satırın dayandığı {total} testin {compared} tanesi referans aralığıyla karşılaştırılır; {uncompared} tanesi karşılaştırılmadan bildirilir. İkinci gruba ilişkin bir hüküm verilmez.',
+      <String, Object>{
+        'total': localizedInteger(context, int.parse(mixedVerdict.group(1)!)),
+        'compared': localizedInteger(context, int.parse(mixedVerdict.group(2)!)),
+        'uncompared': localizedInteger(context, int.parse(mixedVerdict.group(3)!)),
+      });
   }
   final RegExpMatch? namedCount = RegExp(
     r'^(\d+) named · none in this build\.$',
   ).firstMatch(source);
   if (namedCount != null) {
-    return '${namedCount.group(1)} başlık var · bu sürümde içerik yok.';
+    return localeTemplate(context,
+      '{count} named · none in this build.',
+      '{count} başlık var · bu sürümde içerik yok.',
+      <String, Object>{'count': localizedInteger(context, int.parse(namedCount.group(1)!))});
   }
   final RegExpMatch? cameraDistance = RegExp(
     r'^Stand about (\d+)–(\d+) cm from the camera\.$',
   ).firstMatch(source);
   if (cameraDistance != null) {
-    return 'Kameradan yaklaşık ${cameraDistance.group(1)}–${cameraDistance.group(2)} cm uzakta dur.';
+    return localeTemplate(context,
+      'Stand about {min}–{max} cm from the camera.',
+      'Kameradan yaklaşık {min}–{max} cm uzakta dur.',
+      <String, Object>{
+        'min': localizedInteger(context, int.parse(cameraDistance.group(1)!)),
+        'max': localizedInteger(context, int.parse(cameraDistance.group(2)!)),
+      });
   }
   final RegExpMatch? cameraHeight = RegExp(
     r'^Put the phone (\d+)–(\d+) cm off the floor\.$',
   ).firstMatch(source);
   if (cameraHeight != null) {
-    return 'Telefonu yerden ${cameraHeight.group(1)}–${cameraHeight.group(2)} cm yüksekliğe koy.';
+    return localeTemplate(context,
+      'Put the phone {min}–{max} cm off the floor.',
+      'Telefonu yerden {min}–{max} cm yüksekliğe koy.',
+      <String, Object>{
+        'min': localizedInteger(context, int.parse(cameraHeight.group(1)!)),
+        'max': localizedInteger(context, int.parse(cameraHeight.group(2)!)),
+      });
   }
   final RegExpMatch? yaw = RegExp(
     r'^Face the camera square-on — more than (\d+)° of turn and the reading is not used\.$',
   ).firstMatch(source);
   if (yaw != null) {
-    return 'Kameraya düz dön; ${yaw.group(1)}° üzerindeki dönüşlerde ölçüm kullanılmaz.';
+    return localeTemplate(context,
+      'Face the camera square-on — more than {degrees}° of turn and the reading is not used.',
+      'Kameraya düz dön; {degrees}° üzerindeki dönüşlerde ölçüm kullanılmaz.',
+      <String, Object>{'degrees': localizedInteger(context, int.parse(yaw.group(1)!))});
   }
-  String result = source;
-  for (final MapEntry<String, String> part in _turkishBlockerParts.entries) {
-    result = result.replaceAll(part.key, part.value);
+  return _knownBlockerText(context, source) ?? honestSource;
+}
+
+// Metric subjects are named by the engine's finite bridge vocabulary. Do not
+// partially rewrite an unrecognised ID, user string or unknown blocker reason.
+const Set<String> _knownBlockerSubjects = <String>{
+  'Forward trunk lean', 'Sideways trunk tilt', 'Shin angle', 'Heel lift',
+  'Knee height', 'Reach depth', 'Shoulder-line width',
+  'Hip line in the plank', 'Hold time',
+};
+
+String? _knownBlockerText(BuildContext context, String source) {
+  final String? direct = _turkishBlockerParts[source];
+  if (direct != null) return localeText(context, source, direct);
+  final List<String> groups = source.split(' · ');
+  if (groups.length > 1) {
+    final List<String> translated = <String>[];
+    for (final String group in groups) {
+      final String? value = _knownBlockerText(context, group);
+      if (value == null) return null;
+      translated.add(value);
+    }
+    return translated.join(' · ');
   }
-  return result;
+  final int divider = source.indexOf(' — ');
+  if (divider == -1) return null;
+  final String subject = source.substring(0, divider);
+  final String reason = source.substring(divider + 3);
+  final String? translatedReason = _knownBlockerText(context, reason);
+  if (translatedReason == null) return null;
+  String translatedSubject;
+  if (_turkishConfigCopy.containsKey(subject)) {
+    translatedSubject = configText(context, subject);
+  } else {
+    final List<String> subjects = subject.replaceAll(' and ', ', ').split(', ');
+    if (subjects.isEmpty || !subjects.every(_knownBlockerSubjects.contains)) return null;
+    final List<String> names = subjects.map((String name) =>
+      localeText(context, name, _turkishBlockerParts[name]!)).toList();
+    translatedSubject = names.length == 1 ? names.single : localeTemplate(context,
+      '{first} and {last}', '{first} ve {last}', <String, Object>{
+        'first': names.sublist(0, names.length - 1).join(', '),
+        'last': names.last,
+      });
+  }
+  return localeTemplate(context, '{subject} — {reason}', '{subject} — {reason}',
+    <String, Object>{'subject': translatedSubject, 'reason': translatedReason});
 }
 
 const String _assessmentIntro =
@@ -80,6 +211,28 @@ const String _assessmentIntroHonest =
     'Twelve movement assessments are listed; three have a camera measurement path in this build. Each test shows its current limits.';
 
 const Map<String, String> _turkishConfigCopy = <String, String>{
+  'Something unexpected happened while starting the camera. Try again.':
+      'Kamera başlatılırken beklenmeyen bir hata oluştu. Yeniden dene.',
+  'The camera could not start. Try again.':
+      'Kamera başlatılamadı. Yeniden dene.',
+  'Camera access is off for Lissom.': 'Lissom için kamera erişimi kapalı.',
+  'Lissom needs camera access to measure.':
+      'Lissom ölçüm yapmak için kamera erişimine ihtiyaç duyar.',
+  'MEASUREMENTS, NOT MARKS': 'BUNLAR ÖLÇÜM, NOT DEĞİL',
+  'Measured and compared': 'Ölçüldü ve karşılaştırıldı',
+  'Measured — your starting point': 'Ölçüldü; başlangıç noktan',
+  'Below the lowest range we compare against. That is a starting point, not a failure — and the number is yours.':
+      'Karşılaştırdığımız en düşük aralığın altında. Bu bir başlangıç noktasıdır, başarısızlık değildir; sayı sana aittir.',
+  'Your number, placed against the range we compare with.':
+      'Değerin, karşılaştırmada kullandığımız aralığa göre gösterilir.',
+  'Measured — read qualitatively': 'Ölçüldü; nitel olarak okunur',
+  'These tests have no numeric range to compare against, by design.':
+      'Bu testlerin tasarım gereği karşılaştırılacak sayısal aralığı yoktur.',
+  'Measured — not compared': 'Ölçüldü; karşılaştırılmadı',
+  'The number is real. Why we cannot compare it is on each row.':
+      'Sayı gerçek bir ölçümdür. Neden karşılaştıramadığımız her satırda açıklanır.',
+  'Named, with the reason. We would rather tell you than leave a blank.':
+      'Nedeniyle birlikte adlandırıldı. Boş bırakmak yerine açıklıyoruz.',
   'Ashtanga beginner foundations': 'Ashtanga başlangıç temelleri',
   'Written Hatha, chair/office, supported standing Vinyasa, adapted supported Yin and Ashtanga beginner foundations are included. Ashtanga uses standing adaptations and sequence reading, not the full Primary Series. Demonstration and physical acceptance remain separate. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa, uyarlanmış destekli Yin ve Ashtanga başlangıç temelleri içerilir. Ashtanga ayakta uyarlamalar ve sıra okumayı kullanır; tam temel seri değildir. Gösterim ve fiziksel kabul ayrıdır. Yoga duruşları kamerayla puanlanmaz.',
   'Written Hatha, chair/office, supported standing Vinyasa and adapted supported Yin beginner paths are included. Demonstration and physical acceptance remain separate; the beginner Ashtanga course remains pending. Yoga postures are not camera-scored.': 'Yazılı Hatha, sandalye/ofis, destekli ayakta Vinyasa ve uyarlanmış destekli Yin başlangıç yolları içerilir. Gösterim ve fiziksel kabul ayrı; başlangıç Ashtanga kursu bekliyor. Yoga duruşları kamerayla puanlanmaz.',

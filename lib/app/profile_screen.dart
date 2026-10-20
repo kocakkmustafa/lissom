@@ -7,9 +7,8 @@
 /// kodda yoktu, o yüzden geçici bir kapı açılmıştı. Sekmeler geldi, kapı
 /// KAPANDI — sayfa artık ait olduğu yerde.
 ///
-/// ⛔ **Burada bir "ayarlar" listesi UYDURULMADI.** Bildirim tercihi, birim
-/// seçimi, hesap, dil — hiçbiri kodda yok. Kapatmayan bir anahtar koymak, ölü
-/// buton sınıfının ta kendisidir.
+/// Installation language is a real persisted preference. Measurement settings
+/// and reminders remain unavailable; their explanatory gap stays visible.
 library;
 
 import 'package:flutter/material.dart';
@@ -20,6 +19,8 @@ import 'app_facts.dart';
 import 'lissom_theme.dart';
 import 'local_account_bridge.dart';
 import 'locale_text.dart';
+import 'lissom_locales.dart';
+import 'lissom_localizations.dart';
 import 'surfaces.dart';
 import 'what_lissom_doesnt_do.dart';
 
@@ -43,6 +44,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
+    final LissomLocaleController? localeController =
+        LissomLocaleScope.maybeOf(context);
     return DecoratedBox(
       decoration: const BoxDecoration(gradient: LissomColors.screenBackground),
       child: ListView(
@@ -192,7 +195,11 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 22),
 
-          // ── Ayarlar: YOK, ve nedeni yazılı ─────────────────────────────
+          if (localeController != null) ...<Widget>[
+            _LanguageCard(controller: localeController),
+            const SizedBox(height: 22),
+          ],
+          // Measurement settings remain absent, with the reason visible.
           Column(
             key: noSettingsKey,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,8 +217,8 @@ class ProfileScreen extends StatelessWidget {
               NamedGapCard(
                 title: localeText(
                   context,
-                  'No local settings',
-                  'Yerel ayar bulunmuyor',
+                  'Other settings are unavailable',
+                  'Diğer ayarlar bulunmuyor',
                 ),
                 reason: localeText(
                   context,
@@ -223,9 +230,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 detail: localeText(
                   context,
-                  'We would rather leave the section empty than fill it '
-                      'with switches that do nothing.',
-                  'Çalışmayan seçenekler göstermiyoruz.',
+                  'Controls for unavailable features are not shown.',
+                  'Sunulmayan özellikler için ayar gösterilmez.',
                 ),
               ),
             ],
@@ -268,10 +274,123 @@ class _EntryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            const Icon(Icons.chevron_right, color: LissomColors.bodySecondary),
+            Icon(
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.chevron_left : Icons.chevron_right,
+              color: LissomColors.bodySecondary,
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+class _LanguageCard extends StatelessWidget {
+  const _LanguageCard({required this.controller});
+
+  final LissomLocaleController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final LissomLocalizations? catalog = LissomLocalizations.maybeOf(context);
+    final String currentTag =
+        canonicalLocaleTag(Localizations.localeOf(context));
+    return LissomCard(
+      key: const Key('profile.language'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(localeText(context, 'App language', 'Uygulama dili'),
+            style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 8),
+          Text(localeText(
+            context,
+            'Language is saved on this installation and does not change your account or practice records.',
+            'Dil bu kurulumda saklanır; hesabını veya çalışma kayıtlarını değiştirmez.',
+          )),
+          const SizedBox(height: 8),
+          Text(localeText(
+            context,
+            'Text without an available translation is shown in English.',
+            'Çevirisi bulunmayan metinler İngilizce gösterilir.',
+          )),
+          const SizedBox(height: 8),
+          if (controller.readFailed)
+            Text(localeText(
+              context,
+              'The saved language could not be read. The system language is being used. Choose a language to save a new preference.',
+              'Kayıtlı dil okunamadı. Sistem dili kullanılıyor. Yeni tercih kaydetmek için bir dil seç.',
+            ), key: const Key('profile.language.readFailure')),
+          if (catalog != null && !catalog.catalogAvailable)
+            Text(localeText(
+              context,
+              'This language catalog could not be loaded. Missing text is shown in English.',
+              'Bu dilin kataloğu yüklenemedi. Eksik metinler İngilizce gösterilir.',
+            ), key: const Key('profile.language.catalogFailure')),
+          FilledButton.tonalIcon(
+            key: const Key('profile.language.choose'),
+            icon: const Icon(Icons.language),
+            onPressed: !controller.isReady || controller.isSaving
+                ? null : () => _choose(context),
+            label: Text(controller.tag == null
+                ? localeTemplate(context,
+                    'System language ({language})', 'Sistem dili ({language})',
+                    <String, Object>{'language': kLissomLanguageNames[currentTag]!})
+                : kLissomLanguageNames[controller.tag]!),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _choose(BuildContext context) => showDialog<void>(
+    context: context,
+    builder: (BuildContext dialogContext) => AnimatedBuilder(
+      animation: controller,
+      builder: (BuildContext context, Widget? child) => AlertDialog(
+        key: const Key('profile.language.dialog'),
+        title: Text(localeText(context, 'App language', 'Uygulama dili')),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (controller.writeFailed)
+                  Text(localeText(
+                    context,
+                    'The language could not be saved. Your previous language is unchanged. Try again.',
+                    'Dil kaydedilemedi. Önceki dilin değişmedi. Yeniden dene.',
+                  ), key: const Key('profile.language.writeFailure')),
+                _option(context, null,
+                  localeText(context, 'Use system language', 'Sistem dilini kullan')),
+                for (final MapEntry<String, String> language
+                    in kLissomLanguageNames.entries)
+                  _option(context, language.key, language.value),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: controller.isSaving ? null : () => Navigator.of(context).pop(),
+            child: Text(localeText(context, 'Cancel', 'Vazgeç')),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Widget _option(BuildContext context, String? tag, String label) =>
+      RadioListTile<String>(
+        key: Key('profile.language.option.${tag ?? 'system'}'),
+        value: tag ?? 'system',
+        groupValue: controller.tag ?? 'system',
+        title: Text(label),
+        onChanged: controller.isSaving ? null : (String? _) async {
+          final bool saved = await controller.select(tag);
+          if (context.mounted && saved) Navigator.of(context).pop();
+        },
+      );
 }
