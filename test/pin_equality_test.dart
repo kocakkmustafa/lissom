@@ -32,10 +32,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// ⛔ MÜHÜRLÜ SABİTLER — kilitten türetilmez, elle beyan edilir.
 ///
-/// Published/reviewed Motion Core 8f, 2026-10-20. The immutable SHA
+/// Published/reviewed Motion Core d69, 2026-10-20. The immutable SHA
 /// retains motion_core 0.13.0 and motion_camera 0.2.0; exact upstream CI
-/// run39404162402 passed12/12. This anchor is independent of the tested lock.
-const String kSealedRef = '8f38158e092c6c9fc60c8ff88ecef449802a259f';
+/// run 39440651688 passed 12/12. This anchor is independent of the tested lock.
+const String kSealedRef = 'd69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d';
 const String kSealedCoreVersion = '0.13.0';
 const String kSealedCameraVersion = '0.2.0';
 
@@ -82,7 +82,7 @@ _LockEntry _readLock(String lock, String pkg) {
   return _LockEntry(ref, resolved, version, source);
 }
 
-const currentMotionSha = '8f38158e092c6c9fc60c8ff88ecef449802a259f';
+const currentMotionSha = 'd69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d';
 
 bool hasLocalMotionOverrides([String? source]) {
   final file = File('pubspec_overrides.yaml');

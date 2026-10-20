@@ -1,11 +1,13 @@
 // EXTERNAL DRAFT / COMPILE, FORMAT, ANALYZER AND SDK TESTS UNRUN.
-// Target: public Core 8f38158e092c6c9fc60c8ff88ecef449802a259f only.
+// Target: public Core d69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d only.
 // Real Core delegates/pages/gate; only account/runtime IO is a public fixture.
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lissom/app/lissom_appearance.dart';
 import 'package:lissom/app/lissom_locales.dart';
+import 'package:lissom/app/lissom_presentation_host.dart';
 import 'package:motion_account/motion_account.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,7 +16,7 @@ const _ownerKey = ValueKey<String>('smoke:guest:stable-ticket');
 const _paidKey = Key('core8f.closed.paid');
 const _accountKey = Key('core8f.open.account');
 
-// Independent literal expectations transcribed from immutable 8f, not produced
+// Independent literal expectations transcribed from immutable d69, not produced
 // by the implementation being tested. These are not fake localizations.
 const _copy = <String, (String, String)>{
   'en': ('Motion account', 'Lissom membership'),
@@ -25,6 +27,12 @@ const _copy = <String, (String, String)>{
   'fr': ('Compte Motion', 'Abonnement Lissom'),
   'ja': ('Motionアカウント', 'Lissomのメンバーシップ'),
   'ar': ('حساب Motion', 'عضوية Lissom'),
+  'it': ('Account Motion', 'Abbonamento Lissom'),
+  'ko': ('Motion 계정', 'Lissom 멤버십'),
+  'id': ('Akun Motion', 'Keanggotaan Lissom'),
+  'pl': ('Konto Motion', 'Członkostwo w Lissom'),
+  'hi': ('Motion खाता', 'Lissom सदस्यता'),
+  'zh-Hans': ('Motion 账户', 'Lissom 会员'),
 };
 const _deleteEnglish =
     'This deletes your shared account and access in all five apps, then erases local history in this app. Cancel any store subscription separately in your Apple or Google account.';
@@ -120,7 +128,7 @@ class _GuestProbeState extends State<_GuestProbe> {
   Widget build(BuildContext context) => const Text('SMOKE_GUEST_CONTENT');
 }
 
-// Same public-interface fixture pattern as Core 8f account_localizations_test
+// Same public-interface fixture pattern as Core account_localizations_test
 // and Lissom account_native_contract_test. No real client/HTTP/session is opened.
 class _FixtureSupabase implements SupabaseClient {
   const _FixtureSupabase();
@@ -288,8 +296,36 @@ class _PaidHarness extends StatelessWidget {
   );
 }
 
+// Independent literals transcribed from immutable public Core d69; not derived
+// from the localization instance whose nested blocker is under test.
+const _checkingPublic14 = <String, String>{
+  "en": "Checking account…",
+  "tr": "Hesap doğrulanıyor…",
+  "es-419": "Verificando cuenta…",
+  "pt-BR": "Verificando conta…",
+  "de": "Konto wird geprüft…",
+  "fr": "Vérification du compte…",
+  "ja": "アカウントを確認中…",
+  "ar": "جارٍ التحقّق من الحساب…",
+  "it": "Verifica dell'account…",
+  "ko": "계정 확인 중…",
+  "id": "Memeriksa akun…",
+  "pl": "Sprawdzanie konta…",
+  "hi": "खाता जाँचा जा रहा है…",
+  "zh-Hans": "正在检查账户…",
+};
+
+final class _MemoryAppearancePreference implements AppearancePreferenceStore {
+  _MemoryAppearancePreference(this.value);
+  ThemeMode value;
+  @override
+  Future<ThemeMode> read() async => value;
+  @override
+  Future<void> write(ThemeMode mode) async { value = mode; }
+}
+
 void main() {
-  testWidgets('public 8f delegates follow actual Lissom installation selection', (
+  testWidgets('public d69 delegates follow actual Lissom installation selection', (
     tester,
   ) async {
     final controller = LissomLocaleController(store: _MemoryPreference('en'));
@@ -298,7 +334,7 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
       controller.dispose();
     });
-    expect(MotionAccountLocalizations.supportedLocales, hasLength(8));
+    expect(MotionAccountLocalizations.supportedLocales, hasLength(14));
     expect(
       MotionAccountLocalizations.delegates,
       contains(MotionAccountLocalizations.delegate),
@@ -313,9 +349,36 @@ void main() {
     );
     expect(
       MotionAccountLocalizations.localeFor(const Locale('it')),
+      const Locale('it'),
+      reason: 'Published d69 includes the six additional approved locales.',
+    );
+    expect(
+      MotionAccountLocalizations.localeFor(const Locale('xx')),
       const Locale('en'),
-      reason:
-          '8f has eight locales; this does not accept the later 14-locale Core.',
+      reason: 'Unsupported-language fallback stays explicit.',
+    );
+    const hans = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
+    const hant = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');
+    expect(MotionAccountLocalizations.localeFor(hans), hans);
+    expect(MotionAccountLocalizations.localeFor(hant), const Locale('en'));
+    expect(
+      MotionAccountLocalizations.localeFor(const Locale('zh', 'TW')),
+      const Locale('en'),
+    );
+    expect(
+      MotionAccountLocalizations.localeListResolutionCallback(
+        const <Locale>[hant, Locale('fr')],
+        MotionAccountLocalizations.supportedLocales,
+      ),
+      const Locale('fr'),
+      reason: 'Traditional Chinese must not silently choose Simplified Chinese.',
+    );
+    expect(
+      MotionAccountLocalizations.localeListResolutionCallback(
+        const <Locale>[Locale('xx'), Locale('fr')],
+        MotionAccountLocalizations.supportedLocales,
+      ),
+      const Locale('fr'),
     );
     expect(
       MotionAccountLocalizations.localeResolutionCallback(
@@ -375,7 +438,7 @@ void main() {
   });
 
   testWidgets(
-    'real 8f nested gate inherits selection and retains guest State while blocked',
+    'real d69 nested gate inherits selection and retains guest State while blocked',
     (tester) async {
       tester.platformDispatcher.localesTestValue = const <Locale>[Locale('en')];
       addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -478,7 +541,7 @@ void main() {
   );
 
   testWidgets(
-    '8f default paid false and retained deletion copy keep store cancellation separate',
+    'd69 default paid false and retained deletion copy keep store cancellation separate',
     (tester) async {
       final controller = LissomLocaleController(store: _MemoryPreference('en'));
       final account = _FixtureAccount(signedIn: true);
@@ -568,4 +631,102 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets(
+    'production presentation bridge preserves fourteen blocker locales and manual theme without guest rebinding',
+    (tester) async {
+      tester.platformDispatcher.localesTestValue = const <Locale>[Locale('en')];
+      tester.platformDispatcher.platformBrightnessTestValue = Brightness.light;
+      addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+      addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+      final locale = LissomLocaleController(store: _MemoryPreference('en'));
+      final appearanceStore = _MemoryAppearancePreference(ThemeMode.dark);
+      final appearance = LissomAppearanceController(store: appearanceStore);
+      final runtime = _PhaseRuntime();
+      await Future.wait<void>(<Future<void>>[
+        locale.initialize(), appearance.initialize(),
+      ]);
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        runtime.dispose();
+        locale.dispose();
+        appearance.dispose();
+      });
+      expect(motionPaidFeaturesAvailable, isFalse);
+      await tester.pumpWidget(LissomAppearanceHost(controller: appearance,
+        child: LissomLocaleHost(controller: locale,
+          child: LissomPresentationHost(child: MotionIdentityGate(
+            runtime: runtime, child: const _GuestProbe(key: _ownerKey),
+          )))));
+      await _pumpUntil(tester,
+        () => find.text('SMOKE_GUEST_CONTENT').evaluate().length == 1,
+        'The existing guest must be admitted through the actual presentation bridge.');
+      final guest = tester.state<_GuestProbeState>(find.byKey(_ownerKey));
+      final gateElement = tester.element(find.byType(MotionIdentityGate));
+      final presentationState = tester.state(find.byType(LissomPresentationHost));
+      runtime.phase.value = MotionIdentityPhase.verifying;
+      Object? blockerState;
+      for (final entry in _checkingPublic14.entries) {
+        expect(await locale.select(entry.key), isTrue);
+        await _pumpUntil(tester, () {
+          final elements = find.text(entry.value).evaluate();
+          if (elements.length != 1) { return false; }
+          final context = elements.single;
+          final registered = Localizations.of<MotionAccountLocalizations>(
+            context, MotionAccountLocalizations);
+          return registered != null &&
+            identical(registered, MotionAccountLocalizations.of(context)) &&
+            registered.locale.toLanguageTag() == entry.key &&
+            Localizations.localeOf(context).toLanguageTag() == entry.key &&
+            Theme.of(context).brightness == Brightness.dark;
+        }, 'The actual nested blocker must mount ${entry.key} under manual dark despite a light device.');
+        final checking = tester.element(find.text(entry.value));
+        final nested = tester.widget<MaterialApp>(find.byType(MaterialApp));
+        final currentBlockerState = tester.state(find.byType(MaterialApp));
+        blockerState ??= currentBlockerState;
+        expect(currentBlockerState, same(blockerState));
+        expect(nested.locale!.toLanguageTag(), entry.key);
+        expect(nested.theme, isNotNull);
+        expect(nested.theme!.brightness, Brightness.dark);
+        expect(Theme.of(checking).scaffoldBackgroundColor,
+          Theme.of(gateElement).scaffoldBackgroundColor);
+        expect(Theme.of(checking).colorScheme.primary,
+          Theme.of(gateElement).colorScheme.primary);
+        expect(Directionality.of(checking),
+          entry.key == 'ar' ? TextDirection.rtl : TextDirection.ltr);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        expect(find.text('SMOKE_GUEST_CONTENT'), findsNothing);
+        expect(tester.state(find.byKey(_ownerKey, skipOffstage: false)), same(guest));
+        expect(tester.element(find.byType(MotionIdentityGate)), same(gateElement));
+        expect(tester.state(find.byType(LissomPresentationHost)), same(presentationState));
+      }
+      expect(await appearance.select(ThemeMode.light), isTrue);
+      await _pumpUntil(tester, () {
+        final elements = find.text(_checkingPublic14['zh-Hans']!).evaluate();
+        return elements.length == 1 &&
+          Theme.of(elements.single).brightness == Brightness.light &&
+          Theme.of(elements.single).scaffoldBackgroundColor ==
+            Theme.of(gateElement).scaffoldBackgroundColor &&
+          Theme.of(elements.single).colorScheme.primary ==
+            Theme.of(gateElement).colorScheme.primary;
+      }, 'An already-open blocker must follow a successfully stored manual light selection.');
+      expect(appearanceStore.value, ThemeMode.light);
+      expect(tester.state(find.byType(MaterialApp)), same(blockerState));
+      final lightChecking = tester.element(find.text(_checkingPublic14['zh-Hans']!));
+      expect(Theme.of(lightChecking).scaffoldBackgroundColor,
+        Theme.of(gateElement).scaffoldBackgroundColor);
+      expect(tester.state(find.byKey(_ownerKey, skipOffstage: false)), same(guest));
+      runtime.phase.value = MotionIdentityPhase.signedOut;
+      await _pumpUntil(tester,
+        () => find.text('SMOKE_GUEST_CONTENT').evaluate().length == 1,
+        'The existing guest must reappear after the synthetic phase returns to signedOut.');
+      expect(tester.state(find.byKey(_ownerKey)), same(guest));
+      expect(tester.element(find.byType(MotionIdentityGate)), same(gateElement));
+      expect(tester.state(find.byType(LissomPresentationHost)), same(presentationState));
+      expect(runtime.account.userReads, 0);
+      expect(runtime.account.membershipReads, 0);
+      expect(runtime.account.deleteCalls, 0);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
 }
