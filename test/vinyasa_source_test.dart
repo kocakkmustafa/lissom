@@ -90,27 +90,32 @@ Future<void> _tap(WidgetTester tester, Finder finder) async {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('actual Vinyasa asset parses and verified loader returns same course', () async {
-    final bytes = File(kVinyasaCourseAssetPath).readAsBytesSync();
-    final parsed = HathaCourse.parse(utf8.decode(bytes));
-    final verified = await loadVerifiedVinyasaCourse(_OffsetBundle(bytes));
-    expect(parsed.id, 'lissom.vinyasa.supported-standing.beginner');
-    expect(verified.id, parsed.id);
-    expect(verified.version, parsed.version);
-    expect(verified.lessons.map((lesson) => lesson.id).toList(),
-      parsed.lessons.map((lesson) => lesson.id).toList());
-    final raw = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
-    final sourceKeys = (raw['sources'] as Map).keys.toSet();
-    expect(sourceKeys, <String>{'s1', 's2', 's3', 's4', 's5', 's6', 's7'});
-    expect((raw['sourceScopes'] as Map).keys.toSet(), sourceKeys);
-    for (final module in raw['modules'] as List) {
-      for (final lesson in (module as Map)['lessons'] as List) {
-        for (final source in (lesson as Map)['sourceIds'] as List) {
-          expect(sourceKeys, contains(source));
+  test(
+    'actual Vinyasa asset parses and verified loader returns same course',
+    () async {
+      final bytes = File(kVinyasaCourseAssetPath).readAsBytesSync();
+      final parsed = HathaCourse.parse(utf8.decode(bytes));
+      final verified = await loadVerifiedVinyasaCourse(_OffsetBundle(bytes));
+      expect(parsed.id, 'lissom.vinyasa.supported-standing.beginner');
+      expect(verified.id, parsed.id);
+      expect(verified.version, parsed.version);
+      expect(
+        verified.lessons.map((lesson) => lesson.id).toList(),
+        parsed.lessons.map((lesson) => lesson.id).toList(),
+      );
+      final raw = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      final sourceKeys = (raw['sources'] as Map).keys.toSet();
+      expect(sourceKeys, <String>{'s1', 's2', 's3', 's4', 's5', 's6', 's7'});
+      expect((raw['sourceScopes'] as Map).keys.toSet(), sourceKeys);
+      for (final module in raw['modules'] as List) {
+        for (final lesson in (module as Map)['lessons'] as List) {
+          for (final source in (lesson as Map)['sourceIds'] as List) {
+            expect(sourceKeys, contains(source));
+          }
         }
       }
-    }
-  });
+    },
+  );
 
   test(
     'chair integrity checks exactly the ByteData view and rejects tamper',
@@ -514,40 +519,72 @@ void main() {
     expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
     expect(store.writes, 0);
   });
-  test('v2 decoder has bilingual steps and taught support/exit prerequisites', () {
-    final course = _vinyasa();
-    expect(course.lessons.length, 10); // Identity contract, not skill completion.
-    expect(course.lessonById('v04')!.steps[0].en, contains('feet stay fixed'));
-    expect(course.lessonById('v04')!.steps[2].en, contains('slide palms'));
-    expect(course.lessonById('v06')!.steps[0].tr, contains('sağ ayağı nötre geri getir'));
-    for (final lesson in course.lessons) {
-      expect(lesson.steps.length, 4);
-      expect(lesson.answerKey, isNotNull);
-      for (final step in lesson.steps) {
-        expect(step.en.trim(), isNotEmpty);
-        expect(step.tr.trim(), isNotEmpty);
+  test(
+    'v2 decoder has bilingual steps and taught support/exit prerequisites',
+    () {
+      final course = _vinyasa();
+      expect(
+        course.lessons.length,
+        10,
+      ); // Identity contract, not skill completion.
+      expect(
+        course.lessonById('v04')!.steps[0].en,
+        contains('feet stay fixed'),
+      );
+      expect(course.lessonById('v04')!.steps[2].en, contains('slide palms'));
+      expect(
+        course.lessonById('v06')!.steps[0].tr,
+        contains('sağ ayağı nötre geri getir'),
+      );
+      for (final lesson in course.lessons) {
+        expect(lesson.steps.length, 4);
+        expect(lesson.answerKey, isNotNull);
+        for (final step in lesson.steps) {
+          expect(step.en.trim(), isNotEmpty);
+          expect(step.tr.trim(), isNotEmpty);
+        }
       }
-    }
-    final raw = jsonDecode(File(kVinyasaCourseAssetPath).readAsStringSync()) as Map<String,dynamic>;
-    final first = ((raw['modules'] as List).first as Map)['lessons'] as List;
-    (first.first as Map)['prerequisites'] = ['unknown'];
-    expect(() => HathaCourse.parse(jsonEncode(raw)), throwsFormatException);
-  });
+      final raw =
+          jsonDecode(File(kVinyasaCourseAssetPath).readAsStringSync())
+              as Map<String, dynamic>;
+      final first = ((raw['modules'] as List).first as Map)['lessons'] as List;
+      (first.first as Map)['prerequisites'] = ['unknown'];
+      expect(() => HathaCourse.parse(jsonEncode(raw)), throwsFormatException);
+    },
+  );
   test('Vinyasa records do not count as chair or Hatha participation', () {
     final vinyasa = _vinyasa();
-    final chair = HathaCourse.parse(File('config/courses/chair-office.v1.json').readAsStringSync());
-    final hatha = HathaCourse.parse(File('config/courses/hatha.v1.json').readAsStringSync());
-    final records = HathaProgress(records: [
-      HathaPracticeRecord(lessonId: 'v01', courseId: vinyasa.id,
-        courseVersion: vinyasa.version, practicedAt: DateTime.utc(2026)),
-      HathaPracticeRecord(lessonId: 'c01', courseId: chair.id,
-        courseVersion: chair.version, practicedAt: DateTime.utc(2026)),
-      HathaPracticeRecord(lessonId: 'h01', courseId: hatha.id,
-        courseVersion: hatha.version, practicedAt: DateTime.utc(2026)),
-    ], unreadableRecords: 0);
+    final chair = HathaCourse.parse(
+      File('config/courses/chair-office.v1.json').readAsStringSync(),
+    );
+    final hatha = HathaCourse.parse(
+      File('config/courses/hatha.v1.json').readAsStringSync(),
+    );
+    final records = HathaProgress(
+      records: [
+        HathaPracticeRecord(
+          lessonId: 'v01',
+          courseId: vinyasa.id,
+          courseVersion: vinyasa.version,
+          practicedAt: DateTime.utc(2026),
+        ),
+        HathaPracticeRecord(
+          lessonId: 'c01',
+          courseId: chair.id,
+          courseVersion: chair.version,
+          practicedAt: DateTime.utc(2026),
+        ),
+        HathaPracticeRecord(
+          lessonId: 'h01',
+          courseId: hatha.id,
+          courseVersion: hatha.version,
+          practicedAt: DateTime.utc(2026),
+        ),
+      ],
+      unreadableRecords: 0,
+    );
     expect(records.practicedIn(vinyasa), <String>{'v01'});
     expect(records.practicedIn(chair), <String>{'c01'});
     expect(records.practicedIn(hatha), <String>{'h01'});
   });
-
 }

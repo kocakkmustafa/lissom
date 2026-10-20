@@ -223,10 +223,7 @@ void main() {
         findsNothing,
       );
       expect(
-        find.textContaining(
-          _reviewedH59RehearsalEnglish,
-          skipOffstage: false,
-        ),
+        find.textContaining(_reviewedH59RehearsalEnglish, skipOffstage: false),
         findsNothing,
       );
       expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
