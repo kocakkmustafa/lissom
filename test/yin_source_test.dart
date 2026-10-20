@@ -61,8 +61,12 @@ AppFacts _facts() {
     liveness: base.liveness,
     history: base.history,
     hatha: base.hatha,
-    chairOffice: HathaCourse.parse(File('config/courses/chair-office.v1.json').readAsStringSync()),
-    vinyasa: HathaCourse.parse(File('config/courses/vinyasa-standing.v1.json').readAsStringSync()),
+    chairOffice: HathaCourse.parse(
+      File('config/courses/chair-office.v1.json').readAsStringSync(),
+    ),
+    vinyasa: HathaCourse.parse(
+      File('config/courses/vinyasa-standing.v1.json').readAsStringSync(),
+    ),
     yin: _yin(),
     hathaProgress: base.hathaProgress,
   );
@@ -78,27 +82,41 @@ Future<void> _tap(WidgetTester tester, Finder finder) async {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('actual Yin asset parses and verified loader returns same course', () async {
-    final bytes = File(kYinCourseAssetPath).readAsBytesSync();
-    final parsed = HathaCourse.parse(utf8.decode(bytes));
-    final verified = await loadVerifiedYinCourse(_OffsetBundle(bytes));
-    expect(parsed.id, 'lissom.yin.supported.beginner');
-    expect(verified.id, parsed.id);
-    expect(verified.version, parsed.version);
-    expect(verified.lessons.map((lesson) => lesson.id).toList(),
-      parsed.lessons.map((lesson) => lesson.id).toList());
-    final raw = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
-    final sourceKeys = (raw['sources'] as Map).keys.toSet();
-    expect(sourceKeys, <String>{'s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'});
-    expect((raw['sourceScopes'] as Map).keys.toSet(), sourceKeys);
-    for (final module in raw['modules'] as List) {
-      for (final lesson in (module as Map)['lessons'] as List) {
-        for (final source in (lesson as Map)['sourceIds'] as List) {
-          expect(sourceKeys, contains(source));
+  test(
+    'actual Yin asset parses and verified loader returns same course',
+    () async {
+      final bytes = File(kYinCourseAssetPath).readAsBytesSync();
+      final parsed = HathaCourse.parse(utf8.decode(bytes));
+      final verified = await loadVerifiedYinCourse(_OffsetBundle(bytes));
+      expect(parsed.id, 'lissom.yin.supported.beginner');
+      expect(verified.id, parsed.id);
+      expect(verified.version, parsed.version);
+      expect(
+        verified.lessons.map((lesson) => lesson.id).toList(),
+        parsed.lessons.map((lesson) => lesson.id).toList(),
+      );
+      final raw = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      final sourceKeys = (raw['sources'] as Map).keys.toSet();
+      expect(sourceKeys, <String>{
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+      });
+      expect((raw['sourceScopes'] as Map).keys.toSet(), sourceKeys);
+      for (final module in raw['modules'] as List) {
+        for (final lesson in (module as Map)['lessons'] as List) {
+          for (final source in (lesson as Map)['sourceIds'] as List) {
+            expect(sourceKeys, contains(source));
+          }
         }
       }
-    }
-  });
+    },
+  );
 
   test(
     'Yin integrity checks exactly the ByteData view and rejects tamper',
@@ -257,18 +275,57 @@ void main() {
             _OffsetBundle(File(kYinCourseAssetPath).readAsBytesSync()),
           );
           final lesson = course.lessonById(id)!;
-          final practice = authoredEducationText(course.id, id, locale, 'practice');
-          final question = authoredEducationText(course.id, id, locale, 'selfCheck');
-          final answer = authoredEducationText(course.id, id, locale, 'answerKey');
-          expect(locale == 'tr' ? lesson.practice.tr : lesson.practice.en, practice);
-          expect(locale == 'tr' ? lesson.selfCheck.tr : lesson.selfCheck.en, question);
+          final practice = authoredEducationText(
+            course.id,
+            id,
+            locale,
+            'practice',
+          );
+          final question = authoredEducationText(
+            course.id,
+            id,
+            locale,
+            'selfCheck',
+          );
+          final answer = authoredEducationText(
+            course.id,
+            id,
+            locale,
+            'answerKey',
+          );
+          expect(
+            locale == 'tr' ? lesson.practice.tr : lesson.practice.en,
+            practice,
+          );
+          expect(
+            locale == 'tr' ? lesson.selfCheck.tr : lesson.selfCheck.en,
+            question,
+          );
           expect(lesson.answerKey, isNotNull);
-          expect(locale == 'tr' ? lesson.answerKey!.tr : lesson.answerKey!.en, answer);
+          expect(
+            locale == 'tr' ? lesson.answerKey!.tr : lesson.answerKey!.en,
+            answer,
+          );
           expect(question, isNot(practice));
           expect(answer, isNot(question));
-          final displayedPractice = displayedEducationText(course.id, id, locale, 'practice');
-          final displayedQuestion = displayedEducationText(course.id, id, locale, 'selfCheck');
-          final displayedAnswer = displayedEducationText(course.id, id, locale, 'answerKey');
+          final displayedPractice = displayedEducationText(
+            course.id,
+            id,
+            locale,
+            'practice',
+          );
+          final displayedQuestion = displayedEducationText(
+            course.id,
+            id,
+            locale,
+            'selfCheck',
+          );
+          final displayedAnswer = displayedEducationText(
+            course.id,
+            id,
+            locale,
+            'answerKey',
+          );
           expect(displayedQuestion, isNot(displayedPractice));
           expect(displayedAnswer, isNot(displayedQuestion));
           final store = _CountingStore();
@@ -298,9 +355,17 @@ void main() {
 
           await open();
           final reveal = find.byKey(Key('course.answer.$id'));
-          await tester.scrollUntilVisible(find.text(displayedPractice), 300, maxScrolls: 100);
+          await tester.scrollUntilVisible(
+            find.text(displayedPractice),
+            300,
+            maxScrolls: 100,
+          );
           expect(find.text(displayedPractice), findsOneWidget);
-          await tester.scrollUntilVisible(find.text(displayedQuestion), 300, maxScrolls: 100);
+          await tester.scrollUntilVisible(
+            find.text(displayedQuestion),
+            300,
+            maxScrolls: 100,
+          );
           expect(find.text(displayedQuestion), findsOneWidget);
           expect(store.writes, 0);
           await tester.scrollUntilVisible(reveal, 300, maxScrolls: 100);
@@ -331,14 +396,22 @@ void main() {
             ),
           );
           expect(tester.takeException(), isNull);
-          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
-          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.inactive,
+          );
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.hidden,
+          );
           tester.binding.handleAppLifecycleStateChanged(
             AppLifecycleState.paused,
           );
           await tester.pump();
-          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
-          tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.hidden,
+          );
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.inactive,
+          );
           tester.binding.handleAppLifecycleStateChanged(
             AppLifecycleState.resumed,
           );
@@ -433,54 +506,103 @@ void main() {
     );
   });
 
-  testWidgets('Yin foundation button opens actual Hatha teaching', (tester) async {
-    await tester.pumpWidget(MaterialApp(home: LissomShell(loader: () async => _facts())));
+  testWidgets('Yin foundation button opens actual Hatha teaching', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(home: LissomShell(loader: () async => _facts())),
+    );
     await tester.pumpAndSettle();
     final entry = find.byKey(const Key('home.yinCourse'));
     await tester.scrollUntilVisible(entry, 300);
-    await _tap(tester, find.descendant(of: entry, matching: find.byType(TextButton)));
-    expect(tester.widget<HathaCourseScreen>(find.byType(HathaCourseScreen)).course.id,
-      'lissom.hatha.foundations');
+    await _tap(
+      tester,
+      find.descendant(of: entry, matching: find.byType(TextButton)),
+    );
+    expect(
+      tester
+          .widget<HathaCourseScreen>(find.byType(HathaCourseScreen))
+          .course
+          .id,
+      'lissom.hatha.foundations',
+    );
   });
 
-  testWidgets('course navigation cannot turn locked Yin preview into movement', (tester) async {
-    final course = _yin();
-    final store = _CountingStore();
-    await tester.pumpWidget(MaterialApp(home: HathaCourseScreen(
-      course: course,
-      initialProgress: const HathaProgress(records: [], unreadableRecords: 0),
-      storeLoader: () async => store,
-    )));
-    await tester.pumpAndSettle();
-    final lesson = course.lessonById('y03')!;
-    final tile = find.text(lesson.title.en);
-    await tester.scrollUntilVisible(tile, 300);
-    await _tap(tester, tile);
-    final screen = tester.widget<HathaLessonScreen>(find.byType(HathaLessonScreen));
-    expect(screen.previewOnly, isTrue);
-    expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
-    expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
-    expect(find.byKey(const Key('hatha.session.prepareToPractice')), findsNothing);
-    expect(store.writes, 0);
-  });
+  testWidgets(
+    'course navigation cannot turn locked Yin preview into movement',
+    (tester) async {
+      final course = _yin();
+      final store = _CountingStore();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: HathaCourseScreen(
+            course: course,
+            initialProgress: const HathaProgress(
+              records: [],
+              unreadableRecords: 0,
+            ),
+            storeLoader: () async => store,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final lesson = course.lessonById('y03')!;
+      final tile = find.text(lesson.title.en);
+      await tester.scrollUntilVisible(tile, 300);
+      await _tap(tester, tile);
+      final screen = tester.widget<HathaLessonScreen>(
+        find.byType(HathaLessonScreen),
+      );
+      expect(screen.previewOnly, isTrue);
+      expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+      expect(
+        find.byKey(const Key('hatha.session.prepareToPractice')),
+        findsNothing,
+      );
+      expect(store.writes, 0);
+    },
+  );
 
-  testWidgets('Yin movement preparation names access limits and keeps save closed', (tester) async {
-    final course = _yin();
-    final lesson = course.lessonById('y05')!;
-    final store = _CountingStore();
-    await tester.pumpWidget(MaterialApp(home: HathaLessonScreen(
-      course: course, lesson: lesson, store: store, isRepeat: false,
-    )));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const Key('hatha.session.preparation')), findsOneWidget);
-    expect(find.textContaining('reading h35 or ticking this card'), findsOneWidget);
-    expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
-    expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
-    expect(store.writes, 0);
-  });
+  testWidgets(
+    'Yin movement preparation names access limits and keeps save closed',
+    (tester) async {
+      final course = _yin();
+      final lesson = course.lessonById('y05')!;
+      final store = _CountingStore();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: HathaLessonScreen(
+            course: course,
+            lesson: lesson,
+            store: store,
+            isRepeat: false,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const Key('hatha.session.preparation')),
+        findsOneWidget,
+      );
+      expect(
+        find.textContaining('reading h35 or ticking this card'),
+        findsOneWidget,
+      );
+      expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
+      expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
+      expect(store.writes, 0);
+    },
+  );
 
-  testWidgets('Progress includes distinct Yin participation without mastery', (tester) async {
-    await tester.pumpWidget(MaterialApp(home: Scaffold(body: ProgressScreen(facts: _facts()))));
+  testWidgets('Progress includes distinct Yin participation without mastery', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: ProgressScreen(facts: _facts())),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('Yin participation'), 300);
     expect(find.text('Yin participation'), findsOneWidget);
@@ -562,16 +684,26 @@ void main() {
     final butterfly = course.lessonById('y03')!;
     final caterpillar = course.lessonById('y04')!;
     final questions = course.lessonById('y06')!;
-    expect(butterfly.steps.map((x) => x.en).join(' '),
-      contains('lift forearms completely off'));
-    expect(butterfly.steps.map((x) => x.en).join(' '),
-      contains('Outer-thigh cushions stay in place'));
-    expect(butterfly.steps.map((x) => x.tr).join(' '),
-      contains('Dış uyluk altı yastıklar yerinde kalır'));
-    expect(caterpillar.steps.map((x) => x.en).join(' '),
-      contains('neither leg may still be resting its weight'));
-    expect(caterpillar.steps.map((x) => x.tr).join(' '),
-      contains('iki bacak da artık desteğe ağırlık vermiyor'));
+    expect(
+      butterfly.steps.map((x) => x.en).join(' '),
+      contains('lift forearms completely off'),
+    );
+    expect(
+      butterfly.steps.map((x) => x.en).join(' '),
+      contains('Outer-thigh cushions stay in place'),
+    );
+    expect(
+      butterfly.steps.map((x) => x.tr).join(' '),
+      contains('Dış uyluk altı yastıklar yerinde kalır'),
+    );
+    expect(
+      caterpillar.steps.map((x) => x.en).join(' '),
+      contains('neither leg may still be resting its weight'),
+    );
+    expect(
+      caterpillar.steps.map((x) => x.tr).join(' '),
+      contains('iki bacak da artık desteğe ağırlık vermiyor'),
+    );
     expect(questions.practice.en, contains('A: No symptoms'));
     expect(questions.practice.en, isNot(contains('A: Leave under control')));
     expect(questions.selfCheck.tr, isNot(contains('A: Pozdan kontrollü çık')));
@@ -588,7 +720,9 @@ void main() {
         expect(step.tr.trim(), isNotEmpty);
       }
     }
-    final raw = jsonDecode(File(kYinCourseAssetPath).readAsStringSync()) as Map<String,dynamic>;
+    final raw =
+        jsonDecode(File(kYinCourseAssetPath).readAsStringSync())
+            as Map<String, dynamic>;
     final first = ((raw['modules'] as List).first as Map)['lessons'] as List;
     (first.first as Map)['prerequisites'] = ['unknown'];
     expect(() => HathaCourse.parse(jsonEncode(raw)), throwsFormatException);
@@ -597,17 +731,34 @@ void main() {
     final yin = _yin();
     final courses = <HathaCourse>[
       yin,
-      HathaCourse.parse(File('config/courses/chair-office.v1.json').readAsStringSync()),
-      HathaCourse.parse(File('config/courses/hatha.v1.json').readAsStringSync()),
-      HathaCourse.parse(File('config/courses/vinyasa-standing.v1.json').readAsStringSync()),
+      HathaCourse.parse(
+        File('config/courses/chair-office.v1.json').readAsStringSync(),
+      ),
+      HathaCourse.parse(
+        File('config/courses/hatha.v1.json').readAsStringSync(),
+      ),
+      HathaCourse.parse(
+        File('config/courses/vinyasa-standing.v1.json').readAsStringSync(),
+      ),
     ];
-    final records = HathaProgress(records: [
-      for (final course in courses)
-        HathaPracticeRecord(lessonId: course.lessons.first.id, courseId: course.id,
-          courseVersion: course.version, practicedAt: DateTime.utc(2026)),
-      HathaPracticeRecord(lessonId: 'y02', courseId: yin.id,
-        courseVersion: '0.0.0', practicedAt: DateTime.utc(2026)),
-    ], unreadableRecords: 0);
+    final records = HathaProgress(
+      records: [
+        for (final course in courses)
+          HathaPracticeRecord(
+            lessonId: course.lessons.first.id,
+            courseId: course.id,
+            courseVersion: course.version,
+            practicedAt: DateTime.utc(2026),
+          ),
+        HathaPracticeRecord(
+          lessonId: 'y02',
+          courseId: yin.id,
+          courseVersion: '0.0.0',
+          practicedAt: DateTime.utc(2026),
+        ),
+      ],
+      unreadableRecords: 0,
+    );
     for (final course in courses) {
       expect(records.practicedIn(course), <String>{course.lessons.first.id});
     }

@@ -191,10 +191,14 @@ void main() {
       expect(course.intro.en, contains('not the full Primary Series'));
       expect(course.intro.tr, contains('Tam temel seri değildir'));
       for (final lesson in course.lessons) {
-        expect(lesson.practice.en,
-            authoredEducationText(course.id, lesson.id, 'en', 'practice'));
-        expect(lesson.practice.tr,
-            authoredEducationText(course.id, lesson.id, 'tr', 'practice'));
+        expect(
+          lesson.practice.en,
+          authoredEducationText(course.id, lesson.id, 'en', 'practice'),
+        );
+        expect(
+          lesson.practice.tr,
+          authoredEducationText(course.id, lesson.id, 'tr', 'practice'),
+        );
       }
       expect(
         course.lessonById('a10')!.steps.last.en,
@@ -306,10 +310,17 @@ void main() {
           await _tap(tester, find.byKey(const Key('hatha.session.prepared')));
         }
         final lesson = _course().lessonById(id)!;
-        final practice = displayedEducationText(kAshtangaCourseId, id, language, 'practice');
+        final practice = displayedEducationText(
+          kAshtangaCourseId,
+          id,
+          language,
+          'practice',
+        );
         await tester.scrollUntilVisible(
-          find.text(practice), 250,
-          scrollable: find.byType(Scrollable).last, maxScrolls: 80,
+          find.text(practice),
+          250,
+          scrollable: find.byType(Scrollable).last,
+          maxScrolls: 80,
         );
         expect(find.text(practice), findsOneWidget);
         expect(store.writes, 0);

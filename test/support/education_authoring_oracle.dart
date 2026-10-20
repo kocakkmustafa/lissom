@@ -4,8 +4,12 @@ import 'dart:io';
 // Frozen author-reviewed parsed and displayed content oracles. Do not regenerate
 // from app assets or localization helpers at test runtime: that hides aliases.
 final Map<String, dynamic> _educationOracle =
-    jsonDecode(File('test/fixtures/education_authoring_v1_expected.json')
-        .readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(
+          File(
+            'test/fixtures/education_authoring_v1_expected.json',
+          ).readAsStringSync(),
+        )
+        as Map<String, dynamic>;
 
 String authoredEducationText(
   String courseId,
