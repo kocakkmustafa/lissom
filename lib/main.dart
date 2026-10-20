@@ -152,6 +152,7 @@ class LissomApp extends StatelessWidget {
     localeListResolutionCallback: resolveLissomLocale,
     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
       LissomLocalizationsDelegate(),
+      MotionAccountLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
@@ -573,6 +574,7 @@ class _AccountSetupFailureApp extends StatelessWidget {
     localeListResolutionCallback: resolveLissomLocale,
     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
       LissomLocalizationsDelegate(),
+      MotionAccountLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
