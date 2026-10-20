@@ -268,7 +268,7 @@ void main() {
       expect(source.disposals, 1);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pumpAndSettle();
-      expect(find.textContaining("we'll track it from here"), findsOneWidget);
+      expect(find.textContaining('Measurement saved.'), findsOneWidget);
       expect(find.text('Back to test'), findsOneWidget);
       await tester.tap(find.byKey(const Key('liveCapture.tryAgain')));
       await tester.pumpAndSettle();

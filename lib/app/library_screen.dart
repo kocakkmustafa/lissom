@@ -143,10 +143,11 @@ class LibraryScreen extends StatelessWidget {
                 // Bölüm başlığı SAYIYI taşır: genişlik saklanmıyor, ama
                 // birinci-sınıf yerleşim de verilmiyor.
                 LissomEyebrow(
-                  localeText(
+                  localeTemplate(
                     context,
-                    'Planned, not in this build (${pending.length})',
-                    'Bu sürümde bulunmayan bölümler (${pending.length})',
+                    'Planned, not in this build ({count})',
+                    'Bu sürümde bulunmayan bölümler ({count})',
+                    <String, Object>{'count': localizedInteger(context, pending.length)},
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -157,7 +158,7 @@ class LibraryScreen extends StatelessWidget {
                         'None of them has content in the app you are holding, and we '
                         'are not going to guess when they will.',
                     'Bu başlıklar Lissom’un planlanan kapsamını gösterir. '
-                        'Henüz içerik barındırmazlar; bir yayın tarihi belirtilmez.',
+                        'Bu sürümde içerik barındırmazlar; bir yayın tarihi belirtilmez.',
                   ),
                   style: t.textTheme.bodySmall,
                 ),
@@ -243,27 +244,18 @@ class _BuiltFamilyCard extends StatelessWidget {
                             'Course data unavailable',
                             'Kurs verisi açılamadı',
                           )
-                        : localeText(
-                            context,
-                            '${facts.hatha!.modules.length} modules · '
-                                '${facts.hatha!.lessons.length} Hatha lessons'
-                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} chair / office lessons'}'
-                                '${facts.vinyasa == null ? '' : ' · ${facts.vinyasa!.lessons.length} Vinyasa lessons'}'
-                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin lessons'}'
-                                '${facts.ashtanga == null ? '' : ' · ${facts.ashtanga!.lessons.length} Ashtanga foundations lessons'}',
-                            '${facts.hatha!.modules.length} modül · '
-                                '${facts.hatha!.lessons.length} Hatha dersi'
-                                '${facts.chairOffice == null ? '' : ' · ${facts.chairOffice!.lessons.length} sandalye / ofis dersi'}'
-                                '${facts.vinyasa == null ? '' : ' · ${facts.vinyasa!.lessons.length} Vinyasa dersi'}'
-                                '${facts.yin == null ? '' : ' · ${facts.yin!.lessons.length} Yin dersi'}'
-                                '${facts.ashtanga == null ? '' : ' · ${facts.ashtanga!.lessons.length} Ashtanga temelleri dersi'}',
-                          )
-                  : localeText(
+                        : _teachingInventory(context)
+                  : localeTemplate(
                       context,
-                      '$total tests · $live camera measurement paths in the engine '
-                          '· ${measurementAvailable ? 'camera entry on Home for supported tests' : 'camera closed in this release'}',
-                      '$total test · motorda $live kamera ölçüm yolu '
-                          '· ${measurementAvailable ? 'desteklenen testlerde kamera girişi Ana Sayfa’da' : 'bu sürümde kamera kapalı'}',
+                      '{total} tests · {live} camera measurement paths in the engine · {availability}',
+                      '{total} test · motorda {live} kamera ölçüm yolu · {availability}',
+                      <String, Object>{
+                        'total': localizedInteger(context, total),
+                        'live': localizedInteger(context, live),
+                        'availability': localeText(context,
+                          measurementAvailable ? 'camera entry on Home for supported tests' : 'camera closed in this release',
+                          measurementAvailable ? 'desteklenen testlerde kamera girişi Ana Sayfa’da' : 'bu sürümde kamera kapalı'),
+                      },
                     ),
               style: t.textTheme.bodySmall?.copyWith(
                 color: LissomColors.roseDeepHover,
@@ -274,6 +266,28 @@ class _BuiltFamilyCard extends StatelessWidget {
       ),
     );
   }
+
+  String _teachingInventory(BuildContext context) => <String>[
+    localeTemplate(context,
+        '{modules} modules · {lessons} Hatha lessons',
+        '{modules} modül · {lessons} Hatha dersi',
+        <String, Object>{
+          'modules': localizedInteger(context, facts.hatha!.modules.length),
+          'lessons': localizedInteger(context, facts.hatha!.lessons.length),
+        }),
+    if (facts.chairOffice case final HathaCourse chair)
+      localeTemplate(context, '{count} chair / office lessons', '{count} sandalye / ofis dersi',
+          <String, Object>{'count': localizedInteger(context, chair.lessons.length)}),
+    if (facts.vinyasa case final HathaCourse vinyasa)
+      localeTemplate(context, '{count} Vinyasa lessons', '{count} Vinyasa dersi',
+          <String, Object>{'count': localizedInteger(context, vinyasa.lessons.length)}),
+    if (facts.yin case final HathaCourse yin)
+      localeTemplate(context, '{count} Yin lessons', '{count} Yin dersi',
+          <String, Object>{'count': localizedInteger(context, yin.lessons.length)}),
+    if (facts.ashtanga case final HathaCourse ashtanga)
+      localeTemplate(context, '{count} Ashtanga foundations lessons', '{count} Ashtanga temelleri dersi',
+          <String, Object>{'count': localizedInteger(context, ashtanga.lessons.length)}),
+  ].join(' · ');
 }
 
 /// Kompakt satır: ad + dürüst tek satır durum. Kart YOK, gölge YOK —
@@ -446,10 +460,14 @@ class FamilyPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              localeText(
+              localeTemplate(
                 context,
-                '${course.modules.length} modules · ${course.lessons.length} lessons',
-                '${course.modules.length} modül · ${course.lessons.length} ders',
+                '{modules} modules · {lessons} lessons',
+                '{modules} modül · {lessons} ders',
+                <String, Object>{
+                  'modules': localizedInteger(context, course.modules.length),
+                  'lessons': localizedInteger(context, course.lessons.length),
+                },
               ),
             ),
             const SizedBox(height: 12),
@@ -621,7 +639,7 @@ class FamilyPage extends StatelessWidget {
           ),
         )
       else ...<Widget>[
-        LissomEyebrow('$liveHeading (${live.length})'),
+        LissomEyebrow('$liveHeading (${localizedInteger(context, live.length)})'),
         const SizedBox(height: 10),
         Column(
           key: liveListKey,
@@ -688,7 +706,7 @@ class FamilyPage extends StatelessWidget {
           style: t.textTheme.bodyMedium,
         )
       else ...<Widget>[
-        LissomEyebrow('$blockedHeading (${blocked.length})'),
+        LissomEyebrow('$blockedHeading (${localizedInteger(context, blocked.length)})'),
         const SizedBox(height: 4),
         Text(
           localeText(
@@ -749,7 +767,7 @@ class FamilyPage extends StatelessWidget {
       ];
     }
     return <Widget>[
-      LissomEyebrow('$namedHeading (${family.children.length})'),
+      LissomEyebrow('$namedHeading (${localizedInteger(context, family.children.length)})'),
       const SizedBox(height: 4),
       Text(
         localeText(

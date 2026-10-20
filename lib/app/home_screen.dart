@@ -205,12 +205,15 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            localeText(
+            localeTemplate(
               context,
-              '${course.modules.length} modules · ${course.lessons.length} lessons · '
-                  '$practiced practised',
-              '${course.modules.length} modül · ${course.lessons.length} ders · '
-                  '$practiced çalışıldı',
+              '{modules} modules · {lessons} lessons · {practised} practised',
+              '{modules} modül · {lessons} ders · {practised} çalışıldı',
+              <String, Object>{
+                'modules': localizedInteger(context, course.modules.length),
+                'lessons': localizedInteger(context, course.lessons.length),
+                'practised': localizedInteger(context, practiced),
+              },
             ),
           ),
           const SizedBox(height: 12),
@@ -393,12 +396,11 @@ class HomeScreen extends StatelessWidget {
                     'Nothing has been measured on this device.',
                     'Bu cihazda kayıtlı ölçüm yok.',
                   )
-                : localeText(
+                : localeTemplate(
                     context,
-                    'Last measurement on this device: '
-                        '${_formatDate(last.completedAt)}.',
-                    'Bu cihazdaki son ölçüm: '
-                        '${_formatDate(last.completedAt, context: context)}.',
+                    'Last measurement on this device: {date}.',
+                    'Bu cihazdaki son ölçüm: {date}.',
+                    <String, Object>{'date': localizedDate(context, last.completedAt)},
                   ),
             style: t.textTheme.bodyMedium,
           ),
@@ -467,7 +469,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            '${_formatDate(last.completedAt, context: context)} · '
+            '${localizedDate(context, last.completedAt)} · '
             '${configText(context, _recordClassText(last))}',
             style: t.textTheme.bodyMedium,
           ),
@@ -485,19 +487,17 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            localeText(
-              context,
-              live.isEmpty
-                  // Sayı MOTOR yeteneğini anlatıyor, kullanıcının
-                  // yapabileceğini DEĞİL — cümle bunu söylemeli (L-242).
-                  ? 'The measurement engine can read none of the twelve tests'
-                  : 'The measurement engine can read ${live.length} of '
-                        '${facts.liveness.length} tests',
-              live.isEmpty
-                  ? 'Ölçüm motoru listelenen testlerin hiçbirini okuyamıyor'
-                  : 'Ölçüm motoru ${facts.liveness.length} testin '
-                        '${live.length} tanesini okuyabiliyor',
-            ),
+            live.isEmpty
+                ? localeText(context,
+                    'The measurement engine can read none of the twelve tests',
+                    'Ölçüm motoru listelenen testlerin hiçbirini okuyamıyor')
+                : localeTemplate(context,
+                    'The measurement engine can read {live} of {total} tests',
+                    'Ölçüm motoru {total} testin {live} tanesini okuyabiliyor',
+                    <String, Object>{
+                      'live': localizedInteger(context, live.length),
+                      'total': localizedInteger(context, facts.liveness.length),
+                    }),
             style: t.textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -572,12 +572,13 @@ class HomeScreen extends StatelessWidget {
 
   static Widget _floorNote(BuildContext context, ThemeData t, int unreadable) =>
       Text(
-        localeText(
+        localePlural(
           context,
-          '$unreadable stored record${unreadable == 1 ? '' : 's'} could not be '
-              'read, so anything counted here is a floor, not a total.',
-          '$unreadable kayıt okunamadı. Burada gösterilen sayı toplam değil, '
+          '{count} stored records could not be read, so anything counted here is a floor, not a total.',
+          '{count} kayıt okunamadı. Burada gösterilen sayı toplam değil, '
               'okunabilen en az kayıt sayısıdır.',
+          unreadable,
+          englishOne: '{count} stored record could not be read, so anything counted here is a floor, not a total.',
         ),
         style: t.textTheme.bodySmall?.copyWith(
           color: LissomColors.roseDeepHover,
@@ -598,44 +599,4 @@ class HomeScreen extends StatelessWidget {
     _ => 'recorded',
   };
 
-  static const List<String> _months = <String>[
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  /// Mutlak tarih — **göreli süre ("3 gün önce") BİLEREK yok.** Göreli süre,
-  /// bir gecikme duygusu üretmenin en sessiz yoludur ve §5.2 gecikmeyi
-  /// suçlamayı yasaklıyor. Bir tarih olgudur; "3 gündür" bir ima taşır.
-  static String _formatDate(DateTime d, {BuildContext? context}) {
-    final DateTime l = d.toLocal();
-    if (context != null &&
-        Localizations.localeOf(context).languageCode == 'tr') {
-      const List<String> months = <String>[
-        'Oca',
-        'Şub',
-        'Mar',
-        'Nis',
-        'May',
-        'Haz',
-        'Tem',
-        'Ağu',
-        'Eyl',
-        'Eki',
-        'Kas',
-        'Ara',
-      ];
-      return '${l.day} ${months[l.month - 1]} ${l.year}';
-    }
-    return '${l.day} ${_months[l.month - 1]} ${l.year}';
-  }
 }

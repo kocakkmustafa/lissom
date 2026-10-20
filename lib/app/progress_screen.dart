@@ -346,10 +346,12 @@ class ProgressScreen extends StatelessWidget {
                 'Your readings are here, but we cannot read them',
                 'Ölçümlerin var, ancak okunamıyor',
               ),
-              reason: localeText(
+              reason: localePlural(
                 context,
-                '${h.unreadable} recorded reading${h.unreadable == 1 ? '' : 's'} could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
-                '${h.unreadable} kayıt bu Lissom sürümünde okunamadı. Kayıtlar hâlâ bu telefonda; listeyi boş saymıyoruz.',
+                '{count} recorded readings could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
+                '{count} kayıt bu Lissom sürümünde okunamadı. Kayıtlar hâlâ bu telefonda; listeyi boş saymıyoruz.',
+                h.unreadable,
+                englishOne: '{count} recorded reading could not be read by this version of Lissom. They are still on this phone — we are not going to tell you the list is empty when it is not.',
               ),
               detail: localeText(
                 context,
@@ -391,10 +393,11 @@ class ProgressScreen extends StatelessWidget {
               const SizedBox(height: 14),
             ],
             LissomEyebrow(
-              localeText(
+              localeTemplate(
                 context,
-                'Recorded readings (${h.records.length})',
-                'Kayıtlı ölçümler (${h.records.length})',
+                'Recorded readings ({count})',
+                'Kayıtlı ölçümler ({count})',
+                <String, Object>{'count': localizedInteger(context, h.records.length)},
               ),
             ),
             const SizedBox(height: 10),
@@ -484,16 +487,12 @@ class ProgressScreen extends StatelessWidget {
   ) => LissomCard(
     padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
     child: Text(
-      localeText(
+      localePlural(
         context,
-        '$unreadable stored record${unreadable == 1 ? '' : 's'} on this '
-            // ⚠️ Burada eskiden "treat it as a floor" yazıyordu ve genişletilmiş
-            // wellness süzgeci ilk koşuşunda yakaladı. Masum anlamda kullanılmış
-            // olsa da `treat` mağaza incelemesinin taradığı kelimelerden biri —
-            // bir wellness ürününde onu hiç kullanmamak en ucuz seçenek.
-            'device could not be read. The list below is what we could read — '
-            'a floor, not a total.',
-        '$unreadable kayıt okunamadı. Aşağıdaki liste toplam değil, okunabilen kayıtlardır.',
+        '{count} stored records on this device could not be read. The list below is what we could read — a floor, not a total.',
+        '{count} kayıt okunamadı. Aşağıdaki liste toplam değil, okunabilen kayıtlardır.',
+        unreadable,
+        englishOne: '{count} stored record on this device could not be read. The list below is what we could read — a floor, not a total.',
       ),
       style: t.textTheme.bodyMedium?.copyWith(
         color: LissomColors.roseDeepHover,
@@ -528,14 +527,18 @@ class _HathaProgressCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            localeText(
+            localeTemplate(
               context,
               course.recordsParticipation
-                  ? '${practiced.length}/${course.lessons.length} units with participation records · self-recorded; physical skill is not established.'
-                  : '${practiced.length}/${course.lessons.length} lessons practised · self-recorded',
+                  ? '{done}/{total} units with participation records · self-recorded; physical skill is not established.'
+                  : '{done}/{total} lessons practised · self-recorded',
               course.recordsParticipation
-                  ? '${practiced.length}/${course.lessons.length} birimde katılım kaydı · öz kayıt; fiziksel beceri gösterilmez.'
-                  : '${practiced.length}/${course.lessons.length} ders çalışıldı · öz kayıt',
+                  ? '{done}/{total} birimde katılım kaydı · öz kayıt; fiziksel beceri gösterilmez.'
+                  : '{done}/{total} ders çalışıldı · öz kayıt',
+              <String, Object>{
+                'done': localizedInteger(context, practiced.length),
+                'total': localizedInteger(context, course.lessons.length),
+              },
             ),
             style: theme.textTheme.bodySmall,
           ),
@@ -556,7 +559,7 @@ class _HathaProgressCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Text(
-                        '${module.lessons.where((HathaLesson l) => practiced.contains(l.id)).length}/${module.lessons.length}',
+                        '${localizedInteger(context, module.lessons.where((HathaLesson l) => practiced.contains(l.id)).length)}/${localizedInteger(context, module.lessons.length)}',
                         textAlign: TextAlign.end,
                       ),
                     ),
@@ -567,10 +570,12 @@ class _HathaProgressCard extends StatelessWidget {
           if (progress.unreadableRecords > 0) ...<Widget>[
             const SizedBox(height: 8),
             Text(
-              localeText(
+              localePlural(
                 context,
-                '${progress.unreadableRecords} practice records could not be read.',
-                '${progress.unreadableRecords} çalışma kaydı okunamadı.',
+                '{count} practice records could not be read.',
+                '{count} çalışma kaydı okunamadı.',
+                progress.unreadableRecords,
+                englishOne: '{count} practice record could not be read.',
               ),
             ),
           ],
@@ -600,10 +605,13 @@ class _SittingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
     return Text(
-      localeText(
+      localePlural(
         context,
-        '${_LedgerRow._dateOf(at)} · $count reading${count == 1 ? '' : 's'}',
-        '${_LedgerRow._dateOf(at, turkish: true)} · $count ölçüm',
+        '{date} · {count} readings',
+        '{date} · {count} ölçüm',
+        count,
+        englishOne: '{date} · {count} reading',
+        arguments: <String, Object>{'date': localizedDate(context, at)},
       ),
       style: t.textTheme.titleSmall?.copyWith(
         color: LissomColors.bodySecondary,
@@ -640,13 +648,15 @@ class _LedgerRow extends StatelessWidget {
           if (record.unmeasuredUnits > 0) ...<Widget>[
             const SizedBox(height: 6),
             Text(
-              localeText(
+              localePlural(
                 context,
-                '${record.unmeasuredUnits} attempt'
-                    '${record.unmeasuredUnits == 1 ? '' : 's'} could not be read'
-                    '${record.unmeasuredReason == null ? '' : ' · '
-                              '${_reasonText(record.unmeasuredReason!)}'}',
-                '${record.unmeasuredUnits} deneme okunamadı${record.unmeasuredReason == null ? '' : ' · ${_reasonTextTr(record.unmeasuredReason!)}'}',
+                '{count} attempts could not be read{reason}',
+                '{count} deneme okunamadı{reason}',
+                record.unmeasuredUnits,
+                englishOne: '{count} attempt could not be read{reason}',
+                arguments: <String, Object>{
+                  'reason': record.unmeasuredReason == null ? '' : ' · ${localeText(context, _reasonText(record.unmeasuredReason!), _reasonTextTr(record.unmeasuredReason!))}',
+                },
               ),
               style: t.textTheme.bodySmall?.copyWith(
                 color: LissomColors.bodySecondary,
@@ -710,38 +720,4 @@ class _LedgerRow extends StatelessWidget {
     _ => 'neden kaydedilmedi',
   };
 
-  static const List<String> _months = <String>[
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  static const List<String> _monthsTr = <String>[
-    'Oca',
-    'Şub',
-    'Mar',
-    'Nis',
-    'May',
-    'Haz',
-    'Tem',
-    'Ağu',
-    'Eyl',
-    'Eki',
-    'Kas',
-    'Ara',
-  ];
-
-  static String _dateOf(DateTime d, {bool turkish = false}) {
-    final DateTime l = d.toLocal();
-    return '${l.day} ${(turkish ? _monthsTr : _months)[l.month - 1]} ${l.year}';
-  }
 }

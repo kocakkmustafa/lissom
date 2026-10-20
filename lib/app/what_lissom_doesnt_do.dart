@@ -128,10 +128,11 @@ class WhatLissomDoesntDoScreen extends StatelessWidget {
             if (loose.isNotEmpty) ...<Widget>[
               const SizedBox(height: 14),
               LissomEyebrow(
-                localeText(
+                localeTemplate(
                   context,
-                  'Tests we took out of the battery (${loose.length})',
-                  'Değerlendirmeden çıkarılan testler (${loose.length})',
+                  'Tests we took out of the battery ({count})',
+                  'Değerlendirmeden çıkarılan testler ({count})',
+                  <String, Object>{'count': localizedInteger(context, loose.length)},
                 ),
               ),
               const SizedBox(height: 4),

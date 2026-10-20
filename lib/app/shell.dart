@@ -189,7 +189,7 @@ class _LissomShellState extends State<LissomShell> {
     builder: (BuildContext c, AsyncSnapshot<AppFacts> s) {
       // ÇIKMAZ-SOKAK YASAĞI (M-F-267): config okunamazsa ekran yine AÇILIR
       // ve sebebi SÖYLER. Sessiz boş ekran / sonsuz spinner yasak.
-      if (s.hasError) return _LoadFailureScreen(error: '${s.error}');
+      if (s.hasError) return _LoadFailureScreen(onRetry: _reloadFacts);
       if (!s.hasData) return const _LoadingScreen();
 
       final AppFacts facts = s.data!;
@@ -299,9 +299,9 @@ class _LoadingScreen extends StatelessWidget {
 
 /// Yükleme patladı — sebep YUTULMAZ.
 class _LoadFailureScreen extends StatelessWidget {
-  const _LoadFailureScreen({required this.error});
+  const _LoadFailureScreen({required this.onRetry});
   static const Key key_ = Key('shell.loadFailure');
-  final String error;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +338,11 @@ class _LoadFailureScreen extends StatelessWidget {
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
-                  Text(error, style: t.textTheme.bodySmall),
+                  FilledButton(
+                    key: const Key('shell.retryLoad'),
+                    onPressed: onRetry,
+                    child: Text(localeText(context, 'Try again', 'Yeniden dene')),
+                  ),
                 ],
               ),
             ),
@@ -382,19 +386,21 @@ class _TabMismatchScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    localeText(
+                    localeTemplate(
                       context,
-                      'Layout file declares: ${declared.join(" · ")}',
-                      'Düzen dosyasındaki sekmeler: ${declared.join(" · ")}',
+                      'Layout file declares: {tabs}',
+                      'Düzen dosyasındaki sekmeler: {tabs}',
+                      <String, Object>{'tabs': declared.join(' · ')},
                     ),
                     style: t.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    localeText(
+                    localeTemplate(
                       context,
-                      'This build implements: ${kImplementedTabs.join(" · ")}',
-                      'Bu sürümdeki sekmeler: ${kImplementedTabs.join(" · ")}',
+                      'This build implements: {tabs}',
+                      'Bu sürümdeki sekmeler: {tabs}',
+                      <String, Object>{'tabs': kImplementedTabs.join(' · ')},
                     ),
                     style: t.textTheme.bodyMedium,
                   ),

@@ -12,7 +12,7 @@ import 'locale_text.dart';
 import 'yoga_observation_status.dart';
 
 String hathaText(BuildContext context, HathaText value) =>
-    Localizations.localeOf(context).languageCode == 'tr' ? value.tr : value.en;
+    localeText(context, value.en, value.tr);
 
 class HathaCourseScreen extends StatefulWidget {
   const HathaCourseScreen({
@@ -134,10 +134,18 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    localeText(
+                    localeTemplate(
                       context,
-                      widget.course.recordsParticipation ? '${practiced.length} participation records across ${lessons.length} units; physical skill is not established.' : '${practiced.length} of ${lessons.length} lessons practised',
-                      widget.course.recordsParticipation ? '${lessons.length} birimde ${practiced.length} katılım kaydı; fiziksel beceri gösterilmez.' : '${lessons.length} dersten ${practiced.length} tanesi çalışıldı',
+                      widget.course.recordsParticipation
+                          ? '{done} participation records across {total} units; physical skill is not established.'
+                          : '{done} of {total} lessons practised',
+                      widget.course.recordsParticipation
+                          ? '{total} birimde {done} katılım kaydı; fiziksel beceri gösterilmez.'
+                          : '{total} dersten {done} tanesi çalışıldı',
+                      <String, Object>{
+                        'done': localizedInteger(context, practiced.length),
+                        'total': localizedInteger(context, lessons.length),
+                      },
                     ),
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -156,10 +164,12 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                   if (_progress.unreadableRecords > 0) ...<Widget>[
                     const SizedBox(height: 10),
                     Text(
-                      localeText(
+                      localePlural(
                         context,
-                        '${_progress.unreadableRecords} practice records could not be read.',
-                        '${_progress.unreadableRecords} çalışma kaydı okunamadı.',
+                        '{count} practice records could not be read.',
+                        '{count} çalışma kaydı okunamadı.',
+                        _progress.unreadableRecords,
+                        englishOne: '{count} practice record could not be read.',
                       ),
                       style: theme.textTheme.bodySmall,
                     ),
@@ -174,10 +184,11 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                 onPressed: _opening ? null : () => _open(next),
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: Text(
-                  localeText(
+                  localeTemplate(
                     context,
-                    'Continue: ${hathaText(context, next.title)}',
-                    'Devam et: ${hathaText(context, next.title)}',
+                    'Continue: {title}',
+                    'Devam et: {title}',
+                    <String, Object>{'title': hathaText(context, next.title)},
                   ),
                 ),
               )
@@ -253,7 +264,15 @@ class _ModuleSection extends StatelessWidget {
                 ),
               ),
               Text(
-                '$done/${module.lessons.length}',
+                localeTemplate(
+                  context,
+                  '{done}/{total}',
+                  '{done}/{total}',
+                  <String, Object>{
+                    'done': localizedInteger(context, done),
+                    'total': localizedInteger(context, module.lessons.length),
+                  },
+                ),
                 style: theme.textTheme.titleMedium,
               ),
             ],
@@ -281,10 +300,13 @@ class _ModuleSection extends StatelessWidget {
                 title: Text(hathaText(context, lesson.title)),
                 subtitle: Text(
                   lesson.prerequisites.every(practiced.contains)
-                      ? localeText(
+                      ? localeTemplate(
                           context,
-                          '${lesson.minutes} min · guided practice',
-                          '${lesson.minutes} dk · rehberli çalışma',
+                          '{minutes} min · guided practice',
+                          '{minutes} dk · rehberli çalışma',
+                          <String, Object>{
+                            'minutes': localizedInteger(context, lesson.minutes),
+                          },
                         )
                       : localeText(
                           context,
@@ -436,10 +458,13 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 36),
           children: <Widget>[
             LissomEyebrow(
-              localeText(
+              localeTemplate(
                 context,
-                '${lesson.minutes} MIN · SELF-RECORDED',
-                '${lesson.minutes} DK · ÖZ KAYIT',
+                '{minutes} MIN · SELF-RECORDED',
+                '{minutes} DK · ÖZ KAYIT',
+                <String, Object>{
+                  'minutes': localizedInteger(context, lesson.minutes),
+                },
               ),
             ),
             const SizedBox(height: 8),
@@ -530,7 +555,15 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
-                          '${index + 1}. ${hathaText(context, lesson.steps[index])}',
+                          localeTemplate(
+                            context,
+                            '{number}. {text}',
+                            '{number}. {text}',
+                            <String, Object>{
+                              'number': localizedInteger(context, index + 1),
+                              'text': hathaText(context, lesson.steps[index]),
+                            },
+                          ),
                         ),
                       ),
                   ],
@@ -565,7 +598,15 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
-                          '${index + 1}. ${hathaText(context, lesson.steps[index])}',
+                          localeTemplate(
+                            context,
+                            '{number}. {text}',
+                            '{number}. {text}',
+                            <String, Object>{
+                              'number': localizedInteger(context, index + 1),
+                              'text': hathaText(context, lesson.steps[index]),
+                            },
+                          ),
                         ),
                       ),
                     Text(hathaText(context, lesson.practice)),

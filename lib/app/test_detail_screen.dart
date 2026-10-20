@@ -130,10 +130,11 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
                         'No readings recorded for this test',
                         'Bu test için kayıt yok',
                       ),
-                      reason: localeText(
+                      reason: localeTemplate(
                         context,
-                        'When you measure ${widget.test.name}, the value and date appear here.',
-                        '${configText(context, widget.test.name)} ölçüldüğünde değer ve tarih burada görünür.',
+                        'When you measure {test}, the value and date appear here.',
+                        '{test} ölçüldüğünde değer ve tarih burada görünür.',
+                        <String, Object>{'test': configText(context, widget.test.name)},
                       ),
                     )
                   else ...<Widget>[
@@ -141,10 +142,12 @@ class _TestDetailScreenState extends State<TestDetailScreen> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 14),
                         child: Text(
-                          localeText(
+                          localePlural(
                             context,
-                            '${h.unreadable} recorded reading${h.unreadable == 1 ? '' : 's'} on this device could not be read by this version of Lissom. They are still on this phone.',
-                            '${h.unreadable} kayıt bu sürümde okunamadı. Kayıtlar hâlâ bu telefonda.',
+                            '{count} recorded readings on this device could not be read by this version of Lissom. They are still on this phone.',
+                            '{count} kayıt bu sürümde okunamadı. Kayıtlar hâlâ bu telefonda.',
+                            h.unreadable,
+                            englishOne: '{count} recorded reading on this device could not be read by this version of Lissom. They are still on this phone.',
                           ),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
@@ -182,8 +185,12 @@ class _SideHistory extends StatelessWidget {
   /// YENİDEN ESKİYE — `AttemptValueStore.forLesson`ın kendi sözleşmesi.
   final List<AttemptValue> values;
 
-  static String _label(String side) =>
-      side.isEmpty ? side : '${side[0].toUpperCase()}${side.substring(1)}';
+  static String _label(String side) => switch (side) {
+    'right' => 'Right',
+    'left' => 'Left',
+    'bilateral' => 'Bilateral',
+    _ => side.isEmpty ? side : '${side[0].toUpperCase()}${side.substring(1)}',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -195,10 +202,11 @@ class _SideHistory extends StatelessWidget {
         // `wellness_lint.py` bunu bu satırda GERÇEKTEN yakaladı (ölçüldü,
         // varsayılmadı): ilk yazımım üç yerde "yet" kullanmıştı.
         title: showSideLabel
-            ? localeText(
+            ? localeTemplate(
                 context,
-                '${_label(side)} — no readings',
-                '${_labelTr(side)} — ölçüm yok',
+                '{side} — no readings',
+                '{side} — ölçüm yok',
+                <String, Object>{'side': localeText(context, _label(side), _labelTr(side))},
               )
             : localeText(context, 'No readings', 'Ölçüm yok'),
         reason: localeText(
@@ -218,15 +226,16 @@ class _SideHistory extends StatelessWidget {
             const SizedBox(height: 8),
           ],
           Text(
-            '${_fmt(last.value)}${last.unit}',
+            '${localizedDecimal(context, last.value, fractionDigits: last.value == last.value.roundToDouble() ? 0 : 1)}${last.unit}',
             style: t.textTheme.headlineMedium,
           ),
           const SizedBox(height: 4),
           Text(
-            localeText(
+            localeTemplate(
               context,
-              'Last measured ${_formatDate(last.completedAt)}',
-              'Son ölçüm ${_formatDate(last.completedAt, turkish: true)}',
+              'Last measured {date}',
+              'Son ölçüm {date}',
+              <String, Object>{'date': localizedDate(context, last.completedAt)},
             ),
             style: t.textTheme.bodySmall,
           ),
@@ -250,10 +259,11 @@ class _SideHistory extends StatelessWidget {
           if (values.length > 1) ...<Widget>[
             const SizedBox(height: 16),
             LissomEyebrow(
-              localeText(
+              localeTemplate(
                 context,
-                'Every reading (${values.length})',
-                'Tüm ölçümler (${values.length})',
+                'Every reading ({count})',
+                'Tüm ölçümler ({count})',
+                <String, Object>{'count': localizedInteger(context, values.length)},
               ),
             ),
             const SizedBox(height: 8),
@@ -264,20 +274,17 @@ class _SideHistory extends StatelessWidget {
             for (final AttemptValue v in values)
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  spacing: 12,
+                  runSpacing: 4,
                   children: <Widget>[
                     Text(
-                      _formatDate(
-                        v.completedAt,
-                        turkish:
-                            Localizations.localeOf(context).languageCode ==
-                            'tr',
-                      ),
+                      localizedDate(context, v.completedAt),
                       style: t.textTheme.bodyMedium,
                     ),
                     Text(
-                      '${_fmt(v.value)}${v.unit}',
+                      '${localizedDecimal(context, v.value, fractionDigits: v.value == v.value.roundToDouble() ? 0 : 1)}${v.unit}',
                       style: t.textTheme.bodyMedium,
                     ),
                   ],
@@ -289,9 +296,6 @@ class _SideHistory extends StatelessWidget {
     );
   }
 
-  static String _fmt(double v) =>
-      v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
-
   static String _labelTr(String side) => switch (side) {
     'right' => 'Sağ',
     'left' => 'Sol',
@@ -299,40 +303,4 @@ class _SideHistory extends StatelessWidget {
     _ => side,
   };
 
-  static const List<String> _months = <String>[
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  static const List<String> _monthsTr = <String>[
-    'Oca',
-    'Şub',
-    'Mar',
-    'Nis',
-    'May',
-    'Haz',
-    'Tem',
-    'Ağu',
-    'Eyl',
-    'Eki',
-    'Kas',
-    'Ara',
-  ];
-
-  /// Mutlak tarih, göreli DEĞİL — `home_screen.dart`/`progress_screen.dart`
-  /// ile AYNI biçim (§5.2: göreli süre bir gecikme duygusu üretir).
-  static String _formatDate(DateTime d, {bool turkish = false}) {
-    final DateTime l = d.toLocal();
-    return '${l.day} ${(turkish ? _monthsTr : _months)[l.month - 1]} ${l.year}';
-  }
 }

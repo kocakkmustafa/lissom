@@ -277,10 +277,11 @@ class HonestyBoxCard extends StatelessWidget {
                   // gibi ÇİFT TİRE üretiyordu ve cümle okunmuyordu.
                   // Simülatör ekranı yakaladı, test değil.
                   Text(
-                    localeText(
+                    localeTemplate(
                       context,
-                      'Not in this build · $blocker',
-                      'Bu sürümde yok · ${configText(context, blocker)}',
+                      'Not in this build · {reason}',
+                      'Bu sürümde yok · {reason}',
+                      <String, Object>{'reason': configText(context, blocker)},
                     ),
                     style: t.textTheme.bodySmall?.copyWith(
                       color: LissomColors.bodySecondary,

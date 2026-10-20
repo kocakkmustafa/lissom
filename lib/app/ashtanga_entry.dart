@@ -30,10 +30,14 @@ class AshtangaEntry extends StatelessWidget {
         Text(hathaText(context, course.intro)),
         const SizedBox(height: 8),
         Text(
-          localeText(
+          localeTemplate(
             context,
-            '$participation/${course.lessons.length} units with self-recorded participation',
-            '${course.lessons.length} birimde $participation öz beyanlı katılım kaydı',
+            '{done}/{total} units with self-recorded participation',
+            '{total} birimde {done} öz beyanlı katılım kaydı',
+            <String, Object>{
+              'done': localizedInteger(context, participation),
+              'total': localizedInteger(context, course.lessons.length),
+            },
           ),
         ),
         const SizedBox(height: 12),

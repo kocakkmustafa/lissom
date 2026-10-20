@@ -109,7 +109,7 @@ class HathaSessionPreparationCard extends StatelessWidget {
           for (int index = 0; index < steps.length; index++)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
-              child: Text('${index + 1}. ${steps[index]}'),
+              child: Text('${localizedInteger(context, index + 1)}. ${steps[index]}'),
             ),
           Text(
             localeText(

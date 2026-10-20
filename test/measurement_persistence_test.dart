@@ -277,9 +277,9 @@ void main() {
       reason: 'depoya yazılan sayı ekranda gösterilenle UYUŞMUYOR',
     );
 
-    expect(find.text('This is your starting point — we\'ll track it from here.'),
+    expect(find.text('Measurement saved. You can see earlier values on the test page.'),
         findsOneWidget,
-        reason: 'yazma BAŞARILI — takip sözü verilebilir');
+        reason: 'yazma BAŞARILI — kaydedildi bilgisi gösterilir');
   });
 
   testWidgets(
@@ -294,13 +294,14 @@ void main() {
     expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,
         reason: 'POZİTİF ÇAPA — sonuç ekranı yine açık, çökme yok');
 
-    expect(find.textContaining('we\'ll track it from here'), findsNothing,
+    expect(find.textContaining('Measurement saved.'), findsNothing,
         reason: 'KAYIT YOKKEN takip sözü vermek, kusuru bir katman derine '
             'taşımak olurdu — söz OLGUYA bağlıdır');
     expect(find.textContaining('could not be saved'), findsOneWidget,
         reason: 'sessizce yutmak yasak — kullanıcı kaydın düştüğünü bilmeli');
-    expect(find.textContaining('disk dolu'), findsOneWidget,
-        reason: 'sebep isimli gider (ikincil tonda)');
+    expect(find.text('Saving failed. Try again.'), findsOneWidget);
+    expect(find.textContaining('disk dolu'), findsNothing,
+        reason: 'ham OS hatası yerel yol veya tanımlayıcı içerebilir');
   });
 
   testWidgets('Türkçe kayıt hatası ham işletim sistemi metnini göstermiyor',
@@ -324,7 +325,7 @@ void main() {
     // (bu dosyanın kendi tuzağı, sınıf dokümanında).
     final _RecordingStore store = _RecordingStore();
     await _run(tester, loader: () async => store);
-    expect(find.textContaining('we\'ll track it from here'), findsOneWidget,
+    expect(find.textContaining('Measurement saved.'), findsOneWidget,
         reason: 'POZİTİF ÇAPA — ilk deneme kaydedildi');
 
     await tester.tap(find.byKey(const Key('liveCapture.tryAgain')));
@@ -332,7 +333,7 @@ void main() {
 
     // Yeni deneme HENÜZ bitmedi → sonuç ekranı yok, dolayısıyla eski
     // "kaydedildi" cümlesi de EKRANDA OLMAMALI.
-    expect(find.textContaining('we\'ll track it from here'), findsNothing,
+    expect(find.textContaining('Measurement saved.'), findsNothing,
         reason: 'kayıt bir OLAY, durum değil — depo ek-yalnız; önceki '
             'denemenin hâli yeni denemenin ekranında yaşayamaz');
   });
@@ -377,14 +378,14 @@ void main() {
         reason: 'düşük güvenden türetilmiş bir sayı ekranda GÖRÜNMEMELİ');
 
     // Sebep İSİMLİ gider — roadmap'in "retry reason"ı.
-    expect(find.text('Reason: lowConfidence.'), findsOneWidget,
+    expect(find.text('Reason: the reading was not confident enough to keep.'), findsOneWidget,
         reason: 'kullanıcı NEDEN ölçülemediğini görmeli — isimsiz "tekrar '
             'dene" yeterli değil (ResultCode.lowConfidence.name)');
 
     // Takip sözü yalnız GERÇEK ölçüm için — bkz. yukarıdaki "yazma
     // BAŞARISIZ" testinin AYNI ilkesi, burada NEDENİ farklı (yazma değil
     // ölçüm başarısız).
-    expect(find.textContaining('we\'ll track it from here'), findsNothing,
+    expect(find.textContaining('Measurement saved.'), findsNothing,
         reason: 'ölçülmedi — "izleyeceğiz" sözü tutulamayan bir vaat olurdu');
 
     expect(find.byKey(const Key('liveCapture.tryAgain')), findsOneWidget,

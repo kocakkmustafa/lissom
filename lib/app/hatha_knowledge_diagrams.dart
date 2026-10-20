@@ -123,7 +123,6 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
     final panels = _panels[lessonId];
     if (panels == null) return const SizedBox.shrink();
     final theme = Theme.of(context);
-    final tr = Localizations.localeOf(context).languageCode == 'tr';
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: LissomCard(
@@ -148,7 +147,7 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
             for (int i = 0; i < panels.length; i++) ...<Widget>[
               const SizedBox(height: 18),
               Text(
-                tr ? panels[i].tr : panels[i].en,
+                localeText(context, panels[i].en, panels[i].tr),
                 style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -168,7 +167,19 @@ class HathaKnowledgeDiagrams extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    '${j + 1}. ${tr ? panels[i].labelsTr[j] : panels[i].labelsEn[j]}',
+                    localeTemplate(
+                      context,
+                      '{number}. {text}',
+                      '{number}. {text}',
+                      <String, Object>{
+                        'number': localizedInteger(context, j + 1),
+                        'text': localeText(
+                          context,
+                          panels[i].labelsEn[j],
+                          panels[i].labelsTr[j],
+                        ),
+                      },
+                    ),
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),

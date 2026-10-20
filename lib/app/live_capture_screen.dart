@@ -608,7 +608,7 @@ class _LiveView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 12),
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: FilledButton(
                 key: const Key('liveCapture.finish'),
                 onPressed: onFinish,
@@ -620,7 +620,7 @@ class _LiveView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 12),
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: OutlinedButton(
                 key: const Key('liveCapture.openSettings'),
                 onPressed: () => unawaited(onOpenSettings()),
@@ -634,26 +634,31 @@ class _LiveView extends StatelessWidget {
     );
   }
 
-  String _stateText(BuildContext context, LiveSessionState state) {
-    final String english = state.userText;
-    if (Localizations.localeOf(context).languageCode != 'tr') return english;
-    return switch (state) {
-      LiveIdle() => 'Kamera hazırlanıyor.',
-      PermissionDenied() =>
-        'Lissom ölçüm yapmak için kamera erişimine ihtiyaç duyar.',
-      NoPersonDetected() => 'Kadrajda kimse yok. Kamera görüşüne geç.',
-      JointsOutOfFrame(:final String missingGroup) => switch (missingGroup) {
-        'lower-body' => 'Alt beden eklemleri kadraj dışında.',
-        'upper-body' => 'Üst beden eklemleri kadraj dışında.',
-        _ => 'Gerekli eklemler kadraj dışında.',
-      },
-      Measuring(:final LiveReading reading) =>
-        reading.hasMeasurement
-            ? 'Ölçülüyor: ${reading.display}'
-            : configText(context, reading.narrative!),
-      SetupFailed() => 'Kamera başlatılamadı. Yeniden dene.',
-    };
-  }
+  String _stateText(BuildContext context, LiveSessionState state) => switch (state) {
+    LiveIdle() => localeText(context, 'Getting the camera ready.', 'Kamera hazırlanıyor.'),
+    PermissionDenied() => localeText(context, state.userText,
+        'Lissom ölçüm yapmak için kamera erişimine ihtiyaç duyar.'),
+    NoPersonDetected() => localeText(context,
+        'No one is in frame. Step into the camera view.',
+        'Kadrajda kimse yok. Kamera görüşüne geç.'),
+    JointsOutOfFrame(:final String missingGroup) => switch (missingGroup) {
+      'lower-body' => localeText(context,
+          'The lower-body joints this measurement needs are out of frame.',
+          'Alt beden eklemleri kadraj dışında.'),
+      'upper-body' => localeText(context,
+          'The upper-body joints this measurement needs are out of frame.',
+          'Üst beden eklemleri kadraj dışında.'),
+      _ => localeText(context,
+          'The joints this measurement needs are out of frame.',
+          'Gerekli eklemler kadraj dışında.'),
+    },
+    Measuring(:final LiveReading reading) => reading.hasMeasurement
+        ? localeTemplate(context, 'Measuring: {reading}', 'Ölçülüyor: {reading}',
+            <String, Object>{'reading': '${localizedDecimal(context, reading.degrees!, fractionDigits: 0)}°'})
+        : configText(context, reading.narrative!),
+    SetupFailed() => localeText(context, state.userText, 'Kamera başlatılamadı. Yeniden dene.'),
+  };
+
 }
 
 class _ResultView extends StatelessWidget {
@@ -678,7 +683,7 @@ class _ResultView extends StatelessWidget {
     final ThemeData t = Theme.of(context);
     final AssessmentResult r = result;
     final String headline = r.isMeasured
-        ? '${r.value!.toStringAsFixed(0)}${r.unit ?? ''}'
+        ? '${localizedDecimal(context, r.value!, fractionDigits: 0)}${r.unit ?? ''}'
         : localeText(context, 'Not measured', 'Ölçüm alınamadı');
     // ⚠️ TAKİP SÖZÜ, YAZMA BAŞARILIYSA VERİLİR (L-285).
     //
@@ -687,21 +692,29 @@ class _ResultView extends StatelessWidget {
     // vaatti. Yazma bağlandı; ama yazma BAŞARISIZ olabilir, ve o hâlde
     // aynı cümle yine yalan olurdu. Söz artık OLGUYA bağlı.
     final String detail = switch ((r.isMeasured, saved)) {
-      (false, _) => 'Reason: ${r.code.name}.',
-      (true, true) =>
-        'This is your starting point — we\'ll track it from here.',
-      (true, false) =>
+      (false, _) => localeTemplate(
+        context,
+        'Reason: {reason}.',
+        'Neden: {reason}.',
+        <String, Object>{'reason': localeText(context,
+          _resultReason(r.code.name), _resultReasonTr(r.code.name))},
+      ),
+      (true, true) => localeText(
+        context,
+        'Measurement saved. You can see earlier values on the test page.',
+        'Ölçüm kaydedildi. Önceki değerleri test sayfasında görebilirsin.',
+      ),
+      (true, false) => localeText(
+        context,
         'Measured, but this could not be saved to your history, '
             'so it will not appear in Progress.',
-      (true, null) => 'Saving this measurement…',
-    };
-    final String detailTr = switch ((r.isMeasured, saved)) {
-      (false, _) => 'Neden: ${_resultReasonTr(r.code.name)}.',
-      (true, true) =>
-        'Ölçüm kaydedildi. Önceki değerleri test sayfasında görebilirsin.',
-      (true, false) =>
         'Ölçüm yapıldı ancak geçmişe kaydedilemedi; İlerleme ekranında görünmez.',
-      (true, null) => 'Ölçüm kaydediliyor…',
+      ),
+      (true, null) => localeText(
+        context,
+        'Saving this measurement…',
+        'Ölçüm kaydediliyor…',
+      ),
     };
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -709,7 +722,7 @@ class _ResultView extends StatelessWidget {
         Text(headline, style: t.textTheme.headlineMedium),
         const SizedBox(height: 8),
         Text(
-          localeText(context, detail, detailTr),
+          detail,
           key: const Key('liveCapture.resultDetail'),
           style: t.textTheme.bodyMedium,
         ),
@@ -720,7 +733,7 @@ class _ResultView extends StatelessWidget {
           Text(
             localeText(
               context,
-              'Reason: $saveError',
+              'Saving failed. Try again.',
               'Kaydetme sırasında hata oluştu. Yeniden dene.',
             ),
             style: t.textTheme.bodySmall?.copyWith(
@@ -730,7 +743,7 @@ class _ResultView extends StatelessWidget {
         ],
         const Spacer(),
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: OutlinedButton(
             key: const Key('liveCapture.tryAgain'),
             onPressed: saved == null && !sourceRetired ? null : onTryAgain,
@@ -744,6 +757,16 @@ class _ResultView extends StatelessWidget {
       ],
     );
   }
+
+  static String _resultReason(String code) => switch (code) {
+    'noAttemptDetected' => 'no movement was detected',
+    'setupTimedOut' => 'the setup did not settle in time',
+    'measurementTimedOut' => 'the reading did not settle in time',
+    'aborted' => 'the attempt was stopped by a form check',
+    'trackingLost' => 'the camera lost track of you',
+    'lowConfidence' => 'the reading was not confident enough to keep',
+    _ => 'no measurement could be taken',
+  };
 
   static String _resultReasonTr(String code) => switch (code) {
     'noAttemptDetected' => 'hareket algılanmadı',
@@ -781,8 +804,13 @@ class _CameraSetupCard extends StatelessWidget {
     final List<String> lines = <String>[
       if (test.instruction.trim().isNotEmpty) test.instruction,
       if (setup.distanceCm != null)
-        'Stand about ${setup.distanceCm![0]}–${setup.distanceCm![1]} cm from '
-            'the camera.',
+        localeTemplate(context,
+            'Stand about {min}–{max} cm from the camera.',
+            'Kameradan yaklaşık {min}–{max} cm uzakta dur.',
+            <String, Object>{
+              'min': localizedInteger(context, setup.distanceCm![0]),
+              'max': localizedInteger(context, setup.distanceCm![1]),
+            }),
       if (_floorTests.contains(test.id))
         localeText(
           context,
@@ -790,16 +818,20 @@ class _CameraSetupCard extends StatelessWidget {
           'Bu test için telefonu yere yakın bir yüksekliğe indir.',
         )
       else if (setup.heightCm != null)
-        'Put the phone ${setup.heightCm![0]}–${setup.heightCm![1]} cm off the '
-            'floor.',
+        localeTemplate(context,
+            'Put the phone {min}–{max} cm off the floor.',
+            'Telefonu yerden {min}–{max} cm yüksekliğe koy.',
+            <String, Object>{
+              'min': localizedInteger(context, setup.heightCm![0]),
+              'max': localizedInteger(context, setup.heightCm![1]),
+            }),
       if (setup.framingRule != null) setup.framingRule!,
       if (setup.yawToleranceDeg != null)
-        localeText(
+        localeTemplate(
           context,
-          'Keep the angle described for this test; more than '
-              '${setup.yawToleranceDeg}° of turn and the reading is not used.',
-          'Bu testte tarif edilen kamera açısını koru; '
-              '${setup.yawToleranceDeg}° üzerindeki dönüşlerde ölçüm kullanılmaz.',
+          'Keep the angle described for this test; more than {degrees}° of turn and the reading is not used.',
+          'Bu testte tarif edilen kamera açısını koru; {degrees}° üzerindeki dönüşlerde ölçüm kullanılmaz.',
+          <String, Object>{'degrees': localizedConfigNumber(context, setup.yawToleranceDeg!)},
         ),
     ];
     return LissomCard(
