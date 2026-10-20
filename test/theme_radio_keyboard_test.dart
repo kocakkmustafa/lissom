@@ -1,6 +1,6 @@
 // DRAFT ONLY / SDK UNRUN. Real RadioGroup + actual settings dialog semantics.
 import 'dart:async';
-import 'dart:ui' show SemanticsFlag;
+import 'dart:ui' show CheckedState, Tristate;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,9 +53,12 @@ void main() {
         reason: 'The actual selected radio must receive keyboard focus.',
       );
       final selectedBefore = tester.getSemantics(find.byKey(systemKey));
-      expect(selectedBefore.hasFlag(SemanticsFlag.isChecked), isTrue);
       expect(
-        selectedBefore.hasFlag(SemanticsFlag.isInMutuallyExclusiveGroup),
+        selectedBefore.flagsCollection.isChecked == CheckedState.isTrue,
+        isTrue,
+      );
+      expect(
+        selectedBefore.flagsCollection.isInMutuallyExclusiveGroup,
         isTrue,
       );
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
@@ -71,7 +74,7 @@ void main() {
         final tile = find.byKey(Key('profile.appearance.option.${mode.name}'));
         expect(tester.widget<RadioListTile<ThemeMode>>(tile).enabled, isFalse);
         expect(
-          tester.getSemantics(tile).hasFlag(SemanticsFlag.isEnabled),
+          tester.getSemantics(tile).flagsCollection.isEnabled == Tristate.isTrue,
           isFalse,
         );
       }

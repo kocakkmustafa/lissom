@@ -142,8 +142,9 @@ class AppearanceSettingsCard extends StatelessWidget {
                       return;
                     }
                     final saved = await controller.select(next);
-                    if (saved && dialogContext.mounted)
+                    if (saved && dialogContext.mounted) {
                       Navigator.of(dialogContext).pop();
+                    }
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

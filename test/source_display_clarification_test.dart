@@ -2,7 +2,6 @@
 // Uses small in-memory catalogs and production localization helpers; no File,
 // workspace report JSON, path override, native feature, or network dependency.
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

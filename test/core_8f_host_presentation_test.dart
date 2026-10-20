@@ -107,11 +107,11 @@ final class _IntentRuntime implements MotionAccountRuntime {
   @override
   final _IntentAccount account;
   @override
-  final phase = ValueNotifier(MotionIdentityPhase.verified);
+  final ValueNotifier<MotionIdentityPhase> phase = ValueNotifier(MotionIdentityPhase.verified);
   @override
-  final userId = ValueNotifier<String?>(_id);
+  final ValueNotifier<String?> userId = ValueNotifier<String?>(_id);
   @override
-  final passwordRecovery = ValueNotifier(false);
+  final ValueNotifier<bool> passwordRecovery = ValueNotifier(false);
   @override
   bool get isPasswordRecovery => passwordRecovery.value;
   @override
@@ -447,7 +447,7 @@ void main() {
       final appWidget = tester.widget<LissomApp>(find.byType(LissomApp));
       final scope = appWidget.localScope;
       admittedOwner = scope.owner!;
-      final owner = admittedOwner!;
+      final owner = admittedOwner;
       final epoch = owner.epoch;
       final lifetime = scope.lifetimeKey;
       final materialState = tester.state(find.byType(MaterialApp));

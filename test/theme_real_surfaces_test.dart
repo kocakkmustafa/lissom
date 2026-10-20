@@ -11,7 +11,6 @@ import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/lissom_localizations.dart';
 import 'package:lissom/app/hatha_knowledge_diagrams.dart';
 import 'package:lissom/app/shell.dart';
-import 'package:lissom/app/surfaces.dart';
 
 import 'support/contrast.dart';
 import 'support/facts_from_disk.dart';
