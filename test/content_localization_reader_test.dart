@@ -37,11 +37,43 @@ Future<_ActualCatalogBundle> _readyCatalog(
   // Await that exact cached Future outside the fake clock before mounting;
   // pumpAndSettle only waits for frames, not an outstanding isolate decode.
   final raw = await tester.runAsync(
-    () => bundle.loadString('config/l10n/${canonicalLocaleTag(locale)}.json'),
+    () => bundle
+        .loadString('config/l10n/${canonicalLocaleTag(locale)}.json')
+        .timeout(const Duration(seconds: 10)),
   );
   expect(raw, isNotNull, reason: 'The actual catalog must finish loading.');
   expect(raw, isNotEmpty);
   return bundle;
+}
+
+const _readerReadyKey = Key('reader.fixture.catalogTreeReady');
+
+Future<void> _waitForCatalogTree(
+  WidgetTester tester, {
+  bool Function()? readerReady,
+}) async {
+  // The cached asset is only one part of Localizations' asynchronous load.
+  // Let the installed delegates finish on the real event loop, and pump the
+  // resulting frames until the actual home Builder has mounted. The bounded
+  // wait never replaces the bundle or delegate with synchronous test behavior.
+  final ready = await tester.runAsync(() async {
+    final elapsed = Stopwatch()..start();
+    while (elapsed.elapsed < const Duration(seconds: 10)) {
+      await tester.pump();
+      if (find.byKey(_readerReadyKey).evaluate().isNotEmpty &&
+          (readerReady?.call() ?? true)) {
+        return true;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    }
+    return false;
+  });
+  expect(
+    ready,
+    isTrue,
+    reason: 'The real localized reader tree did not mount within 10 seconds.',
+  );
+  await tester.pumpAndSettle();
 }
 
 List<HathaCourse> _courses() => <HathaCourse>[
@@ -86,7 +118,9 @@ Widget _app({
     LissomLocalizationsDelegate(bundle: bundle),
     ...GlobalMaterialLocalizations.delegates,
   ],
-  home: home,
+  home: Builder(
+    builder: (context) => KeyedSubtree(key: _readerReadyKey, child: home),
+  ),
 );
 
 void main() {
@@ -163,7 +197,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await _waitForCatalogTree(tester, readerReady: () => checked > 0);
       expect(checked, 1303);
       for (final course in courses) {
         expect(find.byKey(Key('reader.${course.id}.title')), findsOneWidget);
@@ -186,7 +220,7 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await _waitForCatalogTree(tester);
       final context = tester.element(find.byType(HathaKnowledgeDiagrams));
       final catalog = LissomLocalizations.maybeOf(context)!;
       expect(catalog.catalogAvailable, isTrue);
@@ -233,7 +267,7 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await _waitForCatalogTree(tester);
     expect(find.text('Ayakta temel duruşlar'), findsOneWidget);
     expect(find.text('Ayakta temeller'), findsOneWidget);
   });

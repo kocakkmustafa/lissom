@@ -69,7 +69,7 @@ class OnboardingGate extends StatefulWidget {
 }
 
 class _OnboardingGateState extends State<OnboardingGate> {
-  late Future<_Loaded> _loaded = _load();
+  late Future<_Loaded> _loaded = _startLoad();
 
   /// [OnboardingFlow] tamamlandığında BURADA çevrilir — `_loaded`'ı yeniden
   /// okutup diskten teyit ETMİYORUZ (yazma az önce, aynı çağrı zincirinde
@@ -87,8 +87,16 @@ class _OnboardingGateState extends State<OnboardingGate> {
     if (oldWidget.localScope.lifetimeKey != widget.localScope.lifetimeKey) {
       _completed = false;
       _justCompleted = null;
-      _loaded = _load();
+      _loaded = _startLoad();
     }
+  }
+
+  Future<_Loaded> _startLoad() {
+    final Future<_Loaded> future = _load();
+    // A fast retry error must remain observed until the rebuilt FutureBuilder
+    // subscribes. Its original failure still reaches the named error surface.
+    future.ignore();
+    return future;
   }
 
   Future<_Loaded> _load() async {
@@ -121,7 +129,7 @@ class _OnboardingGateState extends State<OnboardingGate> {
       if (s.hasError) {
         return _GateFailureScreen(
           onRetry: () => setState(() {
-            _loaded = _load();
+            _loaded = _startLoad();
           }),
         );
       }

@@ -47,11 +47,51 @@ Future<_ActualCatalogBundle> _readyCatalog(
   // Keep the real >50 KiB AssetBundle isolate decode, but await its cached
   // Future outside the fake clock instead of treating settled frames as ready.
   final raw = await tester.runAsync(
-    () => bundle.loadString('config/l10n/${canonicalLocaleTag(locale)}.json'),
+    () => bundle
+        .loadString('config/l10n/${canonicalLocaleTag(locale)}.json')
+        .timeout(const Duration(seconds: 10)),
   );
   expect(raw, isNotNull, reason: 'The actual catalog must finish loading.');
   expect(raw, isNotEmpty);
   return bundle;
+}
+
+Future<void> _waitForCourseHeader(
+  WidgetTester tester,
+  HathaCourse course,
+) async {
+  // Wait after delegate installation as well as before it. A preloaded asset
+  // does not mean that MaterialApp's asynchronous Localizations tree is ready.
+  // The real translated header is near the top; the CTA may still be lazy.
+  final ready = await tester.runAsync(() async {
+    final elapsed = Stopwatch()..start();
+    while (elapsed.elapsed < const Duration(seconds: 10)) {
+      await tester.pump();
+      final screen = find.byType(HathaCourseScreen);
+      final elements = screen.evaluate();
+      if (elements.length == 1) {
+        final context = elements.single;
+        final catalog = LissomLocalizations.maybeOf(context);
+        if (catalog != null && catalog.catalogAvailable) {
+          final header = find.descendant(
+            of: screen,
+            matching: find.text(_text(context, course.title)),
+          );
+          if (header.evaluate().isNotEmpty) {
+            return true;
+          }
+        }
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    }
+    return false;
+  });
+  expect(
+    ready,
+    isTrue,
+    reason: 'The real localized course header did not mount within 10 seconds.',
+  );
+  await tester.pumpAndSettle();
 }
 
 HathaCourse _course(String file) =>
@@ -245,7 +285,7 @@ void main() {
             ),
           ),
         );
-        await tester.pumpAndSettle();
+        await _waitForCourseHeader(tester, course);
 
         final courseScreen = find.byType(HathaCourseScreen);
         var context = tester.element(courseScreen);

@@ -105,8 +105,15 @@ class _LissomShellState extends State<LissomShell> {
   late Future<AppFacts> _facts = _loadFacts();
   int _index = 0;
 
-  Future<AppFacts> _loadFacts() =>
-      (widget.loader ?? () => AppFacts.load(scope: widget.localScope))();
+  Future<AppFacts> _loadFacts() {
+    final Future<AppFacts> future = Future<AppFacts>.sync(
+      widget.loader ?? () => AppFacts.load(scope: widget.localScope),
+    );
+    // Retry can fail before the next frame subscribes the FutureBuilder.
+    // Observe that interval while preserving this same error for its UI.
+    future.ignore();
+    return future;
+  }
 
   @override
   void didUpdateWidget(covariant LissomShell oldWidget) {

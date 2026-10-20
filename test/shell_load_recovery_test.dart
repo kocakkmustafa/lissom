@@ -10,6 +10,39 @@ import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
 
 void main() {
+  for (final bool synchronous in <bool>[false, true]) {
+    testWidgets('fast retry failure stays observed, sync=$synchronous', (
+      tester,
+    ) async {
+      pinNarrowSurface(tester);
+      int loads = 0;
+      Future<AppFacts> loader() {
+        loads++;
+        if (synchronous) {
+          throw StateError('PRIVATE_RETRY_FIXTURE');
+        }
+        return Future<AppFacts>.error(StateError('PRIVATE_RETRY_FIXTURE'));
+      }
+
+      await tester.pumpWidget(MaterialApp(
+        theme: buildLissomTheme(),
+        home: LissomShell(loader: loader),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('shell.retryLoad')));
+      // Allow a fast error before the next rendered frame can subscribe.
+      await tester.idle();
+      expect(tester.takeException(), isNull);
+      await tester.pumpAndSettle();
+      expect(loads, 2);
+      expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);
+      expect(find.byKey(const Key('shell.retryLoad')).hitTestable(), findsOneWidget);
+      expect(find.textContaining('PRIVATE_RETRY_FIXTURE'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets(
     'a failed facts load can retry without exposing raw exception data',
     (tester) async {

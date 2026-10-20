@@ -239,6 +239,36 @@ final class _Source implements StartablePoseSource {
   }
 }
 
+Future<void> _hostVisible(
+  WidgetTester tester,
+  Finder target, {
+  bool admissionClosed = false,
+}) async {
+  for (int attempt = 0; attempt < 100; attempt++) {
+    if (admissionClosed) {
+      expect(find.byType(OnboardingGate), findsNothing);
+      expect(find.byType(HomeScreen), findsNothing);
+      expect(find.byType(LiveCaptureScreen), findsNothing);
+    }
+    if (target.evaluate().isNotEmpty) {
+      expect(target, findsOneWidget);
+      expect(
+        LissomLocalizations.maybeOf(tester.element(target))?.catalogAvailable,
+        isTrue,
+      );
+      return;
+    }
+    // A fresh keyed MaterialApp re-enters the real asynchronous delegate even
+    // when its rootBundle string is cached. Never replace it with a fake sync
+    // delegate or release held resource/root Futures to make the UI appear.
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 20)),
+    );
+    await tester.pump(const Duration(milliseconds: 20));
+  }
+  fail('Timed out waiting for the actual host surface: $target');
+}
+
 Future<void> _mount(
   WidgetTester tester,
   _Runtime runtime,
@@ -363,6 +393,7 @@ void main() {
     expect(find.byType(OnboardingGate), findsNothing);
     support.complete(directory);
     await tester.pumpAndSettle();
+    await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
     expect(find.text('Save password'), findsOneWidget);
     expect(find.byType(OnboardingGate), findsNothing);
     await tester.pumpWidget(const SizedBox.shrink());
@@ -387,6 +418,7 @@ void main() {
       expect(source.retired, isTrue);
       expect(source.disposals, 1);
       await tester.pumpAndSettle();
+      await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
       expect(find.text('Save password'), findsOneWidget);
       expect(find.byType(LiveCaptureScreen), findsNothing);
       source.closeBarrier.complete();
@@ -411,14 +443,21 @@ void main() {
       await _capture(tester, source);
       runtime.recover();
       await tester.pumpAndSettle();
+      await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
       await tester.enterText(find.byType(TextField), 'fixture-only-password');
       await tester.tap(find.text('Save password'));
       await tester.pumpAndSettle();
       expect(runtime.passwordRecovery.value, isFalse);
       expect(find.byType(OnboardingGate), findsNothing);
+      await _hostVisible(
+        tester,
+        find.byKey(const Key('lissom.owner.closed')),
+        admissionClosed: true,
+      );
       expect(find.byKey(const Key('lissom.owner.closed')), findsOneWidget);
       source.closeBarrier.complete();
       await tester.pumpAndSettle();
+      await _hostVisible(tester, find.byType(OnboardingGate));
       final LissomLocalScope fresh = tester
           .widget<OnboardingGate>(find.byType(OnboardingGate))
           .localScope;
@@ -467,6 +506,7 @@ void main() {
       await _capture(tester, source);
       runtime.recover();
       await tester.pumpAndSettle();
+      await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
       source.closeBarrier.completeError(
         StateError('fixture native close failure'),
       );
@@ -477,6 +517,11 @@ void main() {
       expect(runtime.passwordRecovery.value, isFalse);
       expect(old.owner!.isActive, isFalse);
       expect(find.byType(OnboardingGate), findsNothing);
+      await _hostVisible(
+        tester,
+        find.byKey(const Key('lissom.owner.closed')),
+        admissionClosed: true,
+      );
       expect(find.byKey(const Key('lissom.owner.closed')), findsOneWidget);
       expect(find.textContaining('could not close'), findsOneWidget);
       expect(source.disposals, 1);
@@ -531,6 +576,11 @@ void main() {
       expect(old.owner!.isActive, isFalse);
       await tester.pumpAndSettle();
       expect(find.byType(OnboardingGate), findsNothing);
+      await _hostVisible(
+        tester,
+        find.byKey(const Key('lissom.owner.closed')),
+        admissionClosed: true,
+      );
       expect(find.byKey(const Key('lissom.owner.closed')), findsOneWidget);
       await tester.pumpWidget(const SizedBox.shrink());
     },
@@ -617,11 +667,17 @@ void main() {
       // remains the sole authority for identity and later retry verification.
       expect(runtime.phase.value, MotionIdentityPhase.verified);
       expect(find.byType(OnboardingGate), findsNothing);
+      await _hostVisible(
+        tester,
+        find.byKey(const Key('lissom.owner.closed')),
+        admissionClosed: true,
+      );
       expect(find.byKey(const Key('lissom.owner.closed')), findsOneWidget);
       expect(tester.takeException(), isNull);
       runtime.phase.value = MotionIdentityPhase.unavailable;
       runtime.phase.value = MotionIdentityPhase.verified;
       await tester.pumpAndSettle();
+      await _hostVisible(tester, find.byType(OnboardingGate));
       final LissomLocalScope fresh = tester
           .widget<OnboardingGate>(find.byType(OnboardingGate))
           .localScope;
@@ -747,9 +803,15 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(OnboardingGate), findsNothing);
       expect(find.byType(HomeScreen), findsNothing);
+      await _hostVisible(
+        tester,
+        find.byKey(const Key('lissom.owner.closed')),
+        admissionClosed: true,
+      );
       expect(find.byKey(const Key('lissom.owner.closed')), findsOneWidget);
       source.closeBarrier.complete();
       await tester.pumpAndSettle();
+      await _hostVisible(tester, find.byType(HomeScreen));
       final LissomLocalScope fresh = tester
           .widget<OnboardingGate>(find.byType(OnboardingGate))
           .localScope;
@@ -810,6 +872,11 @@ void main() {
       expect(runtime.userId.value, isNull);
       expect(find.byType(OnboardingGate), findsNothing);
       expect(find.byType(HomeScreen), findsNothing);
+      await _hostVisible(
+        tester,
+        find.byKey(const Key('lissom.owner.closed')),
+        admissionClosed: true,
+      );
       expect(find.byKey(const Key('lissom.owner.closed')), findsOneWidget);
       expect(find.textContaining('could not close'), findsOneWidget);
       expect(source.disposals, 1);

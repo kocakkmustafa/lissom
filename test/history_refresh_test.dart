@@ -45,12 +45,16 @@ import 'support/narrow_surface.dart';
 // runAsync at mount/tap time; a settled animation alone does not prove a save.
 Future<void> _refreshFrames(WidgetTester tester) async {
   await tester.pump();
-  await tester.pump(const Duration(milliseconds: 400));
-  await tester.pumpAndSettle(
-    const Duration(milliseconds: 20),
-    EnginePhase.sendSemanticsUpdate,
-    const Duration(seconds: 3),
+  // Returning from recall starts real journal IO and a loading spinner. Give
+  // that IO real-clock turns; a continuously animating spinner cannot settle.
+  await tester.runAsync(
+    () => Future<void>.delayed(const Duration(milliseconds: 20)),
   );
+  await tester.pump(const Duration(milliseconds: 400));
+  await tester.runAsync(
+    () => Future<void>.delayed(const Duration(milliseconds: 20)),
+  );
+  await tester.pump();
 }
 
 Future<void> _refreshUntil(

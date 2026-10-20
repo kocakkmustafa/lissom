@@ -141,6 +141,25 @@ Future<void> _settleSdk() async {
   }
 }
 
+Future<void> _verifiedHostVisible(WidgetTester tester) async {
+  final Finder gate = find.byType(OnboardingGate);
+  for (int attempt = 0; attempt < 100; attempt++) {
+    if (gate.evaluate().isNotEmpty) {
+      expect(gate, findsOneWidget);
+      expect(
+        LissomLocalizations.maybeOf(tester.element(gate))?.catalogAvailable,
+        isTrue,
+      );
+      return;
+    }
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 20)),
+    );
+    await tester.pump(const Duration(milliseconds: 20));
+  }
+  fail('Timed out waiting for the newly verified real host');
+}
+
 Future<void> _mount(
   WidgetTester tester,
   MotionAccountRuntime runtime,
@@ -346,6 +365,7 @@ void main() {
       await tester.pumpAndSettle();
       // Exact public Session proof admits a fresh epoch only after verification.
       expect(runtime.isCurrentSessionVerified, isTrue);
+      await _verifiedHostVisible(tester);
       expect(find.byType(OnboardingGate), findsOneWidget);
       final fresh = tester
           .widget<OnboardingGate>(find.byType(OnboardingGate))
@@ -556,6 +576,7 @@ void main() {
       await tester.runAsync(_settleSdk);
       await tester.pumpAndSettle();
       expect(runtime.isCurrentSessionVerified, isTrue);
+      await _verifiedHostVisible(tester);
       expect(find.byType(OnboardingGate), findsOneWidget);
       final fresh = tester
           .widget<OnboardingGate>(find.byType(OnboardingGate))

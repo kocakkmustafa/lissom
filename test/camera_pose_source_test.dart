@@ -83,8 +83,9 @@ final class _NativeCameraBackend {
   }
 
   Future<void> _closePhysical(String owner) {
-    if (_nativeOwner != owner || _phase == 'closed')
+    if (_nativeOwner != owner || _phase == 'closed') {
       return Future<void>.value();
+    }
     if (_phase == 'closing') return _physicalClosing!;
     _phase = 'closing';
     return _physicalClosing = () async {
@@ -1065,8 +1066,9 @@ void main() {
           await native.emitFrame();
           expect(bEvents.whereType<SourceFrameEvent>(), hasLength(2));
         } finally {
-          if (!native.readbackGate!.isCompleted)
+          if (!native.readbackGate!.isCompleted) {
             native.readbackGate!.complete();
+          }
           await closing;
           await aSub.cancel();
           await b.dispose();
