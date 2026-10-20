@@ -46,25 +46,35 @@ Future<void> _pump(
 }
 
 void main() {
-  testWidgets('fast repeated setup failure stays observed before the next frame', (
-    tester,
-  ) async {
-    int loads = 0;
-    await _pump(tester, () async {
-      loads++;
-      throw StateError('PRIVATE_SETUP_RETRY_FIXTURE');
-    });
-    expect(find.byKey(const Key('onboarding.gate.loadFailure')), findsOneWidget);
-    await tester.tap(find.byKey(const Key('onboarding.gate.retry')));
-    await tester.idle();
-    expect(tester.takeException(), isNull);
-    await tester.pumpAndSettle();
-    expect(loads, 2);
-    expect(find.byKey(const Key('onboarding.gate.loadFailure')), findsOneWidget);
-    expect(find.byKey(const Key('onboarding.gate.retry')).hitTestable(), findsOneWidget);
-    expect(find.textContaining('PRIVATE_SETUP_RETRY_FIXTURE'), findsNothing);
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'fast repeated setup failure stays observed before the next frame',
+    (tester) async {
+      int loads = 0;
+      await _pump(tester, () async {
+        loads++;
+        throw StateError('PRIVATE_SETUP_RETRY_FIXTURE');
+      });
+      expect(
+        find.byKey(const Key('onboarding.gate.loadFailure')),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('onboarding.gate.retry')));
+      await tester.idle();
+      expect(tester.takeException(), isNull);
+      await tester.pumpAndSettle();
+      expect(loads, 2);
+      expect(
+        find.byKey(const Key('onboarding.gate.loadFailure')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('onboarding.gate.retry')).hitTestable(),
+        findsOneWidget,
+      );
+      expect(find.textContaining('PRIVATE_SETUP_RETRY_FIXTURE'), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('tamamlanmamışsa OnboardingFlow açılır', (
     WidgetTester tester,

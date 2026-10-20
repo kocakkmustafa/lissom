@@ -393,7 +393,11 @@ void main() {
     expect(find.byType(OnboardingGate), findsNothing);
     support.complete(directory);
     await tester.pumpAndSettle();
-    await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
+    await _hostVisible(
+      tester,
+      find.text('Save password'),
+      admissionClosed: true,
+    );
     expect(find.text('Save password'), findsOneWidget);
     expect(find.byType(OnboardingGate), findsNothing);
     await tester.pumpWidget(const SizedBox.shrink());
@@ -418,7 +422,11 @@ void main() {
       expect(source.retired, isTrue);
       expect(source.disposals, 1);
       await tester.pumpAndSettle();
-      await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
+      await _hostVisible(
+        tester,
+        find.text('Save password'),
+        admissionClosed: true,
+      );
       expect(find.text('Save password'), findsOneWidget);
       expect(find.byType(LiveCaptureScreen), findsNothing);
       source.closeBarrier.complete();
@@ -443,7 +451,11 @@ void main() {
       await _capture(tester, source);
       runtime.recover();
       await tester.pumpAndSettle();
-      await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
+      await _hostVisible(
+        tester,
+        find.text('Save password'),
+        admissionClosed: true,
+      );
       await tester.enterText(find.byType(TextField), 'fixture-only-password');
       await tester.tap(find.text('Save password'));
       await tester.pumpAndSettle();
@@ -506,7 +518,11 @@ void main() {
       await _capture(tester, source);
       runtime.recover();
       await tester.pumpAndSettle();
-      await _hostVisible(tester, find.text('Save password'), admissionClosed: true);
+      await _hostVisible(
+        tester,
+        find.text('Save password'),
+        admissionClosed: true,
+      );
       source.closeBarrier.completeError(
         StateError('fixture native close failure'),
       );

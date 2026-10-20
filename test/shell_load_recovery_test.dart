@@ -24,10 +24,12 @@ void main() {
         return Future<AppFacts>.error(StateError('PRIVATE_RETRY_FIXTURE'));
       }
 
-      await tester.pumpWidget(MaterialApp(
-        theme: buildLissomTheme(),
-        home: LissomShell(loader: loader),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          home: LissomShell(loader: loader),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);
       await tester.tap(find.byKey(const Key('shell.retryLoad')));
@@ -37,7 +39,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(loads, 2);
       expect(find.byKey(const Key('shell.loadFailure')), findsOneWidget);
-      expect(find.byKey(const Key('shell.retryLoad')).hitTestable(), findsOneWidget);
+      expect(
+        find.byKey(const Key('shell.retryLoad')).hitTestable(),
+        findsOneWidget,
+      );
       expect(find.textContaining('PRIVATE_RETRY_FIXTURE'), findsNothing);
       expect(tester.takeException(), isNull);
     });
