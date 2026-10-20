@@ -15,6 +15,22 @@ import 'package:lissom/app/hatha_course_screen.dart';
 import 'package:lissom/app/hatha_progress.dart';
 import 'package:lissom/app/hatha_session_preparation.dart';
 
+// Independent reviewed literals: LIS-ENTR-0809 (v04/TR answer) and
+// LIS-ENTR-0098 (v06/EN first step), not production-derived expectations.
+const String _reviewedV04AnswerTurkish =
+    "İkisi de gerekmez: ayaklar sabit, kalça yerine gelirken ve gövde "
+    "doğrulurken avuç teması korunur; eller yukarı kayabilir. Destek gerekmeyen "
+    "sağlam dik tabanda önce biri sonra diğeri bırakılır. Yer biçimi kanıtı "
+    "değildir.";
+
+const String _reviewedV06FirstStepEnglish =
+    "Before movement write: upright base → optional small free-arm rise/lower → "
+    "supported shallow hinge OR familiar wall-dog preparation → upright base → "
+    "optional short staggered stance and return of the right foot to neutral → "
+    "neutral → optional return of the left foot to neutral → neutral rest. "
+    "Choose only familiar components, keep required support and never remove it "
+    "to make the route look continuous.";
+
 HathaCourse _vinyasa() =>
     HathaCourse.parse(File(kVinyasaCourseAssetPath).readAsStringSync());
 
@@ -192,16 +208,28 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
+    expect(
+      find.text('1. $_reviewedV06FirstStepEnglish', skipOffstage: false),
+      findsNothing,
+    );
     expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
     expect(
       find.byKey(const Key('hatha.session.prepareToPractice')),
       findsNothing,
     );
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pump();
     expect(find.text('1. ${lesson.steps.first.en}'), findsNothing);
+    expect(
+      find.text('1. $_reviewedV06FirstStepEnglish', skipOffstage: false),
+      findsNothing,
+    );
     expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
     expect(store.writes, 0);
   });
@@ -274,7 +302,9 @@ void main() {
           await open();
           final reveal = find.byKey(Key('course.answer.$id'));
           await tester.scrollUntilVisible(reveal, 300);
-          final answer = locale == 'tr'
+          final answer = id == 'v04' && locale == 'tr'
+              ? _reviewedV04AnswerTurkish
+              : locale == 'tr'
               ? lesson.answerKey!.tr
               : lesson.answerKey!.en;
           expect(find.text(answer), findsNothing);
@@ -306,9 +336,21 @@ void main() {
           );
           expect(tester.takeException(), isNull);
           tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.inactive,
+          );
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.hidden,
+          );
+          tester.binding.handleAppLifecycleStateChanged(
             AppLifecycleState.paused,
           );
           await tester.pump();
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.hidden,
+          );
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.inactive,
+          );
           tester.binding.handleAppLifecycleStateChanged(
             AppLifecycleState.resumed,
           );

@@ -17,6 +17,15 @@ import 'package:lissom/app/shell.dart';
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
 
+// Independent reviewed display literal: EN-TR-FINAL-40 ASQ-02.
+// Keep the immutable raw-copy guard and also forbid the actual clarified step.
+const String _reviewedH59RehearsalEnglish =
+    "Rehearse once only a transition taught in an earlier lesson whose entry, "
+    "support and exit you know and have used comfortably. Do not physically "
+    "test a first-time or unresolved transition: keep it on paper, replace it "
+    "with a familiar taught route or observation, then revise the plan before "
+    "h60.";
+
 String _asset() => File('config/courses/hatha.v1.json').readAsStringSync();
 
 final class _MemoryHathaProgressStore implements HathaProgressStore {
@@ -211,6 +220,13 @@ void main() {
       expect(find.textContaining('Review h42'), findsOneWidget);
       expect(
         find.textContaining('Rehearse only', skipOffstage: false),
+        findsNothing,
+      );
+      expect(
+        find.textContaining(
+          _reviewedH59RehearsalEnglish,
+          skipOffstage: false,
+        ),
         findsNothing,
       );
       expect(find.byKey(HathaLessonScreen.practiceKey), findsNothing);
