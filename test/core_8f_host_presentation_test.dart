@@ -198,6 +198,83 @@ final class _GatedAppearanceStore implements AppearancePreferenceStore {
   }
 }
 
+// A Future can retain fake-zone callbacks even when awaited from runAsync.
+// Launch once in the real zone, then progress both zones outside that callback.
+Future<T> _completeFixtureIo<T>(
+  WidgetTester tester,
+  Future<T> Function() operation, {
+  required String boundary,
+}) async {
+  const deadline = Duration(seconds: 5);
+  final elapsed = Stopwatch()..start();
+  late T value;
+  Object? failure;
+  StackTrace? failureStack;
+  Duration? settledAt;
+  var observationEnded = false;
+  var failureObserved = false;
+  void reportLateFailure(Object error, StackTrace stack) {
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: error,
+        stack: stack,
+        context: ErrorDescription(
+          'after fixture IO observation ended: $boundary',
+        ),
+      ),
+    );
+  }
+
+  try {
+    await tester.runAsync(() async {
+      unawaited(
+        Future<T>.sync(operation).then<void>(
+          (result) {
+            value = result;
+            settledAt = elapsed.elapsed;
+          },
+          onError: (Object error, StackTrace stack) {
+            failure = error;
+            failureStack = stack;
+            settledAt = elapsed.elapsed;
+            if (observationEnded) {
+              failureObserved = true;
+              reportLateFailure(error, stack);
+            }
+          },
+        ),
+      );
+    });
+    while (settledAt == null && elapsed.elapsed < deadline) {
+      final remaining = deadline - elapsed.elapsed;
+      if (remaining <= Duration.zero) {
+        break;
+      }
+      final pause = remaining < const Duration(milliseconds: 20)
+          ? remaining
+          : const Duration(milliseconds: 20);
+      await tester.runAsync(() => Future<void>.delayed(pause));
+      await tester.pump();
+    }
+    final observedSettlement = settledAt;
+    if (observedSettlement == null || observedSettlement > deadline) {
+      // Bound waiting, not the admitted operation. Keep its error observer alive.
+      throw TimeoutException('Fixture IO did not settle: $boundary', deadline);
+    }
+    if (failure != null) {
+      failureObserved = true;
+      Error.throwWithStackTrace(failure!, failureStack!);
+    }
+    return value;
+  } finally {
+    observationEnded = true;
+    if (failure != null && !failureObserved) {
+      failureObserved = true;
+      reportLateFailure(failure!, failureStack!);
+    }
+  }
+}
+
 Future<void> _wait(
   WidgetTester tester,
   bool Function() ready,
@@ -290,28 +367,36 @@ void main() {
         // Release and observe each admitted write, even if the other one fails.
         // A late result here is cleanup only, never a persistence-success oracle.
         try {
-          await tester.runAsync(() async {
-            if (!localeStore.release.isCompleted) {
-              localeStore.release.complete();
-            }
-            if (!appearanceStore.release.isCompleted) {
-              appearanceStore.release.complete();
-            }
-            for (final (label, write) in <(String, Future<bool>?)>[
-              ('locale write', localeSave),
-              ('appearance write', appearanceSave),
-            ]) {
-              if (write != null) {
-                try {
-                  await write.timeout(const Duration(seconds: 5));
-                } catch (error, stack) {
-                  cleanupErrors.add((label, error, stack));
-                }
+          await _completeFixtureIo<void>(
+            tester,
+            () async {
+              if (!localeStore.release.isCompleted) {
+                localeStore.release.complete();
               }
-            }
-          });
+              if (!appearanceStore.release.isCompleted) {
+                appearanceStore.release.complete();
+              }
+            },
+            boundary: 'cleanup release preference gates',
+          );
         } catch (error, stack) {
           cleanupErrors.add(('pending-write async zone', error, stack));
+        }
+        for (final (label, write) in <(String, Future<bool>?)>[
+          ('locale write', localeSave),
+          ('appearance write', appearanceSave),
+        ]) {
+          if (write != null) {
+            try {
+              await _completeFixtureIo<bool>(
+                tester,
+                () => write,
+                boundary: 'cleanup $label',
+              );
+            } catch (error, stack) {
+              cleanupErrors.add((label, error, stack));
+            }
+          }
         }
         try {
           await tester.pumpWidget(const SizedBox.shrink());
@@ -333,18 +418,24 @@ void main() {
           }
         }
         try {
-          await tester.runAsync(() async {
-            try {
-              await runtime.closed.timeout(const Duration(seconds: 5));
-            } catch (error, stack) {
-              cleanupErrors.add(('runtime shutdown', error, stack));
-            }
-            try {
-              await admittedOwner?.retireAndDrain();
-            } catch (error, stack) {
-              cleanupErrors.add(('admitted owner drain', error, stack));
-            }
-          });
+          try {
+            await _completeFixtureIo<void>(
+              tester,
+              () => runtime.closed,
+              boundary: 'cleanup runtime shutdown',
+            );
+          } catch (error, stack) {
+            cleanupErrors.add(('runtime shutdown', error, stack));
+          }
+          try {
+            await _completeFixtureIo<void>(
+              tester,
+              () => admittedOwner?.retireAndDrain() ?? Future<void>.value(),
+              boundary: 'cleanup admitted owner drain',
+            );
+          } catch (error, stack) {
+            cleanupErrors.add(('admitted owner drain', error, stack));
+          }
         } catch (error, stack) {
           cleanupErrors.add(('shutdown async zone', error, stack));
         } finally {
@@ -390,21 +481,31 @@ void main() {
           }
         }
       });
-      await tester.runAsync(() async {
-        await localeFile.write('en');
-        await appearanceFile.write(ThemeMode.light);
-        await Future.wait<void>(<Future<void>>[
+      await _completeFixtureIo<void>(
+        tester,
+        () async {
+          await localeFile.write('en');
+          await appearanceFile.write(ThemeMode.light);
+        },
+        boundary: 'startup preference files',
+      );
+      await _completeFixtureIo<List<void>>(
+        tester,
+        () => Future.wait<void>(<Future<void>>[
           locale.initialize(),
           appearance.initialize(),
           runtime.account.initialSessionReady,
-        ]).timeout(const Duration(seconds: 5));
-        for (final tag in <String>['en', 'ar']) {
-          final raw = await rootBundle
-              .loadString('config/l10n/$tag.json')
-              .timeout(const Duration(seconds: 5));
-          expect(LissomLocalizations.parse(raw, tag).catalogAvailable, isTrue);
-        }
-      });
+        ]),
+        boundary: 'startup preferences and initial session',
+      );
+      for (final tag in <String>['en', 'ar']) {
+        final raw = await _completeFixtureIo<String>(
+          tester,
+          () => rootBundle.loadString('config/l10n/$tag.json'),
+          boundary: 'startup $tag catalog',
+        );
+        expect(LissomLocalizations.parse(raw, tag).catalogAvailable, isTrue);
+      }
       expect(runtime.account.supabase.auth.currentSession?.user.id, _id);
       expect(motionPaidFeaturesAvailable, isFalse);
       var cameraInvocations = 0;
@@ -564,10 +665,14 @@ void main() {
 
       // Start in the real async zone: file IO and its completion are not replaced
       // with fake data or considered finished by pumpAndSettle.
-      await tester.runAsync(() async {
-        localeSave = locale.select('ar');
-        appearanceSave = appearance.select(ThemeMode.dark);
-      });
+      await _completeFixtureIo<void>(
+        tester,
+        () async {
+          localeSave = locale.select('ar');
+          appearanceSave = appearance.select(ThemeMode.dark);
+        },
+        boundary: 'start admitted preference writes',
+      );
       await tester.pump();
       expect(locale.isSaving, isTrue);
       expect(appearance.isSaving, isTrue);
@@ -585,19 +690,36 @@ void main() {
         Brightness.light,
       );
       expectLifetime();
-      final beforeValues = await tester.runAsync(
+      final beforeValues = await _completeFixtureIo(
+        tester,
         () async => (await localeFile.read(), await appearanceFile.read()),
+        boundary: 'read preferences before gate release',
       );
       expect(beforeValues, ('en', ThemeMode.light));
-      await tester.runAsync(() async {
-        localeStore.release.complete();
-        appearanceStore.release.complete();
-        expect(await localeSave!.timeout(const Duration(seconds: 5)), isTrue);
-        expect(
-          await appearanceSave!.timeout(const Duration(seconds: 5)),
-          isTrue,
-        );
-      });
+      await _completeFixtureIo<void>(
+        tester,
+        () async {
+          localeStore.release.complete();
+          appearanceStore.release.complete();
+        },
+        boundary: 'release admitted preference writes',
+      );
+      expect(
+        await _completeFixtureIo<bool>(
+          tester,
+          () => localeSave!,
+          boundary: 'locale preference write',
+        ),
+        isTrue,
+      );
+      expect(
+        await _completeFixtureIo<bool>(
+          tester,
+          () => appearanceSave!,
+          boundary: 'appearance preference write',
+        ),
+        isTrue,
+      );
       await _wait(
         tester,
         () =>
@@ -620,11 +742,13 @@ void main() {
       );
       expect(localeStore.writes, 1);
       expect(appearanceStore.writes, 1);
-      final afterValues = await tester.runAsync(
+      final afterValues = await _completeFixtureIo(
+        tester,
         () async => (
           await FileLocalePreferenceStore(localeFile.file).read(),
           await FileAppearancePreferenceStore(appearanceFile.file).read(),
         ),
+        boundary: 'reopen persisted preference files',
       );
       expect(afterValues, ('ar', ThemeMode.dark));
       final save = find.widgetWithText(FilledButton, 'حفظ الملف الشخصي');
