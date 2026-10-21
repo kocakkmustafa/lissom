@@ -9,7 +9,7 @@ const String kAshtangaCourseAssetPath =
     'config/courses/ashtanga-foundations.v1.json';
 const String kAshtangaCourseId = 'lissom.ashtanga.foundations.beginner';
 const String kAshtangaCourseSha256 =
-    '913fe8864c0e71a77567e17a14983e334273c02158662413133a6755cafe8c07';
+    '889d9f22f4006c151ff3ae1a980dcc7b8b00076035a99bdb3f9154b990fb75b1';
 
 /// App-owned text integrity; no traditional-series, physical or media approval.
 Future<HathaCourse> loadVerifiedAshtangaCourse(AssetBundle bundle) async {

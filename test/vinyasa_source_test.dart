@@ -105,7 +105,16 @@ void main() {
       );
       final raw = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
       final sourceKeys = (raw['sources'] as Map).keys.toSet();
-      expect(sourceKeys, <String>{'s1', 's2', 's3', 's4', 's5', 's6', 's7'});
+      expect(sourceKeys, <String>{
+        's1',
+        's2',
+        's3',
+        's4',
+        's5',
+        's6',
+        's7',
+        's8',
+      });
       expect((raw['sourceScopes'] as Map).keys.toSet(), sourceKeys);
       for (final module in raw['modules'] as List) {
         for (final lesson in (module as Map)['lessons'] as List) {
@@ -266,7 +275,7 @@ void main() {
   });
 
   for (final locale in const <String>['en', 'tr']) {
-    for (var number = 1; number <= 10; number++) {
+    for (var number = 1; number <= 14; number++) {
       final id = 'v${number.toString().padLeft(2, '0')}';
       testWidgets(
         '$id $locale large text: scroll, reveal, preparation and reset',
@@ -525,8 +534,23 @@ void main() {
       final course = _vinyasa();
       expect(
         course.lessons.length,
-        10,
+        14,
       ); // Identity contract, not skill completion.
+      // G3 floor extension: knees stay down, bent elbows, stepped lunge.
+      expect(course.modules.last.id, 'v-floor-extension');
+      expect(
+        course.lessonById('v11')!.steps[1].en,
+        contains('Keep the knees down throughout'),
+      );
+      expect(
+        course.lessonById('v12')!.answerKey!.en,
+        contains('Elbows stay bent'),
+      );
+      expect(
+        course.lessonById('v13')!.answerKey!.en,
+        contains('Do not swing or jump'),
+      );
+      expect(course.lessonById('v14')!.prerequisites, ['v13']);
       expect(
         course.lessonById('v04')!.steps[0].en,
         contains('feet stay fixed'),

@@ -7,7 +7,7 @@ import 'hatha_course.dart';
 
 const String kYinCourseAssetPath = 'config/courses/yin-supported.v1.json';
 const String kYinCourseSha256 =
-    'ed346669025d106fcd255093adb89983925ddc46750d80730c7998f7cc2f5770';
+    '647e5c88c1e61720bcd93a6170ca978ba623f296594733fd4d495fbfc1813a66';
 
 /// App-owned text integrity only. Existing Hatha media/source receipts stay
 /// unchanged; this course has no media, camera grade or physical acceptance.

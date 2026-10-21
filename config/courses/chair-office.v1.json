@@ -855,6 +855,208 @@
           "evidenceMode": "self_report"
         }
       ]
+    },
+    {
+      "id": "desk_mobility_extension",
+      "title": {
+        "en": "Extension: more seated mobility for desk days",
+        "tr": "Uzantı: masa günleri için ek oturarak hareketlilik"
+      },
+      "outcome": {
+        "en": "Add a seated side reach, spine rounding and lengthening, and hand and shoulder care to the seated route.",
+        "tr": "Oturarak yana uzanma, omurgayı yuvarlama ve uzatma ile el ve omuz bakımını oturarak rotaya ekle."
+      },
+      "lessons": [
+        {
+          "id": "c13",
+          "title": {
+            "en": "A seated side reach",
+            "tr": "Oturarak yana uzanma"
+          },
+          "objective": {
+            "en": "Reach one arm up and a little to the side and return through centre without leaning on the chair.",
+            "tr": "Bir kolu yukarı ve biraz yana uzat ve sandalyeye yaslanmadan merkezden dön."
+          },
+          "steps": [
+            {
+              "en": "Prepare as in c01/c03: a stable chair without wheels, feet flat and hip-width, sitting a little forward from the backrest.",
+              "tr": "c01/c03'teki gibi hazırlan: tekerleksiz sabit sandalye, ayaklar yerde ve kalça genişliğinde, sırtlığın biraz önünde oturuş."
+            },
+            {
+              "en": "Rest the left hand on the seat or thigh. Raise the right arm forward and up only as high as the shoulder is comfortable.",
+              "tr": "Sol eli oturağa veya uyluğa koy. Sağ kolu yalnız omzun rahat olduğu yüksekliğe kadar öne ve yukarı kaldır."
+            },
+            {
+              "en": "Lean the upper body only a little to the left, keeping both sitting bones on the seat and the head in line with the trunk. Ordinary breathing continues; no hold at the end of the range.",
+              "tr": "Üst gövdeyi yalnız biraz sola eğ; iki oturma kemiği oturakta, baş gövdeyle aynı hizada kalsın. Olağan nefes sürer; aralığın sonunda bekleme yok."
+            },
+            {
+              "en": "Return to upright, lower the arm and pause. Use the other side separately; ranges can differ and either side may be omitted.",
+              "tr": "Dike dön, kolu indir ve bekle. Diğer tarafı ayrı kullan; aralıklar farklı olabilir ve iki taraftan biri atlanabilir."
+            }
+          ],
+          "practice": {
+            "en": "Name the central rest point, then explore one small reach per side. If, without a stop signal, the mistake is lifting a hip off the seat, return upright, reduce the lean and try once more. Pinching or any stop signal ends the action without retest.",
+            "tr": "Merkez dinlenme noktasını adlandır, sonra her taraf için tek küçük bir uzanma dene. Durma işareti olmadan hata bir kalçayı oturaktan kaldırmaksa dike dön, eğilmeyi azalt ve bir kez daha dene. Sıkışma veya herhangi bir durma işareti hareketi yeniden sınamadan bitirir."
+          },
+          "selfCheck": {
+            "en": "To reach further, a learner lifts the opposite hip off the seat. What is the taught choice?",
+            "tr": "Daha uzağa uzanmak için bir öğrenci karşı kalçasını oturaktan kaldırıyor. Öğretilen seçim nedir?"
+          },
+          "answerKey": {
+            "en": "Keep both sitting bones down and lean less. The reach is small by design; distance is not the goal.",
+            "tr": "İki oturma kemiğini aşağıda tut ve daha az eğil. Uzanma bilerek küçüktür; mesafe hedef değildir."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Do not impose matching left/right ranges; note an omission instead of forcing a turn.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Sol/sağ aralıkları eşitleme; zorlamak yerine atlamayı kaydet."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c12"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c14",
+          "title": {
+            "en": "Seated rounding and lengthening of the spine",
+            "tr": "Oturarak omurgayı yuvarlama ve uzatma"
+          },
+          "objective": {
+            "en": "Move between a small rounded back and a tall seat with hands on the thighs.",
+            "tr": "Eller uyluklardayken küçük yuvarlak sırt ile dik oturuş arasında hareket et."
+          },
+          "steps": [
+            {
+              "en": "Sit forward from the backrest, feet flat, hands resting on the thighs. Find a comfortable tall seat as the neutral position.",
+              "tr": "Sırtlığın önünde, ayaklar yerde, eller uyluklarda otur. Nötr konum olarak rahat bir dik oturuş bul."
+            },
+            {
+              "en": "Let the upper back round a little and the chin come gently toward the chest, hands staying on the thighs. Move slowly; this is not a forward fold.",
+              "tr": "Üst sırtın biraz yuvarlanmasına ve çenenin nazikçe göğse yaklaşmasına izin ver; eller uyluklarda kalır. Yavaş hareket et; bu bir öne katlanma değildir."
+            },
+            {
+              "en": "Return through neutral and let the chest lift a little as the shoulders widen, eyes looking ahead, not up. Keep the lower back comfortable and avoid squeezing it.",
+              "tr": "Nötrden geç ve omuzlar genişlerken göğsün biraz yükselmesine izin ver; gözler yukarı değil, ileri baksın. Beli rahat tut ve sıkıştırmaktan kaçın."
+            },
+            {
+              "en": "Move between the two shapes a few times with ordinary breathing, then rest upright or against the backrest.",
+              "tr": "Olağan nefesle iki biçim arasında birkaç kez hareket et, sonra dik veya sırtlığa yaslanarak dinlen."
+            }
+          ],
+          "practice": {
+            "en": "Explore a few slow repeats within a range that feels easy to reverse. If the head drops further than the trunk and there is no stop signal, pause at neutral and use a smaller range. Neck or back pinching ends the action.",
+            "tr": "Geri çevirmesi kolay hissedilen bir aralıkta birkaç yavaş tekrar dene. Baş gövdeden fazla düşüyorsa ve durma işareti yoksa nötrde bekle ve daha küçük bir aralık kullan. Boyunda veya sırtta sıkışma hareketi bitirir."
+          },
+          "selfCheck": {
+            "en": "Does the breath have to follow a fixed count while the spine moves?",
+            "tr": "Omurga hareket ederken nefes sabit bir sayıyı izlemek zorunda mı?"
+          },
+          "answerKey": {
+            "en": "No. Breathing stays ordinary; there is no required count or rhythm. Pausing at neutral is always available.",
+            "tr": "Hayır. Nefes olağan kalır; zorunlu sayı veya ritim yoktur. Nötrde beklemek her zaman mümkündür."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Do not impose matching left/right ranges; note an omission instead of forcing a turn.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Sol/sağ aralıkları eşitleme; zorlamak yerine atlamayı kaydet."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c13"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "c15",
+          "title": {
+            "en": "Hands, wrists and shoulders after screen work",
+            "tr": "Ekran işinden sonra eller, bilekler ve omuzlar"
+          },
+          "objective": {
+            "en": "Use small hand, wrist and shoulder movements as a short break during desk work.",
+            "tr": "Masa başı işte kısa bir mola olarak küçük el, bilek ve omuz hareketleri kullan."
+          },
+          "steps": [
+            {
+              "en": "Sit forward from the backrest, feet flat. Rest the forearms on the thighs or the desk.",
+              "tr": "Sırtlığın önünde, ayaklar yerde otur. Önkolları uyluklara veya masaya yasla."
+            },
+            {
+              "en": "Open and close the hands slowly a few times, then make small comfortable circles with the wrists in both directions. No pulling of the fingers with the other hand.",
+              "tr": "Elleri yavaşça birkaç kez açıp kapa, sonra bileklerle iki yönde küçük rahat daireler çiz. Parmakları diğer elle çekme yok."
+            },
+            {
+              "en": "Let the arms rest by the sides. Lift the shoulders a little toward the ears, then lower them slowly; then draw them a little back and release. Head stays level.",
+              "tr": "Kolları yanlara bırak. Omuzları biraz kulaklara doğru kaldır, sonra yavaşça indir; ardından biraz geriye çek ve bırak. Baş düz kalır."
+            },
+            {
+              "en": "Finish by resting the hands on the thighs and noticing ordinary breathing for a few breaths before going back to work.",
+              "tr": "Elleri uyluklara bırakıp işe dönmeden önce birkaç nefes olağan nefesi fark ederek bitir."
+            }
+          ],
+          "practice": {
+            "en": "Use this as a short break between tasks. Tingling, numbness or pain in the hands or arms ends the action; do not repeat it to check. Record which parts you used and which you left out.",
+            "tr": "Bunu görevler arasında kısa bir mola olarak kullan. Ellerde veya kollarda karıncalanma, uyuşma ya da ağrı hareketi bitirir; kontrol etmek için tekrarlama. Hangi bölümleri kullandığını ve hangilerini çıkardığını kaydet."
+          },
+          "selfCheck": {
+            "en": "Your fingers tingle during wrist circles. Do you try a bigger circle to see if it changes?",
+            "tr": "Bilek daireleri sırasında parmakların karıncalanıyor. Değişip değişmediğini görmek için daha büyük daire dener misin?"
+          },
+          "answerKey": {
+            "en": "No. Tingling ends the action: rest the hands and do not retest. Seek individual advice if it persists or recurs.",
+            "tr": "Hayır. Karıncalanma hareketi bitirir: elleri dinlendir ve yeniden sınama. Sürer veya tekrarlarsa bireysel görüş al."
+          },
+          "adaptation": {
+            "en": "Every action is optional. Use a smaller comfortable range, supported rest or observation. Breathe naturally without retention, force or a required rhythm. Pregnancy, injury, balance or other health limits may need individual health-professional and qualified-instructor guidance; a chair does not guarantee suitability. Do not impose matching left/right ranges; note an omission instead of forcing a turn.",
+            "tr": "Her eylem seçmelidir. Küçük rahat aralık, destekli dinlenme veya gözlem seç. Nefesi tutmadan, zorlamadan veya zorunlu ritme uydurmadan doğal al. Gebelik, sakatlık, denge veya diğer sağlık sınırları sağlık uzmanı ve nitelikli eğitmenden bireysel görüş gerektirebilir; sandalye uygunluk garantisi değildir. Sol/sağ aralıkları eşitleme; zorlamak yerine atlamayı kaydet."
+          },
+          "stopSignal": {
+            "en": "Stop and rest supported for pain, pinching, dizziness, new tingling, unusual breathlessness or feeling unwell. Do not test a symptom by pushing through it. Sudden illness needs medical attention; persistent or recurrent symptoms need individual advice before resuming.",
+            "tr": "Ağrı, sıkışma, baş dönmesi, yeni karıncalanma, alışılmadık nefes darlığı veya kötü hissetmede dur, destekli dinlen. Belirtiyi zorlayarak sınama. Ani kötüleşmede tıbbi yardım al; süren veya tekrarlayan belirtilerde devam etmeden bireysel görüş al."
+          },
+          "mediaBrief": {
+            "en": "Future original instructor demonstration: show the chair, foot contacts, chosen small action, return and rest. No demonstration is supplied or physically validated.",
+            "tr": "Gelecekte özgün eğitmen gösterimi: sandalye, ayak temasları, seçilen küçük eylem, dönüş ve dinlenmeyi göster. Gösterim sağlanmadı veya fiziksel olarak doğrulanmadı."
+          },
+          "sourceIds": [
+            "nhs_seated",
+            "nbt_seated",
+            "nccih"
+          ],
+          "prerequisites": [
+            "c14"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        }
+      ]
     }
   ]
 }

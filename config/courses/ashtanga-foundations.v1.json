@@ -7,8 +7,8 @@
     "tr": "Ashtanga başlangıç temelleri"
   },
   "intro": {
-    "en": "Thirteen text lessons: standing foundations, traditional Sun A/B maps and clearly labelled standing adaptations. This is not the full Primary Series. Self-reported study/participation; physical teaching, individual suitability and accepted demonstrations remain separate. No yoga camera grade.",
-    "tr": "On üç metin dersi: ayakta temeller, geleneksel Güneşe Selam A/B haritaları ve açık etiketli ayakta uyarlamalar. Tam temel seri değildir. Öz beyanlı okuma/katılım; fiziksel öğretim, bireysel uygunluk ve kabul edilmiş gösterimler ayrıdır. Yoga kamera puanı yoktur."
+    "en": "Nineteen text lessons: standing foundations, traditional Sun A/B maps, clearly labelled standing adaptations and an extension with four standing fundamentals and closing rest. This is not the full Primary Series. Self-reported study/participation; physical teaching, individual suitability and accepted demonstrations remain separate. No yoga camera grade.",
+    "tr": "On dokuz metin dersi: ayakta temeller, geleneksel Güneşe Selam A/B haritaları, açık etiketli ayakta uyarlamalar ve dört ayakta temel ile kapanış dinlenmesinden oluşan bir uzantı. Tam temel seri değildir. Öz beyanlı okuma/katılım; fiziksel öğretim, bireysel uygunluk ve kabul edilmiş gösterimler ayrıdır. Yoga kamera puanı yoktur."
   },
   "sources": {
     "kpj_method": "https://kpjayshala.com/about-ashtanga.html",
@@ -20,7 +20,13 @@
     "ayi_fold": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/item/uttanasana-a/?cHash=0ad70ecda39821b7122c6c613e14aadc",
     "ayi_half_lift": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-a-sun-salutation/item/uttanasana-b/?cHash=93fbdfdf9bec4c4e3e7aca39ba2ce115",
     "ayi_chair": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-b-sun-salutation-b/item/utkatasana/?cHash=6c7180eb28375326bf323b6037e94a78",
-    "ayi_warrior": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-b-sun-salutation-b/item/virabhadrasana-a/?cHash=83ca5d046b42fcee295c99916ebb5576"
+    "ayi_warrior": "https://www.ashtangayoga.info/ashtanga-yoga/surya-namaskara-b-sun-salutation-b/item/virabhadrasana-a/?cHash=83ca5d046b42fcee295c99916ebb5576",
+    "ayi_fundamentals": "https://www.ashtangayoga.info/ashtanga-yoga/fundamentals/",
+    "ayi_padangusthasana": "https://de.ashtangayoga.info/ashtanga-yoga/fundamentals/210331-padangushthasana-ronald-richard/",
+    "ayi_trikonasana": "https://de.ashtangayoga.info/ashtanga-yoga/fundamentals/210322-utthita-trikonasana-ronald-richard/",
+    "ayi_parsvakonasana": "https://de.ashtangayoga.info/ashtanga-yoga/fundamentals/210322-utthita-parshva-konasana-ronald-richard/",
+    "ayi_prasarita": "https://de.ashtangayoga.info/ashtanga-yoga/fundamentals/210322-prasarita-padottanasana-a-ronald-richard/",
+    "ayi_finishing": "https://www.ashtangayoga.info/ashtanga-yoga/finishing/"
   },
   "sourceScopes": {
     "kpj_method": {
@@ -117,6 +123,66 @@
       "supports": {
         "en": "Virabhadrasana A and its right/left placement in Sun B.",
         "tr": "Virabhadrasana A ve Güneşe Selam B’de sağ/sol yerleşimi."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_fundamentals": {
+      "supports": {
+        "en": "The order of the standing fundamentals that follow the sun salutations.",
+        "tr": "Güneşe selamlardan sonra gelen ayakta temellerin sırası."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_padangusthasana": {
+      "supports": {
+        "en": "Feet close together, hands on the hips and bent knees as a beginner hint for the fold.",
+        "tr": "Ayaklar yakın, eller kalçada ve öne katlanmada başlangıç ipucu olarak bükük dizler."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_trikonasana": {
+      "supports": {
+        "en": "Wide stance, heel line, arms level and tilting the pelvis before reaching.",
+        "tr": "Geniş duruş, topuk hattı, yatay kollar ve uzanmadan önce pelvisi eğmek."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_parsvakonasana": {
+      "supports": {
+        "en": "Front knee over the ankle, back-foot contact and not jamming the raised arm into the shoulder.",
+        "tr": "Ön diz ayak bileği üzerinde, arka ayak teması ve kaldırılan kolu omza sıkıştırmamak."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_prasarita": {
+      "supports": {
+        "en": "Wide parallel feet, hands on the hips, folding from the pelvis and rising with hands on the hips.",
+        "tr": "Geniş paralel ayaklar, eller kalçada, pelvisten katlanma ve eller kalçadayken yükselme."
+      },
+      "doesNotSupport": {
+        "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
+        "tr": "Lissom’u, ayakta uyarlamalarını veya tüm kursu onaylamaz; kişisel uygunluk, gözlenmiş teknik, medya hakkı veya sağlık sonucu göstermez."
+      }
+    },
+    "ayi_finishing": {
+      "supports": {
+        "en": "The order of the finishing sequence and the closing rest lying on the back.",
+        "tr": "Kapanış serisinin sırası ve sırtüstü kapanış dinlenmesi."
       },
       "doesNotSupport": {
         "en": "Does not endorse Lissom, its standing adaptations or this whole course; does not establish personal suitability, observed technique, media rights or health outcomes.",
@@ -978,6 +1044,392 @@
             "a12"
           ],
           "minutes": 5,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "a.fundamentals_extension",
+      "title": {
+        "en": "Extension: standing fundamentals and closing rest",
+        "tr": "Uzantı: ayakta temeller ve kapanış dinlenmesi"
+      },
+      "outcome": {
+        "en": "Read the standing fundamentals map, use four clearly labelled standing adaptations and close with rest.",
+        "tr": "Ayakta temeller haritasını oku, dört açık etiketli ayakta uyarlamayı kullan ve dinlenmeyle kapat."
+      },
+      "lessons": [
+        {
+          "id": "a14",
+          "title": {
+            "en": "Read the standing fundamentals map",
+            "tr": "Ayakta temeller haritasını oku"
+          },
+          "objective": {
+            "en": "Name the standing fundamentals that follow the sun salutations without practising them.",
+            "tr": "Güneşe selamlardan sonra gelen ayakta temelleri çalışmadan adlandır."
+          },
+          "steps": [
+            {
+              "en": "This extension starts after the a13 endpoint. Sit for reading; no movement is needed in this lesson.",
+              "tr": "Bu uzantı a13 bitişinden sonra başlar. Okumak için otur; bu derste hareket gerekmez."
+            },
+            {
+              "en": "In the traditional order, standing fundamentals follow Sun A and Sun B: forward folds holding the toes or with hands under the feet, Triangle and its revolved form, Side Angle and its revolved form, four wide-leg folds and an intense side stretch.",
+              "tr": "Geleneksel sırada ayakta temeller Güneşe Selam A ve B'yi izler: ayak parmaklarını tutarak veya eller ayak altında öne katlanmalar, Üçgen ve dönen biçimi, Yan Açı ve dönen biçimi, dört geniş bacak katlanması ve yoğun yan esneme."
+            },
+            {
+              "en": "Lissom teaches only four of them as standing adaptations: a shin-supported fold (a15), a short-stance Triangle (a16), Side Angle with the forearm on the thigh (a17) and a wide-leg fold with raised hands (a18). The revolved forms are not taught.",
+              "tr": "Lissom bunlardan yalnız dördünü ayakta uyarlama olarak öğretir: baldır destekli katlanma (a15), kısa duruşlu Üçgen (a16), önkol uylukta Yan Açı (a17) ve eller yükseltilmiş geniş bacak katlanması (a18). Dönen biçimler öğretilmez."
+            },
+            {
+              "en": "Note which adaptations you might choose and which you leave as map knowledge. The traditional five-breath count is described, not required.",
+              "tr": "Hangi uyarlamaları seçebileceğini ve hangilerini harita bilgisi olarak bırakacağını not et. Geleneksel beş nefes sayımı anlatılır, zorunlu değildir."
+            }
+          ],
+          "practice": {
+            "en": "Read the map once, close it and name the four Lissom adaptations and two traditional poses that remain map-only. Correct omissions on paper. No posture is demonstrated to answer a memory question.",
+            "tr": "Haritayı bir kez oku, kapat ve dört Lissom uyarlamasını ve yalnız harita olarak kalan iki geleneksel duruşu adlandır. Eksikleri kâğıt üzerinde düzelt. Bir hafıza sorusunu yanıtlamak için duruş gösterilmez."
+          },
+          "selfCheck": {
+            "en": "Does reading this map mean the revolved Triangle is part of your practice?",
+            "tr": "Bu haritayı okumak dönen Üçgenin pratiğinin parçası olduğu anlamına mı gelir?"
+          },
+          "answerKey": {
+            "en": "No. The revolved forms stay map knowledge; only the four labelled adaptations are taught here.",
+            "tr": "Hayır. Dönen biçimler harita bilgisi olarak kalır; burada yalnız dört etiketli uyarlama öğretilir."
+          },
+          "adaptation": {
+            "en": "Study seated; the map can be read without any movement.",
+            "tr": "Oturarak çalış; harita hiç hareket etmeden okunabilir."
+          },
+          "stopSignal": {
+            "en": "Stop the study if tired. Reading a pose name is not a reason to try it.",
+            "tr": "Yorulursan çalışmayı bırak. Bir duruşun adını okumak onu denemek için neden değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_series",
+            "ayi_fundamentals"
+          ],
+          "prerequisites": [
+            "a13"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a15",
+          "title": {
+            "en": "A shin-supported forward fold",
+            "tr": "Baldır destekli öne katlanma"
+          },
+          "objective": {
+            "en": "Fold forward with bent knees and hands on the shins or a chair, then rise with hands on the hips.",
+            "tr": "Dizler bükülü ve eller baldırlarda veya sandalyede öne katlan, sonra eller kalçadayken yüksel."
+          },
+          "steps": [
+            {
+              "en": "After fresh preparation, stand as in a04 with the feet a little apart and a stable chair in front of you if needed. Place the hands on the hips.",
+              "tr": "Yeni hazırlıktan sonra a04'teki gibi ayaklar biraz açık dur; gerekiyorsa önünde sabit bir sandalye olsun. Elleri kalçaya koy."
+            },
+            {
+              "en": "Bend the knees clearly and hinge forward from the hips only as far as is comfortable. Rest the hands on the shins, the thighs or the chair seat. Holding the big toes is the traditional form and is not required.",
+              "tr": "Dizleri belirgin biçimde bük ve kalçadan yalnız rahat olduğu kadar öne menteşelen. Elleri baldırlara, uyluklara veya sandalye oturağına koy. Ayak başparmaklarını tutmak geleneksel biçimdir ve zorunlu değildir."
+            },
+            {
+              "en": "Let the head hang in line with the trunk, not lower. Stay for a few ordinary breaths; the traditional five-breath count is optional.",
+              "tr": "Baş gövdeyle aynı hizada assın, daha aşağıda değil. Birkaç olağan nefes kal; geleneksel beş nefes sayımı isteğe bağlıdır."
+            },
+            {
+              "en": "To rise, return the hands to the hips, keep the knees bent and come up slowly with a long back. Pause upright before anything else.",
+              "tr": "Yükselmek için elleri kalçaya geri getir, dizleri bükülü tut ve uzun sırtla yavaşça kalk. Başka bir şeyden önce dik konumda bekle."
+            }
+          ],
+          "practice": {
+            "en": "Rehearse the rise first: hands to hips, knees bent, slow return. Then optionally one fold to a familiar depth. If you came up with straight legs and no stop signal occurred, plan bent knees for the next rise. Dizziness ends the attempt; sit down and rest.",
+            "tr": "Önce yükselmeyi çalış: eller kalçaya, dizler bükülü, yavaş dönüş. Sonra istersen tanıdık bir derinliğe tek bir katlanma. Bacaklar düz kalktıysan ve durma işareti olmadıysa bir sonraki yükselme için bükük dizler planla. Baş dönmesi denemeyi bitirir; otur ve dinlen."
+          },
+          "selfCheck": {
+            "en": "Is holding the big toes needed to count this fold?",
+            "tr": "Bu katlanmanın sayılması için ayak başparmaklarını tutmak gerekir mi?"
+          },
+          "answerKey": {
+            "en": "No. Hands on the shins, thighs or a chair are the taught adaptation. The toe grip belongs to the traditional form shown on the map.",
+            "tr": "Hayır. Eller baldırlarda, uyluklarda veya sandalyede öğretilen uyarlamadır. Başparmak tutuşu haritada gösterilen geleneksel biçime aittir."
+          },
+          "adaptation": {
+            "en": "Keep the knees bent and use the chair seat for the hands; map study replaces the fold whenever standing is uncertain.",
+            "tr": "Dizleri bükülü tut ve eller için sandalye oturağını kullan; ayakta durmak belirsizse harita çalışması katlanmanın yerine geçer."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, balance loss or an unfamiliar transfer. A pause or early finish is not a failed score.",
+            "tr": "Ağrı, baş dönmesi, denge kaybı veya tanımadığın geçişte dur. Duraklama veya erken bitiş başarısız puan değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_fundamentals",
+            "ayi_padangusthasana",
+            "ayi_fold"
+          ],
+          "prerequisites": [
+            "a14"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a16",
+          "title": {
+            "en": "A short-stance Triangle adaptation",
+            "tr": "Kısa duruşlu Üçgen uyarlaması"
+          },
+          "objective": {
+            "en": "Use a short stance with the hand on the thigh or a block and return upright before changing sides.",
+            "tr": "Eli uyluk veya blokta kısa bir duruş kullan ve taraf değiştirmeden önce dike dön."
+          },
+          "steps": [
+            {
+              "en": "Stand side-on to a wall or with a chair beside you. Step the feet apart a little less than leg length; turn the right foot out and the left foot slightly in, heels roughly in line.",
+              "tr": "Duvara yan dur veya yanında bir sandalye olsun. Ayakları bacak boyundan biraz daha az aç; sağ ayağı dışa, sol ayağı hafifçe içe çevir, topuklar yaklaşık aynı hatta."
+            },
+            {
+              "en": "Raise the arms only to a comfortable height. Tilt the pelvis first, then lean the trunk to the right and rest the right hand on the thigh, shin or a block. Holding the big toe is not required.",
+              "tr": "Kolları yalnız rahat bir yüksekliğe kaldır. Önce pelvisi eğ, sonra gövdeyi sağa eğ ve sağ eli uyluğa, baldıra veya bloğa koy. Başparmağı tutmak gerekmez."
+            },
+            {
+              "en": "The left hand may stay on the hip or rise only as far as the shoulder is comfortable. Look forward or down rather than up if the neck prefers it.",
+              "tr": "Sol el kalçada kalabilir veya yalnız omzun rahat olduğu kadar yükselebilir. Boyun tercih ederse yukarı değil ileri veya aşağı bak."
+            },
+            {
+              "en": "To leave, press through the feet, bring the trunk upright and turn the feet back to parallel. Pause, then use the left side under the same rules or omit it.",
+              "tr": "Çıkmak için ayaklardan it, gövdeyi dikleştir ve ayakları paralele geri çevir. Bekle, sonra sol tarafı aynı kurallarla kullan veya atla."
+            }
+          ],
+          "practice": {
+            "en": "Write the stance width, hand support and return before moving. Optionally practise one side at a time. A wobble without a stop signal means a shorter stance next time; a balance loss, pain or dizziness ends the attempt without retest.",
+            "tr": "Hareketten önce duruş genişliğini, el desteğini ve dönüşü yaz. İstersen her seferinde bir taraf çalış. Durma işareti olmadan sallanma bir dahaki sefere daha kısa duruş demektir; denge kaybı, ağrı veya baş dönmesi denemeyi yeniden sınamadan bitirir."
+          },
+          "selfCheck": {
+            "en": "Where does the lower hand rest in this adaptation?",
+            "tr": "Bu uyarlamada alttaki el nerede durur?"
+          },
+          "answerKey": {
+            "en": "On the thigh, the shin or a block, at a height that keeps the trunk long. Reaching the floor or the toe is the traditional form, not the goal here.",
+            "tr": "Uylukta, baldırda veya blokta, gövdeyi uzun tutan bir yükseklikte. Zemine veya başparmağa ulaşmak geleneksel biçimdir, buradaki hedef değildir."
+          },
+          "adaptation": {
+            "en": "Use a shorter stance, keep a hand on the wall or chair, or study the map instead of moving.",
+            "tr": "Daha kısa duruş kullan, bir eli duvarda veya sandalyede tut ya da hareket etmek yerine haritayı çalış."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, balance loss or an unfamiliar transfer. A pause or early finish is not a failed score.",
+            "tr": "Ağrı, baş dönmesi, denge kaybı veya tanımadığın geçişte dur. Duraklama veya erken bitiş başarısız puan değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_fundamentals",
+            "ayi_trikonasana"
+          ],
+          "prerequisites": [
+            "a15"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a17",
+          "title": {
+            "en": "Side Angle with the forearm on the thigh",
+            "tr": "Önkol uylukta Yan Açı"
+          },
+          "objective": {
+            "en": "Bend the front knee over the ankle, rest the forearm on the thigh and return upright.",
+            "tr": "Ön dizi ayak bileği üzerinde bük, önkolu uyluğa yasla ve dike dön."
+          },
+          "steps": [
+            {
+              "en": "From the a16 stance, keep the back foot's outer edge in contact with the floor and turn the right foot out.",
+              "tr": "a16 duruşundan arka ayağın dış kenarını zeminle temasta tut ve sağ ayağı dışa çevir."
+            },
+            {
+              "en": "Bend the right knee only as far as it stays above the ankle, not past the toes. Lean the trunk and rest the right forearm on the right thigh.",
+              "tr": "Sağ dizi yalnız ayak bileğinin üzerinde, parmakları geçmeyecek kadar bük. Gövdeyi eğ ve sağ önkolu sağ uyluğa yasla."
+            },
+            {
+              "en": "The left hand stays on the hip, or the left arm reaches forward along the ear only as far as the shoulder is comfortable. Do not press the arm into the shoulder to reach further.",
+              "tr": "Sol el kalçada kalır ya da sol kol yalnız omzun rahat olduğu kadar kulak hizasında öne uzanır. Daha uzağa ulaşmak için kolu omza bastırma."
+            },
+            {
+              "en": "To leave, press through both feet, straighten the front knee and bring the trunk upright. Turn the feet to parallel and pause before the left side or before finishing.",
+              "tr": "Çıkmak için iki ayaktan it, ön dizi düzelt ve gövdeyi dikleştir. Ayakları paralele çevir ve sol taraftan veya bitirmeden önce bekle."
+            }
+          ],
+          "practice": {
+            "en": "Rehearse the exit before the entry. Optionally practise one side with a small knee bend. If the knee moved past the toes and there is no stop signal, straighten, shorten the stance and try once. Knee pain or a shoulder pinch ends the attempt.",
+            "tr": "Girişten önce çıkışı çalış. İstersen küçük bir diz bükümüyle tek taraf çalış. Diz parmakları geçtiyse ve durma işareti yoksa düzel, duruşu kısalt ve bir kez dene. Diz ağrısı veya omuzda sıkışma denemeyi bitirir."
+          },
+          "selfCheck": {
+            "en": "Your front knee drifts past your toes. What do you change?",
+            "tr": "Ön dizin parmaklarının ötesine kayıyor. Neyi değiştirirsin?"
+          },
+          "answerKey": {
+            "en": "Bend the knee less or shorten the stance so the knee stays above the ankle. Placing the hand on the floor is not part of this adaptation.",
+            "tr": "Dizi daha az bük veya diz ayak bileğinin üzerinde kalacak şekilde duruşu kısalt. Eli zemine koymak bu uyarlamanın parçası değildir."
+          },
+          "adaptation": {
+            "en": "Keep the knee bend small and the top hand on the hip; choose map study if the stance is uncertain.",
+            "tr": "Diz bükümünü küçük, üstteki eli kalçada tut; duruş belirsizse harita çalışmasını seç."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, balance loss or an unfamiliar transfer. A pause or early finish is not a failed score.",
+            "tr": "Ağrı, baş dönmesi, denge kaybı veya tanımadığın geçişte dur. Duraklama veya erken bitiş başarısız puan değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_fundamentals",
+            "ayi_parsvakonasana"
+          ],
+          "prerequisites": [
+            "a16"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a18",
+          "title": {
+            "en": "A wide-leg fold with raised hands",
+            "tr": "Eller yükseltilmiş geniş bacak katlanması"
+          },
+          "objective": {
+            "en": "Fold from a wide parallel stance with hands on a chair or blocks and rise with hands on the hips.",
+            "tr": "Geniş paralel duruştan eller sandalyede veya bloklarda katlan ve eller kalçadayken yüksel."
+          },
+          "steps": [
+            {
+              "en": "Place a stable chair or two firm blocks in front of you. Step the feet wide, parallel to each other, at a width where you feel steady. Hands rest on the hips.",
+              "tr": "Önüne sabit bir sandalye veya iki sağlam blok koy. Ayakları birbirine paralel, sağlam hissettiğin genişlikte aç. Eller kalçada dursun."
+            },
+            {
+              "en": "Bend the knees a little, tilt the pelvis and fold forward with a long back until the hands reach the chair seat or blocks. The head stays above the hips; there is no head-to-floor goal.",
+              "tr": "Dizleri biraz bük, pelvisi eğ ve eller sandalye oturağına veya bloklara ulaşana kadar uzun sırtla öne katlan. Baş kalçaların üzerinde kalır; başı yere indirme hedefi yoktur."
+            },
+            {
+              "en": "Stay for a few ordinary breaths with weight even between the feet. Dizziness or a pull behind the knees that does not settle ends the fold.",
+              "tr": "Ağırlık iki ayak arasında eşitken birkaç olağan nefes kal. Baş dönmesi veya geçmeyen diz arkası çekme katlanmayı bitirir."
+            },
+            {
+              "en": "To rise, bring the hands back to the hips, bend the knees and come up slowly with a long back. Walk the feet together in small steps and pause upright.",
+              "tr": "Yükselmek için elleri kalçaya geri getir, dizleri bük ve uzun sırtla yavaşça kalk. Ayakları küçük adımlarla birleştir ve dik konumda bekle."
+            }
+          ],
+          "practice": {
+            "en": "Practise the rise and the stepping in before the fold. Optionally one fold with the chair. If you came up too fast and there is no stop signal, pause, then plan a slower rise. The four traditional hand variations stay map knowledge.",
+            "tr": "Katlanmadan önce yükselmeyi ve ayakları toplamayı çalış. İstersen sandalyeyle tek bir katlanma. Çok hızlı kalktıysan ve durma işareti yoksa bekle, sonra daha yavaş bir yükselme planla. Dört geleneksel el varyasyonu harita bilgisi olarak kalır."
+          },
+          "selfCheck": {
+            "en": "Should the crown of the head reach the floor in this fold?",
+            "tr": "Bu katlanmada başın tepesi zemine ulaşmalı mı?"
+          },
+          "answerKey": {
+            "en": "No. The head stays above the hips and the hands rest on a chair or blocks. The head-down form belongs to the traditional map.",
+            "tr": "Hayır. Baş kalçaların üzerinde kalır ve eller sandalyede veya bloklarda durur. Baş aşağı biçim geleneksel haritaya aittir."
+          },
+          "adaptation": {
+            "en": "Use a narrower stance and the chair seat; map study replaces the fold if balance or dizziness is a concern.",
+            "tr": "Daha dar duruş ve sandalye oturağı kullan; denge veya baş dönmesi kaygısı varsa harita çalışması katlanmanın yerine geçer."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, balance loss or an unfamiliar transfer. A pause or early finish is not a failed score.",
+            "tr": "Ağrı, baş dönmesi, denge kaybı veya tanımadığın geçişte dur. Duraklama veya erken bitiş başarısız puan değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_fundamentals",
+            "ayi_prasarita"
+          ],
+          "prerequisites": [
+            "a17"
+          ],
+          "minutes": 5,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "a19",
+          "title": {
+            "en": "The finishing map and closing rest",
+            "tr": "Kapanış haritası ve kapanış dinlenmesi"
+          },
+          "objective": {
+            "en": "Name the finishing sequence as map knowledge and close a practice with rest.",
+            "tr": "Kapanış serisini harita bilgisi olarak adlandır ve pratiği dinlenmeyle kapat."
+          },
+          "steps": [
+            {
+              "en": "Read the finishing map seated: shoulder stand, plough and related forms, fish, headstand, lotus forms, the lifted lotus and final rest. Apart from the final rest, none of these is taught in Lissom.",
+              "tr": "Kapanış haritasını oturarak oku: omuz duruşu, saban ve ilgili biçimler, balık, baş duruşu, lotus biçimleri, kaldırılmış lotus ve son dinlenme. Son dinlenme dışında bunların hiçbiri Lissom'da öğretilmez."
+            },
+            {
+              "en": "Write a closing for your own route: one of your taught standing adaptations, a pause upright, a supported seat and then rest.",
+              "tr": "Kendi rotan için bir kapanış yaz: öğretilmiş ayakta uyarlamalarından biri, dik bir bekleme, destekli oturuş ve ardından dinlenme."
+            },
+            {
+              "en": "For the rest, lie on the back with knees bent or supported, or on one side, or rest in a supported seat. Let breathing stay ordinary for a few minutes.",
+              "tr": "Dinlenme için dizler bükülü veya destekli sırtüstü ya da bir yana yat veya destekli oturuşta dinlen. Nefes birkaç dakika olağan kalsın."
+            },
+            {
+              "en": "To come up, roll to one side, pause and press up to sitting with the hands. Pause again before standing.",
+              "tr": "Kalkmak için bir yana dön, bekle ve ellerle iterek oturuşa geç. Ayağa kalkmadan önce yine bekle."
+            }
+          ],
+          "practice": {
+            "en": "Close the map and recall which finishing poses remain outside this course and why the rest is kept. Then optionally practise your written closing. A shorter closing that keeps the rest follows the plan. Record recalled, practised and omitted parts separately.",
+            "tr": "Haritayı kapat ve hangi kapanış duruşlarının bu kursun dışında kaldığını ve dinlenmenin neden korunduğunu hatırla. Sonra istersen yazılı kapanışını çalış. Dinlenmeyi koruyan daha kısa bir kapanış plana uyar. Hatırlanan, çalışılan ve atlanan bölümleri ayrı kaydet."
+          },
+          "selfCheck": {
+            "en": "A video shows a shoulder stand before the final rest. Is it part of your Lissom closing?",
+            "tr": "Bir video son dinlenmeden önce omuz duruşu gösteriyor. Bu senin Lissom kapanışının parçası mı?"
+          },
+          "answerKey": {
+            "en": "No. Inversions and lotus forms stay map knowledge and need a trained teacher. The Lissom closing is a supported seat and rest.",
+            "tr": "Hayır. Ters duruşlar ve lotus biçimleri harita bilgisi olarak kalır ve eğitimli bir öğretmen gerektirir. Lissom kapanışı destekli oturuş ve dinlenmedir."
+          },
+          "adaptation": {
+            "en": "The rest can be taken seated; reading the map needs no movement.",
+            "tr": "Dinlenme oturarak yapılabilir; haritayı okumak hareket gerektirmez."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, dizziness, balance loss or an unfamiliar transfer. A pause or early finish is not a failed score.",
+            "tr": "Ağrı, baş dönmesi, denge kaybı veya tanımadığın geçişte dur. Duraklama veya erken bitiş başarısız puan değildir."
+          },
+          "mediaBrief": {
+            "en": "Text only. No accepted demonstration is bundled; source links are references, not licensed lesson media.",
+            "tr": "Yalnız metin. Kabul edilmiş gösterim pakette yoktur; kaynak bağlantıları referanstır, lisanslı ders medyası değildir."
+          },
+          "sourceIds": [
+            "ayi_series",
+            "ayi_finishing"
+          ],
+          "prerequisites": [
+            "a18"
+          ],
+          "minutes": 6,
           "evidenceMode": "self_report"
         }
       ]

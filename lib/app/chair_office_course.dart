@@ -6,7 +6,7 @@ import 'package:motion_content/motion_content.dart';
 import 'hatha_course.dart';
 
 const String kChairOfficeCourseAssetPath = 'config/courses/chair-office.v1.json';
-const String kChairOfficeCourseSha256 = 'c32f5d4f05606f2fa0f9c9a1ac48297bc61a917f3793e39ad1dfb377f9f1426c';
+const String kChairOfficeCourseSha256 = '2663ec6308a65f6e4131cf474ca2ae594bbf34bdff7e4d3c484ad1dcf6e97853';
 
 /// App-owned text integrity only. Existing Hatha media/source receipts stay
 /// unchanged; this course has no media, camera grade or physical acceptance.

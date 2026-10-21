@@ -28,11 +28,11 @@ PLACEHOLDER = re.compile(r"\{([A-Za-z_][A-Za-z_0-9]*)\}")
 LITERAL = re.compile(r'''(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')''', re.S)
 BIDI_CONTROLS = frozenset("\u061c\u200e\u200f\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069")
 COURSE_PINS = {
-    "ashtanga-foundations.v1.json": "913fe8864c0e71a77567e17a14983e334273c02158662413133a6755cafe8c07",
-    "chair-office.v1.json": "c32f5d4f05606f2fa0f9c9a1ac48297bc61a917f3793e39ad1dfb377f9f1426c",
+    "ashtanga-foundations.v1.json": "889d9f22f4006c151ff3ae1a980dcc7b8b00076035a99bdb3f9154b990fb75b1",
+    "chair-office.v1.json": "2663ec6308a65f6e4131cf474ca2ae594bbf34bdff7e4d3c484ad1dcf6e97853",
     "hatha.v1.json": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
-    "vinyasa-standing.v1.json": "815b7a2c7205c0b5e5c32ce096c79ad112d98ca78196184b1ced1414e6953191",
-    "yin-supported.v1.json": "ed346669025d106fcd255093adb89983925ddc46750d80730c7998f7cc2f5770",
+    "vinyasa-standing.v1.json": "64690c084e0b906c0974c9bf70ba7507572a8fcf2b225fe5438bb7c38f05f582",
+    "yin-supported.v1.json": "647e5c88c1e61720bcd93a6170ca978ba623f296594733fd4d495fbfc1813a66",
 }
 
 

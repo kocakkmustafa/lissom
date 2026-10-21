@@ -286,7 +286,7 @@ final class HathaCourse {
       isAshtanga || id == 'lissom.yin.supported.beginner';
 
   bool isWrittenStudy(String lessonId) => isAshtanga &&
-      const {'a01', 'a02', 'a03', 'a08', 'a10', 'a12', 'a13'}.contains(lessonId);
+      const {'a01', 'a02', 'a03', 'a08', 'a10', 'a12', 'a13', 'a14'}.contains(lessonId);
 
   List<HathaLesson> get lessons => modules
       .expand<HathaLesson>((HathaModule module) => module.lessons)

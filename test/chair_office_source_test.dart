@@ -214,7 +214,7 @@ void main() {
   });
 
   for (final locale in const <String>['en', 'tr']) {
-    for (var number = 1; number <= 12; number++) {
+    for (var number = 1; number <= 15; number++) {
       final id = 'c${number.toString().padLeft(2, '0')}';
       testWidgets(
         '$id $locale large text: scroll, reveal, preparation and reset',

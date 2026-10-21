@@ -51,7 +51,7 @@ void main() {
       }
       expect(scope['courseCount'], assets.length);
       expect(scope['lessonCount'], lessons);
-      expect(lessons, 103);
+      expect(lessons, 120);
       expect(scope['mediaIncluded'], isFalse);
       expect(scope['cameraAssessmentAvailable'], isFalse);
       expect(scope['physicalDeviceAccepted'], isFalse);

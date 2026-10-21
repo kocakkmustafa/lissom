@@ -6,7 +6,7 @@ import 'package:motion_content/motion_content.dart';
 import 'hatha_course.dart';
 
 const String kVinyasaCourseAssetPath = 'config/courses/vinyasa-standing.v1.json';
-const String kVinyasaCourseSha256 = '815b7a2c7205c0b5e5c32ce096c79ad112d98ca78196184b1ced1414e6953191';
+const String kVinyasaCourseSha256 = '64690c084e0b906c0974c9bf70ba7507572a8fcf2b225fe5438bb7c38f05f582';
 
 /// App-owned text integrity only. Existing Hatha media/source receipts stay
 /// unchanged; this course has no media, camera grade or physical acceptance.

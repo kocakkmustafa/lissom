@@ -106,6 +106,10 @@ void main() {
         's6',
         's7',
         's8',
+        's9',
+        's10',
+        's11',
+        's12',
       });
       expect((raw['sourceScopes'] as Map).keys.toSet(), sourceKeys);
       for (final module in raw['modules'] as List) {
@@ -260,7 +264,7 @@ void main() {
   });
 
   for (final locale in const <String>['en', 'tr']) {
-    for (var number = 1; number <= 8; number++) {
+    for (var number = 1; number <= 12; number++) {
       final id = 'y${number.toString().padLeft(2, '0')}';
       testWidgets(
         '$id $locale large text: scroll, reveal, preparation and reset',
@@ -680,7 +684,16 @@ void main() {
   });
   test('v2 asset preserves unloaded-prop order and independent questions', () {
     final course = _yin();
-    expect(course.lessons.length, 8); // Content identity, not completion.
+    expect(course.lessons.length, 12); // Content identity, not completion.
+    expect(course.modules.last.id, 'y-shapes-extension');
+    expect(course.lessonById('y09')!.prerequisites, ['y01', 'y02']);
+    expect(course.lessonById('y10')!.prerequisites, ['y01', 'y02']);
+    expect(course.lessonById('y11')!.prerequisites, ['y01', 'y02']);
+    expect(course.lessonById('y12')!.prerequisites, ['y09', 'y10', 'y11']);
+    expect(
+      course.lessonById('y11')!.practice.en,
+      contains('are not part of this pathway'),
+    );
     final butterfly = course.lessonById('y03')!;
     final caterpillar = course.lessonById('y04')!;
     final questions = course.lessonById('y06')!;

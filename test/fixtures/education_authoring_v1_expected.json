@@ -107,6 +107,54 @@
         "tr": {
           "practice": "Sonraki okuma oturumunda planı ve kaynakları kapalı tut. Dik dönüşü, katlanma/kısmi yükselme ayrımını, taraf sırasını ve tek durma–yazılı düzeltme kararını hatırla. Dersi açıp her seferinde tek noktayı karşılaştır. Bir eksiği kâğıtta düzelt, kaynağı kapatıp yeniden açıkla. Hatırlananı ve çözülmeyeni kaydet; poz gösterme veya bunu gözlenmiş fiziksel beceri sayma."
         }
+      },
+      "a14": {
+        "en": {
+          "practice": "Read the map once, close it and name the four Lissom adaptations and two traditional poses that remain map-only. Correct omissions on paper. No posture is demonstrated to answer a memory question."
+        },
+        "tr": {
+          "practice": "Haritayı bir kez oku, kapat ve dört Lissom uyarlamasını ve yalnız harita olarak kalan iki geleneksel duruşu adlandır. Eksikleri kâğıt üzerinde düzelt. Bir hafıza sorusunu yanıtlamak için duruş gösterilmez."
+        }
+      },
+      "a15": {
+        "en": {
+          "practice": "Rehearse the rise first: hands to hips, knees bent, slow return. Then optionally one fold to a familiar depth. If you came up with straight legs and no stop signal occurred, plan bent knees for the next rise. Dizziness ends the attempt; sit down and rest."
+        },
+        "tr": {
+          "practice": "Önce yükselmeyi çalış: eller kalçaya, dizler bükülü, yavaş dönüş. Sonra istersen tanıdık bir derinliğe tek bir katlanma. Bacaklar düz kalktıysan ve durma işareti olmadıysa bir sonraki yükselme için bükük dizler planla. Baş dönmesi denemeyi bitirir; otur ve dinlen."
+        }
+      },
+      "a16": {
+        "en": {
+          "practice": "Write the stance width, hand support and return before moving. Optionally practise one side at a time. A wobble without a stop signal means a shorter stance next time; a balance loss, pain or dizziness ends the attempt without retest."
+        },
+        "tr": {
+          "practice": "Hareketten önce duruş genişliğini, el desteğini ve dönüşü yaz. İstersen her seferinde bir taraf çalış. Durma işareti olmadan sallanma bir dahaki sefere daha kısa duruş demektir; denge kaybı, ağrı veya baş dönmesi denemeyi yeniden sınamadan bitirir."
+        }
+      },
+      "a17": {
+        "en": {
+          "practice": "Rehearse the exit before the entry. Optionally practise one side with a small knee bend. If the knee moved past the toes and there is no stop signal, straighten, shorten the stance and try once. Knee pain or a shoulder pinch ends the attempt."
+        },
+        "tr": {
+          "practice": "Girişten önce çıkışı çalış. İstersen küçük bir diz bükümüyle tek taraf çalış. Diz parmakları geçtiyse ve durma işareti yoksa düzel, duruşu kısalt ve bir kez dene. Diz ağrısı veya omuzda sıkışma denemeyi bitirir."
+        }
+      },
+      "a18": {
+        "en": {
+          "practice": "Practise the rise and the stepping in before the fold. Optionally one fold with the chair. If you came up too fast and there is no stop signal, pause, then plan a slower rise. The four traditional hand variations stay map knowledge."
+        },
+        "tr": {
+          "practice": "Katlanmadan önce yükselmeyi ve ayakları toplamayı çalış. İstersen sandalyeyle tek bir katlanma. Çok hızlı kalktıysan ve durma işareti yoksa bekle, sonra daha yavaş bir yükselme planla. Dört geleneksel el varyasyonu harita bilgisi olarak kalır."
+        }
+      },
+      "a19": {
+        "en": {
+          "practice": "Close the map and recall which finishing poses remain outside this course and why the rest is kept. Then optionally practise your written closing. A shorter closing that keeps the rest follows the plan. Record recalled, practised and omitted parts separately."
+        },
+        "tr": {
+          "practice": "Haritayı kapat ve hangi kapanış duruşlarının bu kursun dışında kaldığını ve dinlenmenin neden korunduğunu hatırla. Sonra istersen yazılı kapanışını çalış. Dinlenmeyi koruyan daha kısa bir kapanış plana uyar. Hatırlanan, çalışılan ve atlanan bölümleri ayrı kaydet."
+        }
       }
     },
     "lissom.yin.supported.beginner": {
@@ -204,6 +252,54 @@
           "practice": "Planı bağımsız açıklayabiliyor ve yeni vakada uygun durma/düzeltme seçebiliyorsan yazılı öğrenme sonucu gösterilebilir. Hareketin gözlenmemişse “öz beyan/gözlenmedi” yaz. Sonraki hedef daha derin veya uzun bekleme değil, bulunan belirsizliği çözmektir. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır.",
           "selfCheck": "Daha sonraki ayrı oturumda eski planı kapalı tut. Seçilen girişi, destekleri, nötr arayı, çıkışı ve durma–düzeltme kararlarını hatırla. Bugünkü kurulum farklıysa planı hatırlamak hareket izni verir mi? Yanıttan sonra düzeltilecek tek eksik yazılı noktayı bul; hangi sonucun bilgi, öz beyan veya gözlenmemiş hareket olduğunu söyle.",
           "answerKey": "Hayır. Bugünkü kurulum ve sınırları yeniden kontrol et; eski plan izin değildir. Seçmeli tanıdık hareket düşünülmeden önce tek yazılı noktayı karşılaştır, düzelt ve yeniden açıkla. Hatırlanan açıklama bilgidir, bildirilen katılım öz beyandır; gözlenmeyen hareket gözlenmemiş kalır. Süre, derin aralık veya ders tiki bu ayrımı kapatmaz."
+        }
+      },
+      "y09": {
+        "en": {
+          "practice": "Read the setup and exit, then optionally rehearse one brief entry and exit. If the elbows were placed too far back and there is no stop signal, lower the chest, move them forward and try once. Record the chosen height and whether you stayed or left early.",
+          "selfCheck": "Your lower back pinches in Sphinx. Do you push up with straighter arms to change the feeling?",
+          "answerKey": "No. A pinch ends the shape: lower the chest and rest on the belly. Straighter arms deepen the arch and are not the taught choice."
+        },
+        "tr": {
+          "practice": "Kurulumu ve çıkışı oku, sonra istersen tek bir kısa giriş ve çıkış çalış. Dirsekler fazla geriye konduysa ve durma işareti yoksa göğsü indir, dirsekleri öne al ve bir kez dene. Seçtiğin yüksekliği ve kalıp kalmadığını ya da erken çıkıp çıkmadığını kaydet.",
+          "selfCheck": "Sfenkste belin sıkışıyor. Hissi değiştirmek için kolları düzleştirip yukarı iter misin?",
+          "answerKey": "Hayır. Sıkışma biçimi bitirir: göğsü indir ve karın üstü dinlen. Düz kollar kavisi derinleştirir ve öğretilen seçim değildir."
+        }
+      },
+      "y10": {
+        "en": {
+          "practice": "Plan the support height before kneeling, then optionally rehearse one brief entry and exit. Child's shape can also be the rest after y09. Pregnancy, recent eating or knee limits can make another rest the better choice. Record the support used.",
+          "selfCheck": "The forehead does not reach the bolster. What changes?",
+          "answerKey": "Add height: another cushion on the bolster or the hands stacked under the forehead. Do not push the hips toward the heels to make contact."
+        },
+        "tr": {
+          "practice": "Diz çökmeden önce destek yüksekliğini planla, sonra istersen tek bir kısa giriş ve çıkış çalış. Çocuk biçimi y09'dan sonraki dinlenme de olabilir. Gebelik, yeni yemek yemiş olmak veya diz sınırları başka bir dinlenmeyi daha iyi seçim yapabilir. Kullandığın desteği kaydet.",
+          "selfCheck": "Alın bolstera ulaşmıyor. Ne değişir?",
+          "answerKey": "Yükseklik ekle: bolsterın üstüne bir yastık daha veya alnın altına üst üste konmuş eller. Teması sağlamak için kalçayı topuklara doğru bastırma."
+        }
+      },
+      "y11": {
+        "en": {
+          "practice": "Read the setup and exit, then optionally one brief side at a time. If the front foot landed too close and there is no stop signal, return to tabletop and place it again. Deeper variations such as lifting the back knee or lowering onto the forearms are not part of this pathway.",
+          "selfCheck": "Your back kneecap feels pressed in Dragon. What are the two taught choices?",
+          "answerKey": "Add padding under the back knee or leave the shape through tabletop. Lifting the knee or moving deeper is not a fix taught here."
+        },
+        "tr": {
+          "practice": "Kurulumu ve çıkışı oku, sonra istersen her seferinde tek bir kısa taraf çalış. Ön ayak fazla yakın konduysa ve durma işareti yoksa dört ayağa dön ve yeniden yerleştir. Arka dizi kaldırmak veya önkollara inmek gibi daha derin varyasyonlar bu yolun parçası değildir.",
+          "selfCheck": "Ejderhada arka diz kapağın baskı hissediyor. Öğretilen iki seçim nedir?",
+          "answerKey": "Arka dizin altına yastık ekle ya da biçimden dört ayak üzerinden çık. Dizi kaldırmak veya daha derine gitmek burada öğretilen bir çözüm değildir."
+        }
+      },
+      "y12": {
+        "en": {
+          "practice": "Write the actual route afterwards, including omitted shapes and early exits. The closing rest is part of the practice, not an extra. Keep knowledge, self-report and observed movement separate. Unsupported, advanced or prolonged Yin remains outside this pathway.",
+          "selfCheck": "You run out of time before the closing rest. Which part do you keep?",
+          "answerKey": "Keep the closing rest and leave out a shape. A shorter practice that ends in rest follows the plan; rushing through every shape does not."
+        },
+        "tr": {
+          "practice": "Sonrasında atlanan biçimler ve erken çıkışlar dahil gerçek rotayı yaz. Kapanış dinlenmesi pratiğin parçasıdır, ek değildir. Bilgiyi, öz bildirimi ve gözlenmiş hareketi ayrı tut. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır.",
+          "selfCheck": "Kapanış dinlenmesinden önce zamanın bitiyor. Hangi bölümü korursun?",
+          "answerKey": "Kapanış dinlenmesini koru ve bir biçimi çıkar. Dinlenmeyle biten daha kısa bir pratik plana uyar; her biçimden aceleyle geçmek uymaz."
         }
       }
     }
@@ -319,6 +415,54 @@
         "tr": {
           "practice": "Sonraki okuma oturumunda planı ve kaynakları kapalı tut. Dik dönüşü, katlanma/kısmi yükselme ayrımını, taraf sırasını ve tek durma–yazılı düzeltme kararını hatırla. Dersi açıp her seferinde tek noktayı karşılaştır. Bir eksiği kâğıtta düzelt, kaynağı kapatıp yeniden açıkla. Hatırlananı ve çözülmeyeni kaydet; poz gösterme veya bunu gözlenmiş fiziksel beceri sayma."
         }
+      },
+      "a14": {
+        "en": {
+          "practice": "Read the map once, close it and name the four Lissom adaptations and two traditional poses that remain map-only. Correct omissions on paper. No posture is demonstrated to answer a memory question."
+        },
+        "tr": {
+          "practice": "Haritayı bir kez oku, kapat ve dört Lissom uyarlamasını ve yalnız harita olarak kalan iki geleneksel duruşu adlandır. Eksikleri kâğıt üzerinde düzelt. Bir hafıza sorusunu yanıtlamak için duruş gösterilmez."
+        }
+      },
+      "a15": {
+        "en": {
+          "practice": "Rehearse the rise first: hands to hips, knees bent, slow return. Then optionally one fold to a familiar depth. If you came up with straight legs and no stop signal occurred, plan bent knees for the next rise. Dizziness ends the attempt; sit down and rest."
+        },
+        "tr": {
+          "practice": "Önce yükselmeyi çalış: eller kalçaya, dizler bükülü, yavaş dönüş. Sonra istersen tanıdık bir derinliğe tek bir katlanma. Bacaklar düz kalktıysan ve durma işareti olmadıysa bir sonraki yükselme için bükük dizler planla. Baş dönmesi denemeyi bitirir; otur ve dinlen."
+        }
+      },
+      "a16": {
+        "en": {
+          "practice": "Write the stance width, hand support and return before moving. Optionally practise one side at a time. A wobble without a stop signal means a shorter stance next time; a balance loss, pain or dizziness ends the attempt without retest."
+        },
+        "tr": {
+          "practice": "Hareketten önce duruş genişliğini, el desteğini ve dönüşü yaz. İstersen her seferinde bir taraf çalış. Durma işareti olmadan sallanma bir dahaki sefere daha kısa duruş demektir; denge kaybı, ağrı veya baş dönmesi denemeyi yeniden sınamadan bitirir."
+        }
+      },
+      "a17": {
+        "en": {
+          "practice": "Rehearse the exit before the entry. Optionally practise one side with a small knee bend. If the knee moved past the toes and there is no stop signal, straighten, shorten the stance and try once. Knee pain or a shoulder pinch ends the attempt."
+        },
+        "tr": {
+          "practice": "Girişten önce çıkışı çalış. İstersen küçük bir diz bükümüyle tek taraf çalış. Diz parmakları geçtiyse ve durma işareti yoksa düzel, duruşu kısalt ve bir kez dene. Diz ağrısı veya omuzda sıkışma denemeyi bitirir."
+        }
+      },
+      "a18": {
+        "en": {
+          "practice": "Practise the rise and the stepping in before the fold. Optionally one fold with the chair. If you came up too fast and there is no stop signal, pause, then plan a slower rise. The four traditional hand variations stay map knowledge."
+        },
+        "tr": {
+          "practice": "Katlanmadan önce yükselmeyi ve ayakları toplamayı çalış. İstersen sandalyeyle tek bir katlanma. Çok hızlı kalktıysan ve durma işareti yoksa bekle, sonra daha yavaş bir yükselme planla. Dört geleneksel el varyasyonu harita bilgisi olarak kalır."
+        }
+      },
+      "a19": {
+        "en": {
+          "practice": "Close the map and recall which finishing poses remain outside this course and why the rest is kept. Then optionally practise your written closing. A shorter closing that keeps the rest follows the plan. Record recalled, practised and omitted parts separately."
+        },
+        "tr": {
+          "practice": "Haritayı kapat ve hangi kapanış duruşlarının bu kursun dışında kaldığını ve dinlenmenin neden korunduğunu hatırla. Sonra istersen yazılı kapanışını çalış. Dinlenmeyi koruyan daha kısa bir kapanış plana uyar. Hatırlanan, çalışılan ve atlanan bölümleri ayrı kaydet."
+        }
       }
     },
     "lissom.yin.supported.beginner": {
@@ -416,6 +560,54 @@
           "practice": "Planı bağımsız açıklayabiliyor ve yeni vakada uygun durma/düzeltme seçebiliyorsan yazılı öğrenme sonucu gösterilebilir. Hareketin gözlenmemişse “öz beyan/gözlenmedi” yaz. Sonraki hedef daha derin veya uzun bekleme değil, bulunan belirsizliği çözmektir. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır.",
           "selfCheck": "Daha sonraki ayrı oturumda eski planı kapalı tut. Seçilen girişi, destekleri, nötr arayı, çıkışı ve durma–düzeltme kararlarını hatırla. Bugünkü kurulum farklıysa planı hatırlamak hareket izni verir mi? Yanıttan sonra düzeltilecek tek eksik yazılı noktayı bul; hangi sonucun bilgi, öz beyan veya gözlenmemiş hareket olduğunu söyle.",
           "answerKey": "Hayır. Bugünkü kurulum ve sınırları yeniden kontrol et; eski plan izin değildir. Seçmeli tanıdık hareket düşünülmeden önce tek yazılı noktayı karşılaştır, düzelt ve yeniden açıkla. Hatırlanan açıklama bilgidir, bildirilen katılım öz beyandır; gözlenmeyen hareket gözlenmemiş kalır. Süre, derin aralık veya ders tiki bu ayrımı kapatmaz."
+        }
+      },
+      "y09": {
+        "en": {
+          "practice": "Read the setup and exit, then optionally rehearse one brief entry and exit. If the elbows were placed too far back and there is no stop signal, lower the chest, move them forward and try once. Record the chosen height and whether you stayed or left early.",
+          "selfCheck": "Your lower back pinches in Sphinx. Do you push up with straighter arms to change the feeling?",
+          "answerKey": "No. A pinch ends the shape: lower the chest and rest on the belly. Straighter arms deepen the arch and are not the taught choice."
+        },
+        "tr": {
+          "practice": "Kurulumu ve çıkışı oku, sonra istersen tek bir kısa giriş ve çıkış çalış. Dirsekler fazla geriye konduysa ve durma işareti yoksa göğsü indir, dirsekleri öne al ve bir kez dene. Seçtiğin yüksekliği ve kalıp kalmadığını ya da erken çıkıp çıkmadığını kaydet.",
+          "selfCheck": "Sfenkste belin sıkışıyor. Hissi değiştirmek için kolları düzleştirip yukarı iter misin?",
+          "answerKey": "Hayır. Sıkışma biçimi bitirir: göğsü indir ve karın üstü dinlen. Düz kollar kavisi derinleştirir ve öğretilen seçim değildir."
+        }
+      },
+      "y10": {
+        "en": {
+          "practice": "Plan the support height before kneeling, then optionally rehearse one brief entry and exit. Child's shape can also be the rest after y09. Pregnancy, recent eating or knee limits can make another rest the better choice. Record the support used.",
+          "selfCheck": "The forehead does not reach the bolster. What changes?",
+          "answerKey": "Add height: another cushion on the bolster or the hands stacked under the forehead. Do not push the hips toward the heels to make contact."
+        },
+        "tr": {
+          "practice": "Diz çökmeden önce destek yüksekliğini planla, sonra istersen tek bir kısa giriş ve çıkış çalış. Çocuk biçimi y09'dan sonraki dinlenme de olabilir. Gebelik, yeni yemek yemiş olmak veya diz sınırları başka bir dinlenmeyi daha iyi seçim yapabilir. Kullandığın desteği kaydet.",
+          "selfCheck": "Alın bolstera ulaşmıyor. Ne değişir?",
+          "answerKey": "Yükseklik ekle: bolsterın üstüne bir yastık daha veya alnın altına üst üste konmuş eller. Teması sağlamak için kalçayı topuklara doğru bastırma."
+        }
+      },
+      "y11": {
+        "en": {
+          "practice": "Read the setup and exit, then optionally one brief side at a time. If the front foot landed too close and there is no stop signal, return to tabletop and place it again. Deeper variations such as lifting the back knee or lowering onto the forearms are not part of this pathway.",
+          "selfCheck": "Your back kneecap feels pressed in Dragon. What are the two taught choices?",
+          "answerKey": "Add padding under the back knee or leave the shape through tabletop. Lifting the knee or moving deeper is not a fix taught here."
+        },
+        "tr": {
+          "practice": "Kurulumu ve çıkışı oku, sonra istersen her seferinde tek bir kısa taraf çalış. Ön ayak fazla yakın konduysa ve durma işareti yoksa dört ayağa dön ve yeniden yerleştir. Arka dizi kaldırmak veya önkollara inmek gibi daha derin varyasyonlar bu yolun parçası değildir.",
+          "selfCheck": "Ejderhada arka diz kapağın baskı hissediyor. Öğretilen iki seçim nedir?",
+          "answerKey": "Arka dizin altına yastık ekle ya da biçimden dört ayak üzerinden çık. Dizi kaldırmak veya daha derine gitmek burada öğretilen bir çözüm değildir."
+        }
+      },
+      "y12": {
+        "en": {
+          "practice": "Write the actual route afterwards, including omitted shapes and early exits. The closing rest is part of the practice, not an extra. Keep knowledge, self-report and observed movement separate. Unsupported, advanced or prolonged Yin remains outside this pathway.",
+          "selfCheck": "You run out of time before the closing rest. Which part do you keep?",
+          "answerKey": "Keep the closing rest and leave out a shape. A shorter practice that ends in rest follows the plan; rushing through every shape does not."
+        },
+        "tr": {
+          "practice": "Sonrasında atlanan biçimler ve erken çıkışlar dahil gerçek rotayı yaz. Kapanış dinlenmesi pratiğin parçasıdır, ek değildir. Bilgiyi, öz bildirimi ve gözlenmiş hareketi ayrı tut. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır.",
+          "selfCheck": "Kapanış dinlenmesinden önce zamanın bitiyor. Hangi bölümü korursun?",
+          "answerKey": "Kapanış dinlenmesini koru ve bir biçimi çıkar. Dinlenmeyle biten daha kısa bir pratik plana uyar; her biçimden aceleyle geçmek uymaz."
         }
       }
     }

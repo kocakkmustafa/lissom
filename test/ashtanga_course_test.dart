@@ -150,14 +150,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(
-    '13 bilingual source-owned lessons have ordered prerequisites and bounded sources',
+    '19 bilingual source-owned lessons have ordered prerequisites and bounded sources',
     () async {
       final course = await loadVerifiedAshtangaCourse(_Bundle());
       expect(course.id, kAshtangaCourseId);
-      expect(course.modules, hasLength(4));
+      expect(course.modules, hasLength(5));
       expect(
         course.lessons.map((l) => l.id),
-        List.generate(13, (i) => 'a${(i + 1).toString().padLeft(2, '0')}'),
+        List.generate(19, (i) => 'a${(i + 1).toString().padLeft(2, '0')}'),
       );
       expect(course.sourceScopes.keys.toSet(), course.sources.keys.toSet());
       final prior = <String>{};
@@ -204,6 +204,15 @@ void main() {
         course.lessonById('a10')!.steps.last.en,
         contains('not required physical progression'),
       );
+      expect(course.modules.last.id, 'a.fundamentals_extension');
+      expect(
+        course.lessonById('a14')!.steps[2].en,
+        contains('The revolved forms are not taught'),
+      );
+      expect(
+        course.lessonById('a19')!.answerKey!.en,
+        contains('Inversions and lotus forms stay map knowledge'),
+      );
     },
   );
 
@@ -220,7 +229,10 @@ void main() {
 
   test('physical preparation applies only to taught movement units', () {
     final course = _course();
-    const physical = {'a04', 'a05', 'a06', 'a07', 'a09', 'a11'};
+    const physical = {
+      'a04', 'a05', 'a06', 'a07', 'a09', 'a11', //
+      'a15', 'a16', 'a17', 'a18', 'a19',
+    };
     for (final lesson in course.lessons) {
       expect(
         HathaSessionPreparation.requiredFor(lesson.id),
@@ -242,14 +254,14 @@ void main() {
       final course = _course();
       final file = File('${root.path}/practice.jsonl');
       final store = JsonlHathaProgressStore(file);
-      await expectLater(store.markPracticed(course, 'a13'), throwsStateError);
+      await expectLater(store.markPracticed(course, 'a19'), throwsStateError);
       for (final lesson in course.lessons) {
         await store.markPracticed(course, lesson.id);
       }
       await store.markPracticed(course, 'a01');
       final progress = await JsonlHathaProgressStore(file).read();
-      expect(progress.records, hasLength(14));
-      expect(progress.practicedIn(course), hasLength(13));
+      expect(progress.records, hasLength(20));
+      expect(progress.practicedIn(course), hasLength(19));
       expect(progress.practicedIn(factsFromDisk().hatha!), isEmpty);
       final nextRaw =
           jsonDecode(File(kAshtangaCourseAssetPath).readAsStringSync())
@@ -257,7 +269,7 @@ void main() {
       nextRaw['version'] = '2.0.0';
       final next = HathaCourse.parse(jsonEncode(nextRaw));
       expect(progress.practicedIn(next), isEmpty);
-      expect(progress.oldVersionCount(next), 14);
+      expect(progress.oldVersionCount(next), 20);
       expect(
         (await JsonlHathaProgressStore(
           File('${root.path}/other/practice.jsonl'),
@@ -282,7 +294,7 @@ void main() {
       });
       final facts = await AppFacts.load(scope: scope, bundle: _Bundle());
       expect(facts.ashtanga!.id, kAshtangaCourseId);
-      expect(facts.ashtanga!.lessons, hasLength(13));
+      expect(facts.ashtanga!.lessons, hasLength(19));
       await expectLater(
         AppFacts.load(scope: scope, bundle: _Bundle(missing: true)),
         throwsStateError,
@@ -527,8 +539,8 @@ void main() {
       expect(
         find.textContaining(
           tr
-              ? '13/13 birimde katılım kaydı'
-              : '13/13 units with participation records',
+              ? '19/19 birimde katılım kaydı'
+              : '19/19 units with participation records',
         ),
         findsOneWidget,
       );

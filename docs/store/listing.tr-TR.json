@@ -7,9 +7,9 @@
     "keywords": "mobilite,esneklik,hareket,sağlıklı yaşam,germe,çömelme,hareket açıklığı"
   },
   "playStore": {
-    "shortDescription": "Beş yoga kataloğunda 103 yazılı ders ve cihazda öz çalışma kaydı."
+    "shortDescription": "Beş yoga kataloğunda 120 yazılı ders ve cihazda öz çalışma kaydı."
   },
-  "description": "Lissom, 10 modülde 60 özgün Türkçe ve İngilizce Hatha yoga dersi sunar. Doğal nefes, hazırlık, destekli pozlar, kontrollü geçişler ve bağımsız çalışma planını öğren. Rahat destek, sandalye veya dinlenme seçeneğini kullan. Her derste hedef, uygulama, öz denetim ve öğretim kaynakları bulunur. Hareket testi kataloğunda Yukarı uzanma, derin çömelme ve düz bacak kaldırma açıklamalarını da inceleyebilirsin. Ayrıca 4 modülde 13 Ashtanga başlangıç temelleri metin dersi; ayakta uyarlamalar ve geleneksel Güneşe Selam A/B haritaları bulunur. Tam temel seri değildir. Destekli Yin 8, destekli ayakta Vinyasa 10 ve sandalye/ofis yogası 12 yazılı ders içerir. Beş katalogda toplam 103 metin dersi bulunur.\n\nÖzgün metin derslerini oku, uygulama görevlerini takip et, kendi çalışmanı değerlendir ve cihazdaki ders kaydından devam et. Hesabın olmadan kataloğu gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır. Ders bitirme ustalık belgesi değildir. Bu içerik hazırlığı sürümünde gösterim videosu bulunmaz.\n\nÇalışma ilerlemesi öz kayıttır; poz puanı değildir. Kamera değerlendirmeleri ve abonelik satışı açık değildir. Genel bilgiler ve uyarlamalar kişiye özel rehabilitasyon veya gebelik tedavisi sunmaz. Lissom tıbbi cihaz değildir; tanı veya tedavi yapmaz.",
+  "description": "Lissom, 10 modülde 60 özgün Türkçe ve İngilizce Hatha yoga dersi sunar. Doğal nefes, hazırlık, destekli pozlar, kontrollü geçişler ve bağımsız çalışma planını öğren. Rahat destek, sandalye veya dinlenme seçeneğini kullan. Her derste hedef, uygulama, öz denetim ve öğretim kaynakları bulunur. Hareket testi kataloğunda Yukarı uzanma, derin çömelme ve düz bacak kaldırma açıklamalarını da inceleyebilirsin. Ayrıca 5 modülde 19 Ashtanga başlangıç temelleri metin dersi; ayakta uyarlamalar, geleneksel Güneşe Selam A/B haritaları, dört ayakta temel ve kapanış dinlenmesi bulunur. Tam temel seri değildir. Destekli Yin 12, destekli Vinyasa 14 (isteğe bağlı dizler yerde yer uzantısıyla) ve sandalye/ofis yogası 15 yazılı ders içerir. Beş katalogda toplam 120 metin dersi bulunur.\n\nÖzgün metin derslerini oku, uygulama görevlerini takip et, kendi çalışmanı değerlendir ve cihazdaki ders kaydından devam et. Hesabın olmadan kataloğu gezebilir, isteğe bağlı ortak Motion hesabını kullanabilirsin. Hesap; e-posta, hesap kimliği ve eklediysen görünen adını kullanır; uygulamadan hesap silme isteği yapabilirsin. Kurs kayıtları cihazda mevcut konuk veya hesap kapsamında kalır. Ders bitirme ustalık belgesi değildir. Bu içerik hazırlığı sürümünde gösterim videosu bulunmaz.\n\nÇalışma ilerlemesi öz kayıttır; poz puanı değildir. Kamera değerlendirmeleri ve abonelik satışı açık değildir. Genel bilgiler ve uyarlamalar kişiye özel rehabilitasyon veya gebelik tedavisi sunmaz. Lissom tıbbi cihaz değildir; tanı veya tedavi yapmaz.",
   "$sourceOfFacts": "Five bundled course JSON assets enumerated in $courseCatalogPreparationCurrent; app-local UI and course-ID/version-aware guest/account practice store. Camera/model and paid-access policy unchanged. No live provider write.",
   "$notClaimed": "No independent skill/mastery outcome, physical-phone performance, clinical suitability, camera form grade or approved AI demonstration is asserted. This local content-preparation draft has not been uploaded.",
   "supportUrl": "https://yulalab.com/support",
@@ -50,23 +50,23 @@
     "measuredDate": "2026-10-20",
     "status": "local_written_catalog_scope_not_full_teaching_physical_or_store_acceptance",
     "courseCount": 5,
-    "lessonCount": 103,
+    "lessonCount": 120,
     "courses": [
       {
         "asset": "config/courses/ashtanga-foundations.v1.json",
         "id": "lissom.ashtanga.foundations.beginner",
         "version": "1.0.0",
-        "sha256": "913fe8864c0e71a77567e17a14983e334273c02158662413133a6755cafe8c07",
-        "lessonCount": 13,
-        "moduleCount": 4
+        "sha256": "889d9f22f4006c151ff3ae1a980dcc7b8b00076035a99bdb3f9154b990fb75b1",
+        "lessonCount": 19,
+        "moduleCount": 5
       },
       {
         "asset": "config/courses/chair-office.v1.json",
         "id": "lissom.chair-office.beginner",
         "version": "1.0.0",
-        "sha256": "c32f5d4f05606f2fa0f9c9a1ac48297bc61a917f3793e39ad1dfb377f9f1426c",
-        "lessonCount": 12,
-        "moduleCount": 4
+        "sha256": "2663ec6308a65f6e4131cf474ca2ae594bbf34bdff7e4d3c484ad1dcf6e97853",
+        "lessonCount": 15,
+        "moduleCount": 5
       },
       {
         "asset": "config/courses/hatha.v1.json",
@@ -80,17 +80,17 @@
         "asset": "config/courses/vinyasa-standing.v1.json",
         "id": "lissom.vinyasa.supported-standing.beginner",
         "version": "1.0.0",
-        "sha256": "815b7a2c7205c0b5e5c32ce096c79ad112d98ca78196184b1ced1414e6953191",
-        "lessonCount": 10,
-        "moduleCount": 2
+        "sha256": "64690c084e0b906c0974c9bf70ba7507572a8fcf2b225fe5438bb7c38f05f582",
+        "lessonCount": 14,
+        "moduleCount": 3
       },
       {
         "asset": "config/courses/yin-supported.v1.json",
         "id": "lissom.yin.supported.beginner",
         "version": "1.0.0",
-        "sha256": "ed346669025d106fcd255093adb89983925ddc46750d80730c7998f7cc2f5770",
-        "lessonCount": 8,
-        "moduleCount": 2
+        "sha256": "647e5c88c1e61720bcd93a6170ca978ba623f296594733fd4d495fbfc1813a66",
+        "lessonCount": 12,
+        "moduleCount": 3
       }
     ],
     "mediaIncluded": false,

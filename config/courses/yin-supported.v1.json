@@ -18,7 +18,11 @@
     "s5": "https://yinyoga.com/yinsights/caterpillar/",
     "s6": "https://yinyoga.com/yinsights/reclining-twist/",
     "s7": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety",
-    "s8": "https://www.nhs.uk/live-well/exercise/sitting-exercises/"
+    "s8": "https://www.nhs.uk/live-well/exercise/sitting-exercises/",
+    "s9": "https://yinyoga.com/yinsights/sphinx-seal/",
+    "s10": "https://yinyoga.com/yinsights/childs-pose/",
+    "s11": "https://yinyoga.com/yinsights/dragon/",
+    "s12": "https://yinyoga.com/yinsights/shavasana/"
   },
   "sourceScopes": {
     "s1": {
@@ -99,6 +103,46 @@
       "doesNotSupport": {
         "en": "The exact original adaptations, prop removal order, route, dose, suitability and physical skill are not validated. No organ, tissue, treatment or health result is claimed.",
         "tr": "Özgün uyarlamaların tamamı, destek çıkarma sırası, rota, doz, uygunluk ve fiziksel beceri doğrulanmaz. Organ, doku, tedavi veya sağlık sonucu iddiası yok."
+      }
+    },
+    "s9": {
+      "supports": {
+        "en": "Belly-lying forearm support, lowering to exit and props under the elbows or chest.",
+        "tr": "Yüzüstü önkol desteği, çıkışta göğsü indirme ve dirsek veya göğüs altı destekler."
+      },
+      "doesNotSupport": {
+        "en": "The exact original adaptations, prop order, dose, suitability and physical skill are not validated. No organ, tissue, energy or health result is claimed.",
+        "tr": "Özgün uyarlamaların tamamı, destek sırası, doz, uygunluk ve fiziksel beceri doğrulanmaz. Organ, doku, enerji veya sağlık sonucu iddiası yoktur."
+      }
+    },
+    "s10": {
+      "supports": {
+        "en": "Sitting back toward the heels, chest or head support and padding for knees and ankles.",
+        "tr": "Topuklara doğru geri oturma, göğüs veya baş desteği ve diz ile ayak bileği için yastık."
+      },
+      "doesNotSupport": {
+        "en": "The exact original adaptations, prop order, dose, suitability and physical skill are not validated. No organ, tissue, energy or health result is claimed.",
+        "tr": "Özgün uyarlamaların tamamı, destek sırası, doz, uygunluk ve fiziksel beceri doğrulanmaz. Organ, doku, enerji veya sağlık sonucu iddiası yoktur."
+      }
+    },
+    "s11": {
+      "supports": {
+        "en": "A low lunge entry from hands and knees, padding under the back knee and a slow exit.",
+        "tr": "Dört ayaktan alçak hamle girişi, arka diz altı yastık ve yavaş çıkış."
+      },
+      "doesNotSupport": {
+        "en": "The exact original adaptations, prop order, dose, suitability and physical skill are not validated. No organ, tissue, energy or health result is claimed.",
+        "tr": "Özgün uyarlamaların tamamı, destek sırası, doz, uygunluk ve fiziksel beceri doğrulanmaz. Organ, doku, enerji veya sağlık sonucu iddiası yoktur."
+      }
+    },
+    "s12": {
+      "supports": {
+        "en": "Closing rest at the end of a practice and the use of a timer.",
+        "tr": "Pratiğin sonunda kapanış dinlenmesi ve zamanlayıcı kullanımı."
+      },
+      "doesNotSupport": {
+        "en": "The exact original adaptations, prop order, dose, suitability and physical skill are not validated. No organ, tissue, energy or health result is claimed.",
+        "tr": "Özgün uyarlamaların tamamı, destek sırası, doz, uygunluk ve fiziksel beceri doğrulanmaz. Organ, doku, enerji veya sağlık sonucu iddiası yoktur."
       }
     }
   },
@@ -635,6 +679,280 @@
             "en": "No. Check today’s setup and limits again; the old plan is not permission. Compare one written point, correct it and explain it again before optional familiar movement is considered. Recalled explanations are knowledge, reported participation is self-report, and movement not observed remains unobserved. No duration, deeper range or lesson tick closes that distinction.",
             "tr": "Hayır. Bugünkü kurulum ve sınırları yeniden kontrol et; eski plan izin değildir. Seçmeli tanıdık hareket düşünülmeden önce tek yazılı noktayı karşılaştır, düzelt ve yeniden açıkla. Hatırlanan açıklama bilgidir, bildirilen katılım öz beyandır; gözlenmeyen hareket gözlenmemiş kalır. Süre, derin aralık veya ders tiki bu ayrımı kapatmaz."
           }
+        }
+      ]
+    },
+    {
+      "id": "y-shapes-extension",
+      "title": {
+        "en": "Further supported shapes and closing rest",
+        "tr": "Ek destekli biçimler ve kapanış dinlenmesi"
+      },
+      "outcome": {
+        "en": "Choose, support and leave three more Yin shapes and close a practice with rest.",
+        "tr": "Üç Yin biçimini daha seç, destekle ve bırak; pratiği dinlenmeyle kapat."
+      },
+      "lessons": [
+        {
+          "id": "y09",
+          "title": {
+            "en": "Supported Sphinx adaptation",
+            "tr": "Destekli Sfenks uyarlaması"
+          },
+          "objective": {
+            "en": "Rest on the forearms from belly lying and leave by lowering the chest first.",
+            "tr": "Yüzüstü yatıştan önkollara dayan ve önce göğsü indirerek çık."
+          },
+          "steps": [
+            {
+              "en": "Prepare a folded blanket for the elbows and a cushion within reach before lying down. Come to belly lying by your familiar route; legs rest long and about hip-width apart.",
+              "tr": "Yatmadan önce dirsekler için katlanmış battaniye ve erişilebilir bir yastık hazırla. Tanıdık yolunla yüzüstü yat; bacaklar uzun ve kalça genişliğinde dursun."
+            },
+            {
+              "en": "Place the elbows on the blanket a little ahead of the shoulders and rest the forearms on the floor. The chest lifts only as far as the forearms carry it; let the shoulders hang without pushing up.",
+              "tr": "Dirsekleri battaniyenin üzerinde omuzların biraz önüne koy ve önkolları zemine yasla. Göğüs yalnız önkolların taşıdığı kadar yükselir; omuzları itmeden bırak."
+            },
+            {
+              "en": "For a lower version slide the elbows further forward, or place the cushion under the chest. A pinch in the lower back, or any stop signal, ends the shape.",
+              "tr": "Daha alçak biçim için dirsekleri daha öne kaydır veya yastığı göğsün altına koy. Belde sıkışma ya da herhangi bir durma işareti biçimi bitirir."
+            },
+            {
+              "en": "To leave, slide the elbows forward and lower the chest to the floor, then rest the cheek on the stacked hands. Pause before moving the blanket or coming up.",
+              "tr": "Çıkmak için dirsekleri öne kaydır ve göğsü zemine indir, sonra yanağını üst üste konmuş ellere yasla. Battaniyeyi taşımadan veya kalkmadan önce bekle."
+            }
+          ],
+          "practice": {
+            "en": "Read the setup and exit, then optionally rehearse one brief entry and exit. If the elbows were placed too far back and there is no stop signal, lower the chest, move them forward and try once. Record the chosen height and whether you stayed or left early.",
+            "tr": "Kurulumu ve çıkışı oku, sonra istersen tek bir kısa giriş ve çıkış çalış. Dirsekler fazla geriye konduysa ve durma işareti yoksa göğsü indir, dirsekleri öne al ve bir kez dene. Seçtiğin yüksekliği ve kalıp kalmadığını ya da erken çıkıp çıkmadığını kaydet."
+          },
+          "selfCheck": {
+            "en": "Your lower back pinches in Sphinx. Do you push up with straighter arms to change the feeling?",
+            "tr": "Sfenkste belin sıkışıyor. Hissi değiştirmek için kolları düzleştirip yukarı iter misin?"
+          },
+          "answerKey": {
+            "en": "No. A pinch ends the shape: lower the chest and rest on the belly. Straighter arms deepen the arch and are not the taught choice.",
+            "tr": "Hayır. Sıkışma biçimi bitirir: göğsü indir ve karın üstü dinlen. Düz kollar kavisi derinleştirir ve öğretilen seçim değildir."
+          },
+          "adaptation": {
+            "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
+            "tr": "Nefes normal ritminde gelsin; derinleştirme, yavaşlatma, tutma veya saniyeye uydurma yok. İlk giriş/çıkış provası yalnız kısa bir denemedir; tam Yin beklemesi diye kaydedilmez. Kurulum rahat ve çıkış belli ise yaklaşık bir dakikaya kadar beklemeyi seçebilirsin; daha erken çıkmak her zaman geçerlidir. Daha sonraki rahat bir oturumda istersen en çok iki dakika seç; süreyi veya derinliği artırmak ilerleme şartı değildir. Bu girişte aynı bekleme içinde daha derine inme. Zamanlayıcı üst sınırı hatırlatır, katlanma hedefi koymaz. Gözler açık kalabilir. Dikkat dağıldığında temas/normal nefese geri dön; görünüşü düzeltmek için çekiştirme. Tanıdık yer erişimi gerekir; h35 okumak bunu öğretmez. Hareket atlanabilir; bilgi/öz beyan/gözlenmiş hareket ayrı kalır. Tam kurulum ve kişisel sınır koşulları için y01/y02’ye bak."
+          },
+          "stopSignal": {
+            "en": "A mild non-increasing sensation may occur; feeling a stretch is not required. Do not use discomfort as an acceptance test. Pain, pinching, burning, numbness/tingling, dizziness, unusual breathlessness, breath holding or emotional distress ends the hold: use the planned controlled exit to familiar rest. Ask for help if you feel at risk of falling. Do not interpret the cause or retry a symptomatic pose in this session. Seek appropriate health assistance if symptoms persist, worsen or concern you. Do not wait for the timer. Stillness never forbids fixing support or leaving.",
+            "tr": "Hafif ve artmayan bir his olabilir; bir şey hissetmek zorunlu değildir. Rahatsızlığı kabul testi gibi kullanma. Ağrı, sıkışma, yanma, uyuşma/karıncalanma, baş dönmesi, alışılmadık nefes darlığı, nefesi tutma veya duygusal zorlanma olursa beklemeyi bırak, belirlenmiş kontrollü çıkışla tanıdık dinlenmeye geç. Kendini düşmeye yaklaşmış hissedersen yardım iste. Belirtinin nedenini yorumlama; belirti olmuş pozu bu oturumda yeniden deneme. Belirti sürer, ağırlaşır veya endişe yaratırsa uygun sağlık yardımı al. Zamanlayıcıyı bekleme. Hareketsizlik, desteği düzeltme veya çıkma yasağı değildir."
+          },
+          "mediaBrief": {
+            "en": "Original demonstration and actual learner feedback are missing. This written record is participation, not observed form, physical eligibility or mastery.",
+            "tr": "Özgün gösterim ve gerçek öğrenci geri bildirimi eksik. Bu yazılı kayıt katılımdır; gözlenmiş biçim, fiziksel uygunluk veya ustalık değildir."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s7",
+            "s9"
+          ],
+          "prerequisites": [
+            "y01",
+            "y02"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "y10",
+          "title": {
+            "en": "Supported Child's shape",
+            "tr": "Destekli Çocuk biçimi"
+          },
+          "objective": {
+            "en": "Sit back toward the heels with chest and head supported and rise slowly with hand support.",
+            "tr": "Göğüs ve baş destekliyken topuklara doğru geri otur ve el desteğiyle yavaşça yüksel."
+          },
+          "steps": [
+            {
+              "en": "Kneel on a padded surface with a bolster or firm cushions lengthwise in front of you. A folded blanket can go under the ankles or between the thighs and calves.",
+              "tr": "Önünde uzunlamasına bolster veya sağlam yastıklarla yastıklı bir zeminde diz çök. Katlanmış battaniye ayak bileklerinin altına veya uyluk ile baldır arasına konabilir."
+            },
+            {
+              "en": "Let the knees open as wide as is comfortable and walk the hands forward to lower the chest onto the bolster. The forehead or one cheek rests on the bolster or on the hands.",
+              "tr": "Dizleri rahat olduğu kadar aç ve göğsü bolsterın üzerine indirmek için elleri öne yürüt. Alın veya bir yanak bolstera ya da ellere dayanır."
+            },
+            {
+              "en": "If the hips stay far from the heels, add height under the chest instead of pressing down. Knee or ankle discomfort ends the shape; sitting upright or lying on the back is the replacement.",
+              "tr": "Kalçalar topuklardan uzak kalıyorsa aşağı bastırmak yerine göğüs altına yükseklik ekle. Diz veya ayak bileği rahatsızlığı biçimi bitirir; dik oturmak veya sırtüstü yatmak yerine geçer."
+            },
+            {
+              "en": "To leave, place the hands beside the bolster, press the floor away and roll up slowly to kneeling. Pause there, then move to a supported seat before standing.",
+              "tr": "Çıkmak için elleri bolsterın yanına koy, zemini it ve yavaşça diz çökmüş oturuşa yuvarlan. Orada bekle, sonra ayağa kalkmadan önce destekli oturuşa geç."
+            }
+          ],
+          "practice": {
+            "en": "Plan the support height before kneeling, then optionally rehearse one brief entry and exit. Child's shape can also be the rest after y09. Pregnancy, recent eating or knee limits can make another rest the better choice. Record the support used.",
+            "tr": "Diz çökmeden önce destek yüksekliğini planla, sonra istersen tek bir kısa giriş ve çıkış çalış. Çocuk biçimi y09'dan sonraki dinlenme de olabilir. Gebelik, yeni yemek yemiş olmak veya diz sınırları başka bir dinlenmeyi daha iyi seçim yapabilir. Kullandığın desteği kaydet."
+          },
+          "selfCheck": {
+            "en": "The forehead does not reach the bolster. What changes?",
+            "tr": "Alın bolstera ulaşmıyor. Ne değişir?"
+          },
+          "answerKey": {
+            "en": "Add height: another cushion on the bolster or the hands stacked under the forehead. Do not push the hips toward the heels to make contact.",
+            "tr": "Yükseklik ekle: bolsterın üstüne bir yastık daha veya alnın altına üst üste konmuş eller. Teması sağlamak için kalçayı topuklara doğru bastırma."
+          },
+          "adaptation": {
+            "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
+            "tr": "Nefes normal ritminde gelsin; derinleştirme, yavaşlatma, tutma veya saniyeye uydurma yok. İlk giriş/çıkış provası yalnız kısa bir denemedir; tam Yin beklemesi diye kaydedilmez. Kurulum rahat ve çıkış belli ise yaklaşık bir dakikaya kadar beklemeyi seçebilirsin; daha erken çıkmak her zaman geçerlidir. Daha sonraki rahat bir oturumda istersen en çok iki dakika seç; süreyi veya derinliği artırmak ilerleme şartı değildir. Bu girişte aynı bekleme içinde daha derine inme. Zamanlayıcı üst sınırı hatırlatır, katlanma hedefi koymaz. Gözler açık kalabilir. Dikkat dağıldığında temas/normal nefese geri dön; görünüşü düzeltmek için çekiştirme. Tanıdık yer erişimi gerekir; h35 okumak bunu öğretmez. Hareket atlanabilir; bilgi/öz beyan/gözlenmiş hareket ayrı kalır. Tam kurulum ve kişisel sınır koşulları için y01/y02’ye bak."
+          },
+          "stopSignal": {
+            "en": "A mild non-increasing sensation may occur; feeling a stretch is not required. Do not use discomfort as an acceptance test. Pain, pinching, burning, numbness/tingling, dizziness, unusual breathlessness, breath holding or emotional distress ends the hold: use the planned controlled exit to familiar rest. Ask for help if you feel at risk of falling. Do not interpret the cause or retry a symptomatic pose in this session. Seek appropriate health assistance if symptoms persist, worsen or concern you. Do not wait for the timer. Stillness never forbids fixing support or leaving.",
+            "tr": "Hafif ve artmayan bir his olabilir; bir şey hissetmek zorunlu değildir. Rahatsızlığı kabul testi gibi kullanma. Ağrı, sıkışma, yanma, uyuşma/karıncalanma, baş dönmesi, alışılmadık nefes darlığı, nefesi tutma veya duygusal zorlanma olursa beklemeyi bırak, belirlenmiş kontrollü çıkışla tanıdık dinlenmeye geç. Kendini düşmeye yaklaşmış hissedersen yardım iste. Belirtinin nedenini yorumlama; belirti olmuş pozu bu oturumda yeniden deneme. Belirti sürer, ağırlaşır veya endişe yaratırsa uygun sağlık yardımı al. Zamanlayıcıyı bekleme. Hareketsizlik, desteği düzeltme veya çıkma yasağı değildir."
+          },
+          "mediaBrief": {
+            "en": "Original demonstration and actual learner feedback are missing. This written record is participation, not observed form, physical eligibility or mastery.",
+            "tr": "Özgün gösterim ve gerçek öğrenci geri bildirimi eksik. Bu yazılı kayıt katılımdır; gözlenmiş biçim, fiziksel uygunluk veya ustalık değildir."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s7",
+            "s10"
+          ],
+          "prerequisites": [
+            "y01",
+            "y02"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "y11",
+          "title": {
+            "en": "Knee-padded low Dragon adaptation",
+            "tr": "Diz yastıklı alçak Ejderha uyarlaması"
+          },
+          "objective": {
+            "en": "Take a small low lunge with the back knee padded and leave through tabletop.",
+            "tr": "Arka diz yastıklıyken küçük bir alçak hamleye gir ve dört ayak üzerinden çık."
+          },
+          "steps": [
+            {
+              "en": "Start in tabletop with a folded blanket under the knees and two firm blocks beside the hands. Bring the right foot forward between the hands in small steps.",
+              "tr": "Dizlerin altında katlanmış battaniye ve ellerin yanında iki sağlam blokla dört ayakta başla. Sağ ayağı küçük adımlarla eller arasına getir."
+            },
+            {
+              "en": "Keep the front knee above or behind the front ankle and slide the back knee back only a little on the padding. Hands rest on the blocks or on the front thigh; the trunk stays upright enough that breathing stays ordinary.",
+              "tr": "Ön dizi ön ayak bileğinin üzerinde veya gerisinde tut ve arka dizi yastık üzerinde yalnız biraz geriye kaydır. Eller bloklarda veya ön uylukta dursun; gövde nefesin olağan kaldığı kadar dik kalsın."
+            },
+            {
+              "en": "Stay only within the shared time limit, without sinking deeper during the hold. Pressure on the back kneecap means more padding or leaving; hip pinching or any stop signal ends the shape.",
+              "tr": "Yalnız ortak süre sınırı içinde kal, bekleme sırasında derine çökme. Arka diz kapağında baskı daha fazla yastık veya çıkış demektir; kalçada sıkışma ya da herhangi bir durma işareti biçimi bitirir."
+            },
+            {
+              "en": "To leave, bring the back knee forward a little, place the hands on the floor or blocks and step the front foot back to tabletop. Pause in tabletop or child shape before the left side. Sides may differ or be omitted.",
+              "tr": "Çıkmak için arka dizi biraz öne getir, elleri zemine veya bloklara koy ve ön ayağı dört ayağa geri adımla. Sol taraftan önce dört ayakta veya çocuk biçiminde bekle. Taraflar farklı olabilir veya atlanabilir."
+            }
+          ],
+          "practice": {
+            "en": "Read the setup and exit, then optionally one brief side at a time. If the front foot landed too close and there is no stop signal, return to tabletop and place it again. Deeper variations such as lifting the back knee or lowering onto the forearms are not part of this pathway.",
+            "tr": "Kurulumu ve çıkışı oku, sonra istersen her seferinde tek bir kısa taraf çalış. Ön ayak fazla yakın konduysa ve durma işareti yoksa dört ayağa dön ve yeniden yerleştir. Arka dizi kaldırmak veya önkollara inmek gibi daha derin varyasyonlar bu yolun parçası değildir."
+          },
+          "selfCheck": {
+            "en": "Your back kneecap feels pressed in Dragon. What are the two taught choices?",
+            "tr": "Ejderhada arka diz kapağın baskı hissediyor. Öğretilen iki seçim nedir?"
+          },
+          "answerKey": {
+            "en": "Add padding under the back knee or leave the shape through tabletop. Lifting the knee or moving deeper is not a fix taught here.",
+            "tr": "Arka dizin altına yastık ekle ya da biçimden dört ayak üzerinden çık. Dizi kaldırmak veya daha derine gitmek burada öğretilen bir çözüm değildir."
+          },
+          "adaptation": {
+            "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
+            "tr": "Nefes normal ritminde gelsin; derinleştirme, yavaşlatma, tutma veya saniyeye uydurma yok. İlk giriş/çıkış provası yalnız kısa bir denemedir; tam Yin beklemesi diye kaydedilmez. Kurulum rahat ve çıkış belli ise yaklaşık bir dakikaya kadar beklemeyi seçebilirsin; daha erken çıkmak her zaman geçerlidir. Daha sonraki rahat bir oturumda istersen en çok iki dakika seç; süreyi veya derinliği artırmak ilerleme şartı değildir. Bu girişte aynı bekleme içinde daha derine inme. Zamanlayıcı üst sınırı hatırlatır, katlanma hedefi koymaz. Gözler açık kalabilir. Dikkat dağıldığında temas/normal nefese geri dön; görünüşü düzeltmek için çekiştirme. Tanıdık yer erişimi gerekir; h35 okumak bunu öğretmez. Hareket atlanabilir; bilgi/öz beyan/gözlenmiş hareket ayrı kalır. Tam kurulum ve kişisel sınır koşulları için y01/y02’ye bak."
+          },
+          "stopSignal": {
+            "en": "A mild non-increasing sensation may occur; feeling a stretch is not required. Do not use discomfort as an acceptance test. Pain, pinching, burning, numbness/tingling, dizziness, unusual breathlessness, breath holding or emotional distress ends the hold: use the planned controlled exit to familiar rest. Ask for help if you feel at risk of falling. Do not interpret the cause or retry a symptomatic pose in this session. Seek appropriate health assistance if symptoms persist, worsen or concern you. Do not wait for the timer. Stillness never forbids fixing support or leaving.",
+            "tr": "Hafif ve artmayan bir his olabilir; bir şey hissetmek zorunlu değildir. Rahatsızlığı kabul testi gibi kullanma. Ağrı, sıkışma, yanma, uyuşma/karıncalanma, baş dönmesi, alışılmadık nefes darlığı, nefesi tutma veya duygusal zorlanma olursa beklemeyi bırak, belirlenmiş kontrollü çıkışla tanıdık dinlenmeye geç. Kendini düşmeye yaklaşmış hissedersen yardım iste. Belirtinin nedenini yorumlama; belirti olmuş pozu bu oturumda yeniden deneme. Belirti sürer, ağırlaşır veya endişe yaratırsa uygun sağlık yardımı al. Zamanlayıcıyı bekleme. Hareketsizlik, desteği düzeltme veya çıkma yasağı değildir."
+          },
+          "mediaBrief": {
+            "en": "Original demonstration and actual learner feedback are missing. This written record is participation, not observed form, physical eligibility or mastery.",
+            "tr": "Özgün gösterim ve gerçek öğrenci geri bildirimi eksik. Bu yazılı kayıt katılımdır; gözlenmiş biçim, fiziksel uygunluk veya ustalık değildir."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s7",
+            "s11"
+          ],
+          "prerequisites": [
+            "y01",
+            "y02"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "y12",
+          "title": {
+            "en": "Closing rest and a longer original practice",
+            "tr": "Kapanış dinlenmesi ve daha uzun özgün pratik"
+          },
+          "objective": {
+            "en": "Plan a practice that links up to four taught shapes with neutral pauses and ends in closing rest.",
+            "tr": "Öğretilen en fazla dört biçimi nötr aralarla bağlayan ve kapanış dinlenmesiyle biten bir pratik planla."
+          },
+          "steps": [
+            {
+              "en": "Before moving, write up to four taught shapes from y03–y05 and y09–y11, the support for each, a neutral pause between them and one shape you can leave out today.",
+              "tr": "Hareketten önce y03–y05 ve y09–y11 arasından en fazla dört öğretilmiş biçimi, her birinin desteğini, aralarındaki nötr arayı ve bugün çıkarabileceğin bir biçimi yaz."
+            },
+            {
+              "en": "Order the shapes so that each transfer is familiar: for example seated shapes first, then belly lying, then back lying. Place the closing rest last.",
+              "tr": "Biçimleri her geçiş tanıdık olacak şekilde sırala: örneğin önce oturuşlu biçimler, sonra yüzüstü, sonra sırtüstü. Kapanış dinlenmesini en sona koy."
+            },
+            {
+              "en": "Practise the plan at your own pace within the shared time limits. Leaving a shape early or skipping one keeps the plan valid; do not lengthen holds to make up time.",
+              "tr": "Planı ortak süre sınırları içinde kendi hızında çalış. Bir biçimden erken çıkmak veya birini atlamak planı geçersiz kılmaz; zamanı telafi etmek için beklemeleri uzatma."
+            },
+            {
+              "en": "Close with rest on the back, knees bent or supported, or on one side, for a few minutes. Roll to the side, pause and come up through a supported seat.",
+              "tr": "Dizler bükülü veya destekli sırtüstü ya da bir yana yatarak birkaç dakika dinlenerek kapat. Yana dön, bekle ve destekli oturuş üzerinden kalk."
+            }
+          ],
+          "practice": {
+            "en": "Write the actual route afterwards, including omitted shapes and early exits. The closing rest is part of the practice, not an extra. Keep knowledge, self-report and observed movement separate. Unsupported, advanced or prolonged Yin remains outside this pathway.",
+            "tr": "Sonrasında atlanan biçimler ve erken çıkışlar dahil gerçek rotayı yaz. Kapanış dinlenmesi pratiğin parçasıdır, ek değildir. Bilgiyi, öz bildirimi ve gözlenmiş hareketi ayrı tut. Desteksiz, ileri veya uzun süreli Yin bu yolun dışında kalır."
+          },
+          "selfCheck": {
+            "en": "You run out of time before the closing rest. Which part do you keep?",
+            "tr": "Kapanış dinlenmesinden önce zamanın bitiyor. Hangi bölümü korursun?"
+          },
+          "answerKey": {
+            "en": "Keep the closing rest and leave out a shape. A shorter practice that ends in rest follows the plan; rushing through every shape does not.",
+            "tr": "Kapanış dinlenmesini koru ve bir biçimi çıkar. Dinlenmeyle biten daha kısa bir pratik plana uyar; her biçimden aceleyle geçmek uymaz."
+          },
+          "adaptation": {
+            "en": "Let breathing follow its ordinary rhythm: no deepening, slowing, retention or matching seconds. The first entry/exit rehearsal is a brief trial, not a completed Yin hold. If setup is comfortable and the exit is known, you may choose to stay for up to about one minute; leaving earlier is always valid. In a later comfortable session you may choose up to two minutes; more time or depth is not a progression requirement. Do not deepen during the same hold in this introduction. A timer reminds you of an upper limit, not an endurance target. Eyes may remain open. When attention wanders, return to contact/ordinary breathing without pulling yourself into a model appearance. Familiar floor access is required, not taught by reading h35. Movement may be omitted; knowledge/self-report/observed movement stay separate. See y01/y02 for the complete setup and personal-limit conditions.",
+            "tr": "Nefes normal ritminde gelsin; derinleştirme, yavaşlatma, tutma veya saniyeye uydurma yok. İlk giriş/çıkış provası yalnız kısa bir denemedir; tam Yin beklemesi diye kaydedilmez. Kurulum rahat ve çıkış belli ise yaklaşık bir dakikaya kadar beklemeyi seçebilirsin; daha erken çıkmak her zaman geçerlidir. Daha sonraki rahat bir oturumda istersen en çok iki dakika seç; süreyi veya derinliği artırmak ilerleme şartı değildir. Bu girişte aynı bekleme içinde daha derine inme. Zamanlayıcı üst sınırı hatırlatır, katlanma hedefi koymaz. Gözler açık kalabilir. Dikkat dağıldığında temas/normal nefese geri dön; görünüşü düzeltmek için çekiştirme. Tanıdık yer erişimi gerekir; h35 okumak bunu öğretmez. Hareket atlanabilir; bilgi/öz beyan/gözlenmiş hareket ayrı kalır. Tam kurulum ve kişisel sınır koşulları için y01/y02’ye bak."
+          },
+          "stopSignal": {
+            "en": "A mild non-increasing sensation may occur; feeling a stretch is not required. Do not use discomfort as an acceptance test. Pain, pinching, burning, numbness/tingling, dizziness, unusual breathlessness, breath holding or emotional distress ends the hold: use the planned controlled exit to familiar rest. Ask for help if you feel at risk of falling. Do not interpret the cause or retry a symptomatic pose in this session. Seek appropriate health assistance if symptoms persist, worsen or concern you. Do not wait for the timer. Stillness never forbids fixing support or leaving.",
+            "tr": "Hafif ve artmayan bir his olabilir; bir şey hissetmek zorunlu değildir. Rahatsızlığı kabul testi gibi kullanma. Ağrı, sıkışma, yanma, uyuşma/karıncalanma, baş dönmesi, alışılmadık nefes darlığı, nefesi tutma veya duygusal zorlanma olursa beklemeyi bırak, belirlenmiş kontrollü çıkışla tanıdık dinlenmeye geç. Kendini düşmeye yaklaşmış hissedersen yardım iste. Belirtinin nedenini yorumlama; belirti olmuş pozu bu oturumda yeniden deneme. Belirti sürer, ağırlaşır veya endişe yaratırsa uygun sağlık yardımı al. Zamanlayıcıyı bekleme. Hareketsizlik, desteği düzeltme veya çıkma yasağı değildir."
+          },
+          "mediaBrief": {
+            "en": "Original demonstration and actual learner feedback are missing. This written record is participation, not observed form, physical eligibility or mastery.",
+            "tr": "Özgün gösterim ve gerçek öğrenci geri bildirimi eksik. Bu yazılı kayıt katılımdır; gözlenmiş biçim, fiziksel uygunluk veya ustalık değildir."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3",
+            "s12"
+          ],
+          "prerequisites": [
+            "y09",
+            "y10",
+            "y11"
+          ],
+          "minutes": 8,
+          "evidenceMode": "self_report"
         }
       ]
     }

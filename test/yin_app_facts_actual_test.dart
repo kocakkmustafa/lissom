@@ -57,7 +57,7 @@ void main() {
     expect(facts.yin!.id, 'lissom.yin.supported.beginner');
     expect(facts.ashtanga!.id, 'lissom.ashtanga.foundations.beginner');
     expect(facts.yin!.lessons.map((lesson) => lesson.id).toList(),
-      List.generate(8, (index) => 'y${(index + 1).toString().padLeft(2, '0')}'));
+      List.generate(12, (index) => 'y${(index + 1).toString().padLeft(2, '0')}'));
     expect(bundle.requested, contains(kYinCourseAssetPath));
     expect(facts.hathaProgress!.records, isEmpty);
   });

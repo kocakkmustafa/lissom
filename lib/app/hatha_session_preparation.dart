@@ -33,12 +33,15 @@ final class HathaSessionPreparation {
   /// Physical lesson routes need a fresh self-report. h05 teaches the warm-up
   /// itself; h55 is knowledge-only. h54/h56/h59 mix study with movement.
   static bool requiredFor(String lessonId) {
-    if (const {'a04', 'a05', 'a06', 'a07', 'a09', 'a11'}.contains(lessonId)) {
+    if (const {
+      'a04', 'a05', 'a06', 'a07', 'a09', 'a11', //
+      'a15', 'a16', 'a17', 'a18', 'a19',
+    }.contains(lessonId)) {
       return true;
     }
-    if (RegExp(r'^y0[2-8]$').hasMatch(lessonId)) return true;
-    if (RegExp(r'^v(0[2-6]|0[89]|10)$').hasMatch(lessonId)) return true;
-    if (RegExp(r'^c(0[1-9]|10|12)$').hasMatch(lessonId)) return true;
+    if (RegExp(r'^y(0[2-9]|1[0-2])$').hasMatch(lessonId)) return true;
+    if (RegExp(r'^v(0[2-6]|0[89]|1[0-4])$').hasMatch(lessonId)) return true;
+    if (RegExp(r'^c(0[1-9]|10|1[2-5])$').hasMatch(lessonId)) return true;
     if (!RegExp(r'^h\d\d$').hasMatch(lessonId)) return false;
     final int number = int.parse(lessonId.substring(1));
     return number == 3 ||

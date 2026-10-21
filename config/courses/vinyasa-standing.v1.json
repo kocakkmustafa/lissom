@@ -17,7 +17,8 @@
     "s4": "https://www.yogaeasy.com/artikel/mountain-pose",
     "s5": "https://www.yogaeasy.com/artikel/half-standing-forward-bend",
     "s6": "https://www.yogaeasy.com/artikel/downward-dog-pose",
-    "s7": "https://www.nhs.uk/live-well/exercise/strength-exercises/"
+    "s7": "https://www.nhs.uk/live-well/exercise/strength-exercises/",
+    "s8": "https://yogawithadriene.com/foundations-knees-chest-chin-pose/"
   },
   "sourceScopes": {
     "s1": {
@@ -88,6 +89,16 @@
       "doesNotSupport": {
         "en": "Exact original sequence, palm-slide exit, learner suitability, retained skill or physical acceptance are not validated.",
         "tr": "Özgün dizinin tamamı, avuç kaydırmalı çıkış, öğrenci uygunluğu, korunan beceri veya fiziksel kabul doğrulanmaz."
+      }
+    },
+    "s8": {
+      "supports": {
+        "en": "Knees-down lowering order, elbows near the body and the small cobra return to all fours.",
+        "tr": "Dizler yerde indirme sırası, gövdeye yakın dirsekler ve dört ayağa küçük kobra dönüşü."
+      },
+      "doesNotSupport": {
+        "en": "The exact original floor link, its dose, learner suitability, wrist or shoulder readiness and physical acceptance are not validated.",
+        "tr": "Özgün yer bağlantısının tamamı, dozu, öğrenci uygunluğu, bilek veya omuz hazırlığı ve fiziksel kabul doğrulanmaz."
       }
     }
   },
@@ -740,6 +751,276 @@
             "v09"
           ],
           "minutes": 6,
+          "evidenceMode": "self_report"
+        }
+      ]
+    },
+    {
+      "id": "v-floor-extension",
+      "title": {
+        "en": "Optional floor extension: a knees-down link",
+        "tr": "İsteğe bağlı yer uzantısı: dizler yerde bağlantı"
+      },
+      "outcome": {
+        "en": "Explain and optionally practise a knees-down floor link with a planned return to tabletop and rest.",
+        "tr": "Dizler yerde bir yer bağlantısını planlı dört ayak dönüşü ve dinlenmeyle açıkla, istersen çalış."
+      },
+      "lessons": [
+        {
+          "id": "v11",
+          "title": {
+            "en": "Tabletop and a knees-down lowering",
+            "tr": "Dört ayak ve dizler yerde indirme"
+          },
+          "objective": {
+            "en": "Lower the chest from tabletop with knees down and return to tabletop without collapsing.",
+            "tr": "Dört ayaktan dizler yerdeyken göğsü indir ve çökmeden dört ayağa dön."
+          },
+          "steps": [
+            {
+              "en": "This extension starts after the standing endpoint of v10 and needs familiar, comfortable floor access. Come to the floor by your usual supported route. In tabletop, knees rest under the hips on padding and hands rest under the shoulders with fingers spread.",
+              "tr": "Bu uzantı v10'un ayakta bitişinden sonra başlar ve tanıdık, rahat yere iniş gerektirir. Yere her zamanki destekli yolunla in. Dört ayakta dizler yastık üzerinde kalçaların altında, eller parmaklar açık omuzların altında olsun."
+            },
+            {
+              "en": "Press the floor lightly away so the shoulders do not sink toward the ears. Keep the knees down throughout; there is no push-up or plank in this lesson.",
+              "tr": "Omuzlar kulaklara doğru çökmesin diye zemini hafifçe it. Dizler baştan sona yerde kalır; bu derste şınav veya plank yoktur."
+            },
+            {
+              "en": "Bend the elbows close to the sides and lower the chest only a little toward the mat while the hips stay above the knees. Choose a small range you can reverse; resting the chest or chin on the mat is optional.",
+              "tr": "Dirsekleri gövdeye yakın bük ve kalçalar dizlerin üzerinde kalırken göğsü mata doğru yalnız biraz indir. Geri çevirebileceğin küçük bir aralık seç; göğsü veya çeneyi mata koymak isteğe bağlıdır."
+            },
+            {
+              "en": "Return by pressing back up to tabletop, or lower the whole front body to the mat and rest. Breathe in an ordinary way and pause in tabletop before any repeat.",
+              "tr": "Dört ayağa geri iterek dön ya da tüm ön gövdeyi mata indirip dinlen. Olağan biçimde nefes al ver ve tekrar etmeden önce dört ayakta bekle."
+            }
+          ],
+          "practice": {
+            "en": "Read the order first, then optionally rehearse one small lowering and return. Wrist, shoulder or knee discomfort ends the attempt; choose belly rest or written study instead. If you only forgot to keep the elbows near the sides and there is no stop signal, return to tabletop, choose less range and try once more. Record the chosen range and return.",
+            "tr": "Önce sırayı oku, sonra istersen tek bir küçük indirme ve dönüş çalış. Bilek, omuz veya dizde rahatsızlık denemeyi bitirir; bunun yerine karın üstü dinlenme veya yazılı çalışma seç. Yalnız dirsekleri gövdeye yakın tutmayı unuttuysan ve durma işareti yoksa dört ayağa dön, daha az aralık seç ve bir kez daha dene. Seçtiğin aralığı ve dönüşü kaydet."
+          },
+          "selfCheck": {
+            "en": "Is a full push-up or plank needed before this lowering counts?",
+            "tr": "Bu indirmenin sayılması için tam şınav veya plank gerekir mi?"
+          },
+          "answerKey": {
+            "en": "No. Knees stay down, the range is small and the return to tabletop or belly rest is part of the lesson. It is a preparation, not proof of chaturanga strength or technique.",
+            "tr": "Hayır. Dizler yerde kalır, aralık küçüktür ve dört ayağa ya da karın üstü dinlenmeye dönüş dersin parçasıdır. Bu bir hazırlıktır; chaturanga gücü veya tekniği kanıtı değildir."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3",
+            "s8"
+          ],
+          "prerequisites": [
+            "v10"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v12",
+          "title": {
+            "en": "A small cobra and the way back",
+            "tr": "Küçük kobra ve geri dönüş"
+          },
+          "objective": {
+            "en": "Lift the chest a little from belly rest and return to tabletop or child shape.",
+            "tr": "Karın üstü dinlenmeden göğsü biraz kaldır ve dört ayağa ya da çocuk biçimine dön."
+          },
+          "steps": [
+            {
+              "en": "From belly rest place the hands under or slightly ahead of the shoulders, elbows bent and near the body. Legs rest long on the mat about hip-width apart; the forehead may rest on the mat.",
+              "tr": "Karın üstü dinlenmede elleri omuzların altına veya biraz önüne koy; dirsekler bükülü ve gövdeye yakın. Bacaklar kalça genişliğinde matta uzanır; alın mata dayanabilir."
+            },
+            {
+              "en": "Lift the head and upper chest only a little, using the back body more than the arms. Keep the elbows bent and the neck long; there is no straight-arm upward dog in this lesson.",
+              "tr": "Başı ve üst göğsü yalnız biraz kaldır; kollardan çok sırt tarafını kullan. Dirsekler bükülü, boyun uzun kalsın; bu derste düz kollu yukarı bakan köpek yoktur."
+            },
+            {
+              "en": "Lower the chest and forehead back to the mat and rest a moment. A lower back pinch or a neck strain ends the lift; rest on the belly or turn the head to one side.",
+              "tr": "Göğsü ve alnı mata geri indir ve bir an dinlen. Belde sıkışma veya boyunda zorlanma kaldırmayı bitirir; karın üstü dinlen veya başı bir yana çevir."
+            },
+            {
+              "en": "To leave, curl the toes under if comfortable and press back to tabletop, then sit back toward the heels in a supported child shape or come to your familiar rest. Pause before standing up by your usual supported route.",
+              "tr": "Çıkmak için rahatsa ayak parmaklarını kıvır ve dört ayağa geri it; sonra destekli çocuk biçiminde topuklara doğru otur veya tanıdık dinlenmene geç. Her zamanki destekli yolunla kalkmadan önce bekle."
+            }
+          ],
+          "practice": {
+            "en": "Rehearse the order once in writing, then optionally one small lift and lowering. Compare the height you chose with the height you could return from without effort. A larger arch is not progress. Stop signals end the attempt without a retest; a forgotten hand position without a stop signal can be corrected from belly rest.",
+            "tr": "Sırayı bir kez yazılı çalış, sonra istersen tek bir küçük kaldırma ve indirme yap. Seçtiğin yüksekliği zorlanmadan dönebildiğin yükseklikle karşılaştır. Daha büyük kavis ilerleme değildir. Durma işaretleri denemeyi yeniden sınamadan bitirir; durma işareti olmadan unutulan el konumu karın üstü dinlenmede düzeltilebilir."
+          },
+          "selfCheck": {
+            "en": "Should the arms straighten to make the cobra higher?",
+            "tr": "Kobrayı yükseltmek için kollar düzleşmeli mi?"
+          },
+          "answerKey": {
+            "en": "No. Elbows stay bent and the lift stays small, led by the back body. Straight-arm upward dog is not taught here, and height is not a measure of success.",
+            "tr": "Hayır. Dirsekler bükülü kalır ve kaldırma küçük olur, sırt tarafı öncülük eder. Düz kollu yukarı bakan köpek burada öğretilmez ve yükseklik başarı ölçüsü değildir."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3",
+            "s8"
+          ],
+          "prerequisites": [
+            "v11"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v13",
+          "title": {
+            "en": "Tabletop, bent-knee dog and a supported lunge",
+            "tr": "Dört ayak, dizleri bükük köpek ve destekli hamle"
+          },
+          "objective": {
+            "en": "Move between tabletop, a bent-knee dog and a knee-down lunge with hand support.",
+            "tr": "Dört ayak, dizleri bükük köpek ve el destekli dizi yerde hamle arasında geçiş yap."
+          },
+          "steps": [
+            {
+              "en": "Start in tabletop with padding under the knees and two firm blocks or a stable chair seat within reach beside the hands. Choose the blocks or chair before moving, not during a transition.",
+              "tr": "Dizlerin altında yastıkla dört ayakta başla; ellerin yanında erişilebilir iki sağlam blok veya sabit bir sandalye oturağı olsun. Blokları veya sandalyeyi geçiş sırasında değil, hareketten önce seç."
+            },
+            {
+              "en": "Optionally curl the toes under and lift the hips back into a dog shape with knees clearly bent, as in h46. Stay only for a few ordinary breaths, then lower the knees back to tabletop.",
+              "tr": "İstersen ayak parmaklarını kıvır ve h46'daki gibi dizler belirgin bükülü köpek biçimine kalçayı geriye kaldır. Yalnız birkaç olağan nefes kal, sonra dizleri dört ayağa geri indir."
+            },
+            {
+              "en": "From tabletop bring the right foot forward between the hands in small steps, with hands on the blocks if the floor is far. The back knee stays down on padding, as in h43. Rise only as far as hands can stay supported.",
+              "tr": "Dört ayaktan sağ ayağı küçük adımlarla eller arasına getir; zemin uzaksa eller blokların üzerinde olsun. Arka diz h43'teki gibi yastık üzerinde yerde kalır. Yalnız ellerin destekli kalabileceği kadar yüksel."
+            },
+            {
+              "en": "Return the right foot back to tabletop in small steps, pause, then use the left side under the same rules. Sides may differ; omitting one side is valid. End in tabletop or your familiar rest.",
+              "tr": "Sağ ayağı küçük adımlarla dört ayağa geri götür, bekle, sonra sol tarafı aynı kurallarla kullan. Taraflar farklı olabilir; bir tarafı atlamak geçerlidir. Dört ayakta veya tanıdık dinlenmende bitir."
+            }
+          ],
+          "practice": {
+            "en": "Write the order with the chosen support, then optionally rehearse one link at a time. Do not swing the foot forward from dog in one move; small steps from tabletop are the taught route. If the foot does not reach and there is no stop signal, use the blocks or stay in tabletop. Stop signals end the attempt without a retest.",
+            "tr": "Sırayı seçtiğin destekle yaz, sonra istersen her bağlantıyı tek tek çalış. Ayağı köpekten tek hareketle öne savurma; dört ayaktan küçük adımlar öğretilen yoldur. Ayak yetişmiyorsa ve durma işareti yoksa blokları kullan veya dört ayakta kal. Durma işaretleri denemeyi yeniden sınamadan bitirir."
+          },
+          "selfCheck": {
+            "en": "Your right foot does not reach your hands from tabletop. What is the taught choice?",
+            "tr": "Sağ ayağın dört ayaktan ellerine ulaşmıyor. Öğretilen seçim nedir?"
+          },
+          "answerKey": {
+            "en": "Raise the hands onto blocks or a chair, take smaller steps, or stay in tabletop. Do not swing or jump the foot forward, and do not lift the back knee to make it fit.",
+            "tr": "Elleri bloklara veya sandalyeye yükselt, daha küçük adımlar at ya da dört ayakta kal. Ayağı öne savurma veya zıplatma; sığdırmak için arka dizi kaldırma."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3",
+            "s6",
+            "s7"
+          ],
+          "prerequisites": [
+            "v12"
+          ],
+          "minutes": 6,
+          "evidenceMode": "self_report"
+        },
+        {
+          "id": "v14",
+          "title": {
+            "en": "A complete knees-down flow and closing rest",
+            "tr": "Dizler yerde tam akış ve kapanış dinlenmesi"
+          },
+          "objective": {
+            "en": "Plan and optionally practise one complete beginner flow from standing to floor links and a closing rest.",
+            "tr": "Ayakta başlayıp yer bağlantıları ve kapanış dinlenmesiyle biten tam bir başlangıç akışını planla, istersen çalış."
+          },
+          "steps": [
+            {
+              "en": "Before moving, write the route: your v06 standing link → supported descent to tabletop → v11 lowering → v12 small cobra → tabletop → optional v13 dog or lunge → child shape or belly rest → closing rest on the back or side.",
+              "tr": "Hareketten önce rotayı yaz: v06 ayakta bağlantın → destekli inişle dört ayak → v11 indirme → v12 küçük kobra → dört ayak → isteğe bağlı v13 köpek veya hamle → çocuk biçimi veya karın üstü dinlenme → sırtüstü veya yan yatarak kapanış dinlenmesi."
+            },
+            {
+              "en": "Link each station with an ordinary breath and pause between them. If one link is not familiar today, leave it out of the plan rather than testing it inside the flow.",
+              "tr": "Her durağı olağan bir nefesle bağla ve aralarında bekle. Bir bağlantı bugün tanıdık değilse onu akış içinde sınamak yerine plandan çıkar."
+            },
+            {
+              "en": "Move through the written route once at your own pace. Any station can become the end of the practice; go straight to your planned rest if attention, contact or breathing becomes uncertain.",
+              "tr": "Yazılı rotayı kendi hızında bir kez geç. Her durak pratiğin sonu olabilir; dikkat, temas veya nefes belirsizleşirse doğrudan planlı dinlenmene geç."
+            },
+            {
+              "en": "Close with a few minutes of rest on the back with knees bent or supported, or on one side. Come up slowly by rolling to the side and pausing in a supported seat before standing.",
+              "tr": "Dizler bükülü veya destekli sırtüstü ya da bir yana yatarak birkaç dakika dinlenerek kapat. Yana dönüp destekli oturuşta bekleyerek yavaşça kalk, sonra ayağa kalk."
+            }
+          ],
+          "practice": {
+            "en": "This is the full written route of the beginner pathway, including the optional floor extension. Record what you practised, omitted and left unresolved. A shorter route is a valid result. One question about wrists, shoulders or floor transfers can be kept for a qualified instructor. A finished timer or a ticked lesson is participation, not observed skill.",
+            "tr": "Bu, isteğe bağlı yer uzantısı dahil başlangıç yolunun tam yazılı rotasıdır. Neyi çalıştığını, atladığını ve çözülmeden bıraktığını kaydet. Daha kısa bir rota geçerli bir sonuçtur. Bilekler, omuzlar veya yer geçişleriyle ilgili bir soru nitelikli bir eğitmen için saklanabilir. Biten bir zamanlayıcı veya işaretlenen ders katılımdır, gözlenmiş beceri değildir."
+          },
+          "selfCheck": {
+            "en": "Halfway through the flow your wrists feel uncomfortable. Do you finish the remaining stations?",
+            "tr": "Akışın ortasında bileklerin rahatsız oluyor. Kalan durakları bitirir misin?"
+          },
+          "answerKey": {
+            "en": "No. Leave the flow and go to the planned rest. The completed stations stay recorded; the omitted ones are recorded as omitted, not as passes.",
+            "tr": "Hayır. Akıştan çık ve planlı dinlenmeye geç. Tamamlanan duraklar kayıtlı kalır; atlananlar başarı olarak değil, atlanmış olarak kaydedilir."
+          },
+          "adaptation": {
+            "en": "All movements optional. Keep needed support, small comfortable range and ordinary breathing; do not hold, force, count or hurry breath. Choose written observation or omit actions. This record is participation, not physical eligibility or mastery. Review h01/h02/h03/h05/h11/h35 actual teaching if foundations are unfamiliar.",
+            "tr": "Her hareket seçmeli. Gereken destek, küçük rahat aralık ve olağan nefesi koru; nefesi tutma, zorlama, sayma veya acele ettirme. Yazılı gözlem/atlama seç. Kayıt katılımdır; fiziksel uygunluk veya ustalık değildir. Temel tanıdık değilse gerçek h01/h02/h03/h05/h11/h35 öğretimini incele."
+          },
+          "stopSignal": {
+            "en": "Stop for pain, pinching, new tingling, dizziness, unusual breathlessness or feeling unwell. Use familiar supported rest, do not retest symptoms. Persistent/recurrent symptoms need individual advice; sudden serious illness needs prompt medical help.",
+            "tr": "Ağrı, sıkışma, yeni karıncalanma, baş dönmesi, alışılmadık nefes darlığı veya kötü hissetmede dur. Tanıdık destekli dinlenme kullan, belirtiyi yeniden sınama. Süren/tekrarlayan belirtide bireysel görüş; ani ciddi kötüleşmede hızla tıbbi yardım gerekir."
+          },
+          "mediaBrief": {
+            "en": "Original instructor demonstration and actual learner feedback are missing. Written source review does not certify physical movement.",
+            "tr": "Özgün eğitmen gösterimi ve gerçek öğrenci geri bildirimi eksik. Yazılı kaynak incelemesi fiziksel hareketi sertifikalandırmaz."
+          },
+          "sourceIds": [
+            "s1",
+            "s2",
+            "s3",
+            "s8"
+          ],
+          "prerequisites": [
+            "v13"
+          ],
+          "minutes": 8,
           "evidenceMode": "self_report"
         }
       ]
