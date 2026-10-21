@@ -22,10 +22,12 @@ import 'support/narrow_surface.dart';
 
 Future<void> pump(WidgetTester tester, SessionHistoryView h) async {
   final AppFacts f = factsFromDisk(history: h);
-  await tester.pumpWidget(MaterialApp(
-    theme: buildLissomTheme(),
-    home: Scaffold(body: ProgressScreen(facts: f)),
-  ));
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: buildLissomTheme(),
+      home: Scaffold(body: ProgressScreen(facts: f)),
+    ),
+  );
   await tester.pumpAndSettle();
 }
 
@@ -48,13 +50,19 @@ void main() {
     // kendi "sayıyı değil kuralı ölç" dersimin (L-239) ihlali. Ekrana bir
     // beyan kartı eklenince 429'a kaydı ve test ürün DOĞRU değişirken
     // kırmızı yandı. Ölçülen kural: beyan defterden ÖNCE gelir.
-    final double noticeY =
-        tester.getTopLeft(find.byKey(ProgressScreen.comparisonNoticeKey)).dy;
-    final double ledgerY =
-        tester.getTopLeft(find.byKey(ProgressScreen.ledgerKey)).dy;
-    expect(noticeY, lessThan(ledgerY),
-        reason: 'kıyas beyanı defterin ALTINDA kalırsa, kaydırmayan kullanıcı '
-            'listeyi bir ilerleme grafiği sanar');
+    final double noticeY = tester
+        .getTopLeft(find.byKey(ProgressScreen.comparisonNoticeKey))
+        .dy;
+    final double ledgerY = tester
+        .getTopLeft(find.byKey(ProgressScreen.ledgerKey))
+        .dy;
+    expect(
+      noticeY,
+      lessThan(ledgerY),
+      reason:
+          'kıyas beyanı defterin ALTINDA kalırsa, kaydırmayan kullanıcı '
+          'listeyi bir ilerleme grafiği sanar',
+    );
 
     // Sebep GERÇEKTEN yazılı: hangi üç koşulun doğrulanamadığı.
     expect(find.textContaining('same model'), findsOneWidget);
@@ -64,13 +72,15 @@ void main() {
     expect(
       find.textContaining('recorded next to it now'),
       findsOneWidget,
-      reason: 'model+config artık kaydediliyor — bu ARTIK doğru ve yazılı '
+      reason:
+          'model+config artık kaydediliyor — bu ARTIK doğru ve yazılı '
           'olmalı',
     );
     expect(
       find.textContaining('compares any of that for you'),
       findsOneWidget,
-      reason: 'kayıt VARLIĞI kıyas KURULDUĞU anlamına gelmiyor — ikisi ayrı '
+      reason:
+          'kayıt VARLIĞI kıyas KURULDUĞU anlamına gelmiyor — ikisi ayrı '
           'iddia, ekran ikincisini de açıkça reddetmeli',
     );
   });
@@ -84,9 +94,10 @@ void main() {
       SessionHistoryView.ok(<SessionRecord>[
         recordOf(lessonId: 'deep_squat', lessonClass: 'measurementOnly'),
         recordOf(
-            lessonId: 'deep_squat',
-            lessonClass: 'measurementOnly',
-            at: DateTime.utc(2026, 7, 20)),
+          lessonId: 'deep_squat',
+          lessonClass: 'measurementOnly',
+          at: DateTime.utc(2026, 7, 20),
+        ),
       ]),
     );
     expectNoBannedCopy(tester);
@@ -99,9 +110,13 @@ void main() {
     // vakum-doğru olabilir ve sonsuza kadar yeşil kalır.
     expect(find.byType(LinearProgressIndicator), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
-    expect(paintersIn(tester), isEmpty,
-        reason: 'çizilmiş bir grafik/gösterge belirdi — §5.1 hükmü ölçüm için '
-            'dolum/trend göstergesini yasaklıyor');
+    expect(
+      paintersIn(tester),
+      isEmpty,
+      reason:
+          'çizilmiş bir grafik/gösterge belirdi — §5.1 hükmü ölçüm için '
+          'dolum/trend göstergesini yasaklıyor',
+    );
   });
 
   testWidgets('POZİTİF İKİZ: gauge bulucuları GERÇEKTEN buluyor (L-255)', (
@@ -111,26 +126,36 @@ void main() {
     // ürünün en sert kuralı (§5.1: "50°'de neredeyse boş bir çubuk, grafikle
     // söylenmiş bir yetersizsin hükmüdür") — bulucusu kanıtsız kalamaz.
     pinNarrowSurface(tester);
-    await expectFinderWorks(tester,
-        probe: const LinearProgressIndicator(value: 0.4),
-        finder: find.byType(LinearProgressIndicator),
-        what: 'dolum çubuğu bulucusu');
-    await expectFinderWorks(tester,
-        probe: const CircularProgressIndicator(value: 0.4),
-        finder: find.byType(CircularProgressIndicator),
-        what: 'ilerleme halkası bulucusu');
+    await expectFinderWorks(
+      tester,
+      probe: const LinearProgressIndicator(value: 0.4),
+      finder: find.byType(LinearProgressIndicator),
+      what: 'dolum çubuğu bulucusu',
+    );
+    await expectFinderWorks(
+      tester,
+      probe: const CircularProgressIndicator(value: 0.4),
+      finder: find.byType(CircularProgressIndicator),
+      what: 'ilerleme halkası bulucusu',
+    );
 
     // `CustomPaint` YÜKLEMİ de ikizlenir — ve iddia ile ikiz AYNI fonksiyonu
     // kullanır (`paintersIn`), yoksa ikiz kendi kopyasını kanıtlar.
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: CustomPaint(painter: ProbePainter(), size: Size(10, 10)),
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CustomPaint(painter: ProbePainter(), size: Size(10, 10)),
+        ),
       ),
-    ));
+    );
     await tester.pump();
-    expect(paintersIn(tester), isNotEmpty,
-        reason: 'BULUCU BOZUK: çizen bir CustomPaint bile görülmüyor — '
-            'gauge yasağının yüklemi vakum-doğru');
+    expect(
+      paintersIn(tester),
+      isNotEmpty,
+      reason:
+          'BULUCU BOZUK: çizen bir CustomPaint bile görülmüyor — '
+          'gauge yasağının yüklemi vakum-doğru',
+    );
   });
 
   testWidgets('BOŞ hâl: kayıt yok — ve bu bir HATA değil', (
@@ -154,8 +179,11 @@ void main() {
     final Finder unavailable = find.byKey(ProgressScreen.unavailableKey);
     await scrollTo(tester, unavailable);
     expect(unavailable, findsOneWidget);
-    expect(find.byKey(ProgressScreen.emptyKey), findsNothing,
-        reason: '"hiç yapmadın" ile "bilmiyorum" AYNI ekranı paylaşamaz');
+    expect(
+      find.byKey(ProgressScreen.emptyKey),
+      findsNothing,
+      reason: '"hiç yapmadın" ile "bilmiyorum" AYNI ekranı paylaşamaz',
+    );
     expect(find.byKey(ProgressScreen.ledgerKey), findsNothing);
     expect(find.byKey(ProgressScreen.unreadableAllKey), findsNothing);
     expect(
@@ -216,9 +244,13 @@ void main() {
       tester,
       SessionHistoryView.ok(<SessionRecord>[
         recordOf(
-            lessonId: 'hamstring_reach:left', lessonClass: 'measurementOnly'),
+          lessonId: 'hamstring_reach:left',
+          lessonClass: 'measurementOnly',
+        ),
         recordOf(
-            lessonId: 'hamstring_reach:right', lessonClass: 'measurementOnly'),
+          lessonId: 'hamstring_reach:right',
+          lessonClass: 'measurementOnly',
+        ),
       ]),
     );
     await scrollTo(tester, find.byKey(ProgressScreen.ledgerKey));

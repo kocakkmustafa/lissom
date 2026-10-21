@@ -70,7 +70,11 @@ const List<(String, Color)> _foregrounds = <(String, Color)>[
 /// metin eşiği yok. Kova bir MUAFİYET değil bir SINIFLANDIRMA: aşağıdaki
 /// kaynak taraması bu sınıflandırmanın doğru kaldığını sınıyor.
 const List<String> _decorativeTokens = <String>[
-  'rose', 'mist', 'mistDeep', 'labelMuted', 'metaMono',
+  'rose',
+  'mist',
+  'mistDeep',
+  'labelMuted',
+  'metaMono',
 ];
 
 /// Dolgu/çizgi/ikon olarak meşru — metin eşiğine tabi değil.
@@ -132,19 +136,31 @@ Map<String, Color> _runtimeTokens(LissomPalette p) => <String, Color>{
   'onError': p.onError,
 };
 const _runtimeBackgrounds = <String>[
-  'canvas', 'card', 'cardWarmEnd', 'cardNeutralEnd',
-  'screenStart', 'screenMiddle', 'screenEnd',
+  'canvas',
+  'card',
+  'cardWarmEnd',
+  'cardNeutralEnd',
+  'screenStart',
+  'screenMiddle',
+  'screenEnd',
 ];
 final _runtimeTextPairs = <(String, String)>[
   for (final fg in <String>['textPrimary', 'textSecondary', 'accentText'])
     for (final bg in _runtimeBackgrounds) (fg, bg),
   for (final bg in <String>[
-    'primaryFill', 'primaryHover', 'primaryPressed', 'secondary',
-  ]) ('onPrimary', bg),
+    'primaryFill',
+    'primaryHover',
+    'primaryPressed',
+    'secondary',
+  ])
+    ('onPrimary', bg),
   ('onSecondaryContainer', 'secondaryContainer'),
-  ('onBanner', 'bannerStart'), ('onBanner', 'bannerEnd'),
-  ('disabledForeground', 'disabledSurface'), ('onError', 'error'),
-  ('onErrorContainer', 'errorContainer'), ('onMarker', 'markerFill'),
+  ('onBanner', 'bannerStart'),
+  ('onBanner', 'bannerEnd'),
+  ('disabledForeground', 'disabledSurface'),
+  ('onError', 'error'),
+  ('onErrorContainer', 'errorContainer'),
+  ('onMarker', 'markerFill'),
   ('onSelection', 'selection'),
   for (final bg in _runtimeBackgrounds) ('error', bg),
 ];
@@ -152,17 +168,32 @@ final _rawColor = RegExp(r'\bColor\s*\(\s*0x[0-9A-Fa-f]{8}\s*\)');
 
 // Return only source outside the fully inventoried light/dark definitions.
 String _outsideRuntimePaletteDefinitions(String source) {
-  final declared = RegExp(r'\bfinal\s+Color\s+(\w+)\s*;')
-      .allMatches(source).map((m) => m.group(1)!).toSet();
+  final declared = RegExp(
+    r'\bfinal\s+Color\s+(\w+)\s*;',
+  ).allMatches(source).map((m) => m.group(1)!).toSet();
   final classified = <String>{
     ..._runtimeTextPairs.expand((p) => <String>[p.$1, p.$2]),
-    'outline', 'focusRing', 'brandSeed', 'divider', 'shadow',
+    'outline',
+    'focusRing',
+    'brandSeed',
+    'divider',
+    'shadow',
   };
-  expect(declared.length, greaterThan(8), reason: 'runtime palette source read');
-  expect(declared.difference(classified), isEmpty,
-      reason: 'runtime token has no contrast or decorative role');
-  expect(classified.difference(declared), isEmpty,
-      reason: 'runtime role has no palette field');
+  expect(
+    declared.length,
+    greaterThan(8),
+    reason: 'runtime palette source read',
+  );
+  expect(
+    declared.difference(classified),
+    isEmpty,
+    reason: 'runtime token has no contrast or decorative role',
+  );
+  expect(
+    classified.difference(declared),
+    isEmpty,
+    reason: 'runtime role has no palette field',
+  );
   for (final p in <LissomPalette>[LissomPalette.light, LissomPalette.dark]) {
     expect(_runtimeTokens(p).keys.toSet(), declared);
   }
@@ -190,27 +221,34 @@ void main() {
     final residue = _outsideRuntimePaletteDefinitions(
       File('lib/app/lissom_palette.dart').readAsStringSync(),
     );
-    expect(_rawColor.hasMatch(residue), isFalse,
-        reason: 'raw color outside inventoried palette definitions');
+    expect(
+      _rawColor.hasMatch(residue),
+      isFalse,
+      reason: 'raw color outside inventoried palette definitions',
+    );
     for (final (mode, palette) in <(String, LissomPalette)>[
-      ('light', LissomPalette.light), ('dark', LissomPalette.dark),
+      ('light', LissomPalette.light),
+      ('dark', LissomPalette.dark),
     ]) {
       final colors = _runtimeTokens(palette);
       for (final (fg, bg) in _runtimeTextPairs) {
-        expect(contrastRatio(colors[fg]!, colors[bg]!),
-            greaterThanOrEqualTo(Wcag.normalText),
-            reason: '$mode $fg/$bg: normal-text threshold remains 4.5');
+        expect(
+          contrastRatio(colors[fg]!, colors[bg]!),
+          greaterThanOrEqualTo(Wcag.normalText),
+          reason: '$mode $fg/$bg: normal-text threshold remains 4.5',
+        );
       }
       for (final fg in <String>['outline', 'focusRing']) {
         for (final bg in _runtimeBackgrounds) {
-          expect(contrastRatio(colors[fg]!, colors[bg]!),
-              greaterThanOrEqualTo(Wcag.nonText),
-              reason: '$mode $fg/$bg non-text contrast');
+          expect(
+            contrastRatio(colors[fg]!, colors[bg]!),
+            greaterThanOrEqualTo(Wcag.nonText),
+            reason: '$mode $fg/$bg non-text contrast',
+          );
         }
       }
     }
   });
-
 
   test('BEYAZ METİN TAŞIYAN dolgular WCAG AA geçer — sınıf, örnek değil', () {
     // J-151/L-264: kusuru bulduğun yerde düzeltmek, sınıfı düzeltmek değil.
@@ -220,10 +258,14 @@ void main() {
     expect(_whiteTextFills, isNotEmpty, reason: 'pozitif çapa: kova boş');
     for (final (String name, Color fill) in _whiteTextFills) {
       final double r = contrastRatio(const Color(0xFFFFFFFF), fill);
-      expect(r, greaterThanOrEqualTo(4.5),
-          reason: '$name beyaz metinle ${r.toStringAsFixed(2)}:1 veriyor. '
-              'Eşik 4,5 — İCAT DEĞİL, WCAG 2.2 AA normal metin. Dolguyu '
-              'koyulaştırın ya da o yüzeyde beyaz metin kullanmayın.');
+      expect(
+        r,
+        greaterThanOrEqualTo(4.5),
+        reason:
+            '$name beyaz metinle ${r.toStringAsFixed(2)}:1 veriyor. '
+            'Eşik 4,5 — İCAT DEĞİL, WCAG 2.2 AA normal metin. Dolguyu '
+            'koyulaştırın ya da o yüzeyde beyaz metin kullanmayın.',
+      );
     }
   });
 
@@ -238,8 +280,9 @@ void main() {
   // kolayca bir yazı-tipi sorunu sanılıyor — oysa sorun SIRALAMA: binding
   // yalnız bir test gövdesinin içinde hazır. O yüzden tema `testWidgets`
   // içinde kuruluyor.
-  testWidgets('anlam taşıyan HER metin rengi WCAG eşiğini geçer',
-      (WidgetTester tester) async {
+  testWidgets('anlam taşıyan HER metin rengi WCAG eşiğini geçer', (
+    WidgetTester tester,
+  ) async {
     final ThemeData theme = buildLissomTheme();
     final Map<String, TextStyle?> used = <String, TextStyle?>{
       'bodyLarge': theme.textTheme.bodyLarge,
@@ -252,23 +295,36 @@ void main() {
       'headlineSmall': theme.textTheme.headlineSmall,
       'headlineLarge': theme.textTheme.headlineLarge,
     };
-    expect(used.values.every((TextStyle? s) => s != null), isTrue,
-        reason: 'pozitif kontrol: tema stilleri okundu');
+    expect(
+      used.values.every((TextStyle? s) => s != null),
+      isTrue,
+      reason: 'pozitif kontrol: tema stilleri okundu',
+    );
 
     final List<String> fails = <String>[];
     for (final MapEntry<String, TextStyle?> e in used.entries) {
       final TextStyle s = e.value!;
       final double th = Wcag.forText(
-          s.fontSize ?? 14, s.fontWeight ?? FontWeight.w400);
+        s.fontSize ?? 14,
+        s.fontWeight ?? FontWeight.w400,
+      );
       for (final (String bgName, Color bg) in _backgrounds) {
         final ContrastPair p = ContrastPair(
-            where: '${e.key} @ $bgName', fg: s.color!, bg: bg, threshold: th);
+          where: '${e.key} @ $bgName',
+          fg: s.color!,
+          bg: bg,
+          threshold: th,
+        );
         if (!p.passes) fails.add(p.report);
       }
     }
-    expect(fails, isEmpty,
-        reason: 'okunmayan metin rengi — "görünmeyen bir dürüst hâl, '
-            'susmakla aynı şeydir":\n${fails.join("\n")}');
+    expect(
+      fails,
+      isEmpty,
+      reason:
+          'okunmayan metin rengi — "görünmeyen bir dürüst hâl, '
+          'susmakla aynı şeydir":\n${fails.join("\n")}',
+    );
   });
 
   test('ANLAM TAŞIYAN ikonlar metin-dışı eşiği (3.0) geçer', () {
@@ -278,10 +334,11 @@ void main() {
     final List<String> fails = <String>[];
     for (final (String bgName, Color bg) in _backgrounds) {
       final ContrastPair p = ContrastPair(
-          where: 'durum ikonu @ $bgName',
-          fg: LissomColors.bodySecondary,
-          bg: bg,
-          threshold: Wcag.nonText);
+        where: 'durum ikonu @ $bgName',
+        fg: LissomColors.bodySecondary,
+        bg: bg,
+        threshold: Wcag.nonText,
+      );
       if (!p.passes) fails.add(p.report);
     }
     expect(fails, isEmpty, reason: fails.join('\n'));
@@ -291,14 +348,19 @@ void main() {
     // Ölçüldü: `roseDeep` #B0748F kart üstünde 3.58 → normal metin eşiğini
     // GEÇMİYOR. `roseDeepHover` #8E5A73 ise 5.33. İkisi de palette zaten var;
     // eksik olan hangisinin METİN olduğuydu.
-    expect(contrastRatio(LissomColors.roseDeep, LissomColors.card),
-        lessThan(Wcag.normalText),
-        reason: 'bu iddia bir OLGU: roseDeep metin için yetersiz. Bir gün '
-            'geçerse palet değişmiş demektir ve bu test onu haber verir');
+    expect(
+      contrastRatio(LissomColors.roseDeep, LissomColors.card),
+      lessThan(Wcag.normalText),
+      reason:
+          'bu iddia bir OLGU: roseDeep metin için yetersiz. Bir gün '
+          'geçerse palet değişmiş demektir ve bu test onu haber verir',
+    );
     for (final (String bgName, Color bg) in _backgrounds) {
-      expect(contrastRatio(LissomColors.roseDeepHover, bg),
-          greaterThanOrEqualTo(Wcag.normalText),
-          reason: 'vurgu METNİ okunmuyor @ $bgName');
+      expect(
+        contrastRatio(LissomColors.roseDeepHover, bg),
+        greaterThanOrEqualTo(Wcag.normalText),
+        reason: 'vurgu METNİ okunmuyor @ $bgName',
+      );
     }
   });
 
@@ -308,43 +370,60 @@ void main() {
     // kalmalı; kalmıyorsa ölçüm bozulmuş demektir.
     const Color oldMetaMono = Color(0xFFA79DA5);
     const Color oldLabelMuted = Color(0xFF9C929B);
-    expect(contrastRatio(oldMetaMono, const Color(0xFFEEDDE7)),
-        lessThan(2.1),
-        reason: 'ölçüm hattı bozulmuş — eski dipnot rengi 2.01 vermeliydi');
-    expect(contrastRatio(oldLabelMuted, LissomColors.card),
-        lessThan(Wcag.normalText));
+    expect(
+      contrastRatio(oldMetaMono, const Color(0xFFEEDDE7)),
+      lessThan(2.1),
+      reason: 'ölçüm hattı bozulmuş — eski dipnot rengi 2.01 vermeliydi',
+    );
+    expect(
+      contrastRatio(oldLabelMuted, LissomColors.card),
+      lessThan(Wcag.normalText),
+    );
   });
 
-  testWidgets('BEYAN KARTI metnini `ink` ile çizer — peach ucu için TEK geçen',
-      (WidgetTester tester) async {
-    // Yapısal iddia, konumsal değil: "eyebrow cream ucunda durur" demek
-    // kartın düzeni değişince sessizce yanlışlaşırdı.
-    expect(contrastRatio(LissomColors.ink, _bannerDarkEnd),
+  testWidgets(
+    'BEYAN KARTI metnini `ink` ile çizer — peach ucu için TEK geçen',
+    (WidgetTester tester) async {
+      // Yapısal iddia, konumsal değil: "eyebrow cream ucunda durur" demek
+      // kartın düzeni değişince sessizce yanlışlaşırdı.
+      expect(
+        contrastRatio(LissomColors.ink, _bannerDarkEnd),
         greaterThanOrEqualTo(Wcag.normalText),
-        reason: 'ink peach ucunda da geçmeli — geçmezse kartın zemini '
-            'değişmiş demektir');
-    expect(contrastRatio(LissomColors.bodySecondary, _bannerDarkEnd),
+        reason:
+            'ink peach ucunda da geçmeli — geçmezse kartın zemini '
+            'değişmiş demektir',
+      );
+      expect(
+        contrastRatio(LissomColors.bodySecondary, _bannerDarkEnd),
         lessThan(Wcag.normalText),
-        reason: 'bu bir OLGU: peach ucu gövde tonu için fazla koyu. Bir gün '
-            'geçerse zemin açılmış demektir ve bu satır haber verir');
+        reason:
+            'bu bir OLGU: peach ucu gövde tonu için fazla koyu. Bir gün '
+            'geçerse zemin açılmış demektir ve bu satır haber verir',
+      );
 
-    await tester.pumpWidget(MaterialApp(
-      theme: buildLissomTheme(),
-      home: const Scaffold(
-        body: DeclarationBanner(eyebrow: 'E', body: 'B'),
-      ),
-    ));
-    await tester.pump();
-    for (final Text w in tester.widgetList<Text>(find.byType(Text))) {
-      final Color? c = w.style?.color;
-      expect(c, LissomColors.ink,
-          reason: 'beyan kartında `ink` dışında bir renk: $c — peach ucunda '
-              'okunmaz');
-    }
-  });
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildLissomTheme(),
+          home: const Scaffold(
+            body: DeclarationBanner(eyebrow: 'E', body: 'B'),
+          ),
+        ),
+      );
+      await tester.pump();
+      for (final Text w in tester.widgetList<Text>(find.byType(Text))) {
+        final Color? c = w.style?.color;
+        expect(
+          c,
+          LissomColors.ink,
+          reason:
+              'beyan kartında `ink` dışında bir renk: $c — peach ucunda '
+              'okunmaz',
+        );
+      }
+    },
+  );
 
-  test('BÜTÜNLÜK: paletteki HER token bir kovada — kapı kendi eksiğini görür',
-      () {
+  test('BÜTÜNLÜK: paletteki HER token bir kovada — kapı kendi eksiğini görür', () {
     // ⚠️ **L-236, JabLab J-116 aktarımı: "örüntüyü değil örneği düzeltmek."**
     //
     // Bu kapının zemin listesi ELLE yazılmıştı ve iki kart-gradyanı ucunu
@@ -355,31 +434,47 @@ void main() {
     // palet KAYNAKTAN okunuyor ve her token üç kovadan birine girmek ZORUNDA.
     // Yeni bir renk eklenip kovalanmazsa bu test kırmızı yanar — yani kapı
     // artık kendi eksikliğini görebiliyor.
-    final String src =
-        File('lib/app/lissom_theme.dart').readAsStringSync();
-    final Set<String> declared = RegExp(r'static const Color (\w+)')
-        .allMatches(src)
-        .map((RegExpMatch m) => m.group(1)!)
-        .toSet();
-    expect(declared.length, greaterThan(8), reason: 'pozitif kontrol: palet '
-        'kaynaktan okundu (${declared.length} token)');
+    final String src = File('lib/app/lissom_theme.dart').readAsStringSync();
+    final Set<String> declared = RegExp(
+      r'static const Color (\w+)',
+    ).allMatches(src).map((RegExpMatch m) => m.group(1)!).toSet();
+    expect(
+      declared.length,
+      greaterThan(8),
+      reason:
+          'pozitif kontrol: palet '
+          'kaynaktan okundu (${declared.length} token)',
+    );
 
     // Kovalar listelerden TÜRETİLİR — elle yazılmış ikinci bir küme, kapının
     // düzeltmeye çalıştığı hatanın aynısını üretirdi.
     final Set<String> bucketed = <String>{
-      'card', 'canvas', 'cream', 'peach', 'cardWarmEnd', 'cardNeutralEnd',
+      'card',
+      'canvas',
+      'cream',
+      'peach',
+      'cardWarmEnd',
+      'cardNeutralEnd',
       ..._foregrounds.map(((String, Color) e) => e.$1),
       ..._decorativeTokens,
       ..._whiteTextFills.map(((String, Color) t) => t.$1),
       ..._fillTokens,
     };
-    expect(declared.difference(bucketed), isEmpty,
-        reason: 'KOVASIZ token — kontrast kapısı onu hiç ölçmez:\n'
-            '${declared.difference(bucketed).join(", ")}');
-    expect(bucketed.difference(declared), isEmpty,
-        reason: 'kovada olup palette OLMAYAN token (yeniden adlandırılmış ya '
-            'da silinmiş — yetim kova girdisi):\n'
-            '${bucketed.difference(declared).join(", ")}');
+    expect(
+      declared.difference(bucketed),
+      isEmpty,
+      reason:
+          'KOVASIZ token — kontrast kapısı onu hiç ölçmez:\n'
+          '${declared.difference(bucketed).join(", ")}',
+    );
+    expect(
+      bucketed.difference(declared),
+      isEmpty,
+      reason:
+          'kovada olup palette OLMAYAN token (yeniden adlandırılmış ya '
+          'da silinmiş — yetim kova girdisi):\n'
+          '${bucketed.difference(declared).join(", ")}',
+    );
 
     // Süs kovası bir SINIFLANDIRMA: oradaki token metin olarak kullanılırsa
     // kapı susar. O yüzden kaynağı da tarıyoruz.
@@ -397,9 +492,13 @@ void main() {
     // iddiası — bozuk bir desenle de sonsuza kadar geçer.
     // The product now uses ThemeExtension colors. Preserve a real-source
     // anchor and explicit positive/negative controls for the legacy guard.
-    expect(RegExp(
-      r'\bcolor\s*:\s*(?:p|LissomPalette\.(?:of|fromTheme)\([^)]*\))\s*\.\s*textSecondary(?![A-Za-z0-9_])',
-    ).hasMatch(uses), isTrue, reason: 'actual runtime secondary text use exists');
+    expect(
+      RegExp(
+        r'\bcolor\s*:\s*(?:p|LissomPalette\.(?:of|fromTheme)\([^)]*\))\s*\.\s*textSecondary(?![A-Za-z0-9_])',
+      ).hasMatch(uses),
+      isTrue,
+      reason: 'actual runtime secondary text use exists',
+    );
     final legacyProbe = RegExp(r'color:\s*LissomColors\.rose(?![A-Za-z0-9_])');
     expect(legacyProbe.hasMatch('color: LissomColors.rose'), isTrue);
     expect(legacyProbe.hasMatch('color: LissomColors.roseDeepHover'), isFalse);
@@ -409,20 +508,30 @@ void main() {
     final runtimeSeedAsColor = RegExp(
       r'\bcolor\s*:\s*(?:p|LissomPalette\.(?:of|fromTheme)\([^)]*\))\s*\.\s*brandSeed(?![A-Za-z0-9_])',
     );
-    expect(runtimeSeedAsColor.hasMatch(
-        'color: LissomPalette.of(context).brandSeed'), isTrue);
+    expect(
+      runtimeSeedAsColor.hasMatch('color: LissomPalette.of(context).brandSeed'),
+      isTrue,
+    );
     expect(runtimeSeedAsColor.hasMatch('color: p.brandSeed'), isTrue);
     expect(runtimeSeedAsColor.hasMatch('seedColor: p.brandSeed'), isFalse);
     expect(runtimeSeedAsColor.hasMatch('color: p.brandSeedExtra'), isFalse);
-    expect(runtimeSeedAsColor.hasMatch(uses), isFalse,
-        reason: 'runtime brand seed must not replace a readable foreground');
+    expect(
+      runtimeSeedAsColor.hasMatch(uses),
+      isFalse,
+      reason: 'runtime brand seed must not replace a readable foreground',
+    );
 
     for (final String token in _decorativeTokens) {
-      final RegExp asColor =
-          RegExp('color:\\s*LissomColors\\.$token(?![A-Za-z0-9_])');
-      expect(asColor.hasMatch(uses), isFalse,
-          reason: '$token METİN rengi olarak kullanılmış — süs kovasında '
-              'olmasının anlamı "metin eşiği yok" idi');
+      final RegExp asColor = RegExp(
+        'color:\\s*LissomColors\\.$token(?![A-Za-z0-9_])',
+      );
+      expect(
+        asColor.hasMatch(uses),
+        isFalse,
+        reason:
+            '$token METİN rengi olarak kullanılmış — süs kovasında '
+            'olmasının anlamı "metin eşiği yok" idi',
+      );
     }
   });
 
@@ -439,9 +548,9 @@ void main() {
     for (final FileSystemEntity f in Directory('lib/app').listSync()) {
       if (f is! File || !f.path.endsWith('.dart')) continue;
       if (f.path.endsWith('lissom_theme.dart')) continue; // paletin evi
-      String src = File(f.path)
-          .readAsStringSync()
-          .replaceAll(RegExp(r'//[^\n]*'), ' ');
+      String src = File(
+        f.path,
+      ).readAsStringSync().replaceAll(RegExp(r'//[^\n]*'), ' ');
       if (f.path.endsWith('lissom_palette.dart')) {
         src = _outsideRuntimePaletteDefinitions(src);
       }
@@ -449,9 +558,13 @@ void main() {
         raw.add('${f.uri.pathSegments.last}: ${m.group(0)}');
       }
     }
-    expect(raw, isEmpty,
-        reason: 'ham renk kovasız kalır ve kontrast kapısı onu HİÇ ölçmez — '
-            'palete token olarak ekleyin:\n${raw.join("\n")}');
+    expect(
+      raw,
+      isEmpty,
+      reason:
+          'ham renk kovasız kalır ve kontrast kapısı onu HİÇ ölçmez — '
+          'palete token olarak ekleyin:\n${raw.join("\n")}',
+    );
   });
 
   test('HİYERARŞİ ÜST SINIRI: okunurluk uğruna ayrım feda edilmemiş', () {
@@ -460,16 +573,24 @@ void main() {
     // taşıyor: "bu bir hüküm değil, bir ölçüm."
     //
     // Alt sınır okunurluk (diğer testler), ÜST sınır hiyerarşi (bu test).
-    final double primary =
-        contrastRatio(LissomColors.ink, LissomColors.card);
-    final double secondary =
-        contrastRatio(LissomColors.bodySecondary, LissomColors.card);
-    expect(secondary, greaterThanOrEqualTo(Wcag.normalText),
-        reason: 'alt sınır: ikincil metin okunmalı');
-    expect(primary / secondary, greaterThan(2.0),
-        reason: 'üst sınır: birincil ile ikincil arasında en az 2× ayrım '
-            'olmalı — yoksa okunurluk uğruna hiyerarşi feda edilmiş demektir '
-            '(ölçülen: ${(primary / secondary).toStringAsFixed(2)}×)');
+    final double primary = contrastRatio(LissomColors.ink, LissomColors.card);
+    final double secondary = contrastRatio(
+      LissomColors.bodySecondary,
+      LissomColors.card,
+    );
+    expect(
+      secondary,
+      greaterThanOrEqualTo(Wcag.normalText),
+      reason: 'alt sınır: ikincil metin okunmalı',
+    );
+    expect(
+      primary / secondary,
+      greaterThan(2.0),
+      reason:
+          'üst sınır: birincil ile ikincil arasında en az 2× ayrım '
+          'olmalı — yoksa okunurluk uğruna hiyerarşi feda edilmiş demektir '
+          '(ölçülen: ${(primary / secondary).toStringAsFixed(2)}×)',
+    );
   });
 
   test('alfa ZEMİNE bindirilir — saydam rengin kendi parlaklığı ölçülmez', () {
