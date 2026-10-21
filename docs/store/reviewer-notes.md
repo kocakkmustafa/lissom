@@ -2,7 +2,7 @@
 
 Bundle com.yulalab.lissom; ASC6794715023; intended version1.0.0. Current source version/build and final signed package must be bound before submission. No credentials belong in this file.
 
-The Library contains five written English/Turkish catalogues: Hatha60, Ashtanga beginner foundations13, supported Yin8, supported standing Vinyasa10, chair/office12 (103lessons total). Ashtanga is not the full Primary Series. Lesson work is self-recorded locally; it does not certify mastery. Demonstration video is absent. Camera evaluation and subscription sales remain closed. Research models are not activated.
+The Library contains five written English/Turkish catalogues: Hatha60, Ashtanga beginner foundations19, supported Yin12, supported Vinyasa14 (with an optional knees-down floor extension), chair/office15 (120 lessons total); all 14 app languages carry the catalogue text. Ashtanga is not the full Primary Series. Lesson work is self-recorded locally; it does not certify mastery. Demonstration video is absent. Camera evaluation and subscription sales remain closed. Research models are not activated.
 
 Browse and practice records can be reviewed as a guest after onboarding. The optional shared Motion account is under Profile. Sign-in, verification/recovery callbacks and account deletion need the existing service and a separately supplied review account if that surface is reviewed. Do not invent a review username/password or create a new account automatically.
 
