@@ -602,9 +602,19 @@ void _report(String window, Map<String, List<TitledVoid>> byKey) {
       depth += '{'.allMatches(ln).length - '}'.allMatches(ln).length;
       if (eyebrow.hasMatch(ln)) {
         scanned++;
+        // Formatter argümanı alt satırlara kaydırabilir: çağrının parantezi
+        // kapanana kadar olan aralık okunur, yalnız ilk satır değil.
+        final StringBuffer call = StringBuffer(ln);
+        int open = '('.allMatches(ln).length - ')'.allMatches(ln).length;
+        for (int j = i + 1; open > 0 && j < lines.length && j <= i + 6; j++) {
+          call.write(lines[j]);
+          open += '('.allMatches(lines[j]).length -
+              ')'.allMatches(lines[j]).length;
+        }
+        final String span = call.toString();
         // Sayı taşıyan başlık D1'in kapsamında. Taşımayan, VE liste
         // döndüren bir kurucuda olan, ikisinden de geçer.
-        if (!_kCount.hasMatch(ln) && !ln.contains(r'${')) {
+        if (!_kCount.hasMatch(span) && !span.contains(r'${')) {
           out.add('$path:${i + 1}  ${ln.trim()}');
         }
       }

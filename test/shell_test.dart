@@ -124,9 +124,17 @@ void main() {
     );
     expect(find.text("Lissom couldn't start"), findsOneWidget);
     expect(
-      find.textContaining('bozuk ia config'),
+      find.text(
+        'The files that describe the tests and the app layout could not be read.',
+      ),
       findsOneWidget,
-      reason: 'sebep YUTULMAZ — kullanıcı neyin patladığını görür',
+      reason: 'sebep YUTULMAZ — kullanıcı neyin okunamadığını görür',
+    );
+    expect(find.byKey(const Key('shell.retryLoad')), findsOneWidget);
+    expect(
+      find.textContaining('bozuk ia config'),
+      findsNothing,
+      reason: 'ham istisna metni kullanıcıya sızmaz',
     );
   });
 

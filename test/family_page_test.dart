@@ -331,7 +331,9 @@ void main() {
     // ...ama test listesi/kurs kartı YOK (sahte doluluk yasağı).
     expect(find.byKey(FamilyPage.liveListKey), findsNothing);
     expect(find.byKey(FamilyPage.blockedListKey), findsNothing);
-    // Kutu burada da ZORUNLU.
+    // Kutu burada da ZORUNLU — tembel ListView'da ekran dışında kurulmaz,
+    // bu yüzden kullanıcının yaptığı gibi kaydırarak ULAŞILIR olduğu kanıtlanır.
+    await tester.scrollUntilVisible(find.byKey(FamilyPage.honestyKey), 250);
     expect(find.byKey(FamilyPage.honestyKey), findsOneWidget);
     expectNoBannedCopy(tester);
   });

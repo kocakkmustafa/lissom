@@ -72,6 +72,27 @@ final RegExp _audioClaim = RegExp(
     r'read(s)? (them |it )?aloud|audio (cue|guidance)|talks you through)',
     caseSensitive: false);
 
+// Olumsuz beyan ("No … audio guidance … is included") bir vaat değil, tersi.
+// Aynı cümlede eşleşmeden ÖNCE, araya karşıtlık ("but"/";") girmeden duran bir
+// olumsuzluk vaadi siler. Katalog (config/l10n) bu beyanı anahtar olarak taşır.
+final RegExp _negation =
+    RegExp(r'\b(no|not|never|without|none)\b', caseSensitive: false);
+
+bool _isAudioClaim(String text) {
+  for (final String sentence in text.split(RegExp(r'(?<=[.!?])\s+'))) {
+    for (final RegExpMatch m in _audioClaim.allMatches(sentence)) {
+      String before = sentence.substring(0, m.start);
+      final int cut = <int>[
+        before.toLowerCase().lastIndexOf(' but '),
+        before.lastIndexOf(';'),
+      ].reduce((int a, int b) => a > b ? a : b);
+      if (cut >= 0) before = before.substring(cut);
+      if (!_negation.hasMatch(before)) return true;
+    }
+  }
+  return false;
+}
+
 Iterable<String> _configStrings() sync* {
   for (final FileSystemEntity f
       in Directory('config').listSync(recursive: true)) {
@@ -112,6 +133,17 @@ void main() {
               'kelime değil, REHBERLİK İDDİASI.');
     }
 
+    // Olumsuz beyan vaat değildir; karşıtlıkla gelen vaat yine yakalanır.
+    expect(
+        _isAudioClaim('No breath or wind-down sessions, audio guidance or '
+            'session timer are included in this release.'),
+        isFalse,
+        reason: 'KAPI FAZLA GENİŞ: açık bir YOKLUK beyanı ses vaadi sayıldı');
+    expect(_isAudioClaim('Audio guidance talks you through each pose.'), isTrue,
+        reason: 'BULUCU BOZUK: olumlu ses vaadi kaçtı');
+    expect(_isAudioClaim('No timer, but audio guidance is included.'), isTrue,
+        reason: 'BULUCU BOZUK: "but" sonrası vaat olumsuzlukla örtüldü');
+
     // Ve yol-bulucu gerçekten arıyor mu?
     expect(File('pubspec.yaml').existsSync(), isTrue,
         reason: 'pozitif çapa: yol-bulucu okunacak dosyayı bulamıyor');
@@ -120,7 +152,7 @@ void main() {
   test('SES vaadi, ses KOD YOLU olmadan edilemez', () {
     final bool audio = hasAudioCodePath();
     final List<String> claims =
-        _configStrings().where(_audioClaim.hasMatch).toList();
+        _configStrings().where(_isAudioClaim).toList();
 
     // Pozitif çapa: config gerçekten okundu mu (L-183)?
     final int total = _configStrings().length;

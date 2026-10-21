@@ -85,7 +85,8 @@ void main() {
     pinNarrowSurface(tester);
     final _FakeStore store = _FakeStore(<AttemptValue>[
       _v('overhead_reach:right', 140, DateTime.utc(2026, 8, 1)),
-      _v('overhead_reach:right', 147.5, DateTime.utc(2026, 8, 14)),
+      // Öğlen UTC: -11…+11 saat diliminde yerel takvim günü aynı kalır.
+      _v('overhead_reach:right', 147.5, DateTime.utc(2026, 8, 14, 12)),
     ]);
     await _pump(tester, _overheadReach(), () async => store);
 
@@ -93,7 +94,8 @@ void main() {
     // görünür; bu KASITLI (liste "her okuma", başlık yalnız SONuncusu).
     expect(find.textContaining('147.5deg'), findsWidgets,
         reason: 'SON (en yeni tarihli) değer görünmeli — 140 değil');
-    expect(find.textContaining('14 Aug 2026'), findsWidgets,
+    // Ürün tarihi yıl dahil tam yerel takvim tarihiyle yazar (localizedDate).
+    expect(find.textContaining('August 14, 2026'), findsWidgets,
         reason: 'mutlak tarih — göreli süre DEĞİL (§5.2)');
   });
 

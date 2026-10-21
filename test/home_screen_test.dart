@@ -116,7 +116,9 @@ void main() {
     await pump(
       tester,
       factsFromDisk(
-        history: const SessionHistoryView.unavailable('PathNotFoundException'),
+        history: const SessionHistoryView.unavailable(
+          'PathNotFoundException: /private/history/session-token',
+        ),
       ),
     );
     await scrollTo(tester, find.byKey(HomeScreen.retestKey));
@@ -130,8 +132,15 @@ void main() {
           'depo açılmadığında yokluk iddiası edilemez — kullanıcının '
           'ölçümleri orada olabilir',
     );
-    // Sebep yutulmaz.
-    expect(find.textContaining('PathNotFoundException'), findsOneWidget);
+    // Sebep yutulmaz ama HAM istisna/OS yolu gösterilmez: kullanıcıya güvenli
+    // bir sonraki adım söylenir (progress ekranıyla aynı gizlilik sözleşmesi).
+    expect(
+      find.text('Reopen Lissom and check your records again.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('PathNotFoundException'), findsNothing);
+    expect(find.textContaining('/private/history'), findsNothing);
+    expect(find.textContaining('session-token'), findsNothing);
   });
 
   testWidgets('BOZUK kayıt varsa sayı ALT SINIR olduğu SÖYLENİR (M-F-228)', (
