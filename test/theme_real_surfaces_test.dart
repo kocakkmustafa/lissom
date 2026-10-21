@@ -205,21 +205,51 @@ void main() {
   testWidgets(
     'real knowledge painter repaints for brightness; chart meaning stays neutral',
     (tester) async {
+      final diagrams = find.byKey(const Key('hatha-diagrams-h54'));
+      final diagramPaints = find.descendant(
+        of: diagrams,
+        matching: find.byType(CustomPaint),
+      );
       await pumpThemeWidget(
         tester,
-        themed(const HathaKnowledgeDiagrams(lessonId: 'h54'), Brightness.light),
+        themed(
+          ListView(
+            children: const <Widget>[HathaKnowledgeDiagrams(lessonId: 'h54')],
+          ),
+          Brightness.light,
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      expect(diagramPaints, findsNWidgets(2));
+      expect(
+        LissomPalette.of(tester.element(diagrams)).textPrimary,
+        LissomPalette.light.textPrimary,
       );
       final light = tester
-          .widgetList<CustomPaint>(find.byType(CustomPaint))
+          .widgetList<CustomPaint>(diagramPaints)
           .where((w) => w.painter != null)
           .first
           .painter!;
       await pumpThemeWidget(
         tester,
-        themed(const HathaKnowledgeDiagrams(lessonId: 'h54'), Brightness.dark),
+        themed(
+          ListView(
+            children: const <Widget>[HathaKnowledgeDiagrams(lessonId: 'h54')],
+          ),
+          Brightness.dark,
+        ),
+      );
+      // Finish MaterialApp's actual AnimatedTheme before sampling its painter.
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(diagramPaints, findsNWidgets(2));
+      expect(
+        LissomPalette.of(tester.element(diagrams)).textPrimary,
+        LissomPalette.dark.textPrimary,
       );
       final dark = tester
-          .widgetList<CustomPaint>(find.byType(CustomPaint))
+          .widgetList<CustomPaint>(diagramPaints)
           .where((w) => w.painter != null)
           .first
           .painter!;
@@ -242,9 +272,15 @@ void main() {
           reduce: true,
         ),
       );
+      // Catalog/element readiness is followed by a normal semantics frame.
+      await tester.pump();
       expect(find.byType(CircularProgressIndicator), findsNothing);
       expect(find.byIcon(Icons.hourglass_empty), findsOneWidget);
       expect(find.bySemanticsLabel('Loading…'), findsOneWidget);
+      expect(
+        tester.getSemantics(find.bySemanticsLabel('Loading…')),
+        isSemantics(label: 'Loading…', isLiveRegion: true),
+      );
     },
   );
 

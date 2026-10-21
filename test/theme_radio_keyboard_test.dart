@@ -52,7 +52,10 @@ void main() {
         isTrue,
         reason: 'The actual selected radio must receive keyboard focus.',
       );
-      final selectedBefore = tester.getSemantics(find.byKey(systemKey));
+      // RadioListTile merges its Radio semantics; inspect the exported data.
+      final selectedBefore = tester
+          .getSemantics(find.byKey(systemKey))
+          .getSemanticsData();
       expect(
         selectedBefore.flagsCollection.isChecked == CheckedState.isTrue,
         isTrue,
@@ -71,7 +74,7 @@ void main() {
         final tile = find.byKey(Key('profile.appearance.option.${mode.name}'));
         expect(tester.widget<RadioListTile<ThemeMode>>(tile).enabled, isFalse);
         expect(
-          tester.getSemantics(tile).flagsCollection.isEnabled ==
+          tester.getSemantics(tile).getSemanticsData().flagsCollection.isEnabled ==
               Tristate.isTrue,
           isFalse,
         );
