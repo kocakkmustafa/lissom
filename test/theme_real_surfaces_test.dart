@@ -17,30 +17,51 @@ import 'support/facts_from_disk.dart';
 import 'support/theme_catalog_readiness.dart';
 import 'lissom_appearance_test.dart' show MemoryAppearanceStore;
 
-// Keep catalog identity stable across theme-only rebuilds, as rootBundle is.
-final _themeCatalogDelegate = LissomLocalizationsDelegate(
-  bundle: ActualThemeCatalogBundle(),
-);
-
+// Keep one real bundle per mounted fixture, stable across theme-only rebuilds.
+// A cached Future must not cross separate widget tests' FakeAsync zones.
 Widget themed(Widget body, Brightness brightness, {bool reduce = false}) =>
-    MaterialApp(
-      theme: buildLissomTheme(brightness: brightness),
-      locale: const Locale('en'),
-      localizationsDelegates: [
-        _themeCatalogDelegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(disableAnimations: reduce),
-        child: child!,
-      ),
-      home: KeyedSubtree(
-        key: themeCatalogAnchor,
-        child: Scaffold(body: body),
-      ),
-    );
+    _ThemedFixture(body: body, brightness: brightness, reduce: reduce);
+
+class _ThemedFixture extends StatefulWidget {
+  const _ThemedFixture({
+    required this.body,
+    required this.brightness,
+    required this.reduce,
+  });
+
+  final Widget body;
+  final Brightness brightness;
+  final bool reduce;
+
+  @override
+  State<_ThemedFixture> createState() => _ThemedFixtureState();
+}
+
+class _ThemedFixtureState extends State<_ThemedFixture> {
+  final _catalogDelegate = LissomLocalizationsDelegate(
+    bundle: ActualThemeCatalogBundle(),
+  );
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    theme: buildLissomTheme(brightness: widget.brightness),
+    locale: const Locale('en'),
+    localizationsDelegates: [
+      _catalogDelegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context).copyWith(disableAnimations: widget.reduce),
+      child: child!,
+    ),
+    home: KeyedSubtree(
+      key: themeCatalogAnchor,
+      child: Scaffold(body: widget.body),
+    ),
+  );
+}
 
 void main() {
   for (final brightness in Brightness.values) {
@@ -275,6 +296,12 @@ void main() {
           Brightness.dark,
           reduce: reduce,
         ),
+      );
+      // Async localization must release the frame before semantics are read.
+      expect(
+        tester.binding.sendFramesToEngine,
+        isTrue,
+        reason: 'The mounted catalog must release the first-frame deferral.',
       );
       // Use the same normal semantics frame for each motion preference.
       await tester.pump();
