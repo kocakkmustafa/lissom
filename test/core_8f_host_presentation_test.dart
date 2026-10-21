@@ -367,18 +367,14 @@ void main() {
         // Release and observe each admitted write, even if the other one fails.
         // A late result here is cleanup only, never a persistence-success oracle.
         try {
-          await _completeFixtureIo<void>(
-            tester,
-            () async {
-              if (!localeStore.release.isCompleted) {
-                localeStore.release.complete();
-              }
-              if (!appearanceStore.release.isCompleted) {
-                appearanceStore.release.complete();
-              }
-            },
-            boundary: 'cleanup release preference gates',
-          );
+          await _completeFixtureIo<void>(tester, () async {
+            if (!localeStore.release.isCompleted) {
+              localeStore.release.complete();
+            }
+            if (!appearanceStore.release.isCompleted) {
+              appearanceStore.release.complete();
+            }
+          }, boundary: 'cleanup release preference gates');
         } catch (error, stack) {
           cleanupErrors.add(('pending-write async zone', error, stack));
         }
@@ -481,14 +477,10 @@ void main() {
           }
         }
       });
-      await _completeFixtureIo<void>(
-        tester,
-        () async {
-          await localeFile.write('en');
-          await appearanceFile.write(ThemeMode.light);
-        },
-        boundary: 'startup preference files',
-      );
+      await _completeFixtureIo<void>(tester, () async {
+        await localeFile.write('en');
+        await appearanceFile.write(ThemeMode.light);
+      }, boundary: 'startup preference files');
       await _completeFixtureIo<List<void>>(
         tester,
         () => Future.wait<void>(<Future<void>>[
@@ -665,14 +657,10 @@ void main() {
 
       // Start in the real async zone: file IO and its completion are not replaced
       // with fake data or considered finished by pumpAndSettle.
-      await _completeFixtureIo<void>(
-        tester,
-        () async {
-          localeSave = locale.select('ar');
-          appearanceSave = appearance.select(ThemeMode.dark);
-        },
-        boundary: 'start admitted preference writes',
-      );
+      await _completeFixtureIo<void>(tester, () async {
+        localeSave = locale.select('ar');
+        appearanceSave = appearance.select(ThemeMode.dark);
+      }, boundary: 'start admitted preference writes');
       await tester.pump();
       expect(locale.isSaving, isTrue);
       expect(appearance.isSaving, isTrue);
@@ -696,14 +684,10 @@ void main() {
         boundary: 'read preferences before gate release',
       );
       expect(beforeValues, ('en', ThemeMode.light));
-      await _completeFixtureIo<void>(
-        tester,
-        () async {
-          localeStore.release.complete();
-          appearanceStore.release.complete();
-        },
-        boundary: 'release admitted preference writes',
-      );
+      await _completeFixtureIo<void>(tester, () async {
+        localeStore.release.complete();
+        appearanceStore.release.complete();
+      }, boundary: 'release admitted preference writes');
       expect(
         await _completeFixtureIo<bool>(
           tester,
