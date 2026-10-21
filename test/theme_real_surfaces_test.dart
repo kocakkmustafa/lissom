@@ -264,46 +264,44 @@ void main() {
     },
   );
 
-  testWidgets(
-    'reduced and animated loading keep equivalent live semantics',
-    (tester) async {
-      for (final reduce in <bool>[true, false]) {
-        await pumpThemeWidget(
-          tester,
-          themed(
-            const LissomLoadingIndicator(label: 'Loading…'),
-            Brightness.dark,
-            reduce: reduce,
-          ),
-        );
-        // Use the same normal semantics frame for each motion preference.
-        await tester.pump();
-        expect(
-          find.byType(CircularProgressIndicator),
-          reduce ? findsNothing : findsOneWidget,
-        );
-        expect(
-          find.byIcon(Icons.hourglass_empty),
-          reduce ? findsOneWidget : findsNothing,
-        );
-        final loading = find.byType(LissomLoadingIndicator);
-        expect(loading, findsOneWidget);
-        final loadingNode = tester.getSemantics(loading);
-        expect(
-          loadingNode.getSemanticsData(),
-          isSemantics(label: 'Loading…', isLiveRegion: true),
-        );
-        // Count exported accessible nodes, not raw element debug properties.
-        final accessibleLoading = tester.semantics
-            .simulatedAccessibilityTraversal(view: tester.view)
-            .where((node) => node.getSemanticsData().label == 'Loading…')
-            .toList();
-        expect(accessibleLoading, hasLength(1));
-        expect(accessibleLoading.single.id, loadingNode.id);
-      }
-    },
-    semanticsEnabled: true,
-  );
+  testWidgets('reduced and animated loading keep equivalent live semantics', (
+    tester,
+  ) async {
+    for (final reduce in <bool>[true, false]) {
+      await pumpThemeWidget(
+        tester,
+        themed(
+          const LissomLoadingIndicator(label: 'Loading…'),
+          Brightness.dark,
+          reduce: reduce,
+        ),
+      );
+      // Use the same normal semantics frame for each motion preference.
+      await tester.pump();
+      expect(
+        find.byType(CircularProgressIndicator),
+        reduce ? findsNothing : findsOneWidget,
+      );
+      expect(
+        find.byIcon(Icons.hourglass_empty),
+        reduce ? findsOneWidget : findsNothing,
+      );
+      final loading = find.byType(LissomLoadingIndicator);
+      expect(loading, findsOneWidget);
+      final loadingNode = tester.getSemantics(loading);
+      expect(
+        loadingNode.getSemanticsData(),
+        isSemantics(label: 'Loading…', isLiveRegion: true),
+      );
+      // Count exported accessible nodes, not raw element debug properties.
+      final accessibleLoading = tester.semantics
+          .simulatedAccessibilityTraversal(view: tester.view)
+          .where((node) => node.getSemanticsData().label == 'Loading…')
+          .toList();
+      expect(accessibleLoading, hasLength(1));
+      expect(accessibleLoading.single.id, loadingNode.id);
+    }
+  }, semanticsEnabled: true);
 
   testWidgets(
     'custom card keeps keyboard activation and a visible focus outline',
