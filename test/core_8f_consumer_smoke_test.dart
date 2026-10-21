@@ -705,7 +705,11 @@ void main() {
                 identical(registered, MotionAccountLocalizations.of(context)) &&
                 registered.locale.toLanguageTag() == entry.key &&
                 Localizations.localeOf(context).toLanguageTag() == entry.key &&
-                Theme.of(context).brightness == Brightness.dark;
+                Theme.of(context).brightness == Brightness.dark &&
+                Theme.of(context).scaffoldBackgroundColor ==
+                    Theme.of(gateElement).scaffoldBackgroundColor &&
+                Theme.of(context).colorScheme.primary ==
+                    Theme.of(gateElement).colorScheme.primary;
           },
           'The actual nested blocker must mount ${entry.key} under manual dark despite a light device.',
         );

@@ -268,8 +268,14 @@ void main() {
       final appearanceFile = FileAppearancePreferenceStore(
         File('${directory.path}/preferences/appearance.json'),
       );
-      final localeStore = _GatedLocaleStore(localeFile);
-      final appearanceStore = _GatedAppearanceStore(appearanceFile);
+      // Barrier Futures must share the real async zone used by file writes.
+      // A fake-zone Completer cannot progress while runAsync alone awaits it.
+      late final _GatedLocaleStore localeStore;
+      late final _GatedAppearanceStore appearanceStore;
+      await tester.runAsync(() async {
+        localeStore = _GatedLocaleStore(localeFile);
+        appearanceStore = _GatedAppearanceStore(appearanceFile);
+      });
       final locale = LissomLocaleController(store: localeStore);
       final appearance = LissomAppearanceController(store: appearanceStore);
       final requests = <String>[];
