@@ -74,7 +74,11 @@ void main() {
         final tile = find.byKey(Key('profile.appearance.option.${mode.name}'));
         expect(tester.widget<RadioListTile<ThemeMode>>(tile).enabled, isFalse);
         expect(
-          tester.getSemantics(tile).getSemanticsData().flagsCollection.isEnabled ==
+          tester
+                  .getSemantics(tile)
+                  .getSemanticsData()
+                  .flagsCollection
+                  .isEnabled ==
               Tristate.isTrue,
           isFalse,
         );
