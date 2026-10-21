@@ -29,8 +29,6 @@ void main() {
   testWidgets(
     'arrow key selects through group, pending write disables real radios',
     (tester) async {
-      final semantics = tester.ensureSemantics();
-      addTearDown(semantics.dispose);
       final store = MemoryAppearanceStore()..pendingWrite = Completer<void>();
       final c = LissomAppearanceController(store: store);
       addTearDown(c.dispose);
@@ -97,5 +95,6 @@ void main() {
       await tester.pump();
       expect(c.mode, ThemeMode.light);
     },
+    semanticsEnabled: true,
   );
 }

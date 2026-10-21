@@ -17,12 +17,17 @@ import 'support/facts_from_disk.dart';
 import 'support/theme_catalog_readiness.dart';
 import 'lissom_appearance_test.dart' show MemoryAppearanceStore;
 
+// Keep catalog identity stable across theme-only rebuilds, as rootBundle is.
+final _themeCatalogDelegate = LissomLocalizationsDelegate(
+  bundle: ActualThemeCatalogBundle(),
+);
+
 Widget themed(Widget body, Brightness brightness, {bool reduce = false}) =>
     MaterialApp(
       theme: buildLissomTheme(brightness: brightness),
       locale: const Locale('en'),
       localizationsDelegates: [
-        LissomLocalizationsDelegate(bundle: ActualThemeCatalogBundle()),
+        _themeCatalogDelegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -260,28 +265,44 @@ void main() {
   );
 
   testWidgets(
-    'reduced loading has equivalent semantics without a rotating spinner',
+    'reduced and animated loading keep equivalent live semantics',
     (tester) async {
-      final semantics = tester.ensureSemantics();
-      addTearDown(semantics.dispose);
-      await pumpThemeWidget(
-        tester,
-        themed(
-          const LissomLoadingIndicator(label: 'Loading…'),
-          Brightness.dark,
-          reduce: true,
-        ),
-      );
-      // Catalog/element readiness is followed by a normal semantics frame.
-      await tester.pump();
-      expect(find.byType(CircularProgressIndicator), findsNothing);
-      expect(find.byIcon(Icons.hourglass_empty), findsOneWidget);
-      expect(find.bySemanticsLabel('Loading…'), findsOneWidget);
-      expect(
-        tester.getSemantics(find.bySemanticsLabel('Loading…')),
-        isSemantics(label: 'Loading…', isLiveRegion: true),
-      );
+      for (final reduce in <bool>[true, false]) {
+        await pumpThemeWidget(
+          tester,
+          themed(
+            const LissomLoadingIndicator(label: 'Loading…'),
+            Brightness.dark,
+            reduce: reduce,
+          ),
+        );
+        // Use the same normal semantics frame for each motion preference.
+        await tester.pump();
+        expect(
+          find.byType(CircularProgressIndicator),
+          reduce ? findsNothing : findsOneWidget,
+        );
+        expect(
+          find.byIcon(Icons.hourglass_empty),
+          reduce ? findsOneWidget : findsNothing,
+        );
+        final loading = find.byType(LissomLoadingIndicator);
+        expect(loading, findsOneWidget);
+        final loadingNode = tester.getSemantics(loading);
+        expect(
+          loadingNode.getSemanticsData(),
+          isSemantics(label: 'Loading…', isLiveRegion: true),
+        );
+        // Count exported accessible nodes, not raw element debug properties.
+        final accessibleLoading = tester.semantics
+            .simulatedAccessibilityTraversal(view: tester.view)
+            .where((node) => node.getSemanticsData().label == 'Loading…')
+            .toList();
+        expect(accessibleLoading, hasLength(1));
+        expect(accessibleLoading.single.id, loadingNode.id);
+      }
     },
+    semanticsEnabled: true,
   );
 
   testWidgets(
