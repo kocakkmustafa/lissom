@@ -45,8 +45,9 @@ void main() {
         }
       }
       final finalProgress = await JsonlHathaProgressStore(file).read();
-      expect(finalProgress.records, hasLength(90));
-      expect(file.readAsLinesSync(), hasLength(90));
+      // Hatha 60 + chair/office 15 + Vinyasa 14 + Yin 12 (Ashtanga ayrı).
+      expect(finalProgress.records, hasLength(101));
+      expect(file.readAsLinesSync(), hasLength(101));
     },
   );
 }
