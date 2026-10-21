@@ -148,12 +148,42 @@ void main() {
     WidgetTester tester,
   ) async {
     pinNarrowSurface(tester);
-    await pump(tester, const SessionHistoryView.unavailable('FileSystemException'));
-    await scrollTo(tester, find.byKey(ProgressScreen.unavailableKey));
-    expect(find.byKey(ProgressScreen.unavailableKey), findsOneWidget);
+    const String rawFailure =
+        'FileSystemException: /private/history/session-token';
+    await pump(tester, const SessionHistoryView.unavailable(rawFailure));
+    final Finder unavailable = find.byKey(ProgressScreen.unavailableKey);
+    await scrollTo(tester, unavailable);
+    expect(unavailable, findsOneWidget);
     expect(find.byKey(ProgressScreen.emptyKey), findsNothing,
         reason: '"hiç yapmadın" ile "bilmiyorum" AYNI ekranı paylaşamaz');
-    expect(find.textContaining('FileSystemException'), findsOneWidget);
+    expect(find.byKey(ProgressScreen.ledgerKey), findsNothing);
+    expect(find.byKey(ProgressScreen.unreadableAllKey), findsNothing);
+    expect(
+      find.descendant(
+        of: unavailable,
+        matching: find.text("Your history didn't open"),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: unavailable,
+        matching: find.textContaining('We are not going to show you a count'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: unavailable,
+        matching: find.text('Reopen Lissom and check your records again.'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Recorded readings ('), findsNothing);
+    expect(find.textContaining('FileSystemException'), findsNothing);
+    expect(find.textContaining('/private/history'), findsNothing);
+    expect(find.textContaining('session-token'), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('ölçülemeyen deneme DÜŞÜRÜLMEZ — sebebi isimli görünür', (

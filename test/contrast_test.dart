@@ -37,6 +37,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lissom/app/lissom_palette.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom/app/surfaces.dart';
 
@@ -92,7 +93,125 @@ const List<(String, Color)> _whiteTextFills = <(String, Color)>[
 /// ikincisi hiç render edilmeyen bir kombinasyonu ölçerdi.
 const Color _bannerDarkEnd = LissomColors.peach;
 
+// Runtime palette inventory and semantic pairs supplement the legacy light gate.
+Map<String, Color> _runtimeTokens(LissomPalette p) => <String, Color>{
+  'canvas': p.canvas,
+  'card': p.card,
+  'cardWarmEnd': p.cardWarmEnd,
+  'cardNeutralEnd': p.cardNeutralEnd,
+  'screenStart': p.screenStart,
+  'screenMiddle': p.screenMiddle,
+  'screenEnd': p.screenEnd,
+  'textPrimary': p.textPrimary,
+  'textSecondary': p.textSecondary,
+  'accentText': p.accentText,
+  'brandSeed': p.brandSeed,
+  'primaryFill': p.primaryFill,
+  'primaryHover': p.primaryHover,
+  'primaryPressed': p.primaryPressed,
+  'onPrimary': p.onPrimary,
+  'secondary': p.secondary,
+  'secondaryContainer': p.secondaryContainer,
+  'onSecondaryContainer': p.onSecondaryContainer,
+  'bannerStart': p.bannerStart,
+  'bannerEnd': p.bannerEnd,
+  'onBanner': p.onBanner,
+  'outline': p.outline,
+  'divider': p.divider,
+  'focusRing': p.focusRing,
+  'disabledSurface': p.disabledSurface,
+  'disabledForeground': p.disabledForeground,
+  'error': p.error,
+  'errorContainer': p.errorContainer,
+  'onErrorContainer': p.onErrorContainer,
+  'markerFill': p.markerFill,
+  'onMarker': p.onMarker,
+  'selection': p.selection,
+  'onSelection': p.onSelection,
+  'shadow': p.shadow,
+  'onError': p.onError,
+};
+const _runtimeBackgrounds = <String>[
+  'canvas', 'card', 'cardWarmEnd', 'cardNeutralEnd',
+  'screenStart', 'screenMiddle', 'screenEnd',
+];
+final _runtimeTextPairs = <(String, String)>[
+  for (final fg in <String>['textPrimary', 'textSecondary', 'accentText'])
+    for (final bg in _runtimeBackgrounds) (fg, bg),
+  for (final bg in <String>[
+    'primaryFill', 'primaryHover', 'primaryPressed', 'secondary',
+  ]) ('onPrimary', bg),
+  ('onSecondaryContainer', 'secondaryContainer'),
+  ('onBanner', 'bannerStart'), ('onBanner', 'bannerEnd'),
+  ('disabledForeground', 'disabledSurface'), ('onError', 'error'),
+  ('onErrorContainer', 'errorContainer'), ('onMarker', 'markerFill'),
+  ('onSelection', 'selection'),
+  for (final bg in _runtimeBackgrounds) ('error', bg),
+];
+final _rawColor = RegExp(r'\bColor\s*\(\s*0x[0-9A-Fa-f]{8}\s*\)');
+
+// Return only source outside the fully inventoried light/dark definitions.
+String _outsideRuntimePaletteDefinitions(String source) {
+  final declared = RegExp(r'\bfinal\s+Color\s+(\w+)\s*;')
+      .allMatches(source).map((m) => m.group(1)!).toSet();
+  final classified = <String>{
+    ..._runtimeTextPairs.expand((p) => <String>[p.$1, p.$2]),
+    'outline', 'focusRing', 'brandSeed', 'divider', 'shadow',
+  };
+  expect(declared.length, greaterThan(8), reason: 'runtime palette source read');
+  expect(declared.difference(classified), isEmpty,
+      reason: 'runtime token has no contrast or decorative role');
+  expect(classified.difference(declared), isEmpty,
+      reason: 'runtime role has no palette field');
+  for (final p in <LissomPalette>[LissomPalette.light, LissomPalette.dark]) {
+    expect(_runtimeTokens(p).keys.toSet(), declared);
+  }
+  final blocks = RegExp(
+    r'\bstatic\s+const\s+LissomPalette\s+(light|dark)\s*=\s*LissomPalette\(([\s\S]*?)\n\s*\);',
+  ).allMatches(source).toList();
+  expect(blocks, hasLength(2));
+  expect(blocks.map((m) => m.group(1)).toSet(), <String>{'light', 'dark'});
+  for (final block in blocks) {
+    final entries = RegExp(
+      r'\b(\w+)\s*:\s*Color\s*\(\s*0x[0-9A-Fa-f]{8}\s*\)',
+    ).allMatches(block.group(2)!).toList();
+    expect(entries, hasLength(declared.length));
+    expect(entries.map((m) => m.group(1)!).toSet(), declared);
+  }
+  var residue = source;
+  for (final block in blocks.reversed) {
+    residue = residue.replaceRange(block.start, block.end, '');
+  }
+  return residue;
+}
+
 void main() {
+  test('runtime light/dark palette roles preserve AA contrast', () {
+    final residue = _outsideRuntimePaletteDefinitions(
+      File('lib/app/lissom_palette.dart').readAsStringSync(),
+    );
+    expect(_rawColor.hasMatch(residue), isFalse,
+        reason: 'raw color outside inventoried palette definitions');
+    for (final (mode, palette) in <(String, LissomPalette)>[
+      ('light', LissomPalette.light), ('dark', LissomPalette.dark),
+    ]) {
+      final colors = _runtimeTokens(palette);
+      for (final (fg, bg) in _runtimeTextPairs) {
+        expect(contrastRatio(colors[fg]!, colors[bg]!),
+            greaterThanOrEqualTo(Wcag.normalText),
+            reason: '$mode $fg/$bg: normal-text threshold remains 4.5');
+      }
+      for (final fg in <String>['outline', 'focusRing']) {
+        for (final bg in _runtimeBackgrounds) {
+          expect(contrastRatio(colors[fg]!, colors[bg]!),
+              greaterThanOrEqualTo(Wcag.nonText),
+              reason: '$mode $fg/$bg non-text contrast');
+        }
+      }
+    }
+  });
+
+
   test('BEYAZ METİN TAŞIYAN dolgular WCAG AA geçer — sınıf, örnek değil', () {
     // J-151/L-264: kusuru bulduğun yerde düzeltmek, sınıfı düzeltmek değil.
     // Birincil butonun dolgusu beyazla 3,66:1'di (13,5px normal metin için
@@ -276,13 +395,27 @@ void main() {
         .join('\n');
     // POZİTİF İKİZ (L-255): desen GERÇEKTEN eşleşiyor mu? Bu bir YOKLUK
     // iddiası — bozuk bir desenle de sonsuza kadar geçer.
-    expect(
-        RegExp('color:\\s*LissomColors\\.bodySecondary(?![A-Za-z0-9_])')
-            .hasMatch(uses),
-        isTrue,
-        reason: 'BULUCU BOZUK: desen, kaynakta APAÇIK var olan '
-            '`color: LissomColors.bodySecondary` kullanımını bile bulamıyor — '
-            'süs-token yasağının her yeşili vakum-doğru');
+    // The product now uses ThemeExtension colors. Preserve a real-source
+    // anchor and explicit positive/negative controls for the legacy guard.
+    expect(RegExp(
+      r'\bcolor\s*:\s*(?:p|LissomPalette\.(?:of|fromTheme)\([^)]*\))\s*\.\s*textSecondary(?![A-Za-z0-9_])',
+    ).hasMatch(uses), isTrue, reason: 'actual runtime secondary text use exists');
+    final legacyProbe = RegExp(r'color:\s*LissomColors\.rose(?![A-Za-z0-9_])');
+    expect(legacyProbe.hasMatch('color: LissomColors.rose'), isTrue);
+    expect(legacyProbe.hasMatch('color: LissomColors.roseDeepHover'), isFalse);
+
+    // The runtime brand seed is not a foreground color. Divider and shadow
+    // keep their legitimate non-text color uses.
+    final runtimeSeedAsColor = RegExp(
+      r'\bcolor\s*:\s*(?:p|LissomPalette\.(?:of|fromTheme)\([^)]*\))\s*\.\s*brandSeed(?![A-Za-z0-9_])',
+    );
+    expect(runtimeSeedAsColor.hasMatch(
+        'color: LissomPalette.of(context).brandSeed'), isTrue);
+    expect(runtimeSeedAsColor.hasMatch('color: p.brandSeed'), isTrue);
+    expect(runtimeSeedAsColor.hasMatch('seedColor: p.brandSeed'), isFalse);
+    expect(runtimeSeedAsColor.hasMatch('color: p.brandSeedExtra'), isFalse);
+    expect(runtimeSeedAsColor.hasMatch(uses), isFalse,
+        reason: 'runtime brand seed must not replace a readable foreground');
 
     for (final String token in _decorativeTokens) {
       final RegExp asColor =
@@ -299,15 +432,20 @@ void main() {
     // ama bir yüzey `Color(0xFF…)` yazarsa o renk hiçbir kovada DEĞİLDİR ve
     // kapı onu hiç görmez. Nitekim iki kart-gradyanı ucu tam böyle gizlenmişti
     // (L-236). Elle kontrol bir kapı değildir.
+    expect(_rawColor.hasMatch('Color(0xFFFFFFFF)'), isTrue);
+    expect(_rawColor.hasMatch('Color ( 0xFFFFFFFF )'), isTrue);
+    expect(_rawColor.hasMatch('Colorful(0xFFFFFFFF)'), isFalse);
     final List<String> raw = <String>[];
     for (final FileSystemEntity f in Directory('lib/app').listSync()) {
       if (f is! File || !f.path.endsWith('.dart')) continue;
       if (f.path.endsWith('lissom_theme.dart')) continue; // paletin evi
-      final String src = File(f.path)
+      String src = File(f.path)
           .readAsStringSync()
           .replaceAll(RegExp(r'//[^\n]*'), ' ');
-      for (final RegExpMatch m
-          in RegExp(r'Color\(0x[0-9A-Fa-f]{8}\)').allMatches(src)) {
+      if (f.path.endsWith('lissom_palette.dart')) {
+        src = _outsideRuntimePaletteDefinitions(src);
+      }
+      for (final RegExpMatch m in _rawColor.allMatches(src)) {
         raw.add('${f.uri.pathSegments.last}: ${m.group(0)}');
       }
     }
