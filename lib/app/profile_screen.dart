@@ -39,6 +39,7 @@ class ProfileScreen extends StatelessWidget {
   static const Key measurementWorksKey = Key('profile.howMeasurementWorks');
   static const Key noSettingsKey = Key('profile.noSettings');
   static const Key accountEntryKey = Key('profile.accountEntry');
+  static const Key licencesEntryKey = Key('profile.licencesEntry');
 
   final AppFacts facts;
   final LissomAccountRouteBuilder? accountRouteBuilder;
@@ -246,6 +247,22 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 22),
+          _EntryCard(
+            key: licencesEntryKey,
+            title: localeText(
+              context,
+              'Open-source licences',
+              'Açık kaynak lisansları',
+            ),
+            subtitle: localeText(
+              context,
+              'Notices for the open-source software included in this app.',
+              'Bu uygulamadaki açık kaynak yazılımların bildirimleri.',
+            ),
+            onTap: () =>
+                showLicensePage(context: context, applicationName: 'Lissom'),
           ),
         ],
       ),

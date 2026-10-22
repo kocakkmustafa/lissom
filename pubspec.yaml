@@ -107,6 +107,8 @@ flutter:
     - config/l10n/
     - config/courses/
     - config/yoga/tasks.v1.json
+    # Apache-2.0 notice for native MediaPipe/CameraX (see native_licences.dart).
+    - assets/licenses/apache-2.0.txt
     # Course-byte integrity only; no video, lesson, or model claim.
     - assets/motion_content/manifest.json
     # Code-pinned QA source membership only; production media stays empty.

@@ -41,6 +41,7 @@ import 'app/local_owner.dart';
 import 'app/local_owner_context.dart';
 import 'app/locale_text.dart';
 import 'app/lissom_locales.dart';
+import 'app/native_licences.dart';
 import 'app/lissom_localizations.dart';
 import 'app/onboarding_gate.dart';
 import 'app/onboarding_store.dart';
@@ -58,6 +59,7 @@ const String kLissomAuthRedirect = 'com.yulalab.lissom://auth/callback';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
+  registerNativeLicences();
   final appearance = LissomAppearanceController();
   final locale = LissomLocaleController();
   // Independent installation reads run together before the first Flutter app.
