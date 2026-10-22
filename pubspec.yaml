@@ -20,7 +20,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_account
-      ref: d69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d
+      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
 
   # Motor AYRI bir paket ve Flutter'a HİÇ bağımlı değil (M-F-160, JabLab
   # ayrımının aynısı): ölçüm/skorlama mantığı bir widget ağacı olmadan
@@ -36,7 +36,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: d69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d
+      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
 
   # Bundled content reader/validator contract at the same immutable Core pin.
   # No production manifest or startup wiring is asserted by this dependency.
@@ -44,7 +44,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_content
-      ref: d69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d
+      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
 
   # Offline, packaged lesson demonstrations only. The shipping media catalog
   # remains empty until separately accepted files are available.
@@ -66,7 +66,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_camera
-      ref: d69e10786e2f1cd509b9eeadeb3ef6ea42d93b5d
+      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
 
   # Yalnız uygulama-özel dizini bulmak için. Depo BİÇİMİ çekirdekte
   # (append-only JSONL); kurucusu `File` alıyor, çünkü path_provider

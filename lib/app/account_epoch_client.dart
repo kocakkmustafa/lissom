@@ -19,6 +19,11 @@ final class LissomEpochAccountClient extends MotionAccountClient {
          supabase: account.supabase,
          app: account.app,
          emailRedirectTo: account.emailRedirectTo,
+         // Core 5832031: keep the runtime's lost-reply receipt probe and the
+         // same mutation/read budgets for any inherited Core operation.
+         deletionReceipt: account.deletionReceipt,
+         operationTimeout: account.operationTimeout,
+         readTimeout: account.readTimeout,
        );
 
   final LissomOwnerRegistry registry;
