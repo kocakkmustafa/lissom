@@ -61,7 +61,10 @@ void main() {
         findsOneWidget,
       );
       await tester.tap(entry);
-      await tester.pumpAndSettle();
+      // LicensePage keeps a progress indicator while it loads licence text
+      // asynchronously, so the route never "settles"; pump the transition.
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       expect(find.byType(LicensePage), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
