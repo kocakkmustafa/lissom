@@ -86,8 +86,10 @@ void main() {
           reason: '$accountData hesap veri beyanından düşmüş',
         );
       }
-      expect(src, isNot(contains('NSPrivacyCollectedDataTypePurchaseHistory')),
-          reason: 'İlk sürümde satın alma kapalı; işlem geçmişi toplanmıyor.');
+      // Satış açık (2026-10-23): sunucu mağaza işlemini doğrular ve hakkı
+      // Motion hesabına bağlı tutar → işlem geçmişi bağlı veri olarak beyanlı.
+      expect(src, contains('<string>NSPrivacyCollectedDataTypePurchaseHistory</string>'),
+          reason: 'Abonelik doğrulaması işlem geçmişi toplar; beyan düşmüş.');
     });
   });
 

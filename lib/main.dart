@@ -34,6 +34,8 @@ import 'app/lissom_theme.dart';
 import 'app/lissom_appearance.dart';
 import 'app/lissom_presentation_host.dart';
 import 'app/account_epoch_client.dart';
+import 'app/age_block_store.dart';
+import 'app/course_access.dart';
 import 'app/auth_session_fence.dart';
 import 'app/app_facts.dart';
 import 'app/local_account_bridge.dart';
@@ -45,6 +47,7 @@ import 'app/native_licences.dart';
 import 'app/lissom_localizations.dart';
 import 'app/onboarding_gate.dart';
 import 'app/onboarding_store.dart';
+
 import 'package:lissom_engine/lissom_engine.dart' show PoseSource;
 
 /// Supabase PKCE doğrulama ve şifre sıfırlama dönüşü her iki platformda da
@@ -104,7 +107,11 @@ Future<void> main() async {
         supportDirectory: () async => owners.supportDirectory,
       ),
     );
-    launch(LissomAccountHost(runtime: runtime, owners: owners));
+    final AgeBlockStore ageBlock = AgeBlockStore();
+    await ageBlock.load();
+    launch(
+      LissomAccountHost(runtime: runtime, owners: owners, ageBlock: ageBlock),
+    );
   } on Object {
     owners.dispose();
     launch(const _AccountSetupFailureApp());
@@ -117,6 +124,7 @@ class LissomApp extends StatelessWidget {
     this.localScope = LissomLocalScope.guest,
     this.accountRouteBuilder,
     this.beforeMeasurement,
+    this.beforePaidLesson,
     this.forcedAccountPage,
     this.factsLoader,
     this.poseSourceLoader,
@@ -127,6 +135,10 @@ class LissomApp extends StatelessWidget {
   final LissomLocalScope localScope;
   final LissomAccountRouteBuilder? accountRouteBuilder;
   final Future<bool> Function(BuildContext)? beforeMeasurement;
+
+  /// Membership gate for lessons outside each course's free part. Null when
+  /// this build has no account service: paid lessons then stay closed.
+  final Future<bool> Function(BuildContext)? beforePaidLesson;
   final Widget? forcedAccountPage;
   final Future<AppFacts> Function()? factsLoader;
   final PoseSource Function()? poseSourceLoader;
@@ -153,9 +165,13 @@ class LissomApp extends StatelessWidget {
         child: child ?? const SizedBox.shrink(),
       );
       final LissomLocalOwner? owner = localScope.owner;
+      final Widget gated = LissomCourseAccess(
+        ensureAccess: beforePaidLesson,
+        child: content,
+      );
       return owner == null
-          ? content
-          : LissomOwnerContext(owner: owner, child: content);
+          ? gated
+          : LissomOwnerContext(owner: owner, child: gated);
     },
     locale: LissomLocaleScope.maybeOf(context)?.locale,
     supportedLocales: kLissomSupportedLocales,
@@ -192,11 +208,15 @@ class LissomAccountHost extends StatefulWidget {
     this.poseSourceLoader,
     this.measurementAvailable,
     this.onboardingLoader,
+    this.ageBlock,
     super.key,
   });
 
   final MotionAccountRuntime runtime;
   final LissomOwnerRegistry? owners;
+
+  /// Durable "under the minimum age" block for the shared account page.
+  final AgeBlockStore? ageBlock;
   final Future<AppFacts> Function()? factsLoader;
   final PoseSource Function()? poseSourceLoader;
   final bool? measurementAvailable;
@@ -503,6 +523,14 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
                 : (String confirmedId) =>
                       pageOwners.eraseWithTicket(ticket, confirmedId),
             onRetryIdentity: widget.runtime.refreshIdentity,
+            // Sales are open (2026-10-23): membership status and the shared
+            // purchase/restore/manage page are shown on the account page.
+            paidFeaturesAvailable: true,
+            // 13+ age and parental-consent flow; region defaults to device.
+            ageBlocked: widget.ageBlock?.blocked ?? false,
+            onAgeBlocked: widget.ageBlock == null
+                ? null
+                : () => unawaited(widget.ageBlock!.markBlocked()),
           ),
     );
   }
@@ -577,6 +605,14 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
                     accountPageBuilder: (pageContext) =>
                         _accountPage(pageContext, MotionApp.lissom.name),
                   ),
+              // Camera sessions stay closed; course subscriptions are open.
+              beforePaidLesson: (lessonContext) => requireMotionPaidAccess(
+                lessonContext,
+                account: widget.runtime.account,
+                accountPageBuilder: (pageContext) =>
+                    _accountPage(pageContext, MotionApp.lissom.name),
+                paidFeaturesAvailable: true,
+              ),
             ),
     );
   }

@@ -18,7 +18,8 @@
     "UserID",
     "OtherDiagnosticData",
     "CoarseLocation",
-    "OtherDataTypes"
+    "OtherDataTypes",
+    "PurchaseHistory"
   ],
   "purpose": "AppFunctionality",
   "linked": true,
@@ -39,9 +40,9 @@
     "sessionHistory": true
   },
   "monetization": {
-    "subscriptionSalesAvailable": false,
+    "subscriptionSalesAvailable": true,
     "paidCameraSessionsAvailable": false,
-    "purchaseHistoryCollectedByActiveRelease": false
+    "purchaseHistoryCollectedByActiveRelease": true
   },
   "accountDeletion": {
     "inAppAction": "Delete Motion account / Motion hesabını sil",

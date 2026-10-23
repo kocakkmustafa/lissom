@@ -211,8 +211,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                         Text(
                           localeText(
                             context,
-                            'Study the written yoga courses without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
-                            'Yazılı yoga kurslarını hesap veya kamera olmadan çalışabilirsin. Motion hesabı isteğe bağlıdır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.',
+                            'Study the first part of every written yoga course without an account or camera. A Motion account is optional; a Lissom or Motion+ subscription unlocks the remaining lessons. Live camera measurements are closed in this release.',
+                            'Her yazılı yoga kursunun ilk bölümünü hesap veya kamera olmadan çalışabilirsin. Motion hesabı isteğe bağlıdır; kalan dersler Lissom veya Motion+ aboneliğiyle açılır. Bu sürümde canlı kamera ölçümleri kapalıdır.',
                           ),
                           style: t.textTheme.bodySmall,
                         ),
@@ -290,12 +290,16 @@ class _WelcomeStep extends StatelessWidget {
             context,
             'Lissom offers written yoga courses with practice tasks, '
                 'adaptations and self-checks. Practice records stay on this '
-                'device and reflect your own reports. Live camera '
-                'measurements and subscription sales are closed in this release.',
+                'device and reflect your own reports. The first part of every '
+                'course is free; a Lissom or Motion+ subscription unlocks the '
+                'remaining lessons. Live camera measurements are closed in '
+                'this release.',
             'Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren '
                 'yazılı yoga kursları sunar. Çalışma kayıtları bu cihazda '
-                'kalır ve kendi çalışma kaydını gösterir. Bu sürümde canlı '
-                'kamera ölçümleri ve abonelik satışı kapalıdır.',
+                'kalır ve kendi çalışma kaydını gösterir. Her kursun ilk '
+                'bölümü ücretsizdir; kalan dersler Lissom veya Motion+ '
+                'aboneliğiyle açılır. Bu sürümde canlı kamera ölçümleri '
+                'kapalıdır.',
           ),
           style: t.textTheme.bodyMedium,
         ),
@@ -314,7 +318,7 @@ class _DisclaimerStep extends StatelessWidget {
   /// BİREBİR (bkz. `MeasurementLimitsFootnote.limitsCopy` ile aynı sözleşme
   /// — TAŞINDI, UYDURULMADI).
   static const String text =
-      'Lissom is a general wellness app offering Hatha yoga practice. '
+      'Lissom is a general wellness app offering written yoga courses. '
       'Live camera measurements are closed in this release. It is not a '
       'medical device, does not diagnose or treat any condition, and is '
       'not a substitute for professional medical or physical therapy '
@@ -336,7 +340,7 @@ class _DisclaimerStep extends StatelessWidget {
           localeText(
             context,
             text,
-            'Lissom, Hatha yoga çalışması sunan genel sağlıklı yaşam amaçlı '
+            'Lissom, yazılı yoga kursları sunan genel sağlıklı yaşam amaçlı '
             'bir uygulamadır. Bu sürümde canlı kamera ölçümleri kapalıdır. '
             'Tıbbi cihaz değildir; herhangi bir hastalığı '
             'teşhis veya tedavi etmez. Tıbbi ya da fizyoterapi tavsiyesinin '

@@ -76,10 +76,10 @@ Future<void> _expectContext(
     final messages = '$messagesBeforeScroll\n$messagesAfterScroll';
     for (final closed in [
       'Live camera measurements are closed in this release',
-      'Live camera measurements and subscription sales are closed',
+      'Live camera measurements are closed in this release.',
       'camera closed in this release',
       'canlı kamera ölçümleri kapalıdır',
-      'canlı kamera ölçümleri ve abonelik satışı kapalıdır',
+      'Bu sürümde canlı kamera ölçümleri kapalıdır.',
       'bu sürümde kamera kapalı',
     ]) {
       expect(messages, isNot(contains(closed)));
@@ -202,18 +202,16 @@ void main() {
                 available
                     ? _status(language, available)
                     : language == 'tr'
-                    ? 'canlı kamera ölçümleri ve abonelik satışı kapalıdır'
-                    : 'Live camera measurements and subscription sales are closed',
+                    ? 'Bu sürümde canlı kamera ölçümleri kapalıdır.'
+                    : 'Live camera measurements are closed in this release.',
               ),
               findsOneWidget,
             );
             expect(
               find.textContaining(
                 language == 'tr'
-                    ? 'abonelik satışı kapalıdır'
-                    : available
-                    ? 'Subscription sales are closed'
-                    : 'subscription sales are closed',
+                    ? 'kalan dersler Lissom veya Motion+ aboneliğiyle açılır'
+                    : 'a Lissom or Motion+ subscription unlocks the remaining lessons',
               ),
               findsOneWidget,
             );

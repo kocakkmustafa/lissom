@@ -288,10 +288,10 @@ class HomeScreen extends StatelessWidget {
         )
       : localeText(
           context,
-          'Explore the movement-test catalogue. Camera assessments and '
-              'subscriptions are not open in this release.',
-          'Hareket testi kataloğunu incele. Kamera değerlendirmeleri ve '
-              'abonelikler bu sürümde açık değil.',
+          'Explore the movement-test catalogue. Camera assessments are not '
+              'open in this release.',
+          'Hareket testi kataloğunu incele. Kamera değerlendirmeleri bu '
+              'sürümde açık değil.',
         );
 
   Widget _section(BuildContext context, HomeSection s) {

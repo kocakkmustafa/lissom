@@ -126,7 +126,8 @@ void main() {
       final copy = _copy(tester, find.byType(ProfileScreen));
       for (final sentence in turkish
           ? <String>[
-              'Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.',
+              'Bu sürümde canlı kamera ölçümleri kapalıdır.',
+              'Her yazılı kursun ilk bölümü ücretsizdir; kalan dersler Lissom veya Motion+ aboneliğiyle açılır.',
               'Yazılı yoga kursları kamera olmadan çalışır.',
               'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir.',
               'Bu kayıtlar Motion hesabına eşitlenmez.',
@@ -134,7 +135,8 @@ void main() {
               'Yazılı hatırlama notları sayfadan çıkınca silinir.',
             ]
           : <String>[
-              'Live camera measurements and subscription sales are closed in this release.',
+              'Live camera measurements are closed in this release.',
+              'The first part of every written course is free; a Lissom or Motion+ subscription unlocks the remaining lessons.',
               'Written yoga courses work without a camera.',
               'Practice records stay on this device and reflect your own reports.',
               'These records are not synced to your Motion account.',

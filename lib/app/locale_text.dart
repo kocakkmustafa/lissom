@@ -82,11 +82,11 @@ _reviewedSourceDisplayCopy = <String, ({String english, String turkish})>{
     turkish:
         "Lissom genel iyi yaşam uygulamasıdır; tıbbi cihaz değildir. Tarama, tanı veya sakatlanma riski tahmini yapmaz. Bu iddialar, yapmadığımız ve hedeflemediğimiz klinik doğrulama gerektirir. Hareket ölçümü tek başına sağlık durumuna ilişkin kanıt değildir.",
   ),
-  "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. Live camera measurements and subscription sales are closed in this release.": (
+  "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. The first part of every course is free; a Lissom or Motion+ subscription unlocks the remaining lessons. Live camera measurements are closed in this release.": (
     english:
-        "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. Live camera measurements and subscription sales are closed in this release.",
+        "Lissom offers written yoga courses with practice tasks, adaptations and self-checks. Practice records stay on this device and reflect your own reports. The first part of every course is free; a Lissom or Motion+ subscription unlocks the remaining lessons. Live camera measurements are closed in this release.",
     turkish:
-        "Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren yazılı yoga kursları sunar. Çalışma kayıtları bu cihazda kalır ve kendi beyanlarını yansıtır. Bu sürümde canlı kamera ölçümleri ve abonelik satışı kapalıdır.",
+        "Lissom, çalışma görevleri, uyarlamalar ve öz denetimler içeren yazılı yoga kursları sunar. Çalışma kayıtları bu cihazda kalır ve kendi beyanlarını yansıtır. Her kursun ilk bölümü ücretsizdir; kalan dersler Lissom veya Motion+ aboneliğiyle açılır. Bu sürümde canlı kamera ölçümleri kapalıdır.",
   ),
   "Lower the seat before lifting either hand, then rest wrists without rolling onto them.": (
     english:

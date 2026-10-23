@@ -91,18 +91,19 @@ void main() {
         r'<key>NSPrivacyCollectedDataType</key>\s*<string>NSPrivacyCollectedDataType(\w+)</string>',
       ).allMatches(manifest).map((match) => match.group(1)).toSet();
       expect((privacy['appleCollectedTypes'] as List).toSet(), types);
-      expect(types, hasLength(6));
+      expect(types, hasLength(7));
+      expect(types, contains('PurchaseHistory'));
       expect(privacy['purpose'], 'AppFunctionality');
       expect(privacy['linked'], isTrue);
       expect(privacy['tracking'], isFalse);
       expect(privacy['draftOnly'], isTrue);
       expect(privacy['formsPublished'], isFalse);
-      expect(
-        (privacy['monetization'] as Map).values.every(
-          (value) => value == false,
-        ),
-        isTrue,
-      );
+      // Sales open 2026-10-23 (courses); camera sessions stay closed.
+      expect(privacy['monetization'], <String, Object>{
+        'subscriptionSalesAvailable': true,
+        'paidCameraSessionsAvailable': false,
+        'purchaseHistoryCollectedByActiveRelease': true,
+      });
       expect(
         (privacy['accountDeletion'] as Map)['sharedAcrossFiveMotionApps'],
         isTrue,

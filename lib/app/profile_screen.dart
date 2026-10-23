@@ -174,23 +174,23 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       measurementAvailable
                           ? '${CaptureUnavailableNote.localizedAvailability(context, measurementAvailable: true)} '
-                                '${localeText(context, 'Subscription sales are closed in this release. Written yoga courses work '
+                                '${localeText(context, 'The first part of every written course is free; a Lissom or Motion+ subscription unlocks the remaining lessons. Written yoga courses work '
                                     'without a camera. Practice records stay on this device and reflect your own reports. '
                                     'These records are not synced to your Motion account. '
                                     'Self-check answers are not saved. Written recall notes are discarded when you leave the page. '
-                                    'Existing measurement records also remain on this device.', 'Bu sürümde abonelik satışı kapalıdır. Yazılı yoga kursları kamera olmadan çalışır. '
+                                    'Existing measurement records also remain on this device.', 'Her yazılı kursun ilk bölümü ücretsizdir; kalan dersler Lissom veya Motion+ aboneliğiyle açılır. Yazılı yoga kursları kamera olmadan çalışır. '
                                     'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir. Bu kayıtlar Motion hesabına eşitlenmez. Öz denetim yanıtları kaydedilmez. '
                                     'Yazılı hatırlama notları sayfadan çıkınca silinir. Önceki ölçüm kayıtları da bu cihazda kalır.')}'
                           : localeText(
                               context,
-                              'Live camera measurements and subscription sales are '
-                                  'closed in this release. Written yoga courses work '
+                              'Live camera measurements are closed in this release. '
+                                  'The first part of every written course is free; a Lissom or Motion+ subscription unlocks the remaining lessons. Written yoga courses work '
                                   'without a camera. Practice records stay on this device and reflect your own reports. '
                                   'These records are not synced to your Motion account. '
                                   'Self-check answers are not saved. Written recall notes are discarded when you leave the page. '
                                   'Existing measurement records also remain on this device.',
-                              'Bu sürümde canlı kamera ölçümleri ve abonelik satışı '
-                                  'kapalıdır. Yazılı yoga kursları kamera olmadan çalışır. '
+                              'Bu sürümde canlı kamera ölçümleri kapalıdır. '
+                                  'Her yazılı kursun ilk bölümü ücretsizdir; kalan dersler Lissom veya Motion+ aboneliğiyle açılır. Yazılı yoga kursları kamera olmadan çalışır. '
                                   'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir. Bu kayıtlar Motion hesabına eşitlenmez. Öz denetim yanıtları kaydedilmez. '
                                   'Yazılı hatırlama notları sayfadan çıkınca silinir. Önceki ölçüm kayıtları da bu cihazda kalır.',
                             ),

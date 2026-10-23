@@ -129,10 +129,11 @@ void main() {
       description,
       contains('60 özgün Türkçe ve İngilizce Hatha yoga dersi'),
     );
-    expect(
-      description,
-      contains('Kamera değerlendirmeleri ve abonelik satışı açık değildir'),
-    );
+    expect(description, contains('Kamera değerlendirmeleri açık değildir'));
+    // Sales open (2026-10-23): free first part, subscription, 14-day trial.
+    expect(description, contains('Her kursun ilk bölümü ücretsizdir'));
+    expect(description, contains('14 gün ücretsiz deneme'));
+    expect(description, contains('geri yükleyebilir veya yönetebilirsin'));
     expect(description, isNot(contains('Üç canlı kamera ölçümü')));
     expect(
       RegExp(

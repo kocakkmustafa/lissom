@@ -177,7 +177,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(
-      find.textContaining('Camera assessments and subscriptions are not open'),
+      find.textContaining('Camera assessments are not open in this release.'),
       findsOneWidget,
     );
     await scrollTo(tester, find.byKey(HomeScreen.quickStartKey));

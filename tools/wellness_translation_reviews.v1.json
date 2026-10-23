@@ -117,8 +117,8 @@
     },
     {
       "locale": "de",
-      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
-      "translationSha256": "dc3e72101b98a103f7b634206b55c204229e0e81e0affe4887a726afe6733603",
+      "sourceEnglishSha256": "95e1baa91571db78269c144a2bf85684c8c91f09f475a4ee79dbb7b52f8cf690",
+      "translationSha256": "1dab5d1cff313e6837e1a1c23f950ff240556ab8c2e3fd13f3f2d5b5d4fda796",
       "leaf": "text",
       "matchedWord": "diagnostiziert"
     },
@@ -201,8 +201,8 @@
     },
     {
       "locale": "fr",
-      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
-      "translationSha256": "c39eaf2391e1e35d5a2c4d5680453426b72f36877d95c2212ea3e8addaefff18",
+      "sourceEnglishSha256": "95e1baa91571db78269c144a2bf85684c8c91f09f475a4ee79dbb7b52f8cf690",
+      "translationSha256": "f66df2767df6ac308a48258f5fde856c8b8d4b623a5f3a0fed0603afe5796c10",
       "leaf": "text",
       "matchedWord": "diagnostique"
     },
@@ -229,8 +229,8 @@
     },
     {
       "locale": "pt-BR",
-      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
-      "translationSha256": "6ce951b79c6de407846809e7e1ef2f2529233ad7f2398a7aaea624f0d1bc1b60",
+      "sourceEnglishSha256": "95e1baa91571db78269c144a2bf85684c8c91f09f475a4ee79dbb7b52f8cf690",
+      "translationSha256": "a4cb1d446d3e5c02d187d0681e5320122a1413dd40042cfb73aee6fb51bd0398",
       "leaf": "text",
       "matchedWord": "diagnostica"
     },
@@ -271,8 +271,8 @@
     },
     {
       "locale": "it",
-      "sourceEnglishSha256": "eef166f5b65a0d9d053ae22717e6a5fa3f3ed4787e14147bba352194f5ec018f",
-      "translationSha256": "c1dc9fb925d2f81e00b381e8ebeda93442cc7c4d7eb6ef85b8f440c5e29d40e3",
+      "sourceEnglishSha256": "95e1baa91571db78269c144a2bf85684c8c91f09f475a4ee79dbb7b52f8cf690",
+      "translationSha256": "bb7d6ee7c16c95407a80ab909fec7a930e0d42a037592db30f320600c6d2259d",
       "leaf": "text",
       "matchedWord": "diagnostica"
     },

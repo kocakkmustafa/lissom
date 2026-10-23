@@ -77,16 +77,16 @@ void main() {
         expect(
           find.textContaining(
             language == 'tr'
-                ? 'Yazılı yoga kurslarını hesap veya kamera olmadan'
-                : 'Study the written yoga courses without an account or camera',
+                ? 'Her yazılı yoga kursunun ilk bölümünü hesap veya kamera olmadan'
+                : 'Study the first part of every written yoga course without an account or camera',
           ),
           findsOneWidget,
         );
         expect(
           find.textContaining(
             language == 'tr'
-                ? 'kamera ölçümleri ve abonelik satışı kapalıdır'
-                : 'measurements and subscription sales are closed',
+                ? 'kalan dersler Lissom veya Motion+ aboneliğiyle açılır'
+                : 'a Lissom or Motion+ subscription unlocks the remaining lessons',
           ),
           findsWidgets,
         );

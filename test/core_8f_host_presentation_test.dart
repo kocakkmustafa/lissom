@@ -647,7 +647,9 @@ void main() {
         );
         expect(runtime.account.savedNames, isEmpty);
         expect(runtime.account.profileReads, 1);
-        expect(runtime.account.membershipReads, 0);
+        // Sales open (2026-10-23): the account page reads membership status
+        // exactly once for its status line; no purchase page is opened.
+        expect(runtime.account.membershipReads, 1);
         expect(cameraInvocations, 0);
         expect(factsLoads, factsBefore);
         expect(requests, requestsBefore);
@@ -752,7 +754,8 @@ void main() {
       );
       expect(owner.isActive, isTrue);
       expect(cameraInvocations, 0);
-      expect(runtime.account.membershipReads, 0);
+      // Still only the account page's single status read; Save adds none.
+      expect(runtime.account.membershipReads, 1);
       expect(requests, requestsBefore);
       await tester.pump(const Duration(milliseconds: 100));
       expect(runtime.account.savedNames, <String>[

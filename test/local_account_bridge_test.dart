@@ -242,7 +242,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.text(
-        'Study the written yoga courses without an account or camera. A Motion account is optional. Live camera measurements and subscription sales are closed in this release.',
+        'Study the first part of every written yoga course without an account or camera. A Motion account is optional; a Lissom or Motion+ subscription unlocks the remaining lessons. Live camera measurements are closed in this release.',
       ),
       findsOneWidget,
     );

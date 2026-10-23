@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'course_access.dart';
 import 'hatha_course.dart';
 import 'hatha_knowledge_diagrams.dart';
 import 'hatha_progress.dart';
@@ -25,6 +26,8 @@ class HathaCourseScreen extends StatefulWidget {
 
   static const Key progressKey = Key('hatha.progress');
   static const Key continueKey = Key('hatha.continue');
+  static const Key accessNoteKey = Key('hatha.accessNote');
+  static const Key subscriptionClosedKey = Key('hatha.subscriptionClosed');
 
   final HathaCourse course;
   final HathaProgress initialProgress;
@@ -40,6 +43,7 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
   final HathaSessionPreparation _preparation = HathaSessionPreparation();
   bool _opening = false;
   bool _loadFailed = false;
+  bool _subscriptionClosed = false;
 
   @override
   void initState() {
@@ -67,8 +71,24 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
     setState(() {
       _opening = true;
       _loadFailed = false;
+      _subscriptionClosed = false;
     });
     try {
+      // Paid lessons pass the shared Motion membership gate first. Records
+      // are untouched: a closed lesson never hides its practice history.
+      final LissomCourseAccessState? access = LissomCourseAccess.maybeOf(
+        context,
+      );
+      if (access != null &&
+          !await access.requestOpen(context, widget.course, lesson.id)) {
+        if (mounted) {
+          setState(() => _subscriptionClosed = !access.hasGate);
+        }
+        return;
+      }
+      if (!mounted) {
+        return;
+      }
       final HathaProgressStore store = await widget.storeLoader();
       if (!mounted) {
         return;
@@ -107,6 +127,7 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
     final ThemeData theme = Theme.of(context);
     final Set<String> practiced = _practiced;
     final List<HathaLesson> lessons = widget.course.lessons;
+    final LissomCourseAccessState? access = LissomCourseAccess.maybeOf(context);
     final HathaLesson? next = lessons.cast<HathaLesson?>().firstWhere(
       (HathaLesson? lesson) => !practiced.contains(lesson!.id),
       orElse: () => null,
@@ -133,6 +154,25 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
               hathaText(context, widget.course.intro),
               style: theme.textTheme.bodyMedium,
             ),
+            if (access != null && !access.subscribed) ...<Widget>[
+              const SizedBox(height: 12),
+              Text(
+                localeTemplate(
+                  context,
+                  'The first {free} of {total} lessons are free. The remaining lessons are included with a Lissom or Motion+ subscription. Your practice records stay readable either way.',
+                  'İlk {free} ders ücretsiz ({total} dersten). Kalan dersler Lissom veya Motion+ aboneliğine dahildir. Çalışma kayıtların her durumda okunur kalır.',
+                  <String, Object>{
+                    'free': localizedInteger(
+                      context,
+                      freeLessonCount(widget.course),
+                    ),
+                    'total': localizedInteger(context, lessons.length),
+                  },
+                ),
+                key: HathaCourseScreen.accessNoteKey,
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
             const SizedBox(height: 18),
             LissomCard(
               key: HathaCourseScreen.progressKey,
@@ -218,6 +258,16 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                 style: theme.textTheme.bodyMedium,
               ),
             const SizedBox(height: 24),
+            if (_subscriptionClosed)
+              Text(
+                localeText(
+                  context,
+                  'This lesson is included with a Lissom or Motion+ subscription. Subscriptions are not available in this build.',
+                  'Bu ders Lissom veya Motion+ aboneliğine dahildir. Bu sürümde abonelik kullanılamıyor.',
+                ),
+                key: HathaCourseScreen.subscriptionClosedKey,
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
             if (_loadFailed)
               Text(
                 localeText(
@@ -233,6 +283,8 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                 practiced: practiced,
                 onOpen: _open,
                 allowPreview: widget.course.allowsLessonPreview,
+                needsSubscription: (String id) =>
+                    access != null && !access.canOpen(widget.course, id),
               ),
               const SizedBox(height: 18),
             ],
@@ -249,12 +301,14 @@ class _ModuleSection extends StatelessWidget {
     required this.practiced,
     required this.onOpen,
     this.allowPreview = false,
+    this.needsSubscription,
   });
 
   final HathaModule module;
   final Set<String> practiced;
   final void Function(HathaLesson) onOpen;
   final bool allowPreview;
+  final bool Function(String lessonId)? needsSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -295,52 +349,81 @@ class _ModuleSection extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           for (final HathaLesson lesson in module.lessons)
-            Material(
-              type: MaterialType.transparency,
-              child: LissomFocusFrame(
-                child: ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  dense: true,
-                  leading: Icon(
-                    practiced.contains(lesson.id)
-                        ? Icons.check_circle_outline
-                        : lesson.prerequisites.every(practiced.contains)
-                        ? Icons.radio_button_unchecked
-                        : Icons.lock_outline,
-                    color: LissomPalette.of(context).accentText,
+            if (needsSubscription?.call(lesson.id) ?? false)
+              Material(
+                type: MaterialType.transparency,
+                child: LissomFocusFrame(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    leading: Icon(
+                      practiced.contains(lesson.id)
+                          ? Icons.check_circle_outline
+                          : Icons.workspace_premium_outlined,
+                      color: LissomPalette.of(context).accentText,
+                    ),
+                    title: Text(hathaText(context, lesson.title)),
+                    subtitle: Text(
+                      localeTemplate(
+                        context,
+                        'Included with a Lissom or Motion+ subscription · {minutes} min',
+                        'Lissom veya Motion+ aboneliğine dahil · {minutes} dk',
+                        <String, Object>{
+                          'minutes': localizedInteger(context, lesson.minutes),
+                        },
+                      ),
+                    ),
+                    onTap: () => onOpen(lesson),
                   ),
-                  title: Text(hathaText(context, lesson.title)),
-                  subtitle: Text(
-                    lesson.prerequisites.every(practiced.contains)
-                        ? localeTemplate(
-                            context,
-                            '{minutes} min · guided practice',
-                            '{minutes} dk · rehberli çalışma',
-                            <String, Object>{
-                              'minutes': localizedInteger(
-                                context,
-                                lesson.minutes,
-                              ),
-                            },
-                          )
-                        : localeText(
-                            context,
-                            allowPreview
-                                ? 'Preview only · practise the earlier lesson first'
-                                : 'Practice the earlier lesson first',
-                            allowPreview
-                                ? 'Yalnız inceleme · önce önceki dersi çalış'
-                                : 'Önce önceki dersi çalış',
-                          ),
+                ),
+              )
+            else
+              Material(
+                type: MaterialType.transparency,
+                child: LissomFocusFrame(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    leading: Icon(
+                      practiced.contains(lesson.id)
+                          ? Icons.check_circle_outline
+                          : lesson.prerequisites.every(practiced.contains)
+                          ? Icons.radio_button_unchecked
+                          : Icons.lock_outline,
+                      color: LissomPalette.of(context).accentText,
+                    ),
+                    title: Text(hathaText(context, lesson.title)),
+                    subtitle: Text(
+                      lesson.prerequisites.every(practiced.contains)
+                          ? localeTemplate(
+                              context,
+                              '{minutes} min · guided practice',
+                              '{minutes} dk · rehberli çalışma',
+                              <String, Object>{
+                                'minutes': localizedInteger(
+                                  context,
+                                  lesson.minutes,
+                                ),
+                              },
+                            )
+                          : localeText(
+                              context,
+                              allowPreview
+                                  ? 'Preview only · practise the earlier lesson first'
+                                  : 'Practice the earlier lesson first',
+                              allowPreview
+                                  ? 'Yalnız inceleme · önce önceki dersi çalış'
+                                  : 'Önce önceki dersi çalış',
+                            ),
+                    ),
+                    onTap:
+                        allowPreview ||
+                            lesson.prerequisites.every(practiced.contains)
+                        ? () => onOpen(lesson)
+                        : null,
                   ),
-                  onTap:
-                      allowPreview ||
-                          lesson.prerequisites.every(practiced.contains)
-                      ? () => onOpen(lesson)
-                      : null,
                 ),
               ),
-            ),
         ],
       ),
     );
