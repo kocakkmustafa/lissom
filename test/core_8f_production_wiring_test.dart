@@ -165,7 +165,7 @@ void main() {
       final account = _ProfileAccount();
       final owner = LissomLocalOwner(userId: _ownerId, epoch: _ownerEpoch);
       final scope = LissomLocalScope.account(_ownerId, owner: owner);
-      expect(motionPaidFeaturesAvailable, isFalse);
+      expect(motionCameraCoachingAvailable, isFalse);
       await preference.initialize();
       addTearDown(() async {
         await tester.pumpWidget(const SizedBox.shrink());

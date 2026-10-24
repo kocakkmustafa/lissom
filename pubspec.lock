@@ -399,17 +399,17 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/motion_account"
-      ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
-      resolved-ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
+      ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
+      resolved-ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
-    version: "0.3.0"
+    version: "0.5.0"
   motion_camera:
     dependency: "direct main"
     description:
       path: "packages/motion_camera"
-      ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
-      resolved-ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
+      ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
+      resolved-ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
     version: "0.2.0"
@@ -417,8 +417,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/motion_content"
-      ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
-      resolved-ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
+      ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
+      resolved-ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
     version: "0.1.0"
@@ -426,20 +426,20 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/motion_core"
-      ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
-      resolved-ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
+      ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
+      resolved-ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
     version: "0.13.0"
   motion_entitlements:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/motion_entitlements"
-      ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
-      resolved-ref: "583203112c942dd38673bc43d7d05f82f4f5173d"
+      ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
+      resolved-ref: "2451428dea30fb9e29db819441bfd5a4fe35adaf"
       url: "https://github.com/kocakkmustafa/motion-core.git"
     source: git
-    version: "0.1.1"
+    version: "0.3.0"
   objective_c:
     dependency: transitive
     description:

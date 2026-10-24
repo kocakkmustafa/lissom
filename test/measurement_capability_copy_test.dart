@@ -11,7 +11,7 @@ import 'package:lissom/app/progress_screen.dart';
 import 'package:lissom/app/shell.dart';
 import 'package:lissom/app/surfaces.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
@@ -96,7 +96,7 @@ void main() {
           'shell camera copy follows capability=$available ($language/$inventory)',
           (tester) async {
             pinTallSurface(tester, height: 6000);
-            expect(motionPaidFeaturesAvailable, isFalse);
+            expect(motionCameraCoachingAvailable, isFalse);
             expect(DevicePassClaim.verified, isFalse);
             final original = factsFromDisk();
             final facts = AppFacts(

@@ -4,7 +4,7 @@
 /// **O3 yayın politikası (2026-10-02):** ortak ölçüm kapısı kapalıysa
 /// yalnız bilgi gösterir, kamera izni istemez. Ertelenmiş izin yolu
 /// `measurementAvailable: true` ile ayrı sınanır; üretim varsayılanı
-/// Home ekranıyla aynı `motionPaidFeaturesAvailable` sabitidir.
+/// Home ekranıyla aynı `motionCameraCoachingAvailable` sabitidir.
 ///
 /// **Tarihsel O3 (2026-08-12):** `CameraPoseSource` bağlandığı GÜN,
 /// AYNI commit'te O3 brief'in aslına döndü — gerçek bir izin isteği
@@ -23,7 +23,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 import 'package:permission_handler/permission_handler.dart';
 
 import 'lissom_theme.dart';
@@ -39,7 +39,7 @@ class OnboardingFlow extends StatefulWidget {
     this.onRequestPermission,
     this.onOpenSettings,
     this.onOpenAccount,
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 

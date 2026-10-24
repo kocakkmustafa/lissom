@@ -7,7 +7,7 @@ import 'package:lissom/app/profile_screen.dart';
 import 'package:lissom/app/surfaces.dart';
 import 'package:lissom/app/what_lissom_doesnt_do.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
@@ -23,7 +23,7 @@ Future<void> _pump(WidgetTester tester, Widget screen, String language) async {
   // This tall host surface materialises copy; it is not device/a11y acceptance.
   pinTallSurface(tester, height: 6000);
   expect(
-    motionPaidFeaturesAvailable,
+    motionCameraCoachingAvailable,
     isFalse,
     reason: 'These claims describe the current closed release policy.',
   );

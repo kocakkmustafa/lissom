@@ -30,7 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'app_facts.dart';
 import 'ashtanga_entry.dart';
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
     this.sessionStoreLoader,
     this.attemptValueStoreLoader,
     this.beforeMeasurement,
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 

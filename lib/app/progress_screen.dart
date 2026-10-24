@@ -38,7 +38,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:motion_core/motion_core.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'app_facts.dart';
 import 'hatha_course.dart';
@@ -53,7 +53,7 @@ import 'surfaces.dart';
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({
     required this.facts,
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 

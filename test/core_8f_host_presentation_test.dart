@@ -499,7 +499,7 @@ void main() {
         expect(LissomLocalizations.parse(raw, tag).catalogAvailable, isTrue);
       }
       expect(runtime.account.supabase.auth.currentSession?.user.id, _id);
-      expect(motionPaidFeaturesAvailable, isFalse);
+      expect(motionCameraCoachingAvailable, isFalse);
       var cameraInvocations = 0;
       var factsLoads = 0;
       await tester.pumpWidget(

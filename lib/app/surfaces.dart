@@ -12,7 +12,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'ia.dart';
 import 'lissom_theme.dart';
@@ -442,7 +442,7 @@ abstract final class DevicePassClaim {
 
 class CaptureUnavailableNote extends StatelessWidget {
   const CaptureUnavailableNote({
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 
@@ -533,7 +533,7 @@ class CaptureUnavailableNote extends StatelessWidget {
 /// koordinatöre isimli gitti.
 class MeasurementLimitsFootnote extends StatelessWidget {
   const MeasurementLimitsFootnote({
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 

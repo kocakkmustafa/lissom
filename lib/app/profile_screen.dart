@@ -13,7 +13,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'app_facts.dart';
 import 'lissom_appearance.dart';
@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     required this.facts,
     this.accountRouteBuilder,
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 

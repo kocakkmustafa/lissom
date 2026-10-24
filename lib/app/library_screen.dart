@@ -21,7 +21,7 @@ import 'study_review.dart';
 import 'course_open_button.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'app_facts.dart';
 import 'attempt_values.dart';
@@ -41,7 +41,7 @@ class LibraryScreen extends StatelessWidget {
     this.attemptValueStoreLoader,
     this.hathaStoreLoader,
     this.onCourseDone,
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 
@@ -404,7 +404,7 @@ class FamilyPage extends StatelessWidget {
     required this.facts,
     this.attemptValueStoreLoader,
     this.hathaStoreLoader,
-    this.measurementAvailable = motionPaidFeaturesAvailable,
+    this.measurementAvailable = motionCameraCoachingAvailable,
     super.key,
   });
 

@@ -1,5 +1,5 @@
 // EXTERNAL DRAFT / COMPILE, FORMAT, ANALYZER AND SDK TESTS UNRUN.
-// Target: public Core 583203112c942dd38673bc43d7d05f82f4f5173d only.
+// Target: public Core 2451428dea30fb9e29db819441bfd5a4fe35adaf only.
 // Real Core delegates/pages/gate; only account/runtime IO is a public fixture.
 import 'dart:async';
 
@@ -261,8 +261,10 @@ class _PaidHarness extends StatelessWidget {
         FilledButton(
           key: _paidKey,
           onPressed: () async {
-            // Deliberately use the real default policy; do not force false here.
-            result.value = await requireMotionPaidAccess(
+            // Deliberately use the real default camera policy (Core R1
+            // requireMotionCameraAccess, Lissom's beforeMeasurement gate);
+            // do not force false here.
+            result.value = await requireMotionCameraAccess(
               context,
               account: account,
               accountPageBuilder: (_) {
@@ -562,7 +564,7 @@ void main() {
         result.dispose();
         controller.dispose();
       });
-      expect(motionPaidFeaturesAvailable, isFalse);
+      expect(motionCameraCoachingAvailable, isFalse);
       await tester.pumpWidget(
         _installationApp(
           controller,
@@ -589,13 +591,14 @@ void main() {
                     .evaluate()
                     .length ==
                 1,
-        'The real default paid=false branch returns false and shows existing copy.',
+        'The real default camera=false branch returns false and shows existing copy.',
       );
       expect(routes, 0);
       expect(
         account.userReads,
         0,
-        reason: 'Closed sales must stop before auth/membership reads.',
+        reason:
+            'Closed camera coaching must stop before auth/membership reads.',
       );
       expect(account.membershipReads, 0);
       expect(account.deleteCalls, 0);
@@ -635,7 +638,10 @@ void main() {
       expect(account.deleteCalls, 0);
       expect(cleanups, 0);
       expect(routes, 0);
-      expect(account.membershipReads, 0);
+      // Core R1: the default account page has membershipAvailable = sales
+      // (open), so opening it reads membership exactly once; the closed
+      // camera gate above still read nothing.
+      expect(account.membershipReads, 1);
       expect(tester.takeException(), isNull);
     },
   );
@@ -660,7 +666,7 @@ void main() {
         locale.dispose();
         appearance.dispose();
       });
-      expect(motionPaidFeaturesAvailable, isFalse);
+      expect(motionCameraCoachingAvailable, isFalse);
       await tester.pumpWidget(
         LissomAppearanceHost(
           controller: appearance,

@@ -525,7 +525,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
             onRetryIdentity: widget.runtime.refreshIdentity,
             // Sales are open (2026-10-23): membership status and the shared
             // purchase/restore/manage page are shown on the account page.
-            paidFeaturesAvailable: true,
+            membershipAvailable: true,
             // 13+ age and parental-consent flow; region defaults to device.
             ageBlocked: widget.ageBlock?.blocked ?? false,
             onAgeBlocked: widget.ageBlock == null
@@ -598,8 +598,10 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
               onboardingLoader: widget.onboardingLoader == null
                   ? null
                   : () => widget.onboardingLoader!(scope),
+              // Camera coaching has its own Core gate (R1): closed, it shows
+              // the "future update" notice and never opens account/purchase.
               beforeMeasurement: (measurementContext) =>
-                  requireMotionPaidAccess(
+                  requireMotionCameraAccess(
                     measurementContext,
                     account: widget.runtime.account,
                     accountPageBuilder: (pageContext) =>
@@ -611,7 +613,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
                 account: widget.runtime.account,
                 accountPageBuilder: (pageContext) =>
                     _accountPage(pageContext, MotionApp.lissom.name),
-                paidFeaturesAvailable: true,
+                salesAvailable: true,
               ),
             ),
     );

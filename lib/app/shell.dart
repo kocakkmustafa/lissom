@@ -25,7 +25,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
@@ -262,7 +262,7 @@ class _LissomShellState extends State<LissomShell> {
   }
 
   bool get _measurementAvailable =>
-      widget.measurementAvailable ?? motionPaidFeaturesAvailable;
+      widget.measurementAvailable ?? motionCameraCoachingAvailable;
 
   Widget _page(AppFacts facts) => switch (facts.ia.tabs[_index]) {
     'home' => HomeScreen(

@@ -46,6 +46,9 @@ void main() {
     expect(main, contains('ageBlocked: widget.ageBlock?.blocked ?? false'));
     expect(main, contains('unawaited(widget.ageBlock!.markBlocked())'));
     // Sales are open on the account page (membership status + options).
-    expect(main, contains('paidFeaturesAvailable: true'));
+    expect(main, contains('membershipAvailable: true'));
+    // Core R1: camera has its own closed gate; paid lessons use the sales one.
+    expect(main, contains('requireMotionCameraAccess('));
+    expect(main, contains('salesAvailable: true'));
   });
 }

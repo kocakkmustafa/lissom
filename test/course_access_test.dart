@@ -8,6 +8,8 @@ import 'package:lissom/app/hatha_course.dart';
 import 'package:lissom/app/hatha_course_screen.dart';
 import 'package:lissom/app/hatha_progress.dart';
 import 'package:lissom/app/lissom_theme.dart';
+import 'package:motion_entitlements/motion_entitlements.dart'
+    show isLessonUnlocked, motionFreeLessonLimit;
 
 import 'support/narrow_surface.dart';
 
@@ -106,6 +108,42 @@ void main() {
         isTrue,
         reason: course.id,
       );
+    }
+  });
+
+  test('the decision is the Core R1 lesson lock with Lissom counts', () {
+    // Core's default formula would cut Hatha mid-module (20/60); Lissom
+    // passes its approved whole-module count (24) instead.
+    const Map<String, int> coreDefault = <String, int>{
+      'lissom.hatha.foundations': 20,
+    };
+    for (final MapEntry<String, int> e in coreDefault.entries) {
+      final HathaCourse course = _course(_files[e.key]!);
+      final int total = course.lessons.length;
+      final int firstModule = course.modules.first.lessons.length;
+      expect(
+        motionFreeLessonLimit(
+          totalLessons: total,
+          firstModuleLessonCount: firstModule,
+        ),
+        e.value,
+        reason: e.key,
+      );
+      final int lissom = freeLessonCount(course);
+      expect(lissom, greaterThan(e.value), reason: e.key);
+      for (int i = 0; i < total; i++) {
+        expect(
+          isFreeLesson(course, course.lessons[i].id),
+          isLessonUnlocked(
+            lessonIndex: i,
+            totalLessons: total,
+            firstModuleLessonCount: firstModule,
+            entitled: false,
+            freeLessonLimit: lissom,
+          ),
+          reason: '${e.key} #$i',
+        );
+      }
     }
   });
 

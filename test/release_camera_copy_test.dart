@@ -9,7 +9,7 @@ import 'package:lissom/app/profile_screen.dart';
 import 'package:lissom/app/progress_screen.dart';
 import 'package:lissom/app/surfaces.dart';
 import 'package:motion_account/motion_account.dart'
-    show motionPaidFeaturesAvailable;
+    show motionCameraCoachingAvailable;
 
 import 'support/facts_from_disk.dart';
 import 'support/narrow_surface.dart';
@@ -45,7 +45,7 @@ void main() {
         tester,
       ) async {
         expect(
-          motionPaidFeaturesAvailable,
+          motionCameraCoachingAvailable,
           isFalse,
           reason: 'This copy is bound to the current closed release policy.',
         );

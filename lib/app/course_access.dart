@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:motion_entitlements/motion_entitlements.dart'
+    show isLessonUnlocked;
 
 import 'hatha_course.dart';
 
@@ -33,15 +35,30 @@ const Map<String, Set<String>> kFreeModuleIds = <String, Set<String>>{
 };
 
 /// Unknown courses are not free: a new course must be listed on purpose.
+///
+/// The decision itself is the shared Core lesson lock (`isLessonUnlocked`,
+/// Core R1). Lissom passes its approved count — the lessons of the leading
+/// free modules — as `freeLessonLimit`, so the Core default formula (which
+/// may cut a module in half, e.g. Hatha 20/60) never applies here. A free
+/// module listed after a paid one does not widen the prefix.
 bool isFreeLesson(HathaCourse course, String lessonId) {
   final Set<String>? free = kFreeModuleIds[course.id];
-  if (free == null) return false;
+  if (free == null || course.modules.isEmpty) return false;
+  final List<HathaLesson> lessons = course.lessons;
+  final int index = lessons.indexWhere((HathaLesson l) => l.id == lessonId);
+  if (index < 0) return false;
+  int freePrefix = 0;
   for (final HathaModule module in course.modules) {
-    if (module.lessons.any((HathaLesson l) => l.id == lessonId)) {
-      return free.contains(module.id);
-    }
+    if (!free.contains(module.id)) break;
+    freePrefix += module.lessons.length;
   }
-  return false;
+  return isLessonUnlocked(
+    lessonIndex: index,
+    totalLessons: lessons.length,
+    firstModuleLessonCount: course.modules.first.lessons.length,
+    entitled: false,
+    freeLessonLimit: freePrefix,
+  );
 }
 
 int freeLessonCount(HathaCourse course) =>

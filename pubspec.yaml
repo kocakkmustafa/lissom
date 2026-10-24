@@ -20,7 +20,15 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_account
-      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
+      ref: 2451428dea30fb9e29db819441bfd5a4fe35adaf
+
+  # Shared paywall-A lesson lock (Core R1). Lissom passes its approved
+  # whole-module free counts as `freeLessonLimit`; same immutable pin.
+  motion_entitlements:
+    git:
+      url: https://github.com/kocakkmustafa/motion-core.git
+      path: packages/motion_entitlements
+      ref: 2451428dea30fb9e29db819441bfd5a4fe35adaf
 
   # Motor AYRI bir paket ve Flutter'a HİÇ bağımlı değil (M-F-160, JabLab
   # ayrımının aynısı): ölçüm/skorlama mantığı bir widget ağacı olmadan
@@ -36,7 +44,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_core
-      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
+      ref: 2451428dea30fb9e29db819441bfd5a4fe35adaf
 
   # Bundled content reader/validator contract at the same immutable Core pin.
   # No production manifest or startup wiring is asserted by this dependency.
@@ -44,7 +52,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_content
-      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
+      ref: 2451428dea30fb9e29db819441bfd5a4fe35adaf
 
   # Offline, packaged lesson demonstrations only. The shipping media catalog
   # remains empty until separately accepted files are available.
@@ -66,7 +74,7 @@ dependencies:
     git:
       url: https://github.com/kocakkmustafa/motion-core.git
       path: packages/motion_camera
-      ref: 583203112c942dd38673bc43d7d05f82f4f5173d
+      ref: 2451428dea30fb9e29db819441bfd5a4fe35adaf
 
   # Yalnız uygulama-özel dizini bulmak için. Depo BİÇİMİ çekirdekte
   # (append-only JSONL); kurucusu `File` alıyor, çünkü path_provider
