@@ -588,6 +588,17 @@ class LissomCard extends StatelessWidget {
   }
 }
 
+/// Locale-aware capitals for eyebrow labels. Dart's toUpperCase is locale
+/// independent, so Turkish/Azerbaijani "i" became dotless "I" ("SENIN"
+/// instead of "SENİN"); dotless "ı" already maps to "I".
+String lissomUpperCase(String text, Locale? locale) {
+  final String? language = locale?.languageCode;
+  if (language == 'tr' || language == 'az') {
+    return text.replaceAll('i', '\u0130').toUpperCase();
+  }
+  return text.toUpperCase();
+}
+
 /// Eyebrow etiket — 11px, geniş harf aralığı, büyük harf. Bölüm başlıkları ve
 /// "MEASURED", "Not measured" gibi durum etiketleri bu stili paylaşır.
 class LissomEyebrow extends StatelessWidget {
@@ -597,7 +608,7 @@ class LissomEyebrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-    text.toUpperCase(),
+    lissomUpperCase(text, Localizations.maybeLocaleOf(context)),
     style: Theme.of(context).textTheme.labelLarge?.copyWith(
       color: color ?? LissomPalette.of(context).textSecondary,
     ),

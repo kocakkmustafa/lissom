@@ -19,11 +19,7 @@ const _plannedFamilyIds = <String>[
   'breath_meditation',
 ];
 
-Future<void> _pump(
-  WidgetTester tester,
-  Widget screen,
-  String language,
-) async {
+Future<void> _pump(WidgetTester tester, Widget screen, String language) async {
   // This tall host surface materialises copy; it is not device/a11y acceptance.
   pinTallSurface(tester, height: 6000);
   expect(
@@ -44,55 +40,60 @@ Future<void> _pump(
 }
 
 String _copy(WidgetTester tester, Finder root) => tester
-    .widgetList<Text>(
-      find.descendant(of: root, matching: find.byType(Text)),
-    )
+    .widgetList<Text>(find.descendant(of: root, matching: find.byType(Text)))
     .map((text) => text.data ?? text.textSpan?.toPlainText() ?? '')
     .join('\n');
 
 void _expectNoFutureSuffix(String copy) {
-  expect(RegExp(r'\byet\b|henüz', caseSensitive: false).hasMatch(copy), isFalse);
+  expect(
+    RegExp(r'\byet\b|henüz', caseSensitive: false).hasMatch(copy),
+    isFalse,
+  );
 }
 
 List<String> _plannedCopy(String familyId, bool turkish) => switch (familyId) {
-  'flexibility_goals' => turkish
-      ? <String>[
-          'Esneklik hedefleri için yollar planda listelenir. Bu sürümde program, eğilim grafiği veya zamanlanmış yeniden ölçüm bulunmaz.',
-          'Bu sürümde hedef ölçümleri veya zamanlanmış yeniden testler bulunmaz.',
-          'Ölçüm gürültüsü eşiği veya ilerleme değişikliği değerlendirmesi sunulmaz.',
-        ]
-      : <String>[
-          'Flexibility goal paths are listed in the plan. No programme, trend chart or scheduled re-measurement is included in this release.',
-          'No goal measurements or scheduled re-tests are available in this build.',
-          'No measurement-noise threshold or progress-change judgement is available.',
-        ],
-  'population_packs' => turkish
-      ? <String>[
-          'Günlük hareket programları planda listelenir. Bu sürümde programlar veya test ağırlıkları günlük rutinine uyarlanmaz.',
-          'Bu sürümde rutinine göre ağırlıklandırılmış hareket testi veya kişiselleştirilmiş program bulunmaz.',
-        ]
-      : <String>[
-          'Day-to-day movement programmes are listed in the plan. This release does not adapt programmes or weight tests to your routine.',
-          'No routine-weighted movement tests or personalised programmes are available in this build.',
-        ],
-  'family_warmups' => turkish
-      ? <String>[
-          'Diğer sporlar için hazırlıklar planda listelenir. Bu sürümde hazırlık içeriği veya başka uygulamaya aktarım bulunmaz.',
-          'Bu sürümde diğer uygulamalara yönelik hareketlilik kontrolü veya uygulamaya aktarım bulunmaz.',
-        ]
-      : <String>[
-          'Warm-ups for other sports are listed in the plan. No warm-up content or handoff to another app is included in this release.',
-          'No partner-app mobility checks or app handoffs are available in this build.',
-        ],
-  'breath_meditation' => turkish
-      ? <String>[
-          'Bu sürümde nefes veya sakinleşme oturumu, sesli rehberlik veya oturum zamanlayıcısı bulunmaz.',
-          'Bu sürümde sesli rehberli veya zamanlayıcılı oturum bulunmaz. Kamera kapalıdır.',
-        ]
-      : <String>[
-          'No breath or wind-down sessions, audio guidance or session timer are included in this release.',
-          'No audio-guided or timed sessions are available in this build. The camera is off.',
-        ],
+  'flexibility_goals' =>
+    turkish
+        ? <String>[
+            'Esneklik hedefleri için yollar planda listelenir. Bu sürümde program, eğilim grafiği veya zamanlanmış yeniden ölçüm bulunmaz.',
+            'Bu sürümde hedef ölçümleri veya zamanlanmış yeniden testler bulunmaz.',
+            'Ölçüm gürültüsü eşiği veya ilerleme değişikliği değerlendirmesi sunulmaz.',
+          ]
+        : <String>[
+            'Flexibility goal paths are listed in the plan. No programme, trend chart or scheduled re-measurement is included in this release.',
+            'No goal measurements or scheduled re-tests are available in this build.',
+            'No measurement-noise threshold or progress-change judgement is available.',
+          ],
+  'population_packs' =>
+    turkish
+        ? <String>[
+            'Günlük hareket programları planda listelenir. Bu sürümde programlar veya test ağırlıkları günlük rutinine uyarlanmaz.',
+            'Bu sürümde rutinine göre ağırlıklandırılmış hareket testi veya kişiselleştirilmiş program bulunmaz.',
+          ]
+        : <String>[
+            'Day-to-day movement programmes are listed in the plan. This release does not adapt programmes or weight tests to your routine.',
+            'No routine-weighted movement tests or personalised programmes are available in this build.',
+          ],
+  'family_warmups' =>
+    turkish
+        ? <String>[
+            'Diğer sporlar için hazırlıklar planda listelenir. Bu sürümde hazırlık içeriği veya başka uygulamaya aktarım bulunmaz.',
+            'Bu sürümde diğer uygulamalara yönelik hareketlilik kontrolü veya uygulamaya aktarım bulunmaz.',
+          ]
+        : <String>[
+            'Warm-ups for other sports are listed in the plan. No warm-up content or handoff to another app is included in this release.',
+            'No partner-app mobility checks or app handoffs are available in this build.',
+          ],
+  'breath_meditation' =>
+    turkish
+        ? <String>[
+            'Bu sürümde nefes veya sakinleşme oturumu, sesli rehberlik veya oturum zamanlayıcısı bulunmaz.',
+            'Bu sürümde sesli rehberli veya zamanlayıcılı oturum bulunmaz. Kamera kapalıdır.',
+          ]
+        : <String>[
+            'No breath or wind-down sessions, audio guidance or session timer are included in this release.',
+            'No audio-guided or timed sessions are available in this build. The camera is off.',
+          ],
   _ => throw ArgumentError.value(familyId, 'familyId'),
 };
 
@@ -124,25 +125,26 @@ void main() {
       await scrollTo(tester, storage);
       expect(storage, findsOneWidget);
       final copy = _copy(tester, find.byType(ProfileScreen));
-      for (final sentence in turkish
-          ? <String>[
-              'Bu sürümde canlı kamera ölçümleri kapalıdır.',
-              'Her yazılı kursun ilk bölümü ücretsizdir; kalan dersler Lissom veya Motion+ aboneliğiyle açılır.',
-              'Yazılı yoga kursları kamera olmadan çalışır.',
-              'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir.',
-              'Bu kayıtlar Motion hesabına eşitlenmez.',
-              'Öz denetim yanıtları kaydedilmez.',
-              'Yazılı hatırlama notları sayfadan çıkınca silinir.',
-            ]
-          : <String>[
-              'Live camera measurements are closed in this release.',
-              'The first part of every written course is free; a Lissom or Motion+ subscription unlocks the remaining lessons.',
-              'Written yoga courses work without a camera.',
-              'Practice records stay on this device and reflect your own reports.',
-              'These records are not synced to your Motion account.',
-              'Self-check answers are not saved.',
-              'Written recall notes are discarded when you leave the page.',
-            ]) {
+      for (final sentence
+          in turkish
+              ? <String>[
+                  'Bu sürümde canlı kamera ölçümleri kapalıdır.',
+                  'Her yazılı kursun ilk bölümü ücretsizdir; kalan dersler Lissom veya Motion+ aboneliğiyle açılır.',
+                  'Yazılı yoga kursları kamera olmadan çalışır.',
+                  'Çalışma kayıtları bu cihazda kalır ve kendi beyanını gösterir.',
+                  'Bu kayıtlar Motion hesabına eşitlenmez.',
+                  'Öz denetim yanıtları kaydedilmez.',
+                  'Yazılı hatırlama notları sayfadan çıkınca silinir.',
+                ]
+              : <String>[
+                  'Live camera measurements are closed in this release.',
+                  'The first part of every written course is free; a Lissom or Motion+ subscription unlocks the remaining lessons.',
+                  'Written yoga courses work without a camera.',
+                  'Practice records stay on this device and reflect your own reports.',
+                  'These records are not synced to your Motion account.',
+                  'Self-check answers are not saved.',
+                  'Written recall notes are discarded when you leave the page.',
+                ]) {
         expect(copy, contains(sentence));
       }
       expect(copy, isNot(contains('Course progress and self-checks stay')));
@@ -165,7 +167,7 @@ void main() {
         (turkish
                 ? 'Planlanan poz gözlemi kategorileri'
                 : 'Planned pose observation categories')
-            .toUpperCase(),
+            .eyebrow(turkish),
       );
       await scrollTo(tester, heading);
       expect(heading, findsOneWidget);
@@ -178,23 +180,24 @@ void main() {
       await scrollTo(tester, tiers);
       expect(tiers, findsOneWidget);
       final tierCopy = _copy(tester, tiers);
-      for (final sentence in turkish
-          ? <String>[
-              'Ayakta, oturarak ve diz çökerek yapılan duruşlar',
-              'Duruş bazında koçluk ve referans puanlaması sunulmaz.',
-              'Kamerayla rehberlik ve puanlama sunulmaz.',
-              'Avatar gösterimi ve puanlama sunulmaz.',
-              'Yerde uzanırken vücut, yan kameradan birçok eklem noktasını örter.',
-              'Poz modelleri ters duruşlarda uzuv adlarını yüksek güvenle yanlış eşleyebilir',
-            ]
-          : <String>[
-              'Standing, seated and kneeling poses',
-              'Pose-by-pose coaching and reference scoring are not available.',
-              'Guided camera coaching and scoring are not available.',
-              'Avatar demonstrations and scoring are not available.',
-              'Self-occlusion: lying on the floor hides most landmarks from a side camera',
-              'Pose models silently swap limb labels on inverted bodies with high confidence',
-            ]) {
+      for (final sentence
+          in turkish
+              ? <String>[
+                  'Ayakta, oturarak ve diz çökerek yapılan duruşlar',
+                  'Duruş bazında koçluk ve referans puanlaması sunulmaz.',
+                  'Kamerayla rehberlik ve puanlama sunulmaz.',
+                  'Avatar gösterimi ve puanlama sunulmaz.',
+                  'Yerde uzanırken vücut, yan kameradan birçok eklem noktasını örter.',
+                  'Poz modelleri ters duruşlarda uzuv adlarını yüksek güvenle yanlış eşleyebilir',
+                ]
+              : <String>[
+                  'Standing, seated and kneeling poses',
+                  'Pose-by-pose coaching and reference scoring are not available.',
+                  'Guided camera coaching and scoring are not available.',
+                  'Avatar demonstrations and scoring are not available.',
+                  'Self-occlusion: lying on the floor hides most landmarks from a side camera',
+                  'Pose models silently swap limb labels on inverted bodies with high confidence',
+                ]) {
         expect(tierCopy, contains(sentence));
       }
       for (final legacy in <String>[
@@ -226,11 +229,7 @@ void main() {
           (family) => family.id == familyId,
         );
         expect(family.honestyBox.measured, isNotEmpty);
-        await _pump(
-          tester,
-          FamilyPage(family: family, facts: facts),
-          language,
-        );
+        await _pump(tester, FamilyPage(family: family, facts: facts), language);
 
         final openingCopy = _copy(tester, find.byType(FamilyPage));
         final honesty = find.byKey(FamilyPage.honestyKey);
@@ -255,7 +254,7 @@ void main() {
               (turkish
                       ? 'Bu sürümde bulunmuyor'
                       : 'Not available in this build')
-                  .toUpperCase(),
+                  .eyebrow(turkish),
             ),
           ),
           findsOneWidget,
@@ -267,7 +266,7 @@ void main() {
               (turkish
                       ? 'Ölçüm motorunun kapsamı'
                       : 'Measurement engine coverage')
-                  .toUpperCase(),
+                  .eyebrow(turkish),
             ),
           ),
           findsNothing,
@@ -307,4 +306,10 @@ void main() {
       });
     }
   }
+}
+
+/// Expected eyebrow text: the app capitalises Turkish with the dotted İ.
+extension on String {
+  String eyebrow(bool turkish) =>
+      lissomUpperCase(this, Locale(turkish ? 'tr' : 'en'));
 }

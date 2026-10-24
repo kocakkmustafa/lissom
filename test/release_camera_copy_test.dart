@@ -129,8 +129,8 @@ void main() {
         final oldHeading = turkish
             ? 'Bu sürümde kamerayla ölçülenler'
             : 'Measured by camera in this build';
-        expect(find.text(heading.toUpperCase()), findsOneWidget);
-        expect(find.textContaining(oldHeading.toUpperCase()), findsNothing);
+        expect(find.text(heading.eyebrow(turkish)), findsOneWidget);
+        expect(find.textContaining(oldHeading.eyebrow(turkish)), findsNothing);
         final note = find.descendant(
           of: find.byKey(CaptureUnavailableNote.key_),
           matching: find.byType(Text),
@@ -149,14 +149,14 @@ void main() {
               (turkish
                       ? 'Ölçüm motorunun kapsamı'
                       : 'Measurement engine coverage')
-                  .toUpperCase(),
+                  .eyebrow(turkish),
             ),
           ),
           findsOneWidget,
         );
         expect(
           find.text(
-            (turkish ? 'Neyi ölçer?' : 'What this measures').toUpperCase(),
+            (turkish ? 'Neyi ölçer?' : 'What this measures').eyebrow(turkish),
           ),
           findsNothing,
         );
@@ -212,4 +212,10 @@ void main() {
       },
     );
   }
+}
+
+/// Expected eyebrow text: the app capitalises Turkish with the dotted İ.
+extension on String {
+  String eyebrow(bool turkish) =>
+      lissomUpperCase(this, Locale(turkish ? 'tr' : 'en'));
 }
