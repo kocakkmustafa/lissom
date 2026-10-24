@@ -31,7 +31,7 @@ COURSE_PINS = {
     "ashtanga-foundations.v1.json": "889d9f22f4006c151ff3ae1a980dcc7b8b00076035a99bdb3f9154b990fb75b1",
     "chair-office.v1.json": "2663ec6308a65f6e4131cf474ca2ae594bbf34bdff7e4d3c484ad1dcf6e97853",
     "hatha.v1.json": "be597ebcb4d9a3ae05410e2b33752b061bdc4ad1aea49896ae978733b7405a3c",
-    "vinyasa-standing.v1.json": "64690c084e0b906c0974c9bf70ba7507572a8fcf2b225fe5438bb7c38f05f582",
+    "vinyasa-standing.v1.json": "d497fba6f0fa04fbf908fbfabc80a8142fec5b8fe143ad2e327b4d2e7c981444",
     "yin-supported.v1.json": "647e5c88c1e61720bcd93a6170ca978ba623f296594733fd4d495fbfc1813a66",
 }
 

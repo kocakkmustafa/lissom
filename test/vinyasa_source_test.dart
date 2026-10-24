@@ -538,6 +538,22 @@ void main() {
       ); // Identity contract, not skill completion.
       // G3 floor extension: knees stay down, bent elbows, stepped lunge.
       expect(course.modules.last.id, 'v-floor-extension');
+      // LIS-03: the intro (library card + course page) names the optional
+      // floor extension instead of calling every floor content knowledge-only.
+      expect(
+        course.intro.en,
+        contains('optional, labelled floor extension (v11–v14)'),
+      );
+      expect(
+        course.intro.en,
+        contains(
+          'within the standing route the floor branch is knowledge-only',
+        ),
+      );
+      expect(
+        course.intro.tr,
+        contains('isteğe bağlı, etiketli yer uzantısı (v11–v14)'),
+      );
       expect(
         course.lessonById('v11')!.steps[1].en,
         contains('Keep the knees down throughout'),
