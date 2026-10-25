@@ -51,4 +51,27 @@ void main() {
     expect(main, contains('requireMotionCameraAccess('));
     expect(main, contains('salesAvailable: true'));
   });
+
+  test('Core R3 store age signal stays on its production default', () {
+    // MotionAccountPage reads the store age range itself (Core R3 K1); the
+    // app must not replace it with a no-op, and iOS needs the entitlement.
+    final main = File('lib/main.dart').readAsStringSync();
+    expect(main, isNot(contains('storeAgeSignal:')));
+    final entitlements = File(
+      'ios/Runner/Runner.entitlements',
+    ).readAsStringSync();
+    expect(
+      entitlements,
+      contains('<key>com.apple.developer.declared-age-range</key>'),
+    );
+    final project = File(
+      'ios/Runner.xcodeproj/project.pbxproj',
+    ).readAsStringSync();
+    expect(
+      'CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;'
+          .allMatches(project)
+          .length,
+      3, // Debug, Release, Profile of the Runner target.
+    );
+  });
 }
