@@ -1,0 +1,15 @@
+{
+  "$doc": "Local Simplified Chinese translation draft of listing.json (K-6/K-7, 2026-10-27): Lissom: Yoga & Mobility, five courses, subscription terms. Not submitted or provider-accepted. Native/legal/store review remains UNRUN.",
+  "appStore": {
+    "name": "Lissom：瑜伽与灵活性",
+    "subtitle": "哈他、阴瑜伽、流瑜伽等",
+    "promotionalText": "五门文字瑜伽课程：哈他瑜伽、阿斯汤加入门基础、有支撑阴瑜伽、站立流瑜伽和椅子／办公室瑜伽。课程支持14种语言，练习记录保存在你的设备上。",
+    "keywords": "hatha,vinyasa,yin,ashtanga,哈他,阿斯汤加,拉伸,柔韧,初学者,呼吸,办公室,椅子"
+  },
+  "playStore": {
+    "shortDescription": "五门瑜伽课程，共120节文字课，练习记录保存在你的设备上。"
+  },
+  "description": "Lissom提供五门原创文字瑜伽课程，共120节课；界面和课程支持14种语言。\n\n• 哈他瑜伽：10个模块共60节课——自然呼吸、准备、有支撑体式、可控过渡及自主安排练习。\n• 阿斯汤加入门基础：5个模块共19节课，包含站姿调整、传统拜日A/B示意图、四个站立基础体式和结束休息。这不是完整的初级序列（Primary Series）。\n• 有支撑阴瑜伽：12节课。\n• 有支撑站立流瑜伽：14节课，附可选的双膝着地地面扩展。\n• 椅子／办公室瑜伽：15节课。\n\n可选择舒适的支撑、椅子或休息方式。每节课都包含学习目标、练习任务、自我检查和教学来源。动作测试目录还介绍了过头伸展、深蹲和主动直腿抬高。\n\n阅读课程、完成练习任务、回顾自己的练习，并从本地课程记录继续。无需登录即可浏览，也可使用可选的共享Motion账户。账户使用你的电子邮件地址、账户ID和可选的显示名称；可在应用内删除账户。课程记录保存在设备上，归属当前访客或账户范围。练习进度由你自己记录，不是体式评分，完成任何课程都不代表已经掌握。不含示范视频。\n\n订阅：每门课程的第一部分免费（120节课中的47节）。Lissom订阅或Motion+订阅（五款Motion应用通用），均有月付和年付，可解锁其余课程；新订阅用户可享14天免费试用。价格和周期会在购买前由App Store或Google Play显示，你可以在应用内恢复或管理订阅。费用从你的App Store或Google Play账户扣除；除非在当前周期结束前至少24小时取消，否则订阅会自动续订，你可以在商店账户设置中管理或取消订阅。删除Motion账户不会取消商店订阅。\n\n摄像头评估未开放。一般信息和调整方案不提供个人康复或产前治疗。Lissom不是医疗器械，不诊断或治疗任何疾病。",
+  "supportUrl": "https://yulalab.com/support",
+  "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
+}

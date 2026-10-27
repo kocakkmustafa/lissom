@@ -36,6 +36,7 @@ import 'app/lissom_presentation_host.dart';
 import 'app/account_epoch_client.dart';
 import 'app/age_block_store.dart';
 import 'app/course_access.dart';
+import 'app/lissom_release_policy.dart';
 import 'app/auth_session_fence.dart';
 import 'app/app_facts.dart';
 import 'app/local_account_bridge.dart';
@@ -526,6 +527,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
             // Sales are open (2026-10-23): membership status and the shared
             // purchase/restore/manage page are shown on the account page.
             membershipAvailable: true,
+            teenPurchasePolicy: lissomTeenPurchasePolicy,
             // 13+ age and parental-consent flow; the country is the store
             // country (Core default storefrontCountry), else device region.
             ageBlocked: widget.ageBlock?.blocked ?? false,
@@ -607,6 +609,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
                     account: widget.runtime.account,
                     accountPageBuilder: (pageContext) =>
                         _accountPage(pageContext, MotionApp.lissom.name),
+                    teenPurchasePolicy: lissomTeenPurchasePolicy,
                   ),
               // Camera sessions stay closed; course subscriptions are open.
               beforePaidLesson: (lessonContext) => requireMotionPaidAccess(
@@ -615,6 +618,7 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
                 accountPageBuilder: (pageContext) =>
                     _accountPage(pageContext, MotionApp.lissom.name),
                 salesAvailable: true,
+                teenPurchasePolicy: lissomTeenPurchasePolicy,
               ),
             ),
     );

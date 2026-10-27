@@ -91,7 +91,7 @@
     "yin": "5/12",
     "ashtanga": "7/19",
     "total": "47/120",
-    "status": "current app counts (Lissom freeLessonLimit override of Core isLessonUnlocked); founder approval pending (K-7)"
+    "status": "current app counts (Lissom freeLessonLimit override of Core isLessonUnlocked); confirmed by founder decision K-7 (2026-10-27)"
   },
   "storeNotifications": "App Store Server Notifications v2 and Play RTDN go to the Core motion-store-notifications function (Core R3 K2); renewals, cancellations and refunds update the account's entitlement without waiting for the app.",
   "catalogSource": "scratch/2026-10-25-motion-core-store-catalog/CATALOG.json (lissom rows: ids, prices, localized names)",

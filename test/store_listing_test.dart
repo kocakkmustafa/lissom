@@ -23,6 +23,8 @@
 /// tamamen kaybolursa kapı SESSİZCE geçmemeli).
 library;
 
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/listing_json.dart';
@@ -114,7 +116,9 @@ void main() {
     expect(lengthViolations, isEmpty);
     expect(missingFields, isEmpty);
 
-    expect(_dig(listing, 'appStore.name'), 'Lissom: Hareket Testleri');
+    // K-7 (2026-10-27): 'Lissom: Yoga & Mobility'; TR in its own words.
+    expect(_dig(english, 'appStore.name'), 'Lissom: Yoga & Mobility');
+    expect(_dig(listing, 'appStore.name'), 'Lissom: Yoga ve Mobilite');
     final String description = _dig(listing, 'description')!;
     for (final String name in <String>[
       'Yukarı uzanma',
@@ -125,10 +129,9 @@ void main() {
     }
     expect(description, contains('Hesabın olmadan kataloğu gezebilir'));
     expect(description, contains('Kamera değerlendirmeleri'));
-    expect(
-      description,
-      contains('60 özgün Türkçe ve İngilizce Hatha yoga dersi'),
-    );
+    expect(description, contains('arayüz ve dersler 14 dilde'));
+    expect(description, contains('10 modülde 60 ders'));
+    expect(description, contains("120 dersin 47'si"));
     expect(description, contains('Kamera değerlendirmeleri açık değildir'));
     // Sales open (2026-10-23): free first part, subscription, 14-day trial.
     expect(description, contains('Her kursun ilk bölümü ücretsizdir'));
@@ -242,6 +245,73 @@ void main() {
       expect(hits, isEmpty, reason: 'KARŞILIKSIZ VAAT: ${hits.join(" · ")}');
     },
   );
+
+  // K-6 (2026-10-27): the other twelve of the 14 store languages. Same
+  // limits as above; keywords are counted in UTF-8 bytes, where ar/ja/hi/zh
+  // can pass a character count and still exceed the byte limit.
+  group('14 dil — yerel taslaklar alan ve içerik sınırını koruyor', () {
+    final Map<String, dynamic> english = readListing(_listingPath);
+    int count(String text, String number) =>
+        RegExp('(?<![0-9])$number(?![0-9])').allMatches(text).length;
+    final RegExp promise = RegExp(
+      r"\b(yet|soon|coming soon|for now|in a future|will be added)\b",
+      caseSensitive: false,
+    );
+
+    for (final String locale in <String>[
+      'es-419',
+      'pt-BR',
+      'de',
+      'fr',
+      'ja',
+      'ar',
+      'it',
+      'ko',
+      'id',
+      'pl',
+      'hi',
+      'zh-Hans',
+    ]) {
+      test(locale, () {
+        final Map<String, dynamic> local = readListing(
+          'docs/store/listing.$locale.json',
+        );
+        final List<String> lengthViolations = <String>[];
+        final List<String> missingFields = <String>[];
+        _checkListing(
+          local,
+          lengthViolations: lengthViolations,
+          missingFields: missingFields,
+        );
+        expect(lengthViolations, isEmpty);
+        expect(missingFields, isEmpty);
+        expect(
+          utf8.encode(_dig(local, 'appStore.keywords')!).length,
+          lessThanOrEqualTo(100),
+          reason: 'keywords bytes',
+        );
+        expect(_dig(local, 'appStore.name'), startsWith('Lissom'));
+
+        // 120 lessons: Hatha 60/10 modules, Ashtanga 19/5, Yin 12,
+        // Vinyasa 14 (+ 14 languages, 14-day trial), chair/office 15;
+        // 47 free; renewal 24 hours.
+        final String desc = _dig(local, 'description')!;
+        for (final String n in <String>['120', '60', '19', '12', '15', '47']) {
+          expect(count(desc, n), greaterThanOrEqualTo(1), reason: n);
+        }
+        expect(count(desc, '14'), greaterThanOrEqualTo(3));
+        expect(count(desc, '24'), greaterThanOrEqualTo(1));
+        expect(desc, contains('Motion+'));
+        expect(
+          userStrings(local).where(promise.hasMatch),
+          isEmpty,
+          reason: 'promise language',
+        );
+        expect(local['supportUrl'], english['supportUrl']);
+        expect(local['privacyPolicyUrl'], english['privacyPolicyUrl']);
+      });
+    }
+  });
 
   group('ÖZ-TESTLER (H-62/M-F-652)', () {
     test('POZİTİF İKİZ — bugünkü gerçek dosya kapıdan geçer', () {
