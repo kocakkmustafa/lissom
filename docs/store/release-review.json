@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "status": "LOCAL_REVIEW_DRAFT_NOT_SUBMITTED",
   "preparedOn": "2026-10-27",
-  "basisSha": "e455e272e397cd11bf955eedced267dc2e595fd6",
+  "basisSha": "496e07280e1ca1ddf609db4af7dd9489f1685514",
   "app": {
     "bundleId": "com.yulalab.lissom",
     "playPackage": "com.yulalab.lissom",
@@ -25,8 +25,8 @@
     "cameraCoachingAvailable": false,
     "demonstrationVideoIncluded": false,
     "manualPracticeRecordIsMastery": false,
-    "teenPurchasePolicy": "Core R3 behaviour: a restricted 13–17 account still waiting for parental consent is not offered purchases; a per-app teen purchase policy arrives with Core R4 (CORE-12, K-2) and Lissom keeps today's behaviour unless K-2 says otherwise",
-    "policySource": "motion_account/lib/src/motion_release_policy.dart at pinned Core f43d71a375431e96c689a7a4a04fb53ff01af693; wired in lib/main.dart (requireMotionPaidAccess salesAvailable: true; requireMotionCameraAccess for camera steps; MotionAccountPage membershipAvailable: true) and lib/app/course_access.dart"
+    "teenPurchasePolicy": "Core R4 MotionTeenPurchasePolicy default parentalConsentRequired (R3 behaviour): a restricted 13–17 account still waiting for parental consent is not offered purchases, restore stays open; Lissom passes no policy until founder decision K-2 (test/age_block_store_test.dart)",
+    "policySource": "motion_account/lib/src/motion_release_policy.dart at pinned Core R4 0d29d1b019033f00828be741aa3e23e3923841be; wired in lib/main.dart (requireMotionPaidAccess salesAvailable: true; requireMotionCameraAccess for camera steps; MotionAccountPage membershipAvailable: true) and lib/app/course_access.dart"
   },
   "subscriptions": {
     "group": "Motion membership",

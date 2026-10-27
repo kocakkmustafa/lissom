@@ -1,6 +1,6 @@
 # Lissom reviewer notes — local draft, not submitted
 
-Bundle `com.yulalab.lissom`; ASC app ID 6794715023; version 1.0.0 (build 4 in source). Reconciled 2026-10-27 with source `e455e27` (Motion Core R3 `f43d71a` pin). The App Review text to paste is `release-review.json` → `appReview` (EN/TR); this file keeps the longer background. The final signed package must be bound before submission. No credentials belong in this file.
+Bundle `com.yulalab.lissom`; ASC app ID 6794715023; version 1.0.0 (build 4 in source). Reconciled 2026-10-27 with source `496e072` (Motion Core R4 `0d29d1b` pin; purchase, trial and age behaviour as in R3). The App Review text to paste is `release-review.json` → `appReview` (EN/TR); this file keeps the longer background. The final signed package must be bound before submission. No credentials belong in this file.
 
 ## Content
 

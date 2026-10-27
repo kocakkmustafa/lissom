@@ -64,7 +64,7 @@
   "statusScope": "Local source draft only; formsPublished=false means this work did not publish a form, not a fresh provider-status assertion",
   "liveProviderFormStatus": "NOT_FRESHLY_RECHECKED",
   "reviewFile": "docs/store/privacy-review.json",
-  "corePin": "f43d71a375431e96c689a7a4a04fb53ff01af693",
+  "corePin": "0d29d1b019033f00828be741aa3e23e3923841be",
   "serverStoredForSales": {
     "motion_entitlements": "server-verified subscription per account (store, product_id, original_transaction_id, state, expires_at, verified_at); refreshed by App Store Server Notifications v2 / Play RTDN",
     "motion_trial_ledger": "one Motion+ trial start per Motion account (app_id, started_at) across the five apps",

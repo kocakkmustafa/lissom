@@ -57,7 +57,7 @@
   "motionPlusScope": "Unlocks the paid parts of all five Motion apps (Lissom, Gravita, JabLab, Ostinato, Choreia) for the same Motion account.",
   "notIncluded": "Camera sessions stay closed in this release.",
   "reconciledWithCoreR3": "2026-10-27",
-  "corePin": "f43d71a375431e96c689a7a4a04fb53ff01af693",
+  "corePin": "0d29d1b019033f00828be741aa3e23e3923841be",
   "playOffers": {
     "lissom_individual": {
       "basePlans": [

@@ -5,7 +5,7 @@ ve Google Play veri güvenliği formlarına henüz girilmiş/onaylanmış beyan 
 
 ## Satış açık + Core R3 uzlaştırması — 2026-10-27 (güncel; aşağıdaki "satış kapalı" satırlarının yerine geçer)
 
-Kaynak `e455e27` (Core R3 `f43d71a` pin). Satış 2026-10-23'te açıldı (karar A); kamera değerlendirmesi
+Kaynak `496e072` (Core R4 `0d29d1b` pin; satın alma ve yaş verisi R3 ile aynı). Satış 2026-10-23'te açıldı (karar A); kamera değerlendirmesi
 kapalı kalır. Aşağıdaki 2026-09-26 tablosundaki "Satın alma geçmişi — Hayır; satış kapalı" satırı ve
 2026-10-18 bölümündeki "103 ders / satış kapalı" cümleleri **tarihseldir**. Güncel katalog 120 yazılı derstir
 (Hatha 60, Ashtanga temelleri 19, destekli Yin 12, ayakta Vinyasa 14, sandalye/ofis 15). Makine-okur

@@ -2,8 +2,8 @@
 
 Yayıma hazırlanacak TR/EN metinlerin kaynağı [listing.json](listing.json) ve
 [listing.tr-TR.json](listing.tr-TR.json) dosyalarıdır. Bu dosyalarda `$` önekli
-alanlar gerekçe notudur ve mağazaya taşınmaz. Kaynak `e455e27` (Motion Core R3
-`f43d71a` pin), sürüm 1.0.0 (build 4). Bu dosya mağaza paneline yazıldığı, güncel
+alanlar gerekçe notudur ve mağazaya taşınmaz. Kaynak `496e072` (Motion Core R4
+`0d29d1b` pin), sürüm 1.0.0 (build 4). Bu dosya mağaza paneline yazıldığı, güncel
 imzalı pakette bulunduğu ya da fiziksel cihazda kabul edildiği anlamına gelmez.
 Bu bakımda mağazaya hiçbir şey yazılmadı ve yükleme yapılmadı.
 
