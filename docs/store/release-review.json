@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_REVIEW_DRAFT_NOT_SUBMITTED",
+  "preparedOn": "2026-10-27",
+  "basisSha": "e455e272e397cd11bf955eedced267dc2e595fd6",
+  "app": {
+    "bundleId": "com.yulalab.lissom",
+    "playPackage": "com.yulalab.lissom",
+    "ascAppId": "6794715023",
+    "version": "1.0.0",
+    "build": "4",
+    "storeName": {
+      "current": "Lissom: Movement Checks",
+      "currentTr": "Lissom: Hareket Testleri",
+      "proposed": "Lissom: Yoga & Mobility",
+      "status": "PROPOSAL_PENDING_FOUNDER_DECISION_K7",
+      "reason": "Camera assessment is closed in the first release; 'Movement Checks' suggests a camera measurement. listing.json keeps the current name until K-7 is answered."
+    }
+  },
+  "releasePolicy": {
+    "subscriptionSalesAvailable": true,
+    "paidLessonGate": "Core isLessonUnlocked with Lissom freeLessonLimit (shortest whole-module prefix covering at least a third): Hatha 24/60, chair/office 6/15, Vinyasa 5/14, Yin 5/12, Ashtanga 7/19 (47/120)",
+    "freeLessonCountsStatus": "CURRENT_APP_COUNTS_PENDING_FOUNDER_APPROVAL_K7",
+    "deprecatedPaidFeaturesAvailable": false,
+    "cameraCoachingAvailable": false,
+    "demonstrationVideoIncluded": false,
+    "manualPracticeRecordIsMastery": false,
+    "teenPurchasePolicy": "Core R3 behaviour: a restricted 13–17 account still waiting for parental consent is not offered purchases; a per-app teen purchase policy arrives with Core R4 (CORE-12, K-2) and Lissom keeps today's behaviour unless K-2 says otherwise",
+    "policySource": "motion_account/lib/src/motion_release_policy.dart at pinned Core f43d71a375431e96c689a7a4a04fb53ff01af693; wired in lib/main.dart (requireMotionPaidAccess salesAvailable: true; requireMotionCameraAccess for camera steps; MotionAccountPage membershipAvailable: true) and lib/app/course_access.dart"
+  },
+  "subscriptions": {
+    "group": "Motion membership",
+    "source": "subscriptions-draft.json (products, prices, trial); Core catalogue scratch/2026-10-25-motion-core-store-catalog/CATALOG.json",
+    "iosProductIds": [
+      "com.yulalab.lissom.individual.monthly",
+      "com.yulalab.lissom.individual.yearly",
+      "com.yulalab.lissom.motionplus.monthly",
+      "com.yulalab.lissom.motionplus.yearly"
+    ],
+    "playProducts": {
+      "lissom_individual": [
+        "monthly",
+        "yearly"
+      ],
+      "lissom_motion_plus": [
+        "monthly",
+        "yearly"
+      ]
+    },
+    "usdBase": {
+      "lissomMonthly": "11.99",
+      "lissomYearly": "69.99",
+      "motionPlusMonthly": "19.99",
+      "motionPlusYearly": "129.99"
+    },
+    "freeTrial": "P14D for new subscribers on every product; Motion+ trial once per Motion account across the five apps (Core R3 K3)",
+    "playMotionPlusTrialOffer": {
+      "offerId": "free-trial",
+      "eligibility": "Developer determined",
+      "tag": "motion-plus-trial",
+      "phase": "Free trial P14D"
+    },
+    "consoleStatus": "OWNER_INPUT_NOT_CREATED_BY_THIS_REPO"
+  },
+  "appReview": {
+    "en-US": "Lissom contains five bundled written yoga courses, with the interface and lessons in 14 languages: Hatha (60 lessons), Ashtanga beginner foundations (19; not the full Primary Series), supported Yin (12), supported standing Vinyasa (14, with an optional knees-down floor extension) and chair/office yoga (15), 120 lessons in total. Practice records are self-reported and stay on the device; no lesson completion certifies mastery. Demonstration video is not included. Camera assessment is closed in this release: the camera code (MediaPipe/CameraX via the shared motion_camera package) is compiled in, so the camera usage description and the Android camera permission are declared, but the app never requests camera permission. A Motion account is optional; the free part of every course opens without signing in. Subscriptions (auto-renewable, group \"Motion membership\"): Lissom monthly / yearly and Motion+ monthly / yearly (Motion+ also opens Ostinato, Choreia, JabLab and Gravita). New subscribers get a 14-day free trial; the Motion+ trial is offered once per Motion account across the five Motion apps. Free lessons per course: Hatha 24 of 60, chair/office 6 of 15, Vinyasa 5 of 14, Yin 5 of 12, Ashtanga 7 of 19; the remaining lessons need a subscription, and saved progress always stays readable. To purchase: in the Library open supported Vinyasa, tap lesson 6 (marked \"Included with a Lissom or Motion+ subscription\"), sign in to the supplied Motion review account and pick a plan on the Membership page. That page shows the store price with the trial and renewal terms, Restore purchases, Manage subscription in the store and the Terms and Privacy links; it is also reachable from Profile → Account → Membership options. Purchases are verified on the server and linked to the Motion account. Cancellation is in the App Store subscription settings (Manage subscription in the store); deleting the Motion account does not cancel a store subscription. Accounts are for ages 13 and over: under-13 sign-up is blocked on the device while the courses stay available as a guest; for ages 13–17 the country's consent age applies and, where required, a parent or guardian approves by email before account features and purchases open. On iOS 26 and later, sign-up may ask to share the App Store age range. Profile → Account → Delete Motion account deletes the shared Motion account for all five Motion apps. A sandbox reviewer account is supplied through App Store Connect, not in this repository. Lissom is not a medical device and gives general information only.",
+    "tr-TR": "Lissom, arayüzü ve dersleri 14 dilde olan beş paketli yazılı yoga kursu içerir: Hatha (60 ders), Ashtanga başlangıç temelleri (19; tam Primary Series değildir), destekli Yin (12), destekli ayakta Vinyasa (14; isteğe bağlı dizler yerde zemin uzantısıyla) ve sandalye/ofis yogası (15), toplam 120 ders. Çalışma kayıtları kişinin kendi beyanıdır ve cihazda kalır; ders tamamlamak ustalık belgelemez. Gösterim videosu yoktur. Bu sürümde kamera değerlendirmesi kapalıdır: kamera kodu (ortak motion_camera paketi üzerinden MediaPipe/CameraX) derlemede bulunduğu için kamera kullanım açıklaması ve Android kamera izni beyanlıdır, ancak uygulama kamera izni istemez. Motion hesabı isteğe bağlıdır; her kursun ücretsiz bölümü giriş yapmadan açılır. Abonelikler (otomatik yenilenen, \"Motion membership\" grubu): Lissom aylık / yıllık ve Motion+ aylık / yıllık (Motion+ Ostinato, Choreia, JabLab ve Gravita'yı da açar). Yeni abonelere 14 gün ücretsiz deneme; Motion+ denemesi beş Motion app genelinde Motion hesabı başına bir kez sunulur. Kurs başına ücretsiz dersler: Hatha 60'tan 24, sandalye/ofis 15'ten 6, Vinyasa 14'ten 5, Yin 12'den 5, Ashtanga 19'dan 7; kalan dersler abonelik ister, kayıtlı ilerleme her zaman okunabilir kalır. Satın alma: Kütüphane'de destekli Vinyasa'yı aç, 6. derse dokun (\"Lissom veya Motion+ aboneliğine dahil\" etiketli), verilen Motion inceleme hesabıyla giriş yap ve Üyelik sayfasında plan seç. Bu sayfa mağaza fiyatını deneme ve yenileme koşullarıyla, Satın almaları geri yükle, Mağazada aboneliği yönet ve Şartlar ile Gizlilik bağlantılarını gösterir; Profil → Hesap → Üyelik seçenekleri yolundan da açılır. Satın almalar sunucuda doğrulanır ve Motion hesabına bağlanır. İptal App Store abonelik ayarlarındadır (Mağazada aboneliği yönet); Motion hesabını silmek mağaza aboneliğini iptal etmez. Hesaplar 13 yaş ve üzeri içindir: 13 yaş altı kayıt cihazda engellenir, kurslar misafir olarak açık kalır; 13–17 yaşta ülkenin onay yaşı uygulanır ve gerekiyorsa veli veya vasi e-postayla onay verdikten sonra hesap özellikleri ve satın alma açılır. iOS 26 ve sonrasında kayıt sırasında App Store yaş aralığının paylaşılması istenebilir. Profil → Hesap → Motion hesabını sil, beş Motion app'in ortak hesabını siler. Sandbox inceleme hesabı App Store Connect üzerinden verilir, bu depoda yer almaz. Lissom tıbbi cihaz değildir ve yalnız genel bilgi verir.",
+    "reviewAccount": null,
+    "reviewAccountStatus": "SUPPLIED_THROUGH_SECURE_STORE_FLOW_NO_CREDENTIAL_IN_REPO",
+    "longFormNotes": "reviewer-notes.md"
+  },
+  "privacy": {
+    "reviewFile": "privacy-review.json",
+    "appleSourceTypes": [
+      "EmailAddress",
+      "Name",
+      "UserID",
+      "OtherDiagnosticData",
+      "CoarseLocation",
+      "OtherDataTypes",
+      "PurchaseHistory"
+    ],
+    "tracking": false,
+    "linked": true,
+    "purpose": "AppFunctionality",
+    "policyUrl": "https://yulalab.com/privacy/motion",
+    "supportUrl": "https://yulalab.com/support",
+    "termsUrl": "https://yulalab.com/terms",
+    "licenseAgreement": "PROPOSAL_APPLE_STANDARD_EULA_PENDING_FOUNDER_DECISION_K7",
+    "finalProviderPublish": false
+  },
+  "play": {
+    "accountDeletionWebUrl": "https://yulalab.com/en/delete-account/motion",
+    "accountDeletionWebUrlStatus": "pending_live",
+    "accountDeletionWebUrlSource": "YULALAB YUL-14 shared Motion deletion page (14 languages: TR root https://yulalab.com/delete-account/motion, others /<locale>/delete-account/motion); site release branch codex/static-public-copy-20261012 @98b907b; goes live with the YUL-09 site release (Yönetim). Status changes from pending_live only after the Yönetim 'release live' notice.",
+    "inAppDeletion": "Profile → Account → Delete Motion account (Core MotionAccountPage); identity-bound remote deletion and local cleanup of that account scope; guest records stay; real account acceptance pending",
+    "dataSafetySource": "privacy-review.json dataTypes[*].playProposal and account-data-safety-draft.md",
+    "targetAudience": "13-15, 16-17, 18+ (accounts 13+, guests of any age); final answer is the owner's console input",
+    "dataSafetySubmitted": false
+  },
+  "ageRating": {
+    "assignedRating": null,
+    "status": "QUESTIONNAIRE_AND_OWNER_DECISION_PENDING_K7_NO_AUTOMATIC_4_PLUS_CLAIM",
+    "historicalEstimate": "listing.json $ageRating '4+ / Everyone' is a pre-sales estimate, not a rating",
+    "contentFacts": [
+      "written yoga and mobility instruction",
+      "general health/wellness information, not a medical device",
+      "no user-generated content, messaging or media sharing",
+      "auto-renewable subscriptions",
+      "accounts 13+ with country consent age and parental approval"
+    ],
+    "ratingAuthority": "Apple/Google questionnaires and region-specific result; this draft does not assign a rating"
+  },
+  "screenshots": {
+    "status": "CURRENT_NATIVE_CAPTURE_PENDING",
+    "locales": [
+      "en-US",
+      "tr-TR"
+    ],
+    "scenes": [
+      "Library with the five catalogues",
+      "one written lesson with support and rest options",
+      "locked lesson label and Membership page with store offers",
+      "local self-recorded progress",
+      "optional account and privacy entry"
+    ],
+    "localDraftRenderer": "tool/render_store_drafts.dart (host drafts with a HOST DRAFT banner; not device proof)",
+    "rules": [
+      "real current signed build and locale",
+      "no private account data",
+      "no camera result or demonstration video",
+      "record device/OS/source SHA and screenshot hash"
+    ]
+  },
+  "openAcceptance": [
+    "LIS-04 signed IPA/AAB from the final SHA (K-8 define confirmation; M-1 Declared Age Range profile)",
+    "YLIS-05 sandbox S1–S18 (scratch/2026-10-23-lissom-sales/SALES-PLAN.tr.md)",
+    "YLIS-06 real-device VoiceOver/TalkBack",
+    "live Motion Core functions (CORE-07) and parental-consent mail",
+    "YUL-14 external account-deletion page live (URL known, pending_live)",
+    "K-7 store name, age rating, countries, EULA and free-lesson counts",
+    "final privacy forms and native screenshots",
+    "explicit upload/publication decision"
+  ],
+  "sources": [
+    "https://developer.apple.com/app-store/review/guidelines/#subscriptions",
+    "https://developer.apple.com/app-store/app-privacy-details/",
+    "https://support.google.com/googleplay/android-developer/answer/13327111",
+    "https://support.google.com/googleplay/android-developer/answer/10787469",
+    "ventures/motion-core/workspace/YAYIN-PROFILI-TASLAK-2026-10-22.md"
+  ]
+}

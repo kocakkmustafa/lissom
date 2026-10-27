@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "draftOnly": true,
   "formsPublished": false,
-  "reviewedDate": "2026-10-18",
+  "reviewedDate": "2026-10-27",
   "appBundleId": "com.yulalab.lissom",
   "courseAssets": [
     "config/courses/ashtanga-foundations.v1.json",
@@ -48,15 +48,32 @@
     "inAppAction": "Delete Motion account / Motion hesabını sil",
     "sharedAcrossFiveMotionApps": true,
     "serverDeletionLiveAccepted": false,
-    "externalDeletionUrlVerified": false
+    "externalDeletionUrlVerified": false,
+    "inAppPath": "Profile → Account → Delete Motion account",
+    "externalDeletionUrlStatus": "pending_live",
+    "externalDeletionUrlSource": "YULALAB site YUL-14 shared Motion deletion page"
   },
   "remainingEvidence": [
-    "Current signed binary and merged SDK privacy report",
+    "Current signed binary and merged SDK privacy report (LIS-04)",
     "Live account login/recovery/deletion acceptance",
+    "Sandbox purchase/restore/notification acceptance S1–S18",
     "Current provider log retention/deletion policy",
-    "Current public privacy/support and external account-deletion page",
+    "Live external account-deletion page (YUL-14)",
     "ASC and Play final form answers/publish"
   ],
   "statusScope": "Local source draft only; formsPublished=false means this work did not publish a form, not a fresh provider-status assertion",
-  "liveProviderFormStatus": "NOT_FRESHLY_RECHECKED"
+  "liveProviderFormStatus": "NOT_FRESHLY_RECHECKED",
+  "reviewFile": "docs/store/privacy-review.json",
+  "corePin": "f43d71a375431e96c689a7a4a04fb53ff01af693",
+  "serverStoredForSales": {
+    "motion_entitlements": "server-verified subscription per account (store, product_id, original_transaction_id, state, expires_at, verified_at); refreshed by App Store Server Notifications v2 / Play RTDN",
+    "motion_trial_ledger": "one Motion+ trial start per Motion account (app_id, started_at) across the five apps",
+    "deletedWithAccount": true,
+    "paymentCardData": "never reaches the app or Motion servers"
+  },
+  "ageAndConsent": {
+    "declaredBirthMonthYearAndCountry": "stored with the account (Apple OtherDataTypes / Play Other info, Motion publishing profile)",
+    "parentEmail": "sent once for approval; only a one-way digest is kept",
+    "storeAgeRange": "Declared Age Range (iOS 26+) / Play Age Signals checked on the device; not stored on the server"
+  }
 }

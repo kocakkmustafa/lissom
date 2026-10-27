@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "asOfUtc": "2026-10-27",
+  "appId": "com.yulalab.lissom",
+  "runtimeSourceCommit": "e455e272e397cd11bf955eedced267dc2e595fd6",
+  "version": "1.0.0",
+  "build": "4",
+  "status": "LOCAL_REVIEW_DRAFT_NOT_SUBMISSION_PAYLOAD",
+  "submissionAllowed": false,
+  "sources": {
+    "appleManifest": "ios/Runner/PrivacyInfo.xcprivacy",
+    "appleManifestSha256": "2c42797792f6bfcbf47c58b95ac8b06c0cae208c854ce8733690d6bdb4763fa2",
+    "localDraft": "docs/store/privacy-draft.json",
+    "providerReceiptDateUtc": "2026-09-26T21:36:00Z",
+    "providerReceiptContext": "account-data-safety-draft.md; shared service receipt, not a new Lissom network session",
+    "motionPublishingProfile": "Motion Core YAYIN-PROFILI-TASLAK-2026-10-22.md (App Privacy and Data Safety rows: birth month/year and country as Other; parent email sent once and kept only as a digest)",
+    "googleTypes": "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en",
+    "googleDeletion": "https://support.google.com/googleplay/android-developer/answer/13327111?hl=en",
+    "privacyPolicy": "https://yulalab.com/privacy/motion",
+    "corePin": "f43d71a375431e96c689a7a4a04fb53ff01af693"
+  },
+  "firstRelease": {
+    "salesEnabled": true,
+    "cameraSessionsEnabled": false,
+    "purchaseHistoryCollected": true,
+    "realPurchaseRestoreAccepted": false,
+    "purchaseRestoreGate": "sandbox_S1_S18_pending_management (scratch/2026-10-23-lissom-sales/SALES-PLAN.tr.md)",
+    "salesDecision": "founder 2026-10-23: app subscription + Motion+, paywall A; Lissom free part 47/120 (current app counts, K-7 approval pending)"
+  },
+  "dataTypes": [
+    {
+      "id": "email",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypeEmailAddress",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "Personal info",
+        "dataType": "Email address",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": true,
+        "purposes": [
+          "App functionality",
+          "Account management"
+        ],
+        "classificationStatus": "direct_definition",
+        "purposesStatus": "developer_review_required"
+      },
+      "note": "Includes the parent or guardian email a 13–17 user enters for approval: sent once, the address itself is not stored, only a one-way digest for rate limiting (Motion publishing profile P6)."
+    },
+    {
+      "id": "display_name",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypeName",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "Personal info",
+        "dataType": "Name",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": true,
+        "purposes": [
+          "App functionality",
+          "Account management"
+        ],
+        "classificationStatus": "direct_definition",
+        "purposesStatus": "developer_review_required"
+      }
+    },
+    {
+      "id": "account_id",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypeUserID",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "Personal info",
+        "dataType": "User IDs",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": null,
+        "purposes": [
+          "App functionality",
+          "Account management"
+        ],
+        "classificationStatus": "direct_definition",
+        "purposesStatus": "developer_review_required"
+      }
+    },
+    {
+      "id": "provider_logs",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypeOtherDiagnosticData",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "App info and performance",
+        "dataType": "Diagnostics",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": null,
+        "purposes": [
+          "App functionality",
+          "Account management",
+          "Fraud prevention, security, and compliance"
+        ],
+        "classificationStatus": "proposed_inference_review_required",
+        "purposesStatus": "developer_review_required"
+      }
+    },
+    {
+      "id": "ip_location",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypeCoarseLocation",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "Location",
+        "dataType": "Approximate location",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": null,
+        "purposes": [
+          "App functionality",
+          "Account management",
+          "Fraud prevention, security, and compliance"
+        ],
+        "classificationStatus": "direct_definition",
+        "purposesStatus": "developer_review_required"
+      },
+      "note": "IP-derived country/region/city added by the Supabase Edge to request logs; no GPS or precise-location permission."
+    },
+    {
+      "id": "authentication_age_and_deletion_receipt",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypeOtherDataTypes",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "Personal info",
+        "dataType": "Other info",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": null,
+        "purposes": [
+          "App functionality",
+          "Account management",
+          "Fraud prevention, security, and compliance"
+        ],
+        "classificationStatus": "proposed_inference_review_required",
+        "purposesStatus": "developer_review_required"
+      },
+      "note": "Password hash (Supabase Auth), declared birth month/year and country (motion_age_declarations; no day is asked), parental-consent state and the account-deletion receipt digest. The App Store age range shared through Declared Age Range on iOS 26+ is used on the device to check the declaration."
+    },
+    {
+      "id": "purchase_history",
+      "apple": {
+        "type": "NSPrivacyCollectedDataTypePurchaseHistory",
+        "linked": true,
+        "tracking": false,
+        "purposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "status": "matches_source_manifest_not_console_readback"
+      },
+      "playProposal": {
+        "category": "Financial info",
+        "dataType": "Purchase history",
+        "collected": true,
+        "shared": null,
+        "ephemeral": false,
+        "optional": true,
+        "purposes": [
+          "App functionality",
+          "Account management"
+        ],
+        "classificationStatus": "direct_definition",
+        "purposesStatus": "developer_review_required"
+      },
+      "source": "Core f43d71a: motion_entitlements stores the server-verified subscription per account (store, product_id, original_transaction_id, state, expires_at, verified_at) so access can be restored; motion_trial_ledger keeps one Motion+ trial start (app_id, started_at) per account; store server notifications (App Store Server Notifications v2 / Play RTDN) refresh the same row. Both tables are deleted with the account. Payment card data never reaches the app or Motion servers."
+    }
+  ],
+  "localOnlyNotCollected": [
+    "course_progress (hatha_progress.jsonl, guest/account scoped, five catalogues)",
+    "session_history",
+    "onboarding_age_band",
+    "camera_video_or_landmarks"
+  ],
+  "microphoneUsed": false,
+  "tracking": false,
+  "transport": {
+    "proposal": "HTTPS for configured production Auth/profile/membership endpoints",
+    "runtimeSessionAccepted": false
+  },
+  "deletion": {
+    "inAppPath": "Profile → Account → Delete Motion account",
+    "sharedAcrossFiveMotionApps": true,
+    "externalRequestUrl": "https://yulalab.com/en/delete-account/motion",
+    "externalRequestUrlStatus": "pending_live",
+    "externalRequestUrlSource": "YULALAB YUL-14 shared Motion deletion page (14 languages: TR root https://yulalab.com/delete-account/motion, others /<locale>/delete-account/motion); site release branch codex/static-public-copy-20261012 @98b907b; goes live with the YUL-09 site release (Yönetim). Status changes from pending_live only after the Yönetim 'release live' notice.",
+    "externalRequestExecuted": false,
+    "realAccountDeletionAccepted": false,
+    "subscriptionCancelledByAccountDeletion": false,
+    "providerRetentionDays": null,
+    "backupRetentionDays": null,
+    "deletionReceiptRetentionDays": null,
+    "retentionProfile": "founder short profile (product data at deletion, logs up to 30 days, 30-day backup cycle) is described in the Motion privacy text; console answers still need owner review",
+    "sharedAccountWarningRequired": true
+  },
+  "unresolvedBeforeSubmission": [
+    {
+      "id": "P01",
+      "field": "dataTypes[*].playProposal.shared",
+      "reason": "Verify provider processing role and applicable sharing exception; null is unresolved, not No."
+    },
+    {
+      "id": "P02",
+      "field": "provider logs, IP location and account identifiers optional",
+      "reason": "Guest startup can check prior account deletion receipts; optional sign-in alone does not prove these records are optional for every user."
+    },
+    {
+      "id": "P03",
+      "field": "Diagnostics/Other info and purposes",
+      "reason": "Proposed mapping only; the age declaration and deletion digest under Other info follow the Motion publishing profile and need owner confirmation."
+    },
+    {
+      "id": "P04",
+      "field": "deletion.*RetentionDays",
+      "reason": "Confirm provider logs/backups/receipt retention; no invented days."
+    },
+    {
+      "id": "P05",
+      "field": "final package SDK inventory and console",
+      "reason": "Signed LIS-04 package privacy report, ASC/Play answers and real account/deletion acceptance pending."
+    },
+    {
+      "id": "P06",
+      "field": "deletion.externalRequestUrl",
+      "reason": "YUL-14 page URL is known (https://yulalab.com/en/delete-account/motion) but not live; Play requires a working external deletion request path before submission."
+    }
+  ],
+  "interpretation": [
+    "All seven Apple manifest rows have Play review entries; taxonomy equivalence is not assumed.",
+    "Optional account use is not proof that every provider log is optional.",
+    "A one-way digest (deletion receipt, parent email) is not treated as anonymous.",
+    "Local course progress and camera frames never leave the device and are not declared as collected."
+  ]
+}

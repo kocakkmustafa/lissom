@@ -3,6 +3,39 @@
 Bu dosya satışın kapalı olduğu ilk sürüm kaynağına ve Motion üretim şemasına göredir. App Store Connect
 ve Google Play veri güvenliği formlarına henüz girilmiş/onaylanmış beyan değildir.
 
+## Satış açık + Core R3 uzlaştırması — 2026-10-27 (güncel; aşağıdaki "satış kapalı" satırlarının yerine geçer)
+
+Kaynak `e455e27` (Core R3 `f43d71a` pin). Satış 2026-10-23'te açıldı (karar A); kamera değerlendirmesi
+kapalı kalır. Aşağıdaki 2026-09-26 tablosundaki "Satın alma geçmişi — Hayır; satış kapalı" satırı ve
+2026-10-18 bölümündeki "103 ders / satış kapalı" cümleleri **tarihseldir**. Güncel katalog 120 yazılı derstir
+(Hatha 60, Ashtanga temelleri 19, destekli Yin 12, ayakta Vinyasa 14, sandalye/ofis 15). Makine-okur
+karşılık `privacy-review.json`'dur (yedi Apple türü ve Play önerileri).
+
+| Veri | Cihaz dışına çıkar mı? | Amaç | Apple App Privacy | Play Data safety |
+|---|---|---|---|---|
+| Satın alma geçmişi (mağaza, ürün kimliği, orijinal işlem kimliği, durum, bitiş, doğrulama zamanı — `motion_entitlements`; Motion+ deneme başlangıcı — `motion_trial_ledger`) | Evet, sunucu doğrulaması ve mağaza sunucu bildirimleri (ASSN v2 / RTDN) | Aboneliği hesaba bağlamak, geri yüklemek, beş app'te Motion+ kapsamı, hesap başına tek Motion+ denemesi | **Purchases → Purchase History**: Linked to user = Evet; Tracking = Hayır; amaç **App Functionality** | **Financial info → Purchase history**: Collected; Shared = (P01 açık); işleme zorunlu değil (satın almayan kullanıcı için oluşmaz); amaç App functionality + Account management |
+| Beyan edilen doğum ay/yılı ve ülke (gün sorulmaz) | Evet, hesapla saklanır | Hesap özellikleri ve yaş korumaları | Other Data Types (mevcut satır) | Personal info → Other info |
+| Veli/vasi e-postası (13–17, onay gereken ülke) | Bir kez onay bağlantısı için gönderilir; adres saklanmaz, yalnız tek yönlü özet | Veli onayı | Contact Info → Email Address kapsamında App Functionality | Personal info → Email address |
+| Mağaza yaş aralığı (iOS 26+ Declared Age Range, Play Age Signals) | Hayır; cihazda beyanla karşılaştırılır | Yaş akışını yalnız sıkılaştırmak | Toplanmaz | Toplanmaz |
+| Ödeme kartı bilgisi | Uygulamaya veya Motion sunucusuna hiç gelmez | — | — | — |
+
+Hesap silme `motion_entitlements` ve `motion_trial_ledger` satırlarını da siler; **mağaza aboneliğini iptal etmez**
+(iptal mağaza hesap ayarlarındadır). Uygulama içi yol: Profil → Hesap → Motion hesabını sil. Uygulama dışı
+silme talebi URL'si YULALAB YUL-14 ortak Motion sayfasıdır: `https://yulalab.com/en/delete-account/motion`
+(TR kök `/delete-account/motion`, 14 dil). Sayfa YUL-09 site sürümüyle canlıya çıkana kadar durum
+`pending_live`dır (`release-review.json` → `play.accountDeletionWebUrlStatus`).
+
+**Konsol giriş adımları (Yönetim; bu repo forma bir şey yazmaz):**
+1. ASC → Lissom (6794715023) → App Privacy → Edit → Data Types → **Purchases → Purchase History** işaretle →
+   "Used for: App Functionality" → "Linked to the user's identity: Yes" → "Used for tracking: No" → Publish.
+   Mevcut altı tür (Email Address, Name, User ID, Other Diagnostic Data, Coarse Location, Other Data Types)
+   aynı yanıtlarla kalır.
+2. Play Console → Lissom → App content → Data safety → Data types → **Financial info → Purchase history**:
+   collected = Yes, shared = (P01 kararına göre), processed ephemerally = No, required/optional = Optional,
+   purposes = App functionality, Account management. Diğer satırlar `privacy-review.json` `playProposal`
+   alanlarına göre; "Data deletion" bölümünde uygulama içi silme + YUL-14 URL'si (`https://yulalab.com/en/delete-account/motion`, canlı olunca).
+3. Kanıt: konsol ekran görüntüsü veya readback; değerler bu dosyaya geri yazılır.
+
 ## Kaynakla uzlaştırma — 2026-09-26
 
 Başlıktaki 2026-09-25 ilk taslak tarihidir. Bu güncelleme mevcut ilk kurs,

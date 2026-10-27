@@ -526,7 +526,8 @@ class _LissomAccountHostState extends State<LissomAccountHost> {
             // Sales are open (2026-10-23): membership status and the shared
             // purchase/restore/manage page are shown on the account page.
             membershipAvailable: true,
-            // 13+ age and parental-consent flow; region defaults to device.
+            // 13+ age and parental-consent flow; the country is the store
+            // country (Core default storefrontCountry), else device region.
             ageBlocked: widget.ageBlock?.blocked ?? false,
             onAgeBlocked: widget.ageBlock == null
                 ? null
