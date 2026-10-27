@@ -32,15 +32,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// ⛔ MÜHÜRLÜ SABİTLER — kilitten türetilmez, elle beyan edilir.
 ///
-/// Published Motion Core R3 f43d71a (R1 camera/sales split + lesson lock,
+/// Published Motion Core R4 0d29d1b (R1 camera/sales split + lesson lock,
 /// R2 store trials + SMTP consent mail, R3 store age signal, one Motion+
-/// trial per account, store server notifications; new native package
-/// motion_platform_signals), 2026-10-25. The immutable SHA retains
-/// motion_core 0.13.0 and motion_camera 0.2.0; exact upstream CI run
-/// 40145997799 passed 13/13. This anchor is independent of the tested lock.
-const String kSealedRef = 'f43d71a375431e96c689a7a4a04fb53ff01af693';
+/// trial per account, store server notifications; R4 per-app teen purchase
+/// policy with the R3 default and Built-in Kotlin camera/platform-signal
+/// plugins), 2026-10-27. The immutable SHA retains motion_core 0.13.0 and
+/// carries motion_camera 0.3.0; exact upstream CI run 40434457573 passed
+/// 13/13. This anchor is independent of the tested lock.
+const String kSealedRef = '0d29d1b019033f00828be741aa3e23e3923841be';
 const String kSealedCoreVersion = '0.13.0';
-const String kSealedCameraVersion = '0.2.0';
+const String kSealedCameraVersion = '0.3.0';
 
 /// Bir git paketinin kilit kaydı.
 final class _LockEntry {
@@ -85,7 +86,7 @@ _LockEntry _readLock(String lock, String pkg) {
   return _LockEntry(ref, resolved, version, source);
 }
 
-const currentMotionSha = 'f43d71a375431e96c689a7a4a04fb53ff01af693';
+const currentMotionSha = '0d29d1b019033f00828be741aa3e23e3923841be';
 
 bool hasLocalMotionOverrides([String? source]) {
   final file = File('pubspec_overrides.yaml');

@@ -74,4 +74,14 @@ void main() {
       3, // Debug, Release, Profile of the Runner target.
     );
   });
+
+  test('Core R4 teen purchase policy stays on its default until K-2', () {
+    // Core R4 adds teenPurchasePolicy; its default (parentalConsentRequired)
+    // keeps the R3 behaviour: a teen still waiting for parental consent sees
+    // no offers, restore stays open. A founder K-2 choice goes to the account
+    // page and both access gates together, so this test changes with it.
+    final main = File('lib/main.dart').readAsStringSync();
+    expect(main, isNot(contains('teenPurchasePolicy:')));
+    expect(main, isNot(contains('storeFamilyControls')));
+  });
 }
