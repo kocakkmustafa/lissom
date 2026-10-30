@@ -39,7 +39,9 @@ const Map<String, int> _fieldLimits = <String, int>{
   'appStore.subtitle': 30,
   'appStore.promotionalText': 170,
   'appStore.keywords': 100,
+  'playStore.title': 30,
   'playStore.shortDescription': 80,
+  'playStore.fullDescription': 4000,
   'description': 4000,
 };
 
@@ -120,23 +122,33 @@ void main() {
     expect(_dig(english, 'appStore.name'), 'Lissom: Yoga & Mobility');
     expect(_dig(listing, 'appStore.name'), 'Lissom: Yoga ve Mobilite');
     final String description = _dig(listing, 'description')!;
+    // 2026-10-30 rewrite: the movement-test catalogue belonged to the closed
+    // camera measurement and the old "Hareket Testleri" name; it stays out.
     for (final String name in <String>[
       'Yukarı uzanma',
       'derin çömelme',
       'düz bacak kaldırma',
     ]) {
-      expect(description, contains(name));
+      expect(description, isNot(contains(name)));
     }
-    expect(description, contains('Hesabın olmadan kataloğu gezebilir'));
-    expect(description, contains('Kamera değerlendirmeleri'));
-    expect(description, contains('arayüz ve dersler 14 dilde'));
+    expect(description, contains('Lissom’u misafir olarak kullanabilirsin'));
+    expect(
+      description,
+      contains('hareketlerini puanlamak, düzeltmek veya saymak için kamerayı'),
+    );
+    expect(description, isNot(contains('Kamera değerlendirmeleri')));
+    expect(description, contains('arayüz ve tüm dersler 14 dilde'));
     expect(description, contains('10 modülde 60 ders'));
-    expect(description, contains("120 dersin 47'si"));
-    expect(description, contains('Kamera değerlendirmeleri açık değildir'));
-    // Sales open (2026-10-23): free first part, subscription, 14-day trial.
-    expect(description, contains('Her kursun ilk bölümü ücretsizdir'));
-    expect(description, contains('14 gün ücretsiz deneme'));
-    expect(description, contains('geri yükleyebilir veya yönetebilirsin'));
+    expect(description, contains('120 dersin 47’si'));
+    expect(description, contains('60 Hatha dersinin ilk 24’ü'));
+    // Sales open (2026-10-23): free first part, membership, 14-day trial.
+    expect(description, contains('Her kursun ilk kısmı ücretsizdir'));
+    expect(description, contains('14 günlük ücretsiz deneme'));
+    expect(
+      description,
+      contains('Satın alımları uygulamada geri yükleyebilirsin'),
+    );
+    expect(description, contains('en az 24 saat önce iptal edilmezse'));
     expect(description, isNot(contains('Üç canlı kamera ölçümü')));
     expect(
       RegExp(
@@ -150,6 +162,38 @@ void main() {
     expect(listing['supportUrl'], english['supportUrl']);
     expect(listing['privacyPolicyUrl'], english['privacyPolicyUrl']);
   });
+
+  // Guideline 3.1.2: the App Store description carries working Terms (EULA)
+  // and Privacy links; 2.3.10: it names no other store. The Play copy names
+  // no Apple store. TR lives at the site root (defaultLocale tr, as-needed).
+  for (final (String path, String terms, String privacy)
+      in <(String, String, String)>[
+        (
+          _listingPath,
+          'https://yulalab.com/en/terms',
+          'https://yulalab.com/en/privacy/motion',
+        ),
+        (
+          _trListingPath,
+          'https://yulalab.com/terms',
+          'https://yulalab.com/privacy/motion',
+        ),
+      ]) {
+    test('3.1.2 bağlantıları ve mağaza adı ayrımı: $path', () {
+      final Map<String, dynamic> listing = readListing(path);
+      final String appStore = _dig(listing, 'description')!;
+      final String play = _dig(listing, 'playStore.fullDescription')!;
+      for (final String text in <String>[appStore, play]) {
+        expect(text, contains(terms));
+        expect(text, contains(privacy));
+        expect(text, contains('EULA'));
+      }
+      expect(appStore, isNot(contains('Google')));
+      expect(play, isNot(contains('Apple')));
+      expect(play, isNot(contains('App Store')));
+      expect(_dig(listing, 'playStore.title'), _dig(listing, 'appStore.name'));
+    });
+  }
 
   test('\$ SÖZLEŞMESİ — gönderilen alan \$ taşımaz, gerekçe \$ taşır', () {
     final Map<String, dynamic> listing = readListing(_listingPath);

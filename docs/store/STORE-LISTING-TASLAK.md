@@ -1,102 +1,130 @@
-# Güncel mağaza metni girişi · 27 Ekim 2026
+# Güncel mağaza metni girişi · 30 Ekim 2026
 
-Yayıma hazırlanacak metinlerin kaynağı 14 mağaza dilindeki `listing*.json` dosyalarıdır
-(EN [listing.json](listing.json), TR [listing.tr-TR.json](listing.tr-TR.json), diğer on iki dil
-`listing.<locale>.json`; K-6, 2026-10-27). Bu dosyalarda `$` önekli
-alanlar gerekçe notudur ve mağazaya taşınmaz. Motion Core R4 `0d29d1b` pin, sürüm 1.0.0 (build 4);
-kurucu kararları K-2, K-6, K-7 (2026-10-27) işlendi. Bu dosya mağaza paneline yazıldığı, güncel
-imzalı pakette bulunduğu ya da fiziksel cihazda kabul edildiği anlamına gelmez.
-Bu bakımda mağazaya hiçbir şey yazılmadı ve yükleme yapılmadı.
+Mağaza metninin kaynağı 14 mağaza dilindeki `listing*.json` dosyalarıdır:
+EN [listing.json](listing.json), TR [listing.tr-TR.json](listing.tr-TR.json), diğer on iki dil
+`listing.<locale>.json`.
 
-**Kapsam:** beş yazılı yoga kataloğu, toplam **120 ders**: Hatha 60 / 10 modül,
-Ashtanga başlangıç temelleri 19 / 5 modül (tam Primary Series değil), destekli Yin 12,
-destekli ayakta Vinyasa 14 (isteğe bağlı dizler yerde zemin uzantısı) ve sandalye/ofis 15.
-Arayüz ve dersler 14 dilde. İlerleme kişinin cihazdaki öz kaydıdır; ustalık, poz puanı
-ya da tıbbi uygunluk iddiası yoktur. Gösterim videosu yoktur. Kamera değerlendirmesi
-kapalıdır. Kurs varlık kimlikleri ve hash'leri `$courseCatalogPreparationCurrent`
-alanındadır (`test/store_scope_preparation_test.dart` bunları paketteki baytlarla eşler).
+**30 Ekim yeniden yazımı:**
+- Dosyalar Yönetim brifine göre baştan yazılan metinle eşitlendi:
+  `scratch/2026-10-30-magaza-metinleri/lissom/STORE-COPY.json`.
+- Aynı klasörde iddia başına kanıt (`EVIDENCE.md`) ve eskimiş ifadelerin listesi (`README.tr.md`) var.
+- Kaynak:
+  - aday `f66a3fa` (1.0.0, build 5);
+  - Motion Core R4.3 `5b15308`;
+  - yulalab-web `4bb91af`.
+- `$` önekli alanlar gerekçe notudur, mağazaya taşınmaz.
+- Bu dosya mağaza paneline yazıldığı ya da fiziksel cihazda kabul edildiği anlamına gelmez. Yükleme yapılmadı; konsol girişi Yönetim'de.
 
-**Satış (karar A, 2026-10-23; Core R3 ile uzlaştırıldı 2026-10-27):** abonelik açıktır
-(Lissom + Motion+). Her kursun ilk bölümü ücretsizdir: Hatha 24/60, sandalye/ofis 6/15,
-Vinyasa 5/14, Yin 5/12, Ashtanga 7/19, toplam **120 dersin 47'si**. Bunlar
-**uygulamadaki mevcut sayılardır; kurucu K-7 ile onaylandı (2026-10-27)**. Kalan dersler
-Lissom veya Motion+ aboneliği ister ve ilerleme her zaman okunur. Fiyat, deneme süresi ve
-yenileme koşullarını mağaza ve uygulamadaki Üyelik sayfası gösterir. Açıklamaya
-Guideline 3.1.2 için yenileme ve iptal cümlesi eklendi (JabLab/Gravita düzeyi).
+## Alanlar
 
-İlgili dosyalar:
-[release-review.json](release-review.json) (sürüm politikası, App Review metni EN/TR,
-Play hesap silme alanı, yaş derecesi, açık kabuller) ·
-[privacy-review.json](privacy-review.json) (yedi Apple türü ve Play önerileri; satın alma
-geçmişi dahil) · [subscriptions-draft.json](subscriptions-draft.json) (ürün kimlikleri,
-fiyat, P14D, Motion+ tek deneme, Play teklifleri) ·
-[account-data-safety-draft.md](account-data-safety-draft.md) (2026-10-27 bölümü:
-konsol giriş adımları) · [reviewer-notes.md](reviewer-notes.md) (uzun inceleme notu).
+| Alan | en-US, tr-TR | Diğer 12 dil |
+|---|---|---|
+| `appStore.name` | App Store adı = Play başlığı | Play başlığı (K-7 yerel ad) |
+| `appStore.subtitle` / `promotionalText` / `keywords` | 30 Ekim App Store metni | K-6 yerel taslağı. Bu sürümün App Store metni yalnız en-US + tr |
+| `description` | **App Store** açıklaması: Apple 3.1.2 cümleleri + Şartlar (EULA) ve Gizlilik bağlantıları; Google adı geçmez | **Play** tam açıklaması |
+| `playStore.title` / `shortDescription` / `fullDescription` | Play metni; Apple adı geçmez | Play metni |
 
-## Alan eşlemesi (14 dil, ölçülmüş)
+Abonelik adları, açıklamaları, Play faydaları ve grup görünen adı (14 dil) yalnız
+`STORE-COPY.json`'da: `subscriptions`, `subscriptionGroup`. Konsol dil kodları
+(`es-419` → ASC `es-MX` vb.) aynı dosyada: `$ascLocale` / `$playLocale`.
 
-| Dil | Dosya | Ad | Subtitle | Promo | Keywords | Play kısa | Açıklama |
-|---|---|---|---|---|---|---|---|
-| en-US | [listing.json](listing.json) | Lissom: Yoga & Mobility | 28 | 168 | 98 B | 79 | 2280 |
-| tr-TR | [listing.tr-TR.json](listing.tr-TR.json) | Lissom: Yoga ve Mobilite | 30 | 147 | 99 B | 62 | 2099 |
-| es-419 | [listing.es-419.json](listing.es-419.json) | Lissom: Yoga y movilidad | 25 | 166 | 98 B | 80 | 2583 |
-| pt-BR | [listing.pt-BR.json](listing.pt-BR.json) | Lissom: Yoga e mobilidade | 26 | 166 | 96 B | 77 | 2478 |
-| de | [listing.de.json](listing.de.json) | Lissom: Yoga & Mobilität | 28 | 170 | 95 B | 79 | 2552 |
-| fr | [listing.fr.json](listing.fr.json) | Lissom: Yoga et mobilité | 27 | 163 | 98 B | 74 | 2615 |
-| ja | [listing.ja.json](listing.ja.json) | Lissom: ヨガとモビリティ | 14 | 87 | 98 B | 39 | 1170 |
-| ar | [listing.ar.json](listing.ar.json) | Lissom: يوغا ومرونة الحركة | 26 | 148 | 97 B | 67 | 1920 |
-| it | [listing.it.json](listing.it.json) | Lissom: Yoga e mobilità | 27 | 166 | 96 B | 78 | 2577 |
-| ko | [listing.ko.json](listing.ko.json) | Lissom: 요가 & 모빌리티 | 15 | 95 | 97 B | 40 | 1248 |
-| id | [listing.id.json](listing.id.json) | Lissom: Yoga dan Mobilitas | 29 | 166 | 99 B | 78 | 2319 |
-| pl | [listing.pl.json](listing.pl.json) | Lissom: Joga i mobilność | 28 | 169 | 98 B | 74 | 2409 |
-| hi | [listing.hi.json](listing.hi.json) | Lissom: योग और गतिशीलता | 24 | 152 | 84 B | 70 | 2117 |
-| zh-Hans | [listing.zh-Hans.json](listing.zh-Hans.json) | Lissom：瑜伽与灵活性 | 11 | 68 | 94 B | 29 | 756 |
-| **Sınır** | | 30 | 30 | 170 | 100 B | 80 | 4000 |
+## Metnin özü
 
-Ortak alanlar: Support URL `https://yulalab.com/support` · Privacy URL
-`https://yulalab.com/privacy/motion` · Terms `https://yulalab.com/terms` · ASC License
-Agreement **Apple standart EULA** (K-7) · Play hesap silme URL'si
-`https://yulalab.com/en/delete-account/motion` — `pending_live` (YUL-09 ile canlı; TR kök
-`/delete-account/motion`). Karakter sayısı Unicode kod noktası, anahtar kelimeler UTF-8
-bayttır (ar/ja/hi/zh'de karakter sınırı geçip bayt sınırı aşılabilir).
+**Kapsam:**
+- Beş yazılı yoga kursu, toplam **120 ders**:
+  - Hatha 60 / 10 modül;
+  - Ashtanga başlangıç temelleri 19 / 5 modül (tam Primary Series değil);
+  - destekli Yin 12;
+  - destekli ayakta Vinyasa 14;
+  - sandalye/ofis 15.
+- Arayüz ve tüm dersler 14 dilde.
+- Her dersin parçaları: hedef, uygulama, öz denetim, kolay yol, ne zaman durulacağı, öğretim kaynakları.
+- İlerleme cihazdaki öz kayıttır. Poz puanı ya da ustalık iddiası yoktur.
+- Kamera ile puanlama, düzeltme veya sayım yoktur. Gösterim videosu yoktur.
+- Misafir kullanım var. Motion hesabı isteğe bağlıdır: 13+, ülkenin dijital rıza yaşının altında önce veli onayı. Hesap uygulamadan silinir.
+- Tıbbi cihaz değildir.
+- Kurs varlık kimlikleri ve hash'leri `$courseCatalogPreparationCurrent` alanında. `test/store_scope_preparation_test.dart` bunları paketteki baytlarla eşler.
 
-Kapılar: `test/store_listing_test.dart` — EN/TR uzunluk ve varlık, TR adı ve satış
-cümleleri, vaat dili, cihaz kanıtı iddiası; on iki yerel dosya için aynı sınırlar,
-anahtar kelime baytı, `Lissom` adı, sayı tutarlılığı (120 · 60 · 19 · 12 · 14×3 · 15 · 47 ·
-24 saat), `Motion+`, vaat dili ve ortak URL'ler. Yerel metinlerin ana dil / hukuk / mağaza
-incelemesi **UNRUN** (her dosyanın `$doc` alanı).
+**Satış (karar A, 2026-10-23; Core R4.3):**
+- Abonelik açık: Lissom üyeliği + Motion+, aylık ve yıllık.
+- Her kursun ilk kısmı ücretsiz, toplam **120 dersin 47'si**: Hatha 24/60, sandalye/ofis 6/15, Vinyasa 5/14, Yin 5/12, Ashtanga 7/19 (`lib/app/course_access.dart`; K-7).
+- Motion+ tanımı Core R4.3 metniyle aynı anlamda: beş uygulamada bugün yayındaki ücretli dersler; kamera koçluğu ve yayımlanmamış dersler hariç.
+  - 13 dilde Core metni olduğu gibi.
+  - EN'de "not yet released" yerine "unreleased" kullanıldı; vaat kapısı "yet" kelimesini reddediyor.
+- 14 gün ücretsiz deneme. Motion+ denemesi her Motion hesabı için bir kez.
+- Metinde sabit fiyat yok; fiyatı mağaza gösterir.
+- Hesap silmek mağaza aboneliğini iptal etmez.
 
-## Kurucu kararları (K-2, K-6, K-7 — 2026-10-27)
+## Alan ölçümü (14 dil)
+
+Karakter sayısı Unicode kod noktası, anahtar kelimeler UTF-8 bayttır.
+
+| Dil | Dosya | Ad / Play başlığı | Subtitle | Promo | Keywords | AS açıklama | Play kısa | Play tam |
+|---|---|---|---|---|---|---|---|---|
+| en-US | [listing.json](listing.json) | Lissom: Yoga & Mobility | 29 | 147 | 97 B | 2791 | 73 | 2550 |
+| tr-TR | [listing.tr-TR.json](listing.tr-TR.json) | Lissom: Yoga ve Mobilite | 29 | 123 | 96 B | 2645 | 64 | 2429 |
+| es-419 | [listing.es-419.json](listing.es-419.json) | Lissom: Yoga y movilidad | — | — | — | — | 77 | 2908 |
+| pt-BR | [listing.pt-BR.json](listing.pt-BR.json) | Lissom: Yoga e mobilidade | — | — | — | — | 72 | 2720 |
+| de | [listing.de.json](listing.de.json) | Lissom: Yoga & Mobilität | — | — | — | — | 76 | 2972 |
+| fr | [listing.fr.json](listing.fr.json) | Lissom: Yoga et mobilité | — | — | — | — | 76 | 2971 |
+| ja | [listing.ja.json](listing.ja.json) | Lissom: ヨガとモビリティ | — | — | — | — | 32 | 1292 |
+| ar | [listing.ar.json](listing.ar.json) | Lissom: يوغا ومرونة الحركة | — | — | — | — | 64 | 2149 |
+| it | [listing.it.json](listing.it.json) | Lissom: Yoga e mobilità | — | — | — | — | 71 | 2821 |
+| ko | [listing.ko.json](listing.ko.json) | Lissom: 요가 & 모빌리티 | — | — | — | — | 40 | 1450 |
+| id | [listing.id.json](listing.id.json) | Lissom: Yoga dan Mobilitas | — | — | — | — | 69 | 2745 |
+| pl | [listing.pl.json](listing.pl.json) | Lissom: Joga i mobilność | — | — | — | — | 73 | 2737 |
+| hi | [listing.hi.json](listing.hi.json) | Lissom: योग और गतिशीलता | — | — | — | — | 72 | 2390 |
+| zh-Hans | [listing.zh-Hans.json](listing.zh-Hans.json) | Lissom：瑜伽与灵活性 | — | — | — | — | 29 | 1024 |
+| **Sınır** | | 30 | 30 | 170 | 100 B | 4000 | 80 | 4000 |
+
+## Ortak alanlar
+
+- Support URL: `https://yulalab.com/support`.
+- Privacy URL: `https://yulalab.com/privacy/motion`.
+- Açıklamadaki bağlantılar her dilde kendi site yolunu taşır: `https://yulalab.com/<dil>/terms`, `…/<dil>/privacy/motion`. TR kökte.
+- ASC License Agreement: **Apple standart EULA** (K-7). Şartlar sayfası onu tamamlar.
+- Play hesap silme URL'si: `https://yulalab.com/en/delete-account/motion`.
+- 2026-10-30 anonim GET: bu bağlantıların hepsi 200.
+
+## Kapılar
+
+`test/store_listing_test.dart`:
+- **EN/TR:** uzunluk ve varlık; K-7 adı; TR satış ve hesap cümleleri.
+- **EN/TR yasaklar:** hareket testi kataloğu ve "Kamera değerlendirmeleri" ifadesi geri dönmesin.
+- **3.1.2:** Şartlar (EULA) ve Gizlilik bağlantıları; App Store metninde Google, Play metninde Apple adı yok; Play başlığı App Store adına eşit.
+- **Dil kalıpları:** vaat dili; cihaz kanıtı iddiası.
+- **On iki yerel dosya:** aynı sınırlar, anahtar kelime baytı, sayı tutarlılığı, `Motion+`, ortak URL'ler.
+
+Yerel metinlerin ana dil, hukuk ve mağaza incelemesi **UNRUN**.
+
+## Kurucu kararları
 
 | Alan | Karar | Repoda |
 |---|---|---|
-| Mağaza adı | **`Lissom: Yoga & Mobility`** (eski `Lissom: Movement Checks` / `Lissom: Hareket Testleri`); her dilde yerel karşılığı, `Lissom` markası korunur | `listing*.json` `appStore.name`; `store_listing_test` |
-| Ücretsiz ders sayıları | uygulamadaki sayılar: Hatha 24/60, sandalye/ofis 6/15, Vinyasa 5/14, Yin 5/12, Ashtanga 7/19 = **47/120** | açıklamalarda "120 dersin 47'si"; `release-review.json`, `subscriptions-draft.json` |
-| Yaş derecesi | diğer Motion app'leriyle aynı: Apple anketi içerik gerçeklerinden, Made for Kids / Kids Category **hayır**; Play hedef kitle 13–15 / 16–17 / 18+; IARC diğer app'lerle aynı. 13+ hesap kuralı içerik derecesi değil, kayıt kapısı (App Review notunda) | `release-review.json` `ageRating` |
+| Mağaza adı | **`Lissom: Yoga & Mobility`** (eski `Lissom: Movement Checks` / `Lissom: Hareket Testleri`); her dilde yerel karşılığı, `Lissom` markası korunur. App Store adı = Play başlığı (30 Eki brifi) | `listing*.json` `appStore.name`, `playStore.title` |
+| Ücretsiz ders sayıları | uygulamadaki sayılar, **47/120** (K-7) | açıklamalar; `subscriptions-draft.json` |
+| Yaş derecesi | 13+ ile uyumlu; Made for Kids **hayır**; Play hedef kitle 13–15 / 16–17 / 18+ | `release-review.json` `ageRating` |
 | Ülkeler | **tüm ülkeler** | `release-review.json` `availability` |
 | Lisans sözleşmesi | **Apple standart EULA** + `https://yulalab.com/terms` | `release-review.json` `privacy.licenseAgreement` |
-| Mağaza dilleri | **14 dil** (uygulama ve site ile aynı) | `listing.<locale>.json` |
-| 13–17 satın alma | **mağaza aile denetimleri** (`storeFamilyControls`, beş app) | `lib/app/lissom_release_policy.dart`; App Review notu |
+| Mağaza dilleri | **14 dil** (K-6) | `listing.<locale>.json` |
+| 13–17 satın alma | **mağaza aile denetimleri** (K-2) | `lib/app/lissom_release_policy.dart` |
 | Kategori / sağlık beyanı | Health & Fitness; tıbbi cihaz değil, genel bilgi | — |
 
 ## Konsol adımları (Yönetim; bu repo konsola yazmaz)
 
-1. **ASC → Lissom (6794715023)**: App Information → Name/Subtitle (14 dil, `listing*.json`) ·
-   Age Rating anketi (diğer Motion app'leriyle aynı yanıtlar) · Availability → tüm ülkeler · App Privacy (`account-data-safety-draft.md` 2026-10-27 adım 1:
-   Purchases → Purchase History, linked, App Functionality) · License Agreement → Apple standart EULA ·
-   1.0.0 sürüm sayfası → Description / Promotional Text / Keywords / Support URL ·
-   App Review Information → Notes = `release-review.json` `appReview.en-US`, demo
-   hesabı güvenli kanaldan · Subscriptions → "Motion membership" (YLIS-05a).
-2. **Play Console → Lissom**: Store listing (14 dil; short + full description) · App content →
-   Target audience (13–15, 16–17, 18+) · Data safety (`account-data-safety-draft.md`
-   adım 2; Financial info → Purchase history) · Data deletion URL `https://yulalab.com/en/delete-account/motion` (YUL-14; canlı olunca) ·
-   Monetize → Subscriptions (YLIS-05b; Motion+ teklifi `free-trial`, Developer determined,
-   tag `motion-plus-trial`).
-3. Her adım için kanıt: ekran görüntüsü veya readback. Sonuç bu dosyalara geri yazılır.
+1. **ASC → Lissom (6794715023):**
+   - App Information → Name/Subtitle (en-US, tr).
+   - 1.0.0 sürüm sayfası → Description / Promotional Text / Keywords.
+   - Subscriptions → ürün adları ve açıklamaları, grup görünen adı (`STORE-COPY.json`).
+   - License Agreement → Apple standart EULA.
+2. **Play Console → Lissom:**
+   - Store listing: 14 dil; başlık + kısa + tam açıklama.
+   - Monetize → Subscriptions → `lissom_individual`, `lissom_motion_plus` adları ve faydaları.
+3. **Kanıt:** her adım için ekran görüntüsü veya readback. Sonuç bu dosyalara geri yazılır.
 
 ## Ne yazılmadı (bilerek)
 
-- Cihazda kanıtlanmış hiçbir cümle; ekran görüntüleri imzalı adaydan yeniden alınacak.
+- Sabit fiyat, tarih, "yakında", gelecek özellik.
 - Kamera ölçümü, poz puanı, koçluk veya kişisel program vaadi.
-- Yerel metinlerin ana dil / hukuk incelemesi yapılmış gibi bir iddia.
-- Fiyatın yerel para birimindeki karşılığı (mağaza gösterir; USD baz yalnız taslaklarda).
+- Hareket testi kataloğu (Overhead Reach vb.). Kapalı ölçüm özelliğine bağlı.
+- Cihazda kanıtlanmış bir cümle; yerel metinlerin incelendiği iddiası.

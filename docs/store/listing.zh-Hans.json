@@ -1,5 +1,6 @@
 {
-  "$doc": "Local Simplified Chinese translation draft of listing.json (K-6/K-7, 2026-10-27): Lissom: Yoga & Mobility, five courses, subscription terms. Not submitted or provider-accepted. Native/legal/store review remains UNRUN.",
+  "$doc": "Lissom zh-Hans store copy, synced 2026-10-30 from scratch/2026-10-30-magaza-metinleri/lissom/STORE-COPY.json (sha256 2713b8f00fab…; claims and evidence in EVIDENCE.md there). Limits and the honesty gate: test/store_listing_test.dart. Not submitted; consoles are Yönetim's. Native/legal review UNRUN.",
+  "$storeCopy20261030": "App Store copy for this release is en-US + tr only. description = Play full description; playStore.title/shortDescription/fullDescription = Play copy. appStore.name equals the Play title; appStore.subtitle/promotionalText/keywords are the K-6 local drafts, kept, not part of the 30 Oct copy.",
   "appStore": {
     "name": "Lissom：瑜伽与灵活性",
     "subtitle": "哈他、阴瑜伽、流瑜伽等",
@@ -7,9 +8,11 @@
     "keywords": "hatha,vinyasa,yin,ashtanga,哈他,阿斯汤加,拉伸,柔韧,初学者,呼吸,办公室,椅子"
   },
   "playStore": {
-    "shortDescription": "五门瑜伽课程，共120节文字课，练习记录保存在你的设备上。"
+    "title": "Lissom：瑜伽与灵活性",
+    "shortDescription": "五门课程共 120 节文字瑜伽课。每门课程的第一部分免费。",
+    "fullDescription": "Lissom 是一个文字瑜伽课程库：五门课程共 120 节课，界面和全部课程提供 14 种语言。\n\n• 哈他瑜伽：10个模块共60节课——自然呼吸、准备、有支撑体式、可控过渡及自主安排练习。\n• 阿斯汤加入门基础：5个模块共19节课，包含站姿调整、传统拜日A/B示意图、四个站立基础体式和结束休息。这不是完整的初级序列（Primary Series）。\n• 有支撑阴瑜伽：12节课。\n• 有支撑站立流瑜伽：14节课，附可选的双膝着地地面扩展。\n• 椅子／办公室瑜伽：15节课。\n\n每节课都包含学习目标、练习任务、自我检查、更简单的做法、何时停止以及教学来源。你可以选择舒适的支撑、椅子或休息姿势。\n\n你可以标记已练习的课程。这些记录是你自己的报告，保存在你的设备上；它们不是体式评分，也不证明掌握程度。Lissom 不使用摄像头为你的动作评分、纠正或计数。课程为文字形式，没有示范视频。\n\n你可以以访客身份使用 Lissom。共享的 Motion 账户为可选项，13 岁起可用；未达到所在国家/地区数字同意年龄的，需先经父母或监护人批准。你可以在应用内删除账户。\n\nLissom 提供一般健康信息。它不是医疗器械，不诊断或治疗任何疾病。孕期、受伤和慢性疾病需要个人化建议。\n\n免费部分与会员\n每门课程的第一部分免费：120 节课中的 47 节，例如哈他瑜伽 60 节课中的前 24 节。Lissom 会员或 Motion+（按月或按年）可解锁其余课程：\n• Lissom 会员：Lissom 五门课程的其余课程。\n• Motion+ (Lissom, Gravita, JabLab, Ostinato, Choreia): 解锁五个 Motion 应用中目前已提供的付费课程和练习。不包含摄像头指导以及尚未发布的课程。\n\n符合条件的新订阅者可享受 14 天免费试用；Motion+ 试用每个 Motion 账户限一次。Google Play 会在购买前以你的货币显示价格。订阅需要 Motion 账户。月度或年度方案会按相同周期和商店显示的价格自动续订，直到取消。请在商店账户中管理取消订阅。删除 Motion 账户不会取消商店订阅。你可以在应用内恢复购买。\n\n使用条款（EULA）：https://yulalab.com/zh-Hans/terms\n隐私政策：https://yulalab.com/zh-Hans/privacy/motion"
   },
-  "description": "Lissom提供五门原创文字瑜伽课程，共120节课；界面和课程支持14种语言。\n\n• 哈他瑜伽：10个模块共60节课——自然呼吸、准备、有支撑体式、可控过渡及自主安排练习。\n• 阿斯汤加入门基础：5个模块共19节课，包含站姿调整、传统拜日A/B示意图、四个站立基础体式和结束休息。这不是完整的初级序列（Primary Series）。\n• 有支撑阴瑜伽：12节课。\n• 有支撑站立流瑜伽：14节课，附可选的双膝着地地面扩展。\n• 椅子／办公室瑜伽：15节课。\n\n可选择舒适的支撑、椅子或休息方式。每节课都包含学习目标、练习任务、自我检查和教学来源。动作测试目录还介绍了过头伸展、深蹲和主动直腿抬高。\n\n阅读课程、完成练习任务、回顾自己的练习，并从本地课程记录继续。无需登录即可浏览，也可使用可选的共享Motion账户。账户使用你的电子邮件地址、账户ID和可选的显示名称；可在应用内删除账户。课程记录保存在设备上，归属当前访客或账户范围。练习进度由你自己记录，不是体式评分，完成任何课程都不代表已经掌握。不含示范视频。\n\n订阅：每门课程的第一部分免费（120节课中的47节）。Lissom订阅或Motion+订阅（五款Motion应用通用），均有月付和年付，可解锁其余课程；新订阅用户可享14天免费试用。价格和周期会在购买前由App Store或Google Play显示，你可以在应用内恢复或管理订阅。费用从你的App Store或Google Play账户扣除；除非在当前周期结束前至少24小时取消，否则订阅会自动续订，你可以在商店账户设置中管理或取消订阅。删除Motion账户不会取消商店订阅。\n\n摄像头评估未开放。一般信息和调整方案不提供个人康复或产前治疗。Lissom不是医疗器械，不诊断或治疗任何疾病。",
+  "description": "Lissom 是一个文字瑜伽课程库：五门课程共 120 节课，界面和全部课程提供 14 种语言。\n\n• 哈他瑜伽：10个模块共60节课——自然呼吸、准备、有支撑体式、可控过渡及自主安排练习。\n• 阿斯汤加入门基础：5个模块共19节课，包含站姿调整、传统拜日A/B示意图、四个站立基础体式和结束休息。这不是完整的初级序列（Primary Series）。\n• 有支撑阴瑜伽：12节课。\n• 有支撑站立流瑜伽：14节课，附可选的双膝着地地面扩展。\n• 椅子／办公室瑜伽：15节课。\n\n每节课都包含学习目标、练习任务、自我检查、更简单的做法、何时停止以及教学来源。你可以选择舒适的支撑、椅子或休息姿势。\n\n你可以标记已练习的课程。这些记录是你自己的报告，保存在你的设备上；它们不是体式评分，也不证明掌握程度。Lissom 不使用摄像头为你的动作评分、纠正或计数。课程为文字形式，没有示范视频。\n\n你可以以访客身份使用 Lissom。共享的 Motion 账户为可选项，13 岁起可用；未达到所在国家/地区数字同意年龄的，需先经父母或监护人批准。你可以在应用内删除账户。\n\nLissom 提供一般健康信息。它不是医疗器械，不诊断或治疗任何疾病。孕期、受伤和慢性疾病需要个人化建议。\n\n免费部分与会员\n每门课程的第一部分免费：120 节课中的 47 节，例如哈他瑜伽 60 节课中的前 24 节。Lissom 会员或 Motion+（按月或按年）可解锁其余课程：\n• Lissom 会员：Lissom 五门课程的其余课程。\n• Motion+ (Lissom, Gravita, JabLab, Ostinato, Choreia): 解锁五个 Motion 应用中目前已提供的付费课程和练习。不包含摄像头指导以及尚未发布的课程。\n\n符合条件的新订阅者可享受 14 天免费试用；Motion+ 试用每个 Motion 账户限一次。Google Play 会在购买前以你的货币显示价格。订阅需要 Motion 账户。月度或年度方案会按相同周期和商店显示的价格自动续订，直到取消。请在商店账户中管理取消订阅。删除 Motion 账户不会取消商店订阅。你可以在应用内恢复购买。\n\n使用条款（EULA）：https://yulalab.com/zh-Hans/terms\n隐私政策：https://yulalab.com/zh-Hans/privacy/motion",
   "supportUrl": "https://yulalab.com/support",
   "privacyPolicyUrl": "https://yulalab.com/privacy/motion"
 }
