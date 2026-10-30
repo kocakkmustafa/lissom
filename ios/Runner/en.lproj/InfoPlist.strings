@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "Lissom uses the camera for movement tests. Camera images are processed live; video is not recorded or uploaded.";
+"NSCameraUsageDescription" = "Live camera measurements are closed in this release. If separately enabled in a later release, Lissom uses the camera for on-device movement measurements. Camera images are processed live; video is not recorded or uploaded.";

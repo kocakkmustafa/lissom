@@ -1,2 +1,2 @@
 /* Camera permission purpose. Feature availability is unchanged. */
-"NSCameraUsageDescription" = "Lissomは動作テストにカメラを使用します。カメラの映像はリアルタイムで処理され、動画は録画もアップロードもされません。";
+"NSCameraUsageDescription" = "このリリースではライブカメラ測定を閉じています。今後のリリースで別途有効化された場合、Lissomはカメラを使い、端末内で動作を測定します。カメラの映像はリアルタイムで処理され、動画は録画もアップロードもされません。";

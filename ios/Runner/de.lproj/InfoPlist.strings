@@ -1,2 +1,2 @@
 /* Camera permission purpose. Feature availability is unchanged. */
-"NSCameraUsageDescription" = "Lissom verwendet die Kamera für Bewegungstests. Die Kamerabilder werden in Echtzeit verarbeitet; Videos werden weder aufgezeichnet noch hochgeladen.";
+"NSCameraUsageDescription" = "Live-Kameramessungen sind in dieser Version geschlossen. Falls sie in einer späteren Version separat freigeschaltet werden, verwendet Lissom die Kamera für Bewegungsmessungen auf dem Gerät. Die Kamerabilder werden in Echtzeit verarbeitet; Videos werden weder aufgezeichnet noch hochgeladen.";

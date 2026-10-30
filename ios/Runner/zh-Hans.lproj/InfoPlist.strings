@@ -1,2 +1,2 @@
 /* Camera permission purpose. Feature availability is unchanged. */
-"NSCameraUsageDescription" = "Lissom使用摄像头进行动作测试。摄像头画面会实时处理；视频不会被录制或上传。";
+"NSCameraUsageDescription" = "此版本已关闭实时摄像头测量。如果在后续版本中另行启用，Lissom会使用摄像头在设备上测量动作。摄像头画面会实时处理；视频不会被录制或上传。";

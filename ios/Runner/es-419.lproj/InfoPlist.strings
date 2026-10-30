@@ -1,2 +1,2 @@
 /* Camera permission purpose. Feature availability is unchanged. */
-"NSCameraUsageDescription" = "Lissom usa la cámara para las pruebas de movimiento. Las imágenes de la cámara se procesan en tiempo real; el video no se graba ni se sube.";
+"NSCameraUsageDescription" = "Las mediciones con cámara en vivo están deshabilitadas en esta versión. Si se habilitan por separado en una versión posterior, Lissom usará la cámara para medir el movimiento en el dispositivo. Las imágenes de la cámara se procesan en tiempo real; el video no se graba ni se sube.";

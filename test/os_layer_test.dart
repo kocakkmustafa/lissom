@@ -142,4 +142,54 @@ void main() {
       }
     }
   });
+
+  test('KAMERA İZNİ: 14 dilde önce "bu sürümde kapalı" der', () {
+    // Kamera ölçümü bu sürümde kapalı; izin metni eskiden "hareket
+    // testleri için kamera" diyordu. Metin önce kapalı olduğunu, sonra
+    // ileride açılırsa ne yapacağını söyler (JabLab/Ostinato kalıbı).
+    // Wellness lint yalnız Info.plist'i okur; .lproj çevirileri burada.
+    const Map<String, String> closed = <String, String>{
+      'en': 'Live camera measurements are closed in this release.',
+      'tr': 'Bu sürümde canlı kamera ölçümleri kapalıdır.',
+      'de': 'Live-Kameramessungen sind in dieser Version geschlossen.',
+      'es-419':
+          'Las mediciones con cámara en vivo están deshabilitadas en esta versión.',
+      'fr': 'Les mesures en direct par caméra sont fermées dans cette version.',
+      'it':
+          'Le misurazioni in tempo reale tramite fotocamera sono disattivate in questa versione.',
+      'pt-BR': 'Medições ao vivo pela câmera estão fechadas nesta versão.',
+      'id': 'Pengukuran kamera langsung ditutup dalam rilis ini.',
+      'pl': 'Pomiary kamerą na żywo są wyłączone w tym wydaniu.',
+      'ja': 'このリリースではライブカメラ測定を閉じています。',
+      'ko': '이번 버전에서는 실시간 카메라 측정이 닫혀 있습니다.',
+      'zh-Hans': '此版本已关闭实时摄像头测量。',
+      'hi': 'इस संस्करण में लाइव कैमरा माप बंद हैं।',
+      'ar': 'قياسات الكاميرا المباشرة مغلقة في هذا الإصدار.',
+    };
+    final RegExp value = RegExp(r'"NSCameraUsageDescription" = "([^"]+)";');
+    String camera(String locale) {
+      final String src = File(
+        'ios/Runner/$locale.lproj/InfoPlist.strings',
+      ).readAsStringSync();
+      return value.firstMatch(src)?.group(1) ?? '';
+    }
+
+    for (final MapEntry<String, String> e in closed.entries) {
+      expect(
+        camera(e.key),
+        startsWith(e.value),
+        reason: '${e.key}: izin metni kapalı durumu söylemeye başlamıyor',
+      );
+      expect(camera(e.key), contains('Lissom'), reason: e.key);
+    }
+    final RegExpMatch? plist = RegExp(
+      r'<key>NSCameraUsageDescription</key>\s*<string>([^<]*)</string>',
+    ).firstMatch(_infoPlist());
+    expect(
+      plist?.group(1),
+      camera('en'),
+      reason: 'Info.plist ve en.lproj aynı metni taşımalı',
+    );
+    expect(plist?.group(1), isNot(contains('movement tests')));
+  });
 }

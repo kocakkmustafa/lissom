@@ -1,1 +1,1 @@
-"NSCameraUsageDescription" = "Lissom hareket testlerinde kamerayı kullanır. Kamera görüntüsü anlık işlenir; video kaydedilmez veya yüklenmez.";
+"NSCameraUsageDescription" = "Bu sürümde canlı kamera ölçümleri kapalıdır. Daha sonraki bir sürümde ayrıca etkinleştirilirse Lissom, cihaz üzerinde hareket ölçümü için kamerayı kullanır. Kamera görüntüsü anlık işlenir; video kaydedilmez veya yüklenmez.";
