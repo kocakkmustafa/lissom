@@ -510,7 +510,7 @@ String? _knownBlockerText(BuildContext context, String source) {
 const String _assessmentIntro =
     'Twelve camera-based movement tests. Each one measures a specific area and tells you what it could and could not see.';
 const String _assessmentIntroHonest =
-    'Twelve movement assessments are listed; three have a camera measurement path in this build. Each test shows its current limits.';
+    'Twelve movement assessments are listed. Each test shows its current limits.';
 
 const Map<String, String> _turkishConfigCopy = <String, String>{
   'Something unexpected happened while starting the camera. Try again.':
@@ -654,7 +654,7 @@ const Map<String, String> _turkishConfigCopy = <String, String>{
   'Meditation state or relaxation of any kind':
       'Meditasyon durumu veya gevşeme düzeyi ölçülmez.',
   _assessmentIntro:
-      'On iki hareket değerlendirmesi listelenir; bu sürümde üçünün kamera ölçüm yolu vardır. Her test mevcut sınırlarını açıklar.',
+      'On iki hareket değerlendirmesi listelenir. Her test mevcut sınırlarını açıklar.',
   'Yoga Styles': 'Yoga türleri',
   'Written Hatha and chair/office beginner paths are available. Demonstration and physical acceptance remain separate; Vinyasa, Yin and beginner Ashtanga courses remain pending. Yoga postures are not camera-scored.':
       'Yazılı Hatha ve sandalye/ofis başlangıç yolları mevcut. Gösterim ve fiziksel kabul ayrıdır; Vinyasa, Yin ve başlangıç Ashtanga kursları bekliyor. Yoga pozları kamerayla puanlanmaz.',
