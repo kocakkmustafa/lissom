@@ -68,6 +68,14 @@ Future<void> _expectContext(
       contains(_status(language, available)),
     );
   }
+  // The assessment intro is static config copy, so it states no camera
+  // capability; the note above carries the open/closed status.
+  for (final claim in [
+    'three have a camera measurement path in this build',
+    'bu sürümde üçünün kamera ölçüm yolu vardır',
+  ]) {
+    expect(messagesBeforeScroll, isNot(contains(claim)));
+  }
   if (available) {
     final messagesAfterScroll = tester
         .widgetList<Text>(find.byType(Text))
@@ -76,6 +84,7 @@ Future<void> _expectContext(
     final messages = '$messagesBeforeScroll\n$messagesAfterScroll';
     for (final closed in [
       'Live camera measurements are closed in this release',
+      'live camera measurements are closed in this release',
       'Live camera measurements are closed in this release.',
       'camera closed in this release',
       'canlı kamera ölçümleri kapalıdır',

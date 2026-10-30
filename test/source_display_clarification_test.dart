@@ -30,9 +30,9 @@ const _clinicalReviewedTurkish =
 const _assessmentSource =
     'Twelve camera-based movement tests. Each one measures a specific area and tells you what it could and could not see.';
 const _assessmentHonestEnglish =
-    'Twelve movement assessments are listed; three have a camera measurement path in this build. Each test shows its current limits.';
+    'Twelve movement assessments are listed. Each test shows its current limits.';
 const _assessmentFrench =
-    'Douze évaluations du mouvement sont répertoriées ; trois comportent un chemin de mesure par caméra dans cette version. Chaque test présente ses limites actuelles.';
+    'Douze évaluations du mouvement sont répertoriées. Chaque test présente ses limites actuelles.';
 
 final class _MemoryCatalogBundle extends CachingAssetBundle {
   _MemoryCatalogBundle(this.catalogs);
