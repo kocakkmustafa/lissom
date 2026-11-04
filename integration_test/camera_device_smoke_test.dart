@@ -6,6 +6,8 @@
 //   --driver=test_driver/camera_smoke_driver.dart \
 //   --target=integration_test/camera_device_smoke_test.dart
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +19,7 @@ import 'package:lissom/app/camera_pose_source.dart';
 import 'package:lissom/app/lissom_theme.dart';
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_core/motion_core.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 final class _SilentSpeaker implements CoachSpeaker {
@@ -60,6 +63,15 @@ final class _MeteredSource implements StartablePoseSource {
   Future<void> dispose() => inner.dispose();
 }
 
+/// Numbers only: stderr (console) and Documents/lissom-camera-smoke.json,
+/// read back with `xcrun devicectl device copy from`.
+Future<void> _emit(Map<String, Object?> report) async {
+  final String json = jsonEncode(report);
+  stderr.writeln('LISSOM_SMOKE_JSON:$json');
+  final Directory docs = await getApplicationDocumentsDirectory();
+  await File('${docs.path}/lissom-camera-smoke.json').writeAsString(json);
+}
+
 int _median(List<int> v) {
   if (v.isEmpty) return -1;
   final List<int> s = List<int>.of(v)..sort();
@@ -94,6 +106,7 @@ void main() {
     }
     sw.stop();
     report['engineUsPerFrame'] = sw.elapsedMicroseconds / frames.length;
+    await _emit(report);
     expect(report['engineUsPerFrame']! as double, lessThan(5000));
   });
 
@@ -109,10 +122,12 @@ void main() {
         const Duration(seconds: 25),
         onTimeout: () => PermissionStatus.denied,
       );
+      report['permissionAsked'] = true;
     }
     report['permission'] = perm.name;
     if (!perm.isGranted) {
       binding.reportData = report;
+      await _emit(report);
       return;
     }
     final CameraPoseCatalog cat = await loadCameraPoseCatalog();
@@ -156,5 +171,7 @@ void main() {
     await t.pumpWidget(const SizedBox());
     await t.pump(const Duration(seconds: 1));
     binding.reportData = report;
+    // Without a driver (wireless device), the numbers go to a file.
+    await _emit(report);
   });
 }
