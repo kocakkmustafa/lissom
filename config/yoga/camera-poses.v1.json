@@ -1,0 +1,1260 @@
+{
+ "id": "lissom.yoga.camera-poses",
+ "schemaVersion": 1,
+ "version": "1.0.0",
+ "status": "trial",
+ "note": "Camera coaching trial (founder decision 2026-11-04). Side view only. define = pose family the camera checks; corrections = the lesson's safe form, in priority order, one spoken at a time. Corrections only ever ask for less range, softer joints or better alignment. Not a score, not a health claim.",
+ "view": "side",
+ "window": {
+  "seconds": 1.0,
+  "minFrames": 3
+ },
+ "setup": {
+  "requiredLandmarks": [
+   0,
+   11,
+   12,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28
+  ],
+  "minVisibility": 0.5,
+  "minMeanVisibility": 0.7,
+  "edgeMargin": 0.02,
+  "maxShoulderWidthRatio": 0.45,
+  "minBodyHeight": 0.45,
+  "maxBodyHeight": 0.97,
+  "stableSeconds": 1.5
+ },
+ "speech": {
+  "cooldownSeconds": 8,
+  "maxRepeatsPerHold": 2,
+  "firstDelaySeconds": 3
+ },
+ "poses": [
+  {
+   "id": "mountain",
+   "posture": "standing",
+   "name": {
+    "en": "Mountain stance",
+    "tr": "Dağ duruşu"
+   },
+   "lessons": [
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h03"
+    },
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h53"
+    },
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v02"
+    },
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a03"
+    }
+   ],
+   "holdSeconds": 15,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "kneeMin",
+     "min": 158
+    },
+    {
+     "feature": "trunkLean",
+     "min": -12,
+     "max": 12
+    },
+    {
+     "feature": "shoulderFlex",
+     "max": 45
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "max": 7,
+     "say": {
+      "en": "Bring your shoulders over your hips.",
+      "tr": "Omuzlarını kalçalarının üstüne getir."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "min": -7,
+     "say": {
+      "en": "Let your ribs come back over your pelvis.",
+      "tr": "Kaburgaların leğeninin üstüne geri gelsin."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 50,
+     "say": {
+      "en": "Let your head rest above your shoulders.",
+      "tr": "Başın omuzlarının üstünde dursun."
+     }
+    }
+   ],
+   "evidence": "independent-below"
+  },
+  {
+   "id": "standing-arm-raise",
+   "posture": "standing",
+   "name": {
+    "en": "Standing with arms raised",
+    "tr": "Kollar kalkık ayakta duruş"
+   },
+   "lessons": [
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a04"
+    },
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a09"
+    },
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v02"
+    }
+   ],
+   "holdSeconds": 10,
+   "yarProxy": "tadasana",
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "kneeMin",
+     "min": 155
+    },
+    {
+     "feature": "trunkLean",
+     "min": -15,
+     "max": 15
+    },
+    {
+     "feature": "shoulderFlex",
+     "min": 50
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "min": -8,
+     "say": {
+      "en": "Let your ribs come back over your pelvis.",
+      "tr": "Kaburgaların leğeninin üstüne geri gelsin."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 50,
+     "say": {
+      "en": "Let your head rest above your shoulders.",
+      "tr": "Başın omuzlarının üstünde dursun."
+     }
+    }
+   ],
+   "evidence": "in-data-pass"
+  },
+  {
+   "id": "chair-supported-fold",
+   "posture": "standing",
+   "name": {
+    "en": "Chair-supported forward fold",
+    "tr": "Sandalye destekli öne eğilme"
+   },
+   "lessons": [
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h11"
+    },
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h12"
+    }
+   ],
+   "holdSeconds": 15,
+   "yarProxy": "padahastasana",
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 45,
+     "max": 135
+    },
+    {
+     "feature": "hip",
+     "max": 135
+    },
+    {
+     "feature": "kneeMin",
+     "min": 115
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "kneeMin",
+     "max": 172,
+     "say": {
+      "en": "Soften your knees a little.",
+      "tr": "Dizlerini biraz yumuşat."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 60,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    }
+   ],
+   "evidence": "independent-pass"
+  },
+  {
+   "id": "shallow-fold",
+   "posture": "standing",
+   "name": {
+    "en": "Shallow fold, hands on thighs",
+    "tr": "Eller uylukta sığ öne eğilme"
+   },
+   "lessons": [
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a05"
+    },
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a09"
+    }
+   ],
+   "holdSeconds": 10,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 10,
+     "max": 50
+    },
+    {
+     "feature": "kneeMin",
+     "min": 130
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "kneeMin",
+     "max": 174,
+     "say": {
+      "en": "Soften your knees a little.",
+      "tr": "Dizlerini biraz yumuşat."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 55,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "halfway-lift",
+   "posture": "standing",
+   "name": {
+    "en": "Halfway lift",
+    "tr": "Yarım kalkış"
+   },
+   "lessons": [
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a05"
+    },
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a09"
+    }
+   ],
+   "holdSeconds": 10,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 40,
+     "max": 95
+    },
+    {
+     "feature": "kneeMin",
+     "min": 125
+    },
+    {
+     "feature": "headBelowHip",
+     "max": 0.3
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "headDrop",
+     "max": 45,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    },
+    {
+     "feature": "kneeMin",
+     "max": 174,
+     "say": {
+      "en": "Soften your knees a little.",
+      "tr": "Dizlerini biraz yumuşat."
+     }
+    }
+   ],
+   "evidence": "independent-below"
+  },
+  {
+   "id": "wall-half-hinge",
+   "posture": "standing",
+   "name": {
+    "en": "Wall-supported half hinge",
+    "tr": "Duvar destekli yarım menteşe"
+   },
+   "lessons": [
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v03"
+    },
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v06"
+    }
+   ],
+   "holdSeconds": 15,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 12,
+     "max": 70
+    },
+    {
+     "feature": "shoulderFlex",
+     "min": 55
+    },
+    {
+     "feature": "kneeMin",
+     "min": 140
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "max": 60,
+     "say": {
+      "en": "Make the hinge smaller.",
+      "tr": "Öne eğilmeyi küçült."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 50,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "wall-dog-prep",
+   "posture": "standing",
+   "name": {
+    "en": "Wall dog preparation",
+    "tr": "Duvarda köpek hazırlığı"
+   },
+   "lessons": [
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v04"
+    },
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v06"
+    }
+   ],
+   "holdSeconds": 15,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 20,
+     "max": 85
+    },
+    {
+     "feature": "shoulderFlex",
+     "min": 95
+    },
+    {
+     "feature": "kneeMin",
+     "min": 140
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "max": 75,
+     "say": {
+      "en": "Make the hinge smaller.",
+      "tr": "Öne eğilmeyi küçült."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 55,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "small-chair-pose",
+   "posture": "standing",
+   "name": {
+    "en": "Small chair pose (Utkatasana adaptation)",
+    "tr": "Küçük sandalye duruşu (Utkatasana uyarlaması)"
+   },
+   "lessons": [
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a06"
+    },
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a11"
+    }
+   ],
+   "holdSeconds": 10,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.0,
+     "max": 2.2
+    },
+    {
+     "feature": "kneeMin",
+     "min": 100,
+     "max": 168
+    },
+    {
+     "feature": "kneeMax",
+     "max": 172
+    },
+    {
+     "feature": "trunkLean",
+     "min": 0,
+     "max": 50
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "kneeMin",
+     "min": 120,
+     "say": {
+      "en": "Choose a smaller knee bend.",
+      "tr": "Dizlerini daha az bük."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "max": 40,
+     "say": {
+      "en": "Lift your chest a little.",
+      "tr": "Göğsünü biraz kaldır."
+     }
+    }
+   ],
+   "evidence": "independent-below"
+  },
+  {
+   "id": "shin-supported-fold",
+   "posture": "standing",
+   "name": {
+    "en": "Shin-supported forward fold",
+    "tr": "Eller kaval kemiğinde öne eğilme"
+   },
+   "lessons": [
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a15"
+    }
+   ],
+   "holdSeconds": 15,
+   "yarProxy": "padahastasana",
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 60,
+     "max": 140
+    },
+    {
+     "feature": "hip",
+     "max": 115
+    },
+    {
+     "feature": "kneeMin",
+     "min": 95
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "kneeMin",
+     "max": 168,
+     "say": {
+      "en": "Keep your knees clearly bent.",
+      "tr": "Dizlerini belirgin biçimde bükük tut."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 60,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    }
+   ],
+   "evidence": "independent-pass"
+  },
+  {
+   "id": "wide-leg-fold",
+   "posture": "standing",
+   "name": {
+    "en": "Wide-leg fold to a chair",
+    "tr": "Geniş bacakla sandalyeye öne eğilme"
+   },
+   "lessons": [
+    {
+     "course": "lissom.ashtanga.foundations.beginner",
+     "lesson": "a18"
+    }
+   ],
+   "holdSeconds": 15,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": 40,
+     "max": 120
+    },
+    {
+     "feature": "hip",
+     "max": 140
+    },
+    {
+     "feature": "kneeMin",
+     "min": 135
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "headBelowHip",
+     "max": 0.0,
+     "say": {
+      "en": "Keep your head above your hips; fold a little less.",
+      "tr": "Başını kalçalarının üstünde tut; biraz daha az eğil."
+     }
+    },
+    {
+     "feature": "kneeMin",
+     "max": 174,
+     "say": {
+      "en": "Soften your knees a little.",
+      "tr": "Dizlerini biraz yumuşat."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "warrior-one-short",
+   "posture": "standing",
+   "name": {
+    "en": "Warrior I with a short stance",
+    "tr": "Kısa adımlı Savaşçı I"
+   },
+   "lessons": [
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h44"
+    },
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h57"
+    }
+   ],
+   "holdSeconds": 10,
+   "yarProxy": "virbhadrasana1",
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.55,
+     "max": 2.0
+    },
+    {
+     "feature": "stanceSplit",
+     "min": 0.6
+    },
+    {
+     "feature": "frontKnee",
+     "min": 60,
+     "max": 168
+    },
+    {
+     "feature": "rearKnee",
+     "min": 135
+    },
+    {
+     "feature": "trunkLean",
+     "min": -20,
+     "max": 25
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "frontKnee",
+     "min": 95,
+     "say": {
+      "en": "Bend the front knee a little less.",
+      "tr": "Öndeki dizini biraz daha az bük."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "max": 15,
+     "say": {
+      "en": "Let your ribs come back over your pelvis.",
+      "tr": "Kaburgaların leğeninin üstüne geri gelsin."
+     }
+    }
+   ],
+   "evidence": "independent-below"
+  },
+  {
+   "id": "staggered-stance",
+   "posture": "standing",
+   "name": {
+    "en": "Supported staggered stance",
+    "tr": "Destekli kademeli duruş"
+   },
+   "lessons": [
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v05"
+    },
+    {
+     "course": "lissom.vinyasa.supported-standing.beginner",
+     "lesson": "v06"
+    }
+   ],
+   "holdSeconds": 10,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.1,
+     "max": 2.4
+    },
+    {
+     "feature": "stanceSplit",
+     "min": 0.3,
+     "max": 1.2
+    },
+    {
+     "feature": "kneeMin",
+     "min": 135
+    },
+    {
+     "feature": "trunkLean",
+     "min": -15,
+     "max": 20
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "kneeMin",
+     "min": 145,
+     "say": {
+      "en": "Bend the front knee a little less.",
+      "tr": "Öndeki dizini biraz daha az bük."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "max": 12,
+     "say": {
+      "en": "Keep your torso upright.",
+      "tr": "Gövdeni dik tut."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "hinge-balance",
+   "posture": "standing",
+   "name": {
+    "en": "Supported hinge balance",
+    "tr": "Destekli menteşe dengesi"
+   },
+   "lessons": [
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h50"
+    }
+   ],
+   "holdSeconds": 10,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.9,
+     "max": 2.4
+    },
+    {
+     "feature": "trunkLean",
+     "min": 35,
+     "max": 105
+    },
+    {
+     "feature": "kneeMax",
+     "min": 140
+    },
+    {
+     "feature": "shoulderFlex",
+     "min": 45
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "headDrop",
+     "max": 50,
+     "say": {
+      "en": "Keep your neck in line with your back.",
+      "tr": "Boynunu sırtınla aynı hizada tut."
+     }
+    },
+    {
+     "feature": "kneeMax",
+     "max": 176,
+     "say": {
+      "en": "Keep the standing knee soft.",
+      "tr": "Bastığın dizi yumuşak tut."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "small-back-extension",
+   "posture": "standing",
+   "name": {
+    "en": "Small standing back extension",
+    "tr": "Ayakta küçük geriye uzanma"
+   },
+   "lessons": [
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h53"
+    }
+   ],
+   "holdSeconds": 8,
+   "yarProxy": "ardhachakrasana",
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.25,
+     "max": 2.6
+    },
+    {
+     "feature": "thighFromVertical",
+     "max": 35
+    },
+    {
+     "feature": "trunkLean",
+     "min": -65,
+     "max": -8
+    },
+    {
+     "feature": "kneeMin",
+     "min": 140
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "min": -20,
+     "say": {
+      "en": "Make the extension smaller.",
+      "tr": "Geriye uzanmayı küçült."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "min": -35,
+     "say": {
+      "en": "Keep your neck long; look forward.",
+      "tr": "Boynunu uzun tut; ileri bak."
+     }
+    }
+   ],
+   "evidence": "in-data-pass"
+  },
+  {
+   "id": "tree-wall",
+   "posture": "standing",
+   "name": {
+    "en": "Tree with a wall",
+    "tr": "Duvarla ağaç duruşu"
+   },
+   "lessons": [
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h10"
+    },
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h12"
+    }
+   ],
+   "holdSeconds": 10,
+   "yarProxy": "vrikshasana",
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 1.2,
+     "max": 2.4
+    },
+    {
+     "feature": "ankleLift",
+     "min": 0.15
+    },
+    {
+     "feature": "standingKnee",
+     "min": 150
+    },
+    {
+     "feature": "stanceSplit",
+     "max": 0.5
+    },
+    {
+     "feature": "trunkLean",
+     "min": -12,
+     "max": 12
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "max": 8,
+     "say": {
+      "en": "Bring your shoulders over your hips.",
+      "tr": "Omuzlarını kalçalarının üstüne getir."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "min": -8,
+     "say": {
+      "en": "Let your ribs come back over your pelvis.",
+      "tr": "Kaburgaların leğeninin üstüne geri gelsin."
+     }
+    }
+   ],
+   "evidence": "in-data-pass"
+  },
+  {
+   "id": "seated-upright",
+   "posture": "chair",
+   "name": {
+    "en": "Upright seat on a chair",
+    "tr": "Sandalyede dik oturuş"
+   },
+   "lessons": [
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c01"
+    },
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c04"
+    },
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c06"
+    },
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c07"
+    },
+    {
+     "course": "lissom.hatha.foundations",
+     "lesson": "h21"
+    }
+   ],
+   "holdSeconds": 15,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.45,
+     "max": 1.4
+    },
+    {
+     "feature": "thighFromVertical",
+     "min": 50,
+     "max": 130
+    },
+    {
+     "feature": "trunkLean",
+     "min": -15,
+     "max": 18
+    },
+    {
+     "feature": "shoulderFlex",
+     "max": 45
+    },
+    {
+     "feature": "kneeNear",
+     "min": 55,
+     "max": 150
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "max": 10,
+     "say": {
+      "en": "Sit tall: shoulders over hips.",
+      "tr": "Dik otur: omuzlar kalçaların üstünde."
+     }
+    },
+    {
+     "feature": "headDrop",
+     "max": 50,
+     "say": {
+      "en": "Let your head rest above your shoulders.",
+      "tr": "Başın omuzlarının üstünde dursun."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "seated-arm-arc",
+   "posture": "chair",
+   "name": {
+    "en": "Seated small arm arc",
+    "tr": "Oturarak küçük kol yayı"
+   },
+   "lessons": [
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c04"
+    },
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c07"
+    }
+   ],
+   "holdSeconds": 8,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.45,
+     "max": 1.4
+    },
+    {
+     "feature": "thighFromVertical",
+     "min": 50,
+     "max": 130
+    },
+    {
+     "feature": "trunkLean",
+     "min": -15,
+     "max": 18
+    },
+    {
+     "feature": "shoulderFlex",
+     "min": 30,
+     "max": 150
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "shoulderFlex",
+     "max": 95,
+     "say": {
+      "en": "Keep the arm below shoulder height.",
+      "tr": "Kolunu omuz hizasının altında tut."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "max": 10,
+     "say": {
+      "en": "Keep your trunk still; a smaller movement is fine.",
+      "tr": "Gövdeni sabit tut; daha küçük bir hareket de olur."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "min": -10,
+     "say": {
+      "en": "Keep your trunk still; a smaller movement is fine.",
+      "tr": "Gövdeni sabit tut; daha küçük bir hareket de olur."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "seated-foot-lift",
+   "posture": "chair",
+   "name": {
+    "en": "Seated foot lift",
+    "tr": "Oturarak ayak kaldırma"
+   },
+   "lessons": [
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c06"
+    },
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c07"
+    }
+   ],
+   "holdSeconds": 8,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.45,
+     "max": 1.4
+    },
+    {
+     "feature": "thighFromVertical",
+     "min": 50,
+     "max": 130
+    },
+    {
+     "feature": "ankleLift",
+     "min": 0.06
+    },
+    {
+     "feature": "trunkLean",
+     "min": -18,
+     "max": 20
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "trunkLean",
+     "max": 10,
+     "say": {
+      "en": "Keep your trunk still; a smaller movement is fine.",
+      "tr": "Gövdeni sabit tut; daha küçük bir hareket de olur."
+     }
+    },
+    {
+     "feature": "trunkLean",
+     "min": -10,
+     "say": {
+      "en": "Keep your trunk still; a smaller movement is fine.",
+      "tr": "Gövdeni sabit tut; daha küçük bir hareket de olur."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "seated-rounding",
+   "posture": "chair",
+   "name": {
+    "en": "Seated spine rounding",
+    "tr": "Oturarak omurgayı yuvarlama"
+   },
+   "lessons": [
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c14"
+    }
+   ],
+   "holdSeconds": 8,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.45,
+     "max": 1.4
+    },
+    {
+     "feature": "thighFromVertical",
+     "min": 50,
+     "max": 130
+    },
+    {
+     "feature": "trunkLean",
+     "min": 3,
+     "max": 40
+    },
+    {
+     "feature": "headDrop",
+     "min": 35
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "headDrop",
+     "max": 80,
+     "say": {
+      "en": "Let your head follow your spine; no lower.",
+      "tr": "Başın omurganı izlesin; daha aşağı inmesin."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  },
+  {
+   "id": "seated-lengthening",
+   "posture": "chair",
+   "name": {
+    "en": "Seated spine lengthening",
+    "tr": "Oturarak omurgayı uzatma"
+   },
+   "lessons": [
+    {
+     "course": "lissom.chair-office.beginner",
+     "lesson": "c14"
+    }
+   ],
+   "holdSeconds": 8,
+   "define": [
+    {
+     "feature": "ankleDrop",
+     "min": 0.45,
+     "max": 1.4
+    },
+    {
+     "feature": "thighFromVertical",
+     "min": 50,
+     "max": 130
+    },
+    {
+     "feature": "trunkLean",
+     "min": -15,
+     "max": 12
+    },
+    {
+     "feature": "headDrop",
+     "max": 40
+    }
+   ],
+   "corrections": [
+    {
+     "feature": "headDrop",
+     "min": -15,
+     "say": {
+      "en": "Look ahead, not up.",
+      "tr": "Yukarı değil, ileri bak."
+     }
+    }
+   ],
+   "evidence": "false-accept-only"
+  }
+ ],
+ "evidenceNote": "evidence: independent-* = DSZ-Yoga skeleton test (E15); in-data-* = YAR held-out persons (E14); false-accept-only = no positive examples anywhere, only false accept measured. The camera chain (video -> MediaPipe) has no independent test: the whole feature is a trial."
+}
