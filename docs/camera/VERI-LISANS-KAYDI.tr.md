@@ -6,10 +6,12 @@ Kural: yalnız ticari kullanıma ve model eğitimi/değerlendirmesine açık, **
 |---|---|---|---|---|---|
 | YAR / YogNet | Mendeley 10.17632/k842kz6v4n.1 | CC BY 4.0 (Mendeley API, 2026-10-27, E04) | ~16 | E14 kural geliştirme + ayrılmış kişi sınaması | silindi; yalnız MediaPipe iskeleti (`data/DELETED-RAW.json`) |
 | DSZ-Yoga | Zenodo 10.5281/zenodo.18297451 v1.0.0 (Damiran, NAIST) | CC BY 4.0 (Zenodo API `metadata.license.id = cc-by-4.0`, 2026-11-05) | 12 | E15 bağımsız kural sınaması | yok (yalnız hareket yakalama); RGB akademik istekle → **kullanılmaz** |
+| UI-PRMD | Zenodo 23104965 (Vakanski ve ark., Idaho Üni.) | ODC-PDDL 1.0 (README + resmî sayfa, 2026-11-05) | 10 | E16 bağımsız sınama | video yok; Vicon/Kinect iskelet |
 | Pose Landmarker Full | MediaPipe model kartı | Apache-2.0 | — | cihazdaki poz modeli (eğitilmedi, yalnız çalıştırılır) | — |
 
 ## Atıf (CC BY 4.0)
 - "YAR/YogNet" — Mendeley Data, doi:10.17632/k842kz6v4n.1, CC BY 4.0.
+- Vakanski, A. ve ark. "UI-PRMD" — Zenodo 23104965, ODC-PDDL 1.0 (atıf zorunlu değil, nezaketen).
 - Damiran, Z. "DSZ-Yoga: A Synchronized Multimodal Dataset for Yoga Pose Recognition" — Zenodo, doi:10.5281/zenodo.18297451, CC BY 4.0.
 
 Uygulama bu verilerden türetilmiş öğrenilmiş ağırlık **taşımaz**; kural sabitleri ders metninden yazılmıştır ve YAR ile ayarlanmıştır. Atıf uygulamanın açık kaynak/lisans sayfasında ve bu kayıtta tutulur.
