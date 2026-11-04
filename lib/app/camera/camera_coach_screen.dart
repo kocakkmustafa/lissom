@@ -336,8 +336,8 @@ class _CameraCoachScreenState extends State<CameraCoachScreen>
                   widget.pose.posture == CameraPosture.floor
                       ? localeText(
                           context,
-                          'Stand the phone upright beside your mat, low and about 2.5–3 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.',
-                          'Telefonu matının yanına, alçakta ve yaklaşık 2,5–3 m uzağa dik koy; seni yandan görsün. Baştan ayağa tüm vücudun görünsün ve kadrajda yalnız ol.',
+                          'Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.',
+                          'Telefonu matının yanına, alçakta ve yaklaşık 2 m uzağa dik koy; seni yandan görsün. Baştan ayağa tüm vücudun görünsün ve kadrajda yalnız ol.',
                         )
                       : localeText(
                           context,

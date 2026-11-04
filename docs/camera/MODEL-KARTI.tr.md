@@ -91,6 +91,17 @@ Gövde eğimi (işaretli: + öne), kalça, diz (yakın, en küçük/büyük, ön
 - Eşik altında kalanlar: alçak kobra 0,83 ve uzanarak dinlenme 0,83 (veri içi), aşağı bakan köpek 0,82 (bağımsız). Bu veriyle ayar yapılmadı.
 - Bel ve sırt talebi (kurucu: yeni kurs yok) mevcut derslerin kamerasıyla karşılanıyor: kedi-inek, çocuk şekli, küçük köprü, diz göğüse, yerde dik oturuş, sandalyede omurga yuvarlama ve uzatma.
 
+## Gerçek video ve kadraj ölçümleri
+- **E17, sandalyede oturuş, VIDIMU** (CC BY 4.0, 53 kişi, gerçek web kamerası → uygulamanın MediaPipe modeli). Bu, video → MediaPipe → kural zincirinin ilk bağımsız sınaması. Geçmedi:
+  - Uygulamanın kurulum kontrolüyle doğru kabul %0. Kişi kadrajda küçük kaldığı için kareler "çok uzak" sayıldı; 45° açıda da "yan dön" uyarısı çıktı.
+  - Yalnız kurallarla doğru kabul %49. Yürüyüşte yanlış kabul %0.
+  - Neden: oturuş kliplerinin yaklaşık dörtte birinde başta bacaklar dikey (ya kişi henüz oturmamış ya da bacaklar masanın arkasında); 45° açı ölçüleri uzatıyor.
+  - Ayar yapılmadı. Sandalye duruşları "deneme" olarak kalıyor.
+- **E19, yatan beden dikey karede.** YAR'ın yer kliplerinden 947 kare dikey 9:16 pencereye kesildi.
+  - Bedeni bulma: dikey %97,7, yatay %96,6.
+  - Tek karede duruşu tanıma: dikey %88, yatay %82.
+  - Sonuç: Core'a yatay kare desteği gerekmez. Yer duruşlarında "çok uzak" sınırı 0,25'e indi; yönerge "yaklaşık 2 m" diyor.
+
 ## Gecikme
 - Masaüstü (Dart VM, M-serisi Mac): özellik + koç kare başına ölçümü `camera_latency_test.dart` yazar.
 - Telefon: cihaz smoke raporu (`docs/camera/CIHAZ-SMOKE.tr.md`).

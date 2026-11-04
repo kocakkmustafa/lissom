@@ -1992,7 +1992,7 @@
  ],
  "evidenceNote": "evidence: independent-* = DSZ-Yoga skeleton test (E15); in-data-* = YAR held-out persons (E14); false-accept-only = no positive examples anywhere, only false accept measured. The camera chain (video -> MediaPipe) has no independent test: the whole feature is a trial. Floor (E18): YAR held-out persons + DSZ-Yoga; DSZ Half_Plank is a bent-elbow lowering (not the knees-down plank family), so that true-accept number is void.",
  "setupFloor": {
-  "minBodyExtent": 0.3,
+  "minBodyExtent": 0.25,
   "maxBodyExtent": 0.98,
   "maxShoulderSpread": 0.45
  }
