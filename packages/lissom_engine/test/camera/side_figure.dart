@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:motion_core/motion_core.dart';
 
-/// Landscape phone frame, as the setup screen asks for.
-const FrameSize kLandscape = FrameSize(1920, 1080);
+/// Portrait frame, as motion_camera delivers it (phone stood upright).
+const FrameSize kPortrait = FrameSize(1080, 1920);
 
 /// A synthetic person seen from the side, facing +x, standing upright.
 /// Units are frame heights (isotropic); [frame] converts to MediaPipe's
@@ -17,7 +17,7 @@ PoseFrame sideFigure({
   double visibility = 0.95,
   double scale = 1,
   bool seated = false,
-  FrameSize size = kLandscape,
+  FrameSize size = kPortrait,
 }) {
   final double cx = size.aspect / 2;
   final Map<int, (double, double)> p = <int, (double, double)>{};

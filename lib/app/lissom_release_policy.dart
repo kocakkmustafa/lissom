@@ -9,3 +9,14 @@ import 'package:motion_account/motion_account.dart';
 /// accounts cannot buy.
 const MotionTeenPurchasePolicy lissomTeenPurchasePolicy =
     MotionTeenPurchasePolicy.storeFamilyControls;
+
+/// Camera coaching trial (founder decision 2026-11-04, "Lissom, önerilerle"):
+/// the camera part of standing and chair lessons, labelled as a trial. One
+/// flag, closed by default; a build opens it only with
+/// `--dart-define=LISSOM_CAMERA_TRIAL=true` (device smoke builds). Opening it
+/// in a store build is a founder decision together with the permission
+/// text, privacy text and store copy in `docs/camera/ACILIS-METINLERI.tr.md`.
+/// Independent of Core's `motionCameraCoachingAvailable` (ROM measurements).
+const bool lissomCameraCoachingTrialOpen = bool.fromEnvironment(
+  'LISSOM_CAMERA_TRIAL',
+);

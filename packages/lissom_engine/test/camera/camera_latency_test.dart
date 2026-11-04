@@ -21,7 +21,7 @@ void main() {
     final Stopwatch sw = Stopwatch()..start();
     for (int i = 0; i < n; i++) {
       final int t = i * 33333;
-      coach.add(sideFigure(tUs: t, trunkLeanDeg: (i % 20) - 10), kLandscape, t);
+      coach.add(sideFigure(tUs: t, trunkLeanDeg: (i % 20) - 10), kPortrait, t);
     }
     sw.stop();
     final double usPerFrame = sw.elapsedMicroseconds / n;

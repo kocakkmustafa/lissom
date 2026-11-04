@@ -19,7 +19,7 @@ List<CameraCoachState> _run(
   int startUs = 0,
 }) => <CameraCoachState>[
   for (int i = 0; i < (seconds * 30).round(); i++)
-    coach.add(make(startUs + i * 33333), kLandscape, startUs + i * 33333),
+    coach.add(make(startUs + i * 33333), kPortrait, startUs + i * 33333),
 ];
 
 void main() {
@@ -96,20 +96,20 @@ void main() {
 
   test('setup: front-facing, cut-off and far bodies are named', () {
     final CameraSetupLimits s = _catalog().setup;
-    expect(cameraSetupIssue(sideFigure(), kLandscape, s), isNull);
+    expect(cameraSetupIssue(sideFigure(), kPortrait, s), isNull);
     expect(
-      cameraSetupIssue(sideFigure(frontFacing: true), kLandscape, s),
+      cameraSetupIssue(sideFigure(frontFacing: true), kPortrait, s),
       CameraSetupIssue.notSideOn,
     );
     expect(
-      cameraSetupIssue(sideFigure(visibility: 0.3), kLandscape, s),
+      cameraSetupIssue(sideFigure(visibility: 0.3), kPortrait, s),
       CameraSetupIssue.bodyNotFull,
     );
     expect(
-      cameraSetupIssue(sideFigure(visibility: 0.6), kLandscape, s),
+      cameraSetupIssue(sideFigure(visibility: 0.6), kPortrait, s),
       CameraSetupIssue.unclearView,
     );
-    expect(cameraSetupIssue(null, kLandscape, s), CameraSetupIssue.noPerson);
+    expect(cameraSetupIssue(null, kPortrait, s), CameraSetupIssue.noPerson);
   });
 
   test('mountain: setup, confirm, hold to the target, then done', () {
@@ -187,7 +187,7 @@ void main() {
     final CameraPoseCatalog cat = _catalog();
     final Map<String, double>? f = cameraFrameFeatures(
       sideFigure(armRaiseDeg: 160),
-      kLandscape,
+      kPortrait,
     );
     expect(cat.pose('mountain')!.inPose(f), isFalse);
     expect(cat.pose('standing-arm-raise')!.inPose(f), isTrue);
@@ -197,7 +197,7 @@ void main() {
     final CameraPoseCatalog cat = _catalog();
     final Map<String, double>? f = cameraFrameFeatures(
       sideFigure(seated: true),
-      kLandscape,
+      kPortrait,
     );
     expect(cat.pose('seated-upright')!.inPose(f), isTrue);
     expect(cat.pose('mountain')!.inPose(f), isFalse);

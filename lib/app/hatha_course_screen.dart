@@ -1,13 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lissom_engine/lissom_engine.dart'
+    show CameraPoseCatalog, PoseSource;
 
+import 'camera/lesson_camera_section.dart';
 import 'course_access.dart';
 import 'hatha_course.dart';
 import 'hatha_knowledge_diagrams.dart';
 import 'hatha_progress.dart';
 import 'hatha_session_preparation.dart';
 import 'lesson_media.dart';
+import 'lissom_release_policy.dart';
 import 'lissom_theme.dart';
 import 'lissom_palette.dart';
 import 'locale_text.dart';
@@ -438,6 +442,9 @@ class HathaLessonScreen extends StatefulWidget {
     required this.isRepeat,
     this.preparation,
     this.previewOnly = false,
+    this.cameraTrialOpen = lissomCameraCoachingTrialOpen,
+    this.cameraCatalogLoader,
+    this.cameraSourceFactory,
     super.key,
   });
 
@@ -450,6 +457,11 @@ class HathaLessonScreen extends StatefulWidget {
   final bool isRepeat;
   final HathaSessionPreparation? preparation;
   final bool previewOnly;
+
+  /// Camera coaching trial flag (closed by default, see release policy).
+  final bool cameraTrialOpen;
+  final Future<CameraPoseCatalog> Function()? cameraCatalogLoader;
+  final PoseSource Function()? cameraSourceFactory;
 
   @override
   State<HathaLessonScreen> createState() => _HathaLessonScreenState();
@@ -604,11 +616,20 @@ class _HathaLessonScreenState extends State<HathaLessonScreen>
                 onReadOnly: () => setState(() => _readOnly = true),
                 onStop: () => Navigator.of(context).pop(false),
               ),
-            YogaObservationStatusCard(
-              key: const Key('yoga.lesson.availability'),
-              course: widget.course,
-              lessonId: lesson.id,
-            ),
+            if (widget.cameraTrialOpen)
+              LessonCameraSection(
+                courseId: widget.course.id,
+                lessonId: lesson.id,
+                canStart: !needsPreparation && !_readOnly,
+                catalogLoader: widget.cameraCatalogLoader,
+                sourceFactory: widget.cameraSourceFactory,
+              )
+            else
+              YogaObservationStatusCard(
+                key: const Key('yoga.lesson.availability'),
+                course: widget.course,
+                lessonId: lesson.id,
+              ),
             const SizedBox(height: 12),
             if (!needsPreparation) ...<Widget>[
               if (_readOnly)
