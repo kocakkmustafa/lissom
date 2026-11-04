@@ -20,6 +20,11 @@ FEATURES = (
     'liftedKnee', 'standingKnee', 'shoulderFlex', 'elbow', 'headDrop',
     'thighFromVertical', 'ankleLift', 'stanceSplit', 'headBelowHip',
     'shoulderWidthRatio', 'ankleDrop', 'facing',
+    # Floor (M2) features: orientation-free, valid lying, kneeling or seated
+    # on the floor. Heights are above the lowest visible body point, in torso
+    # lengths; inclines are degrees from horizontal (+ = the far end higher).
+    'trunkIncline', 'thighIncline', 'shinIncline', 'hipHeight',
+    'shoulderHeight', 'headHeight', 'wristHeight', 'shoulderSpread',
 )
 
 
@@ -149,4 +154,27 @@ def frame_features(lm, aspect, min_vis=0.5, pair_vis=0.3):
         # Lowest visible ankle below the hips, in torso lengths: standing
         # ~1.6-1.9, sitting on a chair ~0.8-1.1, sitting on the floor ~0.
         f['ankleDrop'] = (max(a[1] for a in ankles) - hp[1]) / torso
+
+    # ── Floor features ───────────────────────────────────────────────
+    def incline(a, b):
+        # a -> b against horizontal, + when b is higher (image y down).
+        return math.degrees(math.atan2(-(b[1] - a[1]), abs(b[0] - a[0])))
+
+    f['trunkIncline'] = incline(hp, sh)
+    if ok(hip_i, kn_i):
+        f['thighIncline'] = incline(P[hip_i], P[kn_i])
+    if ok(kn_i, an_i):
+        f['shinIncline'] = incline(P[kn_i], P[an_i])
+    ground = [P[i][1] for i in (L_AN, R_AN, L_KN, R_KN, L_WR, R_WR, L_HEEL, R_HEEL, L_TOE, R_TOE, L_HIP, R_HIP)
+              if ok_pair(i)]
+    if ground:
+        floor_y = max(ground)
+        f['hipHeight'] = (floor_y - hp[1]) / torso
+        f['shoulderHeight'] = (floor_y - sh[1]) / torso
+        if ok(NOSE):
+            f['headHeight'] = (floor_y - P[NOSE][1]) / torso
+        wr = [P[i][1] for i in (L_WR, R_WR) if ok(i)]
+        if wr:
+            f['wristHeight'] = (floor_y - min(wr)) / torso
+    f['shoulderSpread'] = math.hypot(P[L_SH][0] - P[R_SH][0], P[L_SH][1] - P[R_SH][1]) / torso
     return f

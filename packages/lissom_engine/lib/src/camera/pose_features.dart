@@ -35,6 +35,18 @@ abstract final class CameraFeature {
   static const String ankleDrop = 'ankleDrop';
   static const String facing = 'facing';
 
+  // Floor (M2): orientation-free; heights above the lowest visible body
+  // point in torso lengths, inclines in degrees from horizontal (+ = the far
+  // end higher).
+  static const String trunkIncline = 'trunkIncline';
+  static const String thighIncline = 'thighIncline';
+  static const String shinIncline = 'shinIncline';
+  static const String hipHeight = 'hipHeight';
+  static const String shoulderHeight = 'shoulderHeight';
+  static const String headHeight = 'headHeight';
+  static const String wristHeight = 'wristHeight';
+  static const String shoulderSpread = 'shoulderSpread';
+
   static const List<String> all = <String>[
     trunkLean,
     hip,
@@ -55,6 +67,14 @@ abstract final class CameraFeature {
     shoulderWidthRatio,
     ankleDrop,
     facing,
+    trunkIncline,
+    thighIncline,
+    shinIncline,
+    hipHeight,
+    shoulderHeight,
+    headHeight,
+    wristHeight,
+    shoulderSpread,
   ];
 }
 
@@ -233,6 +253,56 @@ Map<String, double>? cameraFrameFeatures(
     // ~1.6-1.9, sitting on a chair ~0.8-1.1, sitting on the floor ~0.
     put(CameraFeature.ankleDrop, (ankleYs.reduce(math.max) - hp.y) / torso);
   }
+
+  // ── Floor features ──────────────────────────────────────────────────
+  double incline(Vec3 a, Vec3 b) =>
+      deg(math.atan2(-(b.y - a.y), (b.x - a.x).abs()));
+  put(CameraFeature.trunkIncline, incline(hp, sh));
+  if (ok(<int>[hipI, knI])) {
+    put(CameraFeature.thighIncline, incline(p(hipI), p(knI)));
+  }
+  if (ok(<int>[knI, anI])) {
+    put(CameraFeature.shinIncline, incline(p(knI), p(anI)));
+  }
+  final List<double> ground = <double>[
+    for (final int i in const <int>[
+      Lm.leftAnkle,
+      Lm.rightAnkle,
+      Lm.leftKnee,
+      Lm.rightKnee,
+      Lm.leftWrist,
+      Lm.rightWrist,
+      Lm.leftHeel,
+      Lm.rightHeel,
+      Lm.leftFootIndex,
+      Lm.rightFootIndex,
+      Lm.leftHip,
+      Lm.rightHip,
+    ])
+      if (okPair(<int>[i])) p(i).y,
+  ];
+  if (ground.isNotEmpty) {
+    final double floorY = ground.reduce(math.max);
+    put(CameraFeature.hipHeight, (floorY - hp.y) / torso);
+    put(CameraFeature.shoulderHeight, (floorY - sh.y) / torso);
+    if (ok(const <int>[Lm.nose])) {
+      put(CameraFeature.headHeight, (floorY - p(Lm.nose).y) / torso);
+    }
+    final List<double> wr = <double>[
+      for (final int i in const <int>[Lm.leftWrist, Lm.rightWrist])
+        if (ok(<int>[i])) p(i).y,
+    ];
+    if (wr.isNotEmpty) {
+      put(CameraFeature.wristHeight, (floorY - wr.reduce(math.min)) / torso);
+    }
+  }
+  final Vec3 ls = p(Lm.leftShoulder);
+  final Vec3 rs = p(Lm.rightShoulder);
+  put(
+    CameraFeature.shoulderSpread,
+    math.sqrt((ls.x - rs.x) * (ls.x - rs.x) + (ls.y - rs.y) * (ls.y - rs.y)) /
+        torso,
+  );
   return out;
 }
 

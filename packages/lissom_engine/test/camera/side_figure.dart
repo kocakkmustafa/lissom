@@ -90,3 +90,65 @@ PoseFrame sideFigure({
     ],
   );
 }
+
+/// A synthetic person lying on the back, seen from the side, in a portrait
+/// frame (iso units = frame heights). [kneesUp] bends the knees toward the
+/// chest; [hipsLifted] makes a small bridge.
+PoseFrame lyingFigure({
+  int tUs = 0,
+  bool kneesUp = false,
+  bool hipsLifted = false,
+  double visibility = 0.95,
+  FrameSize size = kPortrait,
+}) {
+  final double floor = 0.62;
+  final Map<int, (double, double)> p = <int, (double, double)>{};
+  final double hipY = hipsLifted ? floor - 0.10 : floor - 0.03;
+  void pair(int l, int r, double x, double y) {
+    p[l] = (x, y - 0.004);
+    p[r] = (x, y + 0.004);
+  }
+
+  pair(Lm.leftShoulder, Lm.rightShoulder, 0.12, floor - 0.03);
+  pair(Lm.leftHip, Lm.rightHip, 0.30, hipY);
+  if (kneesUp) {
+    pair(Lm.leftKnee, Lm.rightKnee, 0.33, floor - 0.17);
+    pair(Lm.leftAnkle, Lm.rightAnkle, 0.40, floor - 0.08);
+  } else if (hipsLifted) {
+    pair(Lm.leftKnee, Lm.rightKnee, 0.40, floor - 0.12);
+    pair(Lm.leftAnkle, Lm.rightAnkle, 0.45, floor - 0.01);
+  } else {
+    pair(Lm.leftKnee, Lm.rightKnee, 0.40, floor - 0.03);
+    pair(Lm.leftAnkle, Lm.rightAnkle, 0.50, floor - 0.02);
+  }
+  p[Lm.leftHeel] = (p[Lm.leftAnkle]!.$1 - 0.01, floor);
+  p[Lm.rightHeel] = (p[Lm.rightAnkle]!.$1 - 0.01, floor);
+  p[Lm.leftFootIndex] = (
+    p[Lm.leftAnkle]!.$1 + 0.02,
+    p[Lm.leftAnkle]!.$2 - 0.04,
+  );
+  p[Lm.rightFootIndex] = (
+    p[Lm.rightAnkle]!.$1 + 0.02,
+    p[Lm.rightAnkle]!.$2 - 0.04,
+  );
+  p[Lm.leftElbow] = (0.20, floor - 0.02);
+  p[Lm.rightElbow] = (0.20, floor - 0.02);
+  p[Lm.leftWrist] = (0.27, floor - 0.01);
+  p[Lm.rightWrist] = (0.27, floor - 0.01);
+  for (final int i in <int>[17, 18, 19, 20, 21, 22]) {
+    p[i] = (0.27, floor - 0.01);
+  }
+  p[Lm.leftEar] = (0.06, floor - 0.04);
+  p[Lm.rightEar] = (0.06, floor - 0.04);
+  p[Lm.nose] = (0.05, floor - 0.07);
+  for (final int i in <int>[1, 2, 3, 4, 5, 6, 9, 10]) {
+    p[i] = (0.05, floor - 0.06);
+  }
+  return PoseFrame(
+    tUs: tUs,
+    landmarks: <PoseLandmark>[
+      for (int i = 0; i < Lm.count; i++)
+        PoseLandmark(p[i]!.$1 / size.aspect, p[i]!.$2, 0, visibility),
+    ],
+  );
+}

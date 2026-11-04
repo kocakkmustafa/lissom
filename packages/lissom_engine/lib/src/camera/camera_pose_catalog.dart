@@ -63,7 +63,7 @@ final class CameraLessonRef {
   final String lessonId;
 }
 
-enum CameraPosture { standing, chair }
+enum CameraPosture { standing, chair, floor }
 
 final class CameraPoseSpec {
   CameraPoseSpec({
@@ -76,6 +76,7 @@ final class CameraPoseSpec {
     required List<CameraRangeCheck> define,
     required List<CameraCorrection> corrections,
     this.yarProxy,
+    this.evidence,
   }) : lessons = List.unmodifiable(lessons),
        define = List.unmodifiable(define),
        corrections = List.unmodifiable(corrections);
@@ -91,6 +92,10 @@ final class CameraPoseSpec {
 
   /// YAR class used to measure true accept offline; not used at runtime.
   final String? yarProxy;
+
+  /// Offline evidence class (`independent-pass`, `in-data-below`, …); the
+  /// whole feature is a trial whatever this says.
+  final String? evidence;
 
   bool inPose(Map<String, double>? window) =>
       window != null && define.every((c) => c.passes(window[c.feature]));
@@ -117,7 +122,17 @@ final class CameraSetupLimits {
     required this.minBodyHeight,
     required this.maxBodyHeight,
     required this.stableSeconds,
+    this.minFloorExtent = 0.30,
+    this.maxFloorExtent = 0.98,
+    this.maxFloorShoulderSpread = 0.45,
   });
+
+  /// Floor poses (M2): body length along its longest image axis replaces
+  /// head-to-ankle height, and 2-D shoulder spread replaces the horizontal
+  /// shoulder width (a lying body is seen end-on along x).
+  final double minFloorExtent;
+  final double maxFloorExtent;
+  final double maxFloorShoulderSpread;
 
   final List<int> requiredLandmarks;
   final double minVisibility;
@@ -178,6 +193,8 @@ final class CameraPoseCatalog {
     final Map<String, dynamic> w = j['window'] as Map<String, dynamic>;
     final Map<String, dynamic> s = j['setup'] as Map<String, dynamic>;
     final Map<String, dynamic> sp = j['speech'] as Map<String, dynamic>;
+    final Map<String, dynamic> fl =
+        (j['setupFloor'] as Map<String, dynamic>?) ?? const <String, dynamic>{};
     final Set<String> ids = <String>{};
     final List<CameraPoseSpec> poses = <CameraPoseSpec>[];
     for (final dynamic raw in j['poses'] as List<dynamic>) {
@@ -224,6 +241,7 @@ final class CameraPoseCatalog {
               ),
           ],
           yarProxy: p['yarProxy'] as String?,
+          evidence: p['evidence'] as String?,
         ),
       );
     }
@@ -243,6 +261,10 @@ final class CameraPoseCatalog {
         minBodyHeight: (s['minBodyHeight'] as num).toDouble(),
         maxBodyHeight: (s['maxBodyHeight'] as num).toDouble(),
         stableSeconds: (s['stableSeconds'] as num).toDouble(),
+        minFloorExtent: (fl['minBodyExtent'] as num?)?.toDouble() ?? 0.30,
+        maxFloorExtent: (fl['maxBodyExtent'] as num?)?.toDouble() ?? 0.98,
+        maxFloorShoulderSpread:
+            (fl['maxShoulderSpread'] as num?)?.toDouble() ?? 0.45,
       ),
       cooldownSeconds: (sp['cooldownSeconds'] as num).toDouble(),
       maxRepeatsPerHold: sp['maxRepeatsPerHold'] as int,

@@ -19,7 +19,15 @@
 "headBelowHip",
 "shoulderWidthRatio",
 "ankleDrop",
-"facing"
+"facing",
+"trunkIncline",
+"thighIncline",
+"shinIncline",
+"hipHeight",
+"shoulderHeight",
+"headHeight",
+"wristHeight",
+"shoulderSpread"
 ],
 "note": "synthetic landmarks; written by tool/camera_model/make_parity_fixture.py",
 "cases": [
@@ -245,7 +253,15 @@
 "headBelowHip": 1.1389798059592509,
 "shoulderWidthRatio": 0.017623383394595595,
 "ankleDrop": 0.6004816003862192,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -85.22797521895804,
+"thighIncline": 85.18646985147751,
+"shinIncline": -9.902666280180537,
+"hipHeight": 1.28547472258293,
+"shoulderHeight": 0.2889411255987667,
+"headHeight": 0.14649491662367914,
+"wristHeight": 0.14358028540710205,
+"shoulderSpread": 0.8459270301866632
 }
 },
 {
@@ -878,7 +894,14 @@
 "stanceSplit": 0.5302337319977156,
 "headBelowHip": -1.5308215669633087,
 "shoulderWidthRatio": 1.3776560149011001,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 72.68026340673892,
+"thighIncline": -62.24221770443173,
+"hipHeight": 2.5381746011630373,
+"shoulderHeight": 3.4928329077352065,
+"headHeight": 4.068996168126346,
+"wristHeight": 3.4345954467124726,
+"shoulderSpread": 1.8923593669463805
 }
 },
 {
@@ -1094,7 +1117,13 @@
 "thighFromVertical": 64.3920274775455,
 "headBelowHip": 0.7269531304320989,
 "shoulderWidthRatio": 0.3629653899456765,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -57.8226547506778,
+"thighIncline": -25.607972522454514,
+"hipHeight": 0.7035806461143642,
+"shoulderHeight": -0.14282315313482363,
+"headHeight": -0.023372484317734674,
+"shoulderSpread": 0.36307306844368087
 }
 },
 {
@@ -1722,7 +1751,13 @@
 "stanceSplit": 1.011124941997958,
 "shoulderWidthRatio": 0.15884780540627585,
 "ankleDrop": -1.1659436419373734,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 8.761214367489162,
+"thighIncline": -79.63398434728747,
+"shinIncline": 64.86988885977395,
+"hipHeight": 1.388634422906512,
+"shoulderHeight": 1.540951255843492,
+"shoulderSpread": 1.861903444361315
 }
 },
 {
@@ -1946,7 +1981,14 @@
 "headBelowHip": -0.9000663151598459,
 "shoulderWidthRatio": 0.23534961416881314,
 "ankleDrop": 0.6018797972278562,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 64.47654792539261,
+"thighIncline": 76.96490937576083,
+"shinIncline": -73.28311409885016,
+"hipHeight": 0.6018797972278562,
+"shoulderHeight": 1.504288790928347,
+"headHeight": 1.5019461123877023,
+"shoulderSpread": 0.4433213608229036
 }
 },
 {
@@ -2162,7 +2204,12 @@
 "stanceSplit": 0.6031919561723689,
 "shoulderWidthRatio": 2.103979779936054,
 "ankleDrop": 1.0112878565829735,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -56.770867851800126,
+"hipHeight": 1.523478563919204,
+"shoulderHeight": 0.6869927681734875,
+"wristHeight": 0.8808725339293362,
+"shoulderSpread": 2.1235040959174087
 }
 },
 {
@@ -2387,7 +2434,15 @@
 "headBelowHip": 0.20814197223393574,
 "shoulderWidthRatio": 0.7968656606362158,
 "ankleDrop": 0.9143914824415009,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -63.33772788499039,
+"thighIncline": -77.81002060676579,
+"shinIncline": 44.79368084556705,
+"hipHeight": 1.5258801656089926,
+"shoulderHeight": 0.6322131052882926,
+"headHeight": 1.3177381933750567,
+"wristHeight": 1.8925313033578541,
+"shoulderSpread": 0.8176911528724914
 }
 },
 {
@@ -2609,7 +2664,14 @@
 "stanceSplit": 0.061725724683613155,
 "shoulderWidthRatio": 1.1565672405768204,
 "ankleDrop": 0.44923985648652814,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 62.93131333815139,
+"thighIncline": -53.414591035101,
+"shinIncline": 76.64329696665234,
+"hipHeight": 0.5099519430656698,
+"shoulderHeight": 1.4004135795079393,
+"wristHeight": 1.343037301021904,
+"shoulderSpread": 1.1579351202678638
 }
 },
 {
@@ -2826,7 +2888,14 @@
 "thighFromVertical": 86.90911515963637,
 "headBelowHip": -4.818540905937273,
 "shoulderWidthRatio": 0.06605834175365928,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 71.99660752545095,
+"thighIncline": -3.09088484036363,
+"hipHeight": 3.9723988284618255,
+"shoulderHeight": 4.923437046239788,
+"headHeight": 8.7909397343991,
+"wristHeight": 4.858276342357057,
+"shoulderSpread": 7.9276092738481045
 }
 },
 {
@@ -3041,7 +3110,14 @@
 "thighFromVertical": 116.23876197729541,
 "headBelowHip": -0.7957243540963048,
 "shoulderWidthRatio": 0.8391324766870162,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 7.618493470284019,
+"thighIncline": 26.238761977295393,
+"hipHeight": 0.45674327141319593,
+"shoulderHeight": 0.5893195913448167,
+"headHeight": 1.2524676255095006,
+"wristHeight": 0.5959077900529821,
+"shoulderSpread": 1.5081922454696737
 }
 },
 {
@@ -3871,7 +3947,12 @@
 "stanceSplit": 0.4962537901618679,
 "shoulderWidthRatio": 0.17356826074176357,
 "ankleDrop": -0.8975465988658325,
-"facing": 0.0
+"facing": 0.0,
+"trunkIncline": -11.406415695206565,
+"hipHeight": 0.09221428411157254,
+"shoulderHeight": -0.10555282089800615,
+"wristHeight": 0.06975599404450782,
+"shoulderSpread": 0.615204046811207
 }
 },
 {
@@ -4086,7 +4167,12 @@
 "headBelowHip": 0.7499056366691716,
 "shoulderWidthRatio": 0.10308641495344471,
 "ankleDrop": -0.4729322648020531,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -76.57491745135434,
+"hipHeight": 1.0048511641108093,
+"shoulderHeight": 0.03217683210065971,
+"headHeight": 0.2549455274416377,
+"shoulderSpread": 0.18329286660679509
 }
 },
 {
@@ -4306,7 +4392,12 @@
 "stanceSplit": 0.063606626390957,
 "shoulderWidthRatio": 0.21734401746816065,
 "ankleDrop": 1.1899269726051265,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 44.81333775254856,
+"hipHeight": 2.0089367686131925,
+"shoulderHeight": 2.7137361388206593,
+"wristHeight": 0.499113106491134,
+"shoulderSpread": 3.653212965698135
 }
 },
 {
@@ -4515,7 +4606,12 @@
 "features": {
 "trunkLean": -136.66496247776539,
 "shoulderWidthRatio": 0.2337251342863872,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -46.66496247776539,
+"hipHeight": 1.2706983994149113,
+"shoulderHeight": 0.5433451695340934,
+"wristHeight": 1.705285099655113,
+"shoulderSpread": 0.4316646738080915
 }
 },
 {
@@ -4729,7 +4825,14 @@
 "thighFromVertical": 90.17633770219234,
 "headBelowHip": -0.18846067098679772,
 "shoulderWidthRatio": 1.666714644296782,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -44.49304705839584,
+"thighIncline": 0.17633770219233946,
+"hipHeight": 1.0557374472941556,
+"shoulderHeight": 0.3549147423264003,
+"headHeight": 1.2441981182809534,
+"wristHeight": 1.3236034665073884,
+"shoulderSpread": 1.6721195867320091
 }
 },
 {
@@ -4948,7 +5051,13 @@
 "stanceSplit": 1.1785493561810085,
 "shoulderWidthRatio": 0.23635781431609046,
 "ankleDrop": 0.14246909309309588,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 83.98276642030866,
+"thighIncline": 54.5291577894222,
+"shinIncline": -54.779493387907145,
+"hipHeight": 0.36791769410237757,
+"shoulderHeight": 1.3624081041296152,
+"shoulderSpread": 0.5391798349080941
 }
 },
 {
@@ -5168,7 +5277,12 @@
 "ankleLift": 0.20770318343929967,
 "stanceSplit": 0.036725723517409097,
 "shoulderWidthRatio": 2.247641250421008,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 53.71278625254717,
+"thighIncline": 23.785021912811732,
+"hipHeight": 0.6457611067636692,
+"shoulderHeight": 1.4518214839098482,
+"shoulderSpread": 2.558023877037945
 }
 },
 {
@@ -5383,7 +5497,13 @@
 "headDrop": -41.03810005787827,
 "thighFromVertical": 102.62392582861146,
 "shoulderWidthRatio": 0.16326549646191224,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 11.208732805278146,
+"thighIncline": 12.62392582861147,
+"hipHeight": 0.5335897930363459,
+"shoulderHeight": 0.727973655461731,
+"wristHeight": 1.1875205097416648,
+"shoulderSpread": 0.9420903597752255
 }
 },
 {
@@ -5803,7 +5923,14 @@
 "thighFromVertical": 41.43424935367856,
 "headBelowHip": -0.47263832799235195,
 "shoulderWidthRatio": 4.7277327489535494,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 23.770763251949045,
+"thighIncline": -48.56575064632145,
+"hipHeight": 1.2275042854716287,
+"shoulderHeight": 1.6305826459594748,
+"headHeight": 1.7001426134639808,
+"wristHeight": 2.0319122144526385,
+"shoulderSpread": 4.747374454477102
 }
 },
 {
@@ -6022,7 +6149,14 @@
 "stanceSplit": 0.8264842055609485,
 "shoulderWidthRatio": 0.023434946500532117,
 "ankleDrop": 0.7328173047120777,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -72.35415085305644,
+"thighIncline": -11.403893199376098,
+"shinIncline": -60.70378657387611,
+"hipHeight": 1.0396655932348084,
+"shoulderHeight": 0.08671719260634612,
+"wristHeight": 1.1968720798606614,
+"shoulderSpread": 0.2112683616209258
 }
 },
 {
@@ -6244,7 +6378,14 @@
 "stanceSplit": 1.6785841117278655,
 "headBelowHip": 2.907617646752807,
 "shoulderWidthRatio": 3.9024404732127853,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -36.80358100931262,
+"thighIncline": -39.56735292303676,
+"hipHeight": 1.8232067514557664,
+"shoulderHeight": 1.2241331080767772,
+"headHeight": -1.0844108952970404,
+"wristHeight": 6.63533562459561,
+"shoulderSpread": 6.32053485969558
 }
 },
 {
@@ -6465,7 +6606,14 @@
 "stanceSplit": 0.5089994233714624,
 "headBelowHip": 0.10499087383440585,
 "shoulderWidthRatio": 0.7562058229920062,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -1.2362914051403795,
+"thighIncline": -4.435866724902425,
+"hipHeight": 0.617460675261943,
+"shoulderHeight": 0.5958849940281945,
+"headHeight": 0.5124698014275372,
+"wristHeight": 0.0187729852557925,
+"shoulderSpread": 0.8025862077269978
 }
 },
 {
@@ -6689,7 +6837,15 @@
 "headBelowHip": 0.598569147851514,
 "shoulderWidthRatio": 1.0462239348143114,
 "ankleDrop": 1.7885199764472983,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -12.882545415744357,
+"thighIncline": -83.83292145703032,
+"shinIncline": -14.340423144971831,
+"hipHeight": 1.8053891732614673,
+"shoulderHeight": 1.5824360188212567,
+"headHeight": 1.2068200254099533,
+"wristHeight": 0.4328283912177682,
+"shoulderSpread": 2.9344929140617166
 }
 },
 {
@@ -6906,7 +7062,15 @@
 "headBelowHip": 1.8895512683030553,
 "shoulderWidthRatio": 1.0268349973223687,
 "ankleDrop": 1.0844541259029798,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -38.166416185107806,
+"thighIncline": 7.271866022834099,
+"shinIncline": 34.4592687351231,
+"hipHeight": 1.8216828477299387,
+"shoulderHeight": 1.2037351871395485,
+"headHeight": -0.06786842057311661,
+"wristHeight": 2.353972415923769,
+"shoulderSpread": 1.4360725308691877
 }
 },
 {
@@ -7123,7 +7287,13 @@
 "headBelowHip": 0.04905534774078947,
 "shoulderWidthRatio": 0.04514034591770776,
 "ankleDrop": 0.3183255312701901,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 42.511290032130404,
+"hipHeight": 1.0978098921972719,
+"shoulderHeight": 1.7735453658927753,
+"headHeight": 1.0487545444564823,
+"wristHeight": 1.905333913924277,
+"shoulderSpread": 0.12334255441925226
 }
 },
 {
@@ -7340,7 +7510,14 @@
 "thighFromVertical": 49.29049979430032,
 "shoulderWidthRatio": 0.4237414786891657,
 "ankleDrop": -0.41233313990682136,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -63.323957424265565,
+"thighIncline": -40.70950020569969,
+"shinIncline": 28.126863792832026,
+"hipHeight": 1.06964742769319,
+"shoulderHeight": 0.1760882410492777,
+"wristHeight": 0.8681842305494165,
+"shoulderSpread": 0.4314414705201186
 }
 },
 {
@@ -7564,7 +7741,14 @@
 "headBelowHip": -0.6097656261530683,
 "shoulderWidthRatio": 2.35264891597526,
 "ankleDrop": 0.17798501609773615,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 28.601049105105353,
+"thighIncline": 1.7592624361557696,
+"shinIncline": 12.57986564883249,
+"hipHeight": 0.3321371487474175,
+"shoulderHeight": 0.8108450827730693,
+"headHeight": 0.9419027749004858,
+"shoulderSpread": 2.6951844225675607
 }
 },
 {
@@ -7785,7 +7969,12 @@
 "headBelowHip": -0.35419405924975683,
 "shoulderWidthRatio": 0.6184885220985481,
 "ankleDrop": 0.017569852249369453,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 37.8757749444492,
+"hipHeight": 0.1011990051277842,
+"shoulderHeight": 0.7151505200705556,
+"headHeight": 0.455393064377541,
+"shoulderSpread": 0.6315828495066121
 }
 },
 {
@@ -8002,7 +8191,14 @@
 "stanceSplit": 0.8030450118053402,
 "shoulderWidthRatio": 0.2145147553483076,
 "ankleDrop": 0.06382182194721087,
-"facing": 0.0
+"facing": 0.0,
+"trunkIncline": -73.85871588668917,
+"thighIncline": -50.819214639389415,
+"shinIncline": 74.99294678333433,
+"hipHeight": 0.7266290451293609,
+"shoulderHeight": -0.23395004230729108,
+"wristHeight": 0.5368685894425752,
+"shoulderSpread": 0.24721680787663827
 }
 },
 {
@@ -8637,7 +8833,15 @@
 "headBelowHip": 1.8710990741304905,
 "shoulderWidthRatio": 1.7946900654712952,
 "ankleDrop": 4.455310707267993,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 36.10445206651859,
+"thighIncline": 68.2738889968551,
+"shinIncline": -54.73142604008229,
+"hipHeight": 4.455310707267993,
+"shoulderHeight": 5.044569846257664,
+"headHeight": 2.5842116331375022,
+"wristHeight": 1.8012632573859917,
+"shoulderSpread": 2.5672360388156035
 }
 },
 {
@@ -8856,7 +9060,15 @@
 "headBelowHip": -0.1704391926384494,
 "shoulderWidthRatio": 0.2071311293904786,
 "ankleDrop": 1.856792247657499,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -74.8934066638454,
+"thighIncline": -43.41770277746933,
+"shinIncline": 18.86542445450784,
+"hipHeight": 2.218675646330915,
+"shoulderHeight": 1.2532329995111282,
+"headHeight": 2.389114838969365,
+"wristHeight": 0.0,
+"shoulderSpread": 0.22593349294237391
 }
 },
 {
@@ -9075,7 +9287,13 @@
 "headBelowHip": 1.8581183257531113,
 "shoulderWidthRatio": 1.588099197674871,
 "ankleDrop": 0.3059423831702124,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -81.27488647127932,
+"thighIncline": -35.01263636388526,
+"hipHeight": 2.9035290980634705,
+"shoulderHeight": 1.9151016059061812,
+"headHeight": 1.0454107723103592,
+"shoulderSpread": 3.3277413770644446
 }
 },
 {
@@ -9290,7 +9508,14 @@
 "thighFromVertical": 153.31683737463192,
 "headBelowHip": 0.6944901911958371,
 "shoulderWidthRatio": 1.1846019091331728,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 3.2425623785017588,
+"thighIncline": 63.31683737463193,
+"hipHeight": 1.0005847976407323,
+"shoulderHeight": 1.0571479825219774,
+"headHeight": 0.3060946064448951,
+"wristHeight": 1.5782821428711091,
+"shoulderSpread": 1.4332215225018339
 }
 },
 {
@@ -9512,7 +9737,13 @@
 "stanceSplit": 0.6946198136141472,
 "shoulderWidthRatio": 0.4711004753844546,
 "ankleDrop": 1.2485124399459033,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -16.888361156225585,
+"thighIncline": -27.295332481951593,
+"hipHeight": 1.5525495383418542,
+"shoulderHeight": 1.2620417141630136,
+"wristHeight": 2.0227333858863545,
+"shoulderSpread": 1.1185575159991648
 }
 },
 {
@@ -9735,7 +9966,13 @@
 "stanceSplit": 1.4806897947270574,
 "shoulderWidthRatio": 0.783802280974128,
 "ankleDrop": -0.15574749800258306,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 35.74099930366056,
+"thighIncline": 86.68108311165727,
+"shinIncline": -2.247990985260297,
+"hipHeight": 0.10873449692972334,
+"shoulderHeight": 0.6928566637522999,
+"shoulderSpread": 0.8893517961130943
 }
 },
 {
@@ -9956,7 +10193,13 @@
 "ankleLift": 0.06467063787903066,
 "stanceSplit": 0.2399520447821562,
 "shoulderWidthRatio": 1.9462961849795493,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 36.93483074451541,
+"thighIncline": 10.325309431888979,
+"hipHeight": 0.8651825837037019,
+"shoulderHeight": 1.4660888352937433,
+"wristHeight": 0.26949395635215295,
+"shoulderSpread": 1.95944081105681
 }
 },
 {
@@ -10591,7 +10834,15 @@
 "headBelowHip": 0.8027937038146348,
 "shoulderWidthRatio": 1.1986271586276391,
 "ankleDrop": 0.6964683190767046,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 64.43755760473191,
+"thighIncline": -88.48696584201086,
+"shinIncline": 61.91491553964232,
+"hipHeight": 0.886041293198377,
+"shoulderHeight": 1.7881568597080586,
+"headHeight": 0.08324758938374222,
+"wristHeight": 2.2720800080312467,
+"shoulderSpread": 1.9689514303842373
 }
 },
 {
@@ -10816,7 +11067,15 @@
 "headBelowHip": 0.840878869911295,
 "shoulderWidthRatio": 0.2323463623874918,
 "ankleDrop": 8.948731925583974,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": -23.56570330096852,
+"thighIncline": -10.896353350243173,
+"shinIncline": -83.43935928670216,
+"hipHeight": 8.948731925583974,
+"shoulderHeight": 8.54893149057906,
+"headHeight": 8.10785305567268,
+"wristHeight": 9.539465231247801,
+"shoulderSpread": 2.4736026316908952
 }
 },
 {
@@ -11040,7 +11299,14 @@
 "headBelowHip": 0.15318517758549585,
 "shoulderWidthRatio": 0.7654292798309876,
 "ankleDrop": -0.7824618077694502,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -77.16000295596497,
+"thighIncline": -71.82785025169164,
+"hipHeight": 2.0284873798160175,
+"shoulderHeight": 1.0534929217002187,
+"headHeight": 1.8753022022305215,
+"wristHeight": 5.4710159658904285,
+"shoulderSpread": 1.7543890206324357
 }
 },
 {
@@ -11260,7 +11526,12 @@
 "stanceSplit": 0.6669262511889184,
 "shoulderWidthRatio": 1.3026080310515598,
 "ankleDrop": 0.2047520657395297,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 81.81638929577768,
+"hipHeight": 0.32971747072855234,
+"shoulderHeight": 1.319534459745894,
+"wristHeight": 4.404328508083102,
+"shoulderSpread": 1.7569686146437087
 }
 },
 {
@@ -11484,7 +11755,15 @@
 "headBelowHip": -1.7983252522773352,
 "shoulderWidthRatio": 3.581844846946707,
 "ankleDrop": 4.332166163731169,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -46.04191023905239,
+"thighIncline": -64.11968460867264,
+"shinIncline": 84.12597505329181,
+"hipHeight": 4.709875534198306,
+"shoulderHeight": 3.990027803434027,
+"headHeight": 6.5082007864756415,
+"wristHeight": 4.297504214254034,
+"shoulderSpread": 3.6178704588520585
 }
 },
 {
@@ -11700,7 +11979,14 @@
 "thighFromVertical": 153.75140364375093,
 "shoulderWidthRatio": 0.3428235624972239,
 "ankleDrop": 0.1673464284883189,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 44.18481550578412,
+"thighIncline": 63.751403643750926,
+"shinIncline": -56.14022296315253,
+"hipHeight": 0.6425240460170156,
+"shoulderHeight": 1.3394991291580651,
+"wristHeight": 0.4521103918324647,
+"shoulderSpread": 0.44635593260066253
 }
 },
 {
@@ -11923,7 +12209,15 @@
 "headBelowHip": 0.09476112733601803,
 "shoulderWidthRatio": 0.29227465699774957,
 "ankleDrop": -0.49502128811655033,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": 74.9816595147515,
+"thighIncline": 82.22654807379722,
+"shinIncline": -38.610397606403254,
+"hipHeight": 0.11990254703379535,
+"shoulderHeight": 1.085745475381201,
+"headHeight": 0.025141419697777313,
+"wristHeight": 0.7058226666302422,
+"shoulderSpread": 0.4771503696578608
 }
 },
 {
@@ -12145,7 +12439,13 @@
 "headBelowHip": -1.9131336759093027,
 "shoulderWidthRatio": 3.70930765891873,
 "ankleDrop": -2.9563633779650025,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -84.5856250727621,
+"hipHeight": 2.252619210734082,
+"shoulderHeight": 1.2570808882807762,
+"headHeight": 4.165752886643385,
+"wristHeight": 2.8356601243915374,
+"shoulderSpread": 4.3715920551400265
 }
 },
 {
@@ -12360,7 +12660,14 @@
 "thighFromVertical": 177.70133790535684,
 "shoulderWidthRatio": 0.07435170901634364,
 "ankleDrop": -0.7992483285499734,
-"facing": 0.0
+"facing": 0.0,
+"trunkIncline": 43.412760449373195,
+"thighIncline": 87.7013379053567,
+"shinIncline": 11.932636618242713,
+"hipHeight": 0.3864353245459172,
+"shoulderHeight": 1.0736846351022376,
+"wristHeight": 0.9807045318515638,
+"shoulderSpread": 0.8390103171326775
 }
 },
 {
@@ -12584,7 +12891,15 @@
 "headBelowHip": 1.7640594989253982,
 "shoulderWidthRatio": 0.9650575388820346,
 "ankleDrop": 1.7255303687731418,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 86.30879009674142,
+"thighIncline": 70.79044163655712,
+"shinIncline": -77.66515123446949,
+"hipHeight": 1.7255303687731418,
+"shoulderHeight": 2.72345587559853,
+"headHeight": -0.03852913015225634,
+"wristHeight": 0.3674299253904323,
+"shoulderSpread": 1.9258327854869453
 }
 },
 {
@@ -12808,7 +13123,14 @@
 "stanceSplit": 0.7837229046401808,
 "shoulderWidthRatio": 0.918317629649695,
 "ankleDrop": 0.3912200486956351,
-"facing": 1.0
+"facing": 1.0,
+"trunkIncline": 9.748606400086462,
+"thighIncline": -2.815843111735191,
+"shinIncline": -71.40894084936336,
+"hipHeight": 0.3912200486956351,
+"shoulderHeight": 0.5605455809062528,
+"wristHeight": 0.9172339810810899,
+"shoulderSpread": 1.3616567147980545
 }
 },
 {
@@ -13024,7 +13346,13 @@
 "headBelowHip": -0.27846682356090924,
 "shoulderWidthRatio": 0.09550511037582039,
 "ankleDrop": 0.056727041693131086,
-"facing": -1.0
+"facing": -1.0,
+"trunkIncline": -68.12369460788655,
+"hipHeight": 0.9615811880481036,
+"shoulderHeight": 0.03359076479849183,
+"headHeight": 1.240048011609013,
+"wristHeight": 1.4042572790761247,
+"shoulderSpread": 0.19994551380602438
 }
 }
 ]

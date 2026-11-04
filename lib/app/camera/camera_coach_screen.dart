@@ -333,11 +333,17 @@ class _CameraCoachScreenState extends State<CameraCoachScreen>
               LissomCard(
                 key: const Key('camera.coach.setupGuide'),
                 child: Text(
-                  localeText(
-                    context,
-                    'Stand the phone upright, about 2.5–3 m away, with your side facing it. Keep your whole body in view and stay alone in the frame.',
-                    'Telefonu dik olarak yaklaşık 2,5–3 m uzağa koy; yanın telefona baksın. Tüm vücudun görünsün ve kadrajda yalnız ol.',
-                  ),
+                  widget.pose.posture == CameraPosture.floor
+                      ? localeText(
+                          context,
+                          'Stand the phone upright beside your mat, low and about 2.5–3 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.',
+                          'Telefonu matının yanına, alçakta ve yaklaşık 2,5–3 m uzağa dik koy; seni yandan görsün. Baştan ayağa tüm vücudun görünsün ve kadrajda yalnız ol.',
+                        )
+                      : localeText(
+                          context,
+                          'Stand the phone upright, about 2.5–3 m away, with your side facing it. Keep your whole body in view and stay alone in the frame.',
+                          'Telefonu dik olarak yaklaşık 2,5–3 m uzağa koy; yanın telefona baksın. Tüm vücudun görünsün ve kadrajda yalnız ol.',
+                        ),
                 ),
               ),
             const SizedBox(height: 12),

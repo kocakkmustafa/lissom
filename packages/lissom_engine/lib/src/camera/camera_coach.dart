@@ -41,8 +41,9 @@ enum CameraSetupIssue {
 CameraSetupIssue? cameraSetupIssue(
   PoseFrame? frame,
   FrameSize size,
-  CameraSetupLimits limits,
-) {
+  CameraSetupLimits limits, {
+  CameraPosture posture = CameraPosture.standing,
+}) {
   if (frame == null) return CameraSetupIssue.noPerson;
   final List<int> req = limits.requiredLandmarks;
   final double mean =
@@ -59,6 +60,27 @@ CameraSetupIssue? cameraSetupIssue(
     }
   }
   if (mean < limits.minMeanVisibility) return CameraSetupIssue.unclearView;
+  if (posture == CameraPosture.floor) {
+    // Lying, kneeling or sitting on the floor: body length along its
+    // longest image axis (in frame heights), and 2-D shoulder spread.
+    final PoseFrame iso = frame.toIsotropic(size);
+    final List<double> xs = <double>[for (final int i in req) iso[i].x];
+    final List<double> ys = <double>[for (final int i in req) iso[i].y];
+    final double extent = math.max(
+      xs.reduce(math.max) - xs.reduce(math.min),
+      ys.reduce(math.max) - ys.reduce(math.min),
+    );
+    if (extent > limits.maxFloorExtent) return CameraSetupIssue.tooClose;
+    if (extent < limits.minFloorExtent) return CameraSetupIssue.tooFar;
+    final double? spread = cameraFrameFeatures(
+      frame,
+      size,
+    )?[CameraFeature.shoulderSpread];
+    if (spread == null || spread > limits.maxFloorShoulderSpread) {
+      return CameraSetupIssue.notSideOn;
+    }
+    return null;
+  }
   final double top = frame[Lm.nose].y;
   final double bottom = math.max(frame[Lm.leftAnkle].y, frame[Lm.rightAnkle].y);
   final double height = bottom - top;
@@ -178,6 +200,7 @@ final class CameraCoach {
       frame,
       size,
       catalog.setup,
+      posture: pose.posture,
     );
     final int stableUs = (catalog.setup.stableSeconds * 1e6).round();
 
