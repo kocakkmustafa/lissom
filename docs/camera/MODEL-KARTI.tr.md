@@ -96,6 +96,7 @@ Gövde eğimi (işaretli: + öne), kalça, diz (yakın, en küçük/büyük, ön
 - Telefon: cihaz smoke raporu (`docs/camera/CIHAZ-SMOKE.tr.md`).
 
 ## Bilinen riskler
+- **Tanım sorunu, "kollar kalkık ayakta duruş" (`standing-arm-raise`):** E16'da bu duruşun yanlış kabulü %35 çıktı. Kaynağı yana açılan kollar (omuz abdüksiyonu ve skapsiyon). Yandan bakan kamera ile kolu öne kaldırmak ve yana açmak çoğu zaman aynı görünür. a04 ve v02 dersleri kolu "rahat olduğu kadar" kaldırmayı istiyor; yana kaldırma da bu ailenin içinde sayılabilir. Bu bir model hatasından çok **tanım** sorusu. Kurucu ya da içerik kararı gerekiyor: duruş "kollar yukarıda (her yönden)" diye mi tanımlansın, yoksa yalnız öne kaldırma mı? Yalnız öne kaldırma seçilirse yan görüş bunu tek başına ayıramaz.
 - Yanlış ret (duruştayken "henüz değil") derin ya da farklı biçimlerde sık; kullanıcıyı yanlış yöne itmez (koç ret anında düzeltme söylemez) ama can sıkıcıdır.
 - Sandalye duruşları hiç pozitif veriyle sınanmadı.
 - Ağaç duruşunda kalkan dizin açısı yandan ölçülemez (diz kameraya bakıyor); yalnız ayak yüksekliği kullanılır.
