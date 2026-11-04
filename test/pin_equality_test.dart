@@ -37,12 +37,13 @@ import 'package:flutter_test/flutter_test.dart';
 /// trial per account, store server notifications; R4 per-app teen purchase
 /// policy and Built-in Kotlin camera/platform-signal plugins; R4.2 empty
 /// email guard on reset/resend; R4.3 Motion+ benefit text without "live
-/// practice"), 2026-10-29. Package versions are unchanged from R4: the
-/// immutable SHA retains motion_core 0.13.0 and motion_camera 0.3.0. This
-/// anchor is independent of the tested lock.
-const String kSealedRef = '5b15308ea2a89dd5adebe29635f8e7b18fff68e4';
+/// practice"), 2026-10-29; then the membership title brand spelling
+/// (2a00796) and motion_camera 0.4.0 optional preview texture (4145a04,
+/// core PR #15, 2026-11-05 — awaiting founder merge). motion_core stays
+/// 0.13.0. This anchor is independent of the tested lock.
+const String kSealedRef = '4145a04c6f77bc5000bccd41741e6f6d9337b821';
 const String kSealedCoreVersion = '0.13.0';
-const String kSealedCameraVersion = '0.3.0';
+const String kSealedCameraVersion = '0.4.0';
 
 /// Bir git paketinin kilit kaydı.
 final class _LockEntry {
@@ -87,7 +88,7 @@ _LockEntry _readLock(String lock, String pkg) {
   return _LockEntry(ref, resolved, version, source);
 }
 
-const currentMotionSha = '5b15308ea2a89dd5adebe29635f8e7b18fff68e4';
+const currentMotionSha = '4145a04c6f77bc5000bccd41741e6f6d9337b821';
 
 bool hasLocalMotionOverrides([String? source]) {
   final file = File('pubspec_overrides.yaml');

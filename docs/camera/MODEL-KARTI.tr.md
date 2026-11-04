@@ -11,14 +11,15 @@
 ## Ne yapmaz
 - Önden, yerde (sırtüstü, yüzüstü, diz üstü) ve akış (Vinyasa sekansı) duruşlarını değerlendirmez; bu derslerde "bu dersi kamera değerlendirmiyor" yazar.
 - Birden çok kişiyi ayırt etmez (MediaPipe tek kişi); 4 m'den uzakta, baş görünmüyorken güvenilmez.
-- Görüntüyü kaydetmez, göndermez, saklamaz. Kare yalnız cihazdaki poz modeline gider; uygulama kodu yalnız eklem noktalarını görür.
+- Görüntüyü kaydetmez, göndermez, saklamaz. Kare cihazdaki poz modeline ve ekrana (ayna) gider; uygulama kodu yalnız eklem noktalarını görür.
+- Telefon **dik** (portre) durmalıdır: köprü portre kare verir; koç ekranı açıkken uygulama portreye kilitlenir.
 
 ## Bileşenler
 | Katman | Seçim | Lisans |
 |---|---|---|
 | Poz modeli | MediaPipe Pose Landmarker Full `pose_landmarker_full.v1.task` (sha256 `5134a3aa…`, mevcut pin) | Apache-2.0 |
-| Kamera köprüsü | Motion Core `motion_camera` (pin `5b15308`) | kendi kodumuz |
-| Ayna | Flutter `camera` 0.12.2, yalnız önizleme (Ostinato K8 yöntemi) | BSD-3 |
+| Kamera köprüsü | Motion Core `motion_camera` 0.4.0 (pin `4145a04`, önizleme texture'ı; core PR #15) | kendi kodumuz |
+| Ayna | Koç ekranında: aynı `motion_camera` oturumunun texture'ı + üstünde iskelet ve dikey referans çizgisi (tek kamera). Ayrı ayna ekranı: Flutter `camera` 0.12.2, yalnız önizleme (Ostinato K8 yöntemi) | BSD-3 |
 | Doğrulayıcı | Kural tabanlı: `config/yoga/camera-poses.v1.json` + `lissom_engine/lib/src/camera/` | kendi kodumuz |
 | Ses | Cihazın kendi konuşma motoru (`flutter_tts`) | MIT |
 
