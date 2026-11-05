@@ -1979,6 +1979,12 @@
     "Sphinx on the forearms": "前臂支撑的狮身人面式",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "将手机竖直立放在瑜伽垫旁，放低，距离约 2 米，让它从侧面看到你。从头到脚保持全身在画面内，画面中只有你一个人。",
     "Tabletop and cat-cow": "桌式与猫牛式",
-    "Upright seat on the floor": "在地上坐直"
+    "Upright seat on the floor": "在地上坐直",
+    "Beginner path": "入门路径",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "哈他课程的前十节课，按顺序进行。你的练习记录就是哈他课程的记录：在这里完成的课程在完整课程中同样计入。",
+    "You finished the Beginner path.": "你已完成入门路径。",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "你已完成入门路径。请继续哈他课程：{title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "哈他的前十节课，按顺序进行。共用你的哈他练习记录，之后在完整的哈他课程中继续。",
+    "Open Beginner path": "打开入门路径"
   }
 }

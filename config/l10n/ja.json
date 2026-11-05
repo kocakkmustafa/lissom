@@ -1979,6 +1979,12 @@
     "Sphinx on the forearms": "前腕をついたスフィンクス",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "スマートフォンをマットの横、低い位置に約2m離して縦向きに立て、横からあなたが見えるようにしてください。頭から足まで全身が映るようにし、画面にはあなた一人だけが入るようにしてください。",
     "Tabletop and cat-cow": "テーブルポーズとキャット・カウ",
-    "Upright seat on the floor": "床にまっすぐ座る"
+    "Upright seat on the floor": "床にまっすぐ座る",
+    "Beginner path": "初心者コース",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "ハタ・コースの最初の10レッスンを順番に進めます。練習記録はハタ・コースの記録と共通で、ここで終えたレッスンは完全版のコースでも完了として数えられます。",
+    "You finished the Beginner path.": "初心者コースを終えました。",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "初心者コースを終えました。次のレッスンでハタ・コースを続けましょう:{title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "ハタの最初の10レッスンを順番に。ハタの練習記録を共有し、その後は完全版のハタ・コースで続きます。",
+    "Open Beginner path": "初心者コースを開く"
   }
 }

@@ -11,12 +11,16 @@ class CourseOpenButton extends StatefulWidget {
     required this.course,
     required this.storeLoader,
     required this.label,
+    this.pathLessonIds,
     super.key,
   });
 
   final HathaCourse course;
   final Future<HathaProgressStore> Function()? storeLoader;
   final String label;
+
+  /// Opens only these lessons of [course] (see [HathaCourseScreen.pathLessonIds]).
+  final List<String>? pathLessonIds;
 
   @override
   State<CourseOpenButton> createState() => CourseOpenButtonState();
@@ -44,6 +48,7 @@ class CourseOpenButtonState extends State<CourseOpenButton> {
             course: widget.course,
             initialProgress: progress,
             storeLoader: loader,
+            pathLessonIds: widget.pathLessonIds,
           ),
         ),
       );
