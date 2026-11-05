@@ -27,3 +27,7 @@ export 'src/live_session_state.dart';
 export 'src/metric_bridge.dart';
 
 export 'src/yoga_observation.dart';
+
+export 'src/camera/camera_coach.dart';
+export 'src/camera/camera_pose_catalog.dart';
+export 'src/camera/pose_features.dart';

@@ -94,6 +94,17 @@ dependencies:
   # tahmin değil, ölçüldü).
   permission_handler: ^11.3.1
 
+  # Camera coaching trial (founder 2026-11-04), mirror only: live front
+  # camera preview, no image stream, no recording, no audio — the Ostinato
+  # K8 method, same exact version. Coaching itself reads landmarks through
+  # motion_camera; the two never hold the camera together (camera_handoff).
+  camera: 0.12.2
+
+  # Camera coaching trial: speaks the single correction with the device's
+  # own speech engine (AVSpeechSynthesizer / Android TextToSpeech). Text only;
+  # no image or landmark leaves the app. MIT.
+  flutter_tts: 4.2.5
+
 dev_dependencies:
   http: 1.6.0
   integration_test:
@@ -115,6 +126,8 @@ flutter:
     - config/l10n/
     - config/courses/
     - config/yoga/tasks.v1.json
+    # Camera coaching trial catalog (poses, ranges, corrections, setup limits).
+    - config/yoga/camera-poses.v1.json
     # Apache-2.0 notice for native MediaPipe/CameraX (see native_licences.dart).
     - assets/licenses/apache-2.0.txt
     # Course-byte integrity only; no video, lesson, or model claim.
