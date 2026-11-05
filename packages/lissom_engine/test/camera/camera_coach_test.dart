@@ -70,7 +70,11 @@ void main() {
     expect(cat.poses.length, greaterThanOrEqualTo(20));
     expect(
       cat.poses.map((CameraPoseSpec p) => p.posture).toSet(),
-      <CameraPosture>{CameraPosture.standing, CameraPosture.chair},
+      <CameraPosture>{
+        CameraPosture.standing,
+        CameraPosture.chair,
+        CameraPosture.floor,
+      },
     );
     for (final CameraPoseSpec p in cat.poses) {
       expect(p.lessons, isNotEmpty, reason: p.id);
@@ -211,6 +215,6 @@ void main() {
           .map((CameraPoseSpec p) => p.id),
       contains('mountain'),
     );
-    expect(cat.posesForLesson('lissom.hatha.foundations', 'h29'), isEmpty);
+    expect(cat.posesForLesson('lissom.hatha.foundations', 'h31'), isEmpty);
   });
 }

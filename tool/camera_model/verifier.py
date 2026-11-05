@@ -56,3 +56,32 @@ def first_correction(pose, wf):
         if v is not None and not check_ok(c, v):
             return c
     return None
+
+
+def setup_issue(lm, aspect, setup):
+    """Mirror of Dart `cameraSetupIssue`; None = setup is fine."""
+    if lm is None:
+        return 'noPerson'
+    req = setup['requiredLandmarks']
+    vis = [float(lm[i][3]) for i in req]
+    mean = sum(vis) / len(vis)
+    if mean < 0.2:
+        return 'noPerson'
+    e = setup['edgeMargin']
+    for i in req:
+        x, y, v = float(lm[i][0]), float(lm[i][1]), float(lm[i][3])
+        if v < setup['minVisibility'] or x < e or x > 1 - e or y < e or y > 1 - e:
+            return 'bodyNotFull'
+    if mean < setup['minMeanVisibility']:
+        return 'unclearView'
+    height = max(float(lm[27][1]), float(lm[28][1])) - float(lm[0][1])
+    if height > setup['maxBodyHeight']:
+        return 'tooClose'
+    if height < setup['minBodyHeight']:
+        return 'tooFar'
+    from features import frame_features
+    f = frame_features(lm, aspect)
+    r = None if f is None else f.get('shoulderWidthRatio')
+    if r is None or r > setup['maxShoulderWidthRatio']:
+        return 'notSideOn'
+    return None

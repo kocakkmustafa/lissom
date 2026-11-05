@@ -26,5 +26,13 @@ Kurucu kararı 2026-11-04 ("Lissom, önerilerle"): ilk kamera kapsamı ayakta ve
 
 Kamera açıkken bu derslerde dürüst not gösterilir: "Bu dersi kamera değerlendirmiyor."
 
+## M2 yer duruşları (kurucu 2026-11-05)
+Yer duruşları bu sürüme alındı ("Evet, M1'den sonra"): 15 duruş, 33 ders.
+- **Hatha:** h04, h13, h14, h15, h16, h17, h19, h20, h22, h23, h25, h26, h27, h29, h37, h38, h39, h40, h43, h46, h47, h48, h51, h52.
+- **Vinyasa:** v11, v12, v13.
+- **Yin:** y03, y04, y09, y10, y11, y12.
+
+Akış (Vinyasa, Güneşe Selam) sonraki sürümde. Bel, sırt ve masa başı için yeni kurs açılmıyor. Kamerada hâlâ olmayanlar şunlar: dönüşler (y05 sırtüstü burgu), duvarda bacaklar (h28), yarım saban (h54), lotus ve balık bilgi dersleri.
+
 ## Kurucu kararı bekleyen kapsam maddesi
 Bağımsız sınamada (E15) dört duruş gerçek kabul eşiğinin altında kaldı: dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I. Seçenekler: (a) "deneme" içinde kalsınlar (varsayılan, bu PR), (b) kapsamdan çıksınlar (16 duruş, ≥20 hedefinin altı), (c) aralıklar aileye göre genişletilip yeni bağımsız veriyle (ör. UI-PRMD) yeniden sınansın.

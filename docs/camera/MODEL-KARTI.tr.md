@@ -65,11 +65,49 @@ Gövde eğimi (işaretli: + öne), kalça, diz (yakın, en küçük/büyük, ön
 - **Sonuç:** FA 20 duruşun hepsinde ≤ 0,10 (yanlış onay riski düşük). TA bağımsız sınamada 2/6 geçti; dağ, yarım kalkış, küçük sandalye ve kısa Savaşçı I eşik altı. Neden: `define` aralıkları duruş ailesinden dar (DSZ'de geriye eğik dağ ≈ −16°, ≈ 84° diz sandalye, ≈ 33° gövde yarım kalkış, arka diz ≈ 108° savaşçı). Ön kayıt gereği bu veriyle düzeltilmedi.
 - 13 duruşta hiçbir yerde pozitif örnek yok (sandalye duruşlarının tamamı dahil): yalnız yanlış kabul ölçüldü.
 
+## M2 — yer duruşları (kurucu 2026-11-05: "Evet, M1'den sonra")
+15 duruş, 33 ders (Hatha, Vinyasa, Yin). Telefon matın yanında, alçakta, dik. Kurulum kontrolü yer duruşlarında baştan ayağa boy yerine **beden uzunluğunu**, yatay omuz genişliği yerine **iki boyutlu omuz açıklığını** kullanır. Yeni yön bağımsız özellikler eklendi: gövde, uyluk ve kaval kemiğinin yataya göre eğimi; kalça, omuz, baş ve bileğin yerden yüksekliği. Mevcut özelliklerin değerleri değişmedi. Aralıklar yalnız YAR'ın geliştirme yarısıyla yazıldı (E18).
+
+| Duruş | Ad | Dersler | Tutuş | YAR ayrılmış TA / FA | DSZ bağımsız TA / FA | Kanıt |
+|---|---|---|---|---|---|---|
+| `tabletop` | Masa ve kedi-inek | Hatha h13, Hatha h14, Vinyasa v11, Vinyasa v13 | 10 s | 1.00 / 0.01 | — / 0.00 | in-data-pass |
+| `child-shape` | Dinlenen çocuk şekli | Hatha h15, Yin y10 | 20 s | 0.92 / 0.00 | — / 0.00 | in-data-pass |
+| `low-cobra` | Alçak kobra | Hatha h17, Vinyasa v12 | 8 s | 0.83 / 0.00 | — / 0.02 | in-data-below |
+| `sphinx` | Ön kollarda sfenks | Hatha h47, Yin y09 | 20 s | — / 0.00 | — / 0.05 | false-accept-only |
+| `small-bridge` | Küçük destekli köprü | Hatha h26 | 8 s | 1.00 / 0.00 | — / 0.00 | in-data-pass |
+| `down-dog` | Aşağı bakan köpek (dizler bükük olabilir) | Hatha h46, Vinyasa v13 | 10 s | 1.00 / 0.05 | 0.82 / 0.00 | independent-below |
+| `knees-down-plank` | Dizler yerde plank | Hatha h48 | 8 s | 1.00 / 0.02 | — / 0.02 | in-data-pass |
+| `lying-rest` | Uzanarak dinlenme | Hatha h16, Hatha h29, Yin y12 | 30 s | 0.83 / 0.01 | — / 0.03 | in-data-below |
+| `knees-to-chest` | Uzanarak dizi göğse çekme | Hatha h25, Hatha h27 | 10 s | 1.00 / 0.01 | — / 0.00 | in-data-pass |
+| `kneeling-backbend-prep` | Destekli deve hazırlığı | Hatha h38 | 8 s | 0.90 / 0.00 | — / 0.01 | in-data-pass |
+| `floor-seat` | Yerde dik oturuş | Hatha h04, Hatha h19, Hatha h20, Hatha h22, Hatha h37, Yin y03 | 20 s | 1.00 / 0.02 | — / 0.09 | in-data-pass |
+| `seated-forward-reach` | Yerde oturarak öne uzanma | Hatha h23, Yin y04 | 15 s | — / 0.00 | — / 0.00 | false-accept-only |
+| `low-lunge` | Destekli alçak hamle | Hatha h43, Yin y11 | 10 s | — / 0.01 | — / 0.01 | false-accept-only |
+| `reverse-table` | Dizler bükük ters masa | Hatha h39, Hatha h52 | 8 s | — / 0.06 | — / 0.00 | false-accept-only |
+| `locust-prep` | Çekirge hazırlığı | Hatha h40, Hatha h51 | 6 s | — / 0.00 | — / 0.00 | false-accept-only |
+
+- DSZ'deki "Half_Plank" dirsekler yaklaşık 90° bükük bir yarım alçalma; bizim "dizler yerde plank" ailemiz değil. Bu yüzden o doğru kabul sonucu geçersiz sayıldı.
+- Kaçan köpek geçişleri sığ köpeklerdi (kalça açısı yaklaşık 128°).
+- Eşik altında kalanlar: alçak kobra 0,83 ve uzanarak dinlenme 0,83 (veri içi), aşağı bakan köpek 0,82 (bağımsız). Bu veriyle ayar yapılmadı.
+- Bel ve sırt talebi (kurucu: yeni kurs yok) mevcut derslerin kamerasıyla karşılanıyor: kedi-inek, çocuk şekli, küçük köprü, diz göğüse, yerde dik oturuş, sandalyede omurga yuvarlama ve uzatma.
+
+## Gerçek video ve kadraj ölçümleri
+- **E17, sandalyede oturuş, VIDIMU** (CC BY 4.0, 53 kişi, gerçek web kamerası → uygulamanın MediaPipe modeli). Bu, video → MediaPipe → kural zincirinin ilk bağımsız sınaması. Geçmedi:
+  - Uygulamanın kurulum kontrolüyle doğru kabul %0. Kişi kadrajda küçük kaldığı için kareler "çok uzak" sayıldı; 45° açıda da "yan dön" uyarısı çıktı.
+  - Yalnız kurallarla doğru kabul %49. Yürüyüşte yanlış kabul %0.
+  - Neden: oturuş kliplerinin yaklaşık dörtte birinde başta bacaklar dikey (ya kişi henüz oturmamış ya da bacaklar masanın arkasında); 45° açı ölçüleri uzatıyor.
+  - Ayar yapılmadı. Sandalye duruşları "deneme" olarak kalıyor.
+- **E19, yatan beden dikey karede.** YAR'ın yer kliplerinden 947 kare dikey 9:16 pencereye kesildi.
+  - Bedeni bulma: dikey %97,7, yatay %96,6.
+  - Tek karede duruşu tanıma: dikey %88, yatay %82.
+  - Sonuç: Core'a yatay kare desteği gerekmez. Yer duruşlarında "çok uzak" sınırı 0,25'e indi; yönerge "yaklaşık 2 m" diyor.
+
 ## Gecikme
 - Masaüstü (Dart VM, M-serisi Mac): özellik + koç kare başına ölçümü `camera_latency_test.dart` yazar.
 - Telefon: cihaz smoke raporu (`docs/camera/CIHAZ-SMOKE.tr.md`).
 
 ## Bilinen riskler
+- **Tanım sorunu, "kollar kalkık ayakta duruş" (`standing-arm-raise`):** E16'da bu duruşun yanlış kabulü %35 çıktı. Kaynağı yana açılan kollar (omuz abdüksiyonu ve skapsiyon). Yandan bakan kamera ile kolu öne kaldırmak ve yana açmak çoğu zaman aynı görünür. a04 ve v02 dersleri kolu "rahat olduğu kadar" kaldırmayı istiyor; yana kaldırma da bu ailenin içinde sayılabilir. Bu bir model hatasından çok **tanım** sorusu. Kurucu ya da içerik kararı gerekiyor: duruş "kollar yukarıda (her yönden)" diye mi tanımlansın, yoksa yalnız öne kaldırma mı? Yalnız öne kaldırma seçilirse yan görüş bunu tek başına ayıramaz.
 - Yanlış ret (duruştayken "henüz değil") derin ya da farklı biçimlerde sık; kullanıcıyı yanlış yöne itmez (koç ret anında düzeltme söylemez) ama can sıkıcıdır.
 - Sandalye duruşları hiç pozitif veriyle sınanmadı.
 - Ağaç duruşunda kalkan dizin açısı yandan ölçülemez (diz kameraya bakıyor); yalnız ayak yüksekliği kullanılır.

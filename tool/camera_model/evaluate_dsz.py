@@ -46,6 +46,9 @@ POSITIVE = {
     'Half_Forward_Bend': ['halfway-lift'],
     'Warrior1_Right': ['warrior-one-short'],
     'Warrior1_Left': ['warrior-one-short'],
+    # E18 (floor, M2): added after E15; standing mappings unchanged.
+    'Downward_Facing_Dog': ['down-dog'],
+    'Half_Plank': ['knees-down-plank'],
 }
 # Labels left out of a pose's negatives because the side camera cannot tell
 # them from that pose's family, or the label does not fix the arm position.
@@ -57,6 +60,8 @@ FAMILY = {
     'hinge-balance': {'Half_Forward_Bend'},
     'standing-arm-raise': {'Standing_Mountain'},
     'staggered-stance': {'Warrior1_Right', 'Warrior1_Left'},
+    # E18: up dog is a prone backbend like a low cobra with the hips lifted.
+    'low-cobra': {'Upward_Facing_Dog'},
 }
 HEIGHT_CM = 200.0      # frame height in cm: a ~170 cm person fills ~0.85
 SIZE = (1920, 1080)

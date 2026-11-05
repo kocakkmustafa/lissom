@@ -113,7 +113,7 @@ void main() {
         Scaffold(
           body: LessonCameraSection(
             courseId: 'lissom.hatha.foundations',
-            lessonId: 'h29',
+            lessonId: 'h31',
             canStart: true,
             catalogLoader: () async => _catalog(),
           ),
