@@ -11,14 +11,15 @@
 ## Ne yapmaz
 - Önden, yerde (sırtüstü, yüzüstü, diz üstü) ve akış (Vinyasa sekansı) duruşlarını değerlendirmez; bu derslerde "bu dersi kamera değerlendirmiyor" yazar.
 - Birden çok kişiyi ayırt etmez (MediaPipe tek kişi); 4 m'den uzakta, baş görünmüyorken güvenilmez.
-- Görüntüyü kaydetmez, göndermez, saklamaz. Kare yalnız cihazdaki poz modeline gider; uygulama kodu yalnız eklem noktalarını görür.
+- Görüntüyü kaydetmez, göndermez, saklamaz. Kare cihazdaki poz modeline ve ekrana (ayna) gider; uygulama kodu yalnız eklem noktalarını görür.
+- Telefon **dik** (portre) durmalıdır: köprü portre kare verir; koç ekranı açıkken uygulama portreye kilitlenir.
 
 ## Bileşenler
 | Katman | Seçim | Lisans |
 |---|---|---|
 | Poz modeli | MediaPipe Pose Landmarker Full `pose_landmarker_full.v1.task` (sha256 `5134a3aa…`, mevcut pin) | Apache-2.0 |
-| Kamera köprüsü | Motion Core `motion_camera` (pin `5b15308`) | kendi kodumuz |
-| Ayna | Flutter `camera` 0.12.2, yalnız önizleme (Ostinato K8 yöntemi) | BSD-3 |
+| Kamera köprüsü | Motion Core `motion_camera` 0.4.0 (pin `4145a04`, önizleme texture'ı; core PR #15) | kendi kodumuz |
+| Ayna | Koç ekranında: aynı `motion_camera` oturumunun texture'ı + üstünde iskelet ve dikey referans çizgisi (tek kamera). Ayrı ayna ekranı: Flutter `camera` 0.12.2, yalnız önizleme (Ostinato K8 yöntemi) | BSD-3 |
 | Doğrulayıcı | Kural tabanlı: `config/yoga/camera-poses.v1.json` + `lissom_engine/lib/src/camera/` | kendi kodumuz |
 | Ses | Cihazın kendi konuşma motoru (`flutter_tts`) | MIT |
 
@@ -56,6 +57,10 @@ Gövde eğimi (işaretli: + öne), kalça, diz (yakın, en küçük/büyük, ön
 
 - **E14** (YAR/YogNet, CC BY 4.0, yan görüş, 8 ayrılmış kişi grubu): veri içi; YAR E04–E13'te kullanıldı, özellik dağılımlarına tüm veride bakıldı. Bağımsız değil.
 - **E15** (DSZ-Yoga, CC BY 4.0, 12 yeni kişi): bağımsız ve kişi ayrık, ama **3B iskeletin sentetik yan görüşü** — kamera ve MediaPipe hatası yok, bu yüzden iyimser olabilir.
+- **E16** (UI-PRMD, ODC-PDDL 1.0, 10 kişi, Vicon işaretçileri, sentetik yan görüş; aile ilkesiyle genişletilmiş v1.1 ile karşılaştırma): v1.1 ön kayıtlı kurala göre **kabul edilmedi**, katalog v1.0'da kaldı. Gerçek kabul ölçümleri geçersiz, çünkü pozitif tanımında protokol hatası var: oturup kalkma tekrarları ayakta başlıyor, omuz rotasyonu kollar yandayken yapılıyor. Yanlış kabul ölçümleri geçerli:
+  - `standing-arm-raise` 0,35. Yandan bakınca yana açılan kollar da "kollar kalkık" görünüyor; aile tanımı sorusu.
+  - `warrior-one-short` 0,11. Engel adımı ve düz bacak kaldırma.
+  - Diğer duruşlar ≤ 0,09.
 - Ürün eşiği (§7.4): TA ≥ 0,90, FA ≤ 0,10.
 - **Sonuç:** FA 20 duruşun hepsinde ≤ 0,10 (yanlış onay riski düşük). TA bağımsız sınamada 2/6 geçti; dağ, yarım kalkış, küçük sandalye ve kısa Savaşçı I eşik altı. Neden: `define` aralıkları duruş ailesinden dar (DSZ'de geriye eğik dağ ≈ −16°, ≈ 84° diz sandalye, ≈ 33° gövde yarım kalkış, arka diz ≈ 108° savaşçı). Ön kayıt gereği bu veriyle düzeltilmedi.
 - 13 duruşta hiçbir yerde pozitif örnek yok (sandalye duruşlarının tamamı dahil): yalnız yanlış kabul ölçüldü.

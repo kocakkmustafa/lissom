@@ -33,7 +33,7 @@ library;
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart' show ValueNotifier, visibleForTesting;
 import 'package:lissom_engine/lissom_engine.dart';
 import 'package:motion_camera/motion_camera.dart';
 import 'package:motion_core/motion_core.dart';
@@ -62,11 +62,21 @@ final class CameraPoseSource implements StartablePoseSource {
     MotionCameraController? controller,
     Future<PermissionStatus> Function()? requestPermission,
     Future<String> Function()? prepareModel,
+    this.preview = false,
   }) : _capture = (controller ?? _appCameraController).createCaptureLease(),
        _requestPermission = requestPermission ?? Permission.camera.request,
        _prepareModel = prepareModel ?? materializePoseModel;
 
   final CameraCaptureLease _capture;
+
+  /// Camera coaching mirror (Core motion_camera 0.4.0): the same session
+  /// also draws into a texture; [session] then carries its id.
+  final bool preview;
+
+  /// Facts of the running session (texture id when [preview]); `null`
+  /// until the native start succeeded.
+  final ValueNotifier<CameraSessionInfo?> session =
+      ValueNotifier<CameraSessionInfo?>(null);
   final Future<PermissionStatus> Function() _requestPermission;
   final Future<String> Function() _prepareModel;
   final StreamController<PoseSourceEvent> _events =
@@ -114,8 +124,10 @@ final class CameraPoseSource implements StartablePoseSource {
       final CameraSessionInfo info = await _capture.start(
         modelPath: modelPath,
         modelId: kPoseModelId,
+        preview: preview,
       );
       if (_retired) return;
+      session.value = info;
       final FrameSize size = FrameSize(info.width, info.height);
       _frameSub = _capture.frames().listen(
         (CameraFrameEnvelope e) => _onEnvelope(e, size),
@@ -154,6 +166,7 @@ final class CameraPoseSource implements StartablePoseSource {
   @override
   Future<void> dispose() {
     _retired = true;
+    session.value = null;
     _capture.retire();
     final existing = _disposeFuture;
     if (existing != null) return existing;

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_camera/motion_camera.dart'
+    show CameraSessionInfo, MotionCameraPreview;
 import 'package:motion_core/motion_core.dart';
 import 'package:permission_handler/permission_handler.dart'
     show openAppSettings;
@@ -22,9 +24,12 @@ Future<CameraPoseCatalog> loadCameraPoseCatalog({AssetBundle? bundle}) async =>
       await (bundle ?? rootBundle).loadString(kCameraPosesAsset),
     );
 
-/// Camera coaching for one pose (trial). Shows a body outline drawn from the
-/// landmarks — never the camera image — the hold timer and the one current
-/// correction, which is also spoken.
+/// Camera coaching for one pose (trial). Shows the mirror (the same camera
+/// session's preview texture, Core motion_camera 0.4.0) with the body
+/// outline and a vertical reference line drawn from the landmarks on top, the
+/// hold timer and the one current correction, which is also spoken. Without
+/// a preview texture it shows the outline alone. App code never reads the
+/// image; it goes from the camera to the screen.
 class CameraCoachScreen extends StatefulWidget {
   const CameraCoachScreen({
     required this.catalog,
@@ -73,7 +78,8 @@ class _CameraCoachScreenState extends State<CameraCoachScreen>
   }
 
   Future<void> _start() async {
-    final PoseSource source = (widget.sourceFactory ?? CameraPoseSource.new)();
+    final PoseSource source =
+        (widget.sourceFactory ?? () => CameraPoseSource(preview: true))();
     _source = source;
     _sub = source.events().listen(_onEvent);
     await awaitCameraHandoff();
@@ -346,25 +352,16 @@ class _CameraCoachScreenState extends State<CameraCoachScreen>
               ),
             ],
             const SizedBox(height: 14),
-            AspectRatio(
-              aspectRatio: _size.aspect,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: LissomPalette.of(context).card,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: CustomPaint(
-                  key: const Key('camera.coach.outline'),
-                  painter: _BodyOutlinePainter(
-                    frame: _frame,
-                    color: s != null && s.inPose
-                        ? LissomPalette.of(context).primaryFill
-                        : LissomPalette.of(context).textSecondary,
-                  ),
-                ),
+            _CoachView(
+              source: _source,
+              size: _size,
+              painter: _BodyOutlinePainter(
+                frame: _frame,
+                color: s != null && s.inPose
+                    ? LissomPalette.of(context).primaryFill
+                    : LissomPalette.of(context).textSecondary,
               ),
             ),
-            const SizedBox(height: 14),
             const SizedBox(height: 16),
             if (src is PermissionDenied)
               OutlinedButton(
@@ -406,7 +403,57 @@ class _CameraCoachScreenState extends State<CameraCoachScreen>
   }
 }
 
-/// Draws the body from landmarks only (no camera image on this screen).
+/// The mirror with the outline on top when the source offers a preview
+/// texture (Core motion_camera 0.4.0, one camera for both); otherwise the
+/// outline alone on a plain card. The texture image never reaches app code.
+class _CoachView extends StatelessWidget {
+  const _CoachView({
+    required this.source,
+    required this.size,
+    required this.painter,
+  });
+
+  final PoseSource? source;
+  final FrameSize size;
+  final CustomPainter painter;
+
+  @override
+  Widget build(BuildContext context) {
+    final PoseSource? s = source;
+    final Widget outline = AspectRatio(
+      aspectRatio: size.aspect,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: LissomPalette.of(context).card,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: CustomPaint(
+          key: const Key('camera.coach.outline'),
+          painter: painter,
+        ),
+      ),
+    );
+    if (s is! CameraPoseSource) return outline;
+    return ValueListenableBuilder<CameraSessionInfo?>(
+      valueListenable: s.session,
+      builder: (BuildContext context, CameraSessionInfo? info, _) =>
+          info?.previewTextureId == null
+          ? outline
+          : ClipRRect(
+              key: const Key('camera.coach.mirror'),
+              borderRadius: BorderRadius.circular(16),
+              child: MotionCameraPreview(
+                session: info!,
+                overlay: CustomPaint(painter: painter),
+              ),
+            ),
+    );
+  }
+}
+
+/// Draws the body from landmarks, plus a dashed vertical reference line
+/// through the hips (a plumb line to compare the trunk with — a reference,
+/// not a target the learner must reach).
 class _BodyOutlinePainter extends CustomPainter {
   _BodyOutlinePainter({required this.frame, required this.color});
 
@@ -447,6 +494,15 @@ class _BodyOutlinePainter extends CustomPainter {
     }
     if (f.visibility(Lm.nose) >= 0.5) {
       canvas.drawCircle(at(Lm.nose), 8, p..style = PaintingStyle.stroke);
+    }
+    if (f.visibility(Lm.leftHip) >= 0.5 && f.visibility(Lm.rightHip) >= 0.5) {
+      final double x = (at(Lm.leftHip).dx + at(Lm.rightHip).dx) / 2;
+      final Paint line = Paint()
+        ..color = color.withValues(alpha: 0.5)
+        ..strokeWidth = 2;
+      for (double y = 0; y < size.height; y += 18) {
+        canvas.drawLine(Offset(x, y), Offset(x, y + 9), line);
+      }
     }
   }
 

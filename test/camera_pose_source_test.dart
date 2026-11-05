@@ -137,6 +137,8 @@ final class _NativeCameraBackend {
           'h': 1920,
           'clock': 'monotonic',
           'library': 'fixture-library',
+          if ((call.arguments as Map<Object?, Object?>)['preview'] == true)
+            'previewTextureId': 41,
         };
       }
       if (call.method == 'stopOwned') {
@@ -487,6 +489,46 @@ void main() {
         expect(native.calls, <String>['startOwned', 'stopOwned', 'readback']);
       },
     );
+
+    test('a preview source asks the same session for a texture', () async {
+      final source = CameraPoseSource(
+        controller: controller,
+        requestPermission: () async => PermissionStatus.granted,
+        prepareModel: () async => '/fixture/model.task',
+        preview: true,
+      );
+      expect(source.session.value, isNull);
+      await source.start();
+      expect(
+        (native.controlCalls
+                .firstWhere((c) => c.method == 'startOwned')
+                .arguments
+            as Map<Object?, Object?>)['preview'],
+        isTrue,
+      );
+      expect(source.session.value?.previewTextureId, 41);
+      await source.dispose();
+      expect(source.session.value, isNull);
+    });
+
+    test('the default source keeps the pre-preview start message', () async {
+      final source = CameraPoseSource(
+        controller: controller,
+        requestPermission: () async => PermissionStatus.granted,
+        prepareModel: () async => '/fixture/model.task',
+      );
+      await source.start();
+      expect(
+        (native.controlCalls
+                    .firstWhere((c) => c.method == 'startOwned')
+                    .arguments
+                as Map<Object?, Object?>)
+            .containsKey('preview'),
+        isFalse,
+      );
+      expect(source.session.value?.previewTextureId, isNull);
+      await source.dispose();
+    });
 
     test('late pending native failure emits no retired setup event', () async {
       native.startGate = Completer<void>();
