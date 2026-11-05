@@ -6,6 +6,7 @@ import 'package:lissom_engine/lissom_engine.dart'
 
 import 'camera/lesson_camera_section.dart';
 import 'course_access.dart';
+import 'hatha_beginner_path.dart';
 import 'hatha_course.dart';
 import 'hatha_knowledge_diagrams.dart';
 import 'hatha_progress.dart';
@@ -25,10 +26,12 @@ class HathaCourseScreen extends StatefulWidget {
     required this.course,
     required this.initialProgress,
     required this.storeLoader,
+    this.pathLessonIds,
     super.key,
   });
 
   static const Key progressKey = Key('hatha.progress');
+  static const Key pathContinueHintKey = Key('hatha.pathContinueHint');
   static const Key continueKey = Key('hatha.continue');
   static const Key accessNoteKey = Key('hatha.accessNote');
   static const Key subscriptionClosedKey = Key('hatha.subscriptionClosed');
@@ -36,6 +39,11 @@ class HathaCourseScreen extends StatefulWidget {
   final HathaCourse course;
   final HathaProgress initialProgress;
   final Future<HathaProgressStore> Function() storeLoader;
+
+  /// When set, the screen shows only these lessons of [course] (the Beginner
+  /// path). [course] stays the full Hatha course: practice records, the
+  /// prerequisite rule and the access gate are the course's own.
+  final List<String>? pathLessonIds;
 
   @override
   State<HathaCourseScreen> createState() => _HathaCourseScreenState();
@@ -126,11 +134,57 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
     }
   }
 
+  /// Hatha modules, narrowed to the path lessons when this is the path view.
+  List<HathaModule> _visibleModules(Set<String>? pathIds) {
+    if (pathIds == null) return widget.course.modules;
+    return <HathaModule>[
+      for (final HathaModule m in widget.course.modules)
+        if (m.lessons.any((HathaLesson l) => pathIds.contains(l.id)))
+          HathaModule(
+            id: m.id,
+            title: m.title,
+            outcome: m.outcome,
+            lessons: <HathaLesson>[
+              for (final HathaLesson l in m.lessons)
+                if (pathIds.contains(l.id)) l,
+            ],
+          ),
+    ];
+  }
+
+  String _pathContinueHint(BuildContext context) {
+    final HathaLesson? after = widget.course.lessonById(
+      hathaBeginnerPathNextLessonId,
+    );
+    if (after == null) {
+      return localeText(
+        context,
+        'You finished the Beginner path.',
+        'Başlangıç yolunu bitirdin.',
+      );
+    }
+    return localeTemplate(
+      context,
+      'You finished the Beginner path. Continue the Hatha course with: {title}',
+      'Başlangıç yolunu bitirdin. Hatha kursuna şu dersle devam et: {title}',
+      <String, Object>{'title': hathaText(context, after.title)},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Set<String> practiced = _practiced;
-    final List<HathaLesson> lessons = widget.course.lessons;
+    final Set<String>? pathIds = widget.pathLessonIds?.toSet();
+    final bool isPath = pathIds != null;
+    final List<HathaLesson> lessons = isPath
+        ? <HathaLesson>[
+            for (final HathaLesson l in widget.course.lessons)
+              if (pathIds.contains(l.id)) l,
+          ]
+        : widget.course.lessons;
+    final Set<String> practiced = isPath
+        ? _practiced.intersection(pathIds)
+        : _practiced;
     final LissomCourseAccessState? access = LissomCourseAccess.maybeOf(context);
     final HathaLesson? next = lessons.cast<HathaLesson?>().firstWhere(
       (HathaLesson? lesson) => !practiced.contains(lesson!.id),
@@ -150,12 +204,20 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              hathaText(context, widget.course.title),
+              isPath
+                  ? localeText(context, 'Beginner path', 'Başlangıç yolu')
+                  : hathaText(context, widget.course.title),
               style: theme.textTheme.headlineLarge,
             ),
             const SizedBox(height: 10),
             Text(
-              hathaText(context, widget.course.intro),
+              isPath
+                  ? localeText(
+                      context,
+                      'The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.',
+                      'Hatha kursunun ilk on dersi, sırasıyla. Çalışma kayıtların Hatha kursunun kayıtlarıdır: burada bitirdiğin ders tam kursta da sayılır.',
+                    )
+                  : hathaText(context, widget.course.intro),
               style: theme.textTheme.bodyMedium,
             ),
             if (access != null && !access.subscribed) ...<Widget>[
@@ -170,7 +232,10 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                       context,
                       freeLessonCount(widget.course),
                     ),
-                    'total': localizedInteger(context, lessons.length),
+                    'total': localizedInteger(
+                      context,
+                      widget.course.lessons.length,
+                    ),
                   },
                 ),
                 key: HathaCourseScreen.accessNoteKey,
@@ -248,6 +313,12 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                   ),
                 ),
               )
+            else if (isPath)
+              Text(
+                key: HathaCourseScreen.pathContinueHintKey,
+                _pathContinueHint(context),
+                style: theme.textTheme.bodyMedium,
+              )
             else
               Text(
                 localeText(
@@ -281,7 +352,9 @@ class _HathaCourseScreenState extends State<HathaCourseScreen>
                 ),
                 style: TextStyle(color: theme.colorScheme.error),
               ),
-            for (final HathaModule module in widget.course.modules) ...<Widget>[
+            for (final HathaModule module in _visibleModules(
+              pathIds,
+            )) ...<Widget>[
               _ModuleSection(
                 module: module,
                 practiced: practiced,

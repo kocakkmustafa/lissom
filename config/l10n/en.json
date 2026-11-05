@@ -1979,6 +1979,12 @@
     "Sphinx on the forearms": "Sphinx on the forearms",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.",
     "Tabletop and cat-cow": "Tabletop and cat-cow",
-    "Upright seat on the floor": "Upright seat on the floor"
+    "Upright seat on the floor": "Upright seat on the floor",
+    "Beginner path": "Beginner path",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.",
+    "You finished the Beginner path.": "You finished the Beginner path.",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "You finished the Beginner path. Continue the Hatha course with: {title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.",
+    "Open Beginner path": "Open Beginner path"
   }
 }

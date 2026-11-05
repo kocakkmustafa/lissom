@@ -2000,6 +2000,12 @@
     "Sphinx on the forearms": "अग्रबाहुओं पर स्फ़िंक्स",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "फ़ोन को अपनी चटाई के पास, नीचे और लगभग 2 मी दूर सीधा खड़ा करें ताकि वह आपको बगल से देखे। सिर से पैर तक पूरा शरीर फ़्रेम में रखें और फ़्रेम में अकेले रहें।",
     "Tabletop and cat-cow": "टेबलटॉप और कैट-काउ",
-    "Upright seat on the floor": "फ़र्श पर सीधे बैठना"
+    "Upright seat on the floor": "फ़र्श पर सीधे बैठना",
+    "Beginner path": "शुरुआती पथ",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "हठ कोर्स के पहले दस पाठ, क्रम से। आपके अभ्यास रिकॉर्ड हठ कोर्स के ही रिकॉर्ड हैं: यहाँ पूरा किया गया पाठ पूरे कोर्स में भी गिना जाता है।",
+    "You finished the Beginner path.": "आपने शुरुआती पथ पूरा कर लिया।",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "आपने शुरुआती पथ पूरा कर लिया। हठ कोर्स को इस पाठ से जारी रखें: {title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "हठ के पहले दस पाठ, क्रम से। यह आपके हठ अभ्यास रिकॉर्ड साझा करता है, फिर पूरे हठ कोर्स में आगे बढ़ता है।",
+    "Open Beginner path": "शुरुआती पथ खोलें"
   }
 }

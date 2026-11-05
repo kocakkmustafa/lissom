@@ -1979,6 +1979,12 @@
     "Sphinx on the forearms": "전완으로 받치는 스핑크스",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "휴대폰을 매트 옆 낮은 곳에 약 2m 떨어뜨려 세로로 세워 옆에서 보이게 하세요. 머리부터 발끝까지 온몸이 보이게 하고 화면에는 혼자만 있도록 하세요.",
     "Tabletop and cat-cow": "테이블 자세와 고양이-소",
-    "Upright seat on the floor": "바닥에 곧게 앉기"
+    "Upright seat on the floor": "바닥에 곧게 앉기",
+    "Beginner path": "입문 과정",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "하타 코스의 처음 열 개 레슨을 순서대로 진행합니다. 연습 기록은 하타 코스의 기록과 같으며, 여기서 마친 레슨은 전체 코스에서도 완료로 집계됩니다.",
+    "You finished the Beginner path.": "입문 과정을 마쳤습니다.",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "입문 과정을 마쳤습니다. 다음 레슨으로 하타 코스를 이어 가세요: {title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "하타의 처음 열 개 레슨을 순서대로. 하타 연습 기록을 함께 쓰고, 이후 전체 하타 코스에서 이어집니다.",
+    "Open Beginner path": "입문 과정 열기"
   }
 }

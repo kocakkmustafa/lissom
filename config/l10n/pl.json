@@ -2014,6 +2014,12 @@
     "Sphinx on the forearms": "Sfinks na przedramionach",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "Postaw telefon pionowo obok maty, nisko i około 2 m od siebie, tak aby widział cię z boku. Trzymaj całe ciało w kadrze, od głowy do stóp, i bądź w nim sam.",
     "Tabletop and cat-cow": "Pozycja stołu i kot-krowa",
-    "Upright seat on the floor": "Wyprostowany siad na podłodze"
+    "Upright seat on the floor": "Wyprostowany siad na podłodze",
+    "Beginner path": "Ścieżka dla początkujących",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "Pierwsze dziesięć lekcji kursu Hatha, po kolei. Twoje zapisy praktyki to zapisy kursu Hatha: lekcja ukończona tutaj liczy się także w pełnym kursie.",
+    "You finished the Beginner path.": "Ukończono ścieżkę dla początkujących.",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "Ukończono ścieżkę dla początkujących. Kontynuuj kurs Hatha od lekcji: {title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "Pierwszych dziesięć lekcji Hatha, po kolei. Dzieli Twoje zapisy praktyki Hatha, a potem prowadzi dalej w pełnym kursie Hatha.",
+    "Open Beginner path": "Otwórz ścieżkę dla początkujących"
   }
 }
