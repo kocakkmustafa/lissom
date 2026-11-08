@@ -1985,6 +1985,8 @@
     "You finished the Beginner path.": "你已完成入门路径。",
     "You finished the Beginner path. Continue the Hatha course with: {title}": "你已完成入门路径。请继续哈他课程：{title}",
     "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "哈他的前十节课，按顺序进行。共用你的哈他练习记录，之后在完整的哈他课程中继续。",
-    "Open Beginner path": "打开入门路径"
+    "Open Beginner path": "打开入门路径",
+    "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.": "Lissom 仅在你于课程中开始可选的相机练习时才使用相机。画面在本设备上处理以识别身体位置；视频不会被录制或上传。",
+    "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine.": "图像、视频和身体位置不会被记录、存储，也不会发送给我们或任何其他人。语音纠正使用你设备自带的语音引擎。"
   }
 }

@@ -2034,6 +2034,8 @@
     "You finished the Beginner path.": "أنهيت مسار المبتدئين.",
     "You finished the Beginner path. Continue the Hatha course with: {title}": "أنهيت مسار المبتدئين. تابع دورة الهاثا بهذا الدرس: {title}",
     "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "أول عشرة دروس هاثا، بالترتيب. يشارك سجلات تدريبك في الهاثا، ثم يتابع في دورة الهاثا الكاملة.",
-    "Open Beginner path": "افتح مسار المبتدئين"
+    "Open Beginner path": "افتح مسار المبتدئين",
+    "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.": "يستخدم Lissom الكاميرا فقط عندما تبدأ التدريب الاختياري بالكاميرا في أحد الدروس. تُعالَج الصورة على هذا الجهاز لتحديد أوضاع الجسم؛ ولا يُسجَّل الفيديو ولا يُرفع.",
+    "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine.": "لا تُسجَّل الصور والفيديو وأوضاع الجسم ولا تُخزَّن ولا تُرسَل إلينا أو إلى أي جهة أخرى. تستخدم التصحيحات المنطوقة محرك الكلام في جهازك."
   }
 }

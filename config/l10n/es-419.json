@@ -2006,6 +2006,8 @@
     "You finished the Beginner path.": "Terminaste la ruta para principiantes.",
     "You finished the Beginner path. Continue the Hatha course with: {title}": "Terminaste la ruta para principiantes. Continúa el curso de Hatha con: {title}",
     "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "Las primeras diez lecciones de Hatha, en orden. Comparte tus registros de práctica de Hatha y luego continúa en el curso de Hatha completo.",
-    "Open Beginner path": "Abrir la ruta para principiantes"
+    "Open Beginner path": "Abrir la ruta para principiantes",
+    "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.": "Lissom usa la cámara solo cuando inicias la práctica opcional con cámara en una lección. La imagen se procesa en este dispositivo para encontrar posiciones del cuerpo; el video no se graba ni se sube.",
+    "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine.": "Las imágenes, el video y las posiciones del cuerpo no se graban, no se guardan ni se envían a nosotros ni a nadie más. Las correcciones habladas usan el motor de voz de tu dispositivo."
   }
 }
