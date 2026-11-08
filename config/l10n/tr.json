@@ -1979,6 +1979,12 @@
     "Sphinx on the forearms": "Ön kollarda sfenks",
     "Stand the phone upright beside your mat, low and about 2 m away, so it sees you from the side. Keep your whole body in view, head to feet, and stay alone in the frame.": "Telefonu matının yanına, alçakta ve yaklaşık 2 m uzağa dik koy; seni yandan görsün. Baştan ayağa tüm vücudun görünsün ve kadrajda yalnız ol.",
     "Tabletop and cat-cow": "Masa ve kedi-inek",
-    "Upright seat on the floor": "Yerde dik oturuş"
+    "Upright seat on the floor": "Yerde dik oturuş",
+    "Beginner path": "Başlangıç yolu",
+    "The first ten lessons of the Hatha course, in order. Your practice records are the Hatha course records: a lesson you finish here counts in the full course too.": "Hatha kursunun ilk on dersi, sırasıyla. Çalışma kayıtların Hatha kursunun kayıtlarıdır: burada bitirdiğin ders tam kursta da sayılır.",
+    "You finished the Beginner path.": "Başlangıç yolunu bitirdin.",
+    "You finished the Beginner path. Continue the Hatha course with: {title}": "Başlangıç yolunu bitirdin. Hatha kursuna şu dersle devam et: {title}",
+    "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "Hatha'nın ilk on dersi, sırasıyla. Hatha çalışma kayıtlarını paylaşır, ardından tam Hatha kursunda devam eder.",
+    "Open Beginner path": "Başlangıç yolunu aç"
   }
 }

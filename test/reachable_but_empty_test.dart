@@ -111,6 +111,15 @@ void main() {
       // kutusu) İÇERİK SAYILMAZ.
       final bool hasItems = facts.live
           .any((TestLiveness x) => find.text(x.name).evaluate().isNotEmpty);
+      // Dürüstlük kutusu sayfanın SONUNDADIR ve ListView tembeldir: sayfa
+      // uzadıkça kutu çizim penceresinin dışına düşer ve `find.byKey` onu
+      // "yok" sanır. Önce kutuya kaydır; gerçekten yoksa kaydırma hata verir
+      // ve aile yine BOŞ-SESSİZ sayılır (ölçüt gevşemez).
+      try {
+        await scrollTo(tester, find.byKey(FamilyPage.honestyKey));
+      } on Object {
+        // Kutu yok: aşağıda `declares` false kalır.
+      }
       final bool declares =
           find.byKey(FamilyPage.honestyKey).evaluate().isNotEmpty;
 

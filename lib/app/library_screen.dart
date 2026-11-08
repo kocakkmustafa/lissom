@@ -25,6 +25,7 @@ import 'package:motion_account/motion_account.dart'
 
 import 'app_facts.dart';
 import 'attempt_values.dart';
+import 'hatha_beginner_path.dart';
 import 'hatha_course.dart';
 import 'hatha_course_screen.dart';
 import 'hatha_progress.dart';
@@ -493,6 +494,40 @@ class FamilyPage extends StatelessWidget {
       ];
     }
     return <Widget>[
+      if (hathaBeginnerPathAvailable(course)) ...<Widget>[
+        LissomCard(
+          key: const Key('library.beginnerPath'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                localeText(context, 'Beginner path', 'Başlangıç yolu'),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                localeText(
+                  context,
+                  'The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.',
+                  'Hatha\'nın ilk on dersi, sırasıyla. Hatha çalışma kayıtlarını paylaşır, ardından tam Hatha kursunda devam eder.',
+                ),
+              ),
+              const SizedBox(height: 12),
+              CourseOpenButton(
+                course: course,
+                storeLoader: hathaStoreLoader,
+                pathLessonIds: hathaBeginnerPathLessonIds,
+                label: localeText(
+                  context,
+                  'Open Beginner path',
+                  'Başlangıç yolunu aç',
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
       LissomCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
