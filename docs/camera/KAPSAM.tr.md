@@ -1,8 +1,8 @@
 # Lissom kamera koçluğu — kapsam (Aşama 0)
 
-Kurucu kararı 2026-11-04 ("Lissom, önerilerle"): ilk kamera kapsamı ayakta ve sandalye duruşları, en az 20 duruş, yandan ölçülebilenler. Yer duruşları ve Vinyasa akışları sonraki sürüm.
+Kurucu kararı 2026-11-04 ("Lissom, önerilerle"): ilk kamera kapsamı ayakta ve sandalye duruşları, en az 20 duruş, yandan ölçülebilenler (M1). Yer duruşları o gün "sonraki sürüm"di; kurucu 2026-11-05'te bunları **M2** olarak kapsama aldı (aşağıda "M2 yer duruşları"). Vinyasa akışları (M3) sonraki sürümde kalır.
 
-**Katalog:** `config/yoga/camera-poses.v1.json` — 20 duruş (15 ayakta, 5 sandalye), 4 kurstan 27 ders. Ayrıntılı sayılar `MODEL-KARTI.tr.md`.
+**Katalog:** `config/yoga/camera-poses.v1.json` — toplam 35 duruş, 60 ders: M1 20 duruş (15 ayakta, 5 sandalye; 4 kurstan 27 ders) + M2 15 yer duruşu (33 ders). Ayrıntılı sayılar `MODEL-KARTI.tr.md`. Aşağıdaki "Kamerada olan dersler" ve "Kamerada olmayanlar" bölümleri **M1** tablosudur; M2 bölümü onları tamamlar.
 
 ## Seçim ölçütü
 1. Ayakta ya da sandalyede.
@@ -20,7 +20,7 @@ Kurucu kararı 2026-11-04 ("Lissom, önerilerle"): ilk kamera kapsamı ayakta ve
 |---|---|
 | h45 Savaşçı II, h09 ve a16 üçgen, a17 yan açı | Duruşu tanımlayan açı önden (frontal düzlem); yandan bacaklar üst üste biner. Önden doğruluk ~0,80 (E06/E08). |
 | c13 oturarak yana uzanma, c05/h22 oturarak dönüş | Yana eğilme ve dönme yandan görünmez. |
-| h13–h20, h25–h30, h37–h40, h43, h46–h48, h51, h52, h54–h56, Yin dersleri, v11–v14 | Yer duruşları (diz üstü, oturuş, sırtüstü, yüzüstü): kurucu kararıyla sonraki sürüm. |
+| h13–h20, h25–h30, h37–h40, h43, h46–h48, h51, h52, h54–h56, Yin dersleri, v11–v14 | Yer duruşları (diz üstü, oturuş, sırtüstü, yüzüstü): **M1'de yoktu** (kurucu kararıyla sonraki sürüm). 2026-11-05'te M2 olarak alındı: bu gruptan kamerada olan dersler aşağıdaki "M2 yer duruşları" listesindedir; o listede olmayanlar kamerada hâlâ yoktur. |
 | h34, h35, h49, h58, a08, a10, a07 | Akış ve geçişler (DTW gerekir): sonraki sürüm. |
 | h01, h02, h31–h33, h36, h41, h42, h59, h60, a01, a02, a12–a14, a19, v01, v07–v10, c02, c03, c08–c12, c15 | Bilgi, nefes, plan ya da tekrar dersleri; değerlendirilecek sabit duruş yok. |
 
