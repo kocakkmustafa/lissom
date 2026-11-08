@@ -5,7 +5,7 @@
 ## ADR-L001 — Kamera koçluğu denemesi: ilk kapsam ve tek bayrak
 **Tarih:** 2026-11-04 · **Statü:** kabul (kurucu) · **Kaynak:** `docs/camera/KAPSAM.tr.md`
 - **Bağlam:** Lissom'a kamera koçluğu eklenecek mi, nasıl?
-- **Karar:** Kurucu "Lissom, önerilerle" (2026-11-04). İlk kapsam ayakta ve sandalye duruşları, en az 20 duruş, yandan ölçülebilenler. Özellik "deneme" etiketli, tek bayrak (`LISSOM_CAMERA_TRIAL`) arkasında, varsayılan kapalı.
+- **Karar:** Kurucu "Lissom, önerilerle" (2026-11-04) ile sıradaki Motion uygulamasını seçti. İlk kamera kapsamı (ayakta ve sandalye duruşları, en az 20 duruş, yandan ölçülebilenler; yer duruşları ve Vinyasa sonra) bu kararla birlikte raporun varsayılanlarıyla kabul edilen alt karardır (vault: "Karar — Sıradaki Uygulama Lissom (2026-11-04)"). Özellik "deneme" etiketli, tek bayrak (`LISSOM_CAMERA_TRIAL`) arkasında, varsayılan kapalı.
 - **Sonuç:** 20 duruş (15 ayakta + 5 sandalye), 27 ders. Bayrağı mağaza sürümünde açmak ayrı kurucu kararıdır (F3).
 
 ## ADR-L002 — M2: yer duruşları kapsama alındı
@@ -17,7 +17,7 @@
 ## ADR-L003 — iPhone kamera smoke ertelendi
 **Tarih:** 2026-11-05 · **Statü:** kabul (kurucu) · **Kaynak:** Motion oturum devri 2026-11-06 (Lissom)
 - **Karar:** Kurucu "kamera testi beklesin" (2026-11-05). Bayrak kapalı kalır.
-- **Sonuç:** Cihazda kamera izni, texture, kare hızı ve MediaPipe çıkarım süresi ölçülmedi (`CIHAZ-SMOKE.tr.md`); bu nedenle kameranın veri sınırı testleri cihazsız yazılır ve `TEST_ONLY` etiketlenir (LIS-P1-02).
+- **Sonuç:** Cihazda kamera izni, texture, kare hızı ve MediaPipe çıkarım süresi ölçülmedi (`CIHAZ-SMOKE.tr.md`). Mühendislik sonucu (kurucu kararı değil): cihazsız kanıt `TEST_ONLY` etiketlenir; kameranın veri sınırı testleri bu etiketle planlandı (Backlog LIS-P1-02).
 
 ## ADR-L004 — Başlangıç yolu Hatha'nın seçimidir, ayrı kurs değildir
 **Tarih:** 2026-11-06 · **Statü:** kabul (kurucu) · **Kaynak:** lissom#21 → `87deb09`

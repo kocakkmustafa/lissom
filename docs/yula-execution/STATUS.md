@@ -13,8 +13,8 @@ Bu dosya "şu an ne çalışıyor" sorusunun tek cevabıdır. Her satırın kan�
 | Destekli Yin | 12 ders, v1.0.0 | `config/courses/yin-supported.v1.json` |
 | Ashtanga temelleri | 19 ders, v1.0.0 (tam Primary Series değil) | `config/courses/ashtanga-foundations.v1.json`; `docs/ASHTANGA-FOUNDATIONS-2026-10-16.md` |
 | **Başlangıç yolu** | Hatha h01–h10, yeni ders yok; ilerleme, önkoşul ve erişim Hatha'nın kendisi (ayrı kurs/kayıt yok); bitince Hatha h11'e yönlendirir | lissom#21 → `87deb09`; `lib/app/hatha_beginner_path.dart`; `test/hatha_beginner_path_test.dart` (7 test) |
-| Kamera koçluğu — M1 | 20 duruş (15 ayakta + 5 sandalye), 27 ders | `config/yoga/camera-poses.v1.json` (v1.2.0, durum `trial`) |
-| Kamera koçluğu — M2 | 15 yer duruşu, 33 ders (2026-11-05'te alındı) | aynı katalog: 35 duruş = 15 ayakta + 15 yer + 5 sandalye, 60 ders |
+| Kamera koçluğu — M1 (deneme, bayrak arkasında) | 20 duruş (15 ayakta + 5 sandalye), 27 ders | `config/yoga/camera-poses.v1.json` (v1.2.0, durum `trial`) |
+| Kamera koçluğu — M2 (deneme, bayrak arkasında) | 15 yer duruşu, 33 ders (2026-11-05'te alındı) | aynı katalog: 35 duruş = 15 ayakta + 15 yer + 5 sandalye, 60 ders |
 | Kamera bayrağı | `LISSOM_CAMERA_TRIAL`, **varsayılan kapalı**; yalnız `--dart-define=LISSOM_CAMERA_TRIAL=true` ile açılır (cihaz smoke derlemesi) | `lib/app/lissom_release_policy.dart` |
 | Ölçüm bataryası kamerası | Kapalı (Core `motionCameraCoachingAvailable = false`); bayraktan bağımsız | `lib/app/lissom_release_policy.dart` yorumu; `CaptureUnavailableNote` |
 | Ayna (iki yol) | (1) Koç ekranında Core `motion_camera` 0.4.0 oturumunun texture'ı + iskelet + dikey çizgi (tek kamera); (2) ayrı ayna ekranı: Flutter `camera` paketi, yalnız önizleme | `lib/app/camera/camera_coach_screen.dart`, `lib/app/camera/mirror_camera.dart`, `lib/app/camera/mirror_screen.dart`; `docs/camera/MODEL-KARTI.tr.md` "Bileşenler" |
@@ -38,13 +38,15 @@ Kamera doğrulayıcısı kural tabanlıdır (öğrenilmiş sınıflandırıcı y
 
 | # | Madde | Seçenekler / durum | Kaynak |
 |---|---|---|---|
-| F1 | Eşik altı 4 duruş (dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I) | (a) "deneme" içinde kalsınlar (varsayılan, bugünkü durum), (b) kapsamdan çıksınlar (16 duruş), (c) aralıklar genişletilip yeni bağımsız veriyle yeniden sınansın | `docs/camera/KAPSAM.tr.md` son bölüm; Motion panosu |
+| F1 | Eşik altı duruşlar: M1'de 4 (dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I); M2'de 3 (alçak kobra 0,83, uzanarak dinlenme 0,83, aşağı bakan köpek 0,82; bu veriyle ayar yapılmadı). M2'nin 3'ü için ayrı karar maddesi henüz yok, aynı üç seçenek geçerli | (a) "deneme" içinde kalsınlar (varsayılan, bugünkü durum), (b) kapsamdan çıksınlar (M1 hedefi ≥20 duruş için 16'ya düşer; katalog toplamı 35'ten 31'e), (c) aralıklar genişletilip yeni bağımsız veriyle yeniden sınansın | `docs/camera/KAPSAM.tr.md` son bölüm; `docs/camera/MODEL-KARTI.tr.md` (M2 eşik altı); Motion panosu |
 | F2 | iPhone kamera smoke | Kurucu 2026-11-05: "kamera testi beklesin"; izin/kare hızı/çıkarım süresi ölçülmedi | `docs/camera/CIHAZ-SMOKE.tr.md` |
-| F3 | Kamera açılışı ve ücreti | Bayrağın mağaza sürümünde açılması, aynı sürümde izin metni + gizlilik metni + mağaza metni, kamera için ücret | `lissom_release_policy.dart` yorumu; `docs/camera/ACILIS-METINLERI.tr.md` |
+| F3 | Kamera açılışı ve ücreti | Bayrağın mağaza sürümünde açılması (aynı sürümde izin metni + gizlilik metni + mağaza metni birlikte) ve kamera için ücret | Açılış: `lissom_release_policy.dart` yorumu, `docs/camera/ACILIS-METINLERI.tr.md`; ücret: Motion Durum Panosu "Kalan işler" |
 | F4 | M3 akış (Vinyasa, Güneşe Selam) | Sonraki sürüm; DTW gerekir | `docs/camera/KAPSAM.tr.md` |
 | F5 | Ashtanga açık kalanlar | Yetkin öğretmen/öğrenci incelemesi, kabul edilmiş demonstrasyon/lisans, sensör doğruluğu; tam Primary Series kapsam dışı | `docs/ASHTANGA-FOUNDATIONS-2026-10-16.md` "Açık kalanlar" |
 | F6 | `standing-arm-raise` tanımı | "Kollar yukarıda (her yönden)" mi, yalnız öne kaldırma mı; E16'da yanlış kabul %35 | `docs/camera/MODEL-KARTI.tr.md` "Bilinen riskler" |
 | F7 | Mağaza reddi 4.3(a) | Ret gerekçesi, yeni build, abonelik kapsamı/fiyat; yeniden gönderim Ostinato onaylanıp yayınlanana kadar bekliyor (kurucu 2026-11-06) | Motion Durum Panosu |
+
+F2, F4 ve F7'de kurucu bir erteleme ya da sıralama kararı verdi (F2: "kamera testi beklesin"; F4: M3 sonraki sürüm; F7: yeniden gönderim beklemede); kalan iş, zamanı gelince karar ya da uygulamadır. F1, F3, F5 ve F6 açık kurucu/içerik kararıdır.
 
 Bu liste tek yerdir: yeni bir kurucu kararı bekleyen madde buraya eklenir, karar alınınca satır silinmez, `DECISIONS.md`'ye ADR olarak taşınır ve burada "karar: ADR-Lxxx" yazılır.
 

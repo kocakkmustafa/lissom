@@ -35,4 +35,4 @@ Yer duruşları bu sürüme alındı ("Evet, M1'den sonra"): 15 duruş, 33 ders.
 Akış (Vinyasa, Güneşe Selam) sonraki sürümde. Bel, sırt ve masa başı için yeni kurs açılmıyor. Kamerada hâlâ olmayanlar şunlar: dönüşler (y05 sırtüstü burgu), duvarda bacaklar (h28), yarım saban (h54), lotus ve balık bilgi dersleri.
 
 ## Kurucu kararı bekleyen kapsam maddesi
-Bağımsız sınamada (E15) dört duruş gerçek kabul eşiğinin altında kaldı: dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I. Seçenekler: (a) "deneme" içinde kalsınlar (varsayılan, bu PR), (b) kapsamdan çıksınlar (16 duruş, ≥20 hedefinin altı), (c) aralıklar aileye göre genişletilip yeni bağımsız veriyle (ör. UI-PRMD) yeniden sınansın.
+Bağımsız sınamada (E15) dört duruş gerçek kabul eşiğinin altında kaldı: dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I. Seçenekler: (a) "deneme" içinde kalsınlar (varsayılan, bugünkü durum), (b) kapsamdan çıksınlar (M1 hedefi için 16 duruş, ≥20'nin altı; M2 sonrası katalog toplamı 35'ten 31'e iner), (c) aralıklar aileye göre genişletilip yeni bağımsız veriyle (ör. UI-PRMD) yeniden sınansın.
