@@ -1,6 +1,6 @@
 # Lissom — durum (kaynak gerçeği)
 
-**Tarih:** 2026-11-08 · **Kaynak commit:** `main` `87deb09` (lissom#21 merge) · **Bilet:** LIS-P1-01
+**Tarih:** 2026-11-10 · **Kaynak commit:** `main` `5ea39cb` (lissom#24 merge) · **Bilet:** LIS-P1-01 (ilk yazım 2026-11-08), güncelleme LIS-P1-02/03
 Bu dosya "şu an ne çalışıyor" sorusunun tek cevabıdır. Her satırın kanıtı yanındadır; kanıtı olmayan satır `DOĞRULANMADI` yazar. Kararların gerekçesi `DECISIONS.md`'dedir.
 
 ## 1. Ne çalışıyor (kod main'de)
@@ -31,8 +31,8 @@ Kamera doğrulayıcısı kural tabanlıdır (öğrenilmiş sınıflandırıcı y
 | App Store | 1.0.0 (build 5) REJECTED, 4.3(a) Spam; gönderim UNRESOLVED_ISSUES | Motion Durum Panosu (2026-11-06); `DOĞRULANMADI` bu bilette |
 | Google Play | Yalnız alpha (kapalı test) build 5; üretim kapalı | aynı |
 | iPhone kamera smoke | Doğrulayıcı maliyeti ölçüldü (≈40 µs/kare); kamera izni, texture, kare hızı, MediaPipe çıkarım süresi **ölçülmedi** | `docs/camera/CIHAZ-SMOKE.tr.md` |
-| Kamera güvenlik testleri | Kare/landmark ağa çıkmaz, izin reddi, bayrak kapalıyken tetiklenmez: **henüz test yok** | LIS-P1-02 (Backlog) |
-| Uygulama içi kamera açılış metinleri | Hazır (TR/EN), uygulamada **yok** | LIS-P1-03 (Backlog); `docs/camera/ACILIS-METINLERI.tr.md` |
+| Kamera güvenlik testleri | Kare/landmark ağa çıkmaz, izin reddinde ders kamerasız sürer, bayrak kapalıyken kamera yolu tetiklenmez: 12 test (yalnız test, cihazsız; `TEST_ONLY`) | lissom#23 → `c4cffe2`; `test/camera/camera_data_boundary_test.dart` |
+| Uygulama içi kamera açılış metinleri | `LessonCameraSection`'da izin açıklaması ve gizlilik satırı var (`canStart:false` iken de görünür; 14 dil; bayrak kapalı kalır); 10 test | lissom#24 → `5ea39cb`; `test/camera/camera_opening_copy_test.dart`; kaynak metin `docs/camera/ACILIS-METINLERI.tr.md` |
 
 ## 3. Kurucu kararı bekleyenler (tek liste)
 
