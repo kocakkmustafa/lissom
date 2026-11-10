@@ -1985,6 +1985,8 @@
     "You finished the Beginner path.": "初心者コースを終えました。",
     "You finished the Beginner path. Continue the Hatha course with: {title}": "初心者コースを終えました。次のレッスンでハタ・コースを続けましょう:{title}",
     "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "ハタの最初の10レッスンを順番に。ハタの練習記録を共有し、その後は完全版のハタ・コースで続きます。",
-    "Open Beginner path": "初心者コースを開く"
+    "Open Beginner path": "初心者コースを開く",
+    "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.": "Lissomは、レッスン内の任意のカメラ練習を開始したときだけカメラを使います。映像は体の位置を見つけるためにこの端末内で処理され、動画は録画もアップロードもされません。",
+    "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine.": "画像、動画、体の位置は記録も保存もされず、当社や第三者に送信されることもありません。音声での修正は、お使いの端末の音声エンジンを使います。"
   }
 }

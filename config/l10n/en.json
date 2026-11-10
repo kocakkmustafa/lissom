@@ -1985,6 +1985,8 @@
     "You finished the Beginner path.": "You finished the Beginner path.",
     "You finished the Beginner path. Continue the Hatha course with: {title}": "You finished the Beginner path. Continue the Hatha course with: {title}",
     "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.",
-    "Open Beginner path": "Open Beginner path"
+    "Open Beginner path": "Open Beginner path",
+    "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.": "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.",
+    "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine.": "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine."
   }
 }

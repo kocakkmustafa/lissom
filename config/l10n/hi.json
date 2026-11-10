@@ -2006,6 +2006,8 @@
     "You finished the Beginner path.": "आपने शुरुआती पथ पूरा कर लिया।",
     "You finished the Beginner path. Continue the Hatha course with: {title}": "आपने शुरुआती पथ पूरा कर लिया। हठ कोर्स को इस पाठ से जारी रखें: {title}",
     "The first ten Hatha lessons, in order. Shares your Hatha practice records, then continues in the full Hatha course.": "हठ के पहले दस पाठ, क्रम से। यह आपके हठ अभ्यास रिकॉर्ड साझा करता है, फिर पूरे हठ कोर्स में आगे बढ़ता है।",
-    "Open Beginner path": "शुरुआती पथ खोलें"
+    "Open Beginner path": "शुरुआती पथ खोलें",
+    "Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.": "Lissom कैमरे का उपयोग केवल तब करता है जब आप किसी पाठ में वैकल्पिक कैमरा अभ्यास शुरू करते हैं। शरीर की स्थितियाँ पहचानने के लिए छवि इसी डिवाइस पर प्रोसेस होती है; वीडियो न रिकॉर्ड होता है, न अपलोड।",
+    "Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device's speech engine.": "छवियाँ, वीडियो और शरीर की स्थितियाँ न रिकॉर्ड की जाती हैं, न सहेजी जाती हैं, और न हमें या किसी और को भेजी जाती हैं। बोले गए सुधार आपके डिवाइस के अपने स्पीच इंजन का उपयोग करते हैं।"
   }
 }

@@ -98,6 +98,30 @@ class _LessonCameraSectionState extends State<LessonCameraSection> {
             ),
           ),
         );
+        body.add(const SizedBox(height: 8));
+        body.add(
+          Text(
+            localeText(
+              context,
+              'Lissom uses the camera only when you start the optional camera practice in a lesson. The image is processed on this device to find body positions; video is not recorded or uploaded.',
+              'Lissom kamerayı yalnız bir derste isteğe bağlı kamera çalışmasını başlattığında kullanır. Görüntü vücut konumlarını bulmak için bu cihazda işlenir; video kaydedilmez veya yüklenmez.',
+            ),
+            key: const Key('camera.lesson.permissionNote'),
+            style: theme.textTheme.bodySmall,
+          ),
+        );
+        body.add(const SizedBox(height: 6));
+        body.add(
+          Text(
+            localeText(
+              context,
+              'Images, video and body positions are not recorded, stored or sent to us or anyone else. Spoken corrections use your device\'s speech engine.',
+              'Görüntü, video ve vücut konumları kaydedilmez, saklanmaz, bize ya da başkasına gönderilmez. Sesli düzeltmeler cihazının kendi konuşma motorunu kullanır.',
+            ),
+            key: const Key('camera.lesson.privacyNote'),
+            style: theme.textTheme.bodySmall,
+          ),
+        );
         body.add(const SizedBox(height: 10));
         if (!widget.canStart) {
           body.add(
