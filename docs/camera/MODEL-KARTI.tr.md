@@ -9,9 +9,9 @@
 - Puan, not, sağlık ya da tedavi iddiası **yoktur**.
 
 ## Ne yapmaz
-- Önden, yerde (sırtüstü, yüzüstü, diz üstü) ve akış (Vinyasa sekansı) duruşlarını değerlendirmez; bu derslerde "bu dersi kamera değerlendirmiyor" yazar.
+- Önden bakılan duruşları (h45 Savaşçı II, h09 ve a16 üçgen, a17 yan açı) ve akış/geçiş derslerini (Vinyasa sekansı, Güneşe Selam) değerlendirmez. Yer duruşları artık kapsamdadır (M2, 2026-11-05: 15 duruş, 33 ders; aşağıdaki "M2" bölümü); kamerada hâlâ olmayan yer dersleri: y05 sırtüstü burgu, h28 duvarda bacaklar, h54 yarım saban, lotus ve balık bilgi dersleri. Katalogda duruşu olmayan derste "Bu dersi kamera değerlendirmiyor." yazar. Kaynak: `docs/camera/KAPSAM.tr.md` satır 5 (katalog: 35 duruş, 60 ders), 21, 24, 35; `lib/app/camera/lesson_camera_section.dart` satır 80–90.
 - Birden çok kişiyi ayırt etmez (MediaPipe tek kişi); 4 m'den uzakta, baş görünmüyorken güvenilmez.
-- Görüntüyü kaydetmez, göndermez, saklamaz. Kare cihazdaki poz modeline ve ekrana (ayna) gider; uygulama kodu yalnız eklem noktalarını görür.
+- Görüntüyü kaydetmez, göndermez, saklamaz. Kare cihazdaki poz modeline ve ekrana (ayna) gider; uygulama kodu yalnız eklem noktalarını görür. Kaynak: `test/camera/camera_data_boundary_test.dart` (lissom#23, LIS-P1-02; cihazsız, `TEST_ONLY`). Kapsamı sınırlıdır: ağ sayacı yalnız `dart:io` `HttpClient` oluşturmayı görür; ham soket, yerel (native) taraf, `motion_camera`'nın yerel kısmı ve konuşma motoru kapsam dışıdır (sınırlar dosyanın başındadır).
 - Telefon **dik** (portre) durmalıdır: köprü portre kare verir; koç ekranı açıkken uygulama portreye kilitlenir.
 
 ## Bileşenler
