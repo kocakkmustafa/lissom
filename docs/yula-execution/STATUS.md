@@ -1,6 +1,6 @@
 # Lissom — durum (kaynak gerçeği)
 
-**Tarih:** 2026-11-10 · **Kaynak commit:** `main` `5ea39cb` (lissom#24 merge) · **Bilet:** LIS-P1-01 (ilk yazım 2026-11-08), güncelleme LIS-P1-02/03
+**Tarih:** 2026-11-13 · **Kaynak commit:** `main` `fd202bb` (lissom#27 merge) · **Bilet:** LIS-P1-01 (ilk yazım 2026-11-08), güncelleme LIS-P1-02/03/06
 Bu dosya "şu an ne çalışıyor" sorusunun tek cevabıdır. Her satırın kanıtı yanındadır; kanıtı olmayan satır `DOĞRULANMADI` yazar. Kararların gerekçesi `DECISIONS.md`'dedir.
 
 ## 1. Ne çalışıyor (kod main'de)
@@ -19,8 +19,8 @@ Bu dosya "şu an ne çalışıyor" sorusunun tek cevabıdır. Her satırın kan�
 | Ölçüm bataryası kamerası | Kapalı (Core `motionCameraCoachingAvailable = false`); bayraktan bağımsız | `lib/app/lissom_release_policy.dart` yorumu; `CaptureUnavailableNote` |
 | Ayna (iki yol) | (1) Koç ekranında Core `motion_camera` 0.4.0 oturumunun texture'ı + iskelet + dikey çizgi (tek kamera); (2) ayrı ayna ekranı: Flutter `camera` paketi, yalnız önizleme | `lib/app/camera/camera_coach_screen.dart`, `lib/app/camera/mirror_camera.dart`, `lib/app/camera/mirror_screen.dart`; `docs/camera/MODEL-KARTI.tr.md` "Bileşenler" |
 | Android kamera | `uses-feature camera required=false` | lissom#20 → `a731513` |
-| Yerelleştirme | 14 dil, `config/l10n/*.json`, 1983 mesaj | `python3 -B tools/check_content_localization.py` |
-| Test/CI | Yerel `flutter analyze` temiz, `flutter test` 1105 geçti (2026-11-08, #21 dalında); CI 3/3 yeşil | lissom#21 CI; `.github/workflows/checks.yml` |
+| Yerelleştirme | 14 dil, `config/l10n/*.json`, 1985 mesaj | `python3 -B tools/check_content_localization.py` |
+| Test/CI | Yerel `flutter analyze` temiz; `flutter test` 1126 geçti / 1 başarısız (2026-11-13, main `fd202bb` kodu): `test/core_8f_host_presentation_test.dart` "real host keeps owner and account route until and after persisted theme plus locale change" tek başına da kırmızı, `TimeoutException after 0:00:05: Fixture IO did not settle: read preferences before gate` (yerel makinede; main CI'ı lissom#27'de 3/3 yeşildi; neden doğrulanmadı, bilet LIS-P1-09). Bu satır yeniden ölçüm ister | lissom#27 CI; `.github/workflows/checks.yml`; yerel koşu günlüğü `scratch/2026-11-13-lissom-docs/test-06.log` |
 
 Kamera doğrulayıcısı kural tabanlıdır (öğrenilmiş sınıflandırıcı yok). Görüntü, video ve eklem noktaları kaydedilmez ve gönderilmez; puan ve sağlık iddiası yoktur (`docs/camera/MODEL-KARTI.tr.md`). "Deneme" etiketli ve bayrak arkasındadır; bu dosya bayrağın mağaza sürümünde açık olduğunu **söylemez**.
 
@@ -52,7 +52,7 @@ Bu liste tek yerdir: yeni bir kurucu kararı bekleyen madde buraya eklenir, kara
 
 ## 4. Bilinen belge borcu
 
-- `docs/camera/MODEL-KARTI.tr.md` "Ne yapmaz" bölümü hâlâ yer duruşlarını değerlendirmediğini söylüyor; M2 (2026-11-05) sonrası bu cümle eskidir. Bu bilette düzeltilmedi (kapsam: yalnız `KAPSAM.tr.md`); ayrı bilet ya da bir sonraki kamera biletinde düzeltilir.
+Açık belge borcu yok (2026-11-13). Kapanan borç: `docs/camera/MODEL-KARTI.tr.md` "Ne yapmaz" bölümü M2 (2026-11-05) ve veri sınırı testleri sonrası gerçeğe getirildi (lissom#26 → `efc7f6f`, LIS-P1-04).
 
 ## 5. Doğrulama komutları
 
