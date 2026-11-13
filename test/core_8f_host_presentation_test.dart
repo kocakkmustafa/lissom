@@ -205,8 +205,16 @@ Future<T> _completeFixtureIo<T>(
   Future<T> Function() operation, {
   required String boundary,
 }) async {
+  // The bound is on the admitted operation, not on host scheduler latency. Each
+  // real-zone poll window sleeps `pause`; any lateness beyond `windowSlack` is
+  // starvation of this process (loaded CI/dev machine), not IO progress, so it
+  // is excluded from the budget. A wall-clock hard cap still ends a stuck run.
   const deadline = Duration(seconds: 5);
+  const hardCap = Duration(seconds: 60);
+  const windowSlack = Duration(milliseconds: 100);
+  var starved = Duration.zero;
   final elapsed = Stopwatch()..start();
+  Duration unstarved() => elapsed.elapsed - starved;
   late T value;
   Object? failure;
   StackTrace? failureStack;
@@ -245,19 +253,26 @@ Future<T> _completeFixtureIo<T>(
         ),
       );
     });
-    while (settledAt == null && elapsed.elapsed < deadline) {
-      final remaining = deadline - elapsed.elapsed;
+    while (settledAt == null &&
+        unstarved() < deadline &&
+        elapsed.elapsed < hardCap) {
+      final remaining = deadline - unstarved();
       if (remaining <= Duration.zero) {
         break;
       }
       final pause = remaining < const Duration(milliseconds: 20)
           ? remaining
           : const Duration(milliseconds: 20);
+      final window = Stopwatch()..start();
       await tester.runAsync(() => Future<void>.delayed(pause));
+      final lateness = window.elapsed - pause;
+      if (lateness > windowSlack) {
+        starved += lateness;
+      }
       await tester.pump();
     }
     final observedSettlement = settledAt;
-    if (observedSettlement == null || observedSettlement > deadline) {
+    if (observedSettlement == null || observedSettlement - starved > deadline) {
       // Bound waiting, not the admitted operation. Keep its error observer alive.
       throw TimeoutException('Fixture IO did not settle: $boundary', deadline);
     }
