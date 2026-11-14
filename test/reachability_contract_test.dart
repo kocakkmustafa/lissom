@@ -175,12 +175,14 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('onboarding.continue')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('onboarding.continue')));
-    await tester.pumpAndSettle();
+    // OnboardingGate `measurementAvailable`ı OnboardingFlow'a İLETMİYOR →
+    // akış üretim varsayılanında (4 adım, kamera yok) kalır.
+    expect(find.text('STEP 3 OF 4'), findsOneWidget); // profil
     await tester.tap(find.byKey(const Key('onboarding.ageBand.u40')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('onboarding.continue')));
     await tester.pumpAndSettle();
+    expect(find.text('STEP 4 OF 4'), findsOneWidget);
     await tester.tap(find.byKey(const Key('onboarding.continue')));
     await tester.pumpAndSettle();
 

@@ -275,19 +275,19 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // O1 Welcome → O2 Disclaimer → O3 Camera → O4 Profile → O5 Limits
+      // Welcome → Disclaimer → Profile → Limits (kamera adımı üretimde yok)
       await tester.tap(find.byKey(const Key('onboarding.continue')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('onboarding.disclaimer.ack')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('onboarding.continue')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('onboarding.continue')));
-      await tester.pumpAndSettle();
+      expect(find.text('STEP 3 OF 4'), findsOneWidget); // profil
       await tester.tap(find.byKey(const Key('onboarding.ageBand.60plus')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('onboarding.continue')));
       await tester.pumpAndSettle();
+      expect(find.text('STEP 4 OF 4'), findsOneWidget);
       await tester.tap(find.byKey(const Key('onboarding.continue')));
       await tester.pumpAndSettle();
 

@@ -46,7 +46,11 @@ final class _RetryStore implements OnboardingStore {
   }
 }
 
-Future<void> _finishSteps(WidgetTester tester) async {
+/// Sayaç LissomEyebrow'da büyük harf: en `STEP n OF 4`, tr `4 ADIMIN n. ADIMI`.
+String _stepLabel(String language, int n) =>
+    language == 'tr' ? '4 ADIMIN $n. ADIMI' : 'STEP $n OF 4';
+
+Future<void> _finishSteps(WidgetTester tester, [String language = 'en']) async {
   Future<void> next() async {
     await tester.tap(find.byKey(const Key('onboarding.continue')));
     await tester.pumpAndSettle();
@@ -56,10 +60,11 @@ Future<void> _finishSteps(WidgetTester tester) async {
   await tester.tap(find.byKey(const Key('onboarding.disclaimer.ack')));
   await tester.pumpAndSettle();
   await next();
-  await next();
+  expect(find.text(_stepLabel(language, 3)), findsOneWidget); // profil
   await tester.tap(find.byKey(const Key('onboarding.ageBand.40-59')));
   await tester.pumpAndSettle();
   await next();
+  expect(find.text(_stepLabel(language, 4)), findsOneWidget);
 }
 
 Widget _host(
@@ -125,7 +130,7 @@ void main() {
         int done = 0;
         await tester.pumpWidget(_host(language, store, (_) => done++));
         await tester.pumpAndSettle();
-        await _finishSteps(tester);
+        await _finishSteps(tester, language);
         await tester.tap(find.byKey(const Key('onboarding.continue')));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
