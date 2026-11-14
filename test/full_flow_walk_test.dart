@@ -172,14 +172,17 @@ Future<void> _walkThroughOnboarding(
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(const Key('onboarding.continue')));
   await tester.pumpAndSettle();
-  // OnboardingGate `measurementAvailable`ı OnboardingFlow'a İLETMİYOR →
-  // akış üretim varsayılanında (4 adım, kamera yok) kalır.
-  expect(find.text('STEP 3 OF 4'), findsOneWidget); // profil
+  // Kapı `measurementAvailable: true`yu OnboardingFlow'a iletir → 5 adım:
+  // 3. adım kamera (izin istenmeden `continue` ile geçilir), 4. profil.
+  expect(find.text('STEP 3 OF 5'), findsOneWidget); // kamera
+  await tester.tap(find.byKey(const Key('onboarding.continue')));
+  await tester.pumpAndSettle();
+  expect(find.text('STEP 4 OF 5'), findsOneWidget); // profil
   await tester.tap(find.byKey(const Key('onboarding.ageBand.u40')));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(const Key('onboarding.continue')));
   await tester.pumpAndSettle();
-  expect(find.text('STEP 4 OF 4'), findsOneWidget);
+  expect(find.text('STEP 5 OF 5'), findsOneWidget);
   await tester.tap(find.byKey(const Key('onboarding.continue')));
   await tester.pumpAndSettle();
 
