@@ -18,7 +18,7 @@ Course structure and source coverage (counted from `config/courses/*.v1.json`; m
 
 Total 26 modules, 120 lessons. The Hatha `sourceScopes` map covers 11 of its 30 listed sources. Each `doesNotSupport` entry states what its source does not validate (for example, the exact original sequence, lesson doses or learner suitability), so the sources are references for concepts, not endorsements of the lessons. The in-app text for these is bilingual (EN/TR) in the JSON; the 14-language interface and lesson text are counted in the store listings, not re-verified here.
 
-Camera evaluation is closed in this release and research models are not activated. The camera code path (MediaPipe/CameraX via `motion_camera`) is compiled into the binary, so the camera usage description and the Android camera permission remain declared; the camera step is gated off (`requireMotionCameraAccess`, Core `motionCameraCoachingAvailable = false`) and the app never requests camera permission. Open-source licences, including the native MediaPipe and CameraX Apache-2.0 notices, are listed under Profile → Open-source licences.
+Camera evaluation is closed in this release and research models are not activated. The camera code path (MediaPipe/CameraX via `motion_camera`) is compiled into the binary, so the iOS camera usage description remains declared, but the Android CAMERA permission is not declared in the app manifest; the camera step is gated off (`requireMotionCameraAccess`, Core `motionCameraCoachingAvailable = false`) and the app never requests camera permission. Open-source licences, including the native MediaPipe and CameraX Apache-2.0 notices, are listed under Profile → Open-source licences.
 
 ## Subscriptions
 

@@ -93,14 +93,15 @@ akışı ve son paket/SDK gizlilik raporu ayrı kabul kapılarıdır.
 | Satın alma geçmişi | Hayır; ilk sürümde satış ve ücretli oturum kapalı | Kullanılmaz | İlk sürüm formunda beyan edilmez; satış açılırsa yeniden değerlendirilir |
 | Kamera görüntüsü ve eklem noktaları | Hayır | Canlı cihaz içi ölçüm | Sunucuya toplanmaz |
 | Beş katalogdaki kurs ilerlemesi | Hayır | Kullanıcının çalışma kaydı; ustalık/poz notu değildir | Hatha, Ashtanga temelleri, destekli Yin, ayakta Vinyasa ve sandalye/ofis kayıtları aynı yerel `hatha_progress.jsonl` günlüğünde `courseId`/`courseVersion` ile ayrılır; konuk/hesap kapsamı korunur, sunucuya senkronize edilmez |
-| Mikrofon/ses | Kullanılmaz | İlk kurs mikrofon istemez | iOS mikrofon gerekçesi ve Android `RECORD_AUDIO` yoktur |
+| Mikrofon/ses | Kullanılmaz | İlk kurs mikrofon istemez | iOS mikrofon gerekçesi yoktur; Android `RECORD_AUDIO` uygulama manifestinde yoktur, ancak birleşik manifestte `camera_android_camerax` kütüphanesinden gelir (uygulama kodu `enableAudio: false` kullanır, `lib/app/camera/mirror_camera.dart:60`; ses yakalama kullanımı cihazda DOĞRULANMADI, Play Data Safety için kurucuya işaretli) |
 | Ölçüm ve seans geçmişi | Hayır | Cihazdaki uygulama geçmişi | Sunucuya toplanmaz |
 
 Parola Auth isteğinde iletilir; uygulama geçmişinde tutulmaz. Ödeme kartı
 bilgisi Motion'a gelmez. Apple manifestinde altı toplanan tür `Linked=true`,
 `Tracking=false`, `PurposeAppFunctionality` olarak beyanlıdır. Kamera/video,
-yerel geçmiş, mikrofon ve reklam kimliği sunucuya gönderilmez; ilk sürümde
-mikrofon izni yoktur. Bu tablo gerçek cihaz, birleşik iOS gizlilik raporu ve
+yerel geçmiş, mikrofon ve reklam kimliği sunucuya gönderilmez; iOS'ta mikrofon
+izni yoktur, Android'de uygulama manifestinde yoktur ama birleşik manifestte
+kütüphaneden gelen `RECORD_AUDIO` durur (yukarıdaki Mikrofon/ses satırı). Bu tablo gerçek cihaz, birleşik iOS gizlilik raporu ve
 mağaza formlarının son kabulünün yerine geçmez.
 
 [Apple](https://developer.apple.com/app-store/app-privacy-details/) ve
@@ -109,7 +110,9 @@ yalnız cihazda kalan işlem/kaydın collection beyanı gerektirmediğini açık
 Cihaz dışına gönderilen türetilmiş veri veya SDK trafiği ayrı değerlendirilir.
 Hatha öz beyanı poz/ustalık veya sağlık uygunluğu puanı değildir; genel
 uyarlama açıklaması kişisel sağlık verisinin sağlayıcıya gönderimi değildir.
-Lissom için mikrofon veya ses toplama beyanı eklenmez.
+Lissom için mikrofon veya ses toplama beyanı eklenmez; Android birleşik
+manifestteki `RECORD_AUDIO`'nun Play Data Safety/izin beyanına etkisi kurucu/
+Motion orchestration kararıdır (`DOĞRULANMADI`).
 
 Kaynaklar: `lib/main.dart`, `lib/app/hatha_progress.dart`,
 `lib/app/local_account_bridge.dart`, native izin dosyaları ve
