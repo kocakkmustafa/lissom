@@ -35,3 +35,4 @@
 **Tarih:** 2026-11-06 · **Statü:** kabul (mühendislik; kurucu kararı gerekmez, kapsam: manifest +2 satır) · **Kaynak:** lissom#20 → `a731513`
 - **Karar:** `android.hardware.camera` `required=false`: kamerasız cihazlar da uygulamayı kurabilir; kamera yolu zaten bayrak arkasında.
 - **Sonuç:** Mağaza uyumluluk listesi daralmaz.
+- **LIS-P1-15 ile yürürlükten kalktı:** uygulama manifestinden camera `uses-feature` satırları kaldırıldı (CAMERA izni de kaldırıldı); bkz. `docs/camera/ANDROID-KAMERA-IZNI.tr.md`.

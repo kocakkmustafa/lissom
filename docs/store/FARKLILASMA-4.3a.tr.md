@@ -24,7 +24,7 @@ Kaynak kuralı: yollar bu depo köküne göredir. `ventures/<uygulama>/app/…` 
 
 **Bayrak kapalıyken kameradan geriye kalan, tutarlılık gerektiren izler:**
 - Onboarding'de `_Step.camera` adımı kodda var (`lib/app/onboarding_flow.dart:73,98,256-261,396`); `measurementAvailable` (varsayılan `motionCameraCoachingAvailable = false`, `:42`) kapalıyken ayrı bir dal çizilir (`:514`) ve izin istenmez (`docs/store/reviewer-notes.md:21`). Bu dalın ekranda tam metni bu bilette görülmedi (`DOĞRULANMADI`). Mevcut App Review metni: `docs/store/release-review.json:66`; taslak onunla uyumlu tutulmalı.
-- Kamera kodu derlemede var, kamera kullanım açıklaması ve Android kamera izni bildirimde kalıyor; model dosyası git'te değil, build sırasında indirilir (`pubspec.yaml:145-147`, `tool/fetch_pose_model.sh`). Mağaza notu: "the camera step is gated off … the app never requests camera permission" (`docs/store/reviewer-notes.md:21`).
+- Kamera kodu derlemede var, iOS kamera kullanım açıklaması bildirimde kalıyor, Android CAMERA izni uygulama manifestinde yok ve birleşik manifestte `tools:node="remove"` ile kaldırıldı (kütüphanelerden gelen kamera `uses-feature` ve `RECORD_AUDIO` birleşikte durur; `docs/camera/ANDROID-KAMERA-IZNI.tr.md`); model dosyası git'te değil, build sırasında indirilir (`pubspec.yaml:145-147`, `tool/fetch_pose_model.sh`). Mağaza notu: "the camera step is gated off … the app never requests camera permission" (`docs/store/reviewer-notes.md:21`).
 
 ## 2. Beş Motion uygulamasıyla ortak şablon öğeleri
 

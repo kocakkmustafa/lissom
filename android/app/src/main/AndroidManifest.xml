@@ -1,8 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <!-- Camera trial closed (LIS-P1-15): motion_camera/CameraX libraries add
+         CAMERA to the merged manifest; remove it. See docs/camera/ANDROID-KAMERA-IZNI.tr.md. -->
+    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
     <application
         android:label="Lissom"
         android:name="${applicationName}"
