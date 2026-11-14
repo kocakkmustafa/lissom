@@ -142,7 +142,7 @@ void main() {
       await _pump(tester, () async => store);
       expect(find.byType(OnboardingFlow), findsOneWidget);
 
-      // Beş adımı geçmeden `onDone`ı doğrudan tetiklemek yerine gerçek akışı
+      // Dört adımı (üretim akışı) geçmeden `onDone`ı doğrudan tetiklemek yerine gerçek akışı
       // sürüyoruz — geçitin SADECE `onDone` sinyaline mi yoksa yeniden
       // diskten OKUMAYA mı güvendiğini ayırt etmek için `store` write
       // SONRASI BİLE değiştirmiyoruz (`completed` hâlâ false kalsaydı ve
@@ -156,15 +156,15 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('onboarding.continue'))); // O2
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('onboarding.continue'))); // O3
-      await tester.pumpAndSettle();
+      expect(find.text('STEP 3 OF 4'), findsOneWidget); // profil
       await tester.tap(find.byKey(const Key('onboarding.ageBand.u40')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('onboarding.continue'))); // O4
+      await tester.tap(find.byKey(const Key('onboarding.continue'))); // profil
       await tester.pumpAndSettle();
+      expect(find.text('STEP 4 OF 4'), findsOneWidget);
       await tester.tap(
         find.byKey(const Key('onboarding.continue')),
-      ); // O5 → bitiş
+      ); // limits → bitiş
       await tester.pumpAndSettle();
 
       expect(find.byType(LissomShell), findsOneWidget);

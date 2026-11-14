@@ -3,7 +3,7 @@
 ///
 /// **O3 yayın politikası (LIS-P1-12a, 2026-11-14):** ortak ölçüm kapısı
 /// kapalıysa kamera adımı akıştan TAMAMEN çıkar (4 adım), kamera izni
-/// istenmez. (`_CameraInfoStep`in kapalı dalı artık üretimde ulaşılmaz.)
+/// istenmez; `_CameraInfoStep` yalnız ölçüm açıkken kurulur (LIS-P1-13).
 /// Ertelenmiş izin yolu
 /// `measurementAvailable: true` ile ayrı sınanır; üretim varsayılanı
 /// Home ekranıyla aynı `motionCameraCoachingAvailable` sabitidir.
@@ -263,7 +263,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       onRequestPermission:
           widget.onRequestPermission ?? Permission.camera.request,
       onOpenSettings: widget.onOpenSettings ?? openAppSettings,
-      measurementAvailable: widget.measurementAvailable,
     ),
     _Step.profile => _ProfileStep(
       ageBand: _ageBand,
@@ -403,12 +402,10 @@ class _CameraInfoStep extends StatefulWidget {
   const _CameraInfoStep({
     required this.onRequestPermission,
     required this.onOpenSettings,
-    required this.measurementAvailable,
   });
 
   final Future<PermissionStatus> Function() onRequestPermission;
   final Future<bool> Function() onOpenSettings;
-  final bool measurementAvailable;
 
   @override
   State<_CameraInfoStep> createState() => _CameraInfoStepState();
@@ -424,7 +421,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   bool get _busy => _requesting || _openingSettings;
 
   Future<void> _requestPermission() async {
-    if (!widget.measurementAvailable || _busy) {
+    if (_busy) {
       return;
     }
     setState(() {
@@ -452,7 +449,7 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   }
 
   Future<void> _openSettings() async {
-    if (!widget.measurementAvailable || _busy) {
+    if (_busy) {
       return;
     }
     setState(() {
@@ -517,28 +514,6 @@ class _CameraInfoStepState extends State<_CameraInfoStep> {
   @override
   Widget build(BuildContext context) {
     final ThemeData t = Theme.of(context);
-    if (!widget.measurementAvailable) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          LissomEyebrow(
-            localeText(context, 'About the camera', 'Kamera hakkında'),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            localeText(
-              context,
-              'Camera measurements are closed in this release. '
-                  'We do not request camera access; the written yoga courses work '
-                  'without it.',
-              'Bu sürümde kamera ölçümleri kapalıdır. Kamera izni istemiyoruz; '
-                  'yazılı yoga kursları kamera olmadan çalışır.',
-            ),
-            style: t.textTheme.bodyMedium,
-          ),
-        ],
-      );
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

@@ -43,11 +43,20 @@ void main() {
           await next();
           await tester.tap(find.byKey(const Key('onboarding.disclaimer.ack')));
           await tester.pumpAndSettle();
+          final int total = available ? 5 : 4;
+          String step(int n) => language == 'tr'
+              ? '$total ADIMIN $n. ADIMI'
+              : 'STEP $n OF $total';
           await next();
-          await next(); // no camera permission button pressed
+          expect(find.text(step(3)), findsOneWidget); // kamera (5) / profil (4)
+          if (available) {
+            await next(); // kamera adımı → profil; izin düğmesine basılmadı
+            expect(find.text(step(4)), findsOneWidget);
+          }
           await tester.tap(find.byKey(const Key('onboarding.ageBand.u40')));
           await tester.pumpAndSettle();
           await next();
+          expect(find.text(step(total)), findsOneWidget);
           final context = find.textContaining(
             language == 'tr'
                 ? 'Bu sınırlar, kamera ölçümü alındığında'
