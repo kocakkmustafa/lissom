@@ -7,6 +7,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:lissom_engine/lissom_engine.dart';
+import 'package:motion_account/motion_account.dart'
+    show motionCameraCoachingAvailable;
 import 'package:motion_core/motion_core.dart';
 
 import 'app_facts.dart';
@@ -161,6 +163,9 @@ class _OnboardingGateState extends State<OnboardingGate> {
       }
       return OnboardingFlow(
         store: s.data!.store,
+        // null → OnboardingFlow'un üretim varsayılanı (Core sabiti).
+        measurementAvailable:
+            widget.measurementAvailable ?? motionCameraCoachingAvailable,
         onOpenAccount: widget.accountRouteBuilder == null ? null : _openAccount,
         onDone: (OnboardingProfile p) => setState(() {
           _completed = true;
