@@ -1,8 +1,10 @@
 /// Onboarding akışı — O1 Welcome → O2 Disclaimer → O3 Camera permission →
 /// O4 Profile → O5 Measurement limits (`docs/design/UI-BRIEF.md` §2.1).
 ///
-/// **O3 yayın politikası (2026-10-02):** ortak ölçüm kapısı kapalıysa
-/// yalnız bilgi gösterir, kamera izni istemez. Ertelenmiş izin yolu
+/// **O3 yayın politikası (LIS-P1-12a, 2026-11-14):** ortak ölçüm kapısı
+/// kapalıysa kamera adımı akıştan TAMAMEN çıkar (4 adım), kamera izni
+/// istenmez. (`_CameraInfoStep`in kapalı dalı artık üretimde ulaşılmaz.)
+/// Ertelenmiş izin yolu
 /// `measurementAvailable: true` ile ayrı sınanır; üretim varsayılanı
 /// Home ekranıyla aynı `motionCameraCoachingAvailable` sabitidir.
 ///
@@ -88,7 +90,11 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   bool _saving = false;
   bool _saveFailed = false;
 
-  static const List<_Step> _order = _Step.values;
+  /// Kamera kapalıyken (mağaza varsayılanı) kamera adımı akıştan TAMAMEN
+  /// çıkar; sayaç da buna göre sayar (LIS-P1-12a).
+  List<_Step> get _order => widget.measurementAvailable
+      ? _Step.values
+      : _Step.values.where((_Step s) => s != _Step.camera).toList();
 
   int get _index => _order.indexOf(_step);
 

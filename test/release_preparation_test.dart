@@ -70,16 +70,16 @@ void main() {
         find.byKey(const Key('onboarding.camera.openSettings')),
         findsNothing,
       );
+      // LIS-P1-12a: kapalı kamerada kamera adımı akıştan çıktı; disclaimer'dan
+      // sonra doğrudan profil gelir, kamera metni hiç görünmez.
       expect(
         find.textContaining(
           language == 'tr'
               ? 'Kamera izni istemiyoruz'
               : 'We do not request camera access',
         ),
-        findsOneWidget,
+        findsNothing,
       );
-      await tester.tap(find.byKey(const Key('onboarding.continue')));
-      await tester.pumpAndSettle();
       expect(find.byKey(const Key('onboarding.ageBand.u40')), findsOneWidget);
       expect(permissionCalls, isEmpty);
       expect(tester.takeException(), isNull);
