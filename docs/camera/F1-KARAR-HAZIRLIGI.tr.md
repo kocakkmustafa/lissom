@@ -1,5 +1,7 @@
 # Lissom kamera koçluğu — F1 karar hazırlığı (eşik altı duruşlar)
 
+> **KARAR VERİLDİ 2026-11-15: (a)** denemede kalır (kurucu; `docs/yula-execution/DECISIONS.md` ADR-L007).
+
 F1, kamera doğrulayıcısının ölçülen doğru kabulü (TA) ürün eşiğinin altında kalan 7 duruşun ne olacağı sorusudur (`docs/yula-execution/STATUS.md` §3, F1 satırı). Bu belge karar vermez, öneri içermez; yalnız kanıtı ve her seçeneğin etkisini toplar.
 Kaynak commit `fd202bb`, tarih 2026-11-13. Tıbbi/sağlık ya da puan iddiası yoktur. Kamera zincirinin (video → MediaPipe) bağımsız sınaması yoktur; özelliğin tamamı "deneme" etiketli ve bayrak arkasında, varsayılan kapalıdır (`MODEL-KARTI.tr.md:3`).
 

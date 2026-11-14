@@ -62,6 +62,7 @@ Gövde eğimi (işaretli: + öne), kalça, diz (yakın, en küçük/büyük, ön
   - `warrior-one-short` 0,11. Engel adımı ve düz bacak kaldırma.
   - Diğer duruşlar ≤ 0,09.
 - Ürün eşiği (§7.4): TA ≥ 0,90, FA ≤ 0,10.
+- **Karar 2026-11-15: (a) denemede kalır (ADR-L007)** — M1'deki 4 eşik altı duruş için (kurucu).
 - **Sonuç:** FA 20 duruşun hepsinde ≤ 0,10 (yanlış onay riski düşük). TA bağımsız sınamada 2/6 geçti; dağ, yarım kalkış, küçük sandalye ve kısa Savaşçı I eşik altı. Neden: `define` aralıkları duruş ailesinden dar (DSZ'de geriye eğik dağ ≈ −16°, ≈ 84° diz sandalye, ≈ 33° gövde yarım kalkış, arka diz ≈ 108° savaşçı). Ön kayıt gereği bu veriyle düzeltilmedi.
 - 13 duruşta hiçbir yerde pozitif örnek yok (sandalye duruşlarının tamamı dahil): yalnız yanlış kabul ölçüldü.
 
@@ -89,6 +90,7 @@ Gövde eğimi (işaretli: + öne), kalça, diz (yakın, en küçük/büyük, ön
 - DSZ'deki "Half_Plank" dirsekler yaklaşık 90° bükük bir yarım alçalma; bizim "dizler yerde plank" ailemiz değil. Bu yüzden o doğru kabul sonucu geçersiz sayıldı.
 - Kaçan köpek geçişleri sığ köpeklerdi (kalça açısı yaklaşık 128°).
 - Eşik altında kalanlar: alçak kobra 0,83 ve uzanarak dinlenme 0,83 (veri içi), aşağı bakan köpek 0,82 (bağımsız). Bu veriyle ayar yapılmadı.
+- **Karar 2026-11-15: (a) denemede kalır (ADR-L007)** — M2'deki 3 eşik altı duruş için (kurucu).
 - Bel ve sırt talebi (kurucu: yeni kurs yok) mevcut derslerin kamerasıyla karşılanıyor: kedi-inek, çocuk şekli, küçük köprü, diz göğüse, yerde dik oturuş, sandalyede omurga yuvarlama ve uzatma.
 
 ## Gerçek video ve kadraj ölçümleri
