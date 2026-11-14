@@ -21,7 +21,16 @@ Bayrak (`lissomCameraCoachingTrialOpen`) mağaza sürümünde açılmadıkça bu
 - EN: "Camera coaching (trial) in standing and chair lessons: place the phone at your side, and Lissom checks whether you are in the pose, times the hold and says one correction at a time — on your device, with no score."
 - TR: "Ayakta ve sandalye derslerinde kamera koçluğu (deneme): telefonu yanına koy; Lissom duruşta olup olmadığını kontrol eder, tutuşu sayar ve bir seferde tek düzeltme söyler — cihazında, puan vermeden."
 
-## 5. App Review notu (4.3(a) — Lissom'u ortak Motion kabuğundan ayıran özellik)
+## 5. App Review notu (4.3(a) — Lissom'u ortak Motion kabuğundan ayıran içerik)
+
+Düzeltme: LIS-P1-11. Mevcut sürümde kamera özelliği yoktur (`LISSOM_CAMERA_TRIAL` kapalı, `lib/app/lissom_release_policy.dart:16-22`); bu not, aşağıdaki "yok" cümlesi dışında, kamerayı özellik olarak anmaz. Sayılar ve satır atıfları `docs/store/reviewer-notes.md:11-17` tablosundadır (`config/courses/*.v1.json`: modüller `hatha.v1.json:45`, `ashtanga-foundations.v1.json:193`, `yin-supported.v1.json:149`, `vinyasa-standing.v1.json:105`, `chair-office.v1.json:61`); "14 dil" `docs/store/listing.json:7` ve `lib/app/lissom_locales.dart:9-24`'e dayanır (JSON'larda yalnız EN/TR içerik doğrulandı, `DOĞRULANMADI`); yerel pratik kaydı `lib/app/hatha_progress.dart`.
+
+"Lissom is a library of written yoga courses: 5 courses, 26 modules and 120 lessons, with the interface and every lesson in 14 languages (Hatha 60, Ashtanga beginner foundations 19, supported Yin 12, supported standing Vinyasa 14, chair/office 15). The Hatha course is a 60-lesson, 10-module path from foundations onwards; the first 24 Hatha lessons are free. Every lesson has a learning goal, a practice task, a self-check, an easier path, when to stop and its teaching sources; the courses list their teaching sources, and where a source scope is recorded it states what the source does and does not support (Hatha lists 30 sources, 11 with a scope entry). Practice records are the learner's own, stored on the device. Lessons are written and there is no demonstration video. Lissom is not a medical device. This version has no camera feature."
+
+### Bayrak açıldığında (kurucu kararı) kullanılacak ayrı taslak
+
+**ŞU AN GEÇERSİZ — LISSOM_CAMERA_TRIAL kapalı.** Aşağıdaki metin mevcut sürümde kullanılamaz; bayrağı açmak kurucu kararıdır.
+
 "Lissom 1.x adds an on-device camera coaching trial to 27 standing and chair lessons (Library → Hatha → Mountain stance → prepare → 'Practise with the camera'). It checks from a side view whether the learner is in the lesson's pose, times the hold and speaks one alignment cue at a time, using a pinned MediaPipe Pose model on the device. It is specific to yoga lessons and to Lissom's 20-pose catalogue; no other Motion app has it. No image, video or landmark leaves the device; there is no score and no health claim. A front-camera mirror (preview only) is also offered in the same lessons."
 
 ## 6. Sürüm notu
