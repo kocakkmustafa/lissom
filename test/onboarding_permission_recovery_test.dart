@@ -68,15 +68,16 @@ Future<_Store> _pumpToCamera(
     ),
   );
   await tester.pumpAndSettle();
+  final int total = measurementAvailable ? 5 : 4;
   expect(
-    find.text(language == 'tr' ? '5 ADIMIN 1. ADIMI' : 'STEP 1 OF 5'),
+    find.text(language == 'tr' ? '$total ADIMIN 1. ADIMI' : 'STEP 1 OF $total'),
     findsOneWidget,
   );
   await _tap(tester, _continueKey);
   await _tap(tester, const Key('onboarding.disclaimer.ack'));
   await _tap(tester, _continueKey);
   expect(
-    find.text(language == 'tr' ? '5 ADIMIN 3. ADIMI' : 'STEP 3 OF 5'),
+    find.text(language == 'tr' ? '$total ADIMIN 3. ADIMI' : 'STEP 3 OF $total'),
     findsOneWidget,
   );
   return store;
@@ -323,7 +324,7 @@ void main() {
     });
 
     testWidgets(
-      'closed camera has no permission or Settings action in $language',
+      'closed camera has no camera step, permission or Settings action in $language',
       (WidgetTester tester) async {
         pinNarrowSurface(tester);
         int requests = 0;
@@ -341,20 +342,21 @@ void main() {
             throw PlatformException(code: 'test', message: _privateDetail);
           },
         );
+        // LIS-P1-12a: kapalı kamerada kamera adımı akıştan çıkar; 3. adım
+        // artık profil (4 adımlık akış), kamera metni/izin eylemi hiç yok.
+        expect(find.byKey(const Key('onboarding.ageBand.u40')), findsOneWidget);
         expect(
           find.textContaining(
             turkish
-                ? 'yazılı yoga kursları kamera olmadan çalışır'
-                : 'the written yoga courses work without it',
+                ? 'Kamera izni istemiyoruz'
+                : 'We do not request camera access',
           ),
-          findsOneWidget,
+          findsNothing,
         );
         expect(find.byKey(_requestKey), findsNothing);
         expect(find.byKey(_settingsKey), findsNothing);
         expect(find.byKey(_requestErrorKey), findsNothing);
         expect(find.byKey(_settingsErrorKey), findsNothing);
-        _expectContinueEnabled(tester);
-        await _tap(tester, _continueKey);
         expect(requests, 0);
         expect(settingsCalls, 0);
         expect(tester.takeException(), isNull);
