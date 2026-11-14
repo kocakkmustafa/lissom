@@ -6,6 +6,18 @@ Bundle `com.yulalab.lissom`; ASC app ID 6794715023; version 1.0.0 (build 4 in so
 
 The Library contains five written catalogues, with interface and lessons in 14 languages: Hatha 60, Ashtanga beginner foundations 19, supported Yin 12, supported Vinyasa 14 (with an optional knees-down floor extension) and chair/office 15 — 120 lessons in total. Ashtanga is not the full Primary Series. Lesson work is self-recorded locally; it does not certify mastery. Demonstration video is absent. Lissom is not a medical device and gives general information only.
 
+Course structure and source coverage (counted from `config/courses/*.v1.json`; modules/lessons, `sources` = listed source URLs, `sourceScopes` = per-source entries stating what the source `supports` and `doesNotSupport`):
+
+| Course (id, version) | Modules / lessons | `sources` | `sourceScopes` | File:line (`sources` · `sourceScopes` · `modules`) |
+|---|---|---|---|---|
+| Hatha (`lissom.hatha.foundations` 1.0.1) | 10 / 60 | 30 | 11 | `hatha.v1.json:13` · `:3883` · `:45` |
+| Ashtanga beginner foundations (1.0.0) | 5 / 19 | 16 | 16 | `ashtanga-foundations.v1.json:13` · `:31` · `:193` |
+| Supported Yin (1.0.0) | 3 / 12 | 12 | 12 | `yin-supported.v1.json:13` · `:27` · `:149` |
+| Supported standing Vinyasa (1.0.0) | 3 / 14 | 8 | 8 | `vinyasa-standing.v1.json:13` · `:23` · `:105` |
+| Chair/office (1.0.0) | 5 / 15 | 4 | 4 | `chair-office.v1.json:13` · `:19` · `:61` |
+
+Total 26 modules, 120 lessons. The Hatha `sourceScopes` map covers 11 of its 30 listed sources. Each `doesNotSupport` entry states what its source does not validate (for example, the exact original sequence, lesson doses or learner suitability), so the sources are references for concepts, not endorsements of the lessons. The in-app text for these is bilingual (EN/TR) in the JSON; the 14-language interface and lesson text are counted in the store listings, not re-verified here.
+
 Camera evaluation is closed in this release and research models are not activated. The camera code path (MediaPipe/CameraX via `motion_camera`) is compiled into the binary, so the camera usage description and the Android camera permission remain declared; the camera step is gated off (`requireMotionCameraAccess`, Core `motionCameraCoachingAvailable = false`) and the app never requests camera permission. Open-source licences, including the native MediaPipe and CameraX Apache-2.0 notices, are listed under Profile → Open-source licences.
 
 ## Subscriptions
