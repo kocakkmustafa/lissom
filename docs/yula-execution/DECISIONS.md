@@ -36,3 +36,9 @@
 - **Karar:** `android.hardware.camera` `required=false`: kamerasız cihazlar da uygulamayı kurabilir; kamera yolu zaten bayrak arkasında.
 - **Sonuç:** Mağaza uyumluluk listesi daralmaz.
 - **LIS-P1-15 ile yürürlükten kalktı:** uygulama manifestinden camera `uses-feature` satırları kaldırıldı (CAMERA izni de kaldırıldı); bkz. `docs/camera/ANDROID-KAMERA-IZNI.tr.md`.
+
+## ADR-L007 — 7 eşik altı duruş (a) denemede kalır
+**Tarih:** 2026-11-15 · **Statü:** kabul (kurucu) · **Kaynak:** lissom#28 (F1 hazırlığı) → `docs/camera/F1-KARAR-HAZIRLIGI.tr.md`; vault "Karar — Lissom kamera eşik altı duruşlar denemede kalır (2026-11-15)"
+- **Bağlam:** Doğru kabul (TA) hedefi ≥ 0,90; ölçülen 0,62–0,87 (M1: dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I; M2: alçak kobra, uzanarak dinlenme, aşağı bakan köpek). Yanlış kabul yedisinde ≤ 0,10 (`MODEL-KARTI.tr.md:37-91`). Seçenekler: (a) denemede kalır, (b) kapsamdan çıkar (12 ders kamerasız kalır, M1 hedefin ≥20 altına düşer), (c) aralıklar genişletilip yeniden sınanır (yeni mekanizma ister).
+- **Karar:** Kurucu "a: denemede tut" (2026-11-15): 7 duruşun hepsi "Kamera koçluğu · deneme"de kalır; katalog, kod ve kapsam değişmez; `LISSOM_CAMERA_TRIAL` kapalı kalır; asıl değerlendirme gerçek cihaz testinden sonra yeniden açılır. ADR-L003 (kamera smoke ertelendi) ile uyumlu: cihaz testi gelmeden kamera açılışı ve bu duruşların kaderi birlikte beklemede.
+- **Sonuç:** F1 kapandı. Kamera kapalı olduğundan App Store yeniden gönderimi etkilenmez. F6 (`standing-arm-raise` tanımı) aynı gerekçeyle kamera açılış kararına kadar bekler.

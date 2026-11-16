@@ -34,5 +34,9 @@ Yer duruşları bu sürüme alındı ("Evet, M1'den sonra"): 15 duruş, 33 ders.
 
 Akış (Vinyasa, Güneşe Selam) sonraki sürümde. Bel, sırt ve masa başı için yeni kurs açılmıyor. Kamerada hâlâ olmayanlar şunlar: dönüşler (y05 sırtüstü burgu), duvarda bacaklar (h28), yarım saban (h54), lotus ve balık bilgi dersleri.
 
-## Kurucu kararı bekleyen kapsam maddesi
-Bağımsız sınamada (E15) dört duruş gerçek kabul eşiğinin altında kaldı: dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I. Seçenekler: (a) "deneme" içinde kalsınlar (varsayılan, bugünkü durum), (b) kapsamdan çıksınlar (M1 hedefi için 16 duruş, ≥20'nin altı; M2 sonrası katalog toplamı 35'ten 31'e iner), (c) aralıklar aileye göre genişletilip yeni bağımsız veriyle (ör. UI-PRMD) yeniden sınansın.
+## Kapsam maddesi: KARAR VERİLDİ (kurucu 2026-11-15, ADR-L007)
+Kurucu "a: denemede tut" (2026-11-15; `docs/yula-execution/DECISIONS.md` ADR-L007). Gerçek kabul eşiğinin altında kalan 7 duruşun hepsi "Kamera koçluğu · deneme"de kalır; katalog, kod ve kapsam değişmez, `LISSOM_CAMERA_TRIAL` kapalı kalır.
+- **M1 (bağımsız sınama E15):** dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I.
+- **M2:** alçak kobra, uzanarak dinlenme, aşağı bakan köpek.
+- Reddedilen seçenekler: (b) kapsamdan çıkarma (M1 hedefi için 16 duruş, ≥20'nin altı; katalog toplamı 35'ten 31'e inerdi), (c) aralıkları aileye göre genişletip yeni bağımsız veriyle (ör. UI-PRMD) yeniden sınama.
+- Asıl değerlendirme gerçek cihaz testinden sonra yeniden açılır.

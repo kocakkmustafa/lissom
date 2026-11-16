@@ -38,15 +38,15 @@ Kamera doğrulayıcısı kural tabanlıdır (öğrenilmiş sınıflandırıcı y
 
 | # | Madde | Seçenekler / durum | Kaynak |
 |---|---|---|---|
-| F1 | Eşik altı duruşlar: M1'de 4 (dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I); M2'de 3 (alçak kobra 0,83, uzanarak dinlenme 0,83, aşağı bakan köpek 0,82; bu veriyle ayar yapılmadı). M2'nin 3'ü için ayrı karar maddesi henüz yok, aynı üç seçenek geçerli | (a) "deneme" içinde kalsınlar (varsayılan, bugünkü durum), (b) kapsamdan çıksınlar (M1 hedefi ≥20 duruş için 16'ya düşer; katalog toplamı 35'ten 31'e), (c) aralıklar genişletilip yeni bağımsız veriyle yeniden sınansın | `docs/camera/KAPSAM.tr.md` son bölüm; `docs/camera/MODEL-KARTI.tr.md` (M2 eşik altı); Motion panosu |
+| F1 | **KARAR: (a) denemede kalır, kurucu 2026-11-15, ADR-L007.** Eşik altı duruşlar: M1'de 4 (dağ, yarım kalkış, küçük sandalye, kısa Savaşçı I); M2'de 3 (alçak kobra 0,83, uzanarak dinlenme 0,83, aşağı bakan köpek 0,82; bu veriyle ayar yapılmadı). Karar 7 duruşun hepsi için geçerli (M2'nin 3'ü dahil) | **(a) "deneme" içinde kalsınlar (SEÇİLDİ)**, (b) kapsamdan çıksınlar (M1 hedefi ≥20 duruş için 16'ya düşer; katalog toplamı 35'ten 31'e), (c) aralıklar genişletilip yeni bağımsız veriyle yeniden sınansın | `docs/camera/KAPSAM.tr.md` son bölüm; `docs/camera/MODEL-KARTI.tr.md` (M2 eşik altı); Motion panosu |
 | F2 | iPhone kamera smoke | Kurucu 2026-11-05: "kamera testi beklesin"; izin/kare hızı/çıkarım süresi ölçülmedi | `docs/camera/CIHAZ-SMOKE.tr.md` |
 | F3 | Kamera açılışı ve ücreti | Bayrağın mağaza sürümünde açılması (aynı sürümde izin metni + gizlilik metni + mağaza metni birlikte) ve kamera için ücret | Açılış: `lissom_release_policy.dart` yorumu, `docs/camera/ACILIS-METINLERI.tr.md`; ücret: Motion Durum Panosu "Kalan işler" |
 | F4 | M3 akış (Vinyasa, Güneşe Selam) | Sonraki sürüm; DTW gerekir | `docs/camera/KAPSAM.tr.md` |
 | F5 | Ashtanga açık kalanlar | Yetkin öğretmen/öğrenci incelemesi, kabul edilmiş demonstrasyon/lisans, sensör doğruluğu; tam Primary Series kapsam dışı | `docs/ASHTANGA-FOUNDATIONS-2026-10-16.md` "Açık kalanlar" |
-| F6 | `standing-arm-raise` tanımı | "Kollar yukarıda (her yönden)" mi, yalnız öne kaldırma mı; E16'da yanlış kabul %35 | `docs/camera/MODEL-KARTI.tr.md` "Bilinen riskler" |
+| F6 | `standing-arm-raise` tanımı (kamera açılış kararına kadar bekler) | "Kollar yukarıda (her yönden)" mi, yalnız öne kaldırma mı; E16'da yanlış kabul %35 | `docs/camera/MODEL-KARTI.tr.md` "Bilinen riskler" |
 | F7 | Mağaza reddi 4.3(a) | Ret gerekçesi, yeni build, abonelik kapsamı/fiyat; yeniden gönderim Ostinato onaylanıp yayınlanana kadar bekliyor (kurucu 2026-11-06) | Motion Durum Panosu |
 
-F2, F4 ve F7'de kurucu bir erteleme ya da sıralama kararı verdi (F2: "kamera testi beklesin"; F4: M3 sonraki sürüm; F7: yeniden gönderim beklemede); kalan iş, zamanı gelince karar ya da uygulamadır. F1, F3, F5 ve F6 açık kurucu/içerik kararıdır.
+F1'de kurucu karar verdi; F2, F4 ve F7'de kurucu bir erteleme ya da sıralama kararı verdi (F2: "kamera testi beklesin"; F4: M3 sonraki sürüm; F7: yeniden gönderim beklemede); kalan iş, zamanı gelince karar ya da uygulamadır. F1 karara bağlandı (a: denemede kalır, ADR-L007); F6 kamera açılış kararına kadar bekler. F3 ve F5 açık kurucu/içerik kararıdır.
 
 Bu liste tek yerdir: yeni bir kurucu kararı bekleyen madde buraya eklenir, karar alınınca satır silinmez, `DECISIONS.md`'ye ADR olarak taşınır ve burada "karar: ADR-Lxxx" yazılır.
 
